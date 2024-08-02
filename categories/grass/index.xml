@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>一川烟草 on 飞鸿踏雪泥</title><link>https://dyhes.github.io/categories/grass/</link><description>Recent content in 一川烟草 on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 31 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://dyhes.github.io/categories/grass/index.xml" rel="self" type="application/rss+xml"/><item><title>【Umi】Tailwind</title><link>https://dyhes.github.io/p/umitailwind/</link><pubDate>Wed, 31 Jul 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/umitailwind/</guid><description>&lt;p>可以使用 umi 微生成器&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">npx umi g tailwindcss
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>快速下载tailwind&lt;/p></description></item><item><title>【CSS】Object-fit</title><link>https://dyhes.github.io/p/cssobject-fit/</link><pubDate>Thu, 25 Jul 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/cssobject-fit/</guid><description>&lt;p>The object-fit CSS property is used to specify how the content of a &lt;strong>replaced element&lt;/strong>, such as an &lt;img> or &lt;video>, should be resized to fit its container. Replaced elements are elements &lt;strong>whose content is not managed by the CSS box model,&lt;/strong> like images, videos, or iframes.
+The object-fit property can take several values, which control how the replaced element’s content is resized:&lt;/p>
+&lt;h2 id="fill">&lt;strong>fill&lt;/strong>
+&lt;/h2>&lt;ul>
+&lt;li>This is the &lt;strong>default&lt;/strong> value.&lt;/li>
+&lt;li>The content is resized to fill the container, &lt;strong>ignoring its aspect ratio&lt;/strong>.&lt;/li>
+&lt;li>The image or video may look distorted if the aspect ratio of the container &lt;strong>differs&lt;/strong> from that of the content.&lt;/li>
+&lt;/ul>
+&lt;h2 id="contain">&lt;strong>contain&lt;/strong>
+&lt;/h2>&lt;ul>
+&lt;li>The content is scaled to &lt;strong>maintain its aspect ratio&lt;/strong> while fitting within the container.&lt;/li>
+&lt;li>The entire content will be visible, but there may be &lt;strong>empty space&lt;/strong> (letterboxing or pillarboxing) if the aspect ratios do not match.&lt;/li>
+&lt;/ul>
+&lt;h2 id="cover">&lt;strong>cover&lt;/strong>
+&lt;/h2>&lt;ul>
+&lt;li>The content is scaled to maintain its aspect ratio while covering the entire container.&lt;/li>
+&lt;li>Parts of the content might be cropped if the aspect ratio of the container and content do not match.&lt;/li>
+&lt;/ul>
+&lt;h2 id="none">&lt;strong>none&lt;/strong>
+&lt;/h2>&lt;ul>
+&lt;li>The content is not resized.&lt;/li>
+&lt;li>The content is displayed at its original size, and it may overflow the container if it is larger than the container.&lt;/li>
+&lt;/ul>
+&lt;h2 id="scale-down">&lt;strong>scale-down&lt;/strong>
+&lt;/h2>&lt;ul>
+&lt;li>The content is scaled down to fit within the container while maintaining its aspect ratio.&lt;/li>
+&lt;li>This behaves like &lt;strong>contain&lt;/strong> if the content is larger than the container, or like &lt;strong>none&lt;/strong> if the content is smaller than the container.&lt;/li>
+&lt;/ul></description></item><item><title>【React】ReactNode vs ReactElement</title><link>https://dyhes.github.io/p/reactreactnode-vs-reactelement/</link><pubDate>Thu, 25 Jul 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/reactreactnode-vs-reactelement/</guid><description>&lt;h2 id="reactelement">ReactElement
+&lt;/h2>&lt;ul>
+&lt;li>A ReactElement is a plain object describing a component instance or DOM node and its desired properties.&lt;/li>
+&lt;li>It’s the &lt;strong>return type&lt;/strong> of React.createElement().&lt;/li>
+&lt;li>It’s always an &lt;strong>object&lt;/strong> with a type and props.&lt;/li>
+&lt;li>It’s more &lt;strong>specific&lt;/strong> and represents a single React element.&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-tsx" data-lang="tsx">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">element&lt;/span>: &lt;span class="kt">React.ReactElement&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="nx">Hello&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="reactnode">ReactNode
+&lt;/h2>&lt;ul>
+&lt;li>ReactNode is a &lt;strong>more general&lt;/strong> type that can represent a React element, a string, a number, a boolean, null, undefined, or &lt;strong>an array of ReactNodes&lt;/strong>.&lt;/li>
+&lt;li>It’s a &lt;strong>union&lt;/strong> type that includes ReactElement.&lt;/li>
+&lt;li>It’s more &lt;strong>flexible&lt;/strong> and can represent &lt;strong>any valid value&lt;/strong> that can be rendered in React.&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-tsx" data-lang="tsx">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">node1&lt;/span>: &lt;span class="kt">React.ReactNode&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;Hello&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">node2&lt;/span>: &lt;span class="kt">React.ReactNode&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">42&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">node3&lt;/span>: &lt;span class="kt">React.ReactNode&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="nx">World&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">node4&lt;/span>: &lt;span class="kt">React.ReactNode&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="nx">node1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">node2&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">node3&lt;/span>&lt;span class="p">];&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="key-differences">Key Differences
+&lt;/h2>&lt;ul>
+&lt;li>Specificity:
+&lt;ul>
+&lt;li>ReactElement is more specific and always represents a single React element.&lt;/li>
+&lt;li>ReactNode is more general and can represent various types that React can render.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Usage:
+&lt;ul>
+&lt;li>ReactElement is typically used when you specifically need a React element.&lt;/li>
+&lt;li>ReactNode is often used for &lt;strong>component children&lt;/strong> or when you want to accept any renderable content.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Type Hierarchy:
+&lt;ul>
+&lt;li>ReactNode &lt;strong>includes&lt;/strong> ReactElement, but not vice versa.&lt;/li>
+&lt;li>All ReactElements are ReactNodes, but not all ReactNodes are ReactElements.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Common Use Cases:
+&lt;ul>
+&lt;li>ReactElement: When you’re working with specific React components or elements.&lt;/li>
+&lt;li>ReactNode: When defining props that can accept various types of content, like children.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-tsx" data-lang="tsx">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="nx">React&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">ReactElement&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">ReactNode&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="kr">from&lt;/span> &lt;span class="s1">&amp;#39;react&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// This only accepts a single React element
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kr">const&lt;/span> &lt;span class="nx">ElementComponent&lt;/span>: &lt;span class="kt">React.FC&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="p">{&lt;/span> &lt;span class="nx">content&lt;/span>: &lt;span class="kt">ReactElement&lt;/span> &lt;span class="p">}&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">({&lt;/span> &lt;span class="nx">content&lt;/span> &lt;span class="p">})&lt;/span> &lt;span class="o">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;{&lt;/span>&lt;span class="nx">content&lt;/span>&lt;span class="p">}&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// This accepts any renderable content
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kr">const&lt;/span> &lt;span class="nx">NodeComponent&lt;/span>: &lt;span class="kt">React.FC&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="p">{&lt;/span> &lt;span class="nx">content&lt;/span>: &lt;span class="kt">ReactNode&lt;/span> &lt;span class="p">}&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">({&lt;/span> &lt;span class="nx">content&lt;/span> &lt;span class="p">})&lt;/span> &lt;span class="o">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;{&lt;/span>&lt;span class="nx">content&lt;/span>&lt;span class="p">}&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">function&lt;/span> &lt;span class="nx">App() {&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">ElementComponent&lt;/span> &lt;span class="na">content&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">{&amp;lt;&lt;/span>&lt;span class="nt">span&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="nx">Hello&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">span&lt;/span>&lt;span class="p">&amp;gt;}&lt;/span> &lt;span class="p">/&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="cm">/* Valid */&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>&lt;span class="cm">/* &amp;lt;ElementComponent content=&amp;#34;Hello&amp;#34; /&amp;gt; */&lt;/span>&lt;span class="p">}&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="cm">/* Invalid */&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">NodeComponent&lt;/span> &lt;span class="na">content&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">{&amp;lt;&lt;/span>&lt;span class="nt">span&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="nx">World&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">span&lt;/span>&lt;span class="p">&amp;gt;}&lt;/span> &lt;span class="p">/&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="cm">/* Valid */&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">NodeComponent&lt;/span> &lt;span class="na">content&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;Hello&amp;#34;&lt;/span> &lt;span class="p">/&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="cm">/* Also Valid */&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item></channel></rss>

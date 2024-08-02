@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Java on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/java/</link><description>Recent content in Java on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 14 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://dyhes.github.io/tags/java/index.xml" rel="self" type="application/rss+xml"/><item><title>【Java】Enum</title><link>https://dyhes.github.io/p/javaenum/</link><pubDate>Sun, 14 Jul 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/javaenum/</guid><description>&lt;img src="https://dyhes.github.io/covers/cover19.png" alt="Featured image of post 【Java】Enum" />&lt;p>Java enums are a special type of class used to define collections of constants. They provide a way to represent a fixed set of values, which can be useful for categorizing data and ensuring type safety.&lt;/p>
+&lt;h2 id="key-points">Key Points
+&lt;/h2>&lt;ul>
+&lt;li>Implicitly final and static: Enum constants are implicitly public, static, and final.&lt;/li>
+&lt;li>values() method: Every enum has a static values() method that returns an array of all enum constants.&lt;/li>
+&lt;li>valueOf(String) method: This static method returns the &lt;strong>enum constant&lt;/strong> with the specified name.&lt;/li>
+&lt;li>The name() method returns the name of the enum constant as declared in its enum declaration. It&amp;rsquo;s an instance method available on all enum constants.&lt;/li>
+&lt;li>valueOf(String) and name() provide a way to convert between the Enum and String.&lt;/li>
+&lt;li>ordinal() method: Returns the &lt;strong>position&lt;/strong> of the enum constant (zero-based).&lt;/li>
+&lt;li>Constructors, Fields, and Methods: Enums can have constructors, fields, and methods, allowing you to associate data and behavior with each constant.&lt;/li>
+&lt;li>Implementing Interfaces: Enums can implement interfaces, providing a way to define behavior for each constant.&lt;/li>
+&lt;li>EnumSet and EnumMap: These are specialized Set and Map implementations for use with enum types, offering &lt;strong>better performance&lt;/strong> than their general-purpose counterparts.&lt;/li>
+&lt;li>Constant-specific method implementation: You can &lt;strong>override methods for specific enum&lt;/strong> constants, allowing for different behavior per constant.&lt;/li>
+&lt;li>Abstract methods in enums: You can define abstract methods in an enum, forcing each constant to provide its own implementation.&lt;/li>
+&lt;/ul>
+&lt;h2 id="example">example
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// Basic enum definition&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">enum&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Day&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">MONDAY&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">TUESDAY&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">WEDNESDAY&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">THURSDAY&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">FRIDAY&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">SATURDAY&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">SUNDAY&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">// Enum with constructor, fields, and methods&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">enum&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Planet&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">MERCURY&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">3&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">303e&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">23&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">2&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">4397e6&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">VENUS&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">4&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">869e&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">24&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">6&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">0518e6&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">EARTH&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">5&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">976e&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">24&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">6&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">37814e6&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">final&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">mass&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// in kilograms&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">final&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">radius&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// in meters&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Planet&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">mass&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">radius&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">mass&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">mass&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">radius&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">radius&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">getMass&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">mass&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">getRadius&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">radius&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Enum constant-specific method implementation&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">surfaceGravity&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">6&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">67300E&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">mass&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">radius&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">radius&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">// Usage examples&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">EnumExample&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">static&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">main&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">[]&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">args&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Basic usage&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Day&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">today&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Day&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">MONDAY&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Today is &amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">today&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Switch statement with enum&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">switch&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">today&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">case&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">MONDAY&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Start of the work week&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">case&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">FRIDAY&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;TGIF!&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">default&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Midweek&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Using enum methods&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Planet&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">earth&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Planet&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">EARTH&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Earth&amp;#39;s mass: &amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">earth&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getMass&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Earth&amp;#39;s surface gravity: &amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">earth&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">surfaceGravity&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Iterating over enum values&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">for&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Planet&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">planet&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Planet&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">values&lt;/span>&lt;span class="p">())&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">planet&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">name&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;: &amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">planet&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">surfaceGravity&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="usage-with-pageable">Usage with Pageable
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">enum&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">UserSortField&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">ID&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;id&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">FIRST_NAME&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;firstName&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">LAST_NAME&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;lastName&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">EMAIL&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;email&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">CREATED_DATE&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;createdDate&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">final&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">fieldName&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">UserSortField&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">fiel&lt;/span>&lt;span class="err">&lt;/span>&lt;span class="n">dName&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">fieldName&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">fieldName&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">getFieldName&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">fieldName&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@RestController&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@RequestMapping&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;/api/users&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">UserController&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Autowired&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">UserService&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userService&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@GetMapping&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ResponseEntity&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Map&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Object&lt;/span>&lt;span class="o">&amp;gt;&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">getAllUsers&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@RequestParam&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">defaultValue&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;0&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">page&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@RequestParam&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">defaultValue&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;10&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">size&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@RequestParam&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">defaultValue&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;ID&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">UserSortField&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">sortBy&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Page&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userPage&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userService&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getAllUsers&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">page&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">size&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">sortBy&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// ... rest of the method remains the same&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Service&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">UserService&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Autowired&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">UserRepository&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userRepository&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Page&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">getAllUsers&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">page&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">size&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">UserSortField&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">sortBy&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Pageable&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">pageable&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">PageRequest&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">of&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">page&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">size&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Sort&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">by&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sortBy&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getFieldName&lt;/span>&lt;span class="p">()));&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userRepository&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">findAll&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pageable&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="usage-with-spring-data-jpa">Usage with Spring Data JPA
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">enum&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Status&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">ACTIVE&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">INACTIVE&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">PENDING&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">javax.persistence.*&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Entity&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">User&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Id&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@GeneratedValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">strategy&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">GenerationType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">IDENTITY&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Enumerated&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">EnumType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">STRING&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Status&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">status&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// getters and setters&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The @Enumerated annotation is used to specify how the Enum should be persisted in the database. There are two options:&lt;/p>
+&lt;p>EnumType.ORDINAL: Stores the Enum as an integer (the ordinal value of the Enum constant).
+EnumType.STRING: Stores the Enum as a string (the name of the Enum constant).&lt;/p>
+&lt;h3 id="enumtypeordinal">EnumType.ORDINAL
+&lt;/h3>&lt;h4 id="pros">Pros
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>Database efficiency&lt;/strong>: Stores enums as integers, which typically use less storage space than strings.&lt;/li>
+&lt;li>&lt;strong>Potentially faster queries&lt;/strong>: Integer comparisons are generally faster than string comparisons.&lt;/li>
+&lt;li>&lt;strong>Simpler database representation&lt;/strong>: The database column is a simple integer type.&lt;/li>
+&lt;/ul>
+&lt;h4 id="cons">Cons
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>Fragility to enum order changes&lt;/strong>: If you add, remove, or reorder enum constants, the ordinal values change, which can corrupt existing data.&lt;/li>
+&lt;li>&lt;strong>Less readable in raw database queries&lt;/strong>: You see numbers instead of meaningful names.&lt;/li>
+&lt;li>&lt;strong>Potential for invalid states&lt;/strong>: If the database contains an integer that doesn’t correspond to any enum constant, it can lead to runtime errors.&lt;/li>
+&lt;/ul>
+&lt;h3 id="enumtypestring">EnumType.STRING
+&lt;/h3>&lt;h4 id="pros-1">Pros
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>Readability&lt;/strong>: The database stores the actual names of the enum constants, making raw database queries more understandable.&lt;/li>
+&lt;li>&lt;strong>Resilience to enum order changes&lt;/strong>: Adding or reordering enum constants doesn’t affect existing data.&lt;/li>
+&lt;li>&lt;strong>Self-documenting&lt;/strong>: The database schema itself documents the possible enum values.&lt;/li>
+&lt;li>&lt;strong>Safety&lt;/strong>: It’s harder to accidentally introduce invalid states, as any string not matching an enum constant will be rejected.&lt;/li>
+&lt;/ul>
+&lt;h4 id="cons-1">Cons
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>Less efficient storage&lt;/strong>: Strings typically use more storage space than integers.&lt;/li>
+&lt;li>&lt;strong>Potentially slower queries&lt;/strong>: String comparisons can be slower than integer comparisons, especially for large datasets.&lt;/li>
+&lt;li>&lt;strong>Case sensitivity&lt;/strong>: By default, the comparison is case-sensitive, which might lead to issues if not handled carefully.&lt;/li>
+&lt;/ul>
+&lt;h3 id="recommendation">Recommendation
+&lt;/h3>&lt;p>In most cases, EnumType.STRING is the safer and more maintainable choice, despite the slight performance trade-off. The benefits of readability, safety, and resilience to changes &lt;strong>usually outweigh&lt;/strong> the minor efficiency gains of EnumType.ORDINAL.&lt;/p>
+&lt;p>However, if you’re dealing with a very large dataset where performance and storage efficiency are critical, and you can guarantee that the enum order will never change, EnumType.ORDINAL might be considered.&lt;/p>
+&lt;h3 id="best-practices">Best Practices
+&lt;/h3>&lt;p>&lt;strong>Default&lt;/strong> to EnumType.STRING unless you have a compelling reason not to.
+If using EnumType.ORDINAL, document it clearly and warn about the dangers of changing the enum order.
+Consider using a &lt;strong>custom UserType&lt;/strong> for more complex enum persistence scenarios.
+If using EnumType.STRING, be aware of &lt;strong>case sensitivity&lt;/strong> in your database queries.&lt;/p></description></item><item><title>【Java】Dates and Times</title><link>https://dyhes.github.io/p/javadates-and-times/</link><pubDate>Fri, 12 Jul 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/javadates-and-times/</guid><description>&lt;img src="https://dyhes.github.io/covers/cover19.png" alt="Featured image of post 【Java】Dates and Times" />&lt;h2 id="javautildate">&lt;code>java.util.Date&lt;/code>
+&lt;/h2>&lt;p>You&amp;rsquo;re right to ask about the Date class. The pre-Java 8 java.util.Date class is indeed still available, but it&amp;rsquo;s generally considered &lt;strong>outdated&lt;/strong> for modern Java projects.&lt;/p>
+&lt;h3 id="issues">Issues
+&lt;/h3>&lt;ul>
+&lt;li>Mutable (not &lt;strong>thread-safe&lt;/strong>)&lt;/li>
+&lt;li>Poorly designed API&lt;/li>
+&lt;li>Doesn&amp;rsquo;t handle time zones well&lt;/li>
+&lt;li>Only &lt;strong>millisecond&lt;/strong> precision&lt;/li>
+&lt;li>Confusing method names (e.g., getYear() returns year since 1900)&lt;/li>
+&lt;/ul>
+&lt;h3 id="modern-alternatives">Modern alternatives
+&lt;/h3>&lt;ul>
+&lt;li>Java 8+ java.time package (recommended)&lt;/li>
+&lt;li>Third-party libraries like Joda-Time (for pre-Java 8 projects)&lt;/li>
+&lt;/ul>
+&lt;h3 id="migration">Migration
+&lt;/h3>&lt;ul>
+&lt;li>java.time provides methods to convert between old and new date/time classes&lt;/li>
+&lt;/ul>
+&lt;h2 id="javatime">&lt;code>java.time&lt;/code>
+&lt;/h2>&lt;p>&lt;code>java.time&lt;/code> introduced in Java 8, provides a comprehensive and much-improved API for handling dates, times, and durations.&lt;/p>
+&lt;h3 id="localdate">LocalDate
+&lt;/h3>&lt;p>Represents a date without time or time zone.&lt;/p>
+&lt;h3 id="localtime">LocalTime
+&lt;/h3>&lt;p>Represents a time without date or time zone.&lt;/p>
+&lt;h3 id="localdatetime">LocalDateTime
+&lt;/h3>&lt;p>Combines date and time, without a time zone.&lt;/p>
+&lt;h3 id="zoneddatetime">ZonedDateTime
+&lt;/h3>&lt;p>Date and time with a time zone.&lt;/p>
+&lt;h3 id="zoneid">ZoneId
+&lt;/h3>&lt;p>represents a time zone&lt;/p>
+&lt;h3 id="instant">Instant
+&lt;/h3>&lt;p>Instant represents a point in time on the timeline, typically in UTC (Coordinated Universal Time). It&amp;rsquo;s essentially a &lt;strong>timestamp&lt;/strong> with nanosecond precision.&lt;/p>
+&lt;h3 id="period">Period
+&lt;/h3>&lt;p>Represents a &lt;strong>date-based&lt;/strong> amount of time.&lt;/p>
+&lt;h3 id="duration">Duration
+&lt;/h3>&lt;p>Represents a &lt;strong>time-based&lt;/strong> amount of time.&lt;/p>
+&lt;h3 id="datetimeformatter">DateTimeFormatter
+&lt;/h3>&lt;p>is used for parsing and formatting date-time objects.&lt;/p>
+&lt;h2 id="usage-in-database">Usage in Database
+&lt;/h2>&lt;h3 id="recommended-classes">Recommended classes
+&lt;/h3>&lt;ul>
+&lt;li>LocalDate: For date-only fields (e.g., birthdate)&lt;/li>
+&lt;li>LocalDateTime: For date and time without time zone&lt;/li>
+&lt;li>Instant: For timestamps (e.g., created_at, updated_at)&lt;/li>
+&lt;li>ZonedDateTime: If you need to store time zone information&lt;/li>
+&lt;/ul>
+&lt;h3 id="considerations">Considerations
+&lt;/h3>&lt;ul>
+&lt;li>Instant is often preferred &lt;strong>for timestamps&lt;/strong> because it&amp;rsquo;s always in UTC and avoids time zone ambiguities.&lt;/li>
+&lt;li>If using an &lt;strong>older version of Hibernate&lt;/strong> (pre-5.0), you might need additional configuration or converters.&lt;/li>
+&lt;li>Some databases might require specific column definitions. For example, &lt;strong>PostgreSQL might need @Column(columnDefinition = &amp;ldquo;TIMESTAMP WITH TIME ZONE&amp;rdquo;) for Instant&lt;/strong>.&lt;/li>
+&lt;/ul>
+&lt;h3 id="database-specific-notes">Database-specific notes
+&lt;/h3>&lt;ul>
+&lt;li>MySQL: LocalDateTime is typically stored as DATETIME, Instant as TIMESTAMP.&lt;/li>
+&lt;li>PostgreSQL: Supports all types well, but ensure your JDBC driver is up to date.&lt;/li>
+&lt;li>Oracle: May require additional configuration for LocalDate and LocalDateTime.&lt;/li>
+&lt;/ul>
+&lt;h3 id="best-practices">Best practices
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>Use Instant for audit fields&lt;/strong> (created_at, updated_at).&lt;/li>
+&lt;li>Use LocalDateTime for user-entered date-times if time zone isn&amp;rsquo;t important.&lt;/li>
+&lt;li>Always consider time zone implications in your application logic.
+You can set the following property to ensure proper handling of JDBC time zones:&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">spring&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">jpa&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">properties&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">hibernate&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">jdbc&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">time_zone&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">UTC&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="example">example
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">javax.persistence.*&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">java.time.Instant&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">java.time.LocalDate&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">java.time.LocalDateTime&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Entity&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">User&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Id&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@GeneratedValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">strategy&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">GenerationType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">IDENTITY&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">LocalDate&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">birthDate&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">LocalDateTime&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">lastLogin&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Column&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">columnDefinition&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;TIMESTAMP&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Instant&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">createdAt&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// getters and setters&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="instant-usage">Instant usage
+&lt;/h2>&lt;p>Use Instant for:&lt;/p>
+&lt;ul>
+&lt;li>System-generated timestamps (created_at, updated_at)&lt;/li>
+&lt;li>Event occurrences (lastLogin, orderPlacedAt)&lt;/li>
+&lt;li>Any time you need to record a specific moment and &lt;strong>might deal with different time zones&lt;/strong>&lt;/li>
+&lt;/ul>
+&lt;h3 id="audit-field">Audit field
+&lt;/h3>&lt;ul>
+&lt;li>created_at: When a record was created&lt;/li>
+&lt;li>updated_at: When a record was last modified&lt;/li>
+&lt;li>sometimes deleted_at: When a record was soft-deleted&lt;/li>
+&lt;/ul>
+&lt;h3 id="benifits">Benifits
+&lt;/h3>&lt;p>Querying&lt;/p>
+&lt;ul>
+&lt;li>Easy to query for records created or updated within a specific time range.&lt;/li>
+&lt;/ul>
+&lt;p>Sorting&lt;/p>
+&lt;ul>
+&lt;li>Straightforward to sort records by creation or update time.&lt;/li>
+&lt;/ul>
+&lt;p>Time zone handling&lt;/p>
+&lt;ul>
+&lt;li>When displaying to users, you can easily convert Instant to their local time zone.&lt;/li>
+&lt;/ul>
+&lt;p>Potential pitfall to avoid&lt;/p>
+&lt;ul>
+&lt;li>Don&amp;rsquo;t use LocalDateTime for audit fields unless you&amp;rsquo;re absolutely sure all your servers and databases will always be in the same time zone.&lt;/li>
+&lt;/ul>
+&lt;p>Converting for display&lt;/p>
+&lt;ul>
+&lt;li>When you need to display these times to users
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">ZoneId&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userZone&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ZoneId&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">of&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;America/New_York&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">Instant&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">createdAt&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">entity&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getCreatedAt&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">ZonedDateTime&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userTime&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ZonedDateTime&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">ofInstant&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">createdAt&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userZone&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;h3 id="database-considerations">Database considerations
+&lt;/h3>&lt;ul>
+&lt;li>For MySQL: Use TIMESTAMP column type&lt;/li>
+&lt;li>For PostgreSQL: Use TIMESTAMP WITH TIME ZONE&lt;/li>
+&lt;/ul>
+&lt;h3 id="jpa-auditting">JPA Auditting
+&lt;/h3>&lt;p>If you want to use Spring Data JPA&amp;rsquo;s automatic auditing features, such as:&lt;/p>
+&lt;ul>
+&lt;li>@CreatedDate&lt;/li>
+&lt;li>@LastModifiedDate&lt;/li>
+&lt;li>@CreatedBy&lt;/li>
+&lt;li>@LastModifiedBy
+enable JPA Auditing.&lt;/li>
+&lt;/ul>
+&lt;h3 id="manual-auditting">manual Auditting
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@Entity&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">MyEntity&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// other fields&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Column&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">updatable&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">false&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Instant&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">createdAt&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Instant&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">updatedAt&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@PrePersist&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">protected&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">onCreate&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">createdAt&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Instant&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">now&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">updatedAt&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Instant&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">now&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@PreUpdate&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">protected&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">onUpdate&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">updatedAt&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Instant&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">now&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="example-1">example
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">org.springframework.data.annotation.CreatedDate&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">org.springframework.data.annotation.LastModifiedDate&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">org.springframework.data.jpa.domain.support.AuditingEntityListener&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">javax.persistence.*&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">java.time.Instant&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Entity&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@EntityListeners&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">AuditingEntityListener&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">AuditedEntity&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Id&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@GeneratedValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">strategy&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">GenerationType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">IDENTITY&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@CreatedDate&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Column&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">updatable&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">false&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Instant&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">createdAt&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@LastModifiedDate&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Instant&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">updatedAt&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// getters and setters&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Configuration&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@EnableJpaAuditing&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">JpaConfig&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// other configurations &lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="other-usage">Other usage
+&lt;/h3>&lt;p>It&amp;rsquo;s often a good practice to store times as Instant and convert to appropriate local times when presenting to users.&lt;/p>
+&lt;p>This ensures consistent storage and easier querying, while still allowing flexible display options.&lt;/p>
+&lt;p>While Instant is great for many scenarios, there are cases where other types might be more appropriate:&lt;/p>
+&lt;ul>
+&lt;li>a) LocalDate: When you only need the date without time (e.g., birthDate, holidayDate).&lt;/li>
+&lt;li>b) LocalDateTime: When you need date and time, but the time zone is implicit or unnecessary.&lt;/li>
+&lt;li>c) ZonedDateTime: When you need to &lt;strong>preserve&lt;/strong> the specific time zone information.&lt;/li>
+&lt;/ul></description></item><item><title>【Java】Releases</title><link>https://dyhes.github.io/p/javareleases/</link><pubDate>Fri, 12 Jul 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/javareleases/</guid><description>&lt;img src="https://dyhes.github.io/covers/cover9.png" alt="Featured image of post 【Java】Releases" />&lt;p>Oracle has moved to a new release model since Java 9:&lt;/p>
+&lt;ul>
+&lt;li>There are new Java releases every six months.&lt;/li>
+&lt;li>Every two (three before java17) years, the September release is designated as an LTS release.&lt;/li>
+&lt;li>Non-LTS releases are supported only until the next release.&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-10-1996">Java 1.0 (1996)
+&lt;/h2>&lt;ul>
+&lt;li>First public release&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-11-1997">Java 1.1 (1997)
+&lt;/h2>&lt;ul>
+&lt;li>Inner classes&lt;/li>
+&lt;li>JavaBeans&lt;/li>
+&lt;li>JDBC&lt;/li>
+&lt;li>RMI (Remote Method Invocation)&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-12-1998">Java 1.2 (1998)
+&lt;/h2>&lt;ul>
+&lt;li>Collections framework&lt;/li>
+&lt;li>Swing GUI&lt;/li>
+&lt;li>JIT (Just-In-Time) compiler&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-13-2000">Java 1.3 (2000)
+&lt;/h2>&lt;ul>
+&lt;li>HotSpot JVM&lt;/li>
+&lt;li>JNDI (Java Naming and Directory Interface)&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-14-2002">Java 1.4 (2002)
+&lt;/h2>&lt;ul>
+&lt;li>Assert keyword&lt;/li>
+&lt;li>Regular expressions&lt;/li>
+&lt;li>Logging API&lt;/li>
+&lt;li>NIO (New Input/Output)&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-5-2004">Java 5 (2004)
+&lt;/h2>&lt;ul>
+&lt;li>Generics&lt;/li>
+&lt;li>Annotations&lt;/li>
+&lt;li>Autoboxing/Unboxing&lt;/li>
+&lt;li>Enumerations&lt;/li>
+&lt;li>Varargs&lt;/li>
+&lt;li>Enhanced for loop&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-6-2006">Java 6 (2006)
+&lt;/h2>&lt;ul>
+&lt;li>Scripting language support&lt;/li>
+&lt;li>JDBC 4.0&lt;/li>
+&lt;li>Java Compiler API&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-7-2011">Java 7 (2011)
+&lt;/h2>&lt;ul>
+&lt;li>Try-with-resources&lt;/li>
+&lt;li>Diamond operator&lt;/li>
+&lt;li>Switch with Strings&lt;/li>
+&lt;li>NIO 2.0&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-8-2014---lts">Java 8 (2014) - LTS
+&lt;/h2>&lt;ul>
+&lt;li>Lambda expressions&lt;/li>
+&lt;li>Stream API&lt;/li>
+&lt;li>Optional class&lt;/li>
+&lt;li>Default methods in interfaces&lt;/li>
+&lt;li>New Date and Time API&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-9-2017">Java 9 (2017)
+&lt;/h2>&lt;ul>
+&lt;li>Module system (Project Jigsaw)&lt;/li>
+&lt;li>JShell (REPL)&lt;/li>
+&lt;li>Private methods in interfaces&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-10-2018">Java 10 (2018)
+&lt;/h2>&lt;ul>
+&lt;li>Local variable type inference (var keyword)&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-11-2018---lts">Java 11 (2018) - LTS
+&lt;/h2>&lt;ul>
+&lt;li>HTTP Client API&lt;/li>
+&lt;li>Launch single-file source-code programs&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-12-2019">Java 12 (2019)
+&lt;/h2>&lt;ul>
+&lt;li>Switch expressions (preview)&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-13-2019">Java 13 (2019)
+&lt;/h2>&lt;ul>
+&lt;li>Text blocks (preview)&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-14-2020">Java 14 (2020)
+&lt;/h2>&lt;ul>
+&lt;li>Records (preview)&lt;/li>
+&lt;li>Pattern matching for instanceof (preview)&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-15-2020">Java 15 (2020)
+&lt;/h2>&lt;ul>
+&lt;li>Sealed classes (preview)&lt;/li>
+&lt;li>Hidden classes&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-16-2021">Java 16 (2021)
+&lt;/h2>&lt;ul>
+&lt;li>Pattern matching for instanceof (finalized)&lt;/li>
+&lt;li>Records (finalized)&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-17-2021---lts">Java 17 (2021) - LTS
+&lt;/h2>&lt;ul>
+&lt;li>Sealed classes (finalized)&lt;/li>
+&lt;li>Pattern matching for switch (preview)&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-18-2022">Java 18 (2022)
+&lt;/h2>&lt;ul>
+&lt;li>Simple web server&lt;/li>
+&lt;li>Code snippets in Java API documentation&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-19-2022">Java 19 (2022)
+&lt;/h2>&lt;ul>
+&lt;li>Virtual threads (preview)&lt;/li>
+&lt;li>Pattern matching for switch (second preview)&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-20-2023">Java 20 (2023)
+&lt;/h2>&lt;ul>
+&lt;li>Scoped values (incubator)&lt;/li>
+&lt;li>Record patterns (second preview)&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-212023---lts">Java 21(2023) - LTS
+&lt;/h2>&lt;ul>
+&lt;li>Virtual Threads (finalized)&lt;/li>
+&lt;li>Pattern Matching for Switch (finalized)&lt;/li>
+&lt;li>Record Patterns (finalized)&lt;/li>
+&lt;li>Sequenced Collections&lt;/li>
+&lt;li>String Templates (preview)&lt;/li>
+&lt;li>Unnamed Classes and Instance Main Methods (preview)&lt;/li>
+&lt;li>Unnamed Patterns and Variables (preview)&lt;/li>
+&lt;li>Scoped Values (preview)&lt;/li>
+&lt;li>Foreign Function &amp;amp; Memory API (preview)&lt;/li>
+&lt;li>Structured Concurrency (preview)&lt;/li>
+&lt;li>Vector API (incubator)&lt;/li>
+&lt;/ul></description></item></channel></rss>

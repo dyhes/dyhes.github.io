@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>CSS on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/css/</link><description>Recent content in CSS on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 25 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://dyhes.github.io/tags/css/index.xml" rel="self" type="application/rss+xml"/><item><title>【CSS】Object-fit</title><link>https://dyhes.github.io/p/cssobject-fit/</link><pubDate>Thu, 25 Jul 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/cssobject-fit/</guid><description>&lt;p>The object-fit CSS property is used to specify how the content of a &lt;strong>replaced element&lt;/strong>, such as an &lt;img> or &lt;video>, should be resized to fit its container. Replaced elements are elements &lt;strong>whose content is not managed by the CSS box model,&lt;/strong> like images, videos, or iframes.
+The object-fit property can take several values, which control how the replaced element’s content is resized:&lt;/p>
+&lt;h2 id="fill">&lt;strong>fill&lt;/strong>
+&lt;/h2>&lt;ul>
+&lt;li>This is the &lt;strong>default&lt;/strong> value.&lt;/li>
+&lt;li>The content is resized to fill the container, &lt;strong>ignoring its aspect ratio&lt;/strong>.&lt;/li>
+&lt;li>The image or video may look distorted if the aspect ratio of the container &lt;strong>differs&lt;/strong> from that of the content.&lt;/li>
+&lt;/ul>
+&lt;h2 id="contain">&lt;strong>contain&lt;/strong>
+&lt;/h2>&lt;ul>
+&lt;li>The content is scaled to &lt;strong>maintain its aspect ratio&lt;/strong> while fitting within the container.&lt;/li>
+&lt;li>The entire content will be visible, but there may be &lt;strong>empty space&lt;/strong> (letterboxing or pillarboxing) if the aspect ratios do not match.&lt;/li>
+&lt;/ul>
+&lt;h2 id="cover">&lt;strong>cover&lt;/strong>
+&lt;/h2>&lt;ul>
+&lt;li>The content is scaled to maintain its aspect ratio while covering the entire container.&lt;/li>
+&lt;li>Parts of the content might be cropped if the aspect ratio of the container and content do not match.&lt;/li>
+&lt;/ul>
+&lt;h2 id="none">&lt;strong>none&lt;/strong>
+&lt;/h2>&lt;ul>
+&lt;li>The content is not resized.&lt;/li>
+&lt;li>The content is displayed at its original size, and it may overflow the container if it is larger than the container.&lt;/li>
+&lt;/ul>
+&lt;h2 id="scale-down">&lt;strong>scale-down&lt;/strong>
+&lt;/h2>&lt;ul>
+&lt;li>The content is scaled down to fit within the container while maintaining its aspect ratio.&lt;/li>
+&lt;li>This behaves like &lt;strong>contain&lt;/strong> if the content is larger than the container, or like &lt;strong>none&lt;/strong> if the content is smaller than the container.&lt;/li>
+&lt;/ul></description></item></channel></rss>
