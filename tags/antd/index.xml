@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Antd on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/antd/</link><description>Recent content in Antd on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 09 Aug 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://dyhes.github.io/tags/antd/index.xml" rel="self" type="application/rss+xml"/><item><title>【Antd】Button HtmlType</title><link>https://dyhes.github.io/p/antdbutton-htmltype/</link><pubDate>Fri, 09 Aug 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/antdbutton-htmltype/</guid><description>&lt;p>In Ant Design (AntD), a popular React UI library, the &lt;Button> component is often used to create buttons in user interfaces. The htmlType attribute of the &lt;Button> component is used to specify the native HTML type of the button element. This is analogous to the type attribute in a standard HTML &lt;button> element.&lt;/p>
+&lt;p>When you set htmlType=&amp;ldquo;submit&amp;rdquo; in an AntD &lt;Button>, it means that the button will function as a submit button within a form. Here’s a breakdown of what this does:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Submit Button&lt;/strong>: When the button is clicked, it will trigger the form submission. This is the same behavior you would expect from a native HTML &lt;button type="submit">.&lt;/li>
+&lt;/ul></description></item><item><title>【Antd】Form</title><link>https://dyhes.github.io/p/antdform/</link><pubDate>Fri, 09 Aug 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/antdform/</guid><description>&lt;h1 id="useform-and-antd-form">useForm and Antd Form
+&lt;/h1>&lt;p>Both &lt;code>useForm&lt;/code> and the &lt;code>antd Form&lt;/code> component are popular tools for handling form state and validation in React applications, but they come from different libraries and have different approaches and features.&lt;/p>
+&lt;h2 id="useform-from-react-hook-form">useForm (from &lt;code>react-hook-form&lt;/code>)
+&lt;/h2>&lt;p>&lt;code>useForm&lt;/code> is a hook provided by the &lt;code>react-hook-form&lt;/code> library, which focuses on providing a highly performant and flexible way to handle form state and validation in React.&lt;/p>
+&lt;h3 id="key-features">Key Features
+&lt;/h3>&lt;ol>
+&lt;li>&lt;strong>Performance&lt;/strong>: &lt;code>useForm&lt;/code> minimizes re-renders, making it highly performant, especially for large forms.&lt;/li>
+&lt;li>&lt;strong>Minimal Re-renders&lt;/strong>: By default, form state is managed in a way that prevents unnecessary re-renders of the entire form, updating only the specific fields that need to be updated.&lt;/li>
+&lt;li>&lt;strong>Validation&lt;/strong>: Offers built-in validation and also supports schema validation using libraries like Yup.&lt;/li>
+&lt;li>&lt;strong>Ease of Use&lt;/strong>: Simple API that makes it easy to integrate and manage form state.&lt;/li>
+&lt;li>&lt;strong>Integration with UI Libraries&lt;/strong>: Can be easily integrated with various UI component libraries, although it doesn&amp;rsquo;t provide its own set of form components.&lt;/li>
+&lt;/ol>
+&lt;h3 id="example-usage">Example Usage
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-jsx" data-lang="jsx">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="nx">React&lt;/span> &lt;span class="nx">from&lt;/span> &lt;span class="s1">&amp;#39;react&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">useForm&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="nx">from&lt;/span> &lt;span class="s1">&amp;#39;react-hook-form&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">function&lt;/span> &lt;span class="nx">MyForm&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">register&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">handleSubmit&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">formState&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">errors&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">useForm&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="nx">onSubmit&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">data&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">data&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">form&lt;/span> &lt;span class="na">onSubmit&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="nx">handleSubmit&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">onSubmit&lt;/span>&lt;span class="p">)}&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">input&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="na">...register&lt;/span>&lt;span class="err">(&amp;#39;&lt;/span>&lt;span class="na">firstName&lt;/span>&lt;span class="err">&amp;#39;,&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="na">required&lt;/span>&lt;span class="err">:&lt;/span> &lt;span class="na">true&lt;/span> &lt;span class="p">}&lt;/span>&lt;span class="err">)&lt;/span>&lt;span class="p">}&lt;/span> &lt;span class="p">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>&lt;span class="nx">errors&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">firstName&lt;/span> &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">span&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="nx">This&lt;/span> &lt;span class="nx">field&lt;/span> &lt;span class="nx">is&lt;/span> &lt;span class="nx">required&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">span&lt;/span>&lt;span class="p">&amp;gt;}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">input&lt;/span> &lt;span class="na">type&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;submit&amp;#34;&lt;/span> &lt;span class="p">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">form&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="antd-form-component">antd Form Component
+&lt;/h2>&lt;p>The &lt;code>antd Form&lt;/code> component is part of the Ant Design library, which is a popular UI framework for React. The &lt;code>Form&lt;/code> component provides a set of form management features that are tightly integrated with the Ant Design component library.&lt;/p>
+&lt;h3 id="key-features-1">Key Features
+&lt;/h3>&lt;ol>
+&lt;li>&lt;strong>Integrated with Ant Design&lt;/strong>: Comes with pre-styled form components that match the Ant Design aesthetic.&lt;/li>
+&lt;li>&lt;strong>Declarative Syntax&lt;/strong>: Uses a declarative syntax to define form fields and validation rules.&lt;/li>
+&lt;li>&lt;strong>Validation&lt;/strong>: Built-in support for validation rules and messages, including custom validation.&lt;/li>
+&lt;li>&lt;strong>Data Binding&lt;/strong>: Provides mechanisms for data binding and state management.&lt;/li>
+&lt;li>&lt;strong>Layout&lt;/strong>: Offers various layout options to organize form fields in a responsive manner.&lt;/li>
+&lt;/ol>
+&lt;h3 id="example-usage-1">Example Usage
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-jsx" data-lang="jsx">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="nx">React&lt;/span> &lt;span class="nx">from&lt;/span> &lt;span class="s1">&amp;#39;react&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">Form&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">Input&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">Button&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="nx">from&lt;/span> &lt;span class="s1">&amp;#39;antd&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="s1">&amp;#39;antd/dist/antd.css&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">MyForm&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="nx">onFinish&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">values&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Success:&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">values&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="nx">onFinishFailed&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">errorInfo&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Failed:&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">errorInfo&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">Form&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;basic&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">initialValues&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">{{&lt;/span> &lt;span class="nx">remember&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="kc">true&lt;/span> &lt;span class="p">}}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">onFinish&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="nx">onFinish&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">onFinishFailed&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="nx">onFinishFailed&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">Form.Item&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">label&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;Username&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;username&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">rules&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">{[{&lt;/span> &lt;span class="nx">required&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">message&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;Please input your username!&amp;#39;&lt;/span> &lt;span class="p">}]}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">Input&lt;/span> &lt;span class="p">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">Form.Item&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">Form.Item&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">label&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;Password&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;password&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">rules&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">{[{&lt;/span> &lt;span class="nx">required&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">message&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;Please input your password!&amp;#39;&lt;/span> &lt;span class="p">}]}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">Input.Password&lt;/span> &lt;span class="p">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">Form.Item&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">Form.Item&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">Button&lt;/span> &lt;span class="na">type&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;primary&amp;#34;&lt;/span> &lt;span class="na">htmlType&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;submit&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">Submit&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">Button&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">Form.Item&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">Form&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">export&lt;/span> &lt;span class="k">default&lt;/span> &lt;span class="nx">MyForm&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="summary">Summary
+&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>Performance&lt;/strong>: &lt;code>useForm&lt;/code> is generally more performant due to its minimal re-renders.&lt;/li>
+&lt;li>&lt;strong>UI Integration&lt;/strong>: &lt;code>antd Form&lt;/code> is tightly integrated with the Ant Design component library, providing a consistent UI.&lt;/li>
+&lt;li>&lt;strong>Flexibility&lt;/strong>: &lt;code>useForm&lt;/code> offers more flexibility for integrating with different UI libraries.&lt;/li>
+&lt;li>&lt;strong>Declarative vs. Imperative&lt;/strong>: &lt;code>antd Form&lt;/code> uses a more declarative approach to define fields and validation, while &lt;code>useForm&lt;/code> relies on hooks and a more imperative approach.&lt;/li>
+&lt;/ul>
+&lt;p>Choosing between the two often depends on your specific needs, such as performance requirements, UI consistency, and the complexity of your form logic.&lt;/p></description></item></channel></rss>

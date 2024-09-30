@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Nginx on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/nginx/</link><description>Recent content in Nginx on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 09 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://dyhes.github.io/tags/nginx/index.xml" rel="self" type="application/rss+xml"/><item><title>【NGINX】浅尝</title><link>https://dyhes.github.io/p/nginx%E6%B5%85%E5%B0%9D/</link><pubDate>Wed, 09 Nov 2022 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/nginx%E6%B5%85%E5%B0%9D/</guid><description>&lt;img src="https://dyhes.github.io/p/nginx%E6%B5%85%E5%B0%9D/cover.png" alt="Featured image of post 【NGINX】浅尝" />&lt;h2 id="introduction">Introduction
+&lt;/h2>&lt;p>Nginx is a web server that can also be used as a reverse proxy, load balancer, mail proxy and HTTP cache.&lt;/p>
+&lt;blockquote>
+&lt;p>Nginx是可以用于反向代理，负载均衡，邮件代理和HTTP缓存的Web服务器&lt;/p>
+&lt;/blockquote>
+&lt;p>&lt;img src="https://dyhes.github.io/p/nginx%E6%B5%85%E5%B0%9D/image1.png"
+width="1133"
+height="584"
+srcset="https://dyhes.github.io/p/nginx%E6%B5%85%E5%B0%9D/image1_hu9047729220891669032.png 480w, https://dyhes.github.io/p/nginx%E6%B5%85%E5%B0%9D/image1_hu16195881139315642197.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="194"
+data-flex-basis="465px"
+>&lt;/p>
+&lt;h2 id="installation">Installation
+&lt;/h2>&lt;p>ubuntu:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo apt install nginx
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>查看状态&lt;/strong>&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">systemctl status nginx
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;img src="https://dyhes.github.io/p/nginx%E6%B5%85%E5%B0%9D/image2.png"
+width="870"
+height="230"
+srcset="https://dyhes.github.io/p/nginx%E6%B5%85%E5%B0%9D/image2_hu16239560865597572882.png 480w, https://dyhes.github.io/p/nginx%E6%B5%85%E5%B0%9D/image2_hu294152219136151475.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="378"
+data-flex-basis="907px"
+>&lt;/p>
+&lt;p>&lt;strong>管理&lt;/strong>&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo systemctl stop nginx
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo systemctl start nginx
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo systemctl restart nginx
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo systemctl reload nginx &lt;span class="c1">##configuration changed&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo nginx -s reload
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo systemctl disable nginx &lt;span class="c1">##disable the behavior of starting automatically when the server boots&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo systemctl &lt;span class="nb">enable&lt;/span> nginx
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="terminology">Terminology
+&lt;/h2>&lt;ul>
+&lt;li>
+&lt;p>context&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-nginx" data-lang="nginx">&lt;span class="line">&lt;span class="cl">&lt;span class="k">events&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kn">...&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>directive&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-nginx" data-lang="nginx">&lt;span class="line">&lt;span class="cl">&lt;span class="k">worker_connections&lt;/span> &lt;span class="mi">768&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>context内的键值对&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="bugs">Bugs
+&lt;/h2>&lt;h3 id="css-textplain">css text/plain
+&lt;/h3>&lt;p>NGINX: CSS was not loaded because its MIME type, &amp;ldquo;text/plain&amp;rdquo;, is not &amp;ldquo;text/css&amp;rdquo;&lt;/p>
+&lt;p>修改为&lt;/p>
+&lt;p>&lt;img src="https://dyhes.github.io/p/nginx%E6%B5%85%E5%B0%9D/image3.png"
+width="281"
+height="123"
+srcset="https://dyhes.github.io/p/nginx%E6%B5%85%E5%B0%9D/image3_hu16829738045661340366.png 480w, https://dyhes.github.io/p/nginx%E6%B5%85%E5%B0%9D/image3_hu15806035806556138684.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="228"
+data-flex-basis="548px"
+>&lt;/p>
+&lt;p>后仍未加载&lt;/p>
+&lt;p>原因为&lt;strong>浏览器缓存&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Ctrl+Shift+R&lt;/code> hard reload 解决问题&lt;/p></description></item></channel></rss>

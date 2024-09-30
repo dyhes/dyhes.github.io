@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Computer Network on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/computer-network/</link><description>Recent content in Computer Network on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 22 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://dyhes.github.io/tags/computer-network/index.xml" rel="self" type="application/rss+xml"/><item><title>【DNS】Concepts</title><link>https://dyhes.github.io/p/dnsconcepts/</link><pubDate>Tue, 22 Mar 2022 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/dnsconcepts/</guid><description>&lt;h2 id="domain-name">Domain Name
+&lt;/h2>&lt;p>A domain name is an &lt;strong>identification string&lt;/strong> that defines a realm of administrative autonomy, authority or control within the Internet.&lt;/p>
+&lt;p>Domain names are used in various networking contexts and for &lt;strong>application-specific naming&lt;/strong> and &lt;strong>addressing&lt;/strong> purposes. In general, a domain name &lt;strong>identifies a network domain&lt;/strong>, or it &lt;strong>represents an Internet Protocol&lt;/strong> &lt;strong>(IP) resource&lt;/strong>, such as a personal computer used to access the Internet, a server computer hosting a website, or the web site itself or any other service communicated via the Internet. As of 2017, 330.6 million domain names had been registered.&lt;/p>
+&lt;p>A uniform resource locator (URL), sometimes called a web address, contains the domain name of a site as well as other information, including the transfer protocol and the path.&lt;/p>
+&lt;h3 id="types">types
+&lt;/h3>&lt;p>There are two types of domain names.&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>generic&lt;/strong> top-level domains (gTLDs)&lt;/li>
+&lt;/ul>
+&lt;p>such as .com, .edu, .org, and .gov. Authority over these domains is usually delegated to private organizations.&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>country-code&lt;/strong> top-level domains (ccTLDs).&lt;/li>
+&lt;/ul>
+&lt;p>Each country in the world has its own &lt;strong>2-letter code&lt;/strong>. These domains are administered by authorities in each country.&lt;/p>
+&lt;p>Some ccTLDs, such as .tv (for the island nation of Tuvalu) and .io (the British Indian Ocean Territory), have become popular for use outside of their home countries.&lt;/p>
+&lt;h2 id="domain-name-system">Domain Name System
+&lt;/h2>&lt;p>The Domain Name System (DNS) is the &lt;strong>hierarchical and decentralized naming system&lt;/strong> used to identify computers, services, and other resoures reachable through the Internet or other Internet Protocol (IP) networks.&lt;/p>
+&lt;p>&lt;img src="C:%5cUsers%5cdyhes%5cAppData%5cRoaming%5cTypora%5ctypora-user-images%5cimage-20220324153500031.png"
+loading="lazy"
+alt="image-20220324153500031"
+>&lt;/p>
+&lt;p>The domain name system is administered by the &lt;strong>Internet Corporation for Assigned Names and Numbers(ICANN)&lt;/strong>, a non-profit organization based in California founded in &lt;strong>1998&lt;/strong>.&lt;/p>
+&lt;p>A standard called &lt;strong>DNSSEC&lt;/strong> seeks to beef up DNS security with &lt;strong>encryption&lt;/strong>, but few people have adopted it.&lt;/p>
+&lt;h2 id="dns-server-type">DNS Server Type
+&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>DNS recursor&lt;/strong> ( &lt;strong>librarian&lt;/strong> who is asked to go find a particular book somewhere in a library)&lt;/li>
+&lt;/ul>
+&lt;p>The DNS recursor is a server designed to &lt;strong>receive queries from client machines through applications such as web browsers&lt;/strong>. Typically the recursor is then responsible for &lt;strong>making additional requests&lt;/strong> in order to satisfy the client’s DNS query.&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Root Nameserver&lt;/strong> ( an index in a library that points to different racks of books) The root server is the first step in translating (resolving) human readable host names into IP addresses. it serves as a reference to other more specific locations.&lt;/li>
+&lt;li>&lt;strong>TLD(top level domain server) Nameserver&lt;/strong>- (a specific rack of books in a library.) This nameserver is the next step in the search for a specific IP address, and it hosts the last portion of a hostname (In example.com, the TLD server is “com”).&lt;/li>
+&lt;li>&lt;strong>Authoritative Nameserver&lt;/strong> -( dictionary on a rack of books, in which a specific name can be translated into its definition.) The authoritative nameserver is the last stop in the nameserver query. If the authoritative name server has access to the requested record, it will return the IP address for the requested hostname back to the DNS Recursor (the librarian) that made the initial request.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="C:%5cUsers%5cdyhes%5cAppData%5cRoaming%5cTypora%5ctypora-user-images%5cimage-20220324154414911.png"
+loading="lazy"
+alt="image-20220324154414911"
+>&lt;/p>
+&lt;h3 id="chache">Chache
+&lt;/h3>&lt;p>caching is a data persistence process that helps short-circuit the necessary requests by serving the requested resource record earlier in the DNS lookup.&lt;/p>
+&lt;p>&lt;img src="C:%5cUsers%5cdyhes%5cAppData%5cRoaming%5cTypora%5ctypora-user-images%5cimage-20220120142648564.png"
+loading="lazy"
+alt="image-20220120142648564"
+>&lt;/p>
+&lt;h2 id="subdomain">Subdomain
+&lt;/h2>&lt;p>It’s worth mentioning that in instances where the query is for a subdomain such as foo.example.com or blog.cloudflare.com an &lt;strong>additional nameserver&lt;/strong> will be added to the sequence &lt;strong>after the authoritative nameserver&lt;/strong>, which is responsible for storing the subdomain’s &lt;strong>CNAME record&lt;/strong>.&lt;/p>
+&lt;p>&lt;img src="C:%5cUsers%5cdyhes%5cAppData%5cRoaming%5cTypora%5ctypora-user-images%5cimage-20220324154954437.png"
+loading="lazy"
+alt="image-20220324154954437"
+>&lt;/p></description></item></channel></rss>
