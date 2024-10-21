@@ -1,0 +1,934 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Vue on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/vue/</link><description>Recent content in Vue on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 08 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://dyhes.github.io/tags/vue/index.xml" rel="self" type="application/rss+xml"/><item><title>【Vue】Guide</title><link>https://dyhes.github.io/p/vueguide/</link><pubDate>Sat, 08 May 2021 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/vueguide/</guid><description>&lt;h2 id="create-an-application">Create an Application
+&lt;/h2>&lt;p>Every Vue application starts by creating a new &lt;strong>application instance&lt;/strong> with the &lt;a class="link" href="https://vuejs.org/api/application.html#createapp" target="_blank" rel="noopener"
+>&lt;code>createApp&lt;/code>&lt;/a> function.&lt;/p>
+&lt;p>The object we are passing into &lt;code>createApp&lt;/code> is in fact a component. Every app requires a &amp;ldquo;root component&amp;rdquo; that can contain other components as its children.&lt;/p>
+&lt;p>An application instance won&amp;rsquo;t render anything until its &lt;code>.mount()&lt;/code> method is called. It expects a &amp;ldquo;container&amp;rdquo; argument, which can either be an actual DOM element or a selector string&lt;/p>
+&lt;p>You are not limited to a single application instance on the same page. The &lt;code>createApp&lt;/code> API allows multiple Vue applications to co-exist on the same page, each with its own scope for configuration and global assets&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">app1&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">createApp&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cm">/* ... */&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">app1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">mount&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;#container-1&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">app2&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">createApp&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cm">/* ... */&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">app2&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">mount&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;#container-2&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>If you are using Vue to enhance server-rendered HTML and only need Vue to control specific parts of a large page, avoid mounting a single Vue application instance on the entire page. Instead, create multiple small application instances and mount them on the elements they are responsible for.&lt;/p>
+&lt;h2 id="template-syntax">Template Syntax
+&lt;/h2>&lt;p>The double mustaches interprets the data as plain text, not HTML. In order to output real HTML, you will need to use the &lt;a class="link" href="https://vuejs.org/api/built-in-directives.html#v-html" target="_blank" rel="noopener"
+>&lt;code>v-html&lt;/code> directive&lt;/a>&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="nx">Using&lt;/span> &lt;span class="nx">text&lt;/span> &lt;span class="nx">interpolation&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">{{&lt;/span> &lt;span class="nx">rawHtml&lt;/span> &lt;span class="p">}}&amp;lt;/&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="nx">Using&lt;/span> &lt;span class="nx">v&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nx">html&lt;/span> &lt;span class="nx">directive&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">span&lt;/span> &lt;span class="nt">v-html&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;rawHtml&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="nt">span&lt;/span>&lt;span class="p">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="dynamically-binding-multiple-attributes">dynamically binding multiple attributes
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">script&lt;/span> &lt;span class="na">setup&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">objectOfAttrs&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">id&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;container&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">class&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;wrapper&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">script&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span> &lt;span class="nt">v-bind&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;objectOfAttrs&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span> &lt;span class="o">:&lt;/span>&lt;span class="err">=&amp;#34;&lt;/span>&lt;span class="na">objectOfAttrs&lt;/span>&lt;span class="err">&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="k">for&lt;/span> &lt;span class="kr">short&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="directives">Directives
+&lt;/h3>&lt;p>Directives are special attributes with the &lt;code>v-&lt;/code> prefix. Vue provides a number of &lt;a class="link" href="https://vuejs.org/api/built-in-directives.html" target="_blank" rel="noopener"
+>built-in directives&lt;/a>&lt;/p>
+&lt;p>It is also possible to use a JavaScript expression in a directive argument by wrapping it with square brackets.&lt;/p>
+&lt;h4 id="dynamic-arguments">Dynamic arguments
+&lt;/h4>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">a&lt;/span> &lt;span class="na">v&lt;/span>&lt;span class="nt">-bind:[attributeName]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;url&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="p">...&lt;/span> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">a&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!--&lt;/span> &lt;span class="nx">shorthand&lt;/span> &lt;span class="o">--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">a&lt;/span> &lt;span class="nt">:[attributeName]&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;url&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="p">...&lt;/span> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">a&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Dynamic arguments are expected to evaluate to a string, with the exception of &lt;code>null&lt;/code>. The special value &lt;code>null&lt;/code> can be used to explicitly remove the binding. Any other non-string value will trigger a warning.&lt;/p>
+&lt;h3 id="modifiers">Modifiers
+&lt;/h3>&lt;p>Modifiers are special postfixes denoted by a dot, which indicate that a directive should be bound in some special way. For example, the &lt;code>.prevent&lt;/code> modifier tells the &lt;code>v-on&lt;/code> directive to call &lt;code>event.preventDefault()&lt;/code> on the triggered event.&lt;/p>
+&lt;p>&lt;img src="https://vuejs.org/assets/directive.69c37117.png"
+loading="lazy"
+alt="directive syntax graph"
+>&lt;/p>
+&lt;h2 id="reactivity">Reactivity
+&lt;/h2>&lt;p>We can create a reactive object or array with the &lt;a class="link" href="https://vuejs.org/api/reactivity-core.html#reactive" target="_blank" rel="noopener"
+>&lt;code>reactive()&lt;/code>&lt;/a>, and non-object by the &lt;code>ref()&lt;/code>.&lt;/p>
+&lt;p>When you mutate reactive state, the DOM is updated automatically. However, it should be noted that the DOM updates are not applied synchronously. Instead, Vue buffers them until the &amp;ldquo;next tick&amp;rdquo; in the update cycle to ensure that each component needs to update only once no matter how many state changes you have made.&lt;/p>
+&lt;p>To wait for the DOM update to complete after a state change, you can use the &lt;a class="link" href="https://vuejs.org/api/general.html#nexttick" target="_blank" rel="noopener"
+>nextTick()&lt;/a> global API&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">nextTick&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="nx">from&lt;/span> &lt;span class="s1">&amp;#39;vue&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">function&lt;/span> &lt;span class="nx">increment&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">count&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span>&lt;span class="o">++&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">nextTick&lt;/span>&lt;span class="p">(()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// access updated DOM
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="reactive-proxy">Reactive Proxy
+&lt;/h3>&lt;p>It is important to note that the returned value from &lt;code>reactive()&lt;/code> is a &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy" target="_blank" rel="noopener"
+>Proxy&lt;/a> of the original object, which is not equal to the original object.&lt;/p>
+&lt;p>Only the proxy is reactive - mutating the original object will not trigger updates.&lt;/p>
+&lt;p>To ensure consistent access to the proxy, calling &lt;code>reactive()&lt;/code> on the same object always returns &lt;strong>the same proxy&lt;/strong>, and calling &lt;code>reactive()&lt;/code> on an existing proxy also returns &lt;strong>that&lt;/strong> &lt;strong>same proxy&lt;/strong>&lt;/p>
+&lt;h3 id="ref">Ref
+&lt;/h3>&lt;p>The &lt;code>reactive()&lt;/code> API has two limitations:&lt;/p>
+&lt;ul>
+&lt;li>It only works for object types&lt;/li>
+&lt;li>we couldn&amp;rsquo;t pass it around without losing reactivity.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;code>ref()&lt;/code> allows us to create a &amp;ldquo;reference&amp;rdquo; to any value and pass it around without losing reactivity.&lt;/p>
+&lt;p>When refs are accessed as &lt;strong>top-level properties&lt;/strong> in the template, they are automatically &amp;ldquo;unwrapped&amp;rdquo; so there is no need to use &lt;code>.value&lt;/code>.&lt;/p>
+&lt;h2 id="computed-properties">Computed Properties
+&lt;/h2>&lt;p>For complex logic that includes reactive data, it is recommended to use a &lt;strong>computed property&lt;/strong>.&lt;/p>
+&lt;p>The &lt;code>computed()&lt;/code> function expects to be passed a getter function, and the returned value is a &lt;strong>computed ref&lt;/strong>.&lt;/p>
+&lt;p>A computed property automatically tracks its reactive dependencies.&lt;/p>
+&lt;p>Instead of a computed property, we can define the same function as a method. For the end result, the two approaches are indeed &lt;strong>exactly the same&lt;/strong>. However, the difference is that &lt;strong>computed properties are cached based on their reactive dependencies.&lt;/strong> A computed property will only re-evaluate when &lt;strong>some of its reactive dependencies have changed&lt;/strong>. This means as long as &lt;code>author.books&lt;/code> has not changed, multiple access to &lt;code>publishedBooksMessage&lt;/code> will immediately return the previously computed result without having to run the getter function again. In comparison, a method invocation will &lt;strong>always&lt;/strong> run the function whenever a re-render happens.&lt;/p>
+&lt;p>This also means the following computed property will never update, because &lt;code>Date.now()&lt;/code> is not a reactive dependency.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">now&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">computed&lt;/span>&lt;span class="p">(()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="nb">Date&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">now&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="setter">setter
+&lt;/h3>&lt;p>Computed properties are by default getter-only. If you attempt to assign a new value to a computed property, you will receive a runtime warning. In the rare cases where you need a &amp;ldquo;writable&amp;rdquo; computed property, you can create one by providing both a getter and a setter:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">script&lt;/span> &lt;span class="na">setup&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">computed&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="nx">from&lt;/span> &lt;span class="s1">&amp;#39;vue&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">firstName&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;John&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">lastName&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Doe&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">fullName&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">computed&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// getter
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">get&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="nx">firstName&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="s1">&amp;#39; &amp;#39;&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="nx">lastName&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// setter
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">set&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">newValue&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// Note: we are using destructuring assignment syntax here.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="nx">firstName&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">lastName&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">newValue&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39; &amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">script&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Now when you run &lt;code>fullName.value = 'John Doe'&lt;/code>, the setter will be invoked and &lt;code>firstName&lt;/code> and &lt;code>lastName&lt;/code> will be updated accordingly.&lt;/p>
+&lt;h2 id="class-and-style-bindings">Class and Style Bindings
+&lt;/h2>&lt;p>Vue provides special enhancements when &lt;code>v-bind&lt;/code> is used with &lt;code>class&lt;/code> and &lt;code>style&lt;/code>. In addition to strings, the expressions can also evaluate to objects or arrays.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span> &lt;span class="o">:&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;{ active: isActive }&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The above syntax means the presence of the &lt;code>active&lt;/code> class will be determined by the &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Glossary/Truthy" target="_blank" rel="noopener"
+>truthiness&lt;/a> of the data property &lt;code>isActive&lt;/code>. We can also bind to a &lt;a class="link" href="https://vuejs.org/guide/essentials/computed.html" target="_blank" rel="noopener"
+>computed property&lt;/a> that returns an object.&lt;/p>
+&lt;p>We can bind &lt;code>:class&lt;/code> to an array to apply a list of classes&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span> &lt;span class="o">:&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;[isActive ? activeClass : &amp;#39;&amp;#39;, errorClass]&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span> &lt;span class="o">:&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;[{ active: isActive }, errorClass]&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="with-components">With Components
+&lt;/h3>&lt;p>When you use the &lt;code>class&lt;/code> attribute on a component with a &lt;strong>single root element&lt;/strong>, those classes will be added to the component&amp;rsquo;s root element, and merged with any existing class already on it.&lt;/p>
+&lt;p>If your component has &lt;strong>multiple root elements&lt;/strong>, you would need to define which element will receive this class. You can do this using the &lt;code>$attrs&lt;/code> component property&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">p&lt;/span> &lt;span class="nt">:class&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;$attrs.class&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="nx">Hi&lt;/span>&lt;span class="o">!&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">span&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="nx">This&lt;/span> &lt;span class="nx">is&lt;/span> &lt;span class="nx">a&lt;/span> &lt;span class="nx">child&lt;/span> &lt;span class="nx">component&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">span&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="conditional-rendering">Conditional Rendering
+&lt;/h2>&lt;p>&lt;code>v-if&lt;/code>,&lt;code>v-else-if&lt;/code> and &lt;code>v-else&lt;/code> can be used to attain conditional rendering and they also work for &lt;code>&amp;lt;template&amp;gt;&lt;/code>.&lt;/p>
+&lt;p>The difference is that an element with &lt;code>v-show&lt;/code> will always be rendered and remain in the DOM; &lt;code>v-show&lt;/code> only toggles the &lt;code>display&lt;/code> CSS property of the element.&lt;/p>
+&lt;p>&lt;code>v-show&lt;/code> doesn&amp;rsquo;t support the &lt;code>&amp;lt;template&amp;gt;&lt;/code> element, nor does it work with &lt;code>v-else&lt;/code>.&lt;/p>
+&lt;p>Generally speaking, &lt;code>v-if&lt;/code> has higher toggle costs while &lt;code>v-show&lt;/code> has higher initial render costs. So prefer &lt;code>v-show&lt;/code> if you need to toggle something very often, and prefer &lt;code>v-if&lt;/code> if the condition is unlikely to change at runtime.&lt;/p>
+&lt;p>It&amp;rsquo;s &lt;strong>not&lt;/strong> recommended to use &lt;code>v-if&lt;/code> and &lt;code>v-for&lt;/code> on the same element due to implicit precedence. Refer to &lt;a class="link" href="https://vuejs.org/style-guide/rules-essential.html#avoid-v-if-with-v-for" target="_blank" rel="noopener"
+>style guide&lt;/a> for details.&lt;/p>
+&lt;p>When &lt;code>v-if&lt;/code> and &lt;code>v-for&lt;/code> are both used on the same element, &lt;code>v-if&lt;/code> will be evaluated first.&lt;/p>
+&lt;h2 id="list-rendering">List Rendering
+&lt;/h2>&lt;p>For nested &lt;code>v-for&lt;/code>, scoping also works similar to nested functions. Each &lt;code>v-for&lt;/code> scope has access to parent scopes.&lt;/p>
+&lt;p>Similar to template &lt;code>v-if&lt;/code>, you can also use a &lt;code>&amp;lt;template&amp;gt;&lt;/code> tag with &lt;code>v-for&lt;/code> to render a block of multiple elements.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">ul&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">template&lt;/span> &lt;span class="nt">v-for&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;item in items&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">li&lt;/span>&lt;span class="p">&amp;gt;{{&lt;/span> &lt;span class="nx">item&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">msg&lt;/span> &lt;span class="p">}}&amp;lt;/&lt;/span>&lt;span class="nt">li&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">li&lt;/span> &lt;span class="na">class&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;divider&amp;#34;&lt;/span> &lt;span class="na">role&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;presentation&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="nt">li&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">ul&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>When they exist on the same node, &lt;code>v-if&lt;/code> has a higher priority than &lt;code>v-for&lt;/code>. That means the &lt;code>v-if&lt;/code> condition will not have access to variables from the scope of the &lt;code>v-for&lt;/code>&lt;/p>
+&lt;p>This can be fixed by moving &lt;code>v-for&lt;/code> to a wrapping &lt;code>&amp;lt;template&amp;gt;&lt;/code> tag (which is also more explicit):&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">template&lt;/span> &lt;span class="nt">v-for&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;todo in todos&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">li&lt;/span> &lt;span class="nt">v-if&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;!todo.isComplete&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{{&lt;/span> &lt;span class="na">todo.name&lt;/span> &lt;span class="p">}}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">li&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>To give Vue a hint so that it can track each node&amp;rsquo;s identity, and thus reuse and reorder existing elements, you need to provide a unique &lt;code>key&lt;/code> attribute for each item&lt;/p>
+&lt;p>When using &lt;code>&amp;lt;template v-for&amp;gt;&lt;/code>, the &lt;code>key&lt;/code> should be placed on the &lt;code>&amp;lt;template&amp;gt;&lt;/code> container&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">template&lt;/span> &lt;span class="nt">v-for&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;todo in todos&amp;#34; :key=&amp;#34;todo.name&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">li&lt;/span>&lt;span class="p">&amp;gt;{{&lt;/span> &lt;span class="nx">todo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">name&lt;/span> &lt;span class="p">}}&amp;lt;/&lt;/span>&lt;span class="nt">li&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="with-components-1">with Components
+&lt;/h3>&lt;p>You can directly use &lt;code>v-for&lt;/code> on a component, like any normal element (don&amp;rsquo;t forget to provide a &lt;code>key&lt;/code>).&lt;/p>
+&lt;p>However, this won&amp;rsquo;t automatically pass any data to the component, because components have isolated scopes of their own. In order to pass the iterated data into the component, we should also use props.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">my-component&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">v-for&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;(item, index) in items&amp;#34;&lt;/span>&lt;span class="p">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&lt;/span> &lt;span class="nt">:item&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;item&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">:index&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;index&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">:key&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;item.id&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="nt">my-component&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="array-change">Array Change
+&lt;/h3>&lt;p>Vue wraps an observed array&amp;rsquo;s mutation methods so they will also trigger view updates. The wrapped methods are:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>push()&lt;/code>&lt;/li>
+&lt;li>&lt;code>pop()&lt;/code>&lt;/li>
+&lt;li>&lt;code>shift()&lt;/code>&lt;/li>
+&lt;li>&lt;code>unshift()&lt;/code>&lt;/li>
+&lt;li>&lt;code>splice()&lt;/code>&lt;/li>
+&lt;li>&lt;code>sort()&lt;/code>&lt;/li>
+&lt;li>&lt;code>reverse()&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>There are also non-mutating methods, e.g. &lt;code>filter()&lt;/code>, &lt;code>concat()&lt;/code> and &lt;code>slice()&lt;/code>, which do not mutate the original array but &lt;strong>always return a new array&lt;/strong>. When working with non-mutating methods, we should replace the old array with the new one.&lt;/p>
+&lt;p>Be careful with &lt;code>reverse()&lt;/code> and &lt;code>sort()&lt;/code> in a computed property! These two methods will mutate the original array, which should be avoided in computed getters. Create a copy of the original array before calling these methods.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="o">-&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="nx">numbers&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">reverse&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="c1">//wrong
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="o">+&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="p">[...&lt;/span>&lt;span class="nx">numbers&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="nx">reverse&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="c1">//true
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="event-handling">Event Handling
+&lt;/h2>&lt;p>We can use the &lt;code>v-on&lt;/code> directive, which we typically shorten to the &lt;code>@&lt;/code> symbol, to listen to DOM events and run some JavaScript when they&amp;rsquo;re triggered.&lt;/p>
+&lt;p>The handler value can be one of the following:&lt;/p>
+&lt;ol>
+&lt;li>&lt;strong>Inline handlers:&lt;/strong> Inline JavaScript to be executed when the event is triggered (similar to the native &lt;code>onclick&lt;/code> attribute).&lt;/li>
+&lt;li>&lt;strong>Method handlers:&lt;/strong> A property name or path that points to a method defined on the component.&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">button&lt;/span> &lt;span class="nt">@click&lt;/span>&lt;span class="s">=&amp;#34;count++&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="na">Add&lt;/span> &lt;span class="na">1&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">button&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="nx">Count&lt;/span> &lt;span class="nx">is&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">{{&lt;/span> &lt;span class="nx">count&lt;/span> &lt;span class="p">}}&amp;lt;/&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The template compiler detects method handlers by checking whether the &lt;code>v-on&lt;/code> value string is a valid JavaScript identifier or property access path.&lt;/p>
+&lt;p>Sometimes we also need to access the original DOM event in an inline handler. You can pass it into a method using the special &lt;code>$event&lt;/code> variable, or use an inline arrow function.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">button&lt;/span> &lt;span class="err">@&lt;/span>&lt;span class="na">click&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;warn(&amp;#39;Form cannot be submitted yet.&amp;#39;, $event)&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">Submit&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">button&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!--&lt;/span> &lt;span class="nx">using&lt;/span> &lt;span class="nx">inline&lt;/span> &lt;span class="nx">arrow&lt;/span> &lt;span class="kd">function&lt;/span> &lt;span class="o">--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">button&lt;/span> &lt;span class="err">@&lt;/span>&lt;span class="na">click&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;(event) =&amp;gt; warn(&amp;#39;Form cannot be submitted yet.&amp;#39;, event)&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">Submit&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">button&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="event-modifiers">Event Modifiers
+&lt;/h3>&lt;p>Recall that modifiers are directive postfixes denoted by a dot.&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>.stop&lt;/code>&lt;/li>
+&lt;li>&lt;code>.prevent&lt;/code>&lt;/li>
+&lt;li>&lt;code>.self&lt;/code>&lt;/li>
+&lt;li>&lt;code>.capture&lt;/code>&lt;/li>
+&lt;li>&lt;code>.once&lt;/code>&lt;/li>
+&lt;li>&lt;code>.passive&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!--&lt;/span> &lt;span class="nx">the&lt;/span> &lt;span class="nx">click&lt;/span> &lt;span class="nx">event&lt;/span>&lt;span class="err">&amp;#39;&lt;/span>&lt;span class="nx">s&lt;/span> &lt;span class="nx">propagation&lt;/span> &lt;span class="nx">will&lt;/span> &lt;span class="nx">be&lt;/span> &lt;span class="nx">stopped&lt;/span> &lt;span class="o">--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">a&lt;/span> &lt;span class="nt">@click.stop&lt;/span>&lt;span class="s">=&amp;#34;doThis&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="nt">a&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!--&lt;/span> &lt;span class="nx">the&lt;/span> &lt;span class="nx">submit&lt;/span> &lt;span class="nx">event&lt;/span> &lt;span class="nx">will&lt;/span> &lt;span class="nx">no&lt;/span> &lt;span class="nx">longer&lt;/span> &lt;span class="nx">reload&lt;/span> &lt;span class="nx">the&lt;/span> &lt;span class="nx">page&lt;/span> &lt;span class="o">--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">form&lt;/span> &lt;span class="nt">@submit.prevent&lt;/span>&lt;span class="s">=&amp;#34;onSubmit&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="nt">form&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!--&lt;/span> &lt;span class="nx">modifiers&lt;/span> &lt;span class="nx">can&lt;/span> &lt;span class="nx">be&lt;/span> &lt;span class="nx">chained&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">and&lt;/span> &lt;span class="nx">the&lt;/span> &lt;span class="nx">order&lt;/span> &lt;span class="nx">matters&lt;/span>&lt;span class="o">--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">a&lt;/span> &lt;span class="nt">@click.stop.prevent&lt;/span>&lt;span class="s">=&amp;#34;doThat&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="nt">a&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!--&lt;/span> &lt;span class="nx">just&lt;/span> &lt;span class="nx">the&lt;/span> &lt;span class="nx">modifier&lt;/span> &lt;span class="o">--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">form&lt;/span> &lt;span class="err">@&lt;/span>&lt;span class="na">submit.prevent&lt;/span>&lt;span class="p">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="nt">form&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!--&lt;/span> &lt;span class="nx">only&lt;/span> &lt;span class="nx">trigger&lt;/span> &lt;span class="nx">handler&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="nx">event&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">target&lt;/span> &lt;span class="nx">is&lt;/span> &lt;span class="nx">the&lt;/span> &lt;span class="nx">element&lt;/span> &lt;span class="nx">itself&lt;/span> &lt;span class="o">--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!--&lt;/span> &lt;span class="nx">i&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">e&lt;/span>&lt;span class="p">.&lt;/span> &lt;span class="nx">not&lt;/span> &lt;span class="nx">from&lt;/span> &lt;span class="nx">a&lt;/span> &lt;span class="nx">child&lt;/span> &lt;span class="nx">element&lt;/span> &lt;span class="o">--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span> &lt;span class="nt">@click.self&lt;/span>&lt;span class="s">=&amp;#34;doThat&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;...&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The &lt;code>.capture&lt;/code>, &lt;code>.once&lt;/code>, and &lt;code>.passive&lt;/code> modifiers mirror the &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#Parameters" target="_blank" rel="noopener"
+>options of the native &lt;code>addEventListener&lt;/code> method&lt;/a>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!--&lt;/span> &lt;span class="nx">use&lt;/span> &lt;span class="nx">capture&lt;/span> &lt;span class="nx">mode&lt;/span> &lt;span class="nx">when&lt;/span> &lt;span class="nx">adding&lt;/span> &lt;span class="nx">the&lt;/span> &lt;span class="nx">event&lt;/span> &lt;span class="nx">listener&lt;/span> &lt;span class="o">--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!--&lt;/span> &lt;span class="nx">i&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">e&lt;/span>&lt;span class="p">.&lt;/span> &lt;span class="nx">an&lt;/span> &lt;span class="nx">event&lt;/span> &lt;span class="nx">targeting&lt;/span> &lt;span class="nx">an&lt;/span> &lt;span class="nx">inner&lt;/span> &lt;span class="nx">element&lt;/span> &lt;span class="nx">is&lt;/span> &lt;span class="nx">handled&lt;/span> &lt;span class="nx">here&lt;/span> &lt;span class="nx">before&lt;/span> &lt;span class="nx">being&lt;/span> &lt;span class="nx">handled&lt;/span> &lt;span class="nx">by&lt;/span> &lt;span class="nx">that&lt;/span> &lt;span class="nx">element&lt;/span> &lt;span class="o">--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span> &lt;span class="nt">@click.capture&lt;/span>&lt;span class="s">=&amp;#34;doThis&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;...&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!--&lt;/span> &lt;span class="nx">the&lt;/span> &lt;span class="nx">click&lt;/span> &lt;span class="nx">event&lt;/span> &lt;span class="nx">will&lt;/span> &lt;span class="nx">be&lt;/span> &lt;span class="nx">triggered&lt;/span> &lt;span class="nx">at&lt;/span> &lt;span class="nx">most&lt;/span> &lt;span class="nx">once&lt;/span> &lt;span class="o">--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">a&lt;/span> &lt;span class="nt">@click.once&lt;/span>&lt;span class="s">=&amp;#34;doThis&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="nt">a&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!--&lt;/span> &lt;span class="nx">the&lt;/span> &lt;span class="nx">scroll&lt;/span> &lt;span class="nx">event&lt;/span>&lt;span class="err">&amp;#39;&lt;/span>&lt;span class="nx">s&lt;/span> &lt;span class="k">default&lt;/span> &lt;span class="nx">behavior&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">scrolling&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="nx">will&lt;/span> &lt;span class="nx">happen&lt;/span> &lt;span class="o">--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!--&lt;/span> &lt;span class="nx">immediately&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">instead&lt;/span> &lt;span class="k">of&lt;/span> &lt;span class="nx">waiting&lt;/span> &lt;span class="k">for&lt;/span> &lt;span class="sb">`onScroll`&lt;/span> &lt;span class="nx">to&lt;/span> &lt;span class="nx">complete&lt;/span> &lt;span class="o">--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!--&lt;/span> &lt;span class="k">in&lt;/span> &lt;span class="k">case&lt;/span> &lt;span class="nx">it&lt;/span> &lt;span class="nx">contains&lt;/span> &lt;span class="sb">`event.preventDefault()`&lt;/span> &lt;span class="o">--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span> &lt;span class="nt">@scroll.passive&lt;/span>&lt;span class="s">=&amp;#34;onScroll&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;...&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="key-modifiers">Key Modifiers
+&lt;/h3>&lt;p>You can directly use any valid key names exposed via &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values" target="_blank" rel="noopener"
+>&lt;code>KeyboardEvent.key&lt;/code>&lt;/a> as modifiers by converting them to kebab-case.&lt;/p>
+&lt;h4 id="key-aliases">key aliases
+&lt;/h4>&lt;p>Vue provides aliases for the most commonly used keys:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>.enter&lt;/code>&lt;/li>
+&lt;li>&lt;code>.tab&lt;/code>&lt;/li>
+&lt;li>&lt;code>.delete&lt;/code> (captures both &amp;ldquo;Delete&amp;rdquo; and &amp;ldquo;Backspace&amp;rdquo; keys)&lt;/li>
+&lt;li>&lt;code>.esc&lt;/code>&lt;/li>
+&lt;li>&lt;code>.space&lt;/code>&lt;/li>
+&lt;li>&lt;code>.up&lt;/code>&lt;/li>
+&lt;li>&lt;code>.down&lt;/code>&lt;/li>
+&lt;li>&lt;code>.left&lt;/code>&lt;/li>
+&lt;li>&lt;code>.right&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h4 id="system-modifier-keys">System Modifier Keys
+&lt;/h4>&lt;p>You can use the following modifiers to trigger mouse or keyboard event listeners only when the corresponding modifier key is pressed:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>.ctrl&lt;/code>&lt;/li>
+&lt;li>&lt;code>.alt&lt;/code>&lt;/li>
+&lt;li>&lt;code>.shift&lt;/code>&lt;/li>
+&lt;li>&lt;code>.meta&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>Note that modifier keys are different from regular keys and when used with &lt;code>keyup&lt;/code> events, they have to be pressed when the event is emitted. In other words, &lt;code>keyup.ctrl&lt;/code> will only trigger if you release a key while holding down &lt;code>ctrl&lt;/code>. It won&amp;rsquo;t trigger if you release the &lt;code>ctrl&lt;/code> key alone.&lt;/p>
+&lt;h5 id="exact-modifier">&lt;code>.exact&lt;/code> Modifier
+&lt;/h5>&lt;p>The &lt;code>.exact&lt;/code> modifier allows control of the exact combination of system modifiers needed to trigger an event.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!--&lt;/span> &lt;span class="k">this&lt;/span> &lt;span class="nx">will&lt;/span> &lt;span class="nx">fire&lt;/span> &lt;span class="nx">even&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="nx">Alt&lt;/span> &lt;span class="nx">or&lt;/span> &lt;span class="nx">Shift&lt;/span> &lt;span class="nx">is&lt;/span> &lt;span class="nx">also&lt;/span> &lt;span class="nx">pressed&lt;/span> &lt;span class="o">--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">button&lt;/span> &lt;span class="nt">@click.ctrl&lt;/span>&lt;span class="s">=&amp;#34;onClick&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="nx">A&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">button&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!--&lt;/span> &lt;span class="k">this&lt;/span> &lt;span class="nx">will&lt;/span> &lt;span class="nx">only&lt;/span> &lt;span class="nx">fire&lt;/span> &lt;span class="nx">when&lt;/span> &lt;span class="nx">Ctrl&lt;/span> &lt;span class="nx">and&lt;/span> &lt;span class="nx">no&lt;/span> &lt;span class="nx">other&lt;/span> &lt;span class="nx">keys&lt;/span> &lt;span class="nx">are&lt;/span> &lt;span class="nx">pressed&lt;/span> &lt;span class="o">--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">button&lt;/span> &lt;span class="nt">@click.ctrl.exact&lt;/span>&lt;span class="s">=&amp;#34;onCtrlClick&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="nx">A&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">button&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!--&lt;/span> &lt;span class="k">this&lt;/span> &lt;span class="nx">will&lt;/span> &lt;span class="nx">only&lt;/span> &lt;span class="nx">fire&lt;/span> &lt;span class="nx">when&lt;/span> &lt;span class="nx">no&lt;/span> &lt;span class="nx">system&lt;/span> &lt;span class="nx">modifiers&lt;/span> &lt;span class="nx">are&lt;/span> &lt;span class="nx">pressed&lt;/span> &lt;span class="o">--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">button&lt;/span> &lt;span class="nt">@click.exact&lt;/span>&lt;span class="s">=&amp;#34;onClick&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="nx">A&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">button&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="mouse-button-modifiers">Mouse Button Modifiers
+&lt;/h3>&lt;ul>
+&lt;li>&lt;code>.left&lt;/code>&lt;/li>
+&lt;li>&lt;code>.right&lt;/code>&lt;/li>
+&lt;li>&lt;code>.middle&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>These modifiers restrict the handler to events triggered by a specific mouse button.&lt;/p>
+&lt;h2 id="form-input-bindings">Form Input Bindings
+&lt;/h2>&lt;p>&lt;code>v-model&lt;/code> will ignore the initial &lt;code>value&lt;/code>, &lt;code>checked&lt;/code> or &lt;code>selected&lt;/code> attributes found on any form elements. It will always treat the current bound JavaScript state as the source of truth. You should declare the initial value on the JavaScript side, using reactivity APIs.&lt;/p>
+&lt;h2 id="lifecycle-hooks">Lifecycle Hooks
+&lt;/h2>&lt;p>There are also other hooks which will be called at different stages of the instance&amp;rsquo;s lifecycle, with the most commonly used being &lt;a class="link" href="https://vuejs.org/api/composition-api-lifecycle.html#onmounted" target="_blank" rel="noopener"
+>&lt;code>onMounted&lt;/code>&lt;/a>, &lt;a class="link" href="https://vuejs.org/api/composition-api-lifecycle.html#onupdated" target="_blank" rel="noopener"
+>&lt;code>onUpdated&lt;/code>&lt;/a>, and &lt;a class="link" href="https://vuejs.org/api/composition-api-lifecycle.html#onunmounted" target="_blank" rel="noopener"
+>&lt;code>onUnmounted&lt;/code>&lt;/a>.&lt;/p>
+&lt;p>&lt;img src="https://vuejs.org/assets/lifecycle.16e4c08e.png"
+loading="lazy"
+alt="Component lifecycle diagram"
+>&lt;/p>
+&lt;h2 id="watchs">Watchs
+&lt;/h2>&lt;p>With Composition API, we can use the &lt;a class="link" href="https://vuejs.org/api/reactivity-core.html#watch" target="_blank" rel="noopener"
+>&lt;code>watch&lt;/code> function&lt;/a> to trigger a callback whenever a piece of reactive state changes.&lt;/p>
+&lt;p>&lt;code>watch&lt;/code>&amp;rsquo;s first argument can be different types of reactive &amp;ldquo;sources&amp;rdquo;: it can be a ref (including computed refs), a reactive object, a getter function, or an array of multiple sources.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">y&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// single ref
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="nx">watch&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">x&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">newX&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sb">`x is &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nx">newX&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="sb">`&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// getter
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="nx">watch&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="nx">x&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="nx">y&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">(&lt;/span>&lt;span class="nx">sum&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sb">`sum of x + y is: &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nx">sum&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="sb">`&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// array of multiple sources
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="nx">watch&lt;/span>&lt;span class="p">([&lt;/span>&lt;span class="nx">x&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="nx">y&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="p">([&lt;/span>&lt;span class="nx">newX&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">newY&lt;/span>&lt;span class="p">])&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sb">`x is &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nx">newX&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="sb"> and y is &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nx">newY&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="sb">`&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Do note that you can&amp;rsquo;t watch a property of a reactive object like this:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">obj&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">reactive&lt;/span>&lt;span class="p">({&lt;/span> &lt;span class="nx">count&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">0&lt;/span> &lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// this won&amp;#39;t work because we are passing a number to watch()
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="nx">watch&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">obj&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">count&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">count&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sb">`count is: &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nx">count&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="sb">`&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Instead, use a getter:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// instead, use a getter:
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="nx">watch&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="nx">obj&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">count&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">(&lt;/span>&lt;span class="nx">count&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sb">`count is: &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nx">count&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="sb">`&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="watcheffect">watchEffect
+&lt;/h3>&lt;p>&lt;code>watchEffect()&lt;/code> allows us to perform a side effect immediately while automatically tracking the effect&amp;rsquo;s reactive dependencies.&lt;/p>
+&lt;p>&lt;code>watch&lt;/code> and &lt;code>watchEffect&lt;/code> both allow us to reactively perform side effects. Their main difference is the way they track their reactive dependencies:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>watch&lt;/code> only tracks the explicitly watched source. It won&amp;rsquo;t track anything accessed inside the callback. In addition, the callback only triggers when the source has actually changed. &lt;code>watch&lt;/code> separates dependency tracking from the side effect, giving us more precise control over when the callback should fire.&lt;/li>
+&lt;li>&lt;code>watchEffect&lt;/code>, on the other hand, combines dependency tracking and side effect into one phase. It automatically tracks every reactive property accessed during its synchronous execution. This is more convenient and typically results in terser code, but makes its reactive dependencies less explicit.&lt;/li>
+&lt;/ul>
+&lt;p>By default, user-created watcher callbacks are called &lt;strong>before&lt;/strong> Vue component updates. This means if you attempt to access the DOM inside a watcher callback, the DOM will be in the state before Vue has applied any updates.&lt;/p>
+&lt;p>If you want to access the DOM in a watcher callback &lt;strong>after&lt;/strong> Vue has updated it, you need to specify the &lt;code>flush: 'post'&lt;/code> option.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">watch&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">source&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">callback&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">flush&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;post&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">watchEffect&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">callback&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">flush&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;post&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Post-flush &lt;code>watchEffect()&lt;/code> also has a convenience alias, &lt;code>watchPostEffect()&lt;/code>.&lt;/p>
+&lt;p>Watchers declared synchronously inside &lt;code>setup()&lt;/code> or &lt;code>&amp;lt;script setup&amp;gt;&lt;/code> are bound to the owner component instance, and will be automatically stopped when the owner component is unmounted. In most cases, you don&amp;rsquo;t need to worry about stopping the watcher yourself.&lt;/p>
+&lt;p>The key here is that the watcher must be created &lt;strong>synchronously&lt;/strong>: if the watcher is created in an async callback, it won&amp;rsquo;t be bound to the owner component and must be stopped manually to avoid memory leaks.&lt;/p>
+&lt;p>To manually stop a watcher, use the returned handle function. This works for both &lt;code>watch&lt;/code> and &lt;code>watchEffect&lt;/code>.&lt;/p>
+&lt;p>Note that there should be very few cases where you need to create watchers asynchronously, and synchronous creation should be preferred whenever possible. If you need to wait for some async data, you can make your watch logic conditional instead.&lt;/p>
+&lt;h2 id="template-refs">Template Refs
+&lt;/h2>&lt;p>There may still be cases where we need direct access to the underlying DOM elements. To achieve this, we can use the special &lt;code>ref&lt;/code> attribute:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="nx">input&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;input&amp;#34;&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>ref&lt;/code> is a special attribute, similar to the &lt;code>key&lt;/code> attribute discussed in the &lt;code>v-for&lt;/code> chapter. It allows us to obtain a direct reference to a specific DOM element or child component instance after it&amp;rsquo;s mounted.&lt;/p>
+&lt;p>To obtain the reference with Composition API, we need to declare a ref with the same name&lt;/p>
+&lt;h2 id="components">Components
+&lt;/h2>&lt;h3 id="registration">Registration
+&lt;/h3>&lt;h4 id="global-registration">Global Registration
+&lt;/h4>&lt;p>We can make components available globally in the current &lt;a class="link" href="https://vuejs.org/guide/essentials/application.html" target="_blank" rel="noopener"
+>Vue application&lt;/a> using the &lt;code>app.component()&lt;/code> method.&lt;/p>
+&lt;p>If using SFCs, you will be registering the imported &lt;code>.vue&lt;/code> files.&lt;/p>
+&lt;p>The &lt;code>app.component()&lt;/code> method can be &lt;strong>chained&lt;/strong>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">app&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nx">component&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;ComponentA&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">ComponentA&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nx">component&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;ComponentB&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">ComponentB&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nx">component&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;ComponentC&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">ComponentC&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Globally registered components can be used in the template of any component within this application&lt;/p>
+&lt;h5 id="drawbacks">drawbacks
+&lt;/h5>&lt;ul>
+&lt;li>prevents build systems from removing unused components&lt;/li>
+&lt;li>makes dependency relationships less explicit in large applications&lt;/li>
+&lt;/ul>
+&lt;h4 id="local-registration">Local Registration
+&lt;/h4>&lt;p>When using SFC with &lt;code>&amp;lt;script setup&amp;gt;&lt;/code>, imported components are automatically registered locally.&lt;/p>
+&lt;p>Note that &lt;strong>locally registered components are *not* also available in descendent components&lt;/strong>.&lt;/p>
+&lt;h3 id="props">Props
+&lt;/h3>&lt;p>Vue components require explicit props declaration so that Vue knows what external props passed to the component should be treated as fallthrough attributes.&lt;/p>
+&lt;p>In SFCs using &lt;code>&amp;lt;script setup&amp;gt;&lt;/code>, props can be declared using the &lt;code>defineProps()&lt;/code> macro.&lt;/p>
+&lt;h3 id="events">Events
+&lt;/h3>&lt;h4 id="emit">$emit()
+&lt;/h4>&lt;p>A component can emit custom events directly in template expressions (e.g. in a &lt;code>v-on&lt;/code> handler) using the built-in &lt;code>$emit&lt;/code> function.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-html" data-lang="html">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">button&lt;/span> &lt;span class="err">@&lt;/span>&lt;span class="na">click&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;$emit(&amp;#39;someEvent&amp;#39;)&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>click me&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">button&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The parent can then listen to it using &lt;code>v-on&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-html" data-lang="html">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">MyComponent&lt;/span> &lt;span class="err">@&lt;/span>&lt;span class="na">some-event&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;callback&amp;#34;&lt;/span> &lt;span class="p">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Like components and props, event names provide an automatic case transformation. Like components and props, event names provide an automatic case transformation.&lt;/p>
+&lt;blockquote>
+&lt;p>Unlike native DOM events, component emitted events do &lt;strong>not&lt;/strong> bubble. You can only listen to the events emitted by a direct child component.&lt;/p>
+&lt;/blockquote>
+&lt;p>It&amp;rsquo;s sometimes useful to emit a specific value with an event.&lt;/p>
+&lt;blockquote>
+&lt;p>All extra arguments passed to &lt;code>$emit()&lt;/code> after the event name will be forwarded to the listener. For example, with &lt;code>$emit('foo', 1, 2, 3)&lt;/code> the listener function will receive three arguments.&lt;/p>
+&lt;/blockquote>
+&lt;h4 id="defineemits">&lt;code>defineEmits&lt;/code>
+&lt;/h4>&lt;p>Emitted events can be explicitly declared on the component via the &lt;a class="link" href="https://vuejs.org/api/sfc-script-setup.html#defineprops-defineemits" target="_blank" rel="noopener"
+>&lt;code>defineEmits()&lt;/code>&lt;/a> macro.&lt;/p>
+&lt;h3 id="fallthrough-attributes">Fallthrough Attributes
+&lt;/h3>&lt;p>A &amp;ldquo;fallthrough attribute&amp;rdquo; is an attribute or &lt;code>v-on&lt;/code> event listener that is passed to a component, but is not explicitly declared in the receiving component&amp;rsquo;s &lt;a class="link" href="https://vuejs.org/guide/components/props.html" target="_blank" rel="noopener"
+>props&lt;/a> or &lt;a class="link" href="https://vuejs.org/guide/components/events.html#declaring-emitted-events" target="_blank" rel="noopener"
+>emits&lt;/a>. Common examples of this include &lt;code>class&lt;/code>, &lt;code>style&lt;/code>, and &lt;code>id&lt;/code> attributes.&lt;/p>
+&lt;p>When a component renders a single root element, fallthrough attributes will be automatically added to the root element&amp;rsquo;s attributes.&lt;/p>
+&lt;p>Unlike components with a single root node, components with multiple root nodes do not have an automatic attribute fallthrough behavior. If &lt;code>$attrs&lt;/code> are not bound explicitly, a runtime warning will be issued.&lt;/p>
+&lt;h4 id="useattrs">&lt;code>useAttrs&lt;/code>
+&lt;/h4>&lt;p>If needed, you can access a component&amp;rsquo;s fallthrough attributes in &lt;code>&amp;lt;script setup&amp;gt;&lt;/code> using the &lt;code>useAttrs()&lt;/code> API:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="nx">script&lt;/span> &lt;span class="nx">setup&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">useAttrs&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="nx">from&lt;/span> &lt;span class="s1">&amp;#39;vue&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">attrs&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">useAttrs&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="err">/script&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="providerinject">Provider/inject
+&lt;/h3>&lt;h4 id="prop-drilling">Prop Drilling
+&lt;/h4>&lt;p>&lt;img src="https://vuejs.org/assets/prop-drilling.11201220.png"
+loading="lazy"
+alt="prop drilling diagram"
+>&lt;/p>
+&lt;p>We can solve props drilling with &lt;code>provide&lt;/code> and &lt;code>inject&lt;/code>. A parent component can serve as a &lt;strong>dependency provider&lt;/strong> for all its descendants. Any component in the descendant tree, regardless of how deep it is, can &lt;strong>inject&lt;/strong> dependencies provided by components up in its parent chain.&lt;/p>
+&lt;p>&lt;img src="https://vuejs.org/assets/provide-inject.3e0505e4.png"
+loading="lazy"
+alt="Provide/inject scheme"
+>&lt;/p>
+&lt;h4 id="provide">Provide
+&lt;/h4>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">provide&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="cm">/* key */&lt;/span> &lt;span class="s1">&amp;#39;message&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="cm">/* value */&lt;/span> &lt;span class="s1">&amp;#39;hello!&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The &lt;code>provide()&lt;/code> function accepts two arguments. The first argument is called the &lt;strong>injection key&lt;/strong>, which can be a string or a &lt;code>Symbol&lt;/code>. The injection key is used by descendent components to lookup the desired value to inject. A single component can call &lt;code>provide()&lt;/code> multiple times with different injection keys to provide different values.&lt;/p>
+&lt;p>The second argument is the provided value. The value can be of any type, including reactive state such as refs.&lt;/p>
+&lt;h4 id="inject">Inject
+&lt;/h4>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">message&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">inject&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;message&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>To inject data provided by an ancestor component, use the &lt;a class="link" href="https://vuejs.org/api/composition-api-dependency-injection.html#inject" target="_blank" rel="noopener"
+>&lt;code>inject()&lt;/code>&lt;/a> function.&lt;/p>
+&lt;p>If the provided value is a ref, it will be injected as-is and will &lt;strong>not&lt;/strong> be automatically unwrapped. This allows the injector component to &lt;strong>retain the reactivity connection&lt;/strong> to the provider component.&lt;/p>
+&lt;p>By default, &lt;code>inject&lt;/code> assumes that the injected key is provided somewhere in the parent chain. In the case where the key is not provided, there will be a runtime warning.&lt;/p>
+&lt;p>If we want to make an injected property work with optional providers, we need to declare a default value, similar to props&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">value&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">inject&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;message&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;default value&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>It is recommended to keep any mutations to reactive state inside of the *provider* whenever possible&lt;/strong>.&lt;/p>
+&lt;p>There may be times when we need to update the data from a injector component. In such cases, we recommend providing a function that is responsible for mutating the state.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">provide&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;location&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">location&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">updateLocation&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Finally, you can wrap the provided value with &lt;a class="link" href="https://vuejs.org/api/reactivity-core.html#readonly" target="_blank" rel="noopener"
+>&lt;code>readonly()&lt;/code>&lt;/a> if you want to ensure that the data passed through &lt;code>provide&lt;/code> cannot be mutated by the injected component.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">provide&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;read-only-count&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">readonly&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">count&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>symbol&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">myInjectionKey&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">Symbol&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">provide&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">myInjectionKey&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cm">/* data to provide */&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">injected&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">inject&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">myInjectionKey&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="async-components">Async Components
+&lt;/h3>&lt;p>In large applications, we may need to divide the app into smaller chunks and only load a component from the server when it&amp;rsquo;s needed. To make that possible, Vue has a &lt;a class="link" href="https://vuejs.org/api/general.html#defineasynccomponent" target="_blank" rel="noopener"
+>&lt;code>defineAsyncComponent&lt;/code>&lt;/a> function.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">AsyncComp&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">defineAsyncComponent&lt;/span>&lt;span class="p">(()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nb">Promise&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="nx">resolve&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">reject&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...load component from server
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">resolve&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="cm">/* loaded component */&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// ... use `AsyncComp` like a normal component
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#dynamic_imports" target="_blank" rel="noopener"
+>ES module dynamic import&lt;/a> also returns a Promise, so most of the time we will use it in combination with &lt;code>defineAsyncComponent&lt;/code>. Bundlers like Vite and webpack also support the syntax, so we can use it to import Vue SFCs.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">AsyncComp&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">defineAsyncComponent&lt;/span>&lt;span class="p">(()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">import&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;./components/MyComponent.vue&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="loading-and-error-states">Loading and Error States
+&lt;/h4>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">AsyncComp&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">defineAsyncComponent&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// the loader function
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">loader&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="kr">import&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;./Foo.vue&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// A component to use while the async component is loading
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">loadingComponent&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">LoadingComponent&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// Delay before showing the loading component. Default: 200ms.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">delay&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">200&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// A component to use if the load fails
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">errorComponent&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">ErrorComponent&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// The error component will be displayed if a timeout is
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// provided and exceeded. Default: Infinity.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">timeout&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">3000&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="reusability">Reusability
+&lt;/h2>&lt;h3 id="composables">Composables
+&lt;/h3>&lt;p>In the context of Vue applications, a &amp;ldquo;composable&amp;rdquo; is a function that leverages Vue Composition API to encapsulate and reuse &lt;strong>stateful logic&lt;/strong>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">export&lt;/span> &lt;span class="kd">function&lt;/span> &lt;span class="nx">useMouse&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// state encapsulated and managed by the composable
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="kr">const&lt;/span> &lt;span class="nx">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="nx">y&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// a composable can update its managed state over time.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="kd">function&lt;/span> &lt;span class="nx">update&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">event&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">x&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">event&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">pageX&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">y&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">event&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">pageY&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// a composable can also hook into its owner component&amp;#39;s
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// lifecycle to setup and teardown side effects.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">onMounted&lt;/span>&lt;span class="p">(()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="nb">window&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">addEventListener&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;mousemove&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">update&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">onUnmounted&lt;/span>&lt;span class="p">(()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="nb">window&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">removeEventListener&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;mousemove&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">update&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// expose managed state as return value
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">x&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">y&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>extract the logic into an external file, as a composable function.&lt;/p>
+&lt;p>The cooler part about composables though, is that you can also nest them: one composable function can call one or more other composable functions. This enables us to compose complex logic using small, isolated units, similar to how we compose an entire application using components.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">export&lt;/span> &lt;span class="kd">function&lt;/span> &lt;span class="nx">useFetch&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">url&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="nx">data&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kc">null&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="nx">error&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kc">null&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">function&lt;/span> &lt;span class="nx">doFetch&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// reset state before fetching..
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">data&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">null&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">error&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">null&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// unref() unwraps potential refs
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">fetch&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">unref&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">url&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nx">then&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="nx">res&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="nx">res&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">json&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nx">then&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="nx">json&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">data&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">json&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="k">catch&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="nx">err&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">error&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">err&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">isRef&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">url&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// setup reactive re-fetch if input URL is a ref
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">watchEffect&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">doFetch&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span> &lt;span class="k">else&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// otherwise, just fetch once
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// and avoid the overhead of a watcher
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">doFetch&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">data&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">error&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>&amp;lt;script setup&amp;gt;&lt;/code> is the only place where you can call composables after usage of await. The compiler automatically restores the active instance context after the async operation for you.&lt;/p>
+&lt;p>To some extent, you can think of these extracted cas component-scoped services that can talk to one another.&lt;/p>
+&lt;h3 id="custom-directives">Custom Directives
+&lt;/h3>&lt;p>In addition to the default set of directives shipped in core (like &lt;code>v-model&lt;/code> or &lt;code>v-show&lt;/code>), Vue also allows you to register your own custom directives.&lt;/p>
+&lt;p>We have introduced two forms of code reuse in Vue: &lt;a class="link" href="https://vuejs.org/guide/essentials/component-basics.html" target="_blank" rel="noopener"
+>components&lt;/a> and &lt;a class="link" href="https://vuejs.org/guide/reusability/composables.html" target="_blank" rel="noopener"
+>composables&lt;/a>. Components are the main building blocks, while composables are focused on reusing stateful logic. Custom directives, on the other hand, are mainly intended for reusing logic that involves low-level DOM access on plain elements.&lt;/p>
+&lt;p>A custom directive is defined as an object containing lifecycle hooks similar to those of a component.&lt;/p>
+&lt;p>In &lt;code>&amp;lt;script setup&amp;gt;&lt;/code>, any camelCase variable that starts with the &lt;code>v&lt;/code> prefix can be used as a custom directive. In the example above, &lt;code>vFocus&lt;/code> can be used in the template as &lt;code>v-focus&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">myDirective&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// called before bound element&amp;#39;s attributes
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// or event listeners are applied
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">created&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">el&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">binding&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">vnode&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">prevVnode&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// see below for details on arguments
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// called right before the element is inserted into the DOM.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">beforeMount&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// called when the bound element&amp;#39;s parent component
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// and all its children are mounted.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">mounted&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// called before the parent component is updated
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">beforeUpdate&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// called after the parent component and
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// all of its children have updated
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">updated&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// called before the parent component is unmounted
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">beforeUnmount&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// called when the parent component is unmounted
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">unmounted&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Directive hooks are passed these arguments:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>el&lt;/code>: the element the directive is bound to. This can be used to directly manipulate the DOM.&lt;/li>
+&lt;li>&lt;code>binding&lt;/code>: an object containing the following properties.
+&lt;ul>
+&lt;li>&lt;code>value&lt;/code>: The value passed to the directive. For example in &lt;code>v-my-directive=&amp;quot;1 + 1&amp;quot;&lt;/code>, the value would be &lt;code>2&lt;/code>.&lt;/li>
+&lt;li>&lt;code>oldValue&lt;/code>: The previous value, only available in &lt;code>beforeUpdate&lt;/code> and &lt;code>updated&lt;/code>. It is available whether or not the value has changed.&lt;/li>
+&lt;li>&lt;code>arg&lt;/code>: The argument passed to the directive, if any. For example in &lt;code>v-my-directive:foo&lt;/code>, the arg would be &lt;code>&amp;quot;foo&amp;quot;&lt;/code>.&lt;/li>
+&lt;li>&lt;code>modifiers&lt;/code>: An object containing modifiers, if any. For example in &lt;code>v-my-directive.foo.bar&lt;/code>, the modifiers object would be &lt;code>{ foo: true, bar: true }&lt;/code>.&lt;/li>
+&lt;li>&lt;code>instance&lt;/code>: The instance of the component where the directive is used.&lt;/li>
+&lt;li>&lt;code>dir&lt;/code>: the directive definition object.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>vnode&lt;/code>: the underlying VNode representing the bound element.&lt;/li>
+&lt;li>&lt;code>prevNode&lt;/code>: the VNode representing the bound element from the previous render. Only available in the &lt;code>beforeUpdate&lt;/code> and &lt;code>updated&lt;/code> hooks.&lt;/li>
+&lt;/ul>
+&lt;p>It is also common to globally register custom directives at the app level.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">app&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">directive&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;focus&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cm">/* ... */&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>Custom directives should only be used when the desired functionality can only be achieved via direct DOM manipulation. Prefer declarative templating using built-in directives such as &lt;code>v-bind&lt;/code> when possible because they are more &lt;strong>efficient&lt;/strong> and &lt;strong>server-rendering friendly&lt;/strong>.&lt;/p>
+&lt;/blockquote>
+&lt;h4 id="shorthand">shorthand
+&lt;/h4>&lt;p>It&amp;rsquo;s common for a custom directive to have the same behavior for &lt;code>mounted&lt;/code> and &lt;code>updated&lt;/code>, with no need for the other hooks. In such cases we can define the directive as a function:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">app&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">directive&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;color&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">el&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">binding&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// this will be called for both `mounted` and `updated`
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">el&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">style&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">color&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">binding&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>When used on components, custom directives will always apply to a component&amp;rsquo;s root node, similar to &lt;strong>&lt;a class="link" href="https://vuejs.org/guide/components/attrs.html" target="_blank" rel="noopener"
+>Fallthrough Attributes&lt;/a>.&lt;/strong>&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-html" data-lang="html">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">MyComponent&lt;/span> &lt;span class="na">v-demo&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;test&amp;#34;&lt;/span> &lt;span class="p">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!-- template of MyComponent --&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="c">&amp;lt;!-- v-demo directive will be applied here --&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">span&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>My component content&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">span&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Note that components can potentially have more than one root node. When applied to a multi-root component, a directive will be ignored and a warning will be thrown. Unlike attributes, directives can&amp;rsquo;t be passed to a different element with &lt;code>v-bind=&amp;quot;$attrs&amp;quot;&lt;/code>. In general, it is &lt;strong>not&lt;/strong> recommended to use custom directives on components.&lt;/p>
+&lt;h3 id="plugins">Plugins
+&lt;/h3>&lt;p>Plugins are self-contained code that usually add app-level functionality to Vue. This is how we install a plugin:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">createApp&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="nx">from&lt;/span> &lt;span class="s1">&amp;#39;vue&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">app&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">createApp&lt;/span>&lt;span class="p">({})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">app&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">use&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">myPlugin&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cm">/* optional options */&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>A plugin is defined as either an object that exposes an &lt;code>install()&lt;/code> method, or simply a function that acts as the install function itself. The install function receives the &lt;a class="link" href="https://vuejs.org/api/application.html" target="_blank" rel="noopener"
+>app instance&lt;/a> along with additional options passed to &lt;code>app.use()&lt;/code>, if any:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">myPlugin&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">install&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">app&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">options&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// configure the app
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>There is no strictly defined scope for a plugin, but common scenarios where plugins are useful include:&lt;/p>
+&lt;ol>
+&lt;li>Register one or more global components or custom directives with &lt;a class="link" href="https://vuejs.org/api/application.html#app-component" target="_blank" rel="noopener"
+>&lt;code>app.component()&lt;/code>&lt;/a> and &lt;a class="link" href="https://vuejs.org/api/application.html#app-directive" target="_blank" rel="noopener"
+>&lt;code>app.directive()&lt;/code>&lt;/a>.&lt;/li>
+&lt;li>Make a resource &lt;a class="link" href="https://vuejs.org/guide/components/provide-inject.html" target="_blank" rel="noopener"
+>injectable&lt;/a> throughout the app by calling &lt;a class="link" href="https://vuejs.org/api/application.html#app-provide" target="_blank" rel="noopener"
+>&lt;code>app.provide()&lt;/code>&lt;/a>.&lt;/li>
+&lt;li>Add some global instance properties or methods by attaching them to &lt;a class="link" href="https://vuejs.org/api/application.html#app-config-globalproperties" target="_blank" rel="noopener"
+>&lt;code>app.config.globalProperties&lt;/code>&lt;/a>.&lt;/li>
+&lt;li>A library that needs to perform some combination of the above (e.g. &lt;a class="link" href="https://github.com/vuejs/vue-router-next" target="_blank" rel="noopener"
+>vue-router&lt;/a>).&lt;/li>
+&lt;/ol>
+&lt;h2 id="built-in">Built-in
+&lt;/h2>&lt;h3 id="transition">Transition
+&lt;/h3>&lt;p>Vue offers two built-in components that can help work with transitions and animations in response to changing state:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>&amp;lt;Transition&amp;gt;&lt;/code> for applying animations when an element or component is entering and leaving the DOM.&lt;/li>
+&lt;li>&lt;code>&amp;lt;TransitionGroup&amp;gt;&lt;/code> for applying animations when an element or component is inserted into, removed from, or moved within a &lt;code>v-for&lt;/code> list.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;code>&amp;lt;Transition&amp;gt;&lt;/code> only supports a single element or component as its slot content. If the content is a component, the component must also have only one single root element.&lt;/p>
+&lt;p>When an element in a &lt;code>&amp;lt;Transition&amp;gt;&lt;/code> component is inserted or removed, this is what happens:&lt;/p>
+&lt;ol>
+&lt;li>Vue will automatically sniff whether the target element has &lt;strong>CSS transitions or animations&lt;/strong> applied. If it does, a number of &lt;a class="link" href="https://vuejs.org/guide/built-ins/transition.html#transition-classes" target="_blank" rel="noopener"
+>CSS transition classes&lt;/a> will be added / removed at appropriate timings.&lt;/li>
+&lt;li>If there are &lt;strong>listeners&lt;/strong> for &lt;a class="link" href="https://vuejs.org/guide/built-ins/transition.html#javascript-hooks" target="_blank" rel="noopener"
+>JavaScript hooks&lt;/a>, these hooks will be called at appropriate timings.&lt;/li>
+&lt;li>If no CSS transitions / animations are detected and no JavaScript hooks are provided, the DOM operations for insertion and/or removal will be executed &lt;strong>on the browser&amp;rsquo;s next animation frame&lt;/strong>.&lt;/li>
+&lt;/ol>
+&lt;p>&lt;img src="https://vuejs.org/assets/transition-classes.f0f7b3c9.png"
+loading="lazy"
+alt="Transition Diagram"
+>&lt;/p>
+&lt;ol>
+&lt;li>&lt;code>v-enter-from&lt;/code>: Starting state for enter. Added before the element is inserted, removed one frame after the element is inserted.&lt;/li>
+&lt;li>&lt;code>v-enter-active&lt;/code>: Active state for enter. Applied during the entire entering phase. Added before the element is inserted, removed when the transition/animation finishes. This class can be used to define the duration, delay and easing curve for the entering transition.&lt;/li>
+&lt;li>&lt;code>v-enter-to&lt;/code>: Ending state for enter. Added one frame after the element is inserted (at the same time &lt;code>v-enter-from&lt;/code> is removed), removed when the transition/animation finishes.&lt;/li>
+&lt;li>&lt;code>v-leave-from&lt;/code>: Starting state for leave. Added immediately when a leaving transition is triggered, removed after one frame.&lt;/li>
+&lt;li>&lt;code>v-leave-active&lt;/code>: Active state for leave. Applied during the entire leaving phase. Added immediately when a leave transition is triggered, removed when the transition/animation finishes. This class can be used to define the duration, delay and easing curve for the leaving transition.&lt;/li>
+&lt;li>&lt;code>v-leave-to&lt;/code>: Ending state for leave. Added one frame after a leaving transition is triggered (at the same time &lt;code>v-leave-from&lt;/code> is removed), removed when the transition/animation finishes.&lt;/li>
+&lt;/ol>
+&lt;p>For a named transition, its transition classes will be prefixed with its name instead of &lt;code>v&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">Transition&lt;/span> &lt;span class="na">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;fade&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">...&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">Transition&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">style&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">.&lt;/span>&lt;span class="nx">fade&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nx">enter&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nx">active&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">.&lt;/span>&lt;span class="nx">fade&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nx">leave&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nx">active&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">transition&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">opacity&lt;/span> &lt;span class="mf">0.5&lt;/span>&lt;span class="nx">s&lt;/span> &lt;span class="nx">ease&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">.&lt;/span>&lt;span class="nx">fade&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nx">enter&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nx">from&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">.&lt;/span>&lt;span class="nx">fade&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nx">leave&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nx">to&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">opacity&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">style&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="transitiongroup">TransitionGroup
+&lt;/h3>&lt;p>&lt;code>&amp;lt;TransitionGroup&amp;gt;&lt;/code> is a built-in component designed for animating the insertion, removal, and order change of elements or components that are rendered in a list.&lt;/p>
+&lt;h3 id="keepalive">KeepAlive
+&lt;/h3>&lt;p>&lt;code>&amp;lt;KeepAlive&amp;gt;&lt;/code> is a built-in component that allows us to &lt;strong>conditionally cache component instances&lt;/strong> (to keep the state) when dynamically switching between multiple components.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!--&lt;/span> &lt;span class="nx">Inactive&lt;/span> &lt;span class="nx">components&lt;/span> &lt;span class="nx">will&lt;/span> &lt;span class="nx">be&lt;/span> &lt;span class="nx">cached&lt;/span>&lt;span class="o">!&lt;/span> &lt;span class="o">--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">KeepAlive&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">component&lt;/span> &lt;span class="nt">:is&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;activeComponent&amp;#34;&lt;/span> &lt;span class="p">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">KeepAlive&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="teleport">Teleport
+&lt;/h3>&lt;p>&lt;code>&amp;lt;Teleport&amp;gt;&lt;/code> is a built-in component that allows us to &amp;ldquo;teleport&amp;rdquo; a part of a component&amp;rsquo;s template into a DOM node that exists outside the DOM hierarchy of that component.&lt;/p>
+&lt;h3 id="suspense">Suspense
+&lt;/h3>&lt;p>……&lt;/p></description></item><item><title>【Vue】Tutorial</title><link>https://dyhes.github.io/p/vuetutorial/</link><pubDate>Fri, 07 May 2021 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/vuetutorial/</guid><description>&lt;h2 id="single-file-component-sfc">Single File Component (SFC)
+&lt;/h2>&lt;p>An SFC is a reusable self-contained block of code that encapsulates HTML, CSS and JavaScript that belong together, written inside a &lt;code>.vue&lt;/code> file.&lt;/p>
+&lt;h2 id="declarative-rendering">declarative rendering
+&lt;/h2>&lt;p>The core feature of Vue is &lt;strong>declarative rendering&lt;/strong>: using a template syntax that extends HTML, we can describe how the HTML should look like based on JavaScript state.&lt;/p>
+&lt;h2 id="reactive">Reactive
+&lt;/h2>&lt;p>State that can trigger updates when changed are considered &lt;strong>reactive&lt;/strong>. We can declare reactive state using Vue&amp;rsquo;s &lt;code>reactive()&lt;/code> API. Objects created from &lt;code>reactive()&lt;/code> are JavaScript &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy" target="_blank" rel="noopener"
+>Proxies&lt;/a> that work just like normal objects.&lt;/p>
+&lt;p>&lt;code>reactive()&lt;/code> only works on objects (including arrays and built-in types like &lt;code>Map&lt;/code> and &lt;code>Set&lt;/code>). &lt;code>ref()&lt;/code>, on the other hand, can take any value type and create an object that exposes the inner value under a &lt;code>.value&lt;/code> property.&lt;/p>
+&lt;p>Reactive state declared in the component&amp;rsquo;s &lt;code>&amp;lt;script setup&amp;gt;&lt;/code> block can be used directly in the template.&lt;/p>
+&lt;p>we did not need to use &lt;code>.value&lt;/code> when accessing the &lt;code>message&lt;/code> ref in templates: it is automatically unwrapped for more succinct usage.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">script&lt;/span> &lt;span class="na">setup&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">message&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Hello World!&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">message&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">script&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">h1&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{{&lt;/span>&lt;span class="nx">message&lt;/span>&lt;span class="p">}}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">h1&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="directive">Directive
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">script&lt;/span> &lt;span class="na">setup&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">ref&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="nx">from&lt;/span> &lt;span class="s1">&amp;#39;vue&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">titleClass&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;title&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">script&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">h1&lt;/span> &lt;span class="na">v&lt;/span>&lt;span class="nt">-bind&lt;/span>&lt;span class="o">:&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#39;titleClass&amp;#39;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="nx">Make&lt;/span> &lt;span class="nx">me&lt;/span> &lt;span class="nx">red&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">h1&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">h1&lt;/span> &lt;span class="o">:&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#39;titleClass&amp;#39;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="kr">short&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">h1&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>A &lt;strong>directive&lt;/strong> is a special attribute that starts with the &lt;code>v-&lt;/code> prefix. They are part of Vue&amp;rsquo;s template syntax. Similar to text interpolations, directive values are JavaScript expressions that have access to the component&amp;rsquo;s state.&lt;/p>
+&lt;h2 id="event-listener">Event Listener
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">script&lt;/span> &lt;span class="na">setup&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">ref&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="nx">from&lt;/span> &lt;span class="s1">&amp;#39;vue&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">count&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">function&lt;/span> &lt;span class="nx">increment&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// update component state
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">count&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span>&lt;span class="o">++&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">script&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">button&lt;/span> &lt;span class="na">v&lt;/span>&lt;span class="nt">-on:click&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;increment&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;{{&lt;/span> &lt;span class="nx">count&lt;/span> &lt;span class="p">}}&amp;lt;/&lt;/span>&lt;span class="nt">button&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">button&lt;/span> &lt;span class="nt">@click&lt;/span>&lt;span class="s">=&amp;#34;increment&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="na">for&lt;/span> &lt;span class="na">short&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">button&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="two-way-bindings">Two-Way bindings
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-VUE" data-lang="VUE">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">script&lt;/span> &lt;span class="na">setup&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">text&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">function&lt;/span> &lt;span class="nx">onInput&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">e&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// a v-on handler receives the native DOM event
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// as the argument.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">text&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">e&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">target&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">script&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">input&lt;/span> &lt;span class="nt">:value&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;text&amp;#34;&lt;/span> &lt;span class="nt">@input&lt;/span>&lt;span class="s">=&amp;#34;onInput&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">input&lt;/span> &lt;span class="nt">v-model&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;text&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="err">&amp;lt;!-&lt;/span>&lt;span class="nt">-for&lt;/span> &lt;span class="na">short&lt;/span>&lt;span class="err">--&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>To simplify two-way bindings, Vue provides a directive, &lt;code>v-model&lt;/code>, which is essentially a syntax sugar.&lt;/p>
+&lt;p>&lt;code>v-model&lt;/code> automatically syncs the &lt;code>&amp;lt;input&amp;gt;&lt;/code>&amp;rsquo;s value with the bound state, so we no longer need to use a event handler for that.&lt;/p>
+&lt;p>&lt;code>v-model&lt;/code> works not only on text inputs, but also other input types such as checkboxes, radio buttons, and select dropdowns.&lt;/p>
+&lt;h2 id="conditional-rendering">Conditional Rendering
+&lt;/h2>&lt;p>We can use the &lt;code>v-if&lt;/code> directive to conditionally render an element, we can also use &lt;code>v-else&lt;/code> and &lt;code>v-else-if&lt;/code> to denote other branches of the condition.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">script&lt;/span> &lt;span class="na">setup&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">ref&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="nx">from&lt;/span> &lt;span class="s1">&amp;#39;vue&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">awesome&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">function&lt;/span> &lt;span class="nx">toggle&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">awesome&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span>&lt;span class="o">=!&lt;/span>&lt;span class="nx">awesome&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">script&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">button&lt;/span> &lt;span class="nt">@click&lt;/span>&lt;span class="s">=&amp;#34;toggle&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="na">toggle&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">button&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">h1&lt;/span> &lt;span class="na">v&lt;/span>&lt;span class="nt">-if&lt;/span>&lt;span class="err">=&amp;#39;&lt;/span>&lt;span class="na">awesome&lt;/span>&lt;span class="err">&amp;#39;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="nx">Vue&lt;/span> &lt;span class="nx">is&lt;/span> &lt;span class="nx">awesome&lt;/span>&lt;span class="o">!&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">h1&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">h1&lt;/span> &lt;span class="nt">v-else&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="na">Oh&lt;/span> &lt;span class="na">no&lt;/span> &lt;span class="err">😢&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">h1&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="list-rendering">List Rendering
+&lt;/h2>&lt;p>We can use the &lt;code>v-for&lt;/code> directive to render a list of elements based on a source array&lt;/p>
+&lt;p>we are also giving each todo object a unique &lt;code>id&lt;/code>, and binding it as the &lt;a class="link" href="https://vuejs.org/api/built-in-special-attributes.html#key" target="_blank" rel="noopener"
+>special &lt;code>key&lt;/code> attribute&lt;/a> for each &lt;code>&amp;lt;li&amp;gt;&lt;/code>. The &lt;code>key&lt;/code> allows Vue to accurately move each &lt;code>&amp;lt;li&amp;gt;&lt;/code> to match the position of its corresponding object in the array.&lt;/p>
+&lt;p>There are two ways to update the list:&lt;/p>
+&lt;ol>
+&lt;li>Call &lt;a class="link" href="https://stackoverflow.com/questions/9009879/which-javascript-array-functions-are-mutating" target="_blank" rel="noopener"
+>mutating methods&lt;/a> on the source array&lt;/li>
+&lt;li>Replace the array with a new one&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">script&lt;/span> &lt;span class="na">setup&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">ref&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="nx">from&lt;/span> &lt;span class="s1">&amp;#39;vue&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// give each todo a unique id
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kd">let&lt;/span> &lt;span class="nx">id&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">newTodo&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">todos&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">([&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span> &lt;span class="nx">id&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">id&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">text&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;Learn HTML&amp;#39;&lt;/span> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span> &lt;span class="nx">id&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">id&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">text&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;Learn JavaScript&amp;#39;&lt;/span> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span> &lt;span class="nx">id&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">id&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">text&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;Learn Vue&amp;#39;&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">function&lt;/span> &lt;span class="nx">addTodo&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">todos&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">push&lt;/span>&lt;span class="p">({&lt;/span> &lt;span class="nx">id&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">id&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">text&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">newTodo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span> &lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">newTodo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">function&lt;/span> &lt;span class="nx">removeTodo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">todo&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">todos&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">todos&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">filter&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="nx">t&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="nx">t&lt;/span> &lt;span class="o">!==&lt;/span> &lt;span class="nx">todo&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">script&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">input&lt;/span> &lt;span class="nt">v-model&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;newTodo&amp;#34; @keyup.enter=&amp;#34;addTodo&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">button&lt;/span> &lt;span class="nt">@click&lt;/span>&lt;span class="s">=&amp;#34;addTodo&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="na">Add&lt;/span> &lt;span class="na">Todo&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">button&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">ul&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">li&lt;/span> &lt;span class="nt">v-for&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;todo in todos&amp;#34; :key=&amp;#34;todo.id&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{{&lt;/span> &lt;span class="na">todo.text&lt;/span> &lt;span class="p">}}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">button&lt;/span> &lt;span class="nt">@click&lt;/span>&lt;span class="s">=&amp;#34;removeTodo(todo)&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="na">X&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">button&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">li&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">ul&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="computed-property">Computed property
+&lt;/h2>&lt;p>We can create a computed ref that computes its &lt;code>.value&lt;/code> based on other reactive data sources by using &lt;code>computed()&lt;/code>&lt;/p>
+&lt;p>A computed property tracks other reactive state used in its computation as dependencies. It caches the result and automatically updates it when its dependencies change.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">script&lt;/span> &lt;span class="na">setup&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">computed&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="nx">from&lt;/span> &lt;span class="s1">&amp;#39;vue&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">let&lt;/span> &lt;span class="nx">id&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">newTodo&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">hideCompleted&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kc">false&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">todos&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">([&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span> &lt;span class="nx">id&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">id&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">text&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;Learn HTML&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">done&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="kc">true&lt;/span> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span> &lt;span class="nx">id&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">id&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">text&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;Learn JavaScript&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">done&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="kc">true&lt;/span> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span> &lt;span class="nx">id&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">id&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">text&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;Learn Vue&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">done&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="kc">false&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">filteredTodos&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">computed&lt;/span>&lt;span class="p">(()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="nx">hideCompleted&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">?&lt;/span> &lt;span class="nx">todos&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">filter&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="nx">t&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="o">!&lt;/span>&lt;span class="nx">t&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">done&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">:&lt;/span> &lt;span class="nx">todos&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">function&lt;/span> &lt;span class="nx">addTodo&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">todos&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">push&lt;/span>&lt;span class="p">({&lt;/span> &lt;span class="nx">id&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">id&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">text&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">newTodo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">done&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="kc">false&lt;/span> &lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">newTodo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">function&lt;/span> &lt;span class="nx">removeTodo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">todo&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">todos&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">todos&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">filter&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="nx">t&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="nx">t&lt;/span> &lt;span class="o">!==&lt;/span> &lt;span class="nx">todo&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">script&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">input&lt;/span> &lt;span class="nt">v-model&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;newTodo&amp;#34; @keyup.enter=&amp;#34;addTodo&amp;#34;&lt;/span>&lt;span class="p"> /&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">button&lt;/span> &lt;span class="nt">@click&lt;/span>&lt;span class="s">=&amp;#34;addTodo&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="na">Add&lt;/span> &lt;span class="na">Todo&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">button&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">ul&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">li&lt;/span> &lt;span class="nt">v-for&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;todo in filteredTodos&amp;#34; :key=&amp;#34;todo.id&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">input&lt;/span> &lt;span class="na">type&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;checkbox&amp;#34;&lt;/span> &lt;span class="nt">v-model&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;todo.done&amp;#34;&lt;/span>&lt;span class="p"> /&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">span&lt;/span> &lt;span class="o">:&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;{ done: todo.done }&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;{{&lt;/span> &lt;span class="nx">todo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">text&lt;/span> &lt;span class="p">}}&amp;lt;/&lt;/span>&lt;span class="nt">span&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">button&lt;/span> &lt;span class="nt">@click&lt;/span>&lt;span class="s">=&amp;#34;removeTodo(todo)&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="na">X&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">button&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">li&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">ul&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">button&lt;/span> &lt;span class="err">@&lt;/span>&lt;span class="na">click&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;hideCompleted = !hideCompleted&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{{&lt;/span> &lt;span class="nx">hideCompleted&lt;/span> &lt;span class="o">?&lt;/span> &lt;span class="s1">&amp;#39;Show all&amp;#39;&lt;/span> &lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;Hide completed&amp;#39;&lt;/span> &lt;span class="p">}}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">button&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">style&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">.&lt;/span>&lt;span class="nx">done&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">text&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nx">decoration&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">line&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nx">through&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">style&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="lifecycle-and-template-refs">Lifecycle and Template Refs
+&lt;/h2>&lt;p>We can request a &lt;strong>template ref&lt;/strong> - i.e. a reference to an element in the template - using the &lt;a class="link" href="https://vuejs.org/api/built-in-special-attributes.html#ref" target="_blank" rel="noopener"
+>special &lt;code>ref&lt;/code> attribute&lt;/a>.&lt;/p>
+&lt;p>To access the ref, we need to declare a ref with matching name in &lt;code>&amp;lt;script setup&amp;gt;&lt;/code> . Notice the ref is initialized with &lt;code>null&lt;/code> value. This is because the element doesn&amp;rsquo;t exist yet when &lt;code>&amp;lt;script setup&amp;gt;&lt;/code> is executed. The template ref is only accessible after the component is &lt;strong>mounted&lt;/strong>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">script&lt;/span> &lt;span class="na">setup&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">onMounted&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="nx">from&lt;/span> &lt;span class="s1">&amp;#39;vue&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">p&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kc">null&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">onMounted&lt;/span>&lt;span class="p">(()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">p&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">textContent&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;mounted!&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">script&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">p&lt;/span> &lt;span class="na">ref&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;p&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="nx">hello&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>hooks such as &lt;code>onUpdated&lt;/code> and &lt;code>onUnmounted&lt;/code> are lifecycle hooks.&lt;/p>
+&lt;h2 id="watchers">Watchers
+&lt;/h2>&lt;p>Sometimes we may need to perform &amp;ldquo;side effects&amp;rdquo; reactively&lt;/p>
+&lt;p>&lt;code>watch()&lt;/code> can directly watch a ref, and the callback gets called whenever &lt;code>count&lt;/code>&amp;rsquo;s value changes.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">script&lt;/span> &lt;span class="na">setup&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">watch&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="nx">from&lt;/span> &lt;span class="s1">&amp;#39;vue&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">todoId&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">todoData&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">ref&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kc">null&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">async&lt;/span> &lt;span class="kd">function&lt;/span> &lt;span class="nx">fetchData&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">todoData&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">null&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="nx">res&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">await&lt;/span> &lt;span class="nx">fetch&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="sb">`https://jsonplaceholder.typicode.com/todos/&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nx">todoId&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="sb">`&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">todoData&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">await&lt;/span> &lt;span class="nx">res&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">json&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">fetchData&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">watch&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">todoId&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">fetchData&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">script&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="nx">Todo&lt;/span> &lt;span class="nx">id&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">{{&lt;/span> &lt;span class="nx">todoId&lt;/span> &lt;span class="p">}}&amp;lt;/&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">button&lt;/span> &lt;span class="nt">@click&lt;/span>&lt;span class="s">=&amp;#34;todoId++&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="na">Fetch&lt;/span> &lt;span class="na">next&lt;/span> &lt;span class="na">todo&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">button&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">p&lt;/span> &lt;span class="nt">v-if&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;!todoData&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="na">Loading...&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">pre&lt;/span> &lt;span class="nt">v-else&lt;/span>&lt;span class="p">&amp;gt;{{&lt;/span> &lt;span class="na">todoData&lt;/span> &lt;span class="p">}}&amp;lt;/&lt;/span>&lt;span class="nt">pre&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="props">Props
+&lt;/h2>&lt;p>A child component can accept input from the parent via &lt;strong>props&lt;/strong>. First, it needs to declare the props it accepts:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!--&lt;/span> &lt;span class="nx">ChildComp&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">vue&lt;/span> &lt;span class="o">--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">script&lt;/span> &lt;span class="na">setup&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">props&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">defineProps&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">msg&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nb">String&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">script&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Note &lt;code>defineProps()&lt;/code> is a compile-time macro and doesn&amp;rsquo;t need to be imported. Once declared, the &lt;code>msg&lt;/code> prop can be used in the child component&amp;rsquo;s template. It can also be accessed in JavaScript via the returned object of &lt;code>defineProps()&lt;/code>.&lt;/p>
+&lt;h2 id="emits">Emits
+&lt;/h2>&lt;p>In addition to receiving props, a child component can also emit events to the parent:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">script&lt;/span> &lt;span class="na">setup&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// declare emitted events
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kr">const&lt;/span> &lt;span class="nx">emitter&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">defineEmits&lt;/span>&lt;span class="p">([&lt;/span>&lt;span class="s1">&amp;#39;response&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;test&amp;#39;&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// emit with argument
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="nx">emitter&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;response&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;hello from child&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">emitter&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;test&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;testtest&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">script&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The first argument to &lt;code>emit()&lt;/code> is the event name. Any additional arguments are passed on to the event listener.&lt;/p>
+&lt;p>The parent can listen to child-emitted events using &lt;code>v-on&lt;/code> - here the handler receives the extra argument from the child emit call and assigns it to local state:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">ChildComp&lt;/span> &lt;span class="err">@&lt;/span>&lt;span class="na">response&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;(msg) =&amp;gt; childMsg = msg&amp;#34;&lt;/span> &lt;span class="p">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="slots">Slots
+&lt;/h2>&lt;p>In addition to passing data via props, the parent component can also pass down template fragments to the child via &lt;strong>slots&lt;/strong>.&lt;/p>
+&lt;p>In the child component, it can render the slot content from the parent using the &lt;code>&amp;lt;slot&amp;gt;&lt;/code> element as outlet.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-vue" data-lang="vue">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//parent
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">ChildComp&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">message&lt;/span> &lt;span class="nx">to&lt;/span> &lt;span class="nx">pass&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">ChildComp&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//child
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">some&lt;/span> &lt;span class="nx">word&lt;/span> &lt;span class="nx">here&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">slot&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">message&lt;/span> &lt;span class="nx">passed&lt;/span> &lt;span class="nx">form&lt;/span> &lt;span class="nx">parent&lt;/span> &lt;span class="nx">will&lt;/span> &lt;span class="nx">be&lt;/span> &lt;span class="nx">present&lt;/span> &lt;span class="nx">here&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">and&lt;/span> &lt;span class="k">this&lt;/span> &lt;span class="nx">is&lt;/span> &lt;span class="nx">the&lt;/span> &lt;span class="k">default&lt;/span> &lt;span class="nx">words&lt;/span>&lt;span class="p">.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">slot&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item></channel></rss>

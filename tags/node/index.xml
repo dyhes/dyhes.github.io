@@ -1,0 +1,871 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Node on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/node/</link><description>Recent content in Node on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 12 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://dyhes.github.io/tags/node/index.xml" rel="self" type="application/rss+xml"/><item><title>【Node】.env</title><link>https://dyhes.github.io/p/node.env/</link><pubDate>Thu, 12 Sep 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/node.env/</guid><description>&lt;h2 id="basic">Basic
+&lt;/h2>&lt;p>Using a &lt;code>.env&lt;/code> file is a great practice for managing environment variables in a Node.js project.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-typescript" data-lang="typescript">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="kr">as&lt;/span> &lt;span class="nx">dotenv&lt;/span> &lt;span class="kr">from&lt;/span> &lt;span class="s1">&amp;#39;dotenv&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// Load environment variables from .env file
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="nx">dotenv&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">config&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// usage
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="nx">process&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">env&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">IMGBB_API_KEY&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="process">Process
+&lt;/h2>&lt;p>Now, let&amp;rsquo;s go through the changes and additional steps to set up the &lt;code>.env&lt;/code> file:&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>First, install the &lt;code>dotenv&lt;/code> package:&lt;/p>
+&lt;pre tabindex="0">&lt;code>npm install dotenv @types/dotenv
+&lt;/code>&lt;/pre>&lt;/li>
+&lt;li>
+&lt;p>Create a &lt;code>.env&lt;/code> file in the root of your project with the following content:&lt;/p>
+&lt;pre tabindex="0">&lt;code>IMGBB_API_KEY=your_actual_api_key_here
+MARKDOWN_DIRECTORY=./path/to/your/markdown/files
+&lt;/code>&lt;/pre>&lt;/li>
+&lt;li>
+&lt;p>In the script, we&amp;rsquo;ve made the following changes:&lt;/p>
+&lt;ul>
+&lt;li>Imported the &lt;code>dotenv&lt;/code> package: &lt;code>import * as dotenv from 'dotenv';&lt;/code>&lt;/li>
+&lt;li>Added &lt;code>dotenv.config();&lt;/code> to load the environment variables.&lt;/li>
+&lt;li>Replaced the hardcoded API key with &lt;code>process.env.IMGBB_API_KEY&lt;/code>.&lt;/li>
+&lt;li>Added error handling if the API key is not set.&lt;/li>
+&lt;li>Used &lt;code>process.env.MARKDOWN_DIRECTORY&lt;/code> for the directory path, with a fallback.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>Make sure to add &lt;code>.env&lt;/code> to your &lt;code>.gitignore&lt;/code> file to prevent committing sensitive information:&lt;/p>
+&lt;pre tabindex="0">&lt;code>echo &amp;#34;.env&amp;#34; &amp;gt;&amp;gt; .gitignore
+&lt;/code>&lt;/pre>&lt;/li>
+&lt;/ol></description></item><item><title>【Node】Basics</title><link>https://dyhes.github.io/p/nodebasics/</link><pubDate>Sun, 16 May 2021 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/nodebasics/</guid><description>&lt;h2 id="introduction">Introduction
+&lt;/h2>&lt;p>Node.js is an open-source and cross-platform &lt;strong>JavaScript runtime environment.&lt;/strong>&lt;/p>
+&lt;p>Node.js runs the &lt;strong>V8 JavaScript engine&lt;/strong>, the core of Google Chrome, outside of the browser.&lt;/p>
+&lt;p>A Node.js app runs in a &lt;strong>single process&lt;/strong>, without creating a new thread for every request. Node.js provides a set of &lt;strong>asynchronous I/O&lt;/strong> primitives in its standard library that prevent JavaScript code from &lt;strong>blocking&lt;/strong> and generally, libraries in Node.js are written using &lt;strong>non-blocking paradigms&lt;/strong>, making blocking behavior the exception rather than the norm.&lt;/p>
+&lt;p>When Node.js performs an I/O operation, like reading from the network, accessing a database or the filesystem, instead of blocking the thread and wasting CPU cycles waiting, Node.js will resume the operations when the response comes back.&lt;/p>
+&lt;p>Node.js is a &lt;strong>low-level&lt;/strong> platform. In order to make things easy and exciting for developers, thousands of libraries were built upon Node.js by the community.&lt;/p>
+&lt;p>Many of those established over time as popular options. Here is a non-comprehensive list of the ones worth learning:&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>Express&lt;/strong>: It provides one of the most &lt;strong>simple yet powerful&lt;/strong> ways to create a web server.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>koa&lt;/strong>: It is built by the same team behind Express, aims to be &lt;strong>even simpler and smaller&lt;/strong>,&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Egg.js&lt;/strong>: A framework to build &lt;strong>better enterprise frameworks and apps&lt;/strong> with Node.js &amp;amp; Koa.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Gatsby&lt;/strong>: A &lt;strong>React-based&lt;/strong>, &lt;strong>GraphQL-powered&lt;/strong>, &lt;strong>static site generator&lt;/strong> with a very rich ecosystem of plugins and starters.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Next.js&lt;/strong>: React framework that gives you the best developer experience with all the features you need for production: &lt;strong>hybrid static &amp;amp; server rendering, TypeScript support, smart bundling, route pre-fetching&lt;/strong>, and more.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="difference-to-browsers">Difference to Browsers
+&lt;/h3>&lt;ul>
+&lt;li>
+&lt;p>You can use &lt;strong>Babel&lt;/strong> to transform your code to be ES5-compatible before shipping it to the browser, but in Node.js, you won&amp;rsquo;t need that.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Another difference is that Node.js uses the &lt;strong>CommonJS module system&lt;/strong>, while in the browser we are starting to see the ES Modules standard being implemented. In practice, this means that for the time being you use &lt;code>require()&lt;/code> in Node.js and &lt;code>import&lt;/code> in the browser.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="v8-javascript-engine">V8 javascript engine
+&lt;/h3>&lt;p>V8 is the name of the JavaScript engine that powers Google Chrome. V8 was chosen to be the engine that powered Node.js back in &lt;strong>2009&lt;/strong>. The Node.js ecosystem is huge and thanks to V8 which also powers desktop apps, with projects like Electron.&lt;/p>
+&lt;p>V8 is written in &lt;strong>C++&lt;/strong>, and it&amp;rsquo;s continuously improved. It is portable and runs on Mac, Windows, Linux and several other systems.&lt;/p>
+&lt;p>JavaScript is generally considered an interpreted language, but modern JavaScript engines no longer just interpret JavaScript, they &lt;strong>compile&lt;/strong> it. This has been happening since 2009, when the &lt;strong>SpiderMonkey JavaScript compiler&lt;/strong> was added to Firefox 3.5, and everyone followed this idea. JavaScript is internally compiled by V8 with &lt;strong>just-in-time&lt;/strong> (JIT) &lt;strong>compilation&lt;/strong> to speed up the execution.&lt;/p>
+&lt;h2 id="run-and-exit">Run and Exit
+&lt;/h2>&lt;ul>
+&lt;li>
+&lt;p>RUN&lt;/p>
+&lt;p>The usual way to run a Node.js program is to run the &lt;code>node&lt;/code> globally available command (once you install Node.js) and pass the name of the file you want to execute.&lt;/p>
+&lt;p>to restart the application automatically, &lt;code>nodemon&lt;/code> module is used.&lt;/p>
+&lt;p>Run the application using nodemon followed by application file name.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">nodemon app.js
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>
+&lt;p>EXIT&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>When running a program in the console you can close it with &lt;code>ctrl-C&lt;/code>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>The &lt;code>process&lt;/code> core module provides&lt;code>process.exit()&lt;/code> that allows you to programmatically exit from a Node.js program. When Node.js runs this line, the process is immediately forced to &lt;strong>terminate&lt;/strong>. This means that any callback that&amp;rsquo;s pending, any network request still being sent, any filesystem access, or processes writing to &lt;code>stdout&lt;/code> or &lt;code>stderr&lt;/code> - all is going to be &lt;strong>ungracefully&lt;/strong> terminated right away.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>Note: &lt;code>process&lt;/code> does not require a &amp;ldquo;require&amp;rdquo;, it&amp;rsquo;s automatically available.&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">process&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">exit&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>By default the exit code is &lt;code>0&lt;/code>, which means success. Different exit codes have different meaning, which you might want to use in your own system to have the program communicate to other programs.&lt;/p>
+&lt;p>You can also set the &lt;code>process.exitCode&lt;/code> property&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">process&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">exitCode&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">1&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>Many times with Node.js we start servers, like this HTTP server:&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">express&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;express&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">app&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">express&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">app&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;/&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">req&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">res&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">res&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">send&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Hi!&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">app&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">listen&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3000&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Server ready&amp;#39;&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>Express is a framework that uses the http module under the hood, app.listen() returns an instance of http. You would use https.createServer if you needed to serve your app using HTTPS, as app.listen only uses the http module.&lt;/p>
+&lt;/blockquote>
+&lt;p>This program is never going to end. If you call &lt;code>process.exit()&lt;/code>, any currently pending or running request is going to be aborted. This is &lt;em>&lt;strong>not nice&lt;/strong>&lt;/em>.&lt;/p>
+&lt;p>In this case you need to send the command a SIGTERM signal, and handle that with the process signal handler:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">express&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;express&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">app&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">express&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">app&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;/&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">req&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">res&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">res&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">send&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Hi!&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">server&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">app&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">listen&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3000&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Server ready&amp;#39;&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">process&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">on&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;SIGTERM&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">server&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">close&lt;/span>&lt;span class="p">(()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Process terminated&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>SIGKILL&lt;/code> is the signal that tells a process to immediately terminate, and would ideally act like &lt;code>process.exit()&lt;/code>.&lt;/p>
+&lt;p>&lt;code>SIGTERM&lt;/code> is the signal that tells a process to &lt;strong>gracefully terminate&lt;/strong>. It is the signal that&amp;rsquo;s sent from process managers like &lt;code>upstart&lt;/code> or &lt;code>supervisord&lt;/code> and many others.&lt;/p>
+&lt;p>You can send this signal from inside the program, in another function&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">process&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">kill&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">process&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">pid&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;SIGTERM&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Or from another Node.js running program, or any other app running in your system that knows the PID of the process you want to terminate.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="environment-variables">Environment variables
+&lt;/h2>&lt;p>The &lt;code>process&lt;/code> core module of Node.js provides the &lt;code>env&lt;/code> property which hosts all the environment variables that were set at the moment the process was started.&lt;/p>
+&lt;p>The below code runs &lt;code>app.js&lt;/code> and set &lt;code>USER_ID&lt;/code> and &lt;code>USER_KEY&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">USER_ID&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">239482&lt;/span> &lt;span class="nv">USER_KEY&lt;/span>&lt;span class="o">=&lt;/span>foobar node app.js
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>and you can access them like:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">process&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">env&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">USER_ID&lt;/span> &lt;span class="c1">// &amp;#34;239482&amp;#34;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="nx">process&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">env&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">USER_KEY&lt;/span> &lt;span class="c1">// &amp;#34;foobar&amp;#34;
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>If you have multiple environment variables in your node project, you can also create an &lt;code>.env&lt;/code> file in the root directory of your project, and then use the &lt;strong>dotenv package&lt;/strong> to load them during runtime.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;dotenv&amp;#39;&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="nx">config&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>You can also run your js file with &lt;code>node -r dotenv/config index.js&lt;/code> command if you don&amp;rsquo;t want to import the package in your code.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="repl">REPL
+&lt;/h2>&lt;p>If we run the &lt;code>node&lt;/code> command without any script to execute or without any arguments, we start a REPL session:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">node
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>Note: REPL stands for Read Evaluate Print Loop, and it is a programming language environment (basically a console window) that takes single expression as user input and returns the result back to the console after execution. The REPL session provides a convenient way to quickly test simple JavaScript code.&lt;/p>
+&lt;/blockquote>
+&lt;ul>
+&lt;li>
+&lt;p>JavaScript objects&lt;/p>
+&lt;p>Try entering the name of a JavaScript class, like &lt;code>Number&lt;/code>, add a dot and press &lt;code>tab&lt;/code>. The REPL will print all the properties and methods you can access on that class&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>global objects&lt;/p>
+&lt;p>You can inspect the globals you have access to by typing &lt;code>global.&lt;/code> and pressing &lt;code>tab&lt;/code>.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Special commands&lt;/p>
+&lt;p>The REPL has some special commands, all starting with a dot &lt;code>.&lt;/code>:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>.help&lt;/code>: shows the dot &lt;strong>commands help&lt;/strong>&lt;/li>
+&lt;li>&lt;code>.editor&lt;/code>: enables &lt;strong>editor mode&lt;/strong>, to write multiline JavaScript code with ease. Once you are in this mode, enter &lt;strong>ctrl-D to run&lt;/strong> the code you wrote.&lt;/li>
+&lt;li>&lt;code>.break&lt;/code>: when inputting a multi-line expression, entering the &lt;code>.break&lt;/code> command will abort further input. Same as pressing ctrl-C.&lt;/li>
+&lt;li>&lt;code>.clear&lt;/code>: resets the REPL context to an &lt;strong>empty&lt;/strong> object and clears any multi-line expression currently being input.&lt;/li>
+&lt;li>&lt;code>.load&lt;/code>: loads a JavaScript file, &lt;strong>relative&lt;/strong> to the current working directory&lt;/li>
+&lt;li>&lt;code>.save&lt;/code>: saves all you entered in the REPL session to a file (specify the filename)&lt;/li>
+&lt;li>&lt;code>.exit&lt;/code>: exits the repl (same as pressing ctrl-C two times)&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="accept-argument">Accept argument
+&lt;/h2>&lt;p>The way you retrieve accepted arguments is using the &lt;code>process&lt;/code> object built into Node.js.&lt;/p>
+&lt;p>It exposes an &lt;code>argv&lt;/code> property, which is an &lt;strong>array&lt;/strong> that contains all the command line invocation arguments.&lt;/p>
+&lt;p>The first element is the &lt;strong>full path&lt;/strong> &lt;strong>of the &lt;code>node&lt;/code> command&lt;/strong>.&lt;/p>
+&lt;p>The second element is the &lt;strong>full path of the file&lt;/strong> being executed.&lt;/p>
+&lt;p>All the additional arguments are present from the third position going forward.&lt;/p>
+&lt;p>You can get only the additional arguments by creating a new array that excludes the first 2 params:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">args&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">process&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">argv&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">slice&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>In this case:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">node app.js &lt;span class="nv">name&lt;/span>&lt;span class="o">=&lt;/span>joe
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>args[0]&lt;/code> is &lt;code>name=joe&lt;/code>, and you need to parse it. The best way to do so is by using the &lt;a class="link" href="https://www.npmjs.com/package/minimist" target="_blank" rel="noopener"
+>&lt;code>minimist&lt;/code>&lt;/a> library, which helps dealing with arguments:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">args&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;minimist&amp;#39;&lt;/span>&lt;span class="p">)(&lt;/span>&lt;span class="nx">process&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">argv&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">slice&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">args&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;name&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="c1">//joe
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="input">Input
+&lt;/h2>&lt;p>Node.js since version 7 provides the &lt;a class="link" href="https://nodejs.org/api/readline.html" target="_blank" rel="noopener"
+>&lt;code>readline&lt;/code> module&lt;/a> to perform exactly this: get input from a readable stream such as the &lt;code>process.stdin&lt;/code> stream, which during the execution of a Node.js program is the terminal input, one line at a time.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">readline&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;readline&amp;#39;&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="nx">createInterface&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">input&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">process&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">stdin&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">output&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">process&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">stdout&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">readline&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">question&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sb">`What&amp;#39;s your name?`&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">name&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sb">`Hi &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nx">name&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="sb">!`&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">readline&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">close&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="output">Output
+&lt;/h2>&lt;p>Node.js provides a &lt;a class="link" href="https://nodejs.org/api/console.html" target="_blank" rel="noopener"
+>&lt;code>console&lt;/code> module&lt;/a> which provides tons of very useful ways to interact with the command line.&lt;/p>
+&lt;p>It is basically the same as the &lt;code>console&lt;/code> object you find in the browser.&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>console.log()&lt;/code>&lt;/p>
+&lt;p>The most basic and most used method is &lt;code>console.log()&lt;/code>, which prints the string you pass to it to the console.&lt;/p>
+&lt;p>If you pass an object, it will render it as a string.&lt;/p>
+&lt;p>You can also pass multiple variables to &lt;code>console.log()&lt;/code>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>console.clear()&lt;/code>&lt;/p>
+&lt;p>``console.clear()` clears the console (the behavior might depend on the console used)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>console.count()&lt;/code>&lt;/p>
+&lt;p>What happens is that &lt;code>console.count()&lt;/code> will count the number of times a string is printed, and print the count next to it.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>console.countReset()&lt;/code>&lt;/p>
+&lt;p>The &lt;code>console.countReset()&lt;/code> method resets counter used with &lt;code>console.count()&lt;/code>.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>console.trace()&lt;/code>&lt;/p>
+&lt;p>There might be cases where it&amp;rsquo;s useful to print the call stack trace of a function, maybe to answer the question how did you reach that part of the code&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">function2&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">trace&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">function1&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="nx">function2&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">function1&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>output:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">Trace
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at function2 &lt;span class="o">(&lt;/span>repl:1:33&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at function1 &lt;span class="o">(&lt;/span>repl:1:25&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at repl:1:1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at ContextifyScript.Script.runInThisContext &lt;span class="o">(&lt;/span>vm.js:44:33&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at REPLServer.defaultEval &lt;span class="o">(&lt;/span>repl.js:239:29&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at bound &lt;span class="o">(&lt;/span>domain.js:301:14&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at REPLServer.runBound &lt;span class="o">[&lt;/span>as eval&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>domain.js:314:12&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at REPLServer.onLine &lt;span class="o">(&lt;/span>repl.js:440:10&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at emitOne &lt;span class="o">(&lt;/span>events.js:120:20&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at REPLServer.emit &lt;span class="o">(&lt;/span>events.js:210:7&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>
+&lt;p>&lt;code>console.time()&lt;/code> and &lt;code>console.timeEnd()&lt;/code>&lt;/p>
+&lt;p>You can easily calculate how much time a function takes to run, using &lt;code>time()&lt;/code> and &lt;code>timeEnd()&lt;/code>&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">doSomething&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;test&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">measureDoingSomething&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">time&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;doSomething()&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">//do something, and measure the time it takes
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">doSomething&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">timeEnd&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;doSomething()&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">measureDoingSomething&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>
+&lt;p>&lt;code>console.error()&lt;/code>&lt;/p>
+&lt;p>As we saw &lt;code>console.log&lt;/code> is great for printing messages in the Console. This is what&amp;rsquo;s called the standard output, or &lt;code>stdout&lt;/code>.&lt;/p>
+&lt;p>&lt;code>console.error&lt;/code> prints to the &lt;code>stderr&lt;/code> stream. It will not appear in the console, but it will appear in the error log.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="colorful">Colorful
+&lt;/h3>&lt;p>The simplest way to go about coloring the console output is by using a library. &lt;a class="link" href="https://github.com/chalk/chalk" target="_blank" rel="noopener"
+>Chalk&lt;/a> is such a library, and in addition to coloring it also helps with other styling facilities, like making text bold, italic or underlined.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">chalk&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;chalk&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">chalk&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">yellow&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;hi!&amp;#39;&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="progress-bar">Progress bar
+&lt;/h3>&lt;p>&lt;a class="link" href="https://www.npmjs.com/package/progress" target="_blank" rel="noopener"
+>Progress&lt;/a> is an awesome package to create a progress bar in the console. Install it using &lt;code>npm install progress&lt;/code>&lt;/p>
+&lt;p>This snippet creates a 10-step progress bar, and every 100ms one step is completed. When the bar completes we clear the interval:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">ProgressBar&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;progress&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">bar&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nx">ProgressBar&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;:bar&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">total&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">10&lt;/span> &lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">timer&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">setInterval&lt;/span>&lt;span class="p">(()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">bar&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">tick&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">bar&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">complete&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">clearInterval&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">timer&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">},&lt;/span> &lt;span class="mi">100&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="export">Export
+&lt;/h2>&lt;p>Node.js has a built-in module system. A Node.js file can import functionality exposed by other Node.js files.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//1
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kr">const&lt;/span> &lt;span class="nx">car&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">brand&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;Ford&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">model&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;Fiesta&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">module&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">exports&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">car&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">car&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;./car&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//2
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kr">const&lt;/span> &lt;span class="nx">car&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">brand&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;Ford&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">model&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;Fiesta&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">exports&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">car&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">car&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//or
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="nx">exports&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">car&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">brand&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;Ford&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">model&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;Fiesta&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">items&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;./items&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">car&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">items&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">car&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">car&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;./items&amp;#39;&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="nx">car&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">car&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;./items&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The difference between &lt;code>module.exports&lt;/code> and &lt;code>exports&lt;/code>:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>module.exports&lt;/code> : exposes &lt;strong>the object&lt;/strong> it points to.&lt;/li>
+&lt;li>&lt;code>exports&lt;/code>: exposes &lt;em>&lt;strong>the properties&lt;/strong>&lt;/em> of the object it points to.&lt;/li>
+&lt;/ul>
+&lt;h2 id="production">Production
+&lt;/h2>&lt;p>Node.js assumes it&amp;rsquo;s always running in a development environment. You can signal Node.js that you are running in production by setting the &lt;code>NODE_ENV=production&lt;/code> environment variable or:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">NODE_ENV&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nx">production&lt;/span> &lt;span class="nx">node&lt;/span> &lt;span class="nx">app&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">js&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="npm">&lt;strong>Npm&lt;/strong>
+&lt;/h2>&lt;h3 id="install">Install
+&lt;/h3>&lt;p>If a project has a &lt;code>package.json&lt;/code> file, by running&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">npm install
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>it will install everything the project needs, in the &lt;code>node_modules&lt;/code> folder, creating it if it&amp;rsquo;s not existing already.&lt;/p>
+&lt;p>You can also install a specific package by running&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">npm install &amp;lt;package-name&amp;gt;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Furthermore, since npm 5, this command adds &lt;code>&amp;lt;package-name&amp;gt;&lt;/code> to the &lt;code>package.json&lt;/code> file &lt;em>dependencies&lt;/em>. &lt;strong>Before version 5&lt;/strong>, you needed to add the flag &lt;code>--save&lt;/code>.&lt;/p>
+&lt;p>Often you&amp;rsquo;ll see more &lt;strong>flags&lt;/strong> added to this command:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>--save-dev&lt;/code> installs and adds the entry to the &lt;code>package.json&lt;/code> file &lt;em>devDependencies&lt;/em>&lt;/li>
+&lt;li>&lt;code>--no-save&lt;/code> installs but does not add the entry to the &lt;code>package.json&lt;/code> file &lt;em>dependencies&lt;/em>&lt;/li>
+&lt;li>&lt;code>--save-optional&lt;/code> installs and adds the entry to the &lt;code>package.json&lt;/code> file &lt;em>optionalDependencies&lt;/em>&lt;/li>
+&lt;li>&lt;code>--no-optional&lt;/code> will prevent optional dependencies from being installed&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Shorthands&lt;/strong> of the flags can also be used:&lt;/p>
+&lt;ul>
+&lt;li>-S: &amp;ndash;save&lt;/li>
+&lt;li>-D: &amp;ndash;save-dev&lt;/li>
+&lt;li>-O: &amp;ndash;save-optional&lt;/li>
+&lt;/ul>
+&lt;p>The difference between &lt;em>devDependencies&lt;/em> and &lt;em>dependencies&lt;/em> is that the former contains development tools, like a testing library, while the latter is bundled with the app in production.&lt;/p>
+&lt;p>As for the &lt;em>optionalDependencies&lt;/em> the difference is that build failure of the dependency will not cause installation to fail. But it is your program&amp;rsquo;s responsibility to handle the lack of the dependency.&lt;/p>
+&lt;p>A global installation is performed using the &lt;code>-g&lt;/code> flag:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">npm install -g lodash
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>You can install an old version of an npm package using the &lt;code>@&lt;/code> syntax:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">npm install &amp;lt;package&amp;gt;@&amp;lt;version&amp;gt;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>You might also be interested in listing all the previous versions of a package. You can do it with &lt;code>npm view &amp;lt;package&amp;gt; versions&lt;/code>&lt;/p>
+&lt;p>When you install a package using &lt;code>npm install &amp;lt;packagename&amp;gt;&lt;/code>, the &lt;strong>latest available&lt;/strong> version of the package is downloaded and put in the &lt;code>node_modules&lt;/code> folder, and a corresponding entry is added to the &lt;code>package.json&lt;/code> and &lt;code>package-lock.json&lt;/code> files that are present in your current folder.&lt;/p>
+&lt;h3 id="uninstall">Uninstall
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">npm uninstall &amp;lt;package-name&amp;gt;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Using the &lt;code>-S&lt;/code> flag, or &lt;code>--save&lt;/code>, this operation will also remove the reference in the &lt;code>package.json&lt;/code> file.&lt;/p>
+&lt;p>&lt;code>package.json&lt;/code> will be &lt;strong>automatically&lt;/strong> updated with devDependency and dependency once you uninstall npm package.&lt;/p>
+&lt;p>If the package is installed &lt;strong>globally&lt;/strong>, you need to add the &lt;code>-g&lt;/code> / &lt;code>--global&lt;/code> flag:&lt;/p>
+&lt;h3 id="update">Update
+&lt;/h3>&lt;p>Updating is also made easy, by running&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">npm&lt;/span> &lt;span class="nx">update&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>npm&lt;/code> will check all packages for a newer version that satisfies your versioning constraints.&lt;/p>
+&lt;p>You can specify a single package to update as well:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-console" data-lang="console">&lt;span class="line">&lt;span class="cl">&lt;span class="go">npm update &amp;lt;package-name&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Since npm version 5.0.0, &lt;code>npm update&lt;/code> will update the &lt;code>package.json&lt;/code> with the updated version. Use &lt;code>npm update --no-save&lt;/code> to &lt;strong>not update&lt;/strong> &lt;code>package.json&lt;/code>.&lt;/p>
+&lt;p>To discover new releases of the packages, you run &lt;code>npm outdated&lt;/code>.&lt;/p>
+&lt;p>Some of those updates are major releases. Running &lt;code>npm update&lt;/code> won&amp;rsquo;t update the version of those. Major releases are never updated in this way because they (by definition) introduce breaking changes, and &lt;code>npm&lt;/code> wants to save you trouble.&lt;/p>
+&lt;p>To update all packages to a new major version, install the &lt;code>npm-check-updates&lt;/code> package globally:&lt;/p>
+&lt;p>then run :&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">ncu -u
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="script">Script
+&lt;/h3>&lt;p>The &lt;code>package.json&lt;/code> file supports a format for specifying command line tasks that can be run by using&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-json" data-lang="json">&lt;span class="line">&lt;span class="cl">&lt;span class="err">npm&lt;/span> &lt;span class="err">run&lt;/span> &lt;span class="err">&amp;lt;task-name&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;scripts&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;start-dev&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;node lib/server-development&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;start&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;node lib/server-production&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The &lt;code>npm root -g&lt;/code> command will tell you where that global installation location is on your machine.&lt;/p>
+&lt;h3 id="packagejson">&lt;code>Package.json&lt;/code>
+&lt;/h3>&lt;p>The &lt;code>package.json&lt;/code> file is kind of a &lt;strong>manifest&lt;/strong> for your project. It can do a lot of things, completely unrelated. It&amp;rsquo;s a central repository of configuration for tools, for example. It&amp;rsquo;s also where &lt;code>npm&lt;/code> and &lt;code>yarn&lt;/code> store the names and versions for all the installed packages.&lt;/p>
+&lt;p>There are no fixed requirements of what should be in a &lt;code>package.json&lt;/code> file, for an application. The only requirement is that it &lt;strong>respects the JSON format&lt;/strong>, otherwise it cannot be read by programs that try to access its properties programmatically.&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>main&lt;/p>
+&lt;p>Sets the &lt;strong>entry point&lt;/strong> for the package. When you import this package in an application, that&amp;rsquo;s where the application will search for the module exports.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>private&lt;/p>
+&lt;p>if set to &lt;code>true&lt;/code> prevents the app/package to be accidentally published on &lt;code>npm&lt;/code>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>engines&lt;/p>
+&lt;p>Sets which &lt;strong>versions of Node.js and other commands&lt;/strong> this package/app work on&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>browserslist&lt;/p>
+&lt;p>Is used to tell &lt;strong>which browsers (and their versions)&lt;/strong> you want to support. It&amp;rsquo;s referenced by Babel, Autoprefixer, and other tools, to only add the polyfills and fallbacks needed to the browsers you target.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="package-lockjson">&lt;code>package-lock.json&lt;/code>
+&lt;/h3>&lt;p>The goal of &lt;code>package-lock.json&lt;/code> file is to keep track of the &lt;strong>exact version&lt;/strong> of every package that is installed so that a product is 100% reproducible in the same way even if packages are updated by their maintainers.&lt;/p>
+&lt;p>You don&amp;rsquo;t commit to Git your node_modules folder, which is generally huge, and when you try to replicate the project on another machine by using the &lt;code>npm install&lt;/code> command, if you specified the &lt;code>~&lt;/code> syntax and a patch release of a package has been released, that one is going to be installed. Same for &lt;code>^&lt;/code> and minor releases.&lt;/p>
+&lt;p>The &lt;code>package-lock.json&lt;/code> sets your currently installed version of each package &lt;strong>in stone&lt;/strong>, and &lt;code>npm&lt;/code> will use those exact versions when running &lt;code>npm ci&lt;/code>.&lt;/p>
+&lt;p>The dependencies versions &lt;strong>will be updated&lt;/strong> in the &lt;code>package-lock.json&lt;/code> file when you run &lt;code>npm update&lt;/code>.&lt;/p>
+&lt;h3 id="semantic-version">Semantic Version
+&lt;/h3>&lt;p>The Semantic Versioning concept is simple: all versions have 3 digits: &lt;code>x.y.z&lt;/code>.&lt;/p>
+&lt;ul>
+&lt;li>the first digit is the &lt;strong>major&lt;/strong> version&lt;/li>
+&lt;li>the second digit is the &lt;strong>minor&lt;/strong> version&lt;/li>
+&lt;li>the third digit is the &lt;strong>patch&lt;/strong> version&lt;/li>
+&lt;/ul>
+&lt;p>The rules use those symbols:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>^&lt;/code>: It will only do updates that &lt;strong>do not change the leftmost non-zero number&lt;/strong> i.e there can be changes in minor version or patch version but not in major version. If you write &lt;code>^13.1.0&lt;/code>, when running &lt;code>npm update&lt;/code>, it can update to &lt;code>13.2.0&lt;/code>, &lt;code>13.3.0&lt;/code> even &lt;code>13.3.1&lt;/code>, &lt;code>13.3.2&lt;/code> and so on, but not to &lt;code>14.0.0&lt;/code> or above.&lt;/li>
+&lt;li>&lt;code>~&lt;/code>: if you write &lt;code>~0.13.0&lt;/code> when running &lt;code>npm update&lt;/code> it can update to patch releases: &lt;code>0.13.1&lt;/code> is ok, but &lt;code>0.14.0&lt;/code> is not.&lt;/li>
+&lt;li>&lt;code>&amp;gt;&lt;/code>: you accept any version higher than the one you specify&lt;/li>
+&lt;li>&lt;code>&amp;gt;=&lt;/code>: you accept any version equal to or higher than the one you specify&lt;/li>
+&lt;li>&lt;code>&amp;lt;=&lt;/code>: you accept any version equal or lower to the one you specify&lt;/li>
+&lt;li>&lt;code>&amp;lt;&lt;/code>: you accept any version lower than the one you specify&lt;/li>
+&lt;li>&lt;code>=&lt;/code>: you accept that exact version&lt;/li>
+&lt;li>&lt;code>-&lt;/code>: you accept a &lt;strong>range&lt;/strong> of versions. Example: &lt;code>2.1.0 - 2.6.2&lt;/code>&lt;/li>
+&lt;li>&lt;code>||&lt;/code>: you combine &lt;strong>sets&lt;/strong>. Example: &lt;code>&amp;lt; 2.1 || &amp;gt; 2.6&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>There are other rules too:&lt;/p>
+&lt;ul>
+&lt;li>no symbol: you accept only that specific version you specify (&lt;code>1.2.1&lt;/code>)&lt;/li>
+&lt;li>&lt;code>latest&lt;/code>: you want to use the latest version available&lt;/li>
+&lt;/ul>
+&lt;h3 id="scope">Scope
+&lt;/h3>&lt;p>In your code you can only require &lt;strong>local&lt;/strong> packages:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;package-name&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>In general, &lt;strong>all packages should be installed locally&lt;/strong>. This makes sure you can have dozens of applications in your computer, all running a different version of each package if needed. A package &lt;strong>should be installed globally&lt;/strong> when it provides an executable command that you run from the &lt;strong>shell&lt;/strong> (CLI), and it&amp;rsquo;s reused across projects.&lt;/p>
+&lt;p>Great examples of popular global packages which you might know are&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>npm&lt;/code>&lt;/li>
+&lt;li>&lt;code>vue-cli&lt;/code>&lt;/li>
+&lt;li>&lt;code>grunt-cli&lt;/code>&lt;/li>
+&lt;li>&lt;code>mocha&lt;/code>&lt;/li>
+&lt;li>&lt;code>react-native-cli&lt;/code>&lt;/li>
+&lt;li>&lt;code>gatsby-cli&lt;/code>&lt;/li>
+&lt;li>&lt;code>forever&lt;/code>&lt;/li>
+&lt;li>&lt;code>nodemon&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h3 id="npx">NPX
+&lt;/h3>&lt;p>&lt;code>npx&lt;/code> is a very powerful command that&amp;rsquo;s been available in &lt;strong>npm&lt;/strong> starting version 5.2, released in July 2017.&lt;/p>
+&lt;p>&lt;code>npx&lt;/code> lets you run code built with Node.js and published through the npm registry.&lt;/p>
+&lt;p>Running &lt;code>npx commandname&lt;/code> automatically finds the correct reference of the command inside the &lt;code>node_modules&lt;/code> folder of a project, without needing to know the exact path, and without requiring the package to be installed globally and in the user&amp;rsquo;s path.&lt;/p>
+&lt;h2 id="event">Event
+&lt;/h2>&lt;p>On the backend side, Node.js offers us the option to build a similar system using the &lt;a class="link" href="https://nodejs.org/api/events.html" target="_blank" rel="noopener"
+>&lt;code>events&lt;/code> module&lt;/a>.&lt;/p>
+&lt;p>This module, in particular, offers the &lt;code>EventEmitter&lt;/code> class, which we&amp;rsquo;ll use to handle our events.&lt;/p>
+&lt;p>You initialize that using&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">EventEmitter&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;events&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">eventEmitter&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nx">EventEmitter&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>This object exposes, among many others, the &lt;code>on&lt;/code> and &lt;code>emit&lt;/code> methods.&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>emit&lt;/code> is used to trigger an event&lt;/li>
+&lt;li>&lt;code>on&lt;/code> is used to add a callback function that&amp;rsquo;s going to be executed when the event is triggered&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">eventEmitter&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">on&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;start&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;started&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>when we run&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">eventEmitter&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">emit&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;start&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>the event handler function is triggered, and we get the console log.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">eventEmitter&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">on&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;start&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">start&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">end&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sb">`started from &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nx">start&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="sb"> to &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nx">end&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="sb">`&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">eventEmitter&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">emit&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;start&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">100&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The EventEmitter object also exposes several other methods to interact with events, like&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>once()&lt;/code>: add a one-time listener&lt;/li>
+&lt;li>&lt;code>removeListener()&lt;/code> / &lt;code>off()&lt;/code>: remove an event listener from an event&lt;/li>
+&lt;li>&lt;code>removeAllListeners()&lt;/code>: remove all listeners for an event&lt;/li>
+&lt;/ul>
+&lt;h2 id="event-loop">Event Loop
+&lt;/h2>&lt;p>The Node.js JavaScript code runs on a single thread. There is just one thing happening at a time.&lt;/p>
+&lt;p>This is a limitation that&amp;rsquo;s actually very helpful, as it simplifies a lot how you program without worrying about concurrency issues.&lt;/p>
+&lt;p>You mainly need to be concerned that &lt;em>your code&lt;/em> will run on a &lt;strong>single event loop&lt;/strong>, and write code with this thing in mind to avoid blocking it.&lt;/p>
+&lt;p>Almost all the I/O primitives in JavaScript are non-blocking. Network requests, filesystem operations, and so on. Being blocking is the exception, and this is why JavaScript is based so much on &lt;strong>callbacks&lt;/strong>, and more recently on &lt;strong>promises&lt;/strong> and &lt;strong>async/await&lt;/strong>.&lt;/p>
+&lt;h3 id="call-stack">Call Stack
+&lt;/h3>&lt;p>The event loop continuously checks the &lt;strong>call stack&lt;/strong> to see if there&amp;rsquo;s any function that needs to run.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">bar&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;bar&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">baz&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;baz&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">foo&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;foo&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">setTimeout&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">bar&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">baz&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">foo&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//output
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="nx">foo&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">baz&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">bar&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;img src="C:%5cUsers%5cdyhes%5cAppData%5cRoaming%5cTypora%5ctypora-user-images%5cimage-20220130164512101.png"
+loading="lazy"
+alt="image-20220130164512101"
+>&lt;/p>
+&lt;p>&lt;img src="C:%5cUsers%5cdyhes%5cAppData%5cRoaming%5cTypora%5ctypora-user-images%5cimage-20220130171105441.png"
+loading="lazy"
+alt="image-20220130171105441"
+>&lt;/p>
+&lt;h3 id="the-message-queue">The Message Queue
+&lt;/h3>&lt;p>When &lt;code>setTimeout()&lt;/code> is called, the Browser or Node.js starts the timer. Once the timer expires, in this case immediately as we put 0 as the timeout, the callback function is put in the &lt;strong>Message Queue&lt;/strong>.&lt;/p>
+&lt;p>The Message Queue is also where user-initiated events like click or keyboard events, or fetch responses are queued before your code has the opportunity to react to them. Or also DOM events like &lt;code>onload&lt;/code>.&lt;/p>
+&lt;p>&lt;strong>The loop gives priority to the call stack, and it first processes everything it finds in the call stack, and once there&amp;rsquo;s nothing in there, it goes to pick up things in the message queue.&lt;/strong>&lt;/p>
+&lt;p>We don&amp;rsquo;t have to wait for functions like &lt;code>setTimeout&lt;/code>, fetch or other things to do their own work, because they are provided by the browser, and they live on their own threads. For example, if you set the &lt;code>setTimeout&lt;/code> timeout to 2 seconds, you don&amp;rsquo;t have to wait 2 seconds - the wait &lt;strong>happens elsewhere&lt;/strong>.&lt;/p>
+&lt;h3 id="es6-job-queue">ES6 Job Queue
+&lt;/h3>&lt;p>ECMAScript 2015 introduced the concept of the &lt;strong>Job Queue&lt;/strong>, which is used by B (also introduced in ES6/ES2015). It&amp;rsquo;s a way to execute the result of an &lt;strong>async&lt;/strong> function as soon as possible, rather than being put at the end of the call stack.&lt;/p>
+&lt;p>Promises that resolve before the current function ends will be executed right after the current function.&lt;/p>
+&lt;h3 id="processnexttick">&lt;code>process.nextTick()&lt;/code>
+&lt;/h3>&lt;p>As you try to understand the Node.js event loop, one important part of it is &lt;code>process.nextTick()&lt;/code>. Every time the event loop takes &lt;strong>a full trip&lt;/strong>, we call it a &lt;strong>tick&lt;/strong>. When we pass a function to &lt;code>process.nextTick()&lt;/code>, we instruct the engine to invoke this function at the end of the current operation, &lt;strong>before&lt;/strong> the next event loop tick starts. Calling &lt;code>setTimeout(() =&amp;gt; {}, 0)&lt;/code> will execute the function &lt;strong>at the end of next tick&lt;/strong>, much later than when using &lt;code>nextTick()&lt;/code> which prioritizes the call and executes it just &lt;strong>before the beginning&lt;/strong> of the next tick. Use &lt;code>nextTick()&lt;/code> when you want to make sure that in the next event loop iteration that code is &lt;strong>already executed&lt;/strong>.&lt;/p>
+&lt;h3 id="setimmediate">&lt;code>setImmediate()&lt;/code>
+&lt;/h3>&lt;p>When you want to execute some piece of code &lt;strong>asynchronously&lt;/strong>, but &lt;strong>as soon as possible&lt;/strong>, one option is to use the &lt;code>setImmediate()&lt;/code> function. Any function passed as the &lt;code>setImmediate()&lt;/code> argument is a &lt;strong>callback&lt;/strong> that&amp;rsquo;s executed &lt;strong>in the&lt;/strong> &lt;strong>next iteration of the event loop&lt;/strong>.&lt;/p>
+&lt;p>The differences between &lt;code>setImmediate()&lt;/code> , &lt;code>setTimeout(() =&amp;gt; {}, 0)&lt;/code> , and &lt;code>process.nextTick()&lt;/code>:&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>A function passed to &lt;code>process.nextTick()&lt;/code> is going to be executed on the current iteration of the event loop, after the current operation ends. This means it will always execute before &lt;code>setTimeout&lt;/code> and &lt;code>setImmediate&lt;/code>.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>A &lt;code>setTimeout()&lt;/code> callback with a 0ms delay is very similar to &lt;code>setImmediate()&lt;/code>. The execution order will depend on various factors, but they will be &lt;strong>both run in the next iteration of the event loop&lt;/strong>. If you specify the timeout delay to &lt;code>0&lt;/code>, the callback function will be executed as soon as possible, but after the current function execution. This is called &lt;strong>zero delay&lt;/strong>.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="asynchronicity">Asynchronicity
+&lt;/h2>&lt;p>Computers are asynchronous by design. Asynchronous means that things can happen &lt;strong>independently&lt;/strong> of the main program flow. In the current consumer computers, every program runs for a specific time slot and then it stops its execution to let another program continue their execution. This thing runs in a cycle so fast that it&amp;rsquo;s impossible to notice. We think our computers run many programs simultaneously, but this is an illusion (except on multiprocessor machines). JavaScript is &lt;strong>synchronous&lt;/strong> by default and is single threaded. This means that code cannot create new threads and run in parallel. Lines of code are executed in series, one after another.&lt;/p>
+&lt;h3 id="promise">Promise
+&lt;/h3>&lt;p>A promise is commonly defined as &lt;strong>a proxy for a value that will eventually become available&lt;/strong>. Promises are one way to deal with asynchronous code, without getting stuck in &lt;strong>callback hell&lt;/strong>. Promises have been part of the language for years (standardized and introduced in ES2015), and have recently become more integrated, with &lt;strong>async&lt;/strong> and &lt;strong>await&lt;/strong> in ES2017.&lt;/p>
+&lt;p>&lt;strong>Async functions&lt;/strong> use promises &lt;strong>behind the scenes&lt;/strong>, so understanding how promises work is fundamental to understanding how &lt;code>async&lt;/code> and &lt;code>await&lt;/code> work.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">let&lt;/span> &lt;span class="nx">done&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">isItDoneYet&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nb">Promise&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="nx">resolve&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">reject&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">done&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="nx">workDone&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;Here is the thing I built&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">resolve&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">workDone&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span> &lt;span class="k">else&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="nx">why&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;Still working on something else&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">reject&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">why&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="async-and--await">Async and Await
+&lt;/h3>&lt;p>Async functions are a combination of promises and generators, and basically, they are a higher level abstraction over promises. Let me repeat: &lt;strong>async/await is built on promises&lt;/strong>. An async function &lt;strong>returns a promise&lt;/strong>. When you want to &lt;strong>call&lt;/strong> this function you prepend &lt;code>await&lt;/code>, and &lt;strong>the calling code will stop until the promise is resolved or rejected&lt;/strong>. One caveat: the client function must be defined as &lt;code>async&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">doSomethingAsync&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nb">Promise&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">resolve&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">setTimeout&lt;/span>&lt;span class="p">(()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="nx">resolve&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;I did something&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="mi">3000&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">doSomething&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kr">async&lt;/span> &lt;span class="p">()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kr">await&lt;/span> &lt;span class="nx">doSomethingAsync&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Before&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">doSomething&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;After&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="file-and-folder">File and Folder
+&lt;/h2>&lt;h3 id="file-descriptor">File Descriptor
+&lt;/h3>&lt;p>A file descriptor is &lt;strong>a reference to an open file&lt;/strong>, a &lt;strong>number&lt;/strong> (fd) returned by opening the file using the &lt;code>open()&lt;/code> method offered by the &lt;code>fs&lt;/code> module. This number (&lt;code>fd&lt;/code>) uniquely identifies an open file in operating system&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">fs&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;fs&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">fs&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">open&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;/Users/joe/test.txt&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;r&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">err&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">fd&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">//fd is our file descriptor
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Other flags you&amp;rsquo;ll commonly use are:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>r+&lt;/code> open the file for &lt;strong>reading and writing&lt;/strong>, if file doesn&amp;rsquo;t exist it &lt;strong>won&amp;rsquo;t be created&lt;/strong>.&lt;/li>
+&lt;li>&lt;code>w+&lt;/code> open the file for &lt;strong>reading and writing&lt;/strong>, positioning the stream at the &lt;strong>beginning&lt;/strong> of the file. The file is &lt;strong>created&lt;/strong> &lt;strong>if not existing.&lt;/strong>&lt;/li>
+&lt;li>&lt;code>a&lt;/code> open the file for &lt;strong>writing&lt;/strong>, positioning the stream at the &lt;strong>end&lt;/strong> of the file. The file is &lt;strong>created if not existing&lt;/strong>.&lt;/li>
+&lt;li>&lt;code>a+&lt;/code> open the file for &lt;strong>reading and writing&lt;/strong>, positioning the stream at the &lt;strong>end&lt;/strong> of the file. The file is created if not existing.&lt;/li>
+&lt;/ul>
+&lt;p>You can also open the file by using the &lt;code>fs.openSync&lt;/code> method, which returns the file descriptor, instead of providing it in a callback:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">fs&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;fs&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">try&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="nx">fd&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">fs&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">openSync&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;/Users/joe/test.txt&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;r&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span> &lt;span class="k">catch&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">err&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">error&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">err&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="stats">Stats
+&lt;/h3>&lt;p>The file information is included in the stats variable. We can obtain information about the file by:&lt;/p>
+&lt;ul>
+&lt;li>if the file is a &lt;strong>directory&lt;/strong> or a file, using &lt;code>stats.isFile()&lt;/code> and &lt;code>stats.isDirectory()&lt;/code>&lt;/li>
+&lt;li>if the file is a &lt;strong>symbolic link&lt;/strong> using &lt;code>stats.isSymbolicLink()&lt;/code>&lt;/li>
+&lt;li>the file &lt;strong>size in bytes&lt;/strong> using &lt;code>stats.size&lt;/code>.&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">fs&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;fs&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">fs&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">stat&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;/Users/joe/test.txt&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">err&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">stats&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">err&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">error&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">err&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">//we have access to the file stats in `stats`
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//sync
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kr">const&lt;/span> &lt;span class="nx">fs&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;fs&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">try&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="nx">stats&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">fs&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">statSync&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;/Users/joe/test.txt&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span> &lt;span class="k">catch&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">err&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">error&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">err&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="path">Path
+&lt;/h3>&lt;p>Given a path, you can extract information out of it using those methods:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>dirname&lt;/code>: get the parent folder of a file&lt;/li>
+&lt;li>&lt;code>basename&lt;/code>: get the filename part&lt;/li>
+&lt;li>&lt;code>extname&lt;/code>: get the file extension&lt;/li>
+&lt;/ul>
+&lt;p>You can get the absolute path calculation of a relative path using &lt;code>path.resolve()&lt;/code>, &lt;code>path.normalize()&lt;/code> is another useful function that will try and calculate the actual path, when it contains relative specifiers like &lt;code>.&lt;/code> or &lt;code>..&lt;/code>, or double slashes. &lt;strong>Neither resolve nor normalize will check if the path exists&lt;/strong>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">path&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;path&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">notes&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;/users/joe/notes.txt&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">path&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">dirname&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">notes&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">// /users/joe
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="nx">path&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">basename&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">notes&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">// notes.txt
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="nx">path&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">extname&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">notes&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">// .txt
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">name&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;joe&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">path&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">join&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;/&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;users&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">name&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;notes.txt&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">//&amp;#39;/users/joe/notes.txt&amp;#39;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">path&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">resolve&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;joe.txt&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">//&amp;#39;/Users/joe/joe.txt&amp;#39; if run from my home folder
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">path&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">normalize&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;/users/joe/..//test.txt&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">//&amp;#39;/users/test.txt&amp;#39;
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="read">Read
+&lt;/h3>&lt;p>The simplest way to read a file in Node.js is to use the &lt;code>fs.readFile()&lt;/code> method, passing it the file path, encoding and a callback function that will be called with the file data (and the error).&lt;/p>
+&lt;p>Alternatively, you can use the synchronous version &lt;code>fs.readFileSync()&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">fs&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;fs&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">fs&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">readFile&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;/Users/joe/test.txt&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;utf8&amp;#39;&lt;/span> &lt;span class="p">,&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">err&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">data&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">err&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">error&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">err&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">data&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//sync
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kr">const&lt;/span> &lt;span class="nx">fs&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;fs&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">try&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="nx">data&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">fs&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">readFileSync&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;/Users/joe/test.txt&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;utf8&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">data&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span> &lt;span class="k">catch&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">err&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">error&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">err&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Both &lt;code>fs.readFile()&lt;/code> and &lt;code>fs.readFileSync()&lt;/code> read the full content of the file in memory before returning the data.&lt;/p>
+&lt;p>This means that big files are going to have a major impact on your memory consumption and speed of execution of the program.&lt;/p>
+&lt;p>In this case, a better option is to read the file content using streams.&lt;/p>
+&lt;h3 id="write">Write
+&lt;/h3>&lt;p>The easiest way to write to files in Node.js is to use the &lt;code>fs.writeFile()&lt;/code> API.&lt;/p>
+&lt;p>Alternatively, you can use the synchronous version &lt;code>fs.writeFileSync()&lt;/code>。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">fs&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;fs&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">content&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;Some content!&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">fs&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">writeFile&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;/Users/joe/test.txt&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">content&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">err&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">err&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">error&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">err&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">//file written successfully
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//sync
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kr">const&lt;/span> &lt;span class="nx">fs&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;fs&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">content&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;Some content!&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">try&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">fs&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">writeFileSync&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;/Users/joe/test.txt&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">content&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">//file written successfully
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="p">}&lt;/span> &lt;span class="k">catch&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">err&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">error&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">err&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>By default, this API will &lt;strong>replace the contents of the file&lt;/strong> if it does already exist.&lt;/p>
+&lt;p>You can modify the default by specifying a flag:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">fs&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">writeFile&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;/Users/joe/test.txt&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">content&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">flag&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;a+&amp;#39;&lt;/span> &lt;span class="p">},&lt;/span> &lt;span class="nx">err&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{})&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The flags you&amp;rsquo;ll likely use are&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>r+&lt;/code> open the file for reading and writing&lt;/li>
+&lt;li>&lt;code>w+&lt;/code> open the file for reading and writing, positioning the stream at the beginning of the file. The file is created if it does not exist&lt;/li>
+&lt;li>&lt;code>a&lt;/code> open the file for writing, positioning the stream at the end of the file. The file is created if it does not exist&lt;/li>
+&lt;li>&lt;code>a+&lt;/code> open the file for reading and writing, positioning the stream at the end of the file. The file is created if it does not exist&lt;/li>
+&lt;/ul>
+&lt;h3 id="append">Append
+&lt;/h3>&lt;p>The easiest way to append content to files in Node.js is to use the &lt;code>fs.appendFile()&lt;/code> API.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">content&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;Some content!&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">fs&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">appendFile&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;file.log&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">content&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">err&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">err&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">error&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">err&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">//done!
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="folders">Folders
+&lt;/h3>&lt;ul>
+&lt;li>
+&lt;p>Use &lt;code>fs.access()&lt;/code> to check if the folder exists and Node.js can access it with its permissions.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Use &lt;code>fs.mkdir()&lt;/code> or &lt;code>fs.mkdirSync()&lt;/code> to create a new folder.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">fs&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;fs&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">folderName&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;/Users/joe/test&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">try&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="o">!&lt;/span>&lt;span class="nx">fs&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">existsSync&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">folderName&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">fs&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">mkdirSync&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">folderName&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span> &lt;span class="k">catch&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">err&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">error&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">err&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>
+&lt;p>Use &lt;code>fs.readdir()&lt;/code> or &lt;code>fs.readdirSync()&lt;/code> to read the contents of a directory.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Use &lt;code>fs.rename()&lt;/code> or &lt;code>fs.renameSync()&lt;/code> to rename folder.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Use &lt;code>fs.rmdir()&lt;/code> or &lt;code>fs.rmdirSync()&lt;/code> to remove a folder.&lt;/p>
+&lt;p>Removing a folder that has content can be more complicated than you need. You can pass the option &lt;code>{ recursive: true }&lt;/code> to recursively remove the contents&lt;/p>
+&lt;p>&lt;strong>NOTE:&lt;/strong> &lt;em>In Node&lt;/em> &lt;code>v16.x&lt;/code> &lt;em>the option&lt;/em> &lt;code>recursive&lt;/code> &lt;em>is&lt;/em> &lt;strong>deprecated&lt;/strong> &lt;em>for&lt;/em> &lt;code>fs.rmdir&lt;/code> &lt;em>of callback API, instead use&lt;/em> &lt;code>fs.rm&lt;/code> &lt;em>to delete folders that have content in them&lt;/em>&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">fs&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;fs&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">fs&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">rm&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">dir&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">recursive&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">force&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="kc">true&lt;/span> &lt;span class="p">},&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">err&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">err&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">throw&lt;/span> &lt;span class="nx">err&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sb">`&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nx">dir&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="sb"> is deleted!`&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">});&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="buffer-and-stream">Buffer and Stream
+&lt;/h2>&lt;h3 id="buffer">Buffer
+&lt;/h3>&lt;p>A buffer is &lt;strong>an area of memory&lt;/strong>. It represents &lt;strong>a fixed-size chunk&lt;/strong> of memory (can&amp;rsquo;t be resized) allocated &lt;strong>outside&lt;/strong> of the V8 JavaScript engine. You can think of a buffer like an array of integers, which each represent a byte of data.&lt;/p>
+&lt;p>A buffer is created using the &lt;a class="link" href="https://nodejs.org/api/buffer.html#buffer_buffer_from_buffer_alloc_and_buffer_allocunsafe" target="_blank" rel="noopener"
+>&lt;code>Buffer.from()&lt;/code>&lt;/a>, &lt;a class="link" href="https://nodejs.org/api/buffer.html#buffer_class_method_buffer_alloc_size_fill_encoding" target="_blank" rel="noopener"
+>&lt;code>Buffer.alloc()&lt;/code>&lt;/a>, and &lt;a class="link" href="https://nodejs.org/api/buffer.html#buffer_class_method_buffer_allocunsafe_size" target="_blank" rel="noopener"
+>&lt;code>Buffer.allocUnsafe()&lt;/code>&lt;/a> methods.&lt;/p>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://nodejs.org/api/buffer.html#buffer_class_method_buffer_from_array" target="_blank" rel="noopener"
+>&lt;code>Buffer.from(array)&lt;/code>&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://nodejs.org/api/buffer.html#buffer_class_method_buffer_from_arraybuffer_byteoffset_length" target="_blank" rel="noopener"
+>&lt;code>Buffer.from(arrayBuffer[, byteOffset[, length\]])&lt;/code>&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://nodejs.org/api/buffer.html#buffer_class_method_buffer_from_buffer" target="_blank" rel="noopener"
+>&lt;code>Buffer.from(buffer)&lt;/code>&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://nodejs.org/api/buffer.html#buffer_class_method_buffer_from_string_encoding" target="_blank" rel="noopener"
+>&lt;code>Buffer.from(string[, encoding\])&lt;/code>&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">buf&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">Buffer&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">from&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Hey!&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">buf&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">Buffer&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">alloc&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1024&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//or
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kr">const&lt;/span> &lt;span class="nx">buf&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">Buffer&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">allocUnsafe&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1024&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="stream">Stream
+&lt;/h3>&lt;p>Streams are a way to handle reading/writing files, network communications, or any kind of end-to-end information exchange in an efficient way. The Node.js &lt;a class="link" href="https://nodejs.org/api/stream.html" target="_blank" rel="noopener"
+>&lt;code>stream&lt;/code> module&lt;/a> provides the foundation upon which all streaming APIs are built. &lt;strong>All streams are instances of EventEmitter&lt;/strong>.&lt;/p>
+&lt;p>Streams basically provide two major advantages over using other data handling methods:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Memory efficiency&lt;/strong>: you don&amp;rsquo;t need to load large amounts of data in memory before you are able to process it&lt;/li>
+&lt;li>&lt;strong>Time efficiency&lt;/strong>: it takes way less time to start processing data, since you can start processing as soon as you have it, rather than waiting till the whole data payload is available&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">http&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;http&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">fs&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;fs&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">server&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">http&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">createServer&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="nx">req&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">res&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="nx">stream&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">fs&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">createReadStream&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">__dirname&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="s1">&amp;#39;/data.txt&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">stream&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">pipe&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">res&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">server&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">listen&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3000&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>the &lt;code>pipe()&lt;/code> method is called on the file stream. It takes the source, and pipes it into a destination.&lt;/p>
+&lt;p>The return value of the &lt;code>pipe()&lt;/code> method is the destination stream, which is a very convenient thing that lets us chain multiple &lt;code>pipe()&lt;/code> calls, like this:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">src&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">pipe&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">dest1&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="nx">pipe&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">dest2&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Due to their advantages, many Node.js core modules provide native stream handling capabilities, most notably:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>process.stdin&lt;/code> returns a stream connected to stdin&lt;/li>
+&lt;li>&lt;code>process.stdout&lt;/code> returns a stream connected to stdout&lt;/li>
+&lt;li>&lt;code>process.stderr&lt;/code> returns a stream connected to stderr&lt;/li>
+&lt;li>&lt;code>fs.createReadStream()&lt;/code> creates a readable stream to a file&lt;/li>
+&lt;li>&lt;code>fs.createWriteStream()&lt;/code> creates a writable stream to a file&lt;/li>
+&lt;li>&lt;code>net.connect()&lt;/code> initiates a stream-based connection&lt;/li>
+&lt;li>&lt;code>http.request()&lt;/code> returns an instance of the http.ClientRequest class, which is a writable stream&lt;/li>
+&lt;li>&lt;code>zlib.createGzip()&lt;/code> compress data using gzip (a compression algorithm) into a stream&lt;/li>
+&lt;li>&lt;code>zlib.createGunzip()&lt;/code> decompress a gzip stream.&lt;/li>
+&lt;li>&lt;code>zlib.createDeflate()&lt;/code> compress data using deflate (a compression algorithm) into a stream&lt;/li>
+&lt;li>&lt;code>zlib.createInflate()&lt;/code> decompress a deflate stream&lt;/li>
+&lt;/ul>
+&lt;h3 id="types">types
+&lt;/h3>&lt;p>There are four classes of streams:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>Readable&lt;/code>: a stream you can pipe from, but not pipe into (you can receive data, but not send data to it). When you push data into a readable stream, it is buffered, until a consumer starts to read the data.&lt;/li>
+&lt;li>&lt;code>Writable&lt;/code>: a stream you can pipe into, but not pipe from (you can send data, but not receive from it)&lt;/li>
+&lt;li>&lt;code>Duplex&lt;/code>: a stream you can both pipe into and pipe from, basically a combination of a Readable and Writable stream&lt;/li>
+&lt;li>&lt;code>Transform&lt;/code>: a Transform stream is similar to a Duplex, but the output is a transform of its input&lt;/li>
+&lt;/ul>
+&lt;p>We get the Readable stream from the &lt;a class="link" href="https://nodejs.org/api/stream.html" target="_blank" rel="noopener"
+>&lt;code>stream&lt;/code> module&lt;/a>, and we initialize it and implement the &lt;code>readable._read()&lt;/code> method.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">Stream&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;stream&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">readableStream&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nx">Stream&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Readable&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">readableStream&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">_read&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//or
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kr">const&lt;/span> &lt;span class="nx">readableStream&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nx">Stream&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Readable&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">read&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">readableStream&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">push&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;hi!&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">readableStream&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">push&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;ho!&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">writableStream&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nx">Stream&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Writable&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">writableStream&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">_write&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">chunk&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">encoding&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">next&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">chunk&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">toString&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">next&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>You can also consume a readable stream directly, using the &lt;code>readable&lt;/code> event:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">JScopy&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">readableStream&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">on&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;readable&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">readableStream&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">read&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="modules">Modules
+&lt;/h2>&lt;h3 id="fs--module">fs module
+&lt;/h3>&lt;ul>
+&lt;li>&lt;code>fs.access()&lt;/code>: check if the file exists and Node.js can access it with its permissions&lt;/li>
+&lt;li>&lt;code>fs.appendFile()&lt;/code>: append data to a file. If the file does not exist, it&amp;rsquo;s created&lt;/li>
+&lt;li>&lt;code>fs.chmod()&lt;/code>: change the permissions of a file specified by the filename passed. Related: &lt;code>fs.lchmod()&lt;/code>, &lt;code>fs.fchmod()&lt;/code>&lt;/li>
+&lt;li>&lt;code>fs.chown()&lt;/code>: change the owner and group of a file specified by the filename passed. Related: &lt;code>fs.fchown()&lt;/code>, &lt;code>fs.lchown()&lt;/code>&lt;/li>
+&lt;li>&lt;code>fs.close()&lt;/code>: close a file descriptor&lt;/li>
+&lt;li>&lt;code>fs.copyFile()&lt;/code>: copies a file&lt;/li>
+&lt;li>&lt;code>fs.createReadStream()&lt;/code>: create a readable file stream&lt;/li>
+&lt;li>&lt;code>fs.createWriteStream()&lt;/code>: create a writable file stream&lt;/li>
+&lt;li>&lt;code>fs.link()&lt;/code>: create a new hard link to a file&lt;/li>
+&lt;li>&lt;code>fs.mkdir()&lt;/code>: create a new folder&lt;/li>
+&lt;li>&lt;code>fs.mkdtemp()&lt;/code>: create a temporary directory&lt;/li>
+&lt;li>&lt;code>fs.open()&lt;/code>: set the file mode&lt;/li>
+&lt;li>&lt;code>fs.readdir()&lt;/code>: read the contents of a directory&lt;/li>
+&lt;li>&lt;code>fs.readFile()&lt;/code>: read the content of a file. Related: &lt;code>fs.read()&lt;/code>&lt;/li>
+&lt;li>&lt;code>fs.readlink()&lt;/code>: read the value of a symbolic link&lt;/li>
+&lt;li>&lt;code>fs.realpath()&lt;/code>: resolve relative file path pointers (&lt;code>.&lt;/code>, &lt;code>..&lt;/code>) to the full path&lt;/li>
+&lt;li>&lt;code>fs.rename()&lt;/code>: rename a file or folder&lt;/li>
+&lt;li>&lt;code>fs.rmdir()&lt;/code>: remove a folder&lt;/li>
+&lt;li>&lt;code>fs.stat()&lt;/code>: returns the status of the file identified by the filename passed. Related: &lt;code>fs.fstat()&lt;/code>, &lt;code>fs.lstat()&lt;/code>&lt;/li>
+&lt;li>&lt;code>fs.symlink()&lt;/code>: create a new symbolic link to a file&lt;/li>
+&lt;li>&lt;code>fs.truncate()&lt;/code>: truncate to the specified length the file identified by the filename passed. Related: &lt;code>fs.ftruncate()&lt;/code>&lt;/li>
+&lt;li>&lt;code>fs.unlink()&lt;/code>: remove a file or a symbolic link&lt;/li>
+&lt;li>&lt;code>fs.unwatchFile()&lt;/code>: stop watching for changes on a file&lt;/li>
+&lt;li>&lt;code>fs.utimes()&lt;/code>: change the timestamp of the file identified by the filename passed. Related: &lt;code>fs.futimes()&lt;/code>&lt;/li>
+&lt;li>&lt;code>fs.watchFile()&lt;/code>: start watching for changes on a file. Related: &lt;code>fs.watch()&lt;/code>&lt;/li>
+&lt;li>&lt;code>fs.writeFile()&lt;/code>: write data to a file. Related: &lt;code>fs.write()&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>One peculiar thing about the &lt;code>fs&lt;/code> module is that all the methods are asynchronous by default, but they can also work synchronously by appending &lt;code>Sync&lt;/code>.&lt;/p>
+&lt;h3 id="os-module">os module
+&lt;/h3>&lt;p>This module provides many functions that you can use to retrieve information from the underlying operating system and the computer the program runs on, and interact with it.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">os&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">require&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;os&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>There are a few useful properties that tell us some key things related to handling files:&lt;/p>
+&lt;p>&lt;code>os.EOL&lt;/code> gives the line delimiter sequence. It&amp;rsquo;s &lt;code>\n&lt;/code> on Linux and macOS, and &lt;code>\r\n&lt;/code> on Windows.&lt;/p>
+&lt;p>&lt;code>os.constants.signals&lt;/code> tells us all the constants related to handling process signals, like SIGHUP, SIGKILL and so on.&lt;/p>
+&lt;p>&lt;code>os.constants.errno&lt;/code> sets the constants for error reporting, like EADDRINUSE, EOVERFLOW and more.&lt;/p></description></item></channel></rss>

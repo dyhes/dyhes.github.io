@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Linux on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/linux/</link><description>Recent content in Linux on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 07 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://dyhes.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>【Linux】Basics</title><link>https://dyhes.github.io/p/linuxbasics/</link><pubDate>Mon, 07 Nov 2022 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/linuxbasics/</guid><description>&lt;h2 id="history">History
+&lt;/h2>&lt;p>When Linus Torvalds was studying at the University of Helsinki, he was using a version of the UNIX operating system called &amp;lsquo;Minix&amp;rsquo;. Linus and other users sent requests for modifications and improvements to Minix&amp;rsquo;s creator, Andrew Tanenbaum, but he felt that they weren&amp;rsquo;t necessary. That&amp;rsquo;s when Linus decided to create his own operating system that would take into account users&amp;rsquo; comments and suggestions for improvements.&lt;/p>
+&lt;p>In 1991, ideal conditions existed that would create Linux. In essence, Linus Torvalds had a kernel but no programs of his own, Richard Stallman and GNU had programs but no working kernel. Late in 1991, Linus Torvalds had his kernel and a few GNU programs wrapped around it so it would work well enough to show other people what he had done.&lt;/p>
+&lt;h2 id="distributions">Distributions
+&lt;/h2>&lt;p>The three most popular Desktop distributions of Linux are;&lt;/p>
+&lt;ol>
+&lt;li>&lt;a class="link" href="https://www.linux.org/resources/fedora.12/" target="_blank" rel="noopener"
+>Fedora&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://www.linux.org/resources/ubuntu-desktop.10/" target="_blank" rel="noopener"
+>Ubuntu&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://www.linux.org/resources/linux-mint.16/" target="_blank" rel="noopener"
+>Linux Mint&lt;/a>&lt;/li>
+&lt;/ol>
+&lt;p>The four most popular Server versions of Linux are;&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://www.linux.org/resources/debian.11/" target="_blank" rel="noopener"
+>Debian&lt;/a>&lt;/p>
+&lt;p>The Debian Project was founded by Ian Murdock in 1993. Debian gets its name from the combination of Ian Murdock and his wife Debra&amp;rsquo;s name (Deb-Ian) .Despite its not-for-profit status, Debian is an extremely versatile distribution. It forms the base of many user-friendly distributions like Ubuntu, Linspire and Xandros.&lt;/p>
+&lt;p>mv sources.list.old sources.list&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://www.linux.org/resources/centos.8/" target="_blank" rel="noopener"
+>CentOS&lt;/a> (Linux.org runs on a CentOS Linux VPS)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://www.linux.org/resources/opensuse.15/" target="_blank" rel="noopener"
+>OpenSUSE&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://www.linux.org/resources/slackware.9/" target="_blank" rel="noopener"
+>Slackware&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="install-new-software">install new software
+&lt;/h2>&lt;ul>
+&lt;li>dpkg&lt;/li>
+&lt;li>dselect&lt;/li>
+&lt;li>rpm&lt;/li>
+&lt;li>yum&lt;/li>
+&lt;/ul>
+&lt;h2 id="file-system">File System
+&lt;/h2>&lt;h3 id="heading">/
+&lt;/h3>&lt;p>This will get you into the &amp;lsquo;root&amp;rsquo; or main directory, not /root&lt;/p>
+&lt;h4 id="root">root
+&lt;/h4>&lt;p>root user&amp;rsquo;s home directory&lt;/p>
+&lt;h4 id="home">home
+&lt;/h4>&lt;p>directory that contains non-root user&amp;rsquo;s home directory&lt;/p>
+&lt;h4 id="bin">bin
+&lt;/h4>&lt;p>bin/ is one of the most important directories in Linux. You&amp;rsquo;ll find all of the most used commands there. Right now you should be seeing a lot of red (or green, depending on your version of Linux). Those are programs.&lt;/p>
+&lt;h4 id="sbin">sbin
+&lt;/h4>&lt;p>This directory is like /bin in that it has frequently used programs in it, but they&amp;rsquo;re only meant to be used by root.&lt;/p>
+&lt;h4 id="etc">etc
+&lt;/h4>&lt;p>This houses most of the configuration files for Linux.&lt;/p>
+&lt;h4 id="dev">dev
+&lt;/h4>&lt;p>These are the devices that your system uses or can use.&lt;/p>
+&lt;h4 id="boot">boot
+&lt;/h4>&lt;p>where the Linux kernel usually is.&lt;/p>
+&lt;h4 id="tmp">tmp
+&lt;/h4>&lt;p>/tmp is a directory that is used to store temporary files, as the name may suggest.&lt;/p>
+&lt;h4 id="var">var
+&lt;/h4>&lt;p>/var is a directory for certain files that may change their size (i.e. variable size) For example, there are a few excellent databases for Linux. One is called MySQL. Normally, MySQL keeps its data in a subdirectory of /var called /var/mysql/.&lt;/p>
+&lt;h4 id="usr">usr
+&lt;/h4>&lt;p>unix system resources&lt;/p>
+&lt;p>containing dynamically combined programs, user files and manually-installed programs&lt;/p>
+&lt;p>The usr/ directory contains files and programs meant to be used by all of the users on the system.&lt;/p>
+&lt;h4 id="lib">lib
+&lt;/h4>&lt;p>/lib is for library files. That&amp;rsquo;s where the name /lib comes from.&lt;/p>
+&lt;h4 id="other-directories">other directories
+&lt;/h4>&lt;p>Most installations of Linux will also provide these directories:&lt;/p>
+&lt;p>/mnt
+/cdrom
+/floppy&lt;/p>
+&lt;p>These shouldn&amp;rsquo;t contain anything. Later on, we&amp;rsquo;ll explain in more detail what these are for. Let&amp;rsquo;s just say that in Linux, if you want to see what&amp;rsquo;s on a floppy disk or a CD, you&amp;rsquo;re not going to be able to just click on an &amp;lsquo;a:&amp;rsquo; icon or a &amp;rsquo;d:&amp;rsquo; icon. You&amp;rsquo;re going to do&lt;/p>
+&lt;h3 id="file-permission">File Permission
+&lt;/h3>&lt;p>Let&amp;rsquo;s look at what these symbols mean:&lt;/p>
+&lt;p>start with -(d for directories)&lt;/p>
+&lt;h4 id="three-entity-types">three entity types
+&lt;/h4>&lt;ul>
+&lt;li>owner&lt;/li>
+&lt;li>group&lt;/li>
+&lt;li>world&lt;/li>
+&lt;/ul>
+&lt;h5 id="permission-symbol">permission symbol
+&lt;/h5>&lt;ul>
+&lt;li>r:read 4&lt;/li>
+&lt;li>w:write 2&lt;/li>
+&lt;li>x:execute 1&lt;/li>
+&lt;/ul>
+&lt;h2 id="file-backup">File Backup
+&lt;/h2>&lt;h3 id="tar">tar
+&lt;/h3>&lt;p>an archiving utility&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">tar -cvf&lt;span class="o">(&lt;/span>create verbose file&lt;span class="o">)&lt;/span> tarname files
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">tar -czvf&lt;span class="o">(&lt;/span>create zip verbose file&lt;span class="o">)&lt;/span> tar.gzName files
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&amp;rsquo;tar&amp;rsquo; just assembles the files together into only one file. There is no reduction in the size of these files (the tarball might even be bigger!) Now we would have to do one more thing in order to reduce this file into a more manageable size: use &amp;lsquo;gzip&amp;rsquo;.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">tar -zxvpf my_tar_file.tar.gz
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>-z - unzip the file first
+-x - extract the files from the tarball
+-v - &amp;amp;quot;verbose&amp;amp;quot; (i.e tar tells you what files it&amp;rsquo;s extracting)
+-p - preserves dates, permissions of the original files
+-f - use the file in question (if you don&amp;rsquo;t specify this, tar just sort of sits around doing nothing)&lt;/p>
+&lt;h3 id="gzip">gzip
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">gzip tar_file.tar
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>the file extension becomes .tar.gz&lt;/p>
+&lt;h2 id="text-editor">Text Editor
+&lt;/h2>&lt;h3 id="vi">vi
+&lt;/h3>&lt;p>The most popular text editor for Linux is called &amp;lsquo;vi&amp;rsquo;. This is a program that comes from UNIX. There is a more recent version called &amp;lsquo;vim&amp;rsquo; which means &amp;lsquo;vi improved&amp;rsquo;.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">ESC + i start editing
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ESC + :w save
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ESC + ：wq save and quit
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ESC + :q quit without saving
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ESC + :q! quit without saving and warning
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="joe">joe
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">Ctrl+k+h
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="pico">pico
+&lt;/h3>&lt;p>&amp;hellip;&lt;/p>
+&lt;h2 id="user">User
+&lt;/h2>&lt;h3 id="adduser">adduser
+&lt;/h3>&lt;p>create a new user or update default new user information&lt;/p>
+&lt;h2 id="userdel">userdel
+&lt;/h2>&lt;p>delete a user&lt;/p>
+&lt;h3 id="passwd">passwd
+&lt;/h3>&lt;p>change user password&lt;/p>
+&lt;h2 id="package">Package
+&lt;/h2>&lt;h3 id="slackware">slackware
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">installpkg file.tgz
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">removepkg file.tgz
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">upgradepkg file.tgz
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="debian">debian
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">dpkg file.deb
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">(&lt;/span>advanced package tool&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">apt-setup
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">apt-get update
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">apt-get install package.deb
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">apt-get remove package.deb
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">apt-get upgrade &lt;span class="o">[&lt;/span>p&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="commands">Commands
+&lt;/h2>&lt;h3 id="shutdown">shutdown
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">shutdown -h&lt;span class="o">(&lt;/span>halt&lt;span class="o">)&lt;/span> now
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">shutdown -r&lt;span class="o">(&lt;/span>reboot&lt;span class="o">)&lt;/span> now
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">shutdown -r now
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">shutdown -h +5 &lt;span class="o">(&lt;/span>&lt;span class="m">5&lt;/span> minutes&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="man">man
+&lt;/h3>&lt;p>This command will show the manual for a command or program. The manual is a file that shows you how to use the command and list the different options for the command in question.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">man mkdir
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="info">info
+&lt;/h3>&lt;p>Typing info [command name] will get you more information on a command and is more current than most man files and perhaps a little more readable. In fact, some &amp;lsquo;man&amp;rsquo; files will actually tell you to consult the &amp;lsquo;info&amp;rsquo; file. The &amp;lsquo;info&amp;rsquo; files are not always installed automatically. so you may want to consult your own version of Linux about these files.&lt;/p>
+&lt;h3 id="whatis">whatis
+&lt;/h3>&lt;p>display one-line manual page descriptions&lt;/p>
+&lt;h3 id="apropos">apropos
+&lt;/h3>&lt;p>search the manual page names and descriptions&lt;/p>
+&lt;h3 id="chmod">chmod
+&lt;/h3>&lt;p>Change access permissions&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">chmod &lt;span class="m">644&lt;/span> myDoc.txt
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="chown">chown
+&lt;/h3>&lt;p>Change file owner and group&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">chown owner.group filename
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">chown bob.bob example.txt
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="last">last
+&lt;/h3>&lt;p>show a listing of last logged in users&lt;/p>
+&lt;h3 id="df">df
+&lt;/h3>&lt;p>report file system disk space usage&lt;/p>
+&lt;h3 id="free">free
+&lt;/h3>&lt;p>Display amount of free and used memory in the system&lt;/p>
+&lt;h3 id="du">du
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">du -b filename
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="ps">ps
+&lt;/h3>&lt;p>report a snapshot of the current processes&lt;/p>
+&lt;h3 id="kill">kill
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">kill&lt;/span> PID
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>kill a process&lt;/p>
+&lt;h3 id="mkdir">mkdir
+&lt;/h3>&lt;p>make directories&lt;/p>
+&lt;h3 id="rmdir">rmdir
+&lt;/h3>&lt;p>remove empty directories&lt;/p>
+&lt;h3 id="rm">rm
+&lt;/h3>&lt;p>remove files or directories&lt;/p>
+&lt;h3 id="mv">mv
+&lt;/h3>&lt;p>move or rename files&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">mv tonyd/&lt;span class="o">(&lt;/span>dir&lt;span class="o">)&lt;/span> my_friends/&lt;span class="o">(&lt;/span>dir&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="cp">cp
+&lt;/h3>&lt;p>copy files and directories&lt;/p>
+&lt;h3 id="touch">touch
+&lt;/h3>&lt;p>change file timestamps&lt;/p>
+&lt;h3 id="find">find
+&lt;/h3>&lt;p>search for files&lt;/p>
+&lt;h3 id="grep">grep
+&lt;/h3>&lt;p>prints lines that contain a match for one or more patterns&lt;/p>
+&lt;h3 id="who">who
+&lt;/h3>&lt;p>prints information about users who are currently logged on.&lt;/p>
+&lt;h3 id="tee">tee
+&lt;/h3>&lt;p>read from standard input and write to standard output and files&lt;/p>
+&lt;p>&amp;gt; does the same without |&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">ls -l &lt;span class="p">|&lt;/span> tee directory_listing
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">date &amp;gt; directory_listing
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">date &amp;gt;&amp;gt; directory_listing&lt;span class="o">(&lt;/span>append&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="whereis">whereis
+&lt;/h3>&lt;p>locate the binary,source, and manual page files for a command&lt;/p>
+&lt;h3 id="which">which
+&lt;/h3>&lt;p>locate a command&lt;/p>
+&lt;h3 id="echo">echo
+&lt;/h3>&lt;p>display a line of text&lt;/p>
+&lt;h3 id="wc">wc
+&lt;/h3>&lt;p>print newline, word, and byte counts for each file&lt;/p>
+&lt;h3 id="dir">dir
+&lt;/h3>&lt;p>list directory contents&lt;/p>
+&lt;h3 id="pwd">pwd
+&lt;/h3>&lt;p>print working directory&lt;/p>
+&lt;h3 id="cal">cal
+&lt;/h3>&lt;p>displays a calendar and the adte of Easter&lt;/p>
+&lt;h3 id="tab">&amp;lt;TAB&amp;gt;
+&lt;/h3>&lt;p>auto complete&lt;/p>
+&lt;h3 id="up-arrow">up arrow
+&lt;/h3>&lt;p>show last command&lt;/p>
+&lt;h3 id="down-arrw">down arrw
+&lt;/h3>&lt;p>most recent commands&lt;/p></description></item></channel></rss>
