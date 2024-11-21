@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>千钟粟 on 飞鸿踏雪泥</title><link>https://dyhes.github.io/categories/millet/</link><description>Recent content in 千钟粟 on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 02 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://dyhes.github.io/categories/millet/index.xml" rel="self" type="application/rss+xml"/><item><title>【Spring Boot in practice】Notes</title><link>https://dyhes.github.io/p/spring-boot-in-practicenotes/</link><pubDate>Tue, 02 Jul 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/spring-boot-in-practicenotes/</guid><description>&lt;p>&lt;a class="link" href="https://reader-service.fcdn.sk/?source=3c6b6838ceb712e38b66a0ca2cde230f44274dac2f09fba71ffdc61842816357&amp;amp;download_location=https%3A%2F%2Fsinglelogin.re%2Fdl%2F21754907%2F994075" target="_blank" rel="noopener"
+>Link&lt;/a>&lt;/p>
+&lt;h2 id="spring-boot">Spring boot
+&lt;/h2>&lt;p>Spring Boot is an open source extension of the Spring Framework designed to simplify the Spring application development.&lt;/p>
+&lt;p>Spring Boot was introduced as a subproject under the Spring Framework to empower developers with a fast startup experience and exempt them from most of the configuration hazards.&lt;/p>
+&lt;p>It provides an additional layer between the Spring Framework for the user to simplify certain configuration aspects.&lt;/p>
+&lt;p>A Spring Boot web application can be either Servlet-based or reactive type.&lt;/p>
+&lt;h3 id="components">Components
+&lt;/h3>&lt;ul>
+&lt;li>
+&lt;p>spring-boot&lt;/p>
+&lt;p>This is the &lt;strong>primary&lt;/strong> Spring Boot component that provides support to other components. For example, it contains the &lt;strong>SpringApplication class&lt;/strong>, which contains several static methods to create a standalone Spring Boot application. It also provides support for embedded web servers (e.g., Tomcat) and supports externalized application configurations (e.g., database details of your application), etc.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>spring-boot-autoconfigure&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Spring-boot-starters&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>spring-boot-actuator&lt;/p>
+&lt;p>In the context of software, particularly within the Spring Boot framework, “Actuator” refers to a set of tools and features that provide insights into the application’s runtime behavior and health.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>spring-boot-actuator-autoconfigure&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>spring-boot-loader&lt;/p>
+&lt;p>This component allows a Spring Boot application to be packaged as a single fat JAR file, including all dependencies and the embedded web servers that can be run standalone. You don’t use this module independently; instead, it is used along with Maven or Gradle plugins&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>spring-boot-devtools&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="lombok">Lombok
+&lt;/h3>&lt;p>&lt;a class="link" href="https://projectlombok.org/" target="_blank" rel="noopener"
+>Lombok&lt;/a> is a Java library that automatically generates the constructors, getter, setter, toString, and others based on the presence of a few annotations in the plain old Java object (POJO) class.&lt;/p>
+&lt;h3 id="pojo">POJO
+&lt;/h3>&lt;p>A Plain Old Java Object (POJO) is a simple Java object that does not adhere to any special rules or conventions beyond those required by the Java Language Specification. The term is used to emphasize that these objects are free from the constraints typically imposed by more complex frameworks or libraries.&lt;/p>
+&lt;h3 id="record">Record
+&lt;/h3>&lt;p>Java 14 has introduced the concept of records in the Java language. Records are immutable data classes that require you to specify only the type and name of the fields. The Java compiler can then generate the equals, hashCode, and toString methods. It also generates the private final fields, getter methods, and public constructor.&lt;/p>
+&lt;h3 id="pomxml-file">pom.xml file
+&lt;/h3>&lt;p>The pom.xml file is a fundamental component of a Maven-based Java project. Maven is a build automation tool used primarily for Java projects, and pom.xml (Project Object Model) is the configuration file that defines the project’s dependencies, build configuration, and other project-specific settings.&lt;/p>
+&lt;h3 id="applicationpropertiesfile">application.properties file
+&lt;/h3>&lt;p>The application.properties file is a key configuration file used in Spring Boot applications. It allows developers to define various settings and configurations for the application in a simple and readable format. &lt;/p>
+&lt;h3 id="war-vs-ear">WAR vs EAR
+&lt;/h3>&lt;p>In general, to run a web application, you build and package the application components in a WAR or EAR archive file and deploy it into a web (e.g., Apache Tomcat) or application server (e.g., Red Hat JBoss). Spring Boot simplifies this process to a certain degree. It does not enforce you to build a WAR or EAR file of your application. Instead, it lets you run the Spring Boot application like a regular Java application using a conventional main() method.&lt;/p>
+&lt;h3 id="java-bean">Java Bean
+&lt;/h3>&lt;p>A JavaBean is a reusable software component that follows &lt;strong>specific conventions&lt;/strong> defined by the JavaBeans specification. JavaBeans are used for &lt;strong>encapsulating many objects into a single object&lt;/strong> (the bean), so they can be passed around as a single bean object.&lt;/p>
+&lt;p>&lt;strong>1 Default Constructor:&lt;/strong>&lt;/p>
+&lt;p>A JavaBean must have a no-argument (default) constructor. This allows the bean to be easily instantiated.&lt;/p>
+&lt;p>&lt;strong>2&lt;/strong> &lt;strong>Properties:&lt;/strong>&lt;/p>
+&lt;p>Properties are private fields that are accessed and modified through public getter and setter methods.&lt;/p>
+&lt;p>&lt;strong>3&lt;/strong> &lt;strong>Serializable:&lt;/strong>&lt;/p>
+&lt;p>A JavaBean should implement the Serializable interface to allow its state to be saved and restored.&lt;/p>
+&lt;p>&lt;strong>4&lt;/strong> &lt;strong>Accessor Methods:&lt;/strong>&lt;/p>
+&lt;p>Getter and setter methods follow a specific naming convention (getPropertyName for getters and setPropertyName for setters).
+The “Bean” part of the term is a metaphor borrowed from the agricultural sense of the word, implying something small, lightweight, and reusable.&lt;/p>
+&lt;h3 id="springbootapplication">@SpringBootApplication
+&lt;/h3>&lt;p>@SpringBootApplication annotation is a convenient annotation that consists of three annotations:&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>@EnableAutoConfiguration&lt;/p>
+&lt;p>provides the necessary support for Spring Boot to autoconfigure your application based on the JAR dependencies present in the application
+classpath&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>@ComponentScan&lt;/p>
+&lt;p>Provides support to scan the packages for Spring components in the application.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="spring-component">Spring Component
+&lt;/h3>&lt;p>&lt;strong>A component in Spring is a Java bean that is managed by Spring&lt;/strong> and annotated with the &lt;strong>@Component, @Bean, or specialized component annotations&lt;/strong>. With the presence of @ComponentScan annotation, the Spring Boot application scans for all components present in the &lt;strong>root package and sub-packages&lt;/strong> under it to manage their lifecycle. The key point to remember with ComponentScan is that the scan starts from a root package and continues to all child packages. Thus, if you have packages that are not in the root or its sub-package, none of those components will be scanned by the component scan.&lt;/p>
+&lt;ul>
+&lt;li>@SpringBootConfiguration
+This annotation indicates that &lt;strong>the annotated class provides the Spring Boot application configuration&lt;/strong>. It is meta-annotated with Spring @Configuration annotation so that the configurations in the annotated class can be found automatically by Spring Boot. Thus, the beans defined in this main class can be autodetected and loaded by Spring.&lt;/li>
+&lt;/ul>
+&lt;h3 id="run-method">run() method
+&lt;/h3>&lt;p>Most of the time, you’ll use the static run() method of SpringApplication to bootstrap and launch your application. Spring Boot performs several activities while it executes the run() method:&lt;/p>
+&lt;p>&lt;strong>1&lt;/strong> &lt;strong>Creates an instance of an&lt;/strong> &lt;strong>ApplicationContext&lt;/strong> based on the libraries present in the classpath.&lt;/p>
+&lt;p>&lt;strong>2&lt;/strong> &lt;strong>Registers a&lt;/strong> &lt;strong>CommandLinePropertySource&lt;/strong> to expose command line arguments as Spring properties.&lt;/p>
+&lt;p>&lt;strong>3&lt;/strong> &lt;strong>Refreshes the&lt;/strong> &lt;strong>ApplicationContext&lt;/strong> created at step 1 to load all singleton beans.&lt;/p>
+&lt;p>&lt;strong>4&lt;/strong> &lt;strong>Triggers the&lt;/strong> &lt;strong>ApplicationRunners&lt;/strong> &lt;strong>and&lt;/strong> &lt;strong>CommandRunners&lt;/strong> configured in the application.&lt;/p>
+&lt;p>Most Java applications you develop consist of objects. These objects interact with each other, and there are dependencies among them. To effectively manage object creation and interdependencies, Spring uses the principles of &lt;strong>dependency injection (DI)&lt;/strong>.
+This dependency injection or the &lt;strong>inversion of control (IoC)&lt;/strong> approach lets Spring create the objects (or, more appropriately, the &lt;strong>beans&lt;/strong> in Spring parlance) and inject the dependencies externally.
+The bean definitions are presented to Spring either through the &lt;strong>XML bean definition files&lt;/strong> (e.g., applicationContext.xml) or through the annotation-based configurations (@Configuration annotation). Spring loads these bean definitions and keeps them available in the &lt;strong>Spring IoC container&lt;/strong>. The ApplicationContext interface acts as the &lt;strong>Spring IoC Container&lt;/strong>. Spring provides a plethora of ApplicationContext implementations based on the application type (Servlet or Reactive application), the bean definition configurations (e.g., to load from classpath or annotation), and so on.&lt;/p>
+&lt;p>Although @EventListener works well in most circumstances, it does not work for events that are published very early in the application start-up, such as ApplicationStartingEvent and ApplicationEnvironmentPreparedEvent.&lt;/p>
+&lt;p>By default, Spring Boot reads the application.properties or application.yml file from the following locations:&lt;/p>
+&lt;p>1 The classpath root&lt;/p>
+&lt;p>2 The classpath /config package&lt;/p>
+&lt;p>3 The current directory&lt;/p>
+&lt;p>4 The /config subdirectory in the current directory&lt;/p>
+&lt;p>5 Immediate child directories of the /config subdirectory&lt;/p>
+&lt;p>You can maintain the profile-specific property files with the application-{profile}.properties (or .yml) file.
+You can activate a profile (e.g., dev or test) using the spring.profiles.active Spring Boot property.&lt;/p>
+&lt;p>1 The application properties (properties or the YAML file) packaged inside the application JAR
+2 Profile-specific application properties packaged inside the application JAR
+3 The application properties (properties or the YAML file) packaged outside the application JAR
+4 Profile-specific application properties packaged outside the application JAR&lt;/p>
+&lt;p>Following is the order in which properties get precedence. The higher sequence number overrides the properties of the lower sequence number:
+1 SpringApplication
+2 @PropertySource
+3 Config data file
+4 OS environment variable
+5 Command line arguments&lt;/p>
+&lt;p>Both @Bean and @Component annotations let you &lt;strong>instruct Spring to create instances&lt;/strong> of the annotated class, but their usage is slightly different. You typically use the @Bean annotation for the classes for which &lt;strong>you don’t have access to the source code&lt;/strong>. Thus, you define a bean and return a new instance of the class. For the @Component annotation, as you have access to the source Java file, you can simply annotate the class with this annotation.Both @Bean and @Component annotations let you instruct Spring to create instances of the annotated class, but their usage is slightly different. You typically use the @Bean annotation for the classes for which you don’t have access to the source code. Thus, you define a bean and return a new instance of the class. For the @Component annotation, as you have access to the source Java file, you can simply annotate the class with this annotation.&lt;/p>
+&lt;p>The CommandLineRunner is a useful feature that is frequently used to perform several application initialization activities. In a CommandLineRunner implementation, you also have access to the command line arguments through the args parameter.&lt;/p>
+&lt;p>Bean Validation, part of the Java EE (Enterprise Edition) specification, is a framework that provides a standard way to enforce constraints on the properties of JavaBeans. These constraints ensure that the data within beans meets certain criteria before it is processed or persisted. &lt;/p>
+&lt;p>Java annotations are a powerful feature introduced in &lt;strong>Java 5&lt;/strong> that provide a way to add &lt;strong>metadata&lt;/strong> to Java code. They can be applied to various elements of the code, including classes, methods, fields, parameters, and more. Annotations &lt;strong>do not change&lt;/strong> the action of the compiled program but can be used by the compiler and runtime tools to &lt;strong>generate code, analyze code, and perform other tasks&lt;/strong>.&lt;/p>
+&lt;h2 id="spring-data">Spring Data
+&lt;/h2>&lt;p>&lt;a class="link" href="https://spring.io/projects/spring-data" target="_blank" rel="noopener"
+>Spring Data&lt;/a> lets you access data from a variety of data sources (e.g., relational and nonrelational databases, MapReduce databases, and cloud-based data services). It attempts to provide a uniform, easy-to-use, and familiar programming model through the Spring Framework.&lt;/p>
+&lt;p>It is an umbrella project under the Spring Framework that contains several sub-projects, each of which targets a specific database. For instance, the &lt;strong>Spring Data JPA module is specific to relational databases&lt;/strong> (e.g., H2, MySQL, PostgreSQL). Similarly, Spring Data MongoDB aims to provide support for the MongoDB database.&lt;/p>
+&lt;p>Java Database Connectivity (JDBC) is a &lt;strong>standard API&lt;/strong> provided by Java that allows Java applications to interact with relational databases in a vendor-independent manner. JDBC provides a set of interfaces and classes that enable developers to connect to a database, execute SQL queries, and retrieve results. It serves as a bridge between Java applications and various database management systems (DBMS).&lt;/p>
+&lt;p>Java Persistence API (JPA) is &lt;strong>a specification for object-relational mapping&lt;/strong> (ORM) in Java, which allows developers to manage relational data in Java applications using an object-oriented paradigm. JPA provides a standard way to map Java objects to database tables and to manage persistent data in applications.&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>JDBC:&lt;/strong>
+&lt;ul>
+&lt;li>JDBC is a &lt;strong>low-level&lt;/strong> API for interacting with relational databases. It provides a set of interfaces and classes for connecting to a database, executing SQL queries, and retrieving results. JDBC is database-centric and requires developers to write SQL queries and manage the mapping between Java objects and database tables &lt;strong>manually&lt;/strong>.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>JPA:&lt;/strong>
+&lt;ul>
+&lt;li>JPA is a &lt;strong>high-level&lt;/strong> API for object-relational mapping (ORM). It abstracts the database interactions and &lt;strong>allows developers to work with Java objects instead of SQL queries&lt;/strong>. JPA automatically maps Java objects to database tables and handles CRUD (Create, Read, Update, Delete) operations, making it easier to manage persistent data in an object-oriented way.
+JPA itself is not an implementation but a set of guidelines implemented by various ORM frameworks like &lt;strong>Hibernate&lt;/strong>, EclipseLink, and &lt;strong>Spring Data JPA&lt;/strong>.
+Hibernate is the default JPA provider in Spring Data JPA.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>MyBatis is a persistence framework that offers SQL mapping. It emphasizes direct SQL use, providing a higher degree of control over SQL queries and their execution. Unlike traditional ORM frameworks, &lt;strong>MyBatis does not map Java objects to database tables but rather maps SQL statements to Java methods&lt;/strong>.&lt;/p>
+&lt;p>One of the core themes of Spring Data is to provide a &lt;strong>consistent&lt;/strong> programming model
+to access various data sources.&lt;/p>
+&lt;p>Spring Data provides a &lt;strong>repository abstraction layer&lt;/strong> across the supported databases as a common programming model. The abstraction is contained in the Spring Data Commons module, and it provides several useful interfaces that let you perform the standard create, read, update, and delete (CRUD) operations as well as executing queries. This abstraction layer is the topmost layer and acts as the foundation for other Spring Data modules.&lt;/p>
+&lt;p>&lt;img src="https://dyhes.github.io/image%202.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>As part of the database configuration, Spring Boot automatically configures the &lt;a class="link" href="https://github.com/brettwooldridge/HikariCP" target="_blank" rel="noopener"
+>HikariCP&lt;/a> database connection pool. A database connection pool contains one or more database connections that are generally created at the time of application startup and available for use by the application.
+The benefit of a database connection pool is that a set of database connections are created at the application startup and available for use by the application. Thus, you don’t create a new connection each time you need a database connection and close it once done. The application can take a connection from the pool, use it, and return to the pool. Spring Boot uses HikariCP as the default database connection pool library.
+&lt;img src="https://dyhes.github.io/image%203.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>Spring Boot can load the SQL scripts from the classpath (e.g., the src/main/resources folder) or a preconfigured location. By default, you define the schema.sql file to provide all DDL scripts and define the data.sql file to include the DML scripts and place them inside the src/main/resources folder for Spring Boot to detect and execute these files.
+To begin with, if you are using a database other than an embedded (in-memory) database, you need to set spring.sql.init.mode to always in the application.properties file.
+In this schema initialization-based approach, Spring Boot re-creates the schema each time you restart the application. There is no database schema versioning done by Spring Boot.&lt;/p>
+&lt;p>In this schema initialization-based approach, Spring Boot re-creates the schema each time you restart the application. There is no database schema versioning done by Spring Boot.
+In addition to the schema.sql and data.sql files, Spring Boot also supports database-specific SQLs. For instance, if your application supports multiple database types, and there are SQL syntax differences, you can use schema-${platform}.sql and data-${platform}.sql files.&lt;/p>
+&lt;p>Spring Data uses this marker interface Repository as the primary abstraction for a data source.
+&lt;img src="https://dyhes.github.io/image%204.png"
+loading="lazy"
+>
+In addition to the CrudRepository, Spring Data also provides a PagingAndSortingRepository, which extends the CrudRepository and provides additional support for pagination and sorting of the entities.&lt;/p>
+&lt;p>@Entity marks a java class as a jpa entity
+@Table provides the database table details
+@Column provides mapping information between the Java fields and the associated column name in the table.
+@Repository marks a class as a spring repository&lt;/p>
+&lt;h2 id="spring-security">Spring Security
+&lt;/h2>&lt;p>The following part comes from spring security official website
+Spring Security provides comprehensive support for &lt;a class="link" href="https://en.wikipedia.org/wiki/Authentication" target="_blank" rel="noopener"
+>authentication&lt;/a>. Authentication is how we &lt;strong>verify the identity&lt;/strong> of who is trying to access a particular resource.&lt;/p>
+&lt;p>Spring Security’s PasswordEncoder interface is used to perform a one-way transformation of a password to let the password be stored securely.&lt;/p>
+&lt;p>To mitigate the effectiveness of Rainbow Tables, developers were encouraged to use salted passwords.&lt;/p>
+&lt;p>Adaptive one-way functions:
+Can be adjusted to require more computational resources as hardware improves
+Examples of adaptive one-way functions that should be used include &lt;a class="link" href="https://docs.spring.io/spring-security/reference/features/authentication/password-storage.html#authentication-password-storage-bcrypt" target="_blank" rel="noopener"
+>bcrypt&lt;/a>, &lt;a class="link" href="https://docs.spring.io/spring-security/reference/features/authentication/password-storage.html#authentication-password-storage-pbkdf2" target="_blank" rel="noopener"
+>PBKDF2&lt;/a>, &lt;a class="link" href="https://docs.spring.io/spring-security/reference/features/authentication/password-storage.html#authentication-password-storage-scrypt" target="_blank" rel="noopener"
+>scrypt&lt;/a>, and &lt;a class="link" href="https://docs.spring.io/spring-security/reference/features/authentication/password-storage.html#authentication-password-storage-argon2" target="_blank" rel="noopener"
+>argon2&lt;/a>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">PasswordEncoder&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">passwordEncoder&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">PasswordEncoderFactories&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">createDelegatingPasswordEncoder&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>DelegatingPasswordEncoder Storage Format&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-text" data-lang="text">&lt;span class="line">&lt;span class="cl">{id}encodedPassword
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">e.g.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">{bcrypt}$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">UserDetails&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">user&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">withDefaultPasswordEncoder&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">username&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;user&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">password&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;password&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">roles&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;user&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">build&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">user&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getPassword&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">// {bcrypt}$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Spring Security provides comprehensive support for &lt;a class="link" href="https://en.wikipedia.org/wiki/Authorization" target="_blank" rel="noopener"
+>authorization&lt;/a>. Authorization is &lt;strong>determining who is allowed&lt;/strong> to access a particular resource. Spring Security provides &lt;a class="link" href="https://en.wikipedia.org/wiki/Defense_in_depth_%28computing%29" target="_blank" rel="noopener"
+>defense in depth&lt;/a> by allowing for request based authorization and method based authorization.&lt;/p>
+&lt;p>Prevent CSRF (cross site request forgery)&lt;/p>
+&lt;ul>
+&lt;li>Synchronizer token request&lt;/li>
+&lt;li>Samesite attribute
+Spring Security does not directly control the creation of the session cookie, so it does not provide support for the SameSite attribute. &lt;a class="link" href="https://spring.io/projects/spring-session" target="_blank" rel="noopener"
+>Spring Session&lt;/a> provides support for the SameSite attribute in servlet-based applications. 
+&lt;strong>Safe Methods Must be Read-only&lt;/strong>
+For &lt;a class="link" href="https://docs.spring.io/spring-security/reference/features/exploits/csrf.html#csrf-protection" target="_blank" rel="noopener"
+>either protection&lt;/a> against CSRF to work, the application must ensure that &lt;a class="link" href="https://tools.ietf.org/html/rfc7231#section-4.2.1" target="_blank" rel="noopener"
+>&amp;ldquo;safe&amp;rdquo; HTTP methods are read-only&lt;/a>. This means that requests with the HTTP GET, HEAD, OPTIONS, and TRACE methods should not change the state of the application.&lt;/li>
+&lt;/ul>
+&lt;p>Default Security Headers&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-http" data-lang="http">&lt;span class="line">&lt;span class="cl">&lt;span class="err">Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">Pragma: no-cache
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">Expires: 0
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">X-Content-Type-Options: nosniff
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">Strict-Transport-Security: max-age=31536000 ; includeSubDomains(https only)
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">X-Frame-Options: DENY
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">X-XSS-Protection: 0
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Spring Security provides &lt;strong>Spring Data integration&lt;/strong> that allows referring to the current user within your queries. It is not only useful but necessary to include the user in the queries to support paged results since filtering the results afterwards would not scale.&lt;/p>
+&lt;p>In most environments, Security is stored on a per Thread basis. This means that when work is done on a new Thread, the SecurityContext is lost. Spring Security provides some infrastructure to help make this much easier for users. Spring Security provides low level abstractions for working with Spring Security in multi-threaded environments. &lt;/p>
+&lt;p>The default arrangement of Spring Boot and Spring Security affords the following behaviors at runtime:&lt;/p>
+&lt;ul>
+&lt;li>Requires an authenticated user &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authorization/authorize-http-requests.html" target="_blank" rel="noopener"
+>for any endpoint&lt;/a> (including Boot’s /error endpoint)&lt;/li>
+&lt;li>&lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/user-details-service.html" target="_blank" rel="noopener"
+>Registers a default user&lt;/a> with a generated password at startup (the password is logged to the console; in the preceding example, the password is 8e557245-73e2-4286-969a-ff57fe326336)&lt;/li>
+&lt;li>Protects &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/password-encoder.html" target="_blank" rel="noopener"
+>password storage with BCrypt&lt;/a> as well as others&lt;/li>
+&lt;li>Provides form-based &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/form.html" target="_blank" rel="noopener"
+>login&lt;/a> and &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/logout.html" target="_blank" rel="noopener"
+>logout&lt;/a> flows&lt;/li>
+&lt;li>Authenticates &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/form.html" target="_blank" rel="noopener"
+>form-based login&lt;/a> as well as &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/basic.html" target="_blank" rel="noopener"
+>HTTP Basic&lt;/a>&lt;/li>
+&lt;li>Provides content negotiation; for web requests, redirects to the login page; for service requests, returns a 401 Unauthorized&lt;/li>
+&lt;li>&lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/exploits/csrf.html" target="_blank" rel="noopener"
+>Mitigates CSRF&lt;/a> attacks&lt;/li>
+&lt;li>&lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/session-management.html#ns-session-fixation" target="_blank" rel="noopener"
+>Mitigates Session Fixation&lt;/a> attacks&lt;/li>
+&lt;li>Writes &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/exploits/headers.html#servlet-headers-hsts" target="_blank" rel="noopener"
+>Strict-Transport-Security&lt;/a> to &lt;a class="link" href="https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security" target="_blank" rel="noopener"
+>ensure HTTPS&lt;/a>&lt;/li>
+&lt;li>Writes &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/exploits/headers.html#servlet-headers-content-type-options" target="_blank" rel="noopener"
+>X-Content-Type-Options&lt;/a> to mitigate &lt;a class="link" href="https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#x-content-type-options" target="_blank" rel="noopener"
+>sniffing attacks&lt;/a>&lt;/li>
+&lt;li>Writes &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/exploits/headers.html#servlet-headers-cache-control" target="_blank" rel="noopener"
+>Cache Control headers&lt;/a> that protect authenticated resources&lt;/li>
+&lt;li>Writes &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/exploits/headers.html#servlet-headers-frame-options" target="_blank" rel="noopener"
+>X-Frame-Options&lt;/a> to mitigate &lt;a class="link" href="https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#x-frame-options" target="_blank" rel="noopener"
+>Clickjacking&lt;/a>&lt;/li>
+&lt;li>Integrates with &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/integrations/servlet-api.html" target="_blank" rel="noopener"
+>HttpServletRequest&amp;rsquo;s authentication methods&lt;/a>&lt;/li>
+&lt;li>Publishes &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/events.html" target="_blank" rel="noopener"
+>authentication success and failure events&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>FilterChain&lt;/strong>
+Spring Security’s Servlet support is based on &lt;strong>Servlet Filters&lt;/strong>. The following image shows the typical layering of the handlers for a single HTTP request.
+&lt;img src="https://dyhes.github.io/filterchain.png"
+loading="lazy"
+>
+The client sends a request to the application, and the container creates a FilterChain, which contains the Filter &lt;strong>instances&lt;/strong> and Servlet that should process the HttpServletRequest, based on the path of the request URI. In a Spring MVC application, the Servlet is an instance of &lt;a class="link" href="https://docs.spring.io/spring-framework/docs/6.1.9/reference/html/web.html#mvc-servlet" target="_blank" rel="noopener"
+>DispatcherServlet&lt;/a>.
+At most, one Servlet can handle a single HttpServletRequest and HttpServletResponse.
+more than one Filter can be used to:&lt;/p>
+&lt;ul>
+&lt;li>Prevent downstream Filter instances or the Servlet from being invoked. In this case, the Filter typically writes the HttpServletResponse.&lt;/li>
+&lt;li>Modify the HttpServletRequest or HttpServletResponse used by the downstream Filter instances and the Servlet.&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">doFilter&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ServletRequest&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">request&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ServletResponse&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">response&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">FilterChain&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">chain&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// do something before the rest of the application&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">chain&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">doFilter&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">request&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">response&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// invoke the rest of the application&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// do something after the rest of the application&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>DelegatingFilterProxy&lt;/strong>
+Spring provides a &lt;strong>Filter implementation&lt;/strong> named &lt;a class="link" href="https://docs.spring.io/spring-framework/docs/6.1.9/javadoc-api/org/springframework/web/filter/DelegatingFilterProxy.html" target="_blank" rel="noopener"
+>DelegatingFilterProxy&lt;/a> that allows &lt;strong>bridging&lt;/strong> between the Servlet container’s lifecycle and Spring’s ApplicationContext. The Servlet container allows registering Filter instances by using its own standards, but it is not aware of Spring-defined Beans. You can register DelegatingFilterProxy through the standard Servlet container mechanisms but delegate all the work to a Spring Bean that implements Filter.&lt;/p>
+&lt;p>Here is a picture of how DelegatingFilterProxy fits into the &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/architecture.html#servlet-filters-review" target="_blank" rel="noopener"
+>Filter instances and the FilterChain&lt;/a>.&lt;/p>
+&lt;p>&lt;img src="https://dyhes.github.io/image%205.png"
+loading="lazy"
+>
+DelegatingFilterProxy looks up &lt;em>Bean Filter 0&lt;/em> from the ApplicationContext and then invokes &lt;em>Bean Filter0&lt;/em>. &lt;/p>
+&lt;p>&lt;strong>FilterChainProxy&lt;/strong>
+&lt;a class="link" href="https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/web/SecurityFilterChain.html" target="_blank" rel="noopener"
+>SecurityFilterChain&lt;/a> is used by &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/architecture.html#servlet-filterchainproxy" target="_blank" rel="noopener"
+>FilterChainProxy&lt;/a> to determine which Spring Security Filter instances should be invoked for the current request.
+&lt;img src="https://dyhes.github.io/image%206.png"
+loading="lazy"
+>
+The &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/architecture.html#servlet-security-filters" target="_blank" rel="noopener"
+>Security Filters&lt;/a> in SecurityFilterChain are typically &lt;strong>Beans&lt;/strong>, but they are registered with FilterChainProxy instead of &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/architecture.html#servlet-delegatingfilterproxy" target="_blank" rel="noopener"
+>DelegatingFilterProxy&lt;/a>. FilterChainProxy provides a number of advantages to registering directly with the Servlet container or &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/architecture.html#servlet-delegatingfilterproxy" target="_blank" rel="noopener"
+>DelegatingFilterProxy&lt;/a>. First, it provides a starting point for all of Spring Security’s Servlet support. For that reason&lt;/p>
+&lt;p>FilterChainProxy is &lt;strong>central&lt;/strong> to Spring Security usage, it can perform tasks that are not viewed as optional. For example, it clears out the SecurityContext to avoid memory leaks. It also applies Spring Security’s &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/exploits/firewall.html#servlet-httpfirewall" target="_blank" rel="noopener"
+>HttpFirewall&lt;/a> to protect applications against certain types of attacks.
+In addition, it provides more flexibility in determining when a SecurityFilterChain should be invoked. In a Servlet container, Filter instances are invoked based upon the URL alone. However, &lt;strong>FilterChainProxy can determine invocation based upon anything in the HttpServletRequest&lt;/strong> by using the RequestMatcher interface.
+&lt;img src="https://dyhes.github.io/image%207.png"
+loading="lazy"
+>
+&lt;strong>Security Filters&lt;/strong>
+Most of the time, the default security filters are enough to provide security to your application. However, there might be times that you want to add a custom Filter to the security filter chain.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">TenantFilter&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">implements&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Filter&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Override&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">doFilter&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ServletRequest&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">servletRequest&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ServletResponse&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">servletResponse&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">FilterChain&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">filterChain&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">throws&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">IOException&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ServletException&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">HttpServletRequest&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">request&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">HttpServletRequest&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">servletRequest&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">HttpServletResponse&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">response&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">HttpServletResponse&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">servletResponse&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tenantId&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">request&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getHeader&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;X-Tenant-Id&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kt">boolean&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">hasAccess&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">isUserAllowed&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">tenantId&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">if&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">hasAccess&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">filterChain&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">doFilter&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">request&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">response&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">throw&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">new&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">AccessDeniedException&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Access denied&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Configuration&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@EnableWebSecurity&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">SecurityConfig&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Bean&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">SecurityFilterChain&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">filterChain&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">HttpSecurity&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">throws&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Exception&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">csrf&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Customizer&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">withDefaults&lt;/span>&lt;span class="p">())&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">authorizeHttpRequests&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">authorize&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">authorize&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">anyRequest&lt;/span>&lt;span class="p">().&lt;/span>&lt;span class="na">authenticated&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">httpBasic&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Customizer&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">withDefaults&lt;/span>&lt;span class="p">())&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">formLogin&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Customizer&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">withDefaults&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">addFilterBefore&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">new&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">TenantFilter&lt;/span>&lt;span class="p">(),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">AuthorizationFilter&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">build&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Be careful when you declare your filter as a Spring bean, either by annotating it with @Component or by declaring it as a bean in your configuration, because Spring Boot will automatically &lt;a class="link" href="https://docs.spring.io/spring-boot/docs/3.1.1/reference/html/web.html#web.servlet.embedded-container.servlets-filters-listeners.beans" target="_blank" rel="noopener"
+>register it with the embedded container&lt;/a>. That may cause the filter to be invoked twice, once by the container and once by Spring Security and in a different order.
+&lt;strong>Exception Handing&lt;/strong>
+ExceptionTranslationFilter is inserted into the &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/architecture.html#servlet-filterchainproxy" target="_blank" rel="noopener"
+>FilterChainProxy&lt;/a> as one of the &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/architecture.html#servlet-security-filters" target="_blank" rel="noopener"
+>Security Filters&lt;/a>.
+The &lt;a class="link" href="https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/web/access/ExceptionTranslationFilter.html" target="_blank" rel="noopener"
+>ExceptionTranslationFilter&lt;/a> allows translation of &lt;a class="link" href="https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/access/AccessDeniedException.html" target="_blank" rel="noopener"
+>AccessDeniedException&lt;/a> and &lt;a class="link" href="https://docs.spring.io/spring-security/site/docs/6.3.1/api//org/springframework/security/core/AuthenticationException.html" target="_blank" rel="noopener"
+>AuthenticationException&lt;/a> into HTTP responses.
+&lt;img src="https://dyhes.github.io/image%208.png"
+loading="lazy"
+>&lt;/p>
+&lt;ul>
+&lt;li>If the user is &lt;strong>not authenticated&lt;/strong> or it is an AuthenticationException, then &lt;em>Start Authentication&lt;/em>.
+&lt;ul>
+&lt;li>The &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html#servlet-authentication-securitycontextholder" target="_blank" rel="noopener"
+>SecurityContextHolder&lt;/a> is cleared out.&lt;/li>
+&lt;li>The HttpServletRequest is &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/architecture.html#savedrequests" target="_blank" rel="noopener"
+>saved&lt;/a> so that it can be used to replay the original request once authentication is successful.&lt;/li>
+&lt;li>The AuthenticationEntryPoint is used to request credentials from the client. For example, it might redirect to a log in page or send a WWW-Authenticate header.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>If it is an AccessDeniedException, then &lt;em>Access Denied&lt;/em>. The AccessDeniedHandler is invoked to handle access denied.&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>If the application does not throw an AccessDeniedException or an AuthenticationException, then ExceptionTranslationFilter does not do anything.&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="authentication">Authentication
+&lt;/h3>&lt;p>At the heart of Spring Security’s &lt;strong>authentication model&lt;/strong> is the SecurityContextHolder. It contains the &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html#servlet-authentication-securitycontext" target="_blank" rel="noopener"
+>SecurityContext&lt;/a>.
+&lt;img src="https://dyhes.github.io/securitycontextholder.png"
+loading="lazy"
+>
+The SecurityContextHolder is where Spring Security stores the details of who is &lt;a class="link" href="https://docs.spring.io/spring-security/reference/features/authentication/index.html#authentication" target="_blank" rel="noopener"
+>authenticated&lt;/a>. Spring Security does not care how the SecurityContextHolder is populated. If it contains a value, it is used as the currently authenticated user.&lt;/p>
+&lt;p>Get currently authenticated user&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">SecurityContext&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">context&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">SecurityContextHolder&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getContext&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">Authentication&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">authentication&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">context&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getAuthentication&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">username&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">authentication&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getName&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">Object&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">principal&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">authentication&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getPrincipal&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">Collection&lt;/span>&lt;span class="o">&amp;lt;?&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">extends&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">GrantedAuthority&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">authorities&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">authentication&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getAuthorities&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>By default, SecurityContextHolder uses a ThreadLocal to store these details, which means that &lt;strong>the SecurityContext is always available to methods in the same thread&lt;/strong>, even if the SecurityContext is not explicitly passed around as an argument to those methods.  Using a ThreadLocal in this way is quite safe if you take care to clear the thread after the present principal’s request is processed. Spring Security’s &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/architecture.html#servlet-filterchainproxy" target="_blank" rel="noopener"
+>FilterChainProxy&lt;/a> ensures that the SecurityContext is always cleared.
+ &lt;strong>Authentication&lt;/strong>
+⠀The Authentication contains:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>principal&lt;/strong>: Identifies the user. When authenticating with a username/password this is often an instance of &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/user-details.html#servlet-authentication-userdetails" target="_blank" rel="noopener"
+>UserDetails&lt;/a>.&lt;/li>
+&lt;li>&lt;strong>credentials&lt;/strong>: Often a password. In many cases, this is cleared after the user is authenticated, to ensure that it is not leaked.&lt;/li>
+&lt;li>&lt;strong>authorities&lt;/strong>: The &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html#servlet-authentication-granted-authority" target="_blank" rel="noopener"
+>GrantedAuthority&lt;/a> instances are high-level permissions the user is granted. Two examples are roles and scopes.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;a class="link" href="https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/authentication/AuthenticationManager.html" target="_blank" rel="noopener"
+>AuthenticationManager&lt;/a> is the API that defines &lt;strong>how Spring Security’s Filters perform &lt;a class="link" href="**https://docs.spring.io/spring-security/reference/features/authentication/index.html#authentication" >authentication&lt;/a>&lt;/strong>. The &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html#servlet-authentication-authentication" target="_blank" rel="noopener"
+>Authentication&lt;/a> that is returned is then set on the &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html#servlet-authentication-securitycontextholder" target="_blank" rel="noopener"
+>SecurityContextHolder&lt;/a> by the controller (that is, by &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/architecture.html#servlet-security-filters" target="_blank" rel="noopener"
+>Spring Security’s Filters instances&lt;/a>) that invoked the AuthenticationManager.
+While the implementation of AuthenticationManager could be anything, the most common implementation is &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html#servlet-authentication-providermanager" target="_blank" rel="noopener"
+>ProviderManager&lt;/a>.
+&lt;img src="https://dyhes.github.io/image%209.png"
+loading="lazy"
+>
+ProviderManager delegates to &lt;strong>a List&lt;/strong> of &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html#servlet-authentication-authenticationprovider" target="_blank" rel="noopener"
+>AuthenticationProvider&lt;/a> instances. Each AuthenticationProvider has an opportunity to indicate that authentication should be successful, fail, or indicate it cannot make a decision and allow a downstream AuthenticationProvider to decide. If none of the configured AuthenticationProvider instances can authenticate, authentication fails with a &lt;strong>ProviderNotFoundException&lt;/strong>, which is a special AuthenticationException that indicates that the ProviderManager was not configured to support the type of Authentication that was passed into it.
+In practice each AuthenticationProvider knows how to &lt;strong>perform a specific type of authentication&lt;/strong>. For example, one AuthenticationProvider might be able to validate a username/password, while another might be able to authenticate a SAML assertion. This lets each AuthenticationProvider do a very specific type of authentication while supporting multiple types of authentication and expose only a single AuthenticationManager bean.
+ProviderManager also allows configuring &lt;strong>an optional parent AuthenticationManager&lt;/strong>, which is consulted in the event that no AuthenticationProvider can perform authentication. The parent can be any type of AuthenticationManager, but it is often an instance of ProviderManager.
+In fact, multiple ProviderManager instances might share the same parent AuthenticationManager. This is somewhat common in scenarios where there are multiple &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/architecture.html#servlet-securityfilterchain" target="_blank" rel="noopener"
+>SecurityFilterChain&lt;/a> instances that have some authentication in common (the shared parent AuthenticationManager), but also different authentication mechanisms (the different ProviderManager instances).
+&lt;img src="https://dyhes.github.io/image%2010.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>When a client makes an unauthenticated request to a resource that they are not authorized to access. In this case, an implementation of &lt;strong>AuthenticationEntryPoint&lt;/strong> is used to request credentials from the client. The AuthenticationEntryPoint implementation might perform a &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/form.html#servlet-authentication-form" target="_blank" rel="noopener"
+>redirect to a log in page&lt;/a>, respond with an &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/basic.html#servlet-authentication-basic" target="_blank" rel="noopener"
+>WWW-Authenticate&lt;/a> header, or take other action.
+&lt;strong>AbstractAuthenticationProcessingFilter&lt;/strong>
+&lt;a class="link" href="https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/web/authentication/AbstractAuthenticationProcessingFilter.html" target="_blank" rel="noopener"
+>AbstractAuthenticationProcessingFilter&lt;/a> is used as a base Filter for &lt;strong>authenticating a user’s credentials&lt;/strong>.
+&lt;img src="https://dyhes.github.io/image%2011.png"
+loading="lazy"
+>
+When the user submits their credentials, the AbstractAuthenticationProcessingFilter creates an &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html#servlet-authentication-authentication" target="_blank" rel="noopener"
+>Authentication&lt;/a> from the HttpServletRequest to be authenticated. The type of Authentication created depends on the subclass of AbstractAuthenticationProcessingFilter. For example, &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/form.html#servlet-authentication-usernamepasswordauthenticationfilter" target="_blank" rel="noopener"
+>UsernamePasswordAuthenticationFilter&lt;/a> creates a UsernamePasswordAuthenticationToken from a &lt;em>username&lt;/em> and &lt;em>password&lt;/em> that are submitted in the HttpServletRequest.
+Next, the &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html#servlet-authentication-authentication" target="_blank" rel="noopener"
+>Authentication&lt;/a> is passed into the &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html#servlet-authentication-authenticationmanager" target="_blank" rel="noopener"
+>AuthenticationManager&lt;/a> to be authenticated.
+If authentication fails, then &lt;em>Failure&lt;/em>.&lt;/p>
+&lt;ul>
+&lt;li>The &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html#servlet-authentication-securitycontextholder" target="_blank" rel="noopener"
+>SecurityContextHolder&lt;/a> is cleared out.&lt;/li>
+&lt;li>RememberMeServices.loginFail is invoked. If remember me is not configured, this is a no-op. See the &lt;a class="link" href="https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/web/authentication/rememberme/package-frame.html" target="_blank" rel="noopener"
+>rememberme&lt;/a> package.&lt;/li>
+&lt;li>AuthenticationFailureHandler is invoked. See the &lt;a class="link" href="https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/web/authentication/AuthenticationFailureHandler.html" target="_blank" rel="noopener"
+>AuthenticationFailureHandler&lt;/a> interface.
+If authentication is successful, then &lt;em>Success&lt;/em>.&lt;/li>
+&lt;li>SessionAuthenticationStrategy is notified of a new login. See the &lt;a class="link" href="https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/web/authentication/session/SessionAuthenticationStrategy.html" target="_blank" rel="noopener"
+>SessionAuthenticationStrategy&lt;/a> interface.&lt;/li>
+&lt;li>The &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html#servlet-authentication-authentication" target="_blank" rel="noopener"
+>Authentication&lt;/a> is set on the &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html#servlet-authentication-securitycontextholder" target="_blank" rel="noopener"
+>SecurityContextHolder&lt;/a>. Later, if you need to save the SecurityContext so that it can be automatically set on future requests, SecurityContextRepository#saveContext must be explicitly invoked. See the &lt;a class="link" href="https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/web/context/SecurityContextHolderFilter.html" target="_blank" rel="noopener"
+>SecurityContextHolderFilter&lt;/a> class.&lt;/li>
+&lt;li>RememberMeServices.loginSuccess is invoked. If remember me is not configured, this is a no-op. See the &lt;a class="link" href="https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/web/authentication/rememberme/package-frame.html" target="_blank" rel="noopener"
+>rememberme&lt;/a> package.&lt;/li>
+&lt;li>ApplicationEventPublisher publishes an InteractiveAuthenticationSuccessEvent.&lt;/li>
+&lt;li>AuthenticationSuccessHandler is invoked. See the &lt;a class="link" href="https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/web/authentication/AuthenticationSuccessHandler.html" target="_blank" rel="noopener"
+>AuthenticationSuccessHandler&lt;/a> interface.&lt;/li>
+&lt;/ul>
+&lt;h4 id="usernamepassword-authentication">⠀Username/Password Authentication
+&lt;/h4>&lt;p>authenticate users via a REST API &lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@Configuration&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@EnableWebSecurity&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">SecurityConfig&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Bean&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">SecurityFilterChain&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">securityFilterChain&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">HttpSecurity&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">throws&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Exception&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">authorizeHttpRequests&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">authorize&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">authorize&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">requestMatchers&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;/login&amp;#34;&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="na">permitAll&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">anyRequest&lt;/span>&lt;span class="p">().&lt;/span>&lt;span class="na">authenticated&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">build&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Bean&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">AuthenticationManager&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">authenticationManager&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">UserDetailsService&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userDetailsService&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">PasswordEncoder&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">passwordEncoder&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">DaoAuthenticationProvider&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">authenticationProvider&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">new&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">DaoAuthenticationProvider&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">authenticationProvider&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">setUserDetailsService&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">userDetailsService&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">authenticationProvider&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">setPasswordEncoder&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">passwordEncoder&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">new&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ProviderManager&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">authenticationProvider&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Bean&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">UserDetailsService&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">userDetailsService&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">UserDetails&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userDetails&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">withDefaultPasswordEncoder&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">username&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;user&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">password&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;password&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">roles&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;USER&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">build&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">new&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">InMemoryUserDetailsManager&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">userDetails&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Bean&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">PasswordEncoder&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">passwordEncoder&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">PasswordEncoderFactories&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">createDelegatingPasswordEncoder&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@RestController&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">LoginController&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">final&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">AuthenticationManager&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">authenticationManager&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">LoginController&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">AuthenticationManager&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">authenticationManager&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">authenticationManager&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">authenticationManager&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@PostMapping&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;/login&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ResponseEntity&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Void&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">login&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nd">@RequestBody&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">LoginRequest&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">loginRequest&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Authentication&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">authenticationRequest&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">UsernamePasswordAuthenticationToken&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">unauthenticated&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">loginRequest&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">username&lt;/span>&lt;span class="p">(),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">loginRequest&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">password&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Authentication&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">authenticationResponse&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">authenticationManager&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">authenticate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">authenticationRequest&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// ...&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">record&lt;/span> &lt;span class="nc">LoginRequest&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">username&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">password&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Built-in mechanism for reading a username:&lt;/p>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/form.html" target="_blank" rel="noopener"
+>Form&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/basic.html" target="_blank" rel="noopener"
+>Basic&lt;/a>
+WWW-Authenticate header&lt;/li>
+&lt;li>&lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/digest.html" target="_blank" rel="noopener"
+>Digest&lt;/a>
+You should not use Digest Authentication in modern applications, because it is not considered to be secure.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>DaoAuthenticationProvider&lt;/strong>&lt;/p>
+&lt;p>&lt;a class="link" href="https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/authentication/dao/DaoAuthenticationProvider.html" target="_blank" rel="noopener"
+>DaoAuthenticationProvider&lt;/a> is an &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html#servlet-authentication-authenticationprovider" target="_blank" rel="noopener"
+>AuthenticationProvider&lt;/a> implementation that uses a &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/user-details-service.html#servlet-authentication-userdetailsservice" target="_blank" rel="noopener"
+>UserDetailsService&lt;/a> and &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/password-encoder.html#servlet-authentication-password-storage" target="_blank" rel="noopener"
+>PasswordEncoder&lt;/a> to authenticate a username and password.
+&lt;img src="https://dyhes.github.io/image%2012.png"
+loading="lazy"
+>&lt;/p>
+&lt;h4 id="persistence">&lt;strong>Persistence&lt;/strong>
+&lt;/h4>&lt;p>in Spring Security the association of the user to future requests is made using &lt;a class="link" href="https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/web/context/SecurityContextRepository.html" target="_blank" rel="noopener"
+>SecurityContextRepository&lt;/a>. The default implementation of SecurityContextRepository is &lt;a class="link" href="https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/web/context/DelegatingSecurityContextRepository.html" target="_blank" rel="noopener"
+>DelegatingSecurityContextRepository&lt;/a> which delegates to the following:&lt;/p>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/persistence.html#httpsecuritycontextrepository" target="_blank" rel="noopener"
+>HttpSessionSecurityContextRepository&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/persistence.html#requestattributesecuritycontextrepository" target="_blank" rel="noopener"
+>RequestAttributeSecurityContextRepository&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>NullSecurityContextRepository&lt;/strong>
+If it is not desirable to associate the SecurityContext to an HttpSession (i.e. when authenticating with OAuth) the &lt;a class="link" href="https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/web/context/NullSecurityContextRepository.html" target="_blank" rel="noopener"
+>NullSecurityContextRepository&lt;/a> is an implementation of SecurityContextRepository that does nothing.&lt;/p>
+&lt;p>The&lt;a class="link" href="https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/web/context/SecurityContextPersistenceFilter.html" target="_blank" rel="noopener"
+>SecurityContextPersistenceFilter&lt;/a> is responsible for persisting the SecurityContext between requests using the &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/persistence.html#securitycontextrepository" target="_blank" rel="noopener"
+>SecurityContextRepository&lt;/a>.
+&lt;img src="https://dyhes.github.io/image%2013.png"
+loading="lazy"
+>
+&lt;strong>SecurityContextHolderFilter&lt;/strong>
+The &lt;a class="link" href="https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/web/context/SecurityContextHolderFilter.html" target="_blank" rel="noopener"
+>SecurityContextHolderFilter&lt;/a> is responsible for loading the SecurityContext between requests using the &lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/persistence.html#securitycontextrepository" target="_blank" rel="noopener"
+>SecurityContextRepository&lt;/a>.
+&lt;img src="https://dyhes.github.io/image%2014.png"
+loading="lazy"
+>
+Unlike,&lt;a class="link" href="https://docs.spring.io/spring-security/reference/servlet/authentication/persistence.html#securitycontextpersistencefilter" target="_blank" rel="noopener"
+>SecurityContextPersistenceFilter&lt;/a>, SecurityContextHolderFilter only loads the SecurityContext it does not save the SecurityContext. This means that when using SecurityContextHolderFilter, it is required that the SecurityContext is explicitly saved.&lt;/p>
+&lt;h2 id="restful-api">Restful API
+&lt;/h2>&lt;p>@RestController&lt;/p>
+&lt;p>@Service&lt;/p>
+&lt;p>@Reposity&lt;/p></description></item></channel></rss>

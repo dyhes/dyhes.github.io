@@ -1,0 +1,1385 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>AI on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/ai/</link><description>Recent content in AI on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 11 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://dyhes.github.io/tags/ai/index.xml" rel="self" type="application/rss+xml"/><item><title>【知识图谱】概述</title><link>https://dyhes.github.io/p/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E6%A6%82%E8%BF%B0/</link><pubDate>Fri, 11 Nov 2022 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E6%A6%82%E8%BF%B0/</guid><description>&lt;p>Please Check:&lt;/p>
+&lt;p>&lt;a class="link" href="https://www.cnblogs.com/heslin/p/16880765.html" target="_blank" rel="noopener"
+>https://www.cnblogs.com/heslin/p/16880765.html&lt;/a>&lt;/p></description></item><item><title>【Kaggle】Some Knowledge</title><link>https://dyhes.github.io/p/kagglesome-knowledge/</link><pubDate>Tue, 09 Aug 2022 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/kagglesome-knowledge/</guid><description>&lt;p>The first step in any machine learning project is familiarize yourself with the data. You&amp;rsquo;ll use the Pandas library for this. Pandas is the primary tool data scientists use for exploring and manipulating data.&lt;/p>
+&lt;p>The most important part of the Pandas library is the DataFrame. A DataFrame holds the type of data you might think of as a table. This is similar to a sheet in Excel, or a table in a SQL database.&lt;/p>
+&lt;p>Pandas has powerful methods for most things you&amp;rsquo;ll want to do with this type of data.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># save filepath to variable for easier access&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">melbourne_file_path&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;../input/melbourne-housing-snapshot/melb_data.csv&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># read the data and store data in DataFrame titled melbourne_data&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">melbourne_data&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">pd&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">read_csv&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">melbourne_file_path&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># print a summary of the data in Melbourne data&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">melbourne_data&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">describe&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="building-your-model">Building Your Model
+&lt;/h2>&lt;p>You will use the &lt;strong>scikit-learn&lt;/strong> library to create your models. When coding, this library is written as &lt;strong>sklearn&lt;/strong>, as you will see in the sample code. Scikit-learn is easily the most popular library for modeling the types of data typically stored in DataFrames.&lt;/p>
+&lt;p>The steps to building and using a model are:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Define:&lt;/strong> What type of model will it be? A decision tree? Some other type of model? Some other parameters of the model type are specified too.&lt;/li>
+&lt;li>&lt;strong>Fit:&lt;/strong> Capture patterns from provided data. This is the heart of modeling.&lt;/li>
+&lt;li>&lt;strong>Predict:&lt;/strong> Just what it sounds like&lt;/li>
+&lt;li>&lt;strong>Evaluate&lt;/strong>: Determine how accurate the model&amp;rsquo;s predictions are.&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span> &lt;span class="nn">sklearn.tree&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">DecisionTreeRegressor&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Define model. Specify a number for random_state to ensure same results each run&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">melbourne_model&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">DecisionTreeRegressor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">random_state&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Fit model&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">melbourne_model&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">fit&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">X&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">y&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Many machine learning models allow some randomness in model training. Specifying a number for &lt;code>random_state&lt;/code> ensures you get the same results in each run. This is considered a good practice. You use any number, and model quality won&amp;rsquo;t depend meaningfully on exactly what value you choose.&lt;/p>
+&lt;p>We now have a fitted model that we can use to make predictions.&lt;/p>
+&lt;p>In practice, you&amp;rsquo;ll want to make predictions for new houses coming on the market rather than the houses we already have prices for. But we&amp;rsquo;ll make predictions for the first few rows of the training data to see how the predict function works.&lt;/p>
+&lt;p>The scikit-learn library has a function &lt;code>train_test_split&lt;/code> to break up the data into two pieces. We&amp;rsquo;ll use some of that data as training data to fit the model, and we&amp;rsquo;ll use the other data as validation data to calculate &lt;code>mean_absolute_error&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span> &lt;span class="nn">sklearn.model_selection&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">train_test_split&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># split data into training and validation data, for both features and target&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># The split is based on a random number generator. Supplying a numeric value to&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># the random_state argument guarantees we get the same split every time we&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># run this script.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">train_X&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">val_X&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">train_y&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">val_y&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">train_test_split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">X&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">y&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">random_state&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Define model&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">melbourne_model&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">DecisionTreeRegressor&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Fit model&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">melbourne_model&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">fit&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">train_X&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">train_y&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># get predicted prices on validation data&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">val_predictions&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">melbourne_model&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">predict&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">val_X&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mean_absolute_error&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">val_y&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">val_predictions&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Since we care about accuracy on new data, which we estimate from our validation data, we want to find the sweet spot between underfitting and overfitting. Visually, we want the low point of the (red) validation curve in the figure below.&lt;/p>
+&lt;p>&lt;img src="C:%5cUsers%5cdyhes%5cAppData%5cRoaming%5cTypora%5ctypora-user-images%5cimage-20220201221001169.png"
+loading="lazy"
+alt="image-20220201221001169"
+>&lt;/p>
+&lt;h2 id="pipeline">pipeline
+&lt;/h2>&lt;p>&lt;strong>Pipelines&lt;/strong> are a simple way to keep your data preprocessing and modeling code organized. Specifically, a pipeline bundles preprocessing and modeling steps so you can use the whole bundle as if it were a single step.&lt;/p>
+&lt;h2 id="cross-validation">Cross-validation
+&lt;/h2>&lt;p>In &lt;strong>cross-validation&lt;/strong>, we run our modeling process on different subsets of the data to get multiple measures of model quality.&lt;/p>
+&lt;p>&lt;img src="C:%5cUsers%5cdyhes%5cAppData%5cRoaming%5cTypora%5ctypora-user-images%5cimage-20220207221137378.png"
+loading="lazy"
+alt="image-20220207221137378"
+>&lt;/p>
+&lt;h2 id="deep-learning">Deep Learning
+&lt;/h2>&lt;p>&lt;strong>Deep learning&lt;/strong> is an approach to machine learning characterized by deep stacks of computations. This depth of computation is what has enabled deep learning models to disentangle the kinds of complex and hierarchical patterns found in the most challenging real-world datasets.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span> &lt;span class="nn">tensorflow&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">keras&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span> &lt;span class="nn">tensorflow.keras&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">layers&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Create a network with 1 linear unit&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">model&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">keras&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Sequential&lt;/span>&lt;span class="p">([&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">layers&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Dense&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">units&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">input_shape&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>With the first argument, &lt;code>units&lt;/code>, we define how many outputs we want.&lt;/p>
+&lt;p>With the second argument, &lt;code>input_shape&lt;/code>, we tell Keras the dimensions of the inputs.&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;strong>Many Kinds of Layers&lt;/strong>
+A &amp;ldquo;layer&amp;rdquo; in Keras is a very general kind of thing. A layer can be, essentially, any kind of &lt;em>data transformation&lt;/em>. Many layers, like the &lt;a class="link" href="https://www.tensorflow.org/api_docs/python/tf/keras/layers/Conv2D" target="_blank" rel="noopener"
+>convolutional&lt;/a> and &lt;a class="link" href="https://www.tensorflow.org/api_docs/python/tf/keras/layers/RNN" target="_blank" rel="noopener"
+>recurrent&lt;/a> layers, transform data through use of neurons and differ primarily in the pattern of connections they form. Others though are used for &lt;a class="link" href="https://www.tensorflow.org/api_docs/python/tf/keras/layers/Embedding" target="_blank" rel="noopener"
+>feature engineering&lt;/a> or just &lt;a class="link" href="https://www.tensorflow.org/api_docs/python/tf/keras/layers/Add" target="_blank" rel="noopener"
+>simple arithmetic&lt;/a>. There&amp;rsquo;s a whole world of layers to discover &amp;ndash; &lt;a class="link" href="https://www.tensorflow.org/api_docs/python/tf/keras/layers" target="_blank" rel="noopener"
+>check them out&lt;/a>!&lt;/p>
+&lt;/blockquote>
+&lt;p>It turns out, however, that two dense layers with nothing in between are no better than a single dense layer by itself. Dense layers by themselves can never move us out of the world of lines and planes. What we need is something &lt;em>nonlinear&lt;/em>. What we need are activation functions.&lt;/p>
+&lt;p>&lt;em>Without activation functions, neural networks can only learn linear relationships. In order to fit curves, we&amp;rsquo;ll need to use activation functions.&lt;/em>&lt;/p>
+&lt;p>An &lt;strong>activation function&lt;/strong> is simply some function we apply to each of a layer&amp;rsquo;s outputs (its &lt;em>activations&lt;/em>). The most common is the &lt;em>rectifier&lt;/em> function max(0,x)max(0,x).&lt;/p>
+&lt;h2 id="stochastic-gradient-descent">Stochastic Gradient Descent
+&lt;/h2>&lt;p>In addition to the training data, we need two more things:&lt;/p>
+&lt;ul>
+&lt;li>A &amp;ldquo;loss function&amp;rdquo; that measures how good the network&amp;rsquo;s predictions are.&lt;/li>
+&lt;li>An &amp;ldquo;optimizer&amp;rdquo; that can tell the network how to change its weights.&lt;/li>
+&lt;/ul>
+&lt;p>The optimizer is an algorithm that adjusts the weights to minimize the loss.&lt;/p>
+&lt;p>Virtually all of the optimization algorithms used in deep learning belong to a family called &lt;strong>stochastic gradient descent&lt;/strong>. They are iterative algorithms that train a network in steps. One &lt;strong>step&lt;/strong> of training goes like this:&lt;/p>
+&lt;ol>
+&lt;li>Sample some training data and run it through the network to make predictions.&lt;/li>
+&lt;li>Measure the loss between the predictions and the true values.&lt;/li>
+&lt;li>Finally, adjust the weights in a direction that makes the loss smaller.&lt;/li>
+&lt;/ol>
+&lt;p>Then just do this over and over until the loss is as small as you like (or until it won&amp;rsquo;t decrease any further.)&lt;/p>
+&lt;p>Each iteration&amp;rsquo;s sample of training data is called a &lt;strong>minibatch&lt;/strong> (or often just &amp;ldquo;batch&amp;rdquo;), while a complete round of the training data is called an &lt;strong>epoch&lt;/strong>. The number of epochs you train for is how many times the network will see each training example.&lt;/p>
+&lt;p>After defining a model, you can add a loss function and optimizer with the model&amp;rsquo;s &lt;code>compile&lt;/code> method:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">model&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">compile&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">optimizer&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;adam&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">loss&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;mae&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="overfitting-and-underfitting">overfitting and underfitting
+&lt;/h2>&lt;p>A model&amp;rsquo;s &lt;strong>capacity&lt;/strong> refers to the size and complexity of the patterns it is able to learn. For neural networks, this will largely be determined by how many neurons it has and how they are connected together. If it appears that your network is underfitting the data, you should try increasing its capacity.&lt;/p>
+&lt;p>You can increase the capacity of a network either by making it &lt;em>wider&lt;/em> (more units to existing layers) or by making it &lt;em>deeper&lt;/em> (adding more layers). Wider networks have an easier time learning more linear relationships, while deeper networks prefer more nonlinear ones. Which is better just depends on the dataset.&lt;/p>
+&lt;h2 id="other-kind-of-layers-beside-dense-layer">other kind of layers beside dense layer
+&lt;/h2>&lt;h3 id="dropout-layer">dropout layer
+&lt;/h3>&lt;p>can help correct overfitting.&lt;/p>
+&lt;p>To break up these conspiracies, we randomly &lt;em>drop out&lt;/em> some fraction of a layer&amp;rsquo;s input units every step of training, making it much harder for the network to learn those spurious patterns in the training data. Instead, it has to search for broad, general patterns, whose weight patterns tend to be more robust.&lt;/p>
+&lt;p>&lt;img src="https://i.imgur.com/a86utxY.gif"
+loading="lazy"
+alt="An animation of a network cycling through various random dropout configurations."
+>&lt;/p>
+&lt;p>In Keras, the dropout rate argument &lt;code>rate&lt;/code> defines what percentage of the input units to shut off. Put the &lt;code>Dropout&lt;/code> layer just before the layer you want the dropout applied to:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">keras&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Sequential&lt;/span>&lt;span class="p">([&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># ...&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">layers&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Dropout&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">rate&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mf">0.3&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="c1"># apply 30% dropout to the next layer&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">layers&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Dense&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">16&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># ...&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>When adding dropout, you may need to increase the number of units in your &lt;code>Dense&lt;/code> layers.&lt;/p>
+&lt;h2 id="classification">Classification
+&lt;/h2>&lt;p>&lt;strong>Accuracy&lt;/strong> is one of the many metrics in use for measuring success on a classification problem. Accuracy is the ratio of correct predictions to total predictions: &lt;code>accuracy = number_correct / total&lt;/code>. A model that always predicted correctly would have an accuracy score of &lt;code>1.0&lt;/code>. All else being equal, accuracy is a reasonable metric to use whenever the classes in the dataset occur with about the same frequency.&lt;/p>
+&lt;p>The problem with accuracy (and most other classification metrics) is that it can&amp;rsquo;t be used as a loss function. SGD needs a loss function that changes smoothly, but accuracy, being a ratio of counts, changes in &amp;ldquo;jumps&amp;rdquo;. So, we have to choose a substitute to act as the loss function. This substitute is the &lt;em>cross-entropy&lt;/em> function.&lt;/p>
+&lt;p>Now, recall that the loss function defines the &lt;em>objective&lt;/em> of the network during training. With regression, our goal was to minimize the distance between the expected outcome and the predicted outcome. We chose MAE to measure this distance.&lt;/p>
+&lt;p>For classification, what we want instead is a distance between &lt;em>probabilities&lt;/em>, and this is what cross-entropy provides. &lt;strong>Cross-entropy&lt;/strong> is a sort of measure for the distance from one probability distribution to another.&lt;/p>
+&lt;h2 id="reinforcement-learning">Reinforcement Learning
+&lt;/h2>&lt;p>This idea of using reward to track the performance of an agent is a core idea in the field of reinforcement learning. Once we define the problem in this way, we can use any of a variety of reinforcement learning algorithms to produce an agent.&lt;/p>
+&lt;h2 id="computer-vision">Computer Vision
+&lt;/h2>&lt;p>&lt;img src="https://i.imgur.com/U0n5xjU.png"
+loading="lazy"
+alt="The parts of a convnet: image, base, head, class; input, extract, classify, output."
+>&lt;/p>
+&lt;p>A convnet used for image classification consists of two parts: a &lt;strong>convolutional base&lt;/strong> and a &lt;strong>dense head&lt;/strong>.&lt;/p>
+&lt;p>The base is used to &lt;strong>extract the features&lt;/strong> from an image. It is formed primarily of layers performing the convolution operation, but often includes other kinds of layers as well.&lt;/p>
+&lt;p>The head is used to &lt;strong>determine the class&lt;/strong> of the image. It is formed primarily of dense layers, but might include other layers like dropout.&lt;/p>
+&lt;p>The goal of the network during training is to learn two things:&lt;/p>
+&lt;ol>
+&lt;li>which features to extract from an image (base),&lt;/li>
+&lt;li>which class goes with what features (head).&lt;/li>
+&lt;/ol>
+&lt;p>These days, convnets are rarely trained from scratch. More often, we &lt;strong>reuse the base of a pretrained model&lt;/strong>. To the pretrained base we then &lt;strong>attach an untrained head&lt;/strong>. In other words, we reuse the part of a network that has already learned to do &lt;em>1. Extract features&lt;/em>, and attach to it some fresh layers to learn &lt;em>2. Classify&lt;/em>&lt;/p>
+&lt;p>The most commonly used dataset for pretraining is &lt;a class="link" href="http://image-net.org/about-overview" target="_blank" rel="noopener"
+>&lt;em>ImageNet&lt;/em>&lt;/a>, a large dataset of many kind of natural images. Keras includes a variety models pretrained on ImageNet in its &lt;a class="link" href="https://www.tensorflow.org/api_docs/python/tf/keras/applications" target="_blank" rel="noopener"
+>&lt;code>applications&lt;/code> module&lt;/a>.&lt;/p>
+&lt;h2 id="feature-extraction">Feature Extraction
+&lt;/h2>&lt;p>The &lt;strong>feature extraction&lt;/strong> performed by the base consists of &lt;strong>three basic operations&lt;/strong>:&lt;/p>
+&lt;ol>
+&lt;li>&lt;strong>Filter&lt;/strong> an image for a particular feature (convolution)&lt;/li>
+&lt;li>&lt;strong>Detect&lt;/strong> that feature within the filtered image (ReLU)&lt;/li>
+&lt;li>&lt;strong>Condense&lt;/strong> the image to enhance the features (maximum pooling)&lt;/li>
+&lt;/ol>
+&lt;p>&lt;img src="https://i.imgur.com/IYO9lqp.png"
+loading="lazy"
+alt="An example of the feature extraction process."
+>&lt;/p>
+&lt;p>The &lt;strong>weights&lt;/strong> a convnet learns during training are primarily contained in its convolutional layers. These weights we call &lt;strong>kernels&lt;/strong>. We can represent them as small arrays:&lt;/p>
+&lt;p>&lt;img src="https://i.imgur.com/uJfD9r9.png"
+loading="lazy"
+alt="A 3x3 kernel."
+>&lt;/p>
+&lt;p>A kernel operates by scanning over an image and producing a &lt;em>weighted sum&lt;/em> of pixel values. In this way, a kernel will act sort of like a polarized lens, emphasizing or deemphasizing certain patterns of information.&lt;/p>
+&lt;p>&lt;img src="https://i.imgur.com/j3lk26U.png"
+loading="lazy"
+alt="A kernel acts as a kind of lens."
+>A kernel acts as a kind of lens.&lt;/p>
+&lt;p>Kernels define how a convolutional layer is connected to the layer that follows. The kernel above will connect each neuron in the output to nine neurons in the input. By setting the dimensions of the kernels with &lt;code>kernel_size&lt;/code>, you are telling the convnet how to form these connections. Most often, a kernel will have odd-numbered dimensions &amp;ndash; like &lt;code>kernel_size=(3, 3)&lt;/code> or &lt;code>(5, 5)&lt;/code> &amp;ndash; so that a single pixel sits at the center, but this is not a requirement.&lt;/p>
+&lt;p>The kernels in a convolutional layer determine what kinds of features it creates. During training, a convnet tries to learn what features it needs to solve the classification problem. This means finding the best values for its kernels.&lt;/p>
+&lt;p>The &lt;strong>activations&lt;/strong> in the network we call &lt;strong>feature maps&lt;/strong>. They are what result when we apply a filter to an image; they contain the visual features the kernel extracts. Here are a few kernels pictured with feature maps they produced.&lt;/p>
+&lt;p>&lt;img src="https://i.imgur.com/JxBwchH.png"
+loading="lazy"
+alt="Three kernels and the feature maps they produce."
+>Kernels and features.&lt;/p>
+&lt;p>From the pattern of numbers in the kernel, you can tell the kinds of feature maps it creates. Generally, what a convolution accentuates in its inputs will match the shape of the &lt;em>positive&lt;/em> numbers in the kernel. The left and middle kernels above will both filter for horizontal shapes.&lt;/p>
+&lt;p>With the &lt;code>filters&lt;/code> parameter, you tell the convolutional layer how many feature maps you want it to create as output.&lt;/p>
+&lt;p>Notice that after applying the ReLU function (&lt;strong>Detect&lt;/strong>) the feature map ends up with a lot of &amp;ldquo;dead space,&amp;rdquo; that is, large areas containing only 0&amp;rsquo;s (the black areas in the image). Having to carry these 0 activations through the entire network would increase the size of the model without adding much useful information. Instead, we would like to &lt;em>condense&lt;/em> the feature map to retain only the most useful part &amp;ndash; the feature itself.&lt;/p>
+&lt;p>This in fact is what &lt;strong>maximum pooling&lt;/strong> does. Max pooling takes a patch of activations in the original feature map and replaces them with the maximum activation in that patch.&lt;/p>
+&lt;p>The pooling step increases the proportion of active pixels to zero pixels.&lt;/p>
+&lt;p>In fact, the zero-pixels carry &lt;em>positional information&lt;/em>. The blank space still positions the feature within the image. When &lt;code>MaxPool2D&lt;/code> removes some of these pixels, it removes some of the positional information in the feature map. This gives a convnet a property called &lt;strong>translation invariance&lt;/strong>. This means that a convnet with maximum pooling will tend not to distinguish features by their &lt;em>location&lt;/em> in the image.&lt;/p>
+&lt;p>We mentioned in the previous exercise that average pooling has largely been superceeded by maximum pooling within the convolutional base. There is, however, a kind of average pooling that is still widely used in the &lt;em>head&lt;/em> of a convnet. This is &lt;strong>global average pooling&lt;/strong>. A &lt;code>GlobalAvgPool2D&lt;/code> layer is often used as an alternative to some or all of the hidden &lt;code>Dense&lt;/code> layers in the head of the network&lt;/p>
+&lt;p>There are two additional parameters affecting both convolution and pooling layers &amp;ndash; these are the &lt;code>strides&lt;/code> of the window and whether to use &lt;code>padding&lt;/code> at the image edges. The &lt;code>strides&lt;/code> parameter says how far the window should move at each step, and the &lt;code>padding&lt;/code> parameter describes how we handle the pixels at the edges of the input.&lt;/p>
+&lt;p>.&lt;/p>
+&lt;p>Increasing the stride means that we miss out on potentially valuble information in our summary. Maximum pooling layers, however, will almost always have stride values greater than 1, like &lt;code>(2, 2)&lt;/code> or &lt;code>(3, 3)&lt;/code>, but not larger than the window itself.&lt;/p>
+&lt;p>What the convolution does with these boundary values is determined by its &lt;code>padding&lt;/code> parameter. In TensorFlow, you have two choices: either &lt;code>padding='same'&lt;/code> or &lt;code>padding='valid'&lt;/code>. There are trade-offs with each.&lt;/p>
+&lt;p>When we set &lt;code>padding='valid'&lt;/code>, the convolution window will stay entirely inside the input. The drawback is that the output shrinks (loses pixels), and shrinks more for larger kernels. This will limit the number of layers the network can contain, especially when inputs are small in size.&lt;/p>
+&lt;p>The alternative is to use &lt;code>padding='same'&lt;/code>. The trick here is to &lt;strong>pad&lt;/strong> the input with 0&amp;rsquo;s around its borders, using just enough 0&amp;rsquo;s to make the size of the output the &lt;em>same&lt;/em> as the size of the input. This can have the effect however of diluting the influence of pixels at the borders. The animation below shows a sliding window with &lt;code>'same'&lt;/code> padding.&lt;/p>
+&lt;p>&lt;img src="https://i.imgur.com/RvGM2xb.gif"
+loading="lazy"
+alt="Illustration of zero (same) padding."
+>&lt;/p>
+&lt;p>The VGG model we&amp;rsquo;ve been looking at uses &lt;code>same&lt;/code> padding for all of its convolutional layers. Most modern convnets will use some combination of the two.&lt;/p>
+&lt;p>. A single round of feature extraction can only extract relatively simple features from an image, things like simple lines or contrasts. These are too simple to solve most classification problems. Instead, convnets will repeat this extraction over and over, so that the features become more complex and refined as they travel deeper into the network.&lt;/p>
+&lt;p>It does this by passing them through long chains of &lt;strong>convolutional blocks&lt;/strong> which perform this extraction.&lt;/p>
+&lt;p>&lt;img src="https://i.imgur.com/pr8VwCZ.png"
+loading="lazy"
+alt="Extraction as a sequence of blocks."
+>&lt;/p>
+&lt;p>These convolutional blocks are stacks of &lt;code>Conv2D&lt;/code> and &lt;code>MaxPool2D&lt;/code> layers, whose role in feature extraction we learned about in the last few lessons.&lt;/p>
+&lt;p>&lt;img src="https://i.imgur.com/8D6IhEw.png"
+loading="lazy"
+alt="A kind of extraction block: convolution, ReLU, pooling."
+>&lt;/p>
+&lt;p>Each block represents a round of extraction, and by composing these blocks the convnet can combine and recombine the features produced, growing them and shaping them to better fit the problem at hand. The deep structure of modern convnets is what allows this sophisticated feature engineering and has been largely responsible for their superior performance.&lt;/p></description></item><item><title>【Kaggle】Concepts</title><link>https://dyhes.github.io/p/kaggleconcepts/</link><pubDate>Mon, 08 Aug 2022 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/kaggleconcepts/</guid><description>&lt;p>Kaggle is a cloud computational environment that enables reproducible and collaborative analysis&lt;/p>
+&lt;h2 id="types-of-noteboooks">Types of Noteboooks
+&lt;/h2>&lt;h3 id="script">Script
+&lt;/h3>&lt;p>Scripts are files that execute everything as code sequentially. To start a script, click on “Create Notebook” and select “Script”. This will open the Scripts editing interface.&lt;/p>
+&lt;h3 id="notebooks">Notebooks
+&lt;/h3>&lt;p>The last type is Jupyter notebooks (usually just “notebooks”). Jupyter notebooks consist of a sequence of cells, where each cell is formatted in either Markdown (for writing text) or in a programming language of your choice (for writing code). To start a notebook, click on “Create Notebook”, and select “Notebook”. This will open the Notebooks editing interface.&lt;/p>
+&lt;h2 id="datasets-and-competitions">Datasets and Competitions
+&lt;/h2>&lt;p>Data on Kaggle is available through either Datasets or our Competitions.&lt;/p>
+&lt;p>There are two ways of loading a Dataset in a Notebook. The first is to navigate to a chosen dataset’s landing page, then click on the &lt;a class="link" href="https://www.kaggle.com/notebooks?modal=true" target="_blank" rel="noopener"
+>“New Notebook” button&lt;/a>. This will launch a new Notebook session with the dataset in question spun up and ready to go.&lt;/p>
+&lt;p>Alternatively, you may wish to add datasets after creating your Notebook. To do that, navigate to the “Data” pane in a Notebook editor and click the “Add Data” button. This will open a modal that lets you select Datasets to add to your Notebook.&lt;/p>
+&lt;p>You will notice that there is a third option in the “Add Data” modal: Notebook Output Files.&lt;/p>
+&lt;p>Up to 20 GBs of output from a Notebook may be saved to disk in /kaggle/working. This data is saved automatically and you can then reuse that data in any future Notebook: just navigate to the “Data” pane in a Notebook editor, click on “Add Data”, click on the &amp;ldquo;Notebook Output Files&amp;rdquo; tab, find a Notebook of interest, and then click to add it to your current Notebook.&lt;/p>
+&lt;p>By chaining Notebooks as data sources in this way, it’s possible to build &lt;strong>pipelines&lt;/strong> and generate more and better content than you could in a single notebook alone.&lt;/p>
+&lt;h2 id="editor">Editor
+&lt;/h2>&lt;p>Kaggle Notebooks may be created and edited via the Notebook editor. On larger screens, the Notebook editor consists of three parts:&lt;/p>
+&lt;ul>
+&lt;li>An editing window&lt;/li>
+&lt;li>A console&lt;/li>
+&lt;li>A settings window&lt;/li>
+&lt;/ul>
+&lt;h2 id="collaboration">Collaboration
+&lt;/h2>&lt;p>From your Notebook editor or viewer, public or private, you may navigate to the &amp;lsquo;Share&amp;rsquo; or &amp;lsquo;Sharing&amp;rsquo; button in the Notebook’s menu to expose, among other settings, the Collaborators options. There, use the search box to find and add other users as Notebook collaborators.&lt;/p>
+&lt;p>If your Notebook is private, you may choose between giving Collaborators either viewing privileges (“Can view”) or editing privileges (“Can edit”). If your Notebook is public, Collaborators can only be added with editing privileges (“Can edit”), as anyone can view it already.&lt;/p>
+&lt;p>When you add a collaborator, they will receive a notification via email.&lt;/p>
+&lt;p>Your Notebook collaborators won’t automatically have the same access to any private Datasets as you unless they are explicitly invited to collaborate on the Dataset. Anyone has access to Datasets shared publicly.&lt;/p>
+&lt;h2 id="environment">Environment
+&lt;/h2>&lt;p>Notebooks is more than just a code editor. It’s a versioned computational environment designed to make it easy to reproduce data science work. In the Notebooks IDE, you have access to an interactive session running in a Docker container with pre-installed packages, the ability to mount versioned data sources, customizable compute resources like GPUs, and more.&lt;/p>
+&lt;h3 id="modifying-a-notebook-specific-environment">Modifying a Notebook-specific Environment
+&lt;/h3>&lt;p>It is also possible to modify the Docker container associated with the current Notebook image.&lt;/p>
+&lt;h4 id="using-a-standard-package-installer">Using a standard package installer
+&lt;/h4>&lt;p>In the Notebook Editor, &lt;strong>make sure &amp;ldquo;Internet&amp;rdquo; is enabled&lt;/strong> in the Settings pane (it will be by default if it&amp;rsquo;s a new notebook).&lt;/p>
+&lt;p>For Python, you can &lt;strong>run&lt;/strong> &lt;strong>arbitrary shell commands&lt;/strong> &lt;strong>by prepending ! to a code cell&lt;/strong>. For instance, to install a new package using pip, run &lt;code>!pip install my-new-package&lt;/code>. You can also upgrade or downgrade an existing package by running &lt;code>!pip install my-existing-package==X.Y.Z&lt;/code>.&lt;/p></description></item><item><title>【Python】Matplotlib</title><link>https://dyhes.github.io/p/pythonmatplotlib/</link><pubDate>Thu, 14 Jan 2021 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/pythonmatplotlib/</guid><description>&lt;p>Matplotlib is a low level graph plotting library in python that serves as a visualization utility.&lt;/p>
+&lt;p>Matplotlib was created by John D. Hunter.&lt;/p>
+&lt;p>Most of the Matplotlib utilities lies under the &lt;code>pyplot&lt;/code> submodule, and are usually imported under the &lt;code>plt&lt;/code> alias.&lt;/p>
+&lt;h2 id="plotting">Plotting
+&lt;/h2>&lt;p>The &lt;code>plot()&lt;/code> function is used to draw points (markers) in a diagram.&lt;/p>
+&lt;p>To plot only the markers, you can use &lt;em>shortcut string notation&lt;/em> parameter &amp;lsquo;o&amp;rsquo;, which means &amp;lsquo;rings&amp;rsquo;.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">xpoints&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">array&lt;/span>&lt;span class="p">([&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">8&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">ypoints&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">array&lt;/span>&lt;span class="p">([&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">10&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">plt&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">plot&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">xpoints&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">ypoints&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;o&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">plt&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">show&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>If we do not specify the points in the x-axis, they will get the default values 0, 1, 2, 3,&lt;/p>
+&lt;h3 id="maker">Maker
+&lt;/h3>&lt;p>You can use the keyword argument &lt;code>marker&lt;/code> to emphasize each point with a specified marker&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">plt&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">plot&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ypoints&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;o:r&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## marker|line|color&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">plt&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">show&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th style="text-align: left">Marker&lt;/th>
+&lt;th style="text-align: left">Description&lt;/th>
+&lt;th>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;o&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Circle&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_marker_o" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;*&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Star&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_marker_star" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;.&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Point&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_marker_point" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;,&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Pixel&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_marker_pixel" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;x&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">X&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_marker_x" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;X&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">X (filled)&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_marker_x_filled" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;+&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Plus&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_marker_plus" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;P&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Plus (filled)&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_marker_plus_filled" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;rsquo;s&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Square&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_marker_s" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;D&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Diamond&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_marker_D" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;rsquo;d'&lt;/td>
+&lt;td style="text-align: left">Diamond (thin)&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_marker_thin_d" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;p&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Pentagon&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_marker_p" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;H&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Hexagon&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_marker_H" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;h&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Hexagon&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_marker_hexagon" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;v&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Triangle Down&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_marker_v" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;^&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Triangle Up&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_marker_triangle_up" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;&amp;lt;&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Triangle Left&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_marker_triangle_left" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;&amp;gt;&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Triangle Right&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_marker_triangle_right" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;1&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Tri Down&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_marker_1" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;2&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Tri Up&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_marker_2" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;3&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Tri Left&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_marker_3" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;4&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Tri Right&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_marker_4" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;|&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Vline&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_marker_vline" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;_&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Hline&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th style="text-align: left">Line Syntax&lt;/th>
+&lt;th style="text-align: left">Description&lt;/th>
+&lt;th>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;-&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Solid line&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_fmt_line_solid" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;:&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Dotted line&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_fmt_line_dot" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;&amp;ndash;&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Dashed line&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_fmt_line_dash" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;-.&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Dashed/dotted line&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th style="text-align: left">Color Syntax&lt;/th>
+&lt;th style="text-align: left">Description&lt;/th>
+&lt;th>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;r&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Red&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_fmt_r" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;g&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Green&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_fmt_g" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;b&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Blue&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_fmt_b" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;c&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Cyan&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_fmt_c" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;rsquo;m'&lt;/td>
+&lt;td style="text-align: left">Magenta&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_fmt_m" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;y&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Yellow&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_fmt_y" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;k&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">Black&lt;/td>
+&lt;td>&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_matplotlib_fmt_k" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&amp;lsquo;w&amp;rsquo;&lt;/td>
+&lt;td style="text-align: left">White&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>You can use the keyword argument &lt;code>markersize&lt;/code> or the shorter version, &lt;code>ms&lt;/code> to set the size of the markers.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">plt&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">plot&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ypoints&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">marker&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;o&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">ms&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">20&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>【Python】Numpy</title><link>https://dyhes.github.io/p/pythonnumpy/</link><pubDate>Wed, 13 Jan 2021 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/pythonnumpy/</guid><description>&lt;h2 id="introduction">Introduction
+&lt;/h2>&lt;p>NumPy short for &amp;ldquo;Numerical Python&amp;rdquo; is a Python library, which is used for working with arrays.&lt;/p>
+&lt;p>In Python we have lists that serve the purpose of arrays, but they are slow to process.&lt;/p>
+&lt;p>NumPy aims to provide an array object that is &lt;strong>up to 50x faster&lt;/strong> than traditional Python lists. ( NumPy arrays are stored at one continuous place in memory unlike lists, so processes can access and manipulate them very efficiently. )&lt;/p>
+&lt;p>The array object in NumPy is called &lt;code>ndarray&lt;/code>, it provides a lot of supporting functions that make working with &lt;code>ndarray&lt;/code> very easy.&lt;/p>
+&lt;h2 id="creacte-ndarray-object">Creacte &lt;code>ndarray&lt;/code> Object
+&lt;/h2>&lt;p>To create an &lt;code>ndarray&lt;/code>, we can pass a list, tuple or any array-like object into the &lt;code>array()&lt;/code> method, and it will be converted into an &lt;code>ndarray&lt;/code>&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">arr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">array&lt;/span>&lt;span class="p">([&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">2&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">3&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">4&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">5&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">arr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">array&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">2&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">3&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">4&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">5&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>A dimension in arrays is one level of array depth (nested arrays).&lt;/p>
+&lt;blockquote>
+&lt;p>NumPy has a whole sub module dedicated towards matrix operations called &lt;code>numpy.mat&lt;/code>&lt;/p>
+&lt;/blockquote>
+&lt;p>NumPy Arrays provides the &lt;code>ndim&lt;/code> attribute whicht is an integer that tells us how many dimensions the array have.&lt;/p>
+&lt;h2 id="access">Access
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-py" data-lang="py">&lt;span class="line">&lt;span class="cl">&lt;span class="n">arr&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">d1&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">d2&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">d3&lt;/span>&lt;span class="o">...&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="slicing">Slicing
+&lt;/h2>&lt;ul>
+&lt;li>&lt;code>[start:end]&lt;/code>.&lt;/li>
+&lt;li>&lt;code>[start:end:step]&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>If we don&amp;rsquo;t pass start its considered 0&lt;/p>
+&lt;p>If we don&amp;rsquo;t pass end its considered length of array in that dimension&lt;/p>
+&lt;p>If we don&amp;rsquo;t pass step its considered 1&lt;/p>
+&lt;blockquote>
+&lt;p>The result &lt;em>includes&lt;/em> the start index, but &lt;em>excludes&lt;/em> the end index.&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">#slicing 2-D Arrays&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">arr&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="mi">4&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="data-types">Data Types
+&lt;/h2>&lt;p>NumPy has some extra data types, and refer to data types with one character, like &lt;code>i&lt;/code> for integers, &lt;code>u&lt;/code> for unsigned integers etc.&lt;/p>
+&lt;p>Below is a list of all data types in NumPy and the characters used to represent them.&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>i&lt;/code> - integer&lt;/li>
+&lt;li>&lt;code>b&lt;/code> - boolean&lt;/li>
+&lt;li>&lt;code>u&lt;/code> - unsigned integer&lt;/li>
+&lt;li>&lt;code>f&lt;/code> - float&lt;/li>
+&lt;li>&lt;code>c&lt;/code> - complex float&lt;/li>
+&lt;li>&lt;code>m&lt;/code> - timedelta&lt;/li>
+&lt;li>&lt;code>M&lt;/code> - datetime&lt;/li>
+&lt;li>&lt;code>O&lt;/code> - object&lt;/li>
+&lt;li>&lt;code>S&lt;/code> - string&lt;/li>
+&lt;li>&lt;code>U&lt;/code> - unicode string&lt;/li>
+&lt;li>&lt;code>V&lt;/code> - fixed chunk of memory for other type ( void )&lt;/li>
+&lt;/ul>
+&lt;p>The NumPy array object has a property called &lt;code>dtype&lt;/code> that returns the data type of the array.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">arr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">array&lt;/span>&lt;span class="p">([&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">2&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">3&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">4&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">arr&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">dtype&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## int64&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">arr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">array&lt;/span>&lt;span class="p">([&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">2&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">3&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">4&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="n">dtype&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;S&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>If a type is given in which elements can&amp;rsquo;t be casted then NumPy will raise a ValueError.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">arr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">array&lt;/span>&lt;span class="p">([&lt;/span>&lt;span class="s1">&amp;#39;a&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;2&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;3&amp;#39;&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="n">dtype&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;i&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## ValueError&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="converting-data-type">Converting Data Type
+&lt;/h3>&lt;p>The best way to change the data type of an existing array, is to make a copy of the array with the &lt;code>astype()&lt;/code> method.&lt;/p>
+&lt;p>The &lt;code>astype()&lt;/code> function creates a copy of the array, and allows you to specify the data type as a parameter.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-py" data-lang="py">&lt;span class="line">&lt;span class="cl">&lt;span class="n">arr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">array&lt;/span>&lt;span class="p">([&lt;/span>&lt;span class="mf">1.1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">2.1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">3.1&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">newarr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">arr&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">astype&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;i&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="copy-and-view">Copy and View
+&lt;/h2>&lt;p>The main difference between a copy and a view of an array is that the copy is a &lt;strong>new array&lt;/strong>, and the view is &lt;strong>just a view of the original array&lt;/strong>.&lt;/p>
+&lt;p>The copy &lt;em>owns&lt;/em> the data and any changes made to the copy will not affect original array, and any changes made to the original array will not affect the copy.&lt;/p>
+&lt;p>The view &lt;em>does not own&lt;/em> the data and any changes made to the view will affect the original array, and any changes made to the original array will affect the view.&lt;/p>
+&lt;p>Every NumPy array has the attribute &lt;code>base&lt;/code> that returns &lt;code>None&lt;/code> if the array owns the data.&lt;/p>
+&lt;p>Otherwise, the &lt;code>base&lt;/code> attribute refers to the original object.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">arr&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">copy&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">y&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">arr&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">view&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">base&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## none&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">y&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">base&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## arr&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="shape">Shape
+&lt;/h2>&lt;p>The shape of an array is the number of elements in each dimension.&lt;/p>
+&lt;p>NumPy arrays have an attribute called &lt;code>shape&lt;/code> that returns a &lt;strong>tuple&lt;/strong> with each index having the number of corresponding elements.&lt;/p>
+&lt;h3 id="reshape">Reshape
+&lt;/h3>&lt;p>By reshaping we can add or remove dimensions or change number of elements in each dimension.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">arr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">array&lt;/span>&lt;span class="p">([&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">2&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">3&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">4&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">5&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">6&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">7&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">8&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">9&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">10&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">11&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">12&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">newarr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">arr&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">reshape&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">4&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">3&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">newarr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">arr&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">reshape&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">3&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">2&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>We can reshape an 8 elements 1D array into 4 elements in 2 rows 2D array but we cannot reshape it into a 3 elements 3 rows 2D array as that would require 3x3 = 9 elements.&lt;/p>
+&lt;/blockquote>
+&lt;p>the returned array is a &lt;strong>view&lt;/strong>&lt;/p>
+&lt;p>You are allowed to have one &amp;ldquo;unknown&amp;rdquo; dimension.&lt;/p>
+&lt;p>Meaning that you do not have to specify an exact number for one of the dimensions in the reshape method.&lt;/p>
+&lt;p>Pass &lt;code>-1&lt;/code> as the value, and NumPy will calculate this number for you.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">newarr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">arr&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">reshape&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">2&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>&lt;strong>Note:&lt;/strong> We can not pass &lt;code>-1&lt;/code> to more than one dimension.&lt;/p>
+&lt;/blockquote>
+&lt;h4 id="flattening">Flattening
+&lt;/h4>&lt;p>Flattening array means converting a multidimensional array into a 1D array.&lt;/p>
+&lt;p>We can use &lt;code>reshape(-1)&lt;/code> to do this.&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;strong>Note:&lt;/strong> There are a lot of functions for changing the shapes of arrays in numpy &lt;code>flatten&lt;/code>, &lt;code>ravel&lt;/code> and also for rearranging the elements &lt;code>rot90&lt;/code>, &lt;code>flip&lt;/code>, &lt;code>fliplr&lt;/code>, &lt;code>flipud&lt;/code> etc.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="iterating">Iterating
+&lt;/h2>&lt;p>The function &lt;code>nditer()&lt;/code> is a helping function that can be used from very basic to very advanced iterations. It solves some basic issues which we face in iteration.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="k">for&lt;/span> &lt;span class="n">x&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">nditer&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">arr&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="with-different-data-types">With Different Data Types
+&lt;/h3>&lt;p>We can use &lt;code>op_dtypes&lt;/code> argument and pass it the expected datatype to change the datatype of elements while iterating.&lt;/p>
+&lt;p>NumPy does not change the data type of the element in-place (where the element is in array) so it needs some other space to perform this action, that extra space is called buffer, and in order to enable it in &lt;code>nditer()&lt;/code> we pass &lt;code>flags=['buffered']&lt;/code>&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="k">for&lt;/span> &lt;span class="n">x&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">nditer&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">arr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">flags&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;buffered&amp;#39;&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="n">op_dtypes&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;S&amp;#39;&lt;/span>&lt;span class="p">]):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="with-different-step-size">With Different Step Size
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="k">for&lt;/span> &lt;span class="n">x&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">nditer&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">arr&lt;/span>&lt;span class="p">[:,&lt;/span> &lt;span class="p">::&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">]):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="join">Join
+&lt;/h2>&lt;p>In SQL we join tables based on a key, whereas in NumPy we join arrays by axes.&lt;/p>
+&lt;p>We pass a sequence of arrays that we want to join to the &lt;code>concatenate()&lt;/code> function, along with the axis. If axis is not explicitly passed, it is taken as 0.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">arr1&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">array&lt;/span>&lt;span class="p">([&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">2&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">3&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">arr2&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">array&lt;/span>&lt;span class="p">([&lt;/span>&lt;span class="mi">4&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">5&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">6&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">arr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">concatenate&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">arr1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">arr2&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">#along the row&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">arr1&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">array&lt;/span>&lt;span class="p">([[&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">2&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">4&lt;/span>&lt;span class="p">]])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">arr2&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">array&lt;/span>&lt;span class="p">([[&lt;/span>&lt;span class="mi">5&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">6&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="mi">7&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">8&lt;/span>&lt;span class="p">]])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">arr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">concatenate&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">arr1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">arr2&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">axis&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">#[[1 2 5 6]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## [3 4 7 8]]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="split">Split
+&lt;/h2>&lt;p>Splitting is reverse operation of Joining.&lt;/p>
+&lt;p>Joining merges multiple arrays into one and Splitting breaks one array into multiple.&lt;/p>
+&lt;p>We use &lt;code>array_split()&lt;/code> for splitting arrays, we pass it the array we want to split and the number of splits.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">arr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">array&lt;/span>&lt;span class="p">([&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">2&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">3&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">4&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">5&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">6&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">newarr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">array_split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">arr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">3&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>The return value is an array containing three arrays.&lt;/p>
+&lt;/blockquote>
+&lt;p>If the array has less elements than required, it will adjust from the end accordingly.&lt;/p>
+&lt;blockquote>
+&lt;p>We also have the method &lt;code>split()&lt;/code> available but it will not adjust the elements when elements are less in source array for splitting like in example above, &lt;code>array_split()&lt;/code> worked properly but &lt;code>split()&lt;/code> would fail.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="search">Search
+&lt;/h2>&lt;p>You can search an array for a certain value, and return the indexes that get a match.&lt;/p>
+&lt;p>To search an array, use the &lt;code>where()&lt;/code> method.&lt;/p>
+&lt;h2 id="filter">Filter
+&lt;/h2>&lt;p>Getting some elements out of an existing array and creating a new array out of them is called &lt;em>filtering&lt;/em>.&lt;/p>
+&lt;p>In NumPy, you filter an array using a &lt;em>boolean index list&lt;/em>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">arr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">array&lt;/span>&lt;span class="p">([&lt;/span>&lt;span class="mi">41&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">42&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">43&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">44&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kc">False&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kc">True&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kc">False&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">newarr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">arr&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>We can directly substitute the array instead of the iterable variable in our condition and it will work just as we expect it to.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">arr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">array&lt;/span>&lt;span class="p">([&lt;/span>&lt;span class="mi">41&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">42&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">43&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">44&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">filter_arr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">arr&lt;/span> &lt;span class="o">&amp;gt;&lt;/span> &lt;span class="mi">42&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">newarr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">arr&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">filter_arr&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="random">Random
+&lt;/h2>&lt;p>Random number &lt;strong>does NOT&lt;/strong> mean a different number every time. Random means something that &lt;strong>can not be predicted logically&lt;/strong>.&lt;/p>
+&lt;h3 id="pseudo-random-and-true-random">Pseudo Random and True Random
+&lt;/h3>&lt;p>Random numbers generated through a generation algorithm are called &lt;em>pseudo random&lt;/em>.&lt;/p>
+&lt;p>In order to generate a truly random number on our computers we need to get the random data from some outside source. This outside source is generally our keystrokes, mouse movements, data on network etc.&lt;/p>
+&lt;p>We do not need truly random numbers, unless its related to security (e.g. encryption keys) or the basis of application is the randomness (e.g. Digital roulette wheels).&lt;/p>
+&lt;p>NumPy offers the &lt;code>random&lt;/code> module to work with random numbers.&lt;/p>
+&lt;p>The random module&amp;rsquo;s &lt;code>rand()&lt;/code> method returns a random float between 0 and 1.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span> &lt;span class="nn">numpy&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">random&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Generate a random integer from 0 to 100&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">random&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">randint&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">100&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The &lt;code>randint()&lt;/code> method takes a &lt;code>size&lt;/code> parameter where you can specify the shape of an array.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">x&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">random&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">randint&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">100&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">size&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">5&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The &lt;code>rand()&lt;/code> method also allows you to specify the shape of the array.&lt;/p>
+&lt;p>The &lt;code>choice()&lt;/code> method allows you to generate a random value based on an array of values.&lt;/p>
+&lt;p>The &lt;code>choice()&lt;/code> method takes an array as a parameter and randomly returns one of the values.&lt;/p>
+&lt;h3 id="seaborn">Seaborn
+&lt;/h3>&lt;p>Seaborn is a library that uses Matplotlib underneath to plot graphs. It will be used to visualize random distributions.&lt;/p>
+&lt;h2 id="data-distribution">Data Distribution
+&lt;/h2>&lt;p>Data Distribution is a list of all possible values, and how often each value occurs.&lt;/p>
+&lt;p>Such lists are important when working with statistics and data science.&lt;/p>
+&lt;p>The random module offer methods that returns randomly generated data distributions.&lt;/p>
+&lt;p>We can generate random numbers based on defined probabilities using the &lt;code>choice()&lt;/code> method of the &lt;code>random&lt;/code> module.&lt;/p>
+&lt;p>The &lt;code>choice()&lt;/code> method allows us to specify the probability for each value.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">random&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">choice&lt;/span>&lt;span class="p">([&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">5&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">7&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">9&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="n">p&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mf">0.1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">0.3&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">0.6&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">0.0&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="n">size&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">100&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="permutations">Permutations
+&lt;/h3>&lt;p>A permutation refers to an arrangement of elements. e.g. [3, 2, 1] is a permutation of [1, 2, 3] and vice-versa.&lt;/p>
+&lt;p>The NumPy Random module provides two methods for this: &lt;code>shuffle()&lt;/code> and &lt;code>permutation()&lt;/code>.&lt;/p>
+&lt;ul>
+&lt;li>The &lt;code>shuffle()&lt;/code> method makes changes to the original array.&lt;/li>
+&lt;li>The &lt;code>permutation()&lt;/code> method &lt;em>returns&lt;/em> a re-arranged array (and leaves the original array un-changed).&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">arr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">array&lt;/span>&lt;span class="p">([&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">2&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">3&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">4&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">5&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">random&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">shuffle&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">arr&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">newarr&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">random&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">permutation&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">arr&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="numpy-ufuncs">Numpy ufuncs
+&lt;/h2>&lt;p>ufuncs stands for &amp;ldquo;&lt;strong>Universal Functions&lt;/strong>&amp;rdquo; and they are NumPy functions that operates on the &lt;code>ndarray&lt;/code> object.&lt;/p>
+&lt;p>ufuncs are used to implement &lt;em>&lt;strong>vectorization&lt;/strong>&lt;/em> (Converting iterative statements into a vector based operation ) in NumPy which is way faster than iterating over elements.&lt;/p>
+&lt;p>ufuncs also take additional arguments, like:&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>where&lt;/code> boolean array or condition defining where the operations should take place.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>dtype&lt;/code> defining the return type of elements.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>out&lt;/code> output array where the return value should be copied.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="create">create
+&lt;/h3>&lt;p>To create you own ufunc, you have to &lt;strong>define a normal function&lt;/strong>, like you do with normal functions in Python, then you &lt;strong>add it to your NumPy ufunc library&lt;/strong> with the &lt;code>frompyfunc()&lt;/code> method.&lt;/p>
+&lt;p>The &lt;code>frompyfunc()&lt;/code> method takes the following arguments:&lt;/p>
+&lt;ol>
+&lt;li>&lt;code>function&lt;/code> - the name of the function.&lt;/li>
+&lt;li>&lt;code>inputs&lt;/code> - the number of input arguments (arrays).&lt;/li>
+&lt;li>&lt;code>outputs&lt;/code> - the number of output arrays.&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span> &lt;span class="nf">myadd&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">y&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">y&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">myadd&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">frompyfunc&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">myadd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">2&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>A ufunc should return &lt;code>&amp;lt;class 'numpy.ufunc'&amp;gt;&lt;/code>.&lt;/p>
+&lt;p>If it is not a ufunc, it will return another type, like this built-in NumPy function for joining two or more arrays &lt;code>&amp;lt;class'builtin_function_or_method'&amp;gt;&lt;/code>&lt;/p>
+&lt;p>To test if the function is a ufunc in an if statement, use the &lt;code>numpy.ufunc&lt;/code> value&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="k">if&lt;/span> &lt;span class="nb">type&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">add&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">ufunc&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>【Python】Pandas</title><link>https://dyhes.github.io/p/pythonpandas/</link><pubDate>Wed, 13 Jan 2021 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/pythonpandas/</guid><description>&lt;h2 id="intro">Intro
+&lt;/h2>&lt;p>Pandas is a Python library, which is used to analyze data.&lt;/p>
+&lt;p>It has functions for analyzing, cleaning, exploring, and manipulating data.&lt;/p>
+&lt;p>The name &amp;ldquo;Pandas&amp;rdquo; has a reference to both &amp;ldquo;&lt;strong>Panel Data&lt;/strong>&amp;rdquo;, and &amp;ldquo;&lt;strong>Python Data Analysis&lt;/strong>&amp;rdquo; and was created by Wes McKinney in 2008.&lt;/p>
+&lt;p>Pandas allows us to analyze big data and make conclusions based on statistical theories.&lt;/p>
+&lt;p>Pandas gives you answers about the data. Like:&lt;/p>
+&lt;ul>
+&lt;li>Is there a &lt;strong>correlation&lt;/strong> between two or more columns?&lt;/li>
+&lt;li>What is &lt;strong>average&lt;/strong> value?&lt;/li>
+&lt;li>&lt;strong>Max&lt;/strong> value?&lt;/li>
+&lt;li>&lt;strong>Min&lt;/strong> value?&lt;/li>
+&lt;/ul>
+&lt;p>Pandas are also able to delete rows that are not relevant, or contains wrong values, like empty or NULL values. This is called &lt;em>&lt;strong>cleaning&lt;/strong>&lt;/em> the data.&lt;/p>
+&lt;h2 id="series">Series
+&lt;/h2>&lt;p>A Pandas Series is like a column in a table.&lt;/p>
+&lt;p>It is a one-dimensional array holding data of any type.&lt;/p>
+&lt;h3 id="labels">Labels
+&lt;/h3>&lt;p>If nothing else is specified, the values are labeled with their index number. First value has index 0, second value has index 1 etc.&lt;/p>
+&lt;p>This label can be used to access a specified value.&lt;/p>
+&lt;p>With the &lt;code>index&lt;/code> argument, you can name your own labels.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">a&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">7&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">2&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">myvar&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">pd&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Series&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">a&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">index&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;x&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;y&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;z&amp;#34;&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>You can also use a key/value object, like a dictionary, when creating a Series.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">calories&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="s2">&amp;#34;day1&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">420&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;day2&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">380&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;day3&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">390&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">myvar&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">pd&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Series&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">calories&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">myvar&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">pd&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Series&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">calories&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">index&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;day1&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;day2&amp;#34;&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## only using data from &amp;#39;day1&amp;#39; and &amp;#39;day2&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>&lt;strong>Note:&lt;/strong> The keys of the dictionary become the labels.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="dataframes">DataFrames
+&lt;/h2>&lt;p>A Pandas DataFrame is a 2 dimensional data structure, like a 2 dimensional array, or a table with rows and columns.&lt;/p>
+&lt;p>Series is like a column, a DataFrame is the whole table.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">data&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;calories&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="mi">420&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">380&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">390&lt;/span>&lt;span class="p">],&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;duration&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="mi">50&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">40&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">45&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">myvar&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">pd&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">DataFrame&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Pandas use the &lt;code>loc&lt;/code> attribute to return one or more specified row(s)&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">#use a list of indexes:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">df&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">loc&lt;/span>&lt;span class="p">[[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">]])&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>&lt;strong>Note:&lt;/strong> When using &lt;code>[]&lt;/code>, the result is a Pandas &lt;strong>DataFrame&lt;/strong>.&lt;/p>
+&lt;/blockquote>
+&lt;p>With the &lt;code>index&lt;/code> argument, you can name your own indexes.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">data&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;calories&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="mi">420&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">380&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">390&lt;/span>&lt;span class="p">],&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;duration&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="mi">50&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">40&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">45&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">df&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">pd&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">DataFrame&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">index&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;day1&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;day2&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;day3&amp;#34;&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="read-csv">Read CSV
+&lt;/h2>&lt;p>A simple way to store big data sets is to use CSV files (comma separated files).&lt;/p>
+&lt;p>CSV files contains plain text and is a well know format that can be read by everyone including Pandas.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">df&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">pd&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">read_csv&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;data.csv&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">df&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">to_string&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">#use to_string() to print the entire DataFrame.&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>If you have a large DataFrame with many rows, Pandas will only return the first 5 rows, and the last 5 rows:&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="read-json">Read JSON
+&lt;/h2>&lt;p>Big data sets are often stored, or extracted as JSON.&lt;/p>
+&lt;p>JSON is plain text, but has the format of an object, and is well known in the world of programming, including Pandas.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">df&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">pd&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">read_json&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;data.json&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>If your JSON code is not in a file, but in a Python Dictionary, you can load it into a DataFrame directly.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">df&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">pd&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">DataFrame&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="viewing-data">Viewing Data
+&lt;/h2>&lt;ul>
+&lt;li>&lt;code>head()&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>One of the most used method for getting a quick overview of the DataFrame, is the &lt;code>head()&lt;/code> method.&lt;/p>
+&lt;p>The &lt;code>head()&lt;/code> method returns the headers and a specified number of rows, starting from the top.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">df&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">head&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>&lt;strong>Note:&lt;/strong> if the number of rows is not specified, the &lt;code>head()&lt;/code> method will return the top 5 rows.&lt;/p>
+&lt;/blockquote>
+&lt;ul>
+&lt;li>&lt;code>tail()&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>There is also a &lt;code>tail()&lt;/code> method for viewing the &lt;em>last&lt;/em> rows of the DataFrame.&lt;/p>
+&lt;p>The &lt;code>tail()&lt;/code> method returns the headers(names of columns) and a specified number of rows, starting from the bottom.&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>info()&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>The DataFrames object has a method called &lt;code>info()&lt;/code>, that gives you more information about the data set.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-css" data-lang="css">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">print&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="nt">df&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nc">info&lt;/span>&lt;span class="o">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">/* &amp;lt;class &amp;#39;pandas.core.frame.DataFrame&amp;#39;&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"> RangeIndex: 169 entries, 0 to 168
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"> Data columns (total 4 columns):
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"> ## Column Non-Null Count Dtype
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"> --- ------ -------------- -----
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"> 0 Duration 169 non-null int64
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"> 1 Pulse 169 non-null int64
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"> 2 Maxpulse 169 non-null int64
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"> 3 Calories 164 non-null float64
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"> dtypes: float64(1), int64(3)
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"> memory usage: 5.4 KB
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"> None */&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="cleaning-data">Cleaning Data
+&lt;/h2>&lt;p>Data cleaning means fixing bad data in your data set.&lt;/p>
+&lt;p>Bad data could be:&lt;/p>
+&lt;ul>
+&lt;li>Empty cells&lt;/li>
+&lt;li>Data in wrong format&lt;/li>
+&lt;li>Wrong data&lt;/li>
+&lt;li>Duplicates&lt;/li>
+&lt;/ul>
+&lt;h3 id="empty-cell">Empty Cell
+&lt;/h3>&lt;ol>
+&lt;li>Remove Rows&lt;/li>
+&lt;li>Replace Empty Values&lt;/li>
+&lt;/ol>
+&lt;p>Pandas uses the mean() median() and mode() methods to calculate the respective values for a specified column.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">#1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">new_df&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">df&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">dropna&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">#If you want to change the original DataFrame, use the inplace = True argument&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">df&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">dropna&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">inplace&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">#2 &lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">df&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;Calories&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">mean&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">df&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;Calories&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">median&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">df&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;Calories&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">mode&lt;/span>&lt;span class="p">()[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">df&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;Calories&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">fillna&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">inplace&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>&lt;strong>Note:&lt;/strong> By default, the &lt;code>dropna()&lt;/code> method returns a &lt;em>new&lt;/em> DataFrame, and will not change the original.&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="wrong-format">Wrong Format
+&lt;/h3>&lt;ol>
+&lt;li>Remove Rows&lt;/li>
+&lt;li>Convert Format&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">#1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">df&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">dropna&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">subset&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Date&amp;#39;&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="n">inplace&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">#2&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">df&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">dropna&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">subset&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Date&amp;#39;&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="n">inplace&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="wrong-data">Wrong Data
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="k">for&lt;/span> &lt;span class="n">x&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">df&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">index&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="n">df&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">loc&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;Duration&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">&amp;gt;&lt;/span> &lt;span class="mi">120&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">df&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">loc&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;Duration&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">120&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">#or&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">for&lt;/span> &lt;span class="n">x&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">df&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">index&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="n">df&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">loc&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;Duration&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">&amp;gt;&lt;/span> &lt;span class="mi">120&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">df&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">loc&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;Duration&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">120&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="duplicates">Duplicates
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">df&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">drop_duplicates&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">inplace&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="data-correlations">Data Correlations
+&lt;/h2>&lt;p>A great aspect of the Pandas module is the &lt;code>corr()&lt;/code> method.&lt;/p>
+&lt;p>The &lt;code>corr()&lt;/code> method calculates the relationship between each column in your data set.&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;strong>Note:&lt;/strong> The &lt;code>corr()&lt;/code> method ignores &amp;ldquo;not numeric&amp;rdquo; columns.&lt;/p>
+&lt;/blockquote>
+&lt;p>The Result of the &lt;code>corr()&lt;/code> method is a table with a lot of numbers that represents how well the relationship is between two columns.&lt;/p></description></item><item><title>【Python】语法</title><link>https://dyhes.github.io/p/python%E8%AF%AD%E6%B3%95/</link><pubDate>Tue, 12 Jan 2021 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/python%E8%AF%AD%E6%B3%95/</guid><description>&lt;h2 id="variables">Variables
+&lt;/h2>&lt;p>Variables are containers for storing data values.&lt;/p>
+&lt;p>A variable is created &lt;strong>the moment&lt;/strong> you first assign a value to it.&lt;/p>
+&lt;p>If you want to specify the data type of a variable, this can be done with &lt;strong>casting&lt;/strong>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">str&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">## x will be &amp;#39;3&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">y&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">## y will be 3&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">z&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">float&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">## z will be 3.0&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>You can get the data type of a variable with the &lt;code>type()&lt;/code> function.&lt;/p>
+&lt;h3 id="variable-names">Variable Names
+&lt;/h3>&lt;ul>
+&lt;li>A variable name must start with a &lt;strong>letter&lt;/strong> or the &lt;strong>underscore character&lt;/strong>&lt;/li>
+&lt;li>A variable name &lt;strong>cannot start with a number&lt;/strong>&lt;/li>
+&lt;li>A variable name can only contain a&lt;strong>lpha-numeric characters and underscores&lt;/strong> (A-z, 0-9, and _ )&lt;/li>
+&lt;li>Variable names are &lt;strong>case-sensitive&lt;/strong> (age, Age and AGE are three different variables)&lt;/li>
+&lt;/ul>
+&lt;p>more readable:&lt;/p>
+&lt;ul>
+&lt;li>Camel Case&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">myVariableName&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;John&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>Pascal Case&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">MyVariableName&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;John&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>Snake Case&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">my_variable_name&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;John&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="variable-scope">Variable Scope
+&lt;/h3>&lt;p>Variables that are created outside of a function (as in all of the examples above) are known as global variables.&lt;/p>
+&lt;p>If you create a variable with the same name inside a function, this variable will be local, and can only be used inside the function. The global variable with the same name will remain as it was, global and with the original value.&lt;/p>
+&lt;p>To create a global variable inside a function, &lt;strong>you can use the &lt;code>global&lt;/code> keyword&lt;/strong>.&lt;/p>
+&lt;p>Also, use the &lt;code>global&lt;/code> keyword if you want to &lt;strong>change a global variable inside a function&lt;/strong>.&lt;/p>
+&lt;h2 id="data-type">Data Type
+&lt;/h2>&lt;p>Python has the following data types built-in by default, in these categories:&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Text Type:&lt;/th>
+&lt;th>&lt;code>str&lt;/code>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Numeric Types:&lt;/td>
+&lt;td>&lt;code>int&lt;/code>, &lt;code>float&lt;/code>, &lt;code>complex&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Sequence Types:&lt;/td>
+&lt;td>&lt;code>list&lt;/code>, &lt;code>tuple&lt;/code>, &lt;code>range&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Mapping Type:&lt;/td>
+&lt;td>&lt;code>dict&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Set Types:&lt;/td>
+&lt;td>&lt;code>set&lt;/code>, &lt;code>frozenset&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Boolean Type:&lt;/td>
+&lt;td>&lt;code>bool&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Binary Types:&lt;/td>
+&lt;td>&lt;code>bytes&lt;/code>, &lt;code>bytearray&lt;/code>, &lt;code>memoryview&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h3 id="casting">Casting
+&lt;/h3>&lt;p>There may be times when you want to specify a type on to a variable. This can be done with casting. Python is an object-orientated language, and as such it uses classes to define data types, including its primitive types.&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th style="text-align: left">Example&lt;/th>
+&lt;th style="text-align: left">Data Type&lt;/th>
+&lt;th style="text-align: left">Try it&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td style="text-align: left">x = str(&amp;ldquo;Hello World&amp;rdquo;)&lt;/td>
+&lt;td style="text-align: left">str&lt;/td>
+&lt;td style="text-align: left">&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_type_str2" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">x = int(20)&lt;/td>
+&lt;td style="text-align: left">int&lt;/td>
+&lt;td style="text-align: left">&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_type_int2" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">x = float(20.5)&lt;/td>
+&lt;td style="text-align: left">float&lt;/td>
+&lt;td style="text-align: left">&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_type_float2" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">x = complex(1j)&lt;/td>
+&lt;td style="text-align: left">complex&lt;/td>
+&lt;td style="text-align: left">&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_type_complex2" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">x = list((&amp;ldquo;apple&amp;rdquo;, &amp;ldquo;banana&amp;rdquo;, &amp;ldquo;cherry&amp;rdquo;))&lt;/td>
+&lt;td style="text-align: left">list&lt;/td>
+&lt;td style="text-align: left">&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_type_list2" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">x = tuple((&amp;ldquo;apple&amp;rdquo;, &amp;ldquo;banana&amp;rdquo;, &amp;ldquo;cherry&amp;rdquo;))&lt;/td>
+&lt;td style="text-align: left">tuple&lt;/td>
+&lt;td style="text-align: left">&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_type_tuple2" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">x = range(6)&lt;/td>
+&lt;td style="text-align: left">range&lt;/td>
+&lt;td style="text-align: left">&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_type_range2" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">x = dict(name=&amp;ldquo;John&amp;rdquo;, age=36)&lt;/td>
+&lt;td style="text-align: left">dict&lt;/td>
+&lt;td style="text-align: left">&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_type_dict2" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">x = set((&amp;ldquo;apple&amp;rdquo;, &amp;ldquo;banana&amp;rdquo;, &amp;ldquo;cherry&amp;rdquo;))&lt;/td>
+&lt;td style="text-align: left">set&lt;/td>
+&lt;td style="text-align: left">&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_type_set2" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">x = frozenset((&amp;ldquo;apple&amp;rdquo;, &amp;ldquo;banana&amp;rdquo;, &amp;ldquo;cherry&amp;rdquo;))&lt;/td>
+&lt;td style="text-align: left">frozenset&lt;/td>
+&lt;td style="text-align: left">&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_type_frozenset2" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">x = bool(5)&lt;/td>
+&lt;td style="text-align: left">bool&lt;/td>
+&lt;td style="text-align: left">&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_type_bool2" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">x = bytes(5)&lt;/td>
+&lt;td style="text-align: left">bytes&lt;/td>
+&lt;td style="text-align: left">&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_type_bytes2" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">x = bytearray(5)&lt;/td>
+&lt;td style="text-align: left">bytearray&lt;/td>
+&lt;td style="text-align: left">&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_type_bytearray2" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">x = memoryview(bytes(5))&lt;/td>
+&lt;td style="text-align: left">memoryview&lt;/td>
+&lt;td style="text-align: left">&lt;a class="link" href="https://www.w3schools.com/python/trypython.asp?filename=demo_type_memoryview2" target="_blank" rel="noopener"
+>Try it »&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h3 id="booleans">Booleans
+&lt;/h3>&lt;p>Almost any value is evaluated to &lt;code>True&lt;/code> if it has some sort of content.&lt;/p>
+&lt;p>Any string is &lt;code>True&lt;/code>, except empty strings.&lt;/p>
+&lt;p>Any number is &lt;code>True&lt;/code>, except &lt;code>0&lt;/code>.&lt;/p>
+&lt;p>Any list, tuple, set, and dictionary are &lt;code>True&lt;/code>, except empty ones.&lt;/p>
+&lt;h3 id="collections">Collections
+&lt;/h3>&lt;p>There are four collection data types in the Python programming language:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>List&lt;/strong> is a collection which is ordered and changeable. Allows duplicate members.&lt;/li>
+&lt;li>&lt;strong>&lt;a class="link" href="https://www.w3schools.com/python/python_tuples.asp" target="_blank" rel="noopener"
+>Tuple&lt;/a>&lt;/strong> is a collection which is ordered and unchangeable. Allows duplicate members.&lt;/li>
+&lt;li>&lt;strong>&lt;a class="link" href="https://www.w3schools.com/python/python_sets.asp" target="_blank" rel="noopener"
+>Set&lt;/a>&lt;/strong> is a collection which is unordered, unchangeable, and unindexed. No duplicate members.&lt;/li>
+&lt;li>&lt;strong>&lt;a class="link" href="https://www.w3schools.com/python/python_dictionaries.asp" target="_blank" rel="noopener"
+>Dictionary&lt;/a>&lt;/strong> is a collection which is ordered and changeable. No duplicate members.&lt;/li>
+&lt;/ul>
+&lt;h3 id="list">List
+&lt;/h3>&lt;p>Lists are used to store multiple items in a single variable.&lt;/p>
+&lt;p>Lists are one of 4 built-in data types in Python used to store collections of data, the other 3 are &lt;a class="link" href="https://www.w3schools.com/python/python_tuples.asp" target="_blank" rel="noopener"
+>Tuple&lt;/a>, &lt;a class="link" href="https://www.w3schools.com/python/python_sets.asp" target="_blank" rel="noopener"
+>Set&lt;/a>, and &lt;a class="link" href="https://www.w3schools.com/python/python_dictionaries.asp" target="_blank" rel="noopener"
+>Dictionary&lt;/a>, all with different qualities and usage.&lt;/p>
+&lt;p>A list can contain different data types&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>add&lt;/p>
+&lt;ul>
+&lt;li>To add an item to the end of the list, use the append() method&lt;/li>
+&lt;li>To insert a list item at a specified index, use the &lt;code>insert()&lt;/code> method.&lt;/li>
+&lt;li>To append elements from &lt;em>another list&lt;/em> ( or any iterable object ) to the current list, use the &lt;code>extend()&lt;/code> method.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>remove&lt;/p>
+&lt;ul>
+&lt;li>The &lt;code>remove()&lt;/code> method removes the specified &lt;strong>item&lt;/strong>.&lt;/li>
+&lt;li>The &lt;code>pop()&lt;/code> method removes the specified index. If you do not specify the index, the &lt;code>pop()&lt;/code> method removes the last item.&lt;/li>
+&lt;li>The &lt;code>del&lt;/code> keyword also removes the specified index and can also delete the list completely.&lt;/li>
+&lt;li>The &lt;code>clear()&lt;/code> method empties the list. The list still remains, but it has no content.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">thislist&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">remove&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;banana&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">thislist&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">pop&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">del&lt;/span> &lt;span class="n">thislist&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">del&lt;/span> &lt;span class="n">thislist&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">thislist&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">clear&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="list-comprehension">List Comprehension
+&lt;/h4>&lt;p>List comprehension offers a shorter syntax when you want to &lt;strong>create&lt;/strong> a new list &lt;strong>based on&lt;/strong> the values of an &lt;strong>existing list&lt;/strong>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">newlist&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="n">expression&lt;/span> &lt;span class="k">for&lt;/span> &lt;span class="n">item&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">iterable&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">condition&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="kc">True&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="tuple">Tuple
+&lt;/h3>&lt;p>A tuple is a collection which is ordered and &lt;strong>unchangeable&lt;/strong>.&lt;/p>
+&lt;p>Since tuples are indexed, they can have items with the same value&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-pyhton" data-lang="pyhton">thistuple = (&amp;#34;apple&amp;#34;,)
+&amp;lt;class &amp;#39;tuple&amp;#39;&amp;gt;
+#NOT a tuple
+thistuple = (&amp;#34;apple&amp;#34;)
+&amp;lt;class &amp;#39;str&amp;#39;&amp;gt;
+&lt;/code>&lt;/pre>&lt;p>You can convert the tuple into a list, change the list, and convert the list back into a tuple.&lt;/p>
+&lt;h4 id="unpack">Unpack
+&lt;/h4>&lt;p>we are allowed to extract the values back into variables. This is called &amp;ldquo;unpacking&amp;rdquo;:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">fruits&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;apple&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;banana&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;cherry&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">(&lt;/span>&lt;span class="n">green&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">yellow&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">red&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">fruits&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h5 id="asterisk">Asterisk&lt;code>*&lt;/code>
+&lt;/h5>&lt;p>If the number of variables is less than the number of values, you can add an &lt;code>*&lt;/code> to the variable name and the values will be assigned to the variable as a list:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">fruits&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;apple&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;banana&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;cherry&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;strawberry&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;raspberry&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">(&lt;/span>&lt;span class="n">green&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">yellow&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">red&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">fruits&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">(&lt;/span>&lt;span class="n">green&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">tropic&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">red&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">fruits&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>If the asterisk is added to another variable name than the last, Python will assign values to the variable until the number of values left matches the number of variables left.&lt;/p>
+&lt;h3 id="set">Set
+&lt;/h3>&lt;p>A set is a collection which is &lt;em>unordered&lt;/em>, &lt;em>unchangeable&lt;/em>*, and &lt;em>unindexed&lt;/em>.&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;strong>Note:&lt;/strong> Set &lt;em>items&lt;/em> are unchangeable, but you can remove items and add new items.&lt;/p>
+&lt;/blockquote>
+&lt;ul>
+&lt;li>
+&lt;p>add&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>To add one item to a set use the &lt;code>add()&lt;/code> method.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>To add items from another set into the current set, use the &lt;code>update()&lt;/code> method.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>remove&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>remove()&lt;/code>: if the item to remove does not exist, &lt;code>remove()&lt;/code> will raise an error.&lt;/li>
+&lt;li>&lt;code>discard()&lt;/code> : if the item to remove does not exist, &lt;code>discard()&lt;/code> will &lt;strong>NOT&lt;/strong> raise an error.&lt;/li>
+&lt;li>&lt;code>pop()&lt;/code> :remove and return the &lt;em>last&lt;/em> item, you will not know what item that gets removed.&lt;/li>
+&lt;li>&lt;code>clear()&lt;/code> : you will not know what item that gets removed.&lt;/li>
+&lt;li>&lt;code>del&lt;/code> :delete the set completely&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>join&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>union()&lt;/code> : returns a new set containing all items from both sets&lt;/li>
+&lt;li>&lt;code>update()&lt;/code> : inserts all the items from one set into another.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="set-operation">Set Operation
+&lt;/h4>&lt;p>The &lt;code>intersection_update()&lt;/code> method will keep only the items that are present in both sets.&lt;/p>
+&lt;p>The &lt;code>intersection()&lt;/code> method will return a &lt;em>new&lt;/em> set, that only contains the items that are present in both sets.&lt;/p>
+&lt;p>The &lt;code>symmetric_difference_update()&lt;/code> method will keep only the elements that are NOT present in both sets.&lt;/p>
+&lt;p>The &lt;code>symmetric_difference()&lt;/code> method will return a new set, that contains only the elements that are NOT present in both sets.&lt;/p>
+&lt;h3 id="dictionary">Dictionary
+&lt;/h3>&lt;p>A dictionary is a collection which is ordered*, changeable and do not allow duplicates.&lt;/p>
+&lt;blockquote>
+&lt;p>As of Python version 3.7, dictionaries are &lt;em>ordered&lt;/em>. In Python 3.6 and earlier, dictionaries are &lt;em>unordered&lt;/em>.&lt;/p>
+&lt;/blockquote>
+&lt;ul>
+&lt;li>Access
+&lt;ul>
+&lt;li>referring to its key name inside square brackets&lt;/li>
+&lt;li>&lt;code>get()&lt;/code>&lt;/li>
+&lt;li>&lt;code>keys()&lt;/code>: return a list of all the &lt;strong>keys&lt;/strong> in the dictionary.&lt;/li>
+&lt;li>&lt;code>values()&lt;/code> : return a list of all the &lt;strong>values&lt;/strong> in the dictionary.&lt;/li>
+&lt;li>&lt;code>items()&lt;/code> : return each item in a dictionary, as &lt;strong>tuples&lt;/strong> in a list.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">thisdict&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;model&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">thisdict&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;model&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>Change / Add
+&lt;ul>
+&lt;li>referring to its key name&lt;/li>
+&lt;li>&lt;code>update()&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Remove
+&lt;ul>
+&lt;li>&lt;code>pop()&lt;/code> : removes the item with the specified key name&lt;/li>
+&lt;li>&lt;code>popitem()&lt;/code>: removes the last inserted item (in versions before 3.7, a random item is removed instead)&lt;/li>
+&lt;li>&lt;code>del&lt;/code> : removes the item with the specified key name or the entire dictionary&lt;/li>
+&lt;li>&lt;code>clear() &lt;/code> :empties the dictionary&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">thisdict&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">pop&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;model&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">thisdict&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">popitem&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">del&lt;/span> &lt;span class="n">thisdict&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;model&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">del&lt;/span> &lt;span class="n">thisdict&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">thisdict&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">clear&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>copy: &lt;code>copy()&lt;/code> or &lt;code>dict()&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h4 id="looping">Looping
+&lt;/h4>&lt;ul>
+&lt;li>for in&lt;/li>
+&lt;li>&lt;code>keys()&lt;/code>&lt;/li>
+&lt;li>&lt;code>values()&lt;/code>&lt;/li>
+&lt;li>&lt;code>items()&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h3 id="arrays">Arrays
+&lt;/h3>&lt;p>Python does not have built-in support for Arrays, but &lt;a class="link" href="https://www.w3schools.com/python/python_lists.asp" target="_blank" rel="noopener"
+>Python Lists&lt;/a> can be used instead.&lt;/p>
+&lt;p>To work with arrays in Python you can import a library, like the &lt;a class="link" href="https://www.w3schools.com/python/numpy/default.asp" target="_blank" rel="noopener"
+>NumPy library&lt;/a>.&lt;/p>
+&lt;h2 id="function">Function
+&lt;/h2>&lt;p>A function is a block of code which only runs when it is called.&lt;/p>
+&lt;p>In Python a function is defined using the &lt;code>def&lt;/code> keyword&lt;/p>
+&lt;h3 id="lambda">Lambda
+&lt;/h3>&lt;p>A lambda function is a small anonymous function.&lt;/p>
+&lt;p>A lambda function can take any number of arguments, but can only have one expression.&lt;/p>
+&lt;blockquote>
+&lt;p>lambda &lt;em>arguments&lt;/em> : &lt;em>expression&lt;/em>&lt;/p>
+&lt;/blockquote>
+&lt;p>The power of lambda is better shown when you use them as an anonymous function &lt;strong>inside another function&lt;/strong>.&lt;/p>
+&lt;h2 id="classes">Classes
+&lt;/h2>&lt;p>Python is an object oriented programming language.&lt;/p>
+&lt;p>Almost everything in Python is an object, with its properties and methods.&lt;/p>
+&lt;p>A Class is like an object constructor, or a &amp;ldquo;blueprint&amp;rdquo; for creating objects.&lt;/p>
+&lt;p>To create a class, use the keyword &lt;code>class&lt;/code>&lt;/p>
+&lt;h3 id="___init___-function">&lt;em>&lt;strong>init&lt;/strong>()&lt;/em> Function
+&lt;/h3>&lt;p>All classes have a function called &lt;strong>init&lt;/strong>(), which is always executed when the class is being initiated. Use the &lt;strong>init&lt;/strong>() function to assign values to object properties, or other operations that are necessary to do when the object is being created&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="k">class&lt;/span> &lt;span class="nc">Person&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">def&lt;/span> &lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">age&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">name&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">name&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">age&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">age&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">p1&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">Person&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;John&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">36&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">p1&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">p1&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">age&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>Note:&lt;/p>
+&lt;p>The &lt;code>self&lt;/code> parameter is a reference to the current instance of the class, and is used to access variables that belong to the class.&lt;/p>
+&lt;p>It does not have to be named &lt;code>self&lt;/code> , you can call it whatever you like, but it has to be the first parameter of any function in the class&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="del">&lt;code>del&lt;/code>
+&lt;/h3>&lt;p>You can delete properties on objects or objects by using the &lt;code>del&lt;/code> keyword&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="k">del&lt;/span> &lt;span class="n">p1&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">age&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">del&lt;/span> &lt;span class="n">p1&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="inheritance">Inheritance
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="k">class&lt;/span> &lt;span class="nc">childClass&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">parentClass&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">def&lt;/span> &lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="o">...&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">parentClass&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="o">...&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">super&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="o">...&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>where &lt;code>super()&lt;/code> represent parentClass&lt;/p>
+&lt;h2 id="iterators">Iterators
+&lt;/h2>&lt;p>An iterator is an object that contains a countable number of values.&lt;/p>
+&lt;p>An iterator is an object that can be iterated upon, meaning that you can traverse through all the values.&lt;/p>
+&lt;p>Technically, in Python, an iterator is an object which implements the &lt;strong>iterator protocol&lt;/strong>, which consist of the methods &lt;code>__iter__()&lt;/code> and &lt;code>__next__()&lt;/code>.&lt;/p>
+&lt;h3 id="iterator-vs-iterable">Iterator vs Iterable
+&lt;/h3>&lt;p>Lists, tuples, dictionaries, and sets are all iterable objects. They are iterable &lt;em>containers&lt;/em> which you can get an iterator from.&lt;/p>
+&lt;p>All these objects have a &lt;code>iter()&lt;/code> method which is used to get an iterator&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">mytuple&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;apple&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;banana&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;cherry&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">myit&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">iter&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mytuple&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">next&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">myit&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">next&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">myit&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">next&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">myit&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The &lt;code>for&lt;/code> loop actually creates an iterator object and executes the next() method for each loop.&lt;/p>
+&lt;p>To create an object/class as an iterator you have to implement the methods &lt;code>__iter__()&lt;/code> and &lt;code>__next__()&lt;/code> to your object.&lt;/p>
+&lt;p>To prevent the iteration to go on forever, we can use the &lt;code>StopIteration&lt;/code> statement.&lt;/p>
+&lt;p>In the &lt;code>__next__()&lt;/code> method, we can add a terminating condition to raise an error if the iteration is done a specified number of times&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="k">class&lt;/span> &lt;span class="nc">MyNumbers&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">def&lt;/span> &lt;span class="fm">__iter__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">a&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="bp">self&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">def&lt;/span> &lt;span class="fm">__next__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">a&lt;/span> &lt;span class="o">&amp;lt;=&lt;/span> &lt;span class="mi">20&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">a&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">a&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="mi">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">x&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">raise&lt;/span> &lt;span class="ne">StopIteration&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="exception">Exception
+&lt;/h2>&lt;p>The &lt;code>try&lt;/code> block lets you test a block of code for errors.&lt;/p>
+&lt;p>The &lt;code>except&lt;/code> block lets you handle the error.&lt;/p>
+&lt;p>The &lt;code>else&lt;/code> block lets you execute code when there is no error.&lt;/p>
+&lt;p>The &lt;code>finally&lt;/code> block lets you execute code, regardless of the result of the try- and except blocks.&lt;/p>
+&lt;p>To throw (or raise) an exception, use the &lt;code>raise&lt;/code> keyword.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="k">try&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">raise&lt;/span> &lt;span class="n">SomeException&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">except&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">else&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">finally&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="user-input">User Input
+&lt;/h2>&lt;p>Python allows for user input.&lt;/p>
+&lt;p>That means we are able to ask the user for input.&lt;/p>
+&lt;p>The method is a bit different in Python 3.6 than Python 2.7.&lt;/p>
+&lt;p>Python 3.6 uses the &lt;code>input()&lt;/code> method.&lt;/p>
+&lt;p>Python 2.7 uses the &lt;code>raw_input()&lt;/code> method.&lt;/p>
+&lt;h2 id="string-formatting-by-format">String Formatting by &lt;code>format()&lt;/code>
+&lt;/h2>&lt;p>The &lt;code>format()&lt;/code> method allows you to format selected parts of a string.&lt;/p>
+&lt;p>To control such values, add placeholders (curly brackets &lt;code>{}&lt;/code>) in the text, and run the values through the &lt;code>format()&lt;/code> method&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;The price is &lt;/span>&lt;span class="si">{}&lt;/span>&lt;span class="s2"> dollars&amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">format&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">price&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="index-numbers">Index Numbers
+&lt;/h3>&lt;p>You can use index numbers (a number inside the curly brackets &lt;code>{0}&lt;/code>) to be sure the values are placed in the correct placeholders&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="s2">&amp;#34;I want &lt;/span>&lt;span class="si">{0}&lt;/span>&lt;span class="s2"> pieces of item number &lt;/span>&lt;span class="si">{1}&lt;/span>&lt;span class="s2"> for &lt;/span>&lt;span class="si">{2:.2f}&lt;/span>&lt;span class="s2"> dollars.&amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">format&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">quantity&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">itemno&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">price&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>if you want to refer to the same value more than once, use the index number.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="s2">&amp;#34;His name is &lt;/span>&lt;span class="si">{1}&lt;/span>&lt;span class="s2">. &lt;/span>&lt;span class="si">{1}&lt;/span>&lt;span class="s2"> is &lt;/span>&lt;span class="si">{0}&lt;/span>&lt;span class="s2"> years old.&amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">format&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">age&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="named-indexes">Named Indexes
+&lt;/h3>&lt;p>You can also use named indexes by entering a name inside the curly brackets &lt;code>{carname}&lt;/code>, but then you must use names when you pass the parameter values &lt;code>txt.format(carname = &amp;quot;Ford&amp;quot;)&lt;/code>&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="s2">&amp;#34;I have a &lt;/span>&lt;span class="si">{carname}&lt;/span>&lt;span class="s2">, it is a &lt;/span>&lt;span class="si">{model}&lt;/span>&lt;span class="s2">.&amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">format&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">carname&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;Ford&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">model&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;Mustang&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="file">File
+&lt;/h2>&lt;h3 id="open">Open
+&lt;/h3>&lt;p>The key function for working with files in Python is the &lt;code>open()&lt;/code> function.&lt;/p>
+&lt;p>The &lt;code>open()&lt;/code> function takes two parameters; &lt;em>filename&lt;/em>, and &lt;em>mode&lt;/em>.&lt;/p>
+&lt;p>There are four different methods (modes) for opening a file:&lt;/p>
+&lt;p>&lt;code>&amp;quot;r&amp;quot;&lt;/code> - Read - Default value. Opens a file for reading, error if the file does not exist&lt;/p>
+&lt;p>&lt;code>&amp;quot;a&amp;quot;&lt;/code> - Append - Opens a file for appending, creates the file if it does not exist&lt;/p>
+&lt;p>&lt;code>&amp;quot;w&amp;quot;&lt;/code> - Write - Opens a file for writing, creates the file if it does not exist&lt;/p>
+&lt;p>&lt;code>&amp;quot;x&amp;quot;&lt;/code> - Create - Creates the specified file, returns an error if the file exists&lt;/p>
+&lt;p>In addition you can specify if the file should be handled as binary or text mode&lt;/p>
+&lt;p>&lt;code>&amp;quot;t&amp;quot;&lt;/code> - Text - Default value. Text mode&lt;/p>
+&lt;p>&lt;code>&amp;quot;b&amp;quot;&lt;/code> - Binary - Binary mode (e.g. images)&lt;/p>
+&lt;h3 id="read">Read
+&lt;/h3>&lt;p>The &lt;code>open()&lt;/code> function returns a file object, which has a &lt;code>read()&lt;/code> method for reading the content of the file.&lt;/p>
+&lt;p>By default the &lt;code>read()&lt;/code> method returns the whole text, but you can also specify how many characters you want to return.&lt;/p>
+&lt;p>You can return one line by using the &lt;code>readline()&lt;/code> method.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">f&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">open&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;demofile.txt&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;r&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">f&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">read&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">f&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">read&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">5&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">f&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">readline&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>It is a good practice to always close the file when you are done with it.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">f&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">close&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="writecreate">Write/Create
+&lt;/h3>&lt;p>To write to an existing file, you must add a parameter to the &lt;code>open()&lt;/code> function:&lt;/p>
+&lt;p>&lt;code>&amp;quot;a&amp;quot;&lt;/code> - Append - will append to the end of the file&lt;/p>
+&lt;p>&lt;code>&amp;quot;w&amp;quot;&lt;/code> - Write - will overwrite any existing content&lt;/p>
+&lt;p>To create a new file in Python, use the &lt;code>open()&lt;/code> method, with one of the following parameters:&lt;/p>
+&lt;p>&lt;code>&amp;quot;x&amp;quot;&lt;/code> - Create - will create a file, returns an error if the file exist&lt;/p>
+&lt;p>&lt;code>&amp;quot;a&amp;quot;&lt;/code> - Append - will create a file if the specified file does not exist&lt;/p>
+&lt;p>&lt;code>&amp;quot;w&amp;quot;&lt;/code> - Write - will create a file if the specified file does not exist&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">f&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">open&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;demofile3.txt&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;w&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">f&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">write&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Woops! I have deleted the content!&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="delete">Delete
+&lt;/h3>&lt;p>To delete a file, you must import the OS module, and run its &lt;code>os.remove()&lt;/code> function.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span> &lt;span class="nn">os&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">if&lt;/span> &lt;span class="n">os&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">path&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">exists&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;demofile.txt&amp;#34;&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">os&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">remove&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;demofile.txt&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">else&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;The file does not exist&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>To delete an entire folder, use the &lt;code>os.rmdir()&lt;/code> method:&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-pyt" data-lang="pyt">import os
+os.rmdir(&amp;#34;myfolder&amp;#34;)
+&lt;/code>&lt;/pre>&lt;blockquote>
+&lt;p>&lt;strong>Note:&lt;/strong> You can only remove &lt;em>empty&lt;/em> folders.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="module">Module
+&lt;/h2>&lt;p>Consider a module to be the same as a code library.&lt;/p>
+&lt;p>A file containing a set of functions you want to include in your application.&lt;/p>
+&lt;p>we can use a module by using the &lt;code>import&lt;/code> statement&lt;/p>
+&lt;p>You can name the module file whatever you like, but it must have the file extension &lt;code>.py&lt;/code>&lt;/p>
+&lt;p>You can create an alias when you import a module, by using the &lt;code>as&lt;/code> keyword&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span> &lt;span class="nn">mymodule&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="nn">mx&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>&lt;strong>Note:&lt;/strong> When importing using the &lt;code>from&lt;/code> keyword, do not use the module name when referring to elements in the module. Example: &lt;code>person1[&amp;quot;age&amp;quot;]&lt;/code>, &lt;strong>not&lt;/strong> &lt;code>mymodule.person1[&amp;quot;age&amp;quot;]&lt;/code>&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="dir">&lt;code>dir()&lt;/code>
+&lt;/h3>&lt;p>The &lt;code>dir()&lt;/code> function is a built-in function to list all the function names (or variable names) in a module.&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;strong>Note:&lt;/strong> The dir() function can be used on &lt;em>all&lt;/em> modules, also the ones you create yourself.&lt;/p>
+&lt;/blockquote></description></item></channel></rss>

@@ -1,0 +1,1142 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>文武艺 on 飞鸿踏雪泥</title><link>https://dyhes.github.io/categories/arts/</link><description>Recent content in 文武艺 on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 29 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://dyhes.github.io/categories/arts/index.xml" rel="self" type="application/rss+xml"/><item><title>【Interview】前端研发岗</title><link>https://dyhes.github.io/p/interview%E5%89%8D%E7%AB%AF%E7%A0%94%E5%8F%91%E5%B2%97/</link><pubDate>Sun, 29 Oct 2023 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/interview%E5%89%8D%E7%AB%AF%E7%A0%94%E5%8F%91%E5%B2%97/</guid><description>&lt;h2 id="1-momenta">1-Momenta
+&lt;/h2>&lt;ol>
+&lt;li>
+&lt;p>react通信&lt;/p>
+&lt;ol>
+&lt;li>父组件向子组件传递props，callback&lt;/li>
+&lt;li>子组件通过event向父组件发送消息&lt;/li>
+&lt;li>context&lt;/li>
+&lt;li>兄弟：将state提升到父组件&lt;/li>
+&lt;li>Global Variables(localStorage)&lt;/li>
+&lt;li>完全不相关：observer pattern&lt;/li>
+&lt;/ol>
+&lt;p>vs. Vue&lt;/p>
+&lt;ul>
+&lt;li>provide / inject&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>react diff算法&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>算法&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>eventloop&lt;/p>
+&lt;p>同步 call stack&lt;/p>
+&lt;p>异步 callback queues&lt;/p>
+&lt;p>当call stack为空时，&lt;/p>
+&lt;p>一个tick&lt;/p>
+&lt;ol>
+&lt;li>deque and run the oldest task from macrotask queue (dom event, ajax, setTimeOut, setInterval)&lt;/li>
+&lt;li>execute all microtasks (Promises aync/await)&lt;/li>
+&lt;li>render changes if any&lt;/li>
+&lt;li>wait if macrotask queue is empty&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;li>
+&lt;p>编译原理&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>闲聊etc.&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="2-bytedance">2-ByteDance
+&lt;/h2>&lt;ol>
+&lt;li>
+&lt;p>项目&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>SSR渲染&lt;/p>
+&lt;p>rendering web pages on the server and sending fully rendered HTML pages to the client for display&lt;/p>
+&lt;p>csr: web pages are constructed in the browser using javascript&lt;/p>
+&lt;p>benefit:&lt;/p>
+&lt;ul>
+&lt;li>seo: search engine optimization&lt;/li>
+&lt;li>performance&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>eventloop&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>var let const&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>arrow function 和 普通函数的区别&lt;/p>
+&lt;ol>
+&lt;li>不能Generator函数，不能使用yeild关键字。&lt;/li>
+&lt;li>箭头函数不具有&lt;strong>prototype&lt;/strong>&lt;/li>
+&lt;li>箭头函数不具有super&lt;/li>
+&lt;li>箭头函数不具有new.target，不能作为构造函数使用&lt;/li>
+&lt;li>&lt;strong>箭头函数不会创建自己的this&lt;/strong>，&lt;strong>call | apply | bind 无法改变箭头函数中this的指向&lt;/strong>&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;li>
+&lt;p>闭包及其运用&lt;/p>
+&lt;p>内嵌的函数及它的lexical scoping&lt;/p>
+&lt;p>private method&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>继承（vs. Java）&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>react和vue的区别&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>TCP三次握手&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="3-好未来学而思">3-好未来（学而思）
+&lt;/h2>&lt;ol>
+&lt;li>
+&lt;p>语义化&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>inline和block&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>script defer和async&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Array的原型链&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>构造函数 prototype 实例&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>盒模型 IE和standard box-sizing&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>flex实现水平垂直居中&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>flex属性&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>HTTP caching&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>vue组件通信&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>scope 闭包 外访问内&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>OSI模型&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>DNS&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>HTTP缓存&lt;/p>
+&lt;p>heuristic caching: as much as possible&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>private cache&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>shared cache&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>proxy caches&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>managed caches&lt;/p>
+&lt;p>cdn等等&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>// if both are available max-age is preferred
+Expires: Tue, 28 Feb 2022 22:22:22 GMT (HTTP/1.0)
+Cache-Control: max-age = 604800(sec = 1 week) (HTTP/1.1)
+&lt;/code>&lt;/pre>&lt;p>Vary: Accept-Language&lt;/p>
+&lt;p>revalidation: transform a stale response into a fresh one by asking the origin server, done by conditional request&lt;/p>
+&lt;pre tabindex="0">&lt;code>If-Modified-Since
+If-None-Match ETag
+&lt;/code>&lt;/pre>&lt;/li>
+&lt;li>
+&lt;p>HTTPS&lt;/p>
+&lt;p>use TLS(transport layer security) to encrypt all communication (ssl = secure sockets layer, old standard security technology, v3.0 Netscape 1996)&lt;/p>
+&lt;p>TLS handshake&lt;/p>
+&lt;p>TCP +&lt;/p>
+&lt;p>1）客户端发起一个http请求，告诉服务器自己支持哪些hash算法。&lt;/p>
+&lt;p>2）服务端把自己的信息以数字证书的形式返回给客户端（证书内容有密钥公钥，网站地址，证书颁发机构，失效日期等）。证书中有一个公钥来加密信息，私钥由服务器持有。&lt;/p>
+&lt;p>3）验证证书的合法性&lt;/p>
+&lt;p>客户端收到服务器的响应后会先验证证书的合法性（证书中包含的地址与正在访问的地址是否一致，证书是否过期）。&lt;/p>
+&lt;p>4）生成随机密码（RSA签名）&lt;/p>
+&lt;p>如果验证通过，或用户接受了不受信任的证书，浏览器就会生成一个随机的对称密钥（session key）（随机数）并用公钥加密，让服务端用私钥解密，解密后就用这个对称密钥进行传输了，并且能够说明服务端确实是私钥的持有者。（服务端并不是真的加密这个字符串，而是把字符串进行hash计算后再进行加密后发送给客户端。客户端收到后再解密这个hash值与原来字符串的hash值对比，从而确定对方是否持有私钥。）&lt;/p>
+&lt;p>5）生成对称加密算法&lt;/p>
+&lt;p>验证完服务端身份后，客户端生成一个对称加密的算法和对应密钥，以公钥加密之后发送给服务端。此时被黑客截获也没用，因为只有服务端的私钥才可以对其进行解密。之后客户端与服务端可以用这个对称加密算法来加密和解密通信内容了。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>跨域解决方法&lt;/p>
+&lt;p>同源：协议/主机/端口&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>CORS&lt;/p>
+&lt;p>Preflight request: 一个 CORS 预检请求是用于检查服务器是否支持 &lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Glossary/CORS" target="_blank" rel="noopener"
+>CORS&lt;/a> 即跨域资源共享。&lt;/p>
+&lt;p>它一般是用了以下几个 HTTP 请求首部的 &lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods/OPTIONS" target="_blank" rel="noopener"
+>&lt;code>OPTIONS&lt;/code>&lt;/a> 请求：&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Access-Control-Request-Method" target="_blank" rel="noopener"
+>&lt;code>Access-Control-Request-Method&lt;/code>&lt;/a> 和 &lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Access-Control-Request-Headers" target="_blank" rel="noopener"
+>&lt;code>Access-Control-Request-Headers&lt;/code>&lt;/a>，以及一个 &lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Origin" target="_blank" rel="noopener"
+>&lt;code>Origin&lt;/code>&lt;/a> 首部&lt;/p>
+&lt;pre tabindex="0">&lt;code>Access-Control-Allow-Origin
+Access-Control-Allow-Methods
+Access-Control-Allow-Headers
+Access-Control-Allow-Credentials = true
+Access-Control-Expose-Headers 允许服务器指示那些响应标头可以暴露给浏览器中运行的脚本，以响应跨源请求。
+Access-Control-Max-Age indicates how long the results of a preflight request can be cached
+&lt;/code>&lt;/pre>&lt;p>By default, in cross-origin XMLHttpRequest or Fetch invocations, browsers will not send credentials. CORS-preflight requests must never include credentials. When responding to a credentialed request: The server &lt;strong>must not&lt;/strong> specify the &amp;ldquo;&lt;code>*&lt;/code>&amp;rdquo; wildcard for other related headers&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>jsonp&lt;/p>
+&lt;p>利用了 script 不受同源策略的限制 （脚本的来源取决于脚本所嵌入的资源的来源，比如说访问A主机的当前HTML文件中有一个script标签，这个script标签的src属性请求了一个js脚本，&lt;strong>因为这个脚本是由A主机的HTML文件的嵌入的script标签发起请求获取的&lt;/strong>，因此这个脚本的来源是属于A主机的。)&lt;/p>
+&lt;p>通过动态添加&lt;code>&amp;lt;script&amp;gt;&lt;/code>元素，向服务器发出请求&lt;/p>
+&lt;p>缺点：只能 get 方式，易受到 XSS攻击&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>代理跨域请求(Nginx)&lt;/p>
+&lt;p>前端向发送请求，经过代理，请求需要的服务器资源&lt;/p>
+&lt;p>缺点：需要额外的代理服务器&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Html5 window.postMessage() 方法&lt;/p>
+&lt;p>safely enables cross-origin communication between window objects&lt;/p>
+&lt;p>允许来自不同源的脚本采用异步方式进行有限的通信，可以实现跨文本、多窗口、跨域消息传递&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>基于 Html5 websocket 协议&lt;/p>
+&lt;p>websocket 是 Html5 一种新的协议，基于该协议可以做到浏览器与服务器全双工通信，允许跨域请求&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>修改 document.domain 跨子域&lt;/p>
+&lt;p>相同主域名下的不同子域名资源，设置 document.domain 为 相同的一级域名&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="-比特大陆">-比特大陆
+&lt;/h2>&lt;ol>
+&lt;li>
+&lt;p>水平垂直居中&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;pre tabindex="0">&lt;code>{
+display: flex,
+align-items: center,
+justify-content: center
+}
+&lt;/code>&lt;/pre>&lt;/li>
+&lt;li>
+&lt;p>绝对定位 + margin: auto&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>绝对定位 + 负margin（宽高一半）&lt;/p>
+&lt;pre tabindex="0">&lt;code>{
+position: absolute,
+top: 50%,
+left: 50%,
+margin-left: - width/2
+margin-top: - height/2
+}
+&lt;/code>&lt;/pre>&lt;/li>
+&lt;li>
+&lt;p>绝对定位 + transform&lt;/p>
+&lt;pre tabindex="0">&lt;code>{
+position: absolute,
+top: 50%,
+left: 50%,
+transform: translate(-50%, -50%)
+}
+&lt;/code>&lt;/pre>&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;li>
+&lt;p>ES6新特性&lt;/p>
+&lt;ol>
+&lt;li>const let&lt;/li>
+&lt;li>arrow function&lt;/li>
+&lt;li>module&lt;/li>
+&lt;li>template string&lt;/li>
+&lt;li>default paramter&lt;/li>
+&lt;li>spead/rest&lt;/li>
+&lt;li>destructuring&lt;/li>
+&lt;li>class&lt;/li>
+&lt;li>symbol&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;li>
+&lt;p>react和vue区别&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>react class component和function component区别&lt;/p>
+&lt;p>&lt;strong>class组件是有状态的组件，可以定义state状态。 函数组件是无状态的。 class组件有生命周期。 函数组件没有生命周期，函数组件使用的是Hooks。 class组件是有this对象的&lt;/strong>。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>react diff算法&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>react和vue diff算法的区别&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>scope 闭包&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>react hooks&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>useEffect&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>useReducer&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>css flex&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>虚拟列表&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>深拷贝、浅拷贝区别 实现&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>跳出forEach&lt;/p>
+&lt;p>throw Exception&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="5-滴滴">5-滴滴
+&lt;/h2>&lt;ol>
+&lt;li>
+&lt;p>虚拟DOM树的本质和作用&lt;/p>
+&lt;p>本质：JS和dom之间的映射缓存&lt;/p>
+&lt;p>作用：实现DOM元素的高效更新&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>HTTP缓存 Header&lt;/p>
+&lt;p>Cache-Control&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>防抖、节流 概念实现&lt;/p>
+&lt;p>防抖（debounce)：n 秒后在执行该事件，若在 n 秒内被重复触发，则重新计时&lt;/p>
+&lt;p>节流（throttle）: n 秒内只运行一次，若在 n 秒内重复触发，只有一次生效&lt;/p>
+&lt;p>想象每天上班大厦底下的电梯。把电梯完成一次运送，类比为一次函数的执行和响应&lt;/p>
+&lt;p>假设电梯有两种运行策略 &lt;code>debounce&lt;/code> 和 &lt;code>throttle&lt;/code>，超时设定为15秒，不考虑容量限制&lt;/p>
+&lt;p>电梯第一个人进来后，15秒后准时运送一次，这是节流&lt;/p>
+&lt;p>电梯第一个人进来后，等待15秒。如果过程中又有人进来，15秒等待重新计时，直到15秒后开始运送，这是防抖&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Map的使用&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>这场面试一上来就是几个当时一点都不会的问题，直接大破防放弃面试，但是面试官人很好，还给了我“克服腼腆，提高沟通交流能力“的建议&lt;/p>
+&lt;h2 id="6-thunderbit">6-ThunderBit
+&lt;/h2>&lt;p>消息订阅模式&lt;/p>
+&lt;p>初创公司，创始人都有美国大厂背景，挺有人格魅力的，可惜没去成&lt;/p>
+&lt;h2 id="7-鳄梨科技">7-鳄梨科技
+&lt;/h2>&lt;p>笔试&lt;/p>
+&lt;ol>
+&lt;li>层叠上下文（stacking context)&lt;/li>
+&lt;/ol>
+&lt;ul>
+&lt;li>文档根元素（&lt;code>&amp;lt;html&amp;gt;&lt;/code>）；&lt;/li>
+&lt;li>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/position" target="_blank" rel="noopener"
+>&lt;code>position&lt;/code>&lt;/a> 值为 &lt;code>absolute&lt;/code>（绝对定位）或 &lt;code>relative&lt;/code>（相对定位）且 &lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/z-index" target="_blank" rel="noopener"
+>&lt;code>z-index&lt;/code>&lt;/a> 值不为 &lt;code>auto&lt;/code> 的元素；&lt;/li>
+&lt;li>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/position" target="_blank" rel="noopener"
+>&lt;code>position&lt;/code>&lt;/a> 值为 &lt;code>fixed&lt;/code>（固定定位）或 &lt;code>sticky&lt;/code>（粘滞定位）的元素（沾滞定位适配所有移动设备上的浏览器，但老的桌面浏览器不支持）；&lt;/li>
+&lt;li>flex (&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/flex" target="_blank" rel="noopener"
+>&lt;code>flex&lt;/code>&lt;/a>) 容器的子元素，且 &lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/z-index" target="_blank" rel="noopener"
+>&lt;code>z-index&lt;/code>&lt;/a> 值不为 &lt;code>auto&lt;/code>；&lt;/li>
+&lt;li>grid (&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/grid" target="_blank" rel="noopener"
+>&lt;code>grid&lt;/code>&lt;/a>) 容器的子元素，且 &lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/z-index" target="_blank" rel="noopener"
+>&lt;code>z-index&lt;/code>&lt;/a> 值不为 &lt;code>auto&lt;/code>；&lt;/li>
+&lt;li>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/opacity" target="_blank" rel="noopener"
+>&lt;code>opacity&lt;/code>&lt;/a> 属性值小于 &lt;code>1&lt;/code> 的元素（参见 &lt;a class="link" href="https://www.w3.org/TR/css3-color/#transparency" target="_blank" rel="noopener"
+>the specification for opacity&lt;/a>）；&lt;/li>
+&lt;li>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/mix-blend-mode" target="_blank" rel="noopener"
+>&lt;code>mix-blend-mode&lt;/code>&lt;/a> 属性值不为 &lt;code>normal&lt;/code> 的元素；&lt;/li>
+&lt;li>以下任意属性值不为none的元素：
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/transform" target="_blank" rel="noopener"
+>&lt;code>transform&lt;/code>&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/filter" target="_blank" rel="noopener"
+>&lt;code>filter&lt;/code>&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/backdrop-filter" target="_blank" rel="noopener"
+>&lt;code>backdrop-filter&lt;/code>&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/perspective" target="_blank" rel="noopener"
+>&lt;code>perspective&lt;/code>&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/clip-path" target="_blank" rel="noopener"
+>&lt;code>clip-path&lt;/code>&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/mask" target="_blank" rel="noopener"
+>&lt;code>mask&lt;/code>&lt;/a> / &lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/mask-image" target="_blank" rel="noopener"
+>&lt;code>mask-image&lt;/code>&lt;/a> / &lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/mask-border" target="_blank" rel="noopener"
+>&lt;code>mask-border&lt;/code>&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/isolation" target="_blank" rel="noopener"
+>&lt;code>isolation&lt;/code>&lt;/a> 属性值为 &lt;code>isolate&lt;/code> 的元素；&lt;/li>
+&lt;li>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/will-change" target="_blank" rel="noopener"
+>&lt;code>will-change&lt;/code>&lt;/a> 值设定了任一属性而该属性在 non-initial 值时会创建层叠上下文的元素（参考&lt;a class="link" href="https://dev.opera.com/articles/css-will-change-property/" target="_blank" rel="noopener"
+>这篇文章&lt;/a>）；&lt;/li>
+&lt;li>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain" target="_blank" rel="noopener"
+>&lt;code>contain&lt;/code>&lt;/a> 属性值为 &lt;code>layout&lt;/code>、&lt;code>paint&lt;/code> 或包含它们其中之一的合成值（比如 &lt;code>contain: strict&lt;/code>、&lt;code>contain: content&lt;/code>）的元素。&lt;/li>
+&lt;/ul>
+&lt;ol start="2">
+&lt;li>content, padding, border, margin&lt;/li>
+&lt;/ol>
+&lt;h2 id="8-网易">8-网易
+&lt;/h2>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>强缓存与协商缓存&lt;/strong>的区别&lt;/p>
+&lt;p>强缓存：浏览器不与服务端协商直接取浏览器缓存&lt;/p>
+&lt;p>协商缓存：浏览器会先向服务器确认资源的有效性后才决定是从缓存中取资源还是重新获取资源 (304 Not Modified)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>react生命周期&lt;img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a7d8676f379d4d96bbf0ebd9a8528594~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp"
+loading="lazy"
+alt="img"
+>&lt;/p>
+&lt;p>挂载&lt;/p>
+&lt;ul>
+&lt;li>constructor&lt;/li>
+&lt;li>getDerivedStateFromProps&lt;/li>
+&lt;li>render&lt;/li>
+&lt;li>componentDidMount&lt;/li>
+&lt;/ul>
+&lt;p>更新&lt;/p>
+&lt;ul>
+&lt;li>getDerivedStateFromProps&lt;/li>
+&lt;li>shouldComponentUpdate&lt;/li>
+&lt;li>render&lt;/li>
+&lt;li>getSnapshotBeforeUpdate&lt;/li>
+&lt;li>componentDidUpdate&lt;/li>
+&lt;/ul>
+&lt;p>卸载&lt;/p>
+&lt;ul>
+&lt;li>componentWillUnmount&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>http响应码&lt;/p>
+&lt;ol>
+&lt;li>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status#%e4%bf%a1%e6%81%af%e5%93%8d%e5%ba%94" target="_blank" rel="noopener"
+>信息响应&lt;/a> (&lt;code>100&lt;/code>–&lt;code>199&lt;/code>)&lt;/li>
+&lt;li>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status#%e6%88%90%e5%8a%9f%e5%93%8d%e5%ba%94" target="_blank" rel="noopener"
+>成功响应&lt;/a> (&lt;code>200&lt;/code>–&lt;code>299&lt;/code>)&lt;/li>
+&lt;li>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status#%e9%87%8d%e5%ae%9a%e5%90%91%e6%b6%88%e6%81%af" target="_blank" rel="noopener"
+>重定向消息&lt;/a> (&lt;code>300&lt;/code>–&lt;code>399&lt;/code>)&lt;/li>
+&lt;li>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status#%e5%ae%a2%e6%88%b7%e7%ab%af%e9%94%99%e8%af%af%e5%93%8d%e5%ba%94" target="_blank" rel="noopener"
+>客户端错误响应&lt;/a> (&lt;code>400&lt;/code>–&lt;code>499&lt;/code>)&lt;/li>
+&lt;li>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status#%e6%9c%8d%e5%8a%a1%e7%ab%af%e9%94%99%e8%af%af%e5%93%8d%e5%ba%94" target="_blank" rel="noopener"
+>服务端错误响应&lt;/a> (&lt;code>500&lt;/code>–&lt;code>599&lt;/code>)&lt;/li>
+&lt;/ol>
+&lt;p>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/201" target="_blank" rel="noopener"
+>&lt;code>201 Created&lt;/code>&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/202" target="_blank" rel="noopener"
+>&lt;code>202 Accepted&lt;/code>&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/204" target="_blank" rel="noopener"
+>&lt;code>204 No Content&lt;/code>&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/301" target="_blank" rel="noopener"
+>&lt;code>301 Moved Permanently&lt;/code>&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/307" target="_blank" rel="noopener"
+>&lt;code>307 Temporary Redirect&lt;/code>&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/308" target="_blank" rel="noopener"
+>&lt;code>308 Permanent Redirect&lt;/code>&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/400" target="_blank" rel="noopener"
+>&lt;code>400 Bad Request&lt;/code>&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/403" target="_blank" rel="noopener"
+>&lt;code>403 Forbidden&lt;/code>&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/404" target="_blank" rel="noopener"
+>&lt;code>404 Not Found&lt;/code>&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/405" target="_blank" rel="noopener"
+>&lt;code>405 Method Not Allowed&lt;/code>&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/408" target="_blank" rel="noopener"
+>&lt;code>408 Request Timeout&lt;/code>&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/500" target="_blank" rel="noopener"
+>&lt;code>500 Internal Server Error&lt;/code>&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/501" target="_blank" rel="noopener"
+>&lt;code>501 Not Implemented&lt;/code>&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/502" target="_blank" rel="noopener"
+>&lt;code>502 Bad Gateway&lt;/code>&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/503" target="_blank" rel="noopener"
+>&lt;code>503 Service Unavailable&lt;/code>&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/504" target="_blank" rel="noopener"
+>&lt;code>504 Gateway Timeout&lt;/code>&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>深拷贝浅拷贝&lt;/p>
+&lt;p>深拷贝实现&lt;/p>
+&lt;p>堆上新建了一份对象&lt;/p>
+&lt;ul>
+&lt;li>递归&lt;/li>
+&lt;li>序列化与反序列化&lt;/li>
+&lt;li>structuredClone(value, options)&lt;/li>
+&lt;/ul>
+&lt;p>浅拷贝实现&lt;/p>
+&lt;p>原生 赋值 对象 复制内存地址&lt;/p>
+&lt;p>Object.assign()&lt;/p>
+&lt;p>const let&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>数组&lt;/p>
+&lt;p>splice 原地，可新加（相当于unshift)&lt;/p>
+&lt;p>slice 新数组, 返回切出来的部分&lt;/p>
+&lt;pre tabindex="0">&lt;code>splice(start)
+splice(start, deleteCount)
+splice(start, deleteCount, item1)
+splice(start, deleteCount, item1, item2)
+splice(start, deleteCount, item1, item2, /* …, */ itemN)
+slice()
+slice(start)
+slice(start, end)
+&lt;/code>&lt;/pre>&lt;/li>
+&lt;li>
+&lt;p>flex gap&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>css 画三角形&lt;/p>
+&lt;p>​ border实现&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-css" data-lang="css">&lt;span class="line">&lt;span class="cl">&lt;span class="p">.&lt;/span>&lt;span class="nc">triangle&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">width&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">height&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">border&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">100&lt;/span>&lt;span class="kt">px&lt;/span> &lt;span class="kc">solid&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">border-color&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="kc">orangered&lt;/span> &lt;span class="kc">skyblue&lt;/span> &lt;span class="kc">gold&lt;/span> &lt;span class="kc">yellowgreen&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>三个方向设置透明一个方向设置颜色&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>盒模型&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>animation vs. transition&lt;/p>
+&lt;p>他们虽然都可以做出动画效果，但是transition主要做简单的过渡效果，而animation可以做复杂的动画效果，在语法和用法上有非常大的区别。&lt;/p>
+&lt;p>transition是过渡属性，强调过渡，他的实现需要触发一个事件（比如鼠标移动上去，焦点，点击等）才执行动画，过渡只有一组（两个：开始-结束）关键帧。&lt;/p>
+&lt;p>animation是动画属性，他的实现不需要触发事件，设定好时间之后可以自己执行，且可以循环一个动画（设置多个关键帧）。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>v-if, v-show&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>ref, reactive&lt;/p>
+&lt;ol>
+&lt;li>&lt;code>ref()&lt;/code> 函数可以接受&lt;a class="link" href="https://link.juejin.cn/?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FGlossary%2FPrimitive" target="_blank" rel="noopener"
+>原始类型&lt;/a>（最常见的是布尔值、字符串和数字）以及对象作为参数，而 &lt;code>reactive()&lt;/code> 函数只能接受对象作为参数。&lt;/li>
+&lt;li>&lt;code>ref()&lt;/code> 有一个 &lt;code>.value&lt;/code> 属性，你必须使用 &lt;code>.value&lt;/code> 属性获取内容，但是使用 &lt;code>reactive()&lt;/code> 的话可以直接访问&lt;/li>
+&lt;li>使用 &lt;code>ref()&lt;/code> 函数可以替换整个对象实例，但是在使用 &lt;code>reactive()&lt;/code> 函数时就不行&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;li>
+&lt;p>响应码处理&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>伪类 伪元素&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>instanceof&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>hash 模式&lt;/p>
+&lt;p>hash 模式是一种把前端路由的路径用井号 &lt;code>#&lt;/code> 拼接在真实 URL 后面的模式。当井号 &lt;code>#&lt;/code> 后面的路径发生变化时，浏览器并不会重新发起请求，而是会触发 &lt;code>hashchange&lt;/code> 事件。&lt;/p>
+&lt;p>history 模式&lt;/p>
+&lt;p>history API 是 H5 提供的新特性，允许开发者直接更改前端路由，即更新浏览器 URL 地址而不重新发起请求。&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>二面因拿到百度offer放弃&lt;/p>
+&lt;h2 id="9-迈步科技">9-迈步科技
+&lt;/h2>&lt;ol>
+&lt;li>
+&lt;p>输入网址到页面呈现的过程&lt;/p>
+&lt;p>URL解析：浏览器解析输入的URL，提取出协议、主机、端口、路径等信息。&lt;/p>
+&lt;p>DNS解析：浏览器使用主机名查询DNS服务器，获取对应的IP地址。&lt;/p>
+&lt;p>建立TCP连接：浏览器使用获取到的IP地址和端口号，与服务器建立TCP连接。这涉及到三次握手的过程。&lt;/p>
+&lt;p>发送HTTP请求：一旦TCP连接建立，浏览器向服务器发送HTTP请求。请求的内容包括请求方法、请求头和请求体。&lt;/p>
+&lt;p>服务器处理请求：服务器接收到浏览器发送的HTTP请求后，根据请求的路径和参数，处理请求并准备响应。&lt;/p>
+&lt;p>服务器返回响应：服务器根据请求的处理结果，生成相应的HTTP响应。响应的内容包括响应状态码、响应头和响应体。&lt;/p>
+&lt;p>接收响应：浏览器接收到服务器返回的HTTP响应。&lt;/p>
+&lt;p>渲染页面：浏览器开始解析接收到的响应内容，构建DOM树、CSSOM树和渲染树。然后进行布局和绘制，最终将页面呈现在屏幕上。&lt;/p>
+&lt;p>页面展示：页面渲染完成后，浏览器将页面展示给用户，用户可以看到页面内容并与页面进行交互。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>cookie和session的区别&lt;/p>
+&lt;p>&lt;strong>1. Session :&lt;/strong>
+A session is used to save information on the &lt;strong>server&lt;/strong> momentarily so that it may be utilized across various pages of the website. It is the overall amount of time spent on an activity. The user session begins when the user logs in to a specific network application and ends when the user logs out of the program or shuts down the machine.&lt;/p>
+&lt;p>Session values are far more &lt;strong>secure&lt;/strong> since they are saved in binary or encrypted form and can only be decoded at the server. When the user shuts down the machine or logs out of the program, the session values are automatically deleted. We must save the values in the database to keep them forever.&lt;/p>
+&lt;p>&lt;strong>2. Cookie :&lt;/strong>
+A cookie is a small text file that is saved on the &lt;strong>user’s&lt;/strong> computer. The maximum file size for a cookie is 4KB. It is also known as an HTTP cookie, a web cookie, or an internet cookie. When a user first visits a website, the site sends data packets to the user’s computer in the form of a cookie.&lt;/p>
+&lt;p>The information stored in cookies is &lt;strong>not safe&lt;/strong> since it is kept on the client-side in a text format that anybody can see. We can activate or disable cookies based on our needs.&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>Cookie&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Session&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Cookies are client-side files on a local computer that hold user information.&lt;/td>
+&lt;td>Sessions are server-side files that contain user data.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Cookies end on the lifetime set by the user.&lt;/td>
+&lt;td>When the user quits the browser or logs out of the programmed, the session is over.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>It can only store a certain amount of info.&lt;/td>
+&lt;td>It can hold an indefinite quantity of data.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>The browser’s cookies have a maximum capacity of 4 KB.&lt;/td>
+&lt;td>We can keep as much data as we like within a session, however there is a maximum memory restriction of 128 MB that a script may consume at one time.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Because cookies are kept on the local computer, we don’t need to run a function to start them.&lt;/td>
+&lt;td>To begin the session, we must use the session start() method.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Cookies are not secured.&lt;/td>
+&lt;td>Session are more secured compare than cookies.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Cookies stored data in text file.&lt;/td>
+&lt;td>Session save data in encrypted form.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Cookies stored on a limited data.&lt;/td>
+&lt;td>Session stored a unlimited data.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>We can set an expiration date to delete the cookie’s data. It will automatically delete the data at that specific time.&lt;/td>
+&lt;td>In PHP, to destroy or remove the data stored within a session, we can use the session_destroy() function, and to unset a specific variable, we can use the unset() function&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>具体来说cookie机制采用的是在客户端保持状态的方案，而session机制采用的是在服务器端保持状态的方案。&lt;/p>
+&lt;p>同时我们也看到，由于采用服务器端保持状态的方案在客户端也需要保存一个标识，所以session机制可能需要借助于cookie机制&lt;/p>
+&lt;p>来达到保存标识的目的，但实际上它还有其他选择。&lt;/p>
+&lt;p>cookie机制。正统的cookie分发是通过扩展HTTP协议来实现的，服务器通过在HTTP的响应头中加上一行特殊的指示以提示&lt;/p>
+&lt;p>浏览器按照指示生成相应的cookie。然而纯粹的客户端脚本如JavaScript或者VBScript也可以生成cookie。而cookie的使用&lt;/p>
+&lt;p>是由浏览器按照一定的原则在后台自动发送给服务器的。浏览器检查所有存储的cookie，如果某个cookie所声明的作用范围&lt;/p>
+&lt;p>大于等于将要请求的资源所在的位置，则把该cookie附在请求资源的HTTP请求头上发送给服务器。&lt;/p>
+&lt;pre tabindex="0">&lt;code>Set-Cookie: &amp;lt;cookie-name&amp;gt;=&amp;lt;cookie-value&amp;gt;
+Set-Cookie: &amp;lt;cookie-name&amp;gt;=&amp;lt;cookie-value&amp;gt;; Domain=&amp;lt;domain-value&amp;gt;
+Set-Cookie: &amp;lt;cookie-name&amp;gt;=&amp;lt;cookie-value&amp;gt;; Expires=&amp;lt;date&amp;gt;
+Set-Cookie: &amp;lt;cookie-name&amp;gt;=&amp;lt;cookie-value&amp;gt;; HttpOnly
+Set-Cookie: &amp;lt;cookie-name&amp;gt;=&amp;lt;cookie-value&amp;gt;; Max-Age=&amp;lt;number&amp;gt;
+Set-Cookie: &amp;lt;cookie-name&amp;gt;=&amp;lt;cookie-value&amp;gt;; Partitioned
+Set-Cookie: &amp;lt;cookie-name&amp;gt;=&amp;lt;cookie-value&amp;gt;; Path=&amp;lt;path-value&amp;gt;
+Set-Cookie: &amp;lt;cookie-name&amp;gt;=&amp;lt;cookie-value&amp;gt;; Secure
+Set-Cookie: &amp;lt;cookie-name&amp;gt;=&amp;lt;cookie-value&amp;gt;; SameSite=Strict
+Set-Cookie: &amp;lt;cookie-name&amp;gt;=&amp;lt;cookie-value&amp;gt;; SameSite=Lax
+Set-Cookie: &amp;lt;cookie-name&amp;gt;=&amp;lt;cookie-value&amp;gt;; SameSite=None; Secure
+// Multiple attributes are also possible, for example:
+Set-Cookie: &amp;lt;cookie-name&amp;gt;=&amp;lt;cookie-value&amp;gt;; Domain=&amp;lt;domain-value&amp;gt;; Secure; HttpOnly
+&lt;/code>&lt;/pre>&lt;p>&lt;strong>cookie的内容主要包括：名字，值，过期时间，路径和域&lt;/strong>。路径与域一起构成cookie的作用范围。若不设置过期时间，则表示这&lt;/p>
+&lt;p>个cookie的生命期为浏览器会话期间，关闭浏览器窗口，cookie就消失。这种生命期为浏览器会话期的cookie被称为会话cookie。&lt;/p>
+&lt;p>会话cookie一般不存储在硬盘上而是保存在内存里，当然这种行为并不是规范规定的。若设置了过期时间，浏览器就会把cookie&lt;/p>
+&lt;p>保存到硬盘上，关闭后再次打开浏览器，这些cookie仍然有效直到超过设定的过期时间。存储在硬盘上的cookie可以在不同的浏&lt;/p>
+&lt;p>览器进程间共享，比如两个IE窗口。而对于保存在内存里的cookie，不同的浏览器有不同的处理方式session机制。session机制是一种服务器端的机制，服务器使用一种类似于散列表的结构（也可能就是使用散列表）来保存信息。&lt;/p>
+&lt;p>​ 当程序需要为某个客户端的请求创建一个session时，服务器首先检查这个客户端的请求里是否已包含了一个session标识&lt;/p>
+&lt;p>（称为session id），如果已包含则说明以前已经为此客户端创建过session，服务器就按照session id把这个session检索出来&lt;/p>
+&lt;p>使用（检索不到，会新建一个），如果客户端请求不包含session id，则为此客户端创建一个session并且生成一个与此session相&lt;/p>
+&lt;p>关联的session id，session id的值应该是一个既不会重复，又不容易被找到规律以仿造的字符串，这个session id将被在本次响应&lt;/p>
+&lt;p>中返回给客户端保存。保存这个session id的方式可以采用cookie，这样在交互过程中浏览器可以自动的按照规则把这个标识发送给&lt;/p>
+&lt;p>服务器。一般这个cookie的名字都是类似于SEEESIONID。但cookie可以被人为的禁止，则必须有其他机制以便在cookie被禁止时&lt;/p>
+&lt;p>仍然能够把session id传递回服务器。经常被使用的一种技术叫做URL重写，就是把session id直接附加在URL路径的后面。还有一种技术叫做表单隐藏字段。就是服务器&lt;/p>
+&lt;p>会自动修改表单，添加一个隐藏字段，以便在表单提交时能够把session id传递回服务器。&lt;/p>
+&lt;p>Cookie总是保存在客户端中，按在客户端中的存储位置，可分为会话Cookie和持久Cookie&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>react生命周期&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>get和post区别&lt;/p>
+&lt;p>&lt;strong>（1）post更安全（不会作为url的一部分，不会被缓存、保存在服务器日志、以及浏览器浏览记录中） （2）post发送的数据更大（get有url长度限制） （3）post能发送更多的数据类型（get只能发送ASCII字符）&lt;/strong>&lt;/p>
+&lt;p>GET用于获取信息，是无副作用的，是幂等的，且可缓存POST用于修改&lt;a class="link" href="https://cloud.tencent.com/act/pro/promotion-cvm?from_column=20065&amp;amp;from=20065" target="_blank" rel="noopener"
+>服务器&lt;/a>上的数据，有副作用，非幂等，不可缓存&lt;/p>
+&lt;p>在约定中，GET方法的参数应该放在 url 中，POST方法参数应该放在 body 中&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>useState useRef&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Promise的理解&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>热加载 原理&lt;/p>
+&lt;p>webpack&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>git命令&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>linux命令&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>25匹马求最快的3匹&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>最近读的一本书&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="10-货拉拉">10-货拉拉
+&lt;/h2>&lt;ol>
+&lt;li>
+&lt;p>盒模型&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>position&lt;/p>
+&lt;p>是否在流里&lt;/p>
+&lt;p>absolute和fixed被移出flow&lt;/p>
+&lt;p>&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/position#static" target="_blank" rel="noopener"
+>&lt;code>static&lt;/code>&lt;/a>&lt;/p>
+&lt;p>The element is positioned according to the normal flow of the document. The &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/top" target="_blank" rel="noopener"
+>&lt;code>top&lt;/code>&lt;/a>, &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/right" target="_blank" rel="noopener"
+>&lt;code>right&lt;/code>&lt;/a>, &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/bottom" target="_blank" rel="noopener"
+>&lt;code>bottom&lt;/code>&lt;/a>, &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/left" target="_blank" rel="noopener"
+>&lt;code>left&lt;/code>&lt;/a>, and &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/z-index" target="_blank" rel="noopener"
+>&lt;code>z-index&lt;/code>&lt;/a> properties have &lt;em>no effect&lt;/em>. This is the default value.&lt;/p>
+&lt;p>&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/position#relative" target="_blank" rel="noopener"
+>&lt;code>relative&lt;/code>&lt;/a>&lt;/p>
+&lt;p>The element is positioned according to the normal flow of the document, and then offset &lt;em>relative to itself&lt;/em> based on the values of &lt;code>top&lt;/code>, &lt;code>right&lt;/code>, &lt;code>bottom&lt;/code>, and &lt;code>left&lt;/code>. The offset does not affect the position of any other elements; thus, the space given for the element in the page layout is the same as if position were &lt;code>static&lt;/code>.&lt;/p>
+&lt;p>This value creates a new &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_context" target="_blank" rel="noopener"
+>stacking context&lt;/a> when the value of &lt;code>z-index&lt;/code> is not &lt;code>auto&lt;/code>. Its effect on &lt;code>table-*-group&lt;/code>, &lt;code>table-row&lt;/code>, &lt;code>table-column&lt;/code>, &lt;code>table-cell&lt;/code>, and &lt;code>table-caption&lt;/code> elements is undefined.&lt;/p>
+&lt;p>&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/position#absolute" target="_blank" rel="noopener"
+>&lt;code>absolute&lt;/code>&lt;/a>&lt;/p>
+&lt;p>The element is removed from the normal document flow, and no space is created for the element in the page layout. The element is positioned relative to its closest positioned ancestor (if any) or to the initial &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block" target="_blank" rel="noopener"
+>containing block&lt;/a>. Its final position is determined by the values of &lt;code>top&lt;/code>, &lt;code>right&lt;/code>, &lt;code>bottom&lt;/code>, and &lt;code>left&lt;/code>.&lt;/p>
+&lt;p>This value creates a new &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_context" target="_blank" rel="noopener"
+>stacking context&lt;/a> when the value of &lt;code>z-index&lt;/code> is not &lt;code>auto&lt;/code>. The margins of absolutely positioned boxes do not &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_box_model/Mastering_margin_collapsing" target="_blank" rel="noopener"
+>collapse&lt;/a> with other margins.&lt;/p>
+&lt;p>&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/position#fixed" target="_blank" rel="noopener"
+>&lt;code>fixed&lt;/code>&lt;/a>&lt;/p>
+&lt;p>The element is removed from the normal document flow, and no space is created for the element in the page layout. The element is positioned relative to its initial &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block" target="_blank" rel="noopener"
+>containing block&lt;/a>, which is the viewport in the case of visual media. Its final position is determined by the values of &lt;code>top&lt;/code>, &lt;code>right&lt;/code>, &lt;code>bottom&lt;/code>, and &lt;code>left&lt;/code>.&lt;/p>
+&lt;p>This value always creates a new &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_context" target="_blank" rel="noopener"
+>stacking context&lt;/a>. In printed documents, the element is placed in the same position on &lt;em>every page&lt;/em>.&lt;/p>
+&lt;p>&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/position#sticky" target="_blank" rel="noopener"
+>&lt;code>sticky&lt;/code>&lt;/a>&lt;/p>
+&lt;p>The element is positioned according to the normal flow of the document, and then offset relative to its &lt;em>nearest scrolling ancestor&lt;/em> and &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block" target="_blank" rel="noopener"
+>containing block&lt;/a> (nearest block-level ancestor), including table-related elements, based on the values of &lt;code>top&lt;/code>, &lt;code>right&lt;/code>, &lt;code>bottom&lt;/code>, and &lt;code>left&lt;/code>. The offset does not affect the position of any other elements.&lt;/p>
+&lt;p>This value always creates a new &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_context" target="_blank" rel="noopener"
+>stacking context&lt;/a>. Note that a sticky element &amp;ldquo;sticks&amp;rdquo; to its nearest ancestor that has a &amp;ldquo;scrolling mechanism&amp;rdquo; (created when &lt;code>overflow&lt;/code> is &lt;code>hidden&lt;/code>, &lt;code>scroll&lt;/code>, &lt;code>auto&lt;/code>, or &lt;code>overlay&lt;/code>), even if that ancestor isn&amp;rsquo;t the nearest actually scrolling ancestor.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>BFC&lt;/p>
+&lt;p>Formatting context 是 W3C CSS2.1 规范中的一个概念。它是页面中的一块渲染区域，并且有一套渲染规则，它决定了其子元素将如何定位，以及和其他元素的关系和相互作用。最常见的 Formatting context 有 Block fomatting context (简称BFC)和 Inline formatting context (简称IFC)。&lt;/p>
+&lt;p>Block Formatting Context(区块格式化上下文)&lt;/p>
+&lt;ul>
+&lt;li>内部的Box会在垂直方向，一个接一个地放置。&lt;/li>
+&lt;li>Box垂直方向的距离由margin决定。属于同一个BFC的两个相邻Box的margin会发生重叠。&lt;/li>
+&lt;li>每个盒子（块盒与行盒）的margin box的左边，与包含块border box的左边相接触(对于从左往右的格式化，否则相反)。即使存在浮动也是如此。&lt;/li>
+&lt;li>BFC的区域不会与float box重叠。&lt;/li>
+&lt;li>BFC就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面的元素。反之也如此。&lt;/li>
+&lt;li>计算BFC的高度时，浮动元素也参与计算。&lt;/li>
+&lt;/ul>
+&lt;p>产生&lt;/p>
+&lt;ul>
+&lt;li>The root element of the document (&lt;code>&amp;lt;html&amp;gt;&lt;/code>).&lt;/li>
+&lt;li>Floats (elements where &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/float" target="_blank" rel="noopener"
+>&lt;code>float&lt;/code>&lt;/a> isn&amp;rsquo;t &lt;code>none&lt;/code>).&lt;/li>
+&lt;li>Absolutely positioned elements (elements where &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/position" target="_blank" rel="noopener"
+>&lt;code>position&lt;/code>&lt;/a> is &lt;code>absolute&lt;/code> or &lt;code>fixed&lt;/code>).&lt;/li>
+&lt;li>Inline-blocks (elements with &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/display" target="_blank" rel="noopener"
+>&lt;code>display&lt;/code>&lt;/a>&lt;code>: inline-block&lt;/code>).&lt;/li>
+&lt;li>Table cells (elements with &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/display" target="_blank" rel="noopener"
+>&lt;code>display&lt;/code>&lt;/a>&lt;code>: table-cell&lt;/code>, which is the default for HTML table cells).&lt;/li>
+&lt;li>Table captions (elements with &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/display" target="_blank" rel="noopener"
+>&lt;code>display&lt;/code>&lt;/a>&lt;code>: table-caption&lt;/code>, which is the default for HTML table captions).&lt;/li>
+&lt;li>Anonymous table cells implicitly created by the elements with &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/display" target="_blank" rel="noopener"
+>&lt;code>display&lt;/code>&lt;/a>&lt;code>: table&lt;/code>, &lt;code>table-row&lt;/code>, &lt;code>table-row-group&lt;/code>, &lt;code>table-header-group&lt;/code>, &lt;code>table-footer-group&lt;/code> (which is the default for HTML tables, table rows, table bodies, table headers, and table footers, respectively), or &lt;code>inline-table&lt;/code>.&lt;/li>
+&lt;li>Block elements where &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/overflow" target="_blank" rel="noopener"
+>&lt;code>overflow&lt;/code>&lt;/a> has a value other than &lt;code>visible&lt;/code> and &lt;code>clip&lt;/code>.&lt;/li>
+&lt;li>&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/display" target="_blank" rel="noopener"
+>&lt;code>display&lt;/code>&lt;/a>&lt;code>: flow-root&lt;/code>.&lt;/li>
+&lt;li>Elements with &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/contain" target="_blank" rel="noopener"
+>&lt;code>contain&lt;/code>&lt;/a>&lt;code>: layout&lt;/code>, &lt;code>content&lt;/code>, or &lt;code>paint&lt;/code>.&lt;/li>
+&lt;li>Flex items (direct children of the element with &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/display" target="_blank" rel="noopener"
+>&lt;code>display&lt;/code>&lt;/a>&lt;code>: flex&lt;/code> or &lt;code>inline-flex&lt;/code>) if they are neither &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Glossary/Flex_Container" target="_blank" rel="noopener"
+>flex&lt;/a> nor &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Glossary/Grid_Container" target="_blank" rel="noopener"
+>grid&lt;/a> nor &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_table" target="_blank" rel="noopener"
+>table&lt;/a> containers themselves.&lt;/li>
+&lt;li>Grid items (direct children of the element with &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/display" target="_blank" rel="noopener"
+>&lt;code>display&lt;/code>&lt;/a>&lt;code>: grid&lt;/code> or &lt;code>inline-grid&lt;/code>) if they are neither &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Glossary/Flex_Container" target="_blank" rel="noopener"
+>flex&lt;/a> nor &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Glossary/Grid_Container" target="_blank" rel="noopener"
+>grid&lt;/a> nor &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_table" target="_blank" rel="noopener"
+>table&lt;/a> containers themselves.&lt;/li>
+&lt;li>Multicol containers (elements where &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/column-count" target="_blank" rel="noopener"
+>&lt;code>column-count&lt;/code>&lt;/a> or &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/column-width" target="_blank" rel="noopener"
+>&lt;code>column-width&lt;/code>&lt;/a> isn&amp;rsquo;t &lt;code>auto&lt;/code>, including elements with &lt;code>column-count: 1&lt;/code>).&lt;/li>
+&lt;li>&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/column-span" target="_blank" rel="noopener"
+>&lt;code>column-span&lt;/code>&lt;/a>&lt;code>: all&lt;/code> should always create a new formatting context, even when the &lt;code>column-span: all&lt;/code> element isn&amp;rsquo;t contained by a multicol container (&lt;a class="link" href="https://github.com/w3c/csswg-drafts/commit/a8634b96900279916bd6c505fda88dda71d8ec51" target="_blank" rel="noopener"
+>Spec change&lt;/a>, &lt;a class="link" href="https://crbug.com/709362" target="_blank" rel="noopener"
+>Chrome bug&lt;/a>).&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>数组方法 原地与否&lt;/p>
+&lt;p>find （没有undefined&lt;/p>
+&lt;p>filter&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th style="text-align: left">Mutating method&lt;/th>
+&lt;th style="text-align: left">Non-mutating alternative&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td style="text-align: left">&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/copyWithin" target="_blank" rel="noopener"
+>&lt;code>copyWithin()&lt;/code>&lt;/a>&lt;/td>
+&lt;td style="text-align: left">No one-method alternative&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/fill" target="_blank" rel="noopener"
+>&lt;code>fill()&lt;/code>&lt;/a>&lt;/td>
+&lt;td style="text-align: left">No one-method alternative&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/pop" target="_blank" rel="noopener"
+>&lt;code>pop()&lt;/code>&lt;/a>&lt;/td>
+&lt;td style="text-align: left">&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice" target="_blank" rel="noopener"
+>&lt;code>slice(0, -1)&lt;/code>&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/push" target="_blank" rel="noopener"
+>&lt;code>push(v1, v2)&lt;/code>&lt;/a>&lt;/td>
+&lt;td style="text-align: left">&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat" target="_blank" rel="noopener"
+>&lt;code>concat([v1, v2\])&lt;/code>&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reverse" target="_blank" rel="noopener"
+>&lt;code>reverse()&lt;/code>&lt;/a>&lt;/td>
+&lt;td style="text-align: left">&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toReversed" target="_blank" rel="noopener"
+>&lt;code>toReversed()&lt;/code>&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/shift" target="_blank" rel="noopener"
+>&lt;code>shift()&lt;/code>&lt;/a>&lt;/td>
+&lt;td style="text-align: left">&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice" target="_blank" rel="noopener"
+>&lt;code>slice(1)&lt;/code>&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort" target="_blank" rel="noopener"
+>&lt;code>sort()&lt;/code>&lt;/a>&lt;/td>
+&lt;td style="text-align: left">&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toSorted" target="_blank" rel="noopener"
+>&lt;code>toSorted()&lt;/code>&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice" target="_blank" rel="noopener"
+>&lt;code>splice()&lt;/code>&lt;/a>&lt;/td>
+&lt;td style="text-align: left">&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toSpliced" target="_blank" rel="noopener"
+>&lt;code>toSpliced()&lt;/code>&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/unshift" target="_blank" rel="noopener"
+>&lt;code>unshift(v1, v2)&lt;/code>&lt;/a>&lt;/td>
+&lt;td style="text-align: left">&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toSpliced" target="_blank" rel="noopener"
+>&lt;code>toSpliced(0, 0, v1, v2)&lt;/code>&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;/li>
+&lt;li>
+&lt;p>ES6新特性&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>事件循环&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>var let const&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>响应式&lt;/p>
+&lt;ul>
+&lt;li>media query&lt;/li>
+&lt;li>百分比&lt;/li>
+&lt;li>rem布局 （&lt;code>rem&lt;/code>单位都是相对于根元素html的&lt;code>font-size&lt;/code>来决定大小的）&lt;/li>
+&lt;li>vw/vh&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>Object方法 Object.keys(), Object.values(), Object.entries()&lt;/p>
+&lt;p>&lt;strong>Object.create, Object.is&lt;/strong>, Object.getPrototypeOf(), Object.setPrototypeOf(), Object.assign(), Object.defineProperty()&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>防抖节流&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>闭包&lt;/p>
+&lt;p>&lt;strong>闭包&lt;/strong>（closure）是一个函数以及其捆绑的周边环境状态（&lt;strong>lexical environment&lt;/strong>，&lt;strong>词法环境&lt;/strong>）的引用的组合。&lt;/p>
+&lt;p>缺点&lt;/p>
+&lt;p>延长生命周期，内存消耗大，内存泄漏&lt;/p>
+&lt;p>由于闭包会使得函数中的变量都被保存在内存中，内存消耗很大，所以不能滥用闭包，否则会造成网页的性能问题，在IE中可能导致内存泄露。 解决方法是，在退出函数之前，将不使用的局部变量全部删除。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>原型链&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>vue通信&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>vue响应式原理&lt;/p>
+&lt;p>&lt;a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" target="_blank" rel="noopener"
+>&lt;code>Object.defineProperty&lt;/code>&lt;/a> get set方法追踪依赖，在 property 被访问和修改时通知变更&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>页面展现过程&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>post 和 get&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>深浅拷贝&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>算法题 Set,Map&lt;/p>
+&lt;p>Set(iterable)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>项目中最难的点&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>字符串去重 两种&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="11-百度-基础架构">11-百度 基础架构
+&lt;/h2>&lt;ol>
+&lt;li>
+&lt;p>难点，如何解决，解决之后有没有形成一些方法论&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>CD实现原理&lt;/p>
+&lt;p>持续集成的工作原理是将小的代码块推送到Git仓库中托管的应用程序代码库中，并且每次推送时，都要运行一系列脚本来构建、测试和验证代码更改，然后再将其合并到主分支中。&lt;/p>
+&lt;p>持续交付和部署相当于更进一步的CI，可以在每次推送到仓库默认分支的同时将应用程序部署到生产环境。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>ref和reactive的区别&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>vue3的响应性&lt;/p>
+&lt;p>Proxy&lt;/p>
+&lt;p>Vue2: Object.defineProperty(), get set方法&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>虚拟dom&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>vue3 diff算法&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>vue3 hook&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>http是什么，结构，解决什么问题，注意的点，版本及其区别，方法及其区别，报文结构&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>跨域&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>flex flex-basis和width谁优先，flex上下左右居中&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>block formatting context, 解决margin重叠&lt;/p>
+&lt;p>父元素设置border和padding?&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>stacking context，生效策略&lt;/p>
+&lt;p>&lt;img src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2018/8/30/1658910c5cb364b6~tplv-t2oaga2asx-jj-mark:3024:0:0:0:q75.awebp"
+loading="lazy"
+alt="img"
+>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>二面因拿到另一个部门的offer而取消&lt;/p>
+&lt;h2 id="12-百度-工程效能">12-百度 工程效能
+&lt;/h2>&lt;p>一面&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>es6新特性&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>vue2到vue3&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>三角形&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>扁平化 flatten&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>promise.any&lt;/p>
+&lt;p>settled: fulfilled or rejected&lt;/p>
+&lt;p>resolved: settled or &amp;rsquo;locked-in&amp;rsquo; to match the eventual state of another promise.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>css优先级&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>二面&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>http状态码&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>tcp和udp&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>udp变可靠&lt;/p>
+&lt;p>最简单的方式是在应用层模仿传输层TCP的可靠性传输。下面不考虑拥塞处理，可靠UDP的简单设计。&lt;/p>
+&lt;ul>
+&lt;li>1、添加seq/ack机制，确保数据发送到对端&lt;/li>
+&lt;li>2、添加发送和接收缓冲区，主要是用户超时重传。&lt;/li>
+&lt;li>3、添加超时重传机制。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>es6新特性&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>常用hook&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>useMemo和useCallback区别&lt;/p>
+&lt;p>&lt;code>useMemo&lt;/code> 和 &lt;code>useCallback&lt;/code> 接收的参数都是一样,第一个参数为回调 第二个参数为要依赖的数据&lt;/p>
+&lt;p>共同作用：
+1.仅仅 &lt;code>依赖数据&lt;/code> 发生变化, 才会重新计算结果，也就是起到缓存的作用。&lt;/p>
+&lt;p>两者区别：
+1.&lt;code>useMemo&lt;/code> 计算结果是 &lt;code>return&lt;/code> 回来的值, 主要用于 缓存计算结果的值 ，应用场景如： 需要 计算的状态
+2.&lt;code>useCallback&lt;/code> 计算结果是 &lt;code>函数&lt;/code>, 主要用于 缓存函数，应用场景如: 需要缓存的函数，因为函数式组件每次任何一个 state 的变化 整个组件 都会被重新刷新，一些函数是没有必要被重新刷新的，此时就应该缓存起来，提高性能，和减少资源浪费。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>useMemo的作用&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>实现useCounter&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>实现 objDiff&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="总结">总结
+&lt;/h2>&lt;p>不要等到准备周全才开始面试，边面边学，熟能生巧&lt;/p>
+&lt;p>自我介绍，表达能力，如何展示自己很重要&lt;/p>
+&lt;p>可以考虑从事更有门槛的赛道&lt;/p>
+&lt;p>要自信&lt;/p></description></item><item><title>【JS】Interview Preparation</title><link>https://dyhes.github.io/p/jsinterview-preparation/</link><pubDate>Thu, 05 May 2022 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/jsinterview-preparation/</guid><description>&lt;h3 id="1-原型--构造函数--实例">1. 原型 / 构造函数 / 实例
+&lt;/h3>&lt;ul>
+&lt;li>原型&lt;code>(prototype)&lt;/code>: 一个简单的对象，用于实现对象的 &lt;strong>属性继承&lt;/strong>。在 Firefox 和 Chrome 中，每个&lt;code>JavaScript&lt;/code>对象中都包含一个&lt;code>__proto__&lt;/code> (非标准)的属性指向该对象的原型，可通过&lt;code>obj.__proto__&lt;/code>进行访问。&lt;/li>
+&lt;li>构造函数: 可以通过&lt;code>new&lt;/code>来 &lt;strong>新建一个对象&lt;/strong> 的函数。&lt;/li>
+&lt;li>实例: 通过构造函数和&lt;code>new&lt;/code>创建出来的对象，便是实例。 &lt;strong>实例通过&lt;code>__proto__&lt;/code>指向原型，通过&lt;code>constructor&lt;/code>指向构造函数（借助原型）&lt;/strong>。&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 实例
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kr">const&lt;/span> &lt;span class="nx">instance&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nb">Object&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>则此时， &lt;strong>实例为&lt;code>instance&lt;/code>&lt;/strong>, &lt;strong>构造函数为&lt;code>Object&lt;/code>&lt;/strong>，我们知道，构造函数拥有一个&lt;code>prototype&lt;/code>的属性指向原型，因此原型为:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 原型
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kr">const&lt;/span> &lt;span class="nx">prototype&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">Object&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">prototype&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>三者的关系:&lt;/p>
+&lt;pre tabindex="0">&lt;code>实例.__proto__ === 原型
+原型.constructor === 构造函数
+构造函数.prototype === 原型
+&lt;/code>&lt;/pre>&lt;h3 id="2原型链">2.原型链
+&lt;/h3>&lt;p>&lt;strong>原型链是由原型对象组成&lt;/strong>，每个对象都有 &lt;code>__proto__&lt;/code> 属性，指向了创建该对象的构造函数的原型，&lt;code>__proto__&lt;/code> 将对象连接起来组成了原型链。是一个用来&lt;strong>实现继承和共享属性&lt;/strong>的有限的对象链。&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>属性查找机制&lt;/strong>: 当查找对象的属性时，如果实例对象自身不存在该属性，则&lt;strong>沿着原型链&lt;/strong>往上一级查找，找到时则输出，不存在时，则继续沿着原型链往上一级查找，直至最顶级的原型对象&lt;code>Object.prototype&lt;/code>，如还是没找到，则输出 &lt;code>undefined&lt;/code>；&lt;/li>
+&lt;li>&lt;strong>属性修改机制&lt;/strong>: 只会修改实例对象本身的属性，如果不存在，则进行添加该属性，如果需要修改原型的属性时，则可以用: &lt;code>b.prototype.x = 2&lt;/code>；但是这样会造成&lt;strong>所有&lt;/strong>继承于该对象的实例的属性发生改变。&lt;/li>
+&lt;/ul>
+&lt;h3 id="3-对象的拷贝">3. 对象的拷贝
+&lt;/h3>&lt;ul>
+&lt;li>
+&lt;p>浅拷贝: 以赋值的形式拷贝引用对象，仍指向同一个地址，&lt;strong>修改时原对象也会受到影响&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>Object.assign&lt;/code>&lt;/li>
+&lt;li>展开运算符(&amp;hellip;)&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>深拷贝: 完全拷贝一个新对象，&lt;strong>修改时原对象不再受到任何影响&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">JSON&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">parse&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">JSON&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">stringify&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">obj&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>: 性能最快&lt;/p>
+&lt;ul>
+&lt;li>具有循环引用的对象时，报错&lt;/li>
+&lt;li>当值为函数、&lt;code>undefined&lt;/code>、或&lt;code>symbol&lt;/code>时，无法拷贝&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>递归进行逐一赋值&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="4-new运算符的执行过程">4. new运算符的执行过程
+&lt;/h3>&lt;ul>
+&lt;li>新生成一个对象&lt;/li>
+&lt;li>链接到原型: &lt;code>obj.__proto__ = Con.prototype&lt;/code>&lt;/li>
+&lt;li>绑定this: &lt;code>apply&lt;/code>&lt;/li>
+&lt;li>返回新对象(如果构造函数有自己 retrun 时，则返回该值)&lt;/li>
+&lt;/ul>
+&lt;h3 id="5-instanceof原理">5. instanceof原理
+&lt;/h3>&lt;p>能在实例的 &lt;strong>原型对象链&lt;/strong> 中找到该构造函数的&lt;code>prototype&lt;/code>属性所指向的 &lt;strong>原型对象&lt;/strong>，就返回&lt;code>true&lt;/code>。即:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// __proto__: 代表原型对象链
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="nx">instance&lt;/span>&lt;span class="p">.[&lt;/span>&lt;span class="nx">__proto__&lt;/span>&lt;span class="p">...]&lt;/span> &lt;span class="o">===&lt;/span> &lt;span class="nx">instance&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">constructor&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">prototype&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// return true
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="6-类型转换">6. 类型转换
+&lt;/h3>&lt;ul>
+&lt;li>-、*、/、% ：一律转换成数值后计算&lt;/li>
+&lt;li>+：
+&lt;ul>
+&lt;li>数字 + 字符串 = 字符串， 运算顺序是从左到右&lt;/li>
+&lt;li>数字 + 对象， 优先调用对象的&lt;code>valueOf&lt;/code> -&amp;gt; &lt;code>toString&lt;/code>&lt;/li>
+&lt;li>数字 + &lt;code>boolean/null&lt;/code> -&amp;gt; 数字&lt;/li>
+&lt;li>数字 + &lt;code>undefined&lt;/code> -&amp;gt; &lt;code>NaN&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>[1].toString() === '1'&lt;/code>&lt;/li>
+&lt;li>&lt;code>{}.toString() === '[object object]'&lt;/code>&lt;/li>
+&lt;li>&lt;code>NaN&lt;/code> !== &lt;code>NaN&lt;/code> 、`+undefined 为 NaN&lt;/li>
+&lt;/ul>
+&lt;h3 id="7-防抖与节流">7. 防抖与节流
+&lt;/h3>&lt;p>防抖与节流函数是一种最常用的 &lt;strong>高频触发优化方式&lt;/strong>，能对性能有较大的帮助。&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>防抖 (debounce)&lt;/strong>: 将多次高频操作优化为只在最后一次执行，通常使用的场景是：用户输入，只需再输入完成后做一次输入校验即可。&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>function debounce(fn, wait, immediate) {
+let timer = null
+return function() {
+let args = arguments
+let context = this
+if (immediate &amp;amp;&amp;amp; !timer) {
+fn.apply(context, args)
+}
+if (timer) clearTimeout(timer)
+timer = setTimeout(() =&amp;gt; {
+fn.apply(context, args)
+}, wait)
+}
+}
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>&lt;strong>节流(throttle)&lt;/strong>: 每隔一段时间后执行一次，也就是降低频率，将高频操作优化成低频操作，通常使用场景: 滚动条事件 或者 resize 事件，通常每隔 100~500 ms执行一次即可。&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>function throttle(fn, wait, immediate) {
+let timer = null
+let callNow = immediate
+return function() {
+let context = this,
+args = arguments
+if (callNow) {
+fn.apply(context, args)
+callNow = false
+}
+if (!timer) {
+timer = setTimeout(() =&amp;gt; {
+fn.apply(context, args)
+timer = null
+}, wait)
+}
+}
+}
+&lt;/code>&lt;/pre></description></item></channel></rss>

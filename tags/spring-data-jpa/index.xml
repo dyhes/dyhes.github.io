@@ -1,0 +1,1017 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Spring Data JPA on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/spring-data-jpa/</link><description>Recent content in Spring Data JPA on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 15 Aug 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://dyhes.github.io/tags/spring-data-jpa/index.xml" rel="self" type="application/rss+xml"/><item><title>【Spring Data JPA】Recursive Model Query</title><link>https://dyhes.github.io/p/spring-data-jparecursive-model-query/</link><pubDate>Thu, 15 Aug 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/spring-data-jparecursive-model-query/</guid><description>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// simplified&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Data&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Entity&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Table&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;comments&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@EntityListeners&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">AuditingEntityListener&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">Comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Id&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@GeneratedValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">strategy&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">GenerationType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">IDENTITY&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@ManyToOne&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">fetch&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">FetchType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">LAZY&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@JoinColumn&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;parent_id&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">parent&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@OneToMany&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mappedBy&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;parent&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">orphanRemoval&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">List&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Comment&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">children&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">new&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ArrayList&lt;/span>&lt;span class="o">&amp;lt;&amp;gt;&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="fetchtypeeager">FetchType.EAGER
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">getCommentWithChildren&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">commentId&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">commentRepository&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">findById&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">commentId&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="na">orElse&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kc">null&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="derived-method">Derived Method
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">List&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Comment&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">findSubcomments&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">commentId&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">rootComment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">commentRepository&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">findById&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">commentId&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="na">orElse&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kc">null&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">if&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">rootComment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">==&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">null&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">null&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// or throw an exception if preferred&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">fetchChildren&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">rootComment&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">List&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">of&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">rootComment&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">fetchChildren&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">parent&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">List&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Comment&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">children&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">commentRepository&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">findByParentId&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">parent&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getId&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">parent&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">setChildren&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">children&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">for&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">child&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">children&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">fetchChildren&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">child&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="common-table-expressions-ctes">Common Table Expressions (CTEs)
+&lt;/h2>&lt;p>Spring Data JPA does not support recursive queries out-of-the-box, but you can use native queries to achieve this. Below is an example of how you can perform a recursive query using a native query in Spring Data JPA.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Query&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">value&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;WITH RECURSIVE Subcomments AS (&amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34; SELECT c.id, c.content, c.parent_id &amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34; FROM Comment c &amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34; WHERE c.id = :commentId &amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34; UNION ALL &amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34; SELECT c.id, c.content, c.parent_id &amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34; FROM Comment c &amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34; INNER JOIN Subcomments s ON c.parent_id = s.id&amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;) &amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;SELECT * FROM Subcomments&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">nativeQuery&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">List&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Comment&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">findSubcomments&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nd">@Param&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;commentId&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">commentId&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The fetched result is a flatten list of Comment.&lt;/p>
+&lt;h2 id="performance-considerations">Performance Considerations
+&lt;/h2>&lt;h3 id="ctes">CTEs
+&lt;/h3>&lt;h4 id="pros">Pros:
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>Efficiency&lt;/strong>: Fetching the entire hierarchy in a single query is efficient and reduces the number of database round-trips.&lt;/li>
+&lt;li>&lt;strong>Control&lt;/strong>: You have fine-grained control over how the data is processed and structured in the application layer.&lt;/li>
+&lt;/ul>
+&lt;h4 id="cons">Cons:
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>Complexity&lt;/strong>: The reconstruction of the recursive structure in the application layer can be complex and error-prone.&lt;/li>
+&lt;li>&lt;strong>Memory Usage&lt;/strong>: Depending on the size of the dataset, holding the entire hierarchy in memory for reconstruction can be memory-intensive.&lt;/li>
+&lt;li>&lt;strong>Performance Overhead&lt;/strong>: The reconstruction process itself can introduce performance overhead, especially if the hierarchy is deep or has many nodes.&lt;/li>
+&lt;/ul>
+&lt;h3 id="performance-comparison">Performance Comparison
+&lt;/h3>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>Native Query and CTEs with Reconstruction&lt;/strong>:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Pros&lt;/strong>:
+&lt;ul>
+&lt;li>Efficiently fetches the entire hierarchy in a single query.&lt;/li>
+&lt;li>Minimizes the number of database round-trips.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>Cons&lt;/strong>:
+&lt;ul>
+&lt;li>Complexity in reconstructing the hierarchy in the application layer.&lt;/li>
+&lt;li>Potential memory usage concerns if the dataset is large.&lt;/li>
+&lt;li>Additional performance overhead due to the reconstruction process.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>FetchType.EAGER&lt;/strong>:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Pros&lt;/strong>:
+&lt;ul>
+&lt;li>Simplifies data access by automatically fetching children.&lt;/li>
+&lt;li>Avoids the need for manual reconstruction.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>Cons&lt;/strong>:
+&lt;ul>
+&lt;li>Performance overhead due to eager fetching, especially with large datasets.&lt;/li>
+&lt;li>Risk of the N+1 query problem.&lt;/li>
+&lt;li>Increased memory usage due to loading entire collections.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Derived Methods and Manually Assembling&lt;/strong>:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Pros&lt;/strong>:
+&lt;ul>
+&lt;li>Flexibility and simplicity in using JPA abstractions.&lt;/li>
+&lt;li>Allows for fine-grained control over data fetching and processing.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>Cons&lt;/strong>:
+&lt;ul>
+&lt;li>Potential performance overhead due to multiple queries.&lt;/li>
+&lt;li>Complexity in manually assembling the hierarchical structure.&lt;/li>
+&lt;li>Risk of performance and consistency issues if not managed carefully.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;h3 id="recommendations">Recommendations
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>For Large, Complex Hierarchies&lt;/strong>: Use native queries with CTEs for efficient data fetching. Be prepared to handle the complexity of reconstructing the hierarchy in the application layer. This approach provides the best performance but requires careful implementation.&lt;/li>
+&lt;li>&lt;strong>For Small to Medium Hierarchies&lt;/strong>: Use &lt;code>FetchType.EAGER&lt;/code> for convenience and simplicity. Monitor performance and memory usage to ensure it remains within acceptable limits.&lt;/li>
+&lt;li>&lt;strong>For Flexible, Maintainable Code&lt;/strong>: Use derived methods and manually assemble the hierarchical structure if the performance impact is manageable. This approach offers a good balance between flexibility and simplicity.&lt;/li>
+&lt;/ul>
+&lt;h3 id="conclusion">Conclusion
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>Native Query and CTEs with Reconstruction&lt;/strong>: Best for performance but requires careful handling of the reconstruction phase.&lt;/li>
+&lt;li>&lt;strong>FetchType.EAGER&lt;/strong>: Convenient but can lead to performance and memory overhead.&lt;/li>
+&lt;li>&lt;strong>Derived Methods and Manual Assembly&lt;/strong>: Flexible and maintainable with acceptable performance for smaller datasets.&lt;/li>
+&lt;/ul>
+&lt;p>Ultimately, the choice depends on your specific use case, dataset size, and performance requirements. Always profile and benchmark your application to make an informed decision based on actual performance metrics.&lt;/p></description></item><item><title>【Spring Data JPA】Database Exception</title><link>https://dyhes.github.io/p/spring-data-jpadatabase-exception/</link><pubDate>Thu, 18 Jul 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/spring-data-jpadatabase-exception/</guid><description>&lt;h2 id="emptyresultdataaccessexception">EmptyResultDataAccessException
+&lt;/h2>&lt;h3 id="deletebyidid-id">deleteById(ID id)
+&lt;/h3>&lt;ul>
+&lt;li>Using deleteById(ID id) with @Transactional: If the method is annotated with @Transactional, it might throw an EmptyResultDataAccessException if the entity doesn’t exist.&lt;/li>
+&lt;li>Using deleteById(ID id): This method doesn’t throw an exception if the entity doesn’t exist. It &lt;strong>silently does nothing&lt;/strong>.&lt;/li>
+&lt;/ul></description></item><item><title>【Spring Data JPA】Reference Object</title><link>https://dyhes.github.io/p/spring-data-jpareference-object/</link><pubDate>Thu, 18 Jul 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/spring-data-jpareference-object/</guid><description>&lt;p>benefits:&lt;/p>
+&lt;ul>
+&lt;li>It’s more &lt;strong>efficient&lt;/strong>, as it doesn’t require an additional database query to fetch the Space object.&lt;/li>
+&lt;li>It’s particularly useful when you’re dealing with &lt;strong>large volumes of data&lt;/strong> or when the related entity (Space in this case) has &lt;strong>a lot of fields&lt;/strong> that you don’t need.&lt;/li>
+&lt;/ul>
+&lt;p>However, there are a few things to keep in mind:&lt;/p>
+&lt;ul>
+&lt;li>Make sure the Space with the given ID &lt;strong>actually exists&lt;/strong> in the database. If it doesn’t, you’ll get a EntityNotFoundException when the entity is first accessed.&lt;/li>
+&lt;li>This approach only works for &lt;strong>setting the relationship&lt;/strong>. If you need to access properties of the Space object beyond its ID, you’ll need to fetch the full object from the database.&lt;/li>
+&lt;li>Be aware of any &lt;strong>cascade operations&lt;/strong> or other JPA settings that might affect this behavior.&lt;/li>
+&lt;/ul>
+&lt;h2 id="entitymanagergetreference"> &lt;code>entityManager.getReference&lt;/code>
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@Autowired&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">EntityManager&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">entityManager&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">//&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">Post&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">newPost&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">new&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Post&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">newPost&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">setTitle&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;New Post Title&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">newPost&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">setContent&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Post content...&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">Space&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">spaceReference&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">entityManager&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getReference&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Space&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">knownSpaceId&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">newPost&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">setSpace&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">spaceReference&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">postRepository&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">save&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">newPost&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="pros">Pros
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>Type-safe&lt;/strong>: It ensures the referenced entity type is correct.&lt;/li>
+&lt;li>&lt;strong>JPA-compliant&lt;/strong>: It’s the standard JPA way of creating entity references.&lt;/li>
+&lt;li>&lt;strong>Lazy-loading&lt;/strong>: The reference is a proxy that can lazy-load the full entity when needed.&lt;/li>
+&lt;li>&lt;strong>Consistency&lt;/strong>: It maintains consistency with how JPA handles entity relationships.&lt;/li>
+&lt;/ul>
+&lt;h3 id="cons">Cons
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>Dependency&lt;/strong>: It requires injecting EntityManager, which might not always be desirable or available.&lt;/li>
+&lt;li>&lt;strong>Complexity&lt;/strong>: It adds a bit more complexity to your code.&lt;/li>
+&lt;/ul>
+&lt;h2 id="simple-reference-object">Simple Reference Object
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">Post&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">newPost&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">new&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Post&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">newPost&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">setTitle&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;New Post Title&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">newPost&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">setContent&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Post content...&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">Space&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">spaceReference&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">new&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Space&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">spaceReference&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">setId&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">knownSpaceId&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">newPost&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">setSpace&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">spaceReference&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">postRepository&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">save&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">newPost&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="pros-1">Pros
+&lt;/h3>&lt;ul>
+&lt;li>1 &lt;strong>Simplicity&lt;/strong>: It’s straightforward and easy to understand.&lt;/li>
+&lt;li>2 &lt;strong>No additional dependencies&lt;/strong>: It doesn’t require EntityManager.&lt;/li>
+&lt;li>3 &lt;strong>Lightweight&lt;/strong>: It’s a very lightweight operation.&lt;/li>
+&lt;/ul>
+&lt;h3 id="cons-1">Cons
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>Not type-safe&lt;/strong>: You need to ensure you’re using the correct entity class and ID type.&lt;/li>
+&lt;li>&lt;strong>Not a true JPA proxy&lt;/strong>: It won’t lazy-load additional entity details if accessed.&lt;/li>
+&lt;li>&lt;strong>Potential for inconsistency&lt;/strong>: If not used carefully, it could lead to inconsistencies with how JPA manages entities.&lt;/li>
+&lt;/ul>
+&lt;h2 id="guidelines">Guidelines
+&lt;/h2>&lt;ul>
+&lt;li>If you’re working within a JPA/Hibernate context and have easy access to EntityManager, using EntityManager.getReference() is &lt;strong>generally the preferred&lt;/strong> method. It’s more aligned with JPA standards and provides better integration with JPA’s entity management.&lt;/li>
+&lt;li>If you’re working in a simpler context, perhaps in a &lt;strong>service layer&lt;/strong> where you don’t want to introduce a dependency on EntityManager, using a simple reference object can be appropriate. This is especially true if you’re sure you won’t need to access any properties of the referenced entity beyond its ID.&lt;/li>
+&lt;li>If you’re working on a large-scale application where &lt;strong>performance is critical&lt;/strong>, and you’re dealing with a high volume of entities, the simple reference object might be slightly more efficient as it doesn’t create a proxy object.&lt;/li>
+&lt;li>If you’re using Spring Data JPA repositories, you can also use the &lt;strong>getOne() method (deprecated in newer versions) or getReferenceById() method&lt;/strong>, which internally use EntityManager.getReference().&lt;/li>
+&lt;li>This approach combines the benefits of using EntityManager.getReference() with the convenience of working with repositories.
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">Space&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">spaceReference&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">spaceRepository&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getReferenceById&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">knownSpaceId&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">newPost&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">setSpace&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">spaceReference&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>This approach combines the benefits of using EntityManager.getReference() with the convenience of working with repositories.&lt;/li>
+&lt;li>In general, if you’re working within a JPA environment, using EntityManager.getReference() or the repository’s getReferenceById() method is often the most &lt;strong>robust and recommended&lt;/strong> approach. However, in simpler scenarios or where JPA is not heavily used, a simple reference object can be perfectly adequate.&lt;/li>
+&lt;/ul>
+&lt;h2 id="lazy-loaded-reference">Lazy-loaded Reference
+&lt;/h2>&lt;p>When using a lazy-loaded reference (like those created by EntityManager.getReference() or JpaRepository.getReferenceById()), the full entity will be lazy-loaded in the following scenarios:&lt;/p>
+&lt;h3 id="accessing-non-id-properties">Accessing Non-ID Properties
+&lt;/h3>&lt;p>When you try to access any property of the entity other than its ID, the full entity will be loaded from the database.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">Space&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">spaceReference&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">entityManager&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getReference&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Space&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">spaceId&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">spaceName&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">spaceReference&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getName&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// This will trigger lazy loading&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="invoking-methods">Invoking Methods
+&lt;/h3>&lt;p>If you call any method on the proxy object that requires data from the entity, it will trigger lazy loading.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">Space&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">spaceReference&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">entityManager&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getReference&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Space&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">spaceId&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">spaceReference&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">someMethod&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// This will trigger lazy loading if the method uses any non-ID fields&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="relationship-navigation">Relationship Navigation
+&lt;/h3>&lt;p>If you navigate from the proxy to related entities (that are not already loaded), it will trigger lazy loading.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">Space&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">spaceReference&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">entityManager&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getReference&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Space&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">spaceId&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">List&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Post&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">posts&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">spaceReference&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getPosts&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// This will trigger lazy loading&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="explicit-initialization">Explicit Initialization
+&lt;/h3>&lt;p>If you explicitly initialize the proxy using Hibernate.initialize() or similar methods.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">Space&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">spaceReference&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">entityManager&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getReference&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Space&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">spaceId&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">Hibernate&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">initialize&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">spaceReference&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// This will trigger lazy loading&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="tostring-equals-or-hashcode">toString(), equals(), or hashCode()
+&lt;/h3>&lt;p>If these methods are overridden in your entity class to use non-ID fields, calling them will trigger lazy loading.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">Space&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">spaceReference&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">entityManager&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getReference&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Space&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">spaceId&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">spaceReference&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// This might trigger lazy loading if toString() is overridden&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="serialization">Serialization
+&lt;/h3>&lt;p>If you try to serialize the proxy object, it will typically trigger lazy loading to ensure all data is available for serialization.&lt;/p>
+&lt;h3 id="important-points">Important points
+&lt;/h3>&lt;ul>
+&lt;li>Lazy loading will only work within an &lt;strong>active persistence context&lt;/strong> (typically, within a transaction).&lt;/li>
+&lt;li>If you try to access a lazy-loaded property outside of a persistence context, you might get a &lt;strong>LazyInitializationException&lt;/strong>.&lt;/li>
+&lt;li>The ID of the entity is &lt;strong>always available&lt;/strong> without triggering a load, as it’s used to create the proxy.&lt;/li>
+&lt;li>If the referenced entity doesn’t exist in the database, accessing it will throw an &lt;strong>EntityNotFoundException&lt;/strong> when lazy loading is triggered.&lt;/li>
+&lt;/ul></description></item><item><title>【Java】Enum</title><link>https://dyhes.github.io/p/javaenum/</link><pubDate>Sun, 14 Jul 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/javaenum/</guid><description>&lt;img src="https://dyhes.github.io/covers/cover19.png" alt="Featured image of post 【Java】Enum" />&lt;p>Java enums are a special type of class used to define collections of constants. They provide a way to represent a fixed set of values, which can be useful for categorizing data and ensuring type safety.&lt;/p>
+&lt;h2 id="key-points">Key Points
+&lt;/h2>&lt;ul>
+&lt;li>Implicitly final and static: Enum constants are implicitly public, static, and final.&lt;/li>
+&lt;li>values() method: Every enum has a static values() method that returns an array of all enum constants.&lt;/li>
+&lt;li>valueOf(String) method: This static method returns the &lt;strong>enum constant&lt;/strong> with the specified name.&lt;/li>
+&lt;li>The name() method returns the name of the enum constant as declared in its enum declaration. It&amp;rsquo;s an instance method available on all enum constants.&lt;/li>
+&lt;li>valueOf(String) and name() provide a way to convert between the Enum and String.&lt;/li>
+&lt;li>ordinal() method: Returns the &lt;strong>position&lt;/strong> of the enum constant (zero-based).&lt;/li>
+&lt;li>Constructors, Fields, and Methods: Enums can have constructors, fields, and methods, allowing you to associate data and behavior with each constant.&lt;/li>
+&lt;li>Implementing Interfaces: Enums can implement interfaces, providing a way to define behavior for each constant.&lt;/li>
+&lt;li>EnumSet and EnumMap: These are specialized Set and Map implementations for use with enum types, offering &lt;strong>better performance&lt;/strong> than their general-purpose counterparts.&lt;/li>
+&lt;li>Constant-specific method implementation: You can &lt;strong>override methods for specific enum&lt;/strong> constants, allowing for different behavior per constant.&lt;/li>
+&lt;li>Abstract methods in enums: You can define abstract methods in an enum, forcing each constant to provide its own implementation.&lt;/li>
+&lt;/ul>
+&lt;h2 id="example">example
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// Basic enum definition&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">enum&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Day&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">MONDAY&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">TUESDAY&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">WEDNESDAY&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">THURSDAY&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">FRIDAY&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">SATURDAY&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">SUNDAY&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">// Enum with constructor, fields, and methods&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">enum&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Planet&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">MERCURY&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">3&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">303e&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">23&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">2&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">4397e6&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">VENUS&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">4&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">869e&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">24&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">6&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">0518e6&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">EARTH&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">5&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">976e&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">24&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">6&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">37814e6&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">final&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">mass&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// in kilograms&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">final&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">radius&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// in meters&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Planet&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">mass&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">radius&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">mass&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">mass&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">radius&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">radius&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">getMass&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">mass&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">getRadius&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">radius&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Enum constant-specific method implementation&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">surfaceGravity&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">6&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">67300E&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">mass&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">radius&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">radius&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">// Usage examples&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">EnumExample&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">static&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">main&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">[]&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">args&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Basic usage&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Day&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">today&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Day&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">MONDAY&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Today is &amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">today&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Switch statement with enum&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">switch&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">today&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">case&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">MONDAY&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Start of the work week&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">case&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">FRIDAY&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;TGIF!&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">default&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Midweek&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Using enum methods&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Planet&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">earth&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Planet&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">EARTH&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Earth&amp;#39;s mass: &amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">earth&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getMass&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Earth&amp;#39;s surface gravity: &amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">earth&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">surfaceGravity&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Iterating over enum values&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">for&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Planet&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">planet&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Planet&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">values&lt;/span>&lt;span class="p">())&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">planet&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">name&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;: &amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">planet&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">surfaceGravity&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="usage-with-pageable">Usage with Pageable
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">enum&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">UserSortField&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">ID&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;id&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">FIRST_NAME&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;firstName&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">LAST_NAME&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;lastName&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">EMAIL&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;email&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">CREATED_DATE&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;createdDate&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">final&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">fieldName&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">UserSortField&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">fiel&lt;/span>&lt;span class="err">&lt;/span>&lt;span class="n">dName&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">fieldName&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">fieldName&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">getFieldName&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">fieldName&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@RestController&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@RequestMapping&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;/api/users&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">UserController&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Autowired&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">UserService&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userService&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@GetMapping&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ResponseEntity&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Map&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Object&lt;/span>&lt;span class="o">&amp;gt;&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">getAllUsers&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@RequestParam&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">defaultValue&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;0&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">page&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@RequestParam&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">defaultValue&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;10&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">size&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@RequestParam&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">defaultValue&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;ID&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">UserSortField&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">sortBy&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Page&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userPage&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userService&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getAllUsers&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">page&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">size&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">sortBy&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// ... rest of the method remains the same&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Service&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">UserService&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Autowired&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">UserRepository&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userRepository&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Page&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">getAllUsers&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">page&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">size&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">UserSortField&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">sortBy&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Pageable&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">pageable&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">PageRequest&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">of&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">page&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">size&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Sort&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">by&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sortBy&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getFieldName&lt;/span>&lt;span class="p">()));&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userRepository&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">findAll&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pageable&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="usage-with-spring-data-jpa">Usage with Spring Data JPA
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">enum&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Status&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">ACTIVE&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">INACTIVE&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">PENDING&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">javax.persistence.*&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Entity&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">User&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Id&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@GeneratedValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">strategy&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">GenerationType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">IDENTITY&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Enumerated&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">EnumType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">STRING&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Status&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">status&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// getters and setters&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The @Enumerated annotation is used to specify how the Enum should be persisted in the database. There are two options:&lt;/p>
+&lt;p>EnumType.ORDINAL: Stores the Enum as an integer (the ordinal value of the Enum constant).
+EnumType.STRING: Stores the Enum as a string (the name of the Enum constant).&lt;/p>
+&lt;h3 id="enumtypeordinal">EnumType.ORDINAL
+&lt;/h3>&lt;h4 id="pros">Pros
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>Database efficiency&lt;/strong>: Stores enums as integers, which typically use less storage space than strings.&lt;/li>
+&lt;li>&lt;strong>Potentially faster queries&lt;/strong>: Integer comparisons are generally faster than string comparisons.&lt;/li>
+&lt;li>&lt;strong>Simpler database representation&lt;/strong>: The database column is a simple integer type.&lt;/li>
+&lt;/ul>
+&lt;h4 id="cons">Cons
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>Fragility to enum order changes&lt;/strong>: If you add, remove, or reorder enum constants, the ordinal values change, which can corrupt existing data.&lt;/li>
+&lt;li>&lt;strong>Less readable in raw database queries&lt;/strong>: You see numbers instead of meaningful names.&lt;/li>
+&lt;li>&lt;strong>Potential for invalid states&lt;/strong>: If the database contains an integer that doesn’t correspond to any enum constant, it can lead to runtime errors.&lt;/li>
+&lt;/ul>
+&lt;h3 id="enumtypestring">EnumType.STRING
+&lt;/h3>&lt;h4 id="pros-1">Pros
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>Readability&lt;/strong>: The database stores the actual names of the enum constants, making raw database queries more understandable.&lt;/li>
+&lt;li>&lt;strong>Resilience to enum order changes&lt;/strong>: Adding or reordering enum constants doesn’t affect existing data.&lt;/li>
+&lt;li>&lt;strong>Self-documenting&lt;/strong>: The database schema itself documents the possible enum values.&lt;/li>
+&lt;li>&lt;strong>Safety&lt;/strong>: It’s harder to accidentally introduce invalid states, as any string not matching an enum constant will be rejected.&lt;/li>
+&lt;/ul>
+&lt;h4 id="cons-1">Cons
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>Less efficient storage&lt;/strong>: Strings typically use more storage space than integers.&lt;/li>
+&lt;li>&lt;strong>Potentially slower queries&lt;/strong>: String comparisons can be slower than integer comparisons, especially for large datasets.&lt;/li>
+&lt;li>&lt;strong>Case sensitivity&lt;/strong>: By default, the comparison is case-sensitive, which might lead to issues if not handled carefully.&lt;/li>
+&lt;/ul>
+&lt;h3 id="recommendation">Recommendation
+&lt;/h3>&lt;p>In most cases, EnumType.STRING is the safer and more maintainable choice, despite the slight performance trade-off. The benefits of readability, safety, and resilience to changes &lt;strong>usually outweigh&lt;/strong> the minor efficiency gains of EnumType.ORDINAL.&lt;/p>
+&lt;p>However, if you’re dealing with a very large dataset where performance and storage efficiency are critical, and you can guarantee that the enum order will never change, EnumType.ORDINAL might be considered.&lt;/p>
+&lt;h3 id="best-practices">Best Practices
+&lt;/h3>&lt;p>&lt;strong>Default&lt;/strong> to EnumType.STRING unless you have a compelling reason not to.
+If using EnumType.ORDINAL, document it clearly and warn about the dangers of changing the enum order.
+Consider using a &lt;strong>custom UserType&lt;/strong> for more complex enum persistence scenarios.
+If using EnumType.STRING, be aware of &lt;strong>case sensitivity&lt;/strong> in your database queries.&lt;/p></description></item><item><title>【Spring Data JPA】@Query and JPQL</title><link>https://dyhes.github.io/p/spring-data-jpa@query-and-jpql/</link><pubDate>Sun, 14 Jul 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/spring-data-jpa@query-and-jpql/</guid><description>&lt;img src="https://dyhes.github.io/covers/cover19.png" alt="Featured image of post 【Spring Data JPA】@Query and JPQL" />&lt;h2 id="query">@Query
+&lt;/h2>&lt;p>@Query is an annotation provided by Spring Data JPA. It allows you to define custom queries using either JPQL (Java Persistence Query Language) or native SQL. This annotation is typically used on repository method declarations to specify the query that should be executed when the method is called.&lt;/p>
+&lt;h3 id="native-query">Native Query
+&lt;/h3>&lt;p>While @Query typically uses JPQL, you can also use native SQL by setting the nativeQuery attribute to true.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@Query&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">value&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;SELECT * FROM users WHERE status = ?1&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">nativeQuery&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">List&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">findUsersByStatus&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">status&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="positional-parameters">Positional Parameters
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">interface&lt;/span> &lt;span class="nc">UserRepository&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">extends&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">JpaRepository&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Query&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;SELECT u FROM User u WHERE u.email = ?1&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">findByEmail&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">email&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="named-parameters">Named Parameters
+&lt;/h3>&lt;p>Instead of positional parameters (?1, ?2), you can use named parameters:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@Query&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;SELECT u FROM User u WHERE u.status = :status AND u.name LIKE :nameLike&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">List&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">findUsersByStatusAndNameLike&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nd">@Param&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;status&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">status&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nd">@Param&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;nameLike&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">nameLike&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="modifying-queries">Modifying Queries
+&lt;/h3>&lt;p>For update or delete operations, use the @Modifying annotation along with @Query (mandatory)&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@Modifying&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Query&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;UPDATE User u SET u.status = :status WHERE u.lastLoginDate &amp;lt; :date&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">updateUserStatusByLastLoginDate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nd">@Param&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;status&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">status&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nd">@Param&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;date&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">LocalDate&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">date&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="jpql-java-persistence-query-language">JPQL (Java Persistence Query Language)
+&lt;/h2>&lt;p>JPQL is a query language similar to SQL, but it operates &lt;strong>on JPA entity objects&lt;/strong> rather than database tables. It&amp;rsquo;s used to define queries against entities to search for and retrieve entity objects. JPQL is &lt;strong>database-independent&lt;/strong>, which means you can write queries that work across different database systems.&lt;/p>
+&lt;h2 id="join">JOIN
+&lt;/h2>&lt;p>In database terms, a JOIN is an operation that &lt;strong>combines rows from two or more tables based on a related column between them&lt;/strong>. In the context of JPQL, a JOIN allows you to fetch associated entities based on their relationships.&lt;/p>
+&lt;h3 id="type">Type
+&lt;/h3>&lt;h4 id="entity-definition">Entity Definition
+&lt;/h4>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@Entity&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">User&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Id&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@GeneratedValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">strategy&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">GenerationType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">IDENTITY&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">email&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@OneToMany&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mappedBy&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;user&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">List&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Order&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">orders&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// getters and setters&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Entity&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">Order&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Id&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@GeneratedValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">strategy&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">GenerationType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">IDENTITY&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">product&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Integer&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">quantity&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@ManyToOne&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@JoinColumn&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;user_id&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">user&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// getters and setters&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="inner-join">Inner Join
+&lt;/h4>&lt;p>Retrieves records that have matching values in both entities.&lt;/p>
+&lt;p>In JPQL (Java Persistence Query Language), the keyword JOIN by itself &lt;strong>defaults to an INNER JOIN&lt;/strong>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">interface&lt;/span> &lt;span class="nc">UserRepository&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">extends&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">JpaRepository&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Query&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;SELECT u FROM User u INNER JOIN u.orders o WHERE o.product = :product&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// equals&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Query&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;SELECT u FROM User u JOIN u.orders o WHERE o.product = :product&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">List&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">findUsersByProduct&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nd">@Param&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;product&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">product&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="left-outer-join">Left (Outer) Join
+&lt;/h4>&lt;p>Retrieves &lt;strong>all records from the left&lt;/strong> entity and &lt;strong>the matched records from the right&lt;/strong> entity. If no match is found, NULL values are returned for columns from the right entity.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">interface&lt;/span> &lt;span class="nc">UserRepository&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">extends&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">JpaRepository&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Query&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;SELECT u FROM User u LEFT JOIN u.orders o WHERE u.name = :name&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">List&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">findUsersWithOrders&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nd">@Param&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;name&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="fetch-join">Fetch Join
+&lt;/h4>&lt;p>An &lt;strong>optimization technique&lt;/strong> to eagerly fetch associated entities in a single query.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">interface&lt;/span> &lt;span class="nc">UserRepository&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">extends&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">JpaRepository&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Query&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;SELECT u FROM User u LEFT JOIN FETCH u.orders WHERE u.name = :name&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">List&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">findUsersWithOrdersFetch&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nd">@Param&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;name&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="right-outer-join">Right (Outer) Join
+&lt;/h4>&lt;p>Retrieves &lt;strong>all records from the right&lt;/strong> entity and &lt;strong>the matched records from the left&lt;/strong> entity. If no match is found, NULL values are returned for columns from the left entity. (&lt;strong>Less commonly used&lt;/strong> in JPQL)&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@Query&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;SELECT o FROM Order o RIGHT JOIN o.user u&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">List&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Order&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">findAllOrdersWithUsers&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="full-outer-join">Full (Outer) Join
+&lt;/h4>&lt;p>Retrieves records when there is a match in one of the entities. (&lt;strong>Not supported in JPQL&lt;/strong>; you would typically use a combination of left and right joins to achieve this effect)&lt;/p>
+&lt;h3 id="implicit-join">Implicit Join
+&lt;/h3>&lt;p>In JPQL, you can use implicit joins by simply referencing related entities in the WHERE clause.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@Query&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;SELECT u FROM User u WHERE u.address.city = :city&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">List&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">findUsersByCity&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nd">@Param&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;city&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">city&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Query&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;SELECT u FROM User u JOIN u.address a WHERE a.city = :city&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">List&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">findUsersByCity&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nd">@Param&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;city&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">city&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="differences">Differences
+&lt;/h4>&lt;p>In general, implicit joins do not inherently have performance issues compared to explicit joins. The database optimizer &lt;strong>typically treats them the same way&lt;/strong>. However, there are some important considerations:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Query Optimization:&lt;/strong> Modern database management systems (DBMS) are quite sophisticated in their query optimization. They often &lt;strong>transform implicit joins into explicit joins&lt;/strong> during the query execution plan generation. This means that in many cases, there&amp;rsquo;s no performance difference between implicit and explicit joins.&lt;/li>
+&lt;li>&lt;strong>Readability and Maintainability&lt;/strong>: While not strictly a performance issue, explicit joins are often considered more readable and maintainable. This can indirectly affect performance if &lt;strong>unclear&lt;/strong> queries lead to misunderstandings and suboptimal database usage.&lt;/li>
+&lt;li>&lt;strong>Complex Queries&lt;/strong>: In more complex scenarios, especially involving multiple joins or outer joins, explicit joins can &lt;strong>be clearer&lt;/strong> and might help the optimizer make better decisions. This is more about query complexity than implicit vs. explicit syntax.&lt;/li>
+&lt;li>&lt;strong>Potential Pitfalls of implicit join&lt;/strong>:
+&lt;ul>
+&lt;li>&lt;strong>N+1 Query Problem&lt;/strong>: This can occur with lazy loading and implicit joins, but it&amp;rsquo;s not due to the implicit join itself. It&amp;rsquo;s more about how the ORM (Object-Relational Mapping) handles lazy loading.&lt;/li>
+&lt;li>&lt;strong>Cartesian Products&lt;/strong>: In rare cases, implicit joins might lead to unintended cartesian products, especially in complex queries. Explicit joins make the intentions clearer.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="performance-considerations">Performance Considerations
+&lt;/h3>&lt;ul>
+&lt;li>JOINs can be &lt;strong>expensive&lt;/strong> operations, especially on large tables.&lt;/li>
+&lt;li>&lt;strong>Proper indexing&lt;/strong> on join columns is crucial for performance.&lt;/li>
+&lt;li>Be cautious with &lt;strong>JOIN FETCHes on collections&lt;/strong>, as they can lead to cartesian products and duplicate results. Use DISTINCT when necessary.&lt;/li>
+&lt;/ul></description></item><item><title>【Spring Data JPA】Pageable and Sort</title><link>https://dyhes.github.io/p/spring-data-jpapageable-and-sort/</link><pubDate>Sun, 14 Jul 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/spring-data-jpapageable-and-sort/</guid><description>&lt;h2 id="pageable">Pageable
+&lt;/h2>&lt;p>Pageable is an interface in Spring Data JPA that&amp;rsquo;s used for &lt;strong>pagination and sorting&lt;/strong> when working with the PagingAndSortingRepository. It allows you to retrieve data from a database in smaller chunks (pages) and specify sorting criteria.&lt;/p>
+&lt;h3 id="creation">Creation
+&lt;/h3>&lt;p>Creating Pageable objects:&lt;/p>
+&lt;ul>
+&lt;li>Use &lt;strong>PageRequest.of()&lt;/strong> static factory methods&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Page&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">getUsersPage&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">page&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">size&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Pageable&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">pageable&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">PageRequest&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">of&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">page&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">size&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Sort&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">by&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;lastName&amp;#34;&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="na">ascending&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userRepository&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">findAll&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pageable&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="performance-considerations">Performance Considerations
+&lt;/h3>&lt;ul>
+&lt;li>Pagination can significantly &lt;strong>improve performance&lt;/strong> for large datasets.&lt;/li>
+&lt;li>Be cautious with &lt;strong>offset-based pagination&lt;/strong> (which Pageable uses) for very large datasets, as it can become inefficient.&lt;/li>
+&lt;li>For large datasets, consider using indexed columns for sorting and filtering.&lt;/li>
+&lt;li>Be cautious with &lt;strong>complex joins&lt;/strong> in paginated queries, as they can impact performance.&lt;/li>
+&lt;/ul>
+&lt;h3 id="method-signature">Method Signature
+&lt;/h3>&lt;ul>
+&lt;li>The method should return a &lt;strong>Page&lt;T>&lt;/strong> object.&lt;/li>
+&lt;li>Include a &lt;strong>Pageable parameter&lt;/strong> in the method signature.&lt;/li>
+&lt;/ul>
+&lt;h3 id="sorting">Sorting
+&lt;/h3>&lt;ul>
+&lt;li>The Pageable object includes sorting information.&lt;/li>
+&lt;li>Spring Data &lt;strong>adds ORDER BY&lt;/strong> clauses based on the Sort specification in the Pageable object.&lt;/li>
+&lt;li>The sorting specified in the Pageable object &lt;strong>overrides&lt;/strong> any ORDER BY clause in your query.&lt;/li>
+&lt;/ul>
+&lt;h3 id="native-queries">Native Queries
+&lt;/h3>&lt;ul>
+&lt;li>The query can be in JPQL (Java Persistence Query Language) or native SQL.&lt;/li>
+&lt;li>When using native SQL queries, you need to provide &lt;strong>a separate count query&lt;/strong> for pagination.&lt;/li>
+&lt;li>Use the countQuery attribute of the @Query annotation for this.&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Query&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">value&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;SELECT * FROM users u WHERE u.created_date &amp;gt; :date&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">countQuery&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;SELECT count(*) FROM users u WHERE u.created_date &amp;gt; :date&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">nativeQuery&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Page&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">findUsersCreatedAfter&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nd">@Param&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;date&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Date&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">date&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Pageable&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">pageable&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="sort">Sort
+&lt;/h2>&lt;p>Sort is a class in Spring Data that represents sorting parameters. It&amp;rsquo;s used to specify the order in which data should be returned from a query.&lt;/p>
+&lt;h3 id="creation-1">Creation
+&lt;/h3>&lt;p>Use static factory methods like Sort.by() to create Sort instances.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">Sort&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">sortByName&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Sort&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">by&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;name&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="direction">Direction
+&lt;/h3>&lt;ul>
+&lt;li>Default direction is &lt;strong>ascending&lt;/strong>.&lt;/li>
+&lt;li>Use Direction.ASC or Direction.DESC to specify direction.&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">Sort&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">sortByAgeDesc&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Sort&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">by&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Direction&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">DESC&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;age&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="order">Order
+&lt;/h3>&lt;ul>
+&lt;li>The Order class represents a single sort criterion (property + direction).&lt;/li>
+&lt;li>Multiple Order objects can be combined in a Sort.&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Sort&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">complexSort&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Sort&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">by&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Order&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">asc&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;department&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Order&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">desc&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;salary&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="method-chaining">Method Chaining
+&lt;/h3>&lt;ul>
+&lt;li>Sort provides a fluent API for method chaining.&lt;/li>
+&lt;li>Use and() to combine multiple sort criteria.&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Sort&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">chainedSort&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Sort&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">by&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;department&amp;#34;&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="na">ascending&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">and&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Sort&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">by&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;salary&amp;#34;&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="na">descending&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="null-handling">Null Handling
+&lt;/h3>&lt;p>Null handling:&lt;/p>
+&lt;ul>
+&lt;li>You can specify null handling with nullsFirst() or nullsLast().&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">Sort&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">sort&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Sort&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">by&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Order&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">asc&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;department&amp;#34;&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="na">nullsLast&lt;/span>&lt;span class="p">(),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Order&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">desc&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;salary&amp;#34;&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="na">nullsFirst&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="ignoring-case">Ignoring case
+&lt;/h3>&lt;ul>
+&lt;li>Use ignoreCase() for case-insensitive sorting.&lt;/li>
+&lt;/ul>
+&lt;h3 id="typed-sort">⠀Typed Sort
+&lt;/h3>&lt;ul>
+&lt;li>For type-safe sorting, use Sort.sort(Class).&lt;/li>
+&lt;/ul>
+&lt;h3 id="example">Example
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">org.springframework.data.domain.Sort&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">org.springframework.data.domain.Sort.Direction&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">org.springframework.data.domain.Sort.Order&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">SortExample&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">demonstrateSort&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Sorting by multiple properties&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Sort&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">sortByLastNameThenFirstName&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">Sort&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">by&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;lastName&amp;#34;&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="na">and&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Sort&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">by&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;firstName&amp;#34;&lt;/span>&lt;span class="p">));&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Combining sorts&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Sort&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">combinedSort&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">sortByName&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">and&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sortByAgeDesc&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>【Spring Data JPA】Polymophic Query</title><link>https://dyhes.github.io/p/spring-data-jpapolymophic-query/</link><pubDate>Sat, 13 Jul 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/spring-data-jpapolymophic-query/</guid><description>&lt;h2 id="inheritance-type">Inheritance type
+&lt;/h2>&lt;h3 id="inheritancetypesingle_table">&lt;code>InheritanceType.SINGLE_TABLE&lt;/code>
+&lt;/h3>&lt;h4 id="pros">Pros
+&lt;/h4>&lt;ul>
+&lt;li>Simplest to implement and typically offers &lt;strong>the best performance&lt;/strong> for polymorphic queries.&lt;/li>
+&lt;li>No join operations needed when querying the base class.&lt;/li>
+&lt;li>Easy to add new subclasses without schema changes.&lt;/li>
+&lt;/ul>
+&lt;h4 id="cons">Cons
+&lt;/h4>&lt;ul>
+&lt;li>All columns for all subclasses are in one table, which can lead to &lt;strong>many nullable columns&lt;/strong>.&lt;/li>
+&lt;li>The table can become &lt;strong>very wide&lt;/strong> if there are many subclasses or attributes.&lt;/li>
+&lt;li>Potential for &lt;strong>wasted space&lt;/strong> in the database.&lt;/li>
+&lt;/ul>
+&lt;h3 id="inheritancetypetable_per_class">&lt;code>InheritanceType.TABLE_PER_CLASS&lt;/code>
+&lt;/h3>&lt;h4 id="pros-1">Pros
+&lt;/h4>&lt;ul>
+&lt;li>Each entity has its own table, which can be more &lt;strong>intuitive&lt;/strong>.&lt;/li>
+&lt;li>&lt;strong>Easy to add new attributes&lt;/strong> to subclasses without affecting other classes.&lt;/li>
+&lt;li>Good for cases where subclasses &lt;strong>have many unique attributes&lt;/strong>.&lt;/li>
+&lt;/ul>
+&lt;h4 id="cons-1">Cons
+&lt;/h4>&lt;ul>
+&lt;li>Polymorphic queries can be &lt;strong>inefficient&lt;/strong>, often requiring UNION operations.&lt;/li>
+&lt;li>&lt;strong>Redundant storage&lt;/strong> of common attributes across tables.&lt;/li>
+&lt;li>&lt;strong>Not well supported&lt;/strong> by all JPA providers.&lt;/li>
+&lt;/ul>
+&lt;h3 id="inheritancetypejoined">&lt;code>InheritanceType.JOINED&lt;/code>
+&lt;/h3>&lt;h4 id="pros-2">Pros
+&lt;/h4>&lt;ul>
+&lt;li>Normalized database design with minimal data redundancy.&lt;/li>
+&lt;li>Flexible for adding new subclasses or attributes.&lt;/li>
+&lt;li>&lt;strong>Good balance&lt;/strong> between normalization and performance.&lt;/li>
+&lt;/ul>
+&lt;h4 id="cons-2">Cons
+&lt;/h4>&lt;ul>
+&lt;li>Requires joins for polymorphic queries, which can &lt;strong>impact performance&lt;/strong>.&lt;/li>
+&lt;li>Inserts and updates may affect multiple tables.&lt;/li>
+&lt;li>More complex queries compared to SINGLE_TABLE.&lt;/li>
+&lt;/ul>
+&lt;h2 id="general-consideration">General consideration
+&lt;/h2>&lt;ul>
+&lt;li>SINGLE_TABLE is often the &lt;strong>default choice&lt;/strong> due to its simplicity and performance.&lt;/li>
+&lt;li>JOINED is a good choice when you need a &lt;strong>more normalized&lt;/strong> database structure.&lt;/li>
+&lt;li>TABLE_PER_CLASS can be useful in specific scenarios but is &lt;strong>often avoided&lt;/strong> due to performance concerns with polymorphic queries.&lt;/li>
+&lt;li>The choice often depends on your specific use case, the number of subclasses, how often you perform polymorphic queries, and your database design preferences.&lt;/li>
+&lt;/ul></description></item><item><title>【Spring Data JPA】Cascade Operations</title><link>https://dyhes.github.io/p/spring-data-jpacascade-operations/</link><pubDate>Fri, 12 Jul 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/spring-data-jpacascade-operations/</guid><description>&lt;img src="https://dyhes.github.io/covers/cover7.png" alt="Featured image of post 【Spring Data JPA】Cascade Operations" />&lt;h2 id="types">Types
+&lt;/h2>&lt;ul>
+&lt;li>ALL: Applies all cascade types&lt;/li>
+&lt;li>PERSIST: Cascades the persist (&lt;strong>create&lt;/strong>) operation&lt;/li>
+&lt;li>MERGE: Cascades the merge (&lt;strong>update&lt;/strong>) operation&lt;/li>
+&lt;li>REMOVE: Cascades the remove (&lt;strong>delete&lt;/strong>) operation&lt;/li>
+&lt;li>REFRESH: Cascades the refresh operation&lt;/li>
+&lt;li>DETACH: Cascades the detach operation&lt;/li>
+&lt;/ul>
+&lt;h2 id="common-use-cases">Common use cases
+&lt;/h2>&lt;ul>
+&lt;li>CascadeType.PERSIST: When you &lt;strong>save&lt;/strong> a parent entity, all its child entities are also saved.&lt;/li>
+&lt;li>CascadeType.REMOVE: When you &lt;strong>delete&lt;/strong> a parent entity, all its child entities are also deleted.&lt;/li>
+&lt;li>CascadeType.ALL: Applies all cascade types, useful when you want full propagation of operations.&lt;/li>
+&lt;/ul>
+&lt;h2 id="benefits">Benefits
+&lt;/h2>&lt;ul>
+&lt;li>Simplifies entity management by automating related entity operations&lt;/li>
+&lt;li>Helps maintain data integrity and consistency&lt;/li>
+&lt;li>&lt;strong>Reduces boilerplate code&lt;/strong> for handling related entities&lt;/li>
+&lt;/ul>
+&lt;h2 id="best-practices">Best practices
+&lt;/h2>&lt;p>&lt;strong>Avoid using CascadeType.ALL by default&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>Don&amp;rsquo;t automatically apply CascadeType.ALL to every @OneToMany relationship&lt;/li>
+&lt;li>Can lead to unexpected behavior and potential issues
+&lt;strong>Use specific cascade types&lt;/strong>&lt;/li>
+&lt;li>Choose cascade types that match your specific needs:
+&lt;ul>
+&lt;li>CascadeType.PERSIST: For saving related entities&lt;/li>
+&lt;li>CascadeType.REMOVE: For deleting related entities&lt;/li>
+&lt;li>CascadeType.MERGE: For updating related entities
+&lt;strong>Be cautious with CascadeType.REMOVE&lt;/strong>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Can lead to unintended deletions&lt;/li>
+&lt;li>Consider &lt;strong>using orphanRemoval=true instead&lt;/strong> for more controlled deletions
+&lt;strong>Avoid cascades for shared references&lt;/strong>&lt;/li>
+&lt;li>Don&amp;rsquo;t use cascades when child entities can &lt;strong>exist independently or be shared&lt;/strong>&lt;/li>
+&lt;li>Example: User (parent) and Address (child) where addresses might be shared
+&lt;strong>Consider performance implications&lt;/strong>&lt;/li>
+&lt;li>Cascading operations can impact performance, especially with large datasets&lt;/li>
+&lt;li>Use judiciously and test thoroughly&lt;/li>
+&lt;/ul>
+&lt;h2 id="conversation-with-claude-35">Conversation with Claude 3.5
+&lt;/h2>&lt;p>Can i understand cascade operations like this: it is only necessary when i need to update entity from the non-owning part (namely the collection field holder, the one part in a @OneToMany relationship)?&lt;/p>
+&lt;blockquote>
+&lt;p>Your understanding is on the right track, but it&amp;rsquo;s not entirely accurate.&lt;/p>
+&lt;p>Cascade operations are not only necessary when updating an entity from the non-owning side (the collection field holder in a @OneToMany relationship). They are useful in various scenarios, regardless of which side of the relationship you&amp;rsquo;re operating on.&lt;/p>
+&lt;p>&lt;strong>Cascade from parent to children:&lt;/strong> In a @OneToMany relationship, you might want to cascade operations from the parent (the &amp;ldquo;one&amp;rdquo; side) to the children (the &amp;ldquo;many&amp;rdquo; side). This is &lt;strong>common&lt;/strong> when the child entities&amp;rsquo; lifecycle is dependent on the parent.&lt;/p>
+&lt;p>&lt;strong>Cascade from child to parent:&lt;/strong> In some cases, you might want to cascade operations from the child to the parent. This is less common but can be useful in certain scenarios.&lt;/p>
+&lt;p>&lt;strong>Bidirectional relationships:&lt;/strong> In bidirectional relationships, you can define cascades on both sides, although this requires &lt;strong>careful consideration&lt;/strong> to avoid unintended consequences.&lt;/p>
+&lt;/blockquote></description></item><item><title>【Spring Data JPA】Join Table Entity</title><link>https://dyhes.github.io/p/spring-data-jpajoin-table-entity/</link><pubDate>Fri, 12 Jul 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/spring-data-jpajoin-table-entity/</guid><description>&lt;img src="https://dyhes.github.io/covers/cover13.png" alt="Featured image of post 【Spring Data JPA】Join Table Entity" />&lt;h2 id="composite-key">Composite key
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@Entity&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">BookAuthor&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@EmbeddedId&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">BookAuthorId&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@ManyToOne&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@MapsId&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;bookId&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Book&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">book&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@ManyToOne&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@MapsId&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;authorId&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Author&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">author&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Other fields, getters, setters...&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Embeddable&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">BookAuthorId&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">implements&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Serializable&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">bookId&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">authorId&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Constructors, equals, hashCode...&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="pros">Pros
+&lt;/h3>&lt;ul>
+&lt;li>Naturally represents the relationship between entities.&lt;/li>
+&lt;li>Ensures data integrity at the database level.&lt;/li>
+&lt;li>Can be more &lt;strong>space-efficient&lt;/strong> in some cases.&lt;/li>
+&lt;li>Useful when the combination of fields has a natural, real-world uniqueness.&lt;/li>
+&lt;/ul>
+&lt;h3 id="cons">Cons
+&lt;/h3>&lt;ul>
+&lt;li>Can be &lt;strong>more complex to work with in queries and code&lt;/strong>.&lt;/li>
+&lt;li>May lead to longer primary keys, which can impact performance in large tables.&lt;/li>
+&lt;li>Less flexible if the relationship structure changes.&lt;/li>
+&lt;/ul>
+&lt;h2 id="separate-primary-key">Separate primary key
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@Entity&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">BookAuthor&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Id&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@GeneratedValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">strategy&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">GenerationType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">IDENTITY&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@ManyToOne&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Book&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">book&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@ManyToOne&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Author&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">author&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Other fields, getters, setters...&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="pros-1">Pros
+&lt;/h3>&lt;ul>
+&lt;li>Simpler to work with in code and queries.&lt;/li>
+&lt;li>More flexible if relationships change.&lt;/li>
+&lt;li>Can &lt;strong>improve performance&lt;/strong> in some scenarios, especially with large datasets.&lt;/li>
+&lt;li>Easier to reference from other tables.&lt;/li>
+&lt;/ul>
+&lt;h3 id="cons-1">Cons
+&lt;/h3>&lt;ul>
+&lt;li>Requires an additional column in the table.&lt;/li>
+&lt;li>May not represent the natural relationship as clearly.&lt;/li>
+&lt;/ul>
+&lt;h2 id="consideration">Consideration
+&lt;/h2>&lt;h3 id="consider-using-a-composite-key">Consider using a Composite Key
+&lt;/h3>&lt;ul>
+&lt;li>The combination of foreign keys naturally and uniquely identifies the relationship.&lt;/li>
+&lt;li>You want to enforce referential integrity at the database level.&lt;/li>
+&lt;li>The relationship is &lt;strong>stable&lt;/strong> and unlikely to change.&lt;/li>
+&lt;li>You’re working with a &lt;strong>relatively small&lt;/strong> dataset.&lt;/li>
+&lt;/ul>
+&lt;h3 id="consider-using-a-separate-primary-key">Consider using a Separate Primary Key
+&lt;/h3>&lt;ul>
+&lt;li>1 You need more flexibility in your data model.&lt;/li>
+&lt;li>2 You’re working with &lt;strong>large datasets&lt;/strong> where query performance is crucial.&lt;/li>
+&lt;li>3 You anticipate changes in the relationship structure.&lt;/li>
+&lt;li>4 You want to simplify your code and queries.&lt;/li>
+&lt;li>5 You need to &lt;strong>reference this join table from other entities&lt;/strong>.&lt;/li>
+&lt;/ul>
+&lt;h3 id="additional-considerations">Additional Considerations
+&lt;/h3>&lt;ul>
+&lt;li>Database Performance: Test both approaches with your expected data volume to see which performs better.&lt;/li>
+&lt;li>ORM Tool: Some ORM tools work better with one approach over the other.&lt;/li>
+&lt;li>Team Preference: Consider what your team is more comfortable working with.&lt;/li>
+&lt;li>Existing Patterns: If your project already uses one approach consistently, it might be best to stick with it for consistency.&lt;/li>
+&lt;/ul>
+&lt;p>In many modern applications, &lt;strong>using a separate primary key is often preferred&lt;/strong> due to its simplicity and flexibility. However, there are still valid use cases for composite keys, especially in systems where the relationship itself has significant business meaning.&lt;/p></description></item><item><title>Many-One Relationship</title><link>https://dyhes.github.io/p/many-one-relationship/</link><pubDate>Thu, 11 Jul 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/many-one-relationship/</guid><description>&lt;img src="https://dyhes.github.io/covers/cover19.png" alt="Featured image of post Many-One Relationship" />&lt;h2 id="onetomany">@OneToMany
+&lt;/h2>&lt;ul>
+&lt;li>This annotation is used to define a one-to-many relationship between two entities.&lt;/li>
+&lt;li>It’s typically &lt;strong>used on the “one” side&lt;/strong> of the relationship.&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">Department&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@OneToMany&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mappedBy&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;department&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">cascade&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">CascadeType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">ALL&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">List&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Employee&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">employees&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="manytoone">@ManyToOne
+&lt;/h2>&lt;ul>
+&lt;li>This annotation is used to define a many-to-one relationship between two entities.&lt;/li>
+&lt;li>It’s typically &lt;strong>used on the “many” side&lt;/strong> of the relationship.&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">Employee&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@ManyToOne&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@JoinColumn&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;department_id&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Department&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">department&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Often, @OneToMany and @ManyToOne are used together to create a bidirectional relationship. The @OneToMany side uses mappedBy to indicate the field that owns the relationship. The @ManyToOne side use @JoinColumn to specify the &lt;strong>foreign key column&lt;/strong>.&lt;/p>
+&lt;h2 id="cascade-operation">Cascade operation
+&lt;/h2>&lt;p>Cascade operations in ORM frameworks like Hibernate and JPA allow you to &lt;strong>automatically apply operations performed on a parent entity to its associated child entities&lt;/strong>. This feature is particularly useful in managing relationships between entities and can significantly simplify database operations.&lt;/p>
+&lt;h3 id="types">Types
+&lt;/h3>&lt;ul>
+&lt;li>PERSIST: Saves the child entity when the parent is saved.&lt;/li>
+&lt;li>MERGE: Updates the child entity when the parent is updated.&lt;/li>
+&lt;li>REMOVE: Deletes the child entity when the parent is deleted.&lt;/li>
+&lt;li>REFRESH: Refreshes the child entity when the parent is refreshed.&lt;/li>
+&lt;li>DETACH: Detaches the child entity when the parent is detached (from the persistence context).&lt;/li>
+&lt;li>ALL: Applies all cascade types (PERSIST, MERGE, REMOVE, REFRESH, DETACH).&lt;/li>
+&lt;/ul>
+&lt;h3 id="usage">Usage
+&lt;/h3>&lt;p>You can specify cascade operations in the @OneToMany, @ManyToOne, @OneToOne, or @ManyToMany annotations:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@OneToMany&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cascade&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">CascadeType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">ALL&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">List&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">ChildEntity&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">children&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@OneToMany&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cascade&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="n">CascadeType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">PERSIST&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">CascadeType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">MERGE&lt;/span>&lt;span class="p">})&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">List&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">ChildEntity&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">children&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="considerations">Considerations
+&lt;/h3>&lt;ul>
+&lt;li>Orphan Removal: Used in conjunction with cascading, orphanRemoval = true will remove child entities that are no longer referenced by the parent.&lt;/li>
+&lt;li>Bi-directional Relationships: Be cautious with cascade operations in &lt;strong>bi-directional relationships&lt;/strong> to avoid unintended side effects.&lt;/li>
+&lt;li>Performance: Cascading can &lt;strong>impact performance&lt;/strong>, especially with large datasets. Use it judiciously&lt;/li>
+&lt;/ul></description></item><item><title>One-One Relationship</title><link>https://dyhes.github.io/p/one-one-relationship/</link><pubDate>Thu, 11 Jul 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/one-one-relationship/</guid><description>&lt;img src="https://dyhes.github.io/covers/cover21.jpg" alt="Featured image of post One-One Relationship" />&lt;p>A one-to-one relationship means that each instance of an entity is associated with precisely one instance of another entity. This relationship is bidirectional or unidirectional:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Unidirectional One-to-One&lt;/strong>: One entity has a reference to another entity, but not vice versa.&lt;/li>
+&lt;li>&lt;strong>Bidirectional One-to-One&lt;/strong>: Both entities have references to each other.
+In the context of object-relational mapping (ORM) in Java, specifically when using Java Persistence API (JPA) or Hibernate, the @OneToOne annotation is used to define a one-to-one relationship between two entities.&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// unidirectional &lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Entity&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">User&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Id&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@GeneratedValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">strategy&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">GenerationType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">IDENTITY&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">username&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@OneToOne&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cascade&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">CascadeType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">ALL&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@JoinColumn&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;profile_id&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">referencedColumnName&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;id&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">UserProfile&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userProfile&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Getters and setters&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Entity&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">UserProfile&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Id&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@GeneratedValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">strategy&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">GenerationType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">IDENTITY&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">address&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Getters and setters&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">//bidirectional&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Entity&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">User&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Id&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@GeneratedValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">strategy&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">GenerationType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">IDENTITY&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">username&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@OneToOne&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cascade&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">CascadeType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">ALL&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">mappedBy&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;user&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">UserProfile&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userProfile&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Getters and setters&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Entity&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">UserProfile&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Id&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@GeneratedValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">strategy&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">GenerationType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">IDENTITY&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">address&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@OneToOne&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@JoinColumn&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;user_id&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">user&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Getters and setters&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Many-Many Relationship</title><link>https://dyhes.github.io/p/many-many-relationship/</link><pubDate>Wed, 10 Jul 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/many-many-relationship/</guid><description>&lt;img src="https://dyhes.github.io/covers/cover20.jpg" alt="Featured image of post Many-Many Relationship" />&lt;h2 id="manytomany">@ManyToMany
+&lt;/h2>&lt;p>The @ManyToMany annotation is used in Java persistence frameworks, particularly in Java Persistence API (JPA) and Object-Relational Mapping (ORM) tools like Hibernate. It’s used to define a &lt;strong>many-to-many relationship&lt;/strong> between two entities.&lt;/p>
+&lt;ul>
+&lt;li>Relationship: It represents a relationship where multiple instances of one entity can be associated with multiple instances of another entity.&lt;/li>
+&lt;li>Database representation: In a relational database, this is typically implemented using a join table that contains foreign keys to both entities.&lt;/li>
+&lt;li>Bidirectional vs Unidirectional: The relationship can be &lt;strong>bidirectional&lt;/strong> (defined on both entities) or &lt;strong>unidirectional&lt;/strong> (defined on only one entity, namely the owning one).&lt;/li>
+&lt;li>Usage: It’s typically used on a &lt;strong>collection field&lt;/strong> in an entity class.&lt;/li>
+&lt;li>Join Table: By default, JPA will create a join table, but you can &lt;strong>customize&lt;/strong> this using the &lt;strong>@JoinTable&lt;/strong> annotation.&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@Entity&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Table&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;students&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">Student&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Id&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@GeneratedValue&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@ManyToMany&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@JoinTable&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;student_course&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">joinColumns&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nd">@JoinColumn&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;student_id&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">inverseJoinColumns&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nd">@JoinColumn&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;course_id&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Set&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Course&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">signedCourses&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// getters and setters&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Entity&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Table&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;courses&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">Course&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Id&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@GeneratedValue&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@ManyToMany&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mappedBy&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;signedCourses&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Set&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Student&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">students&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// getters and setters&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>In this example:&lt;/p>
+&lt;ul>
+&lt;li>A student can enroll in multiple courses, and a course can have multiple students.&lt;/li>
+&lt;li>The @JoinTable annotation specifies the details of the join table.&lt;/li>
+&lt;li>The mappedBy attribute in the Course entity indicates that Student is the owning side of the relationship.&lt;/li>
+&lt;/ul>
+&lt;p>When using @ManyToMany, consider these best practices:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Use Set&lt;/strong> instead of List to avoid duplicate entries.&lt;/li>
+&lt;li>Be cautious with bidirectional relationships, as they can &lt;strong>lead to performance issues&lt;/strong> if not managed properly.&lt;/li>
+&lt;li>Consider using &lt;strong>lazy loading&lt;/strong> (fetch = FetchType.LAZY) to improve performance.&lt;/li>
+&lt;li>In some cases, it might be better to model the relationship as &lt;strong>two one-to-many&lt;/strong> relationships with an intermediate entity, especially if you need to store &lt;strong>additional information&lt;/strong> about the relationship.&lt;/li>
+&lt;/ul>
+&lt;h2 id="mappedby">mappedBy
+&lt;/h2>&lt;p>The mappedBy attribute in a @ManyToMany relationship is used to indicate the non-owning side of a &lt;strong>bidirectional&lt;/strong> relationship. &lt;/p>
+&lt;ul>
+&lt;li>In a @ManyToMany relationship, one side needs to be the owning side, and the other is the non-owning (inverse) side.&lt;/li>
+&lt;li>The owning side is where &lt;strong>the @JoinTable is specified&lt;/strong> (if using a custom join table).&lt;/li>
+&lt;li>The non-owning side uses mappedBy to &lt;strong>refer to the property&lt;/strong> on the owning side.
+Key Points&lt;/li>
+&lt;li>&lt;strong>Only&lt;/strong> the owning side of the relationship is responsible for updating the join table.&lt;/li>
+&lt;li>Changes made to the non-owning side &lt;strong>won’t be reflected in the database&lt;/strong> unless the owning side is also updated.
+Benefits&lt;/li>
+&lt;li>&lt;strong>Prevents duplicate&lt;/strong> join tables.&lt;/li>
+&lt;li>Clarifies which side of the relationship is responsible for managing the association.
+Common Mistake:&lt;/li>
+&lt;li>Forgetting to specify mappedBy on one side, which can lead to &lt;strong>two separate join table&lt;/strong>s being created.
+Bidirectional Relationship Management:&lt;/li>
+&lt;li>Even though mappedBy is specified, you typically need to update both sides of the relationship in your Java code &lt;strong>for consistency.&lt;/strong>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">student&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getCourses&lt;/span>&lt;span class="p">().&lt;/span>&lt;span class="na">add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">course&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">course&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getStudents&lt;/span>&lt;span class="p">().&lt;/span>&lt;span class="na">add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">student&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;p>Database Perspective:&lt;/p>
+&lt;ul>
+&lt;li>The database structure is the same regardless of which side is the owning side.&lt;/li>
+&lt;li>The choice affects how JPA manages the relationship, not the underlying database schema.&lt;/li>
+&lt;/ul>
+&lt;h2 id="lazy-loading">lazy loading
+&lt;/h2>&lt;ul>
+&lt;li>Lazy loading means that an object &lt;strong>doesn’t load all of its associated data&lt;/strong> from the database when it’s first retrieved.&lt;/li>
+&lt;li>Instead, it loads only the data it needs immediately and loads other related data &lt;strong>only when it’s specifically requested&lt;/strong>.
+In ORM Context:&lt;/li>
+&lt;li>When you fetch an entity from the database, lazy loading allows you to retrieve the entity &lt;strong>without immediately loading all of its associated entities or collections&lt;/strong>.&lt;/li>
+&lt;li>The associated data is loaded only when you try to &lt;strong>access it&lt;/strong>.
+When to use:&lt;/li>
+&lt;li>Use lazy loading for associations that are not always needed.&lt;/li>
+&lt;li>Use eager loading for associations that are almost always needed with the main entity.
+Implementation:&lt;/li>
+&lt;li>In JPA, lazy loading is often the default &lt;strong>for collection associations&lt;/strong> (@OneToMany, @ManyToMany).&lt;/li>
+&lt;li>&lt;strong>For single-valued associations&lt;/strong> (@ManyToOne, @OneToOne), eager loading is usually the default.
+Best Practices:&lt;/li>
+&lt;li>Use lazy loading as the default strategy.&lt;/li>
+&lt;li>Switch to eager loading only when you’re certain that the related data is always needed.&lt;/li>
+&lt;/ul></description></item></channel></rss>

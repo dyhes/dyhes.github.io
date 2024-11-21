@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hadoop on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/hadoop/</link><description>Recent content in Hadoop on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 04 Aug 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://dyhes.github.io/tags/hadoop/index.xml" rel="self" type="application/rss+xml"/><item><title>【Big Data】Hadoop</title><link>https://dyhes.github.io/p/big-datahadoop/</link><pubDate>Sun, 04 Aug 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/big-datahadoop/</guid><description>&lt;h2 id="hadoop">Hadoop
+&lt;/h2>&lt;p>Hadoop is an open-source framework developed by the Apache Software Foundation used for &lt;strong>storing and processing&lt;/strong> large datasets in a &lt;strong>distributed&lt;/strong> computing environment. It is designed to scale up from a single server to thousands of machines, each offering local computation and storage. Hadoop is built to handle massive amounts of data in a fault-tolerant and efficient manner.&lt;/p>
+&lt;h3 id="core-components">Core Components
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>Hadoop Distributed File System (HDFS):&lt;/strong>
+&lt;ul>
+&lt;li>&lt;strong>Purpose:&lt;/strong> HDFS is designed to store large datasets reliably and to &lt;strong>stream&lt;/strong> those datasets to user applications at high bandwidth.&lt;/li>
+&lt;li>&lt;strong>Architecture:&lt;/strong> It follows a &lt;strong>master-slave&lt;/strong> architecture. The HDFS cluster consists of a single &lt;strong>NameNode (master)&lt;/strong> that manages the file system namespace and regulates access to files by clients. There are multiple &lt;strong>DataNodes (slaves)&lt;/strong> that manage storage attached to the nodes they run on.&lt;/li>
+&lt;li>&lt;strong>Features:&lt;/strong>
+&lt;ul>
+&lt;li>&lt;strong>Fault Tolerance:&lt;/strong> Data is &lt;strong>replicated&lt;/strong> across multiple nodes to ensure availability in case of hardware failure.&lt;/li>
+&lt;li>&lt;strong>Scalability:&lt;/strong> Can scale up to thousands of nodes.&lt;/li>
+&lt;li>&lt;strong>High Throughput:&lt;/strong> Optimized for high throughput of data access rather than low latency.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>MapReduce:&lt;/strong>
+&lt;ul>
+&lt;li>&lt;strong>Purpose:&lt;/strong> A &lt;strong>programming model&lt;/strong> and &lt;strong>execution engine&lt;/strong> that is used for processing and generating large datasets.&lt;/li>
+&lt;li>&lt;strong>Components:&lt;/strong>
+&lt;ul>
+&lt;li>&lt;strong>JobTracker:&lt;/strong> The &lt;strong>master&lt;/strong> node that manages the jobs and resources in the cluster.&lt;/li>
+&lt;li>&lt;strong>TaskTracker:&lt;/strong> The &lt;strong>slave&lt;/strong> nodes that execute the tasks as directed by the JobTracker.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>Phases:&lt;/strong>
+&lt;ul>
+&lt;li>&lt;strong>Map Phase:&lt;/strong> Processes input data and converts it into a set of key-value pairs.&lt;/li>
+&lt;li>&lt;strong>Reduce Phase:&lt;/strong> Processes the intermediate key-value pairs to generate the final output.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>1&lt;/strong> &lt;strong>YARN (Yet Another Resource Negotiator):&lt;/strong>
+&lt;ul>
+&lt;li>&lt;strong>Purpose:&lt;/strong> Manages resources in the Hadoop cluster and schedules jobs.&lt;/li>
+&lt;li>&lt;strong>Components:&lt;/strong>
+&lt;ul>
+&lt;li>&lt;strong>ResourceManager:&lt;/strong> The master that controls and allocates resources.&lt;/li>
+&lt;li>&lt;strong>NodeManager:&lt;/strong> Manages resources and monitoring on the individual nodes.&lt;/li>
+&lt;li>&lt;strong>ApplicationMaster:&lt;/strong> Manages the lifecycle of applications running on YARN.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>Hadoop Common:&lt;/strong>
+&lt;ul>
+&lt;li>&lt;strong>Purpose:&lt;/strong> Provides common utilities and libraries that support the other Hadoop components. It includes the necessary Java libraries and files needed to start Hadoop.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="ecosystem-and-tools">Ecosystem and Tools
+&lt;/h3>&lt;p>Hadoop has a rich ecosystem of tools and frameworks that enhance its functionality:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Hive:&lt;/strong> A data warehouse infrastructure that provides data summarization, query, and analysis. It uses a SQL-like language called HiveQL.&lt;/li>
+&lt;li>&lt;strong>Pig:&lt;/strong> A high-level platform for creating MapReduce programs using a language called Pig Latin.&lt;/li>
+&lt;li>&lt;strong>HBase:&lt;/strong> A distributed, scalable, big data store modeled after Google’s Bigtable and written in Java.&lt;/li>
+&lt;li>&lt;strong>Sqoop:&lt;/strong> A tool designed for efficiently transferring bulk data between Hadoop and structured data stores such as relational databases.&lt;/li>
+&lt;li>&lt;strong>Flume:&lt;/strong> A service for efficiently collecting, aggregating, and moving large amounts of log data.&lt;/li>
+&lt;li>&lt;strong>Oozie:&lt;/strong> A workflow scheduling system to manage Hadoop jobs.&lt;/li>
+&lt;li>&lt;strong>Zookeeper:&lt;/strong> A centralized service for maintaining configuration information, naming, providing distributed synchronization, and providing group services.&lt;/li>
+&lt;li>&lt;strong>Spark:&lt;/strong> A fast and general engine for large-scale data processing that can run on Hadoop clusters.&lt;/li>
+&lt;/ul>
+&lt;h3 id="key-features">Key Features
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>Scalability:&lt;/strong> Can scale horizontally to handle more data by adding more nodes to the cluster.&lt;/li>
+&lt;li>&lt;strong>Cost-Effective:&lt;/strong> Uses commodity hardware, making it a cost-effective solution for big data processing.&lt;/li>
+&lt;li>&lt;strong>Flexibility:&lt;/strong> Can process structured, semi-structured, and unstructured data.&lt;/li>
+&lt;li>&lt;strong>Fault Tolerance:&lt;/strong> Automatically handles hardware failures by replicating data across multiple nodes.&lt;/li>
+&lt;li>&lt;strong>Distributed Computing:&lt;/strong> Processes data in parallel across multiple nodes, increasing processing speed and efficiency.&lt;/li>
+&lt;/ul>
+&lt;h3 id="use-cases">⠀Use Cases
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>Data Warehousing:&lt;/strong> Companies use Hadoop for storing vast amounts of structured and unstructured data.&lt;/li>
+&lt;li>&lt;strong>Log Processing:&lt;/strong> Hadoop is used to analyze and process server logs for insights and troubleshooting.&lt;/li>
+&lt;li>&lt;strong>Recommendation Systems:&lt;/strong> Used by companies like Netflix and Amazon for building recommendation engines.&lt;/li>
+&lt;li>&lt;strong>Data Archival:&lt;/strong> Storing large volumes of historical data for compliance and analysis.&lt;/li>
+&lt;/ul>
+&lt;h2 id="spark">Spark
+&lt;/h2>&lt;p>Apache Spark is an open-source, distributed computing system that provides an interface for programming entire clusters with implicit data parallelism and fault tolerance. Originally developed at UC Berkeley’s AMPLab, Spark offers a fast and general-purpose cluster-computing framework. It &lt;strong>extends the MapReduce model&lt;/strong> to support more types of computations and &lt;strong>optimizes performance&lt;/strong> by keeping data in memory whenever possible.&lt;/p>
+&lt;h3 id="key-features-1">Key Features
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>Speed:&lt;/strong>
+&lt;ul>
+&lt;li>Spark &lt;strong>processes data in memory&lt;/strong>, which significantly reduces the time to read and write to disk. This makes Spark up to 100 times faster than Hadoop MapReduce for certain applications.&lt;/li>
+&lt;li>The DAG (Directed Acyclic Graph) execution engine optimizes task execution by breaking down jobs into stages and tasks, which can be executed in parallel.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>Ease of Use:&lt;/strong>
+&lt;ul>
+&lt;li>Spark provides high-level APIs in Java, Scala, Python, and R. This versatility allows developers to use the language they are most comfortable with.&lt;/li>
+&lt;li>The interactive shell provided by Spark allows for real-time data analysis and debugging.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>Compatibility:&lt;/strong>
+&lt;ul>
+&lt;li>Spark is compatible with Hadoop’s HDFS and YARN, allowing it to be deployed on existing Hadoop clusters.&lt;/li>
+&lt;li>It also supports a wide range of data sources, including HBase, Cassandra, Kafka, and more.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul></description></item></channel></rss>
