@@ -68,6 +68,6 @@ I worked as a web developer intern for [@baidu](https://github.com/baidu) from N
 
   力扣题解、经验
   
-  * **一天星**：微波澄不动，冷浸一天星。
+* **一天星**：微波澄不动，冷浸一天星。
 
   上过的课程
