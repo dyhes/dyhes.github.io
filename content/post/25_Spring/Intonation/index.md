@@ -1,4 +1,5 @@
 ---
+image:  cover.png
 title: 【English】Intonation
 date: 2025-01-28 00:00:00+0000
 categories: 
@@ -128,7 +129,9 @@ Intonation is
   * rising: not quite sure, need confirmation
   * falling: Not a real question, but a statement
 ### Tone Unit
-![](image%202.png)
+
+![](image2.png)
+
 Tone unit are basic building blocks of spoken English.
 When we hear spken English, it is heard as organized into tone units.
 In a tone unit all the sounds of the words join together.
@@ -186,3 +189,4 @@ The main stress falls on the last lexical item in a tone unit.
   * She bought the coat(⬇️). (normal case)
   * She bought(⬇️) the coat.(not steal)
   * She(⬇️) bought the coat. (not he or me)
+
