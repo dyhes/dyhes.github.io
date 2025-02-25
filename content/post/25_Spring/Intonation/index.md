@@ -1,5 +1,6 @@
 ---
-image:  cover.png
+image:  /covers/cover1.png
+weight: 1000
 title: 【English】Intonation
 date: 2025-01-28 00:00:00+0000
 categories: 
