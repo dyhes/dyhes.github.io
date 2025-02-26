@@ -1,5 +1,5 @@
 ---
-title: 【Software Architecture】Notes
+title: 【软件体系结构】笔记
 date: 2025-01-13 00:00:00+0000
 categories: 
     - star
