@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Python on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/python/</link><description>Recent content in Python on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 03 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://dyhes.github.io/tags/python/index.xml" rel="self" type="application/rss+xml"/><item><title>【Python】fstring</title><link>https://dyhes.github.io/p/pythonfstring/</link><pubDate>Mon, 03 Mar 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/pythonfstring/</guid><description>&lt;h1 id="python">【Python】
+&lt;/h1>&lt;h2 id="f-string">f-string
+&lt;/h2>&lt;p>在 Python 中，可以通过 &lt;strong>f-strings&lt;/strong>（格式化字符串字面值）实现类似 JavaScript 模板字符串 &lt;code>a ${variable} bbbb&lt;/code> 的功能。以下是具体用法和对比：&lt;/p>
+&lt;hr>
+&lt;h3 id="python-的-f-strings-语法">Python 的 f-strings 语法
+&lt;/h3>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>基本语法&lt;/strong>&lt;br>
+在字符串前添加 &lt;code>f&lt;/code> 或 &lt;code>F&lt;/code> 前缀，用 &lt;code>{}&lt;/code> 包裹变量名即可直接插入值：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">name&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;张三&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">greeting&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;你好，&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">！&amp;#34;&lt;/span> &lt;span class="c1"># 输出：你好，张三！&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>支持表达式&lt;/strong>&lt;br>
+可以在 &lt;code>{}&lt;/code> 内执行运算、调用函数等：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">price&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">100&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">total&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;总价：&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">price&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="mf">1.1&lt;/span>&lt;span class="si">:&lt;/span>&lt;span class="s2">.2f&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">元&amp;#34;&lt;/span> &lt;span class="c1"># 输出：总价：110.00元&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>多行字符串&lt;/strong>&lt;br>
+通过三引号 &lt;code>&amp;quot;&amp;quot;&amp;quot;&lt;/code> 或 &lt;code>'''&lt;/code> 实现多行模板字符串：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">user_info&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;&amp;#34;&amp;#34;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="s2">姓名：&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="s2">年龄：&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">age&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="s2">&amp;#34;&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="与其他方法的对比">与其他方法的对比
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>方法&lt;/th>
+&lt;th>示例&lt;/th>
+&lt;th>特点&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>f-strings&lt;/strong>&lt;/td>
+&lt;td>&lt;code>f&amp;quot;Value: {x}&amp;quot;&lt;/code>&lt;/td>
+&lt;td>语法简洁，直接内嵌变量和表达式&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>str.format()&lt;/strong>&lt;/td>
+&lt;td>&lt;code>&amp;quot;Value: {}&amp;quot;.format(x)&lt;/code>&lt;/td>
+&lt;td>兼容旧版本，支持复杂格式控制&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>% 格式化&lt;/strong>&lt;/td>
+&lt;td>&lt;code>&amp;quot;Value: %s&amp;quot; % x&lt;/code>&lt;/td>
+&lt;td>Python 2 遗留方法，逐渐被淘汰&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="与-javascript-的差异">与 JavaScript 的差异
+&lt;/h3>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>符号不同&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>JavaScript 使用反引号和 &lt;code>${}&lt;/code>（如 &lt;code>`Hello ${name}`&lt;/code>）。&lt;/li>
+&lt;li>Python 使用 &lt;code>f&lt;/code> 前缀和 &lt;code>{}&lt;/code>（如 &lt;code>f&amp;quot;Hello {name}&amp;quot;&lt;/code>）。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>功能扩展&lt;/strong>&lt;br>
+Python 的 f-strings 支持更丰富的格式控制，例如：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">num&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mf">3.14159&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">formatted&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;保留两位小数：&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">num&lt;/span>&lt;span class="si">:&lt;/span>&lt;span class="s2">.2f&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="c1"># 输出：保留两位小数：3.14&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="最佳实践">最佳实践
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>优先使用 f-strings&lt;/strong>：语法简洁，可读性强，且性能优于其他方法（Python 3.6+ 支持）。&lt;/li>
+&lt;li>&lt;strong>复杂场景用 str.format()&lt;/strong>：例如需要动态生成格式字符串时。&lt;/li>
+&lt;/ul>
+&lt;p>如果需要更详细的字符串操作示例（如连接、类型转换），可参考 Python 变量定义相关教程。&lt;/p></description></item><item><title>【Python】.venv</title><link>https://dyhes.github.io/p/python.venv/</link><pubDate>Mon, 13 Jan 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/python.venv/</guid><description>&lt;p>The .venv directory is typically a folder that contains a &lt;strong>virtual environment&lt;/strong> for Python projects. A virtual environment is a self-contained directory that holds a specific version of Python and any packages or libraries your project requires. This helps isolate your project’s dependencies from the global Python environment on your system, ensuring that each project has its own environment and dependencies without interfering with other projects.
+When you execute a Python script in VS Code, if it’s using a .venv directory, it means that the script is running within this virtual environment. The .venv directory is often created by using the python -m venv .venv command or through VS Code’s environment setup.
+Key points about .venv:&lt;/p>
+&lt;ul>
+&lt;li>It’s not a Python package itself but a directory.&lt;/li>
+&lt;li>It helps in managing dependencies for a specific project.&lt;/li>
+&lt;li>You can activate it using source .venv/bin/activate (Linux/macOS) or .venv\Scripts\activate (Windows) in the terminal.&lt;/li>
+&lt;/ul>
+&lt;p>⠀VS Code typically detects virtual environments and allows you to select the appropriate interpreter for your project, ensuring that Python uses the version and packages from the virtual environment rather than the system-wide installation.&lt;/p></description></item></channel></rss>

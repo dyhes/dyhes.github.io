@@ -1,0 +1,1335 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Java on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/java/</link><description>Recent content in Java on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 23 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://dyhes.github.io/tags/java/index.xml" rel="self" type="application/rss+xml"/><item><title>【Java】String split</title><link>https://dyhes.github.io/p/javastring-split/</link><pubDate>Mon, 23 Sep 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/javastring-split/</guid><description>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">String&lt;/span>&lt;span class="o">[]&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">parts&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">str&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;\\.&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>而非&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">String&lt;/span>&lt;span class="o">[]&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">parts&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">str&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;\.&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>【Java】Enum</title><link>https://dyhes.github.io/p/javaenum/</link><pubDate>Sun, 14 Jul 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/javaenum/</guid><description>&lt;img src="https://dyhes.github.io/covers/cover19.png" alt="Featured image of post 【Java】Enum" />&lt;p>Java enums are a special type of class used to define collections of constants. They provide a way to represent a fixed set of values, which can be useful for categorizing data and ensuring type safety.&lt;/p>
+&lt;h2 id="key-points">Key Points
+&lt;/h2>&lt;ul>
+&lt;li>Implicitly final and static: Enum constants are implicitly public, static, and final.&lt;/li>
+&lt;li>values() method: Every enum has a static values() method that returns an array of all enum constants.&lt;/li>
+&lt;li>valueOf(String) method: This static method returns the &lt;strong>enum constant&lt;/strong> with the specified name.&lt;/li>
+&lt;li>The name() method returns the name of the enum constant as declared in its enum declaration. It&amp;rsquo;s an instance method available on all enum constants.&lt;/li>
+&lt;li>valueOf(String) and name() provide a way to convert between the Enum and String.&lt;/li>
+&lt;li>ordinal() method: Returns the &lt;strong>position&lt;/strong> of the enum constant (zero-based).&lt;/li>
+&lt;li>Constructors, Fields, and Methods: Enums can have constructors, fields, and methods, allowing you to associate data and behavior with each constant.&lt;/li>
+&lt;li>Implementing Interfaces: Enums can implement interfaces, providing a way to define behavior for each constant.&lt;/li>
+&lt;li>EnumSet and EnumMap: These are specialized Set and Map implementations for use with enum types, offering &lt;strong>better performance&lt;/strong> than their general-purpose counterparts.&lt;/li>
+&lt;li>Constant-specific method implementation: You can &lt;strong>override methods for specific enum&lt;/strong> constants, allowing for different behavior per constant.&lt;/li>
+&lt;li>Abstract methods in enums: You can define abstract methods in an enum, forcing each constant to provide its own implementation.&lt;/li>
+&lt;/ul>
+&lt;h2 id="example">example
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// Basic enum definition&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">enum&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Day&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">MONDAY&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">TUESDAY&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">WEDNESDAY&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">THURSDAY&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">FRIDAY&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">SATURDAY&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">SUNDAY&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">// Enum with constructor, fields, and methods&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">enum&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Planet&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">MERCURY&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">3&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">303e&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">23&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">2&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">4397e6&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">VENUS&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">4&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">869e&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">24&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">6&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">0518e6&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">EARTH&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">5&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">976e&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">24&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">6&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">37814e6&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">final&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">mass&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// in kilograms&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">final&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">radius&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// in meters&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Planet&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">mass&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">radius&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">mass&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">mass&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">radius&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">radius&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">getMass&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">mass&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">getRadius&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">radius&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Enum constant-specific method implementation&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">surfaceGravity&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">6&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">67300E&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">mass&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">radius&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">radius&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">// Usage examples&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">EnumExample&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">static&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">main&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">[]&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">args&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Basic usage&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Day&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">today&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Day&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">MONDAY&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Today is &amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">today&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Switch statement with enum&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">switch&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">today&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">case&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">MONDAY&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Start of the work week&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">case&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">FRIDAY&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;TGIF!&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">default&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Midweek&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Using enum methods&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Planet&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">earth&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Planet&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">EARTH&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Earth&amp;#39;s mass: &amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">earth&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getMass&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Earth&amp;#39;s surface gravity: &amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">earth&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">surfaceGravity&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Iterating over enum values&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">for&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Planet&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">planet&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Planet&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">values&lt;/span>&lt;span class="p">())&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">planet&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">name&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;: &amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">planet&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">surfaceGravity&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="usage-with-pageable">Usage with Pageable
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">enum&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">UserSortField&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">ID&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;id&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">FIRST_NAME&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;firstName&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">LAST_NAME&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;lastName&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">EMAIL&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;email&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">CREATED_DATE&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;createdDate&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">final&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">fieldName&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">UserSortField&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">fiel&lt;/span>&lt;span class="err">&lt;/span>&lt;span class="n">dName&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">fieldName&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">fieldName&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">getFieldName&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">fieldName&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@RestController&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@RequestMapping&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;/api/users&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">UserController&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Autowired&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">UserService&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userService&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@GetMapping&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ResponseEntity&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Map&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Object&lt;/span>&lt;span class="o">&amp;gt;&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">getAllUsers&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@RequestParam&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">defaultValue&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;0&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">page&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@RequestParam&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">defaultValue&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;10&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">size&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@RequestParam&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">defaultValue&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;ID&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">UserSortField&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">sortBy&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Page&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userPage&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userService&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getAllUsers&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">page&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">size&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">sortBy&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// ... rest of the method remains the same&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Service&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">UserService&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Autowired&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">UserRepository&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userRepository&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Page&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">getAllUsers&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">page&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">size&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">UserSortField&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">sortBy&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Pageable&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">pageable&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">PageRequest&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">of&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">page&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">size&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Sort&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">by&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sortBy&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getFieldName&lt;/span>&lt;span class="p">()));&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userRepository&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">findAll&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pageable&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="usage-with-spring-data-jpa">Usage with Spring Data JPA
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">enum&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Status&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">ACTIVE&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">INACTIVE&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">PENDING&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">javax.persistence.*&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Entity&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">User&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Id&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@GeneratedValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">strategy&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">GenerationType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">IDENTITY&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Enumerated&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">EnumType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">STRING&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Status&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">status&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// getters and setters&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The @Enumerated annotation is used to specify how the Enum should be persisted in the database. There are two options:&lt;/p>
+&lt;p>EnumType.ORDINAL: Stores the Enum as an integer (the ordinal value of the Enum constant).
+EnumType.STRING: Stores the Enum as a string (the name of the Enum constant).&lt;/p>
+&lt;h3 id="enumtypeordinal">EnumType.ORDINAL
+&lt;/h3>&lt;h4 id="pros">Pros
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>Database efficiency&lt;/strong>: Stores enums as integers, which typically use less storage space than strings.&lt;/li>
+&lt;li>&lt;strong>Potentially faster queries&lt;/strong>: Integer comparisons are generally faster than string comparisons.&lt;/li>
+&lt;li>&lt;strong>Simpler database representation&lt;/strong>: The database column is a simple integer type.&lt;/li>
+&lt;/ul>
+&lt;h4 id="cons">Cons
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>Fragility to enum order changes&lt;/strong>: If you add, remove, or reorder enum constants, the ordinal values change, which can corrupt existing data.&lt;/li>
+&lt;li>&lt;strong>Less readable in raw database queries&lt;/strong>: You see numbers instead of meaningful names.&lt;/li>
+&lt;li>&lt;strong>Potential for invalid states&lt;/strong>: If the database contains an integer that doesn’t correspond to any enum constant, it can lead to runtime errors.&lt;/li>
+&lt;/ul>
+&lt;h3 id="enumtypestring">EnumType.STRING
+&lt;/h3>&lt;h4 id="pros-1">Pros
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>Readability&lt;/strong>: The database stores the actual names of the enum constants, making raw database queries more understandable.&lt;/li>
+&lt;li>&lt;strong>Resilience to enum order changes&lt;/strong>: Adding or reordering enum constants doesn’t affect existing data.&lt;/li>
+&lt;li>&lt;strong>Self-documenting&lt;/strong>: The database schema itself documents the possible enum values.&lt;/li>
+&lt;li>&lt;strong>Safety&lt;/strong>: It’s harder to accidentally introduce invalid states, as any string not matching an enum constant will be rejected.&lt;/li>
+&lt;/ul>
+&lt;h4 id="cons-1">Cons
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>Less efficient storage&lt;/strong>: Strings typically use more storage space than integers.&lt;/li>
+&lt;li>&lt;strong>Potentially slower queries&lt;/strong>: String comparisons can be slower than integer comparisons, especially for large datasets.&lt;/li>
+&lt;li>&lt;strong>Case sensitivity&lt;/strong>: By default, the comparison is case-sensitive, which might lead to issues if not handled carefully.&lt;/li>
+&lt;/ul>
+&lt;h3 id="recommendation">Recommendation
+&lt;/h3>&lt;p>In most cases, EnumType.STRING is the safer and more maintainable choice, despite the slight performance trade-off. The benefits of readability, safety, and resilience to changes &lt;strong>usually outweigh&lt;/strong> the minor efficiency gains of EnumType.ORDINAL.&lt;/p>
+&lt;p>However, if you’re dealing with a very large dataset where performance and storage efficiency are critical, and you can guarantee that the enum order will never change, EnumType.ORDINAL might be considered.&lt;/p>
+&lt;h3 id="best-practices">Best Practices
+&lt;/h3>&lt;p>&lt;strong>Default&lt;/strong> to EnumType.STRING unless you have a compelling reason not to.
+If using EnumType.ORDINAL, document it clearly and warn about the dangers of changing the enum order.
+Consider using a &lt;strong>custom UserType&lt;/strong> for more complex enum persistence scenarios.
+If using EnumType.STRING, be aware of &lt;strong>case sensitivity&lt;/strong> in your database queries.&lt;/p></description></item><item><title>【Java】Dates and Times</title><link>https://dyhes.github.io/p/javadates-and-times/</link><pubDate>Fri, 12 Jul 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/javadates-and-times/</guid><description>&lt;img src="https://dyhes.github.io/covers/cover19.png" alt="Featured image of post 【Java】Dates and Times" />&lt;h2 id="javautildate">&lt;code>java.util.Date&lt;/code>
+&lt;/h2>&lt;p>You&amp;rsquo;re right to ask about the Date class. The pre-Java 8 java.util.Date class is indeed still available, but it&amp;rsquo;s generally considered &lt;strong>outdated&lt;/strong> for modern Java projects.&lt;/p>
+&lt;h3 id="issues">Issues
+&lt;/h3>&lt;ul>
+&lt;li>Mutable (not &lt;strong>thread-safe&lt;/strong>)&lt;/li>
+&lt;li>Poorly designed API&lt;/li>
+&lt;li>Doesn&amp;rsquo;t handle time zones well&lt;/li>
+&lt;li>Only &lt;strong>millisecond&lt;/strong> precision&lt;/li>
+&lt;li>Confusing method names (e.g., getYear() returns year since 1900)&lt;/li>
+&lt;/ul>
+&lt;h3 id="modern-alternatives">Modern alternatives
+&lt;/h3>&lt;ul>
+&lt;li>Java 8+ java.time package (recommended)&lt;/li>
+&lt;li>Third-party libraries like Joda-Time (for pre-Java 8 projects)&lt;/li>
+&lt;/ul>
+&lt;h3 id="migration">Migration
+&lt;/h3>&lt;ul>
+&lt;li>java.time provides methods to convert between old and new date/time classes&lt;/li>
+&lt;/ul>
+&lt;h2 id="javatime">&lt;code>java.time&lt;/code>
+&lt;/h2>&lt;p>&lt;code>java.time&lt;/code> introduced in Java 8, provides a comprehensive and much-improved API for handling dates, times, and durations.&lt;/p>
+&lt;h3 id="localdate">LocalDate
+&lt;/h3>&lt;p>Represents a date without time or time zone.&lt;/p>
+&lt;h3 id="localtime">LocalTime
+&lt;/h3>&lt;p>Represents a time without date or time zone.&lt;/p>
+&lt;h3 id="localdatetime">LocalDateTime
+&lt;/h3>&lt;p>Combines date and time, without a time zone.&lt;/p>
+&lt;h3 id="zoneddatetime">ZonedDateTime
+&lt;/h3>&lt;p>Date and time with a time zone.&lt;/p>
+&lt;h3 id="zoneid">ZoneId
+&lt;/h3>&lt;p>represents a time zone&lt;/p>
+&lt;h3 id="instant">Instant
+&lt;/h3>&lt;p>Instant represents a point in time on the timeline, typically in UTC (Coordinated Universal Time). It&amp;rsquo;s essentially a &lt;strong>timestamp&lt;/strong> with nanosecond precision.&lt;/p>
+&lt;h3 id="period">Period
+&lt;/h3>&lt;p>Represents a &lt;strong>date-based&lt;/strong> amount of time.&lt;/p>
+&lt;h3 id="duration">Duration
+&lt;/h3>&lt;p>Represents a &lt;strong>time-based&lt;/strong> amount of time.&lt;/p>
+&lt;h3 id="datetimeformatter">DateTimeFormatter
+&lt;/h3>&lt;p>is used for parsing and formatting date-time objects.&lt;/p>
+&lt;h2 id="usage-in-database">Usage in Database
+&lt;/h2>&lt;h3 id="recommended-classes">Recommended classes
+&lt;/h3>&lt;ul>
+&lt;li>LocalDate: For date-only fields (e.g., birthdate)&lt;/li>
+&lt;li>LocalDateTime: For date and time without time zone&lt;/li>
+&lt;li>Instant: For timestamps (e.g., created_at, updated_at)&lt;/li>
+&lt;li>ZonedDateTime: If you need to store time zone information&lt;/li>
+&lt;/ul>
+&lt;h3 id="considerations">Considerations
+&lt;/h3>&lt;ul>
+&lt;li>Instant is often preferred &lt;strong>for timestamps&lt;/strong> because it&amp;rsquo;s always in UTC and avoids time zone ambiguities.&lt;/li>
+&lt;li>If using an &lt;strong>older version of Hibernate&lt;/strong> (pre-5.0), you might need additional configuration or converters.&lt;/li>
+&lt;li>Some databases might require specific column definitions. For example, &lt;strong>PostgreSQL might need @Column(columnDefinition = &amp;ldquo;TIMESTAMP WITH TIME ZONE&amp;rdquo;) for Instant&lt;/strong>.&lt;/li>
+&lt;/ul>
+&lt;h3 id="database-specific-notes">Database-specific notes
+&lt;/h3>&lt;ul>
+&lt;li>MySQL: LocalDateTime is typically stored as DATETIME, Instant as TIMESTAMP.&lt;/li>
+&lt;li>PostgreSQL: Supports all types well, but ensure your JDBC driver is up to date.&lt;/li>
+&lt;li>Oracle: May require additional configuration for LocalDate and LocalDateTime.&lt;/li>
+&lt;/ul>
+&lt;h3 id="best-practices">Best practices
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>Use Instant for audit fields&lt;/strong> (created_at, updated_at).&lt;/li>
+&lt;li>Use LocalDateTime for user-entered date-times if time zone isn&amp;rsquo;t important.&lt;/li>
+&lt;li>Always consider time zone implications in your application logic.
+You can set the following property to ensure proper handling of JDBC time zones:&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">spring&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">jpa&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">properties&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">hibernate&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">jdbc&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">time_zone&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">UTC&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="example">example
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">javax.persistence.*&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">java.time.Instant&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">java.time.LocalDate&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">java.time.LocalDateTime&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Entity&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">User&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Id&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@GeneratedValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">strategy&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">GenerationType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">IDENTITY&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">LocalDate&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">birthDate&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">LocalDateTime&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">lastLogin&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Column&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">columnDefinition&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;TIMESTAMP&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Instant&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">createdAt&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// getters and setters&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="instant-usage">Instant usage
+&lt;/h2>&lt;p>Use Instant for:&lt;/p>
+&lt;ul>
+&lt;li>System-generated timestamps (created_at, updated_at)&lt;/li>
+&lt;li>Event occurrences (lastLogin, orderPlacedAt)&lt;/li>
+&lt;li>Any time you need to record a specific moment and &lt;strong>might deal with different time zones&lt;/strong>&lt;/li>
+&lt;/ul>
+&lt;h3 id="audit-field">Audit field
+&lt;/h3>&lt;ul>
+&lt;li>created_at: When a record was created&lt;/li>
+&lt;li>updated_at: When a record was last modified&lt;/li>
+&lt;li>sometimes deleted_at: When a record was soft-deleted&lt;/li>
+&lt;/ul>
+&lt;h3 id="benifits">Benifits
+&lt;/h3>&lt;p>Querying&lt;/p>
+&lt;ul>
+&lt;li>Easy to query for records created or updated within a specific time range.&lt;/li>
+&lt;/ul>
+&lt;p>Sorting&lt;/p>
+&lt;ul>
+&lt;li>Straightforward to sort records by creation or update time.&lt;/li>
+&lt;/ul>
+&lt;p>Time zone handling&lt;/p>
+&lt;ul>
+&lt;li>When displaying to users, you can easily convert Instant to their local time zone.&lt;/li>
+&lt;/ul>
+&lt;p>Potential pitfall to avoid&lt;/p>
+&lt;ul>
+&lt;li>Don&amp;rsquo;t use LocalDateTime for audit fields unless you&amp;rsquo;re absolutely sure all your servers and databases will always be in the same time zone.&lt;/li>
+&lt;/ul>
+&lt;p>Converting for display&lt;/p>
+&lt;ul>
+&lt;li>When you need to display these times to users
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">ZoneId&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userZone&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ZoneId&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">of&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;America/New_York&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">Instant&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">createdAt&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">entity&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getCreatedAt&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">ZonedDateTime&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userTime&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ZonedDateTime&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">ofInstant&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">createdAt&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userZone&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;h3 id="database-considerations">Database considerations
+&lt;/h3>&lt;ul>
+&lt;li>For MySQL: Use TIMESTAMP column type&lt;/li>
+&lt;li>For PostgreSQL: Use TIMESTAMP WITH TIME ZONE&lt;/li>
+&lt;/ul>
+&lt;h3 id="jpa-auditting">JPA Auditting
+&lt;/h3>&lt;p>If you want to use Spring Data JPA&amp;rsquo;s automatic auditing features, such as:&lt;/p>
+&lt;ul>
+&lt;li>@CreatedDate&lt;/li>
+&lt;li>@LastModifiedDate&lt;/li>
+&lt;li>@CreatedBy&lt;/li>
+&lt;li>@LastModifiedBy
+enable JPA Auditing.&lt;/li>
+&lt;/ul>
+&lt;h3 id="manual-auditting">manual Auditting
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@Entity&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">MyEntity&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// other fields&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Column&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">updatable&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">false&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Instant&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">createdAt&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Instant&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">updatedAt&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@PrePersist&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">protected&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">onCreate&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">createdAt&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Instant&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">now&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">updatedAt&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Instant&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">now&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@PreUpdate&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">protected&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">onUpdate&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">updatedAt&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Instant&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">now&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="example-1">example
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">org.springframework.data.annotation.CreatedDate&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">org.springframework.data.annotation.LastModifiedDate&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">org.springframework.data.jpa.domain.support.AuditingEntityListener&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">javax.persistence.*&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">java.time.Instant&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Entity&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@EntityListeners&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">AuditingEntityListener&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">AuditedEntity&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Id&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@GeneratedValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">strategy&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">GenerationType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">IDENTITY&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@CreatedDate&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Column&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">updatable&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">false&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Instant&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">createdAt&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@LastModifiedDate&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Instant&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">updatedAt&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// getters and setters&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Configuration&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@EnableJpaAuditing&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">JpaConfig&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// other configurations &lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="other-usage">Other usage
+&lt;/h3>&lt;p>It&amp;rsquo;s often a good practice to store times as Instant and convert to appropriate local times when presenting to users.&lt;/p>
+&lt;p>This ensures consistent storage and easier querying, while still allowing flexible display options.&lt;/p>
+&lt;p>While Instant is great for many scenarios, there are cases where other types might be more appropriate:&lt;/p>
+&lt;ul>
+&lt;li>a) LocalDate: When you only need the date without time (e.g., birthDate, holidayDate).&lt;/li>
+&lt;li>b) LocalDateTime: When you need date and time, but the time zone is implicit or unnecessary.&lt;/li>
+&lt;li>c) ZonedDateTime: When you need to &lt;strong>preserve&lt;/strong> the specific time zone information.&lt;/li>
+&lt;/ul></description></item><item><title>【Java】Releases</title><link>https://dyhes.github.io/p/javareleases/</link><pubDate>Fri, 12 Jul 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/javareleases/</guid><description>&lt;img src="https://dyhes.github.io/covers/cover9.png" alt="Featured image of post 【Java】Releases" />&lt;p>Oracle has moved to a new release model since Java 9:&lt;/p>
+&lt;ul>
+&lt;li>There are new Java releases every six months.&lt;/li>
+&lt;li>Every two (three before java17) years, the September release is designated as an LTS release.&lt;/li>
+&lt;li>Non-LTS releases are supported only until the next release.&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-10-1996">Java 1.0 (1996)
+&lt;/h2>&lt;ul>
+&lt;li>First public release&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-11-1997">Java 1.1 (1997)
+&lt;/h2>&lt;ul>
+&lt;li>Inner classes&lt;/li>
+&lt;li>JavaBeans&lt;/li>
+&lt;li>JDBC&lt;/li>
+&lt;li>RMI (Remote Method Invocation)&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-12-1998">Java 1.2 (1998)
+&lt;/h2>&lt;ul>
+&lt;li>Collections framework&lt;/li>
+&lt;li>Swing GUI&lt;/li>
+&lt;li>JIT (Just-In-Time) compiler&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-13-2000">Java 1.3 (2000)
+&lt;/h2>&lt;ul>
+&lt;li>HotSpot JVM&lt;/li>
+&lt;li>JNDI (Java Naming and Directory Interface)&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-14-2002">Java 1.4 (2002)
+&lt;/h2>&lt;ul>
+&lt;li>Assert keyword&lt;/li>
+&lt;li>Regular expressions&lt;/li>
+&lt;li>Logging API&lt;/li>
+&lt;li>NIO (New Input/Output)&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-5-2004">Java 5 (2004)
+&lt;/h2>&lt;ul>
+&lt;li>Generics&lt;/li>
+&lt;li>Annotations&lt;/li>
+&lt;li>Autoboxing/Unboxing&lt;/li>
+&lt;li>Enumerations&lt;/li>
+&lt;li>Varargs&lt;/li>
+&lt;li>Enhanced for loop&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-6-2006">Java 6 (2006)
+&lt;/h2>&lt;ul>
+&lt;li>Scripting language support&lt;/li>
+&lt;li>JDBC 4.0&lt;/li>
+&lt;li>Java Compiler API&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-7-2011">Java 7 (2011)
+&lt;/h2>&lt;ul>
+&lt;li>Try-with-resources&lt;/li>
+&lt;li>Diamond operator&lt;/li>
+&lt;li>Switch with Strings&lt;/li>
+&lt;li>NIO 2.0&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-8-2014---lts">Java 8 (2014) - LTS
+&lt;/h2>&lt;ul>
+&lt;li>Lambda expressions&lt;/li>
+&lt;li>Stream API&lt;/li>
+&lt;li>Optional class&lt;/li>
+&lt;li>Default methods in interfaces&lt;/li>
+&lt;li>New Date and Time API&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-9-2017">Java 9 (2017)
+&lt;/h2>&lt;ul>
+&lt;li>Module system (Project Jigsaw)&lt;/li>
+&lt;li>JShell (REPL)&lt;/li>
+&lt;li>Private methods in interfaces&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-10-2018">Java 10 (2018)
+&lt;/h2>&lt;ul>
+&lt;li>Local variable type inference (var keyword)&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-11-2018---lts">Java 11 (2018) - LTS
+&lt;/h2>&lt;ul>
+&lt;li>HTTP Client API&lt;/li>
+&lt;li>Launch single-file source-code programs&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-12-2019">Java 12 (2019)
+&lt;/h2>&lt;ul>
+&lt;li>Switch expressions (preview)&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-13-2019">Java 13 (2019)
+&lt;/h2>&lt;ul>
+&lt;li>Text blocks (preview)&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-14-2020">Java 14 (2020)
+&lt;/h2>&lt;ul>
+&lt;li>Records (preview)&lt;/li>
+&lt;li>Pattern matching for instanceof (preview)&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-15-2020">Java 15 (2020)
+&lt;/h2>&lt;ul>
+&lt;li>Sealed classes (preview)&lt;/li>
+&lt;li>Hidden classes&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-16-2021">Java 16 (2021)
+&lt;/h2>&lt;ul>
+&lt;li>Pattern matching for instanceof (finalized)&lt;/li>
+&lt;li>Records (finalized)&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-17-2021---lts">Java 17 (2021) - LTS
+&lt;/h2>&lt;ul>
+&lt;li>Sealed classes (finalized)&lt;/li>
+&lt;li>Pattern matching for switch (preview)&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-18-2022">Java 18 (2022)
+&lt;/h2>&lt;ul>
+&lt;li>Simple web server&lt;/li>
+&lt;li>Code snippets in Java API documentation&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-19-2022">Java 19 (2022)
+&lt;/h2>&lt;ul>
+&lt;li>Virtual threads (preview)&lt;/li>
+&lt;li>Pattern matching for switch (second preview)&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-20-2023">Java 20 (2023)
+&lt;/h2>&lt;ul>
+&lt;li>Scoped values (incubator)&lt;/li>
+&lt;li>Record patterns (second preview)&lt;/li>
+&lt;/ul>
+&lt;h2 id="java-212023---lts">Java 21(2023) - LTS
+&lt;/h2>&lt;ul>
+&lt;li>Virtual Threads (finalized)&lt;/li>
+&lt;li>Pattern Matching for Switch (finalized)&lt;/li>
+&lt;li>Record Patterns (finalized)&lt;/li>
+&lt;li>Sequenced Collections&lt;/li>
+&lt;li>String Templates (preview)&lt;/li>
+&lt;li>Unnamed Classes and Instance Main Methods (preview)&lt;/li>
+&lt;li>Unnamed Patterns and Variables (preview)&lt;/li>
+&lt;li>Scoped Values (preview)&lt;/li>
+&lt;li>Foreign Function &amp;amp; Memory API (preview)&lt;/li>
+&lt;li>Structured Concurrency (preview)&lt;/li>
+&lt;li>Vector API (incubator)&lt;/li>
+&lt;/ul></description></item><item><title>【Java】注解与反射</title><link>https://dyhes.github.io/p/java%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/</link><pubDate>Fri, 07 Jan 2022 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/java%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/</guid><description>&lt;h2 id="class类">Class类
+&lt;/h2>&lt;p>Class类的实例提供了特定数据类型的相关信息。&lt;/p>
+&lt;p>一个Class类的对象实际上表示的是&lt;strong>一种类型&lt;/strong>。&lt;/p>
+&lt;p>获取Class的三种方式&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//（1）.getClass()&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">Employee&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">e&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">Class&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">info&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">e&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getClass&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">//（2）Class.forName()&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">Class&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">info&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Class&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">forName&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;java.util.Date&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">//（3）T.Class&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">Class&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">info1&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">Class&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">info2&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Double&lt;/span>&lt;span class="o">[]&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="反射">反射
+&lt;/h3>&lt;p>所谓“反射（Reflection）”，就是把Java类中的各种成份映射成相应的另外一些特殊的Java类的实例，从而允许程序在运行时动态地完成一些工作：比如动态装载类型并创建实例，查询类的成员信息，动态地调用方法等。反射技术的&lt;strong>核心类型&lt;/strong>是Class类。&lt;/p>
+&lt;p>不管每个类型创建了多少个实例，也不管你用什么方法获取此类型的Class实例，每个类型都只对应一个Class实例。&lt;/p>
+&lt;h2 id="动态创建对象">动态创建对象
+&lt;/h2>&lt;p>使用构造方法对象或Class对象的&lt;code>newInstance()&lt;/code>方法动态创建指定类型的对象&lt;/p>
+&lt;h2 id="注解">注解
+&lt;/h2>&lt;p>注解相当于一种标记，加了注解就等于给代码打上了某个标记。javac编译器、 IntelliJ之类IDE以及其他一些注解处理工具（Annotation Processing Tool，APT）就 可以利用它来完成一些特殊的工作。&lt;/p>
+&lt;ul>
+&lt;li>@Deprecated：标记类的成员已过时&lt;/li>
+&lt;li>@Override：要求子类必须覆盖基类的方法&lt;/li>
+&lt;li>@Serializable：指定某个类是可以序列化的&lt;/li>
+&lt;li>@FunctionalInterface：指定某个方法重写了基类的同名方法&lt;/li>
+&lt;/ul>
+&lt;h3 id="自定义">自定义
+&lt;/h3>&lt;p>注解，其实就是一个使用@interface定义的接口&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nd">@interface&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">MyTestAnnotation&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="元注解">元注解
+&lt;/h3>&lt;p>定义注解的类型也可以添加“注解”，这种针对“注解”的“注解”， 称为“元注解（meta-annotation）”&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@Retention&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">RetentionPolicy&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">RUNTIME&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">//指明注解生存的时间&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nd">@Target&lt;/span>&lt;span class="p">({&lt;/span>&lt;span class="n">ElementType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">METHOD&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">ElementType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">TYPE&lt;/span>&lt;span class="p">})&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">//指明注解适用的场合&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nd">@interface&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">MyTestAnnotation&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>【Java】IO</title><link>https://dyhes.github.io/p/javaio/</link><pubDate>Wed, 05 Jan 2022 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/javaio/</guid><description>&lt;p>从文件中读取内容，向文件中写入内容，截短文件、合并文 件、压缩文件……，诸如此类的操作，称为&lt;strong>文件存取操作&lt;/strong>， 主要使用“流（Stream）”来完成&lt;/p>
+&lt;p>与文件操作相关的类，集中于java.io包中。&lt;/p>
+&lt;p>Java 1.4中加入了一个New I/O API，提供了一些类完成文件和流操作。&lt;/p>
+&lt;p>Java 7中又加入了一些新类型，称为NIO.2，NIO.2中最重要的是引入了&lt;strong>Path&lt;/strong>和 &lt;strong>AutoCloseable&lt;/strong>接口，还有一个&lt;strong>Files类&lt;/strong>，它的静态方法封装了文件的常用操作。&lt;/p>
+&lt;h2 id="file类">File类
+&lt;/h2>&lt;p>Java使用File类来统一操作文件和文件夹。&lt;/p>
+&lt;ul>
+&lt;li>java.io.File代表与平台无关的文件或目录。也就是说可以通过File类在Java程序中操作文件或目录；&lt;/li>
+&lt;/ul>
+&lt;ul>
+&lt;li>File类只能用来&lt;strong>操作&lt;/strong>文件或目录（包括新建、删除、重命名文件和目录等操作），但&lt;strong>不能用来访问&lt;/strong>文件中的内容；&lt;/li>
+&lt;li>如果需要访问文件中的内容，则需要使用输入/输出流。&lt;/li>
+&lt;/ul>
+&lt;p>&lt;code>RandomAccessFile&lt;/code>（随机文件操作）：一个独立的类，直接继承至Object.它的功能丰富，可以从文件的任意位置进行存取（输入输出）操作。&lt;code>RandomAccessFile&lt;/code>类支持“随机访问”方式，这里“随机”是指可以跳转到文件的任意位置处读写数据。 在访问一个文件的时候，不必把文件从头读到尾，而是希望像访问一个数据库一样“随心所欲”地访问一个文件的某个部分，这时使用类就是最佳选择。‎
+&lt;code>RandomAccessFile&lt;/code>对象类有个&lt;strong>位置指示器‎&lt;/strong>‎，指向当前读写处的位置，当前读写n个字节后，文件指示器将指向这n个字节后面的下一个字节处。 刚打开文件时，文件指示器指向文件的开头处，可以移动文件指示器到新的位置，随后的读写操作将从新的位置开始。 类在数据等长记录格式文件的随机（相对顺序而言）读取时有很大的优势，但该类仅限于操作文件，不能访问其他的I/O设备，如网络、内存映像等。&lt;/p>
+&lt;h2 id="io-stream">&lt;strong>IO Stream&lt;/strong>
+&lt;/h2>&lt;h4 id="分类">分类
+&lt;/h4>&lt;ul>
+&lt;li>
+&lt;p>根据操作数据类型（&lt;em>能用记事本打开并能看到其中的字符内容的是文本文件，反之是二进制文件&lt;/em>）&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>字节流：二进制，以字节为单位&lt;/p>
+&lt;p>字节流的两个基类 InputStream和OutputStream&lt;/p>
+&lt;p>凡是以InputStream或OutputStream结尾的类型为字节流&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>字符流：文本,以字符（2个字节）为单位&lt;/p>
+&lt;p>字符流的两个基类 Reader和Writer&lt;/p>
+&lt;p>凡是以Reader或Writer结尾的均为字符流&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>区别&lt;/p>
+&lt;ul>
+&lt;li>字节流没有缓冲区，是直接输出的，而字符流是输出到缓冲区的。因此在输出时，字节流不调用&lt;code>colse()&lt;/code>方法时，信息已经输出了，而字符流只有在调用close()方法关闭缓冲区时，信息才输出。要想字符流在未关闭时输出信息，则需要手动调用flush()方法；&lt;/li>
+&lt;li>读写单位不同：字节流以字节（&lt;code>8bit&lt;/code>）为单位，字符流以字符为单位，根据码表映射字符，一次可能读多个字节；&lt;/li>
+&lt;li>处理对象不同：字节流能处理所有类型的数据（如图片、&lt;code>avi&lt;/code>等），而字符流只能处理字符类型的数据；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>根据流向&lt;/p>
+&lt;ul>
+&lt;li>输入流&lt;/li>
+&lt;li>输出流&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>根据具体功能&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>节点流：以从或向一个特定的地方（节点）读写数据。&lt;/p>
+&lt;p>1、文件： &lt;code>FileInputStream&lt;/code> 、&lt;code>FileOutputStream&lt;/code>、 &lt;code>FileReader&lt;/code>和 &lt;code>FileWriter&lt;/code> 文件进行处理的节点流； 　　&lt;/p>
+&lt;p>2、字符串： &lt;code>StringReader&lt;/code> 和&lt;code>StringWriter&lt;/code> 对字符串进行处理的节点流； 　　&lt;/p>
+&lt;p>3、数组： &lt;code>ByteArrayInputStream&lt;/code>、&lt;code>ByteArrayOutputStream&lt;/code>、&lt;code>CharArrayReader&lt;/code>和&lt;code>CharArrayWriter&lt;/code> 对数组进行处理的节点流(对应的不再是文件，而是内存中的一个数组)； 　　&lt;/p>
+&lt;p>4、管道： &lt;code>PipedInputStream&lt;/code> 、&lt;code>PipedOutputStream&lt;/code> 和&lt;code>PipedReaderPipedWriter&lt;/code>对管道进行处理的节点流； 　　&lt;/p>
+&lt;p>5、基类： &lt;code>InputStream&lt;/code>、 &lt;code>OutputStream&lt;/code>、 &lt;code>Reader&lt;/code>和 &lt;code>Writer&lt;/code>；&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>处理流：是对一个已存在的流的&lt;strong>连接和封装&lt;/strong>，通过所封装的流的功能调用实现数据读写。处理流的构造方法总是要带一个其他的流对象做参数。一个流对象经过其他流的多次包装，称为流的链接。&lt;/p>
+&lt;p>1、缓冲流：&lt;code>BufferedInputStream&lt;/code>、 &lt;code>BufferedOutputStream&lt;/code>、 &lt;code>BufferedReader&lt;/code>和&lt;code>BufferedWriter&lt;/code> 　增加缓冲功能，避免频繁读写硬盘。 　　&lt;/p>
+&lt;p>2、转换流：&lt;code>InputStreamReader&lt;/code>和 &lt;code>OutputStreamReader&lt;/code>实现字节流和字符流之间的转换。 　　&lt;/p>
+&lt;p>3、数据流 &lt;code>DataInputStream&lt;/code>和&lt;code>DataOutputStream&lt;/code>等提供将基础数据类型写入到文件中，或者读取出来。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://pics2.baidu.com/feed/6159252dd42a28341e23dde5587a81ec17cebfa8.jpeg?token=201587ab58af94624ef1a60c83d1e396&amp;amp;s=C8611F7091BFE5CC1C5D95CB000030B2"
+loading="lazy"
+alt="img"
+>&lt;/p>
+&lt;p>&lt;img src="https://pic4.zhimg.com/80/v2-a001c51e37e77edf5a73dbba3bc80153_1440w.jpg"
+loading="lazy"
+alt="img"
+>&lt;/p>
+&lt;h4 id="关闭流">关闭流
+&lt;/h4>&lt;p>&lt;strong>流关闭的原则&lt;/strong>：先打开先关闭；如果A依赖B，则先关闭A再关闭B；对于处理流如果将节点流关闭以后再关闭处理流，会抛出IO异常，所以直接关闭处理流就行了，会自动调用关闭里面节点流的方法。&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;strong>注意&lt;/strong>：&lt;/p>
+&lt;ul>
+&lt;li>如果将节点流关闭以后再关闭处理流，会抛出IO异常&lt;/li>
+&lt;li>如果关闭了处理流，在关闭与之相关的节点流，也可能出现IO异常。&lt;/li>
+&lt;/ul>&lt;/blockquote>
+&lt;h4 id="inputstream">InputStream
+&lt;/h4>&lt;p>&lt;img src="https://pic1.zhimg.com/80/v2-d464303fd5be6fdb7b11678857824520_1440w.jpg"
+loading="lazy"
+alt="img"
+>&lt;/p>
+&lt;p>&lt;code>ByteArrayInputStream&lt;/code>：字节数组输入流，它的内部缓冲区就是一个字节数组，该类的功能就是从字节数组(&lt;code>byte[]&lt;/code>)中进行以字节为单位的读取资源文件；&lt;/p>
+&lt;p>&lt;code>PipedInputStream&lt;/code>：管道字节输入流，它和&lt;code>PipedOutputStream&lt;/code>一起使用，能实现**多线程间的管道通信。**多线程管道通信的主要流程是在一个线程中向&lt;code>PipedOutputStream&lt;/code>写入数据，这些数据会自动传送到对应的管道输入流&lt;code>PipedInputStream&lt;/code>中，其他线程通过读取&lt;code>PipeInputStream&lt;/code>中缓冲的数据实现多线程间通信；&lt;/p>
+&lt;p>&lt;code>FilterInputStream&lt;/code> ：过滤输入流，装饰者模式中处于装饰者，具体的装饰者都要继承它，所以在该类的子类下都是用来装饰别的流的，也就是处理类。常见的子类有&lt;code>DataInputStream&lt;/code>和&lt;code>BufferedInputStream&lt;/code>；&lt;/p>
+&lt;p>&lt;code>BufferedInputStream&lt;/code>：缓冲输入流，由于基础输入流一个字节一个字节读取,频繁与磁盘进行交互,造成读取速度较低.缓冲流的存在就是先将数据读取到缓冲流(内存中),然后一次性从内存中读取多个字符.提高读取的效率；&lt;/p>
+&lt;p>&lt;code>DataInputStream&lt;/code>：数据输入流,以机器无关的方式读取Java的基本类型；&lt;/p>
+&lt;p>&lt;code>FileInputSream&lt;/code>：文件输入流，它通常用于对文件进行读取操作；&lt;/p>
+&lt;p>&lt;code>File&lt;/code>：对指定目录的文件进行操作。注意，该类虽然是在IO包下，但是并不继承自四大基础类；&lt;/p>
+&lt;p>&lt;code>ObjectInputStream&lt;/code>：对象输入流，用来提供对“基本数据或对象”的持久存储。通俗点讲，也就是能直接传输对象（反序列化中使用）。&lt;/p>
+&lt;h4 id="outputstream">OutputStream
+&lt;/h4>&lt;p>&lt;img src="https://pic4.zhimg.com/80/v2-e208c6f6b8021e0d2a3c519fcbecb6d7_1440w.jpg"
+loading="lazy"
+alt="img"
+>&lt;/p>
+&lt;p>&lt;code>ByteArrayOutputStream&lt;/code>：字节数组输出流，它的内部缓冲区就是一个字节数组，该类的功能就是从字节数组(&lt;code>byte[]&lt;/code>)中进行以字节为单位的写入资源文件；&lt;/p>
+&lt;p>&lt;code>PipedOutputStream&lt;/code> ：管道字节输出流，它和&lt;code>PipedInputStream&lt;/code>一起使用，能实现&lt;strong>多线程间的管道通信。&lt;/strong>&lt;/p>
+&lt;p>&lt;code>FilterOutputStream&lt;/code> ：过滤输出流，装饰者模式中处于装饰者，具体的装饰者都要继承它，所以在该类的子类下都是用来装饰别的流的，也就是处理类。常见的子类有&lt;code>DatOutputStream&lt;/code>、&lt;code>BufferedOutputStream&lt;/code>和&lt;/p>
+&lt;p>&lt;code>BufferedOutputStream&lt;/code>：缓冲输出流，由于基础输入流一个字节一个字节写入,频繁与磁盘进行交互,造成读取速度较低.缓冲流的存在就是先将数据写入到缓冲流(内存中),然后一次性从内存中写入多个字符.提高读取的效率；&lt;/p>
+&lt;p>&lt;code>DataOutputStream&lt;/code>：数据输出流,以机器无关的方式读取Java的基本类型；&lt;/p>
+&lt;p>&lt;code>PrintStream&lt;/code>：继承了&lt;code>FilterOutputStream&lt;/code>。是&amp;quot;装饰类&amp;quot;的一种,所以属于字节流体系中(与&lt;code>PrintStream&lt;/code>相似的流&lt;code>PrintWriter&lt;/code>继承于&lt;code>Writer&lt;/code>,属于字符流体系中),为其他的输出流添加功能.使它们能够方便打印各种数据值的表示形式；&lt;/p>
+&lt;p>&lt;code>FileOutputStream&lt;/code> ：文件输出流，它通常用于对文件进行写入操作；&lt;/p>
+&lt;p>&lt;code>ObjectOutputStream&lt;/code> ：对象输出流，用来提供对“基本数据或对象”的持久存储。通俗点讲，也就是能直接传输对象（反序列化中使用），和所有&lt;code>FilterOutputStream&lt;/code> 的子类都是装饰流(序列化中使用)。&lt;/p>
+&lt;h4 id="reader">Reader
+&lt;/h4>&lt;p>&lt;img src="https://pic1.zhimg.com/80/v2-0e823bac3cb2feab11a1d7db5b598dc4_1440w.jpg"
+loading="lazy"
+alt="img"
+>&lt;/p>
+&lt;p>&lt;code>CharArrayReader&lt;/code> :字符数组输入流。它和&lt;code>ByteArrayInputStream&lt;/code>类似，只不过&lt;code>ByteArrayInputStream&lt;/code>是字节数组输入流，而&lt;code>CharArray&lt;/code>是字符数组输入流&lt;/p>
+&lt;p>&lt;code>PipedReader&lt;/code>:管道字符流， 是从与其它线程共用的管道中读取数据。&lt;/p>
+&lt;p>&lt;code>FilterReader&lt;/code>：过滤输入字符流， 是所有自定义具体装饰流的父类，为所有装饰类提供一个标准、只是简单重写了父类Reader的所有方法、要求子类必须重写核心方法、和提供具有自己特色的方法、这里没有像字节流那样有很多的子类来实现不同的功能、可能是因为字符流本来就是字节流的一种装饰、所以在这里没有必要再对其进行装饰、只是提供一个扩展的接口而已；&lt;/p>
+&lt;p>&lt;code>BufferedReader&lt;/code>：缓冲字符流， 为了提高字符流读写的效率，引入了缓冲机制，进行字符批量的读写，提高了单个字符读写的效率；&lt;/p>
+&lt;p>&lt;code>InputStreamReader&lt;/code>是一个连接字节流和字符流的桥梁，它将字节流转变为字符流；&lt;/p>
+&lt;p>&lt;code>FileReader&lt;/code>：继承&lt;code>InputStreamReader&lt;/code>，可以说是一个达到此功能、常用的工具类，在其源代码中明显使用了将&lt;code>FileInputStream&lt;/code> 转变为&lt;code>Reader&lt;/code> 的方法。我们可以从这个类中得到一定的技巧。&lt;code>Reader&lt;/code> 中各个类的用途和使用方法基本和&lt;code>InputStream&lt;/code> 中的类使用一致。后面会有&lt;code>Reader&lt;/code> 与&lt;code>InputStream&lt;/code> 的对应关系。&lt;/p>
+&lt;h4 id="writer">Writer
+&lt;/h4>&lt;p>&lt;img src="https://pic1.zhimg.com/80/v2-e0bddfb105d00fe202435737684e8240_1440w.jpg"
+loading="lazy"
+alt="img"
+>&lt;/p>
+&lt;p>&lt;code>CharArrayWriter&lt;/code>、&lt;code>StringWriter&lt;/code> 是两种基本的介质流，它们分别向&lt;code>Char&lt;/code> 数组、&lt;code>String&lt;/code> 中写入数据。&lt;/p>
+&lt;p>&lt;code>PipedWriter&lt;/code> 是向与其它线程共用的管道中写入数据 &lt;code>BufferedWriter&lt;/code> 是一个装饰器为&lt;code>Writer&lt;/code> 提供缓冲功能。&lt;/p>
+&lt;p>&lt;code>PrintWriter&lt;/code> 和&lt;code>PrintStream&lt;/code> 极其类似，功能和使用也非常相似。&lt;/p>
+&lt;p>&lt;code>OutputStreamWriter&lt;/code> 是&lt;code>OutputStream&lt;/code> 到&lt;code>Writer&lt;/code> 转换的桥梁，它的子类&lt;code>FileWriter&lt;/code> 其实就是一个实现此功能的具体类。功能和使用和&lt;code>OutputStream&lt;/code> 极其类似。&lt;/p>
+&lt;p>转换流&lt;/p>
+&lt;p>&lt;strong>4.1、定义&lt;/strong>：字符和字节直接的转换，是字符流和字节流之间的桥梁，文本文件在硬盘中以字节流的形式存储时，通过&lt;code>InputStreamReader&lt;/code>读取后转化为字符流给程序处理，即可对读取到的字节数据经过指定编码转换成字符；程序处理的字符流通过&lt;code>OutputStreamWriter&lt;/code>转换为字节流保存，即可对读取到的字符数据经过指定编码转换成字节。&lt;/p>
+&lt;p>&lt;strong>4.2、何时使用转换流？&lt;/strong>&lt;/p>
+&lt;p>①当字节和字符之间有转换动作时； ②流操作的数据需要编码或解码时。&lt;/p>
+&lt;p>&lt;strong>4.3、具体的对象体现：&lt;/strong>&lt;/p>
+&lt;p>&lt;code>InputStreamReader&lt;/code>:字节到字符的桥梁 &lt;code>OutputStreamWriter&lt;/code>:字符到字节的桥梁 这两个流对象是字符体系中的成员，它们有转换作用，本身又是字符流，所以在构造的时候需要传入字节流对象进来，即：&lt;/p>
+&lt;p>&lt;code>InputStreamReader(InputStream in&lt;/code>)：将字节流以字符流输入。&lt;/p>
+&lt;p>&lt;code>OutputStreamWriter&lt;/code>(&lt;code>OutStreamout&lt;/code>):将字节流以字符流输出。&lt;/p>
+&lt;h4 id="systemin-and-systemout">&lt;code>System.in&lt;/code> and &lt;code>System.out&lt;/code>
+&lt;/h4>&lt;p>&lt;strong>System.in&lt;/strong>和&lt;strong>System.out&lt;/strong>分别代表了系统标准的输入和输出设备
+默认输入设备是：键盘，输出设备是：显示器
+System.in的类型是InputStream
+System.out的类型是PrintStream&lt;/p>
+&lt;h4 id="对象流">对象流
+&lt;/h4>&lt;p>ObjectInputStream和OjbectOutputSteam用于存储和读取基本数据类型数据或对象的处理流。它的强大之处就是可以把Java中的对象写入到数据源中，也能把对象从数据源中还原回来。&lt;/p>
+&lt;ul>
+&lt;li>序列化：用ObjectOutputStream类保存基本类型数据或对象的机制&lt;/li>
+&lt;li>反序列化：用ObjectInputStream类读取基本类型数据或对象的机制&lt;/li>
+&lt;/ul>
+&lt;p>ObjectOutputStream和ObjectInputStream不能序列化static和transient修饰的成员变量&lt;/p>
+&lt;h4 id="总结">总结
+&lt;/h4>&lt;p>&lt;code>InputStream&lt;/code>类的功能不足被&lt;code>Scanner&lt;/code>解决了&lt;/p>
+&lt;p>&lt;code>OutputStream&lt;/code>类的功能不足被&lt;code>PrintStream&lt;/code>解决了&lt;/p>
+&lt;p>&lt;code>Reader&lt;/code>类功能不足被&lt;code>BufferReader&lt;/code>解决了&lt;/p>
+&lt;p>&lt;code>Writer&lt;/code>类的功能不足被&lt;code>PrintWriter&lt;/code>解决了&lt;/p>
+&lt;p>输出数据用&lt;code>printStream&lt;/code>，&lt;code>printwriter&lt;/code>读取数据用&lt;code>Scanner&lt;/code>其次是&lt;code>bufferReader&lt;/code>&lt;/p>
+&lt;h2 id="nio">NIO
+&lt;/h2>&lt;p>java.nio全称java non-blocking IO，是指jdk1.4 及以上版本里提供的新api（New IO） ，为所有的原始类型（boolean类型除外）提供缓存支持的数据容器，使用它可以提供非阻塞式的高伸缩性网络。&lt;/p></description></item><item><title>【Java】金旭亮-Java程序设计</title><link>https://dyhes.github.io/p/java%E9%87%91%E6%97%AD%E4%BA%AE-java%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/</link><pubDate>Sat, 11 Dec 2021 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/java%E9%87%91%E6%97%AD%E4%BA%AE-java%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/</guid><description>&lt;h2 id="string">String
+&lt;/h2>&lt;h3 id="stringbuffer">StringBuffer
+&lt;/h3>&lt;p>线程安全&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>stringbuffer.toString()&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h3 id="stringbuilder">StringBuilder
+&lt;/h3>&lt;p>线程不安全，因而性能相对更高&lt;/p>
+&lt;h2 id="arrays类">Arrays类
+&lt;/h2>&lt;p>Arrays类中封装了与数组有关的静态方法&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>Arrays.CcopyOf()&lt;/code>&lt;/li>
+&lt;li>&lt;code>Arrays.sort()&lt;/code>&lt;/li>
+&lt;li>&lt;code>Arrays.fill()&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>等&lt;/p>
+&lt;h2 id="对象连接">对象连接
+&lt;/h2>&lt;p>在“+ ”运算中，当一个对象与一个String对象连接时，会 隐式地调用其toString()方法，默认情况下，此方法返回 “类名 @ + hashCode” 。 为了返回有意义的信息，子类可以重写toString()方法。&lt;/p>
+&lt;h2 id="接口">接口
+&lt;/h2>&lt;p>在面向对象世界中，可以使用“接口（interface）”来抽象对象的&lt;strong>行为特性&lt;/strong>&lt;/p>
+&lt;blockquote>
+&lt;p>eg:能否把“会游泳”、“能被吃”这种特性独立出来作为一种“可选项”，可以被“附加” 到具体对象上？ 这样一来，水鸟可以拥有“会游泳”这个特性，其它种类的鸟就不具备这个特性，但它 可能有其他的特性。&lt;/p>&lt;/blockquote>
+&lt;ul>
+&lt;li>
+&lt;p>如果接口不声明为public的，则自动变为package&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>接口类型 接口类型的变量＝ new 实现了接口的具体类型（）；&lt;/code>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>可以通过继承接口来扩充已有接口，并形成一个新的接口&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="函数式接口">函数式接口
+&lt;/h3>&lt;p>JDK中引入了一种“函数式”接口，这种接口只定义有一个公有 方法，使用@FunctionalInterface注解加以标注，这种类型的接口，主要用于“函数式编程”场景&lt;/p>
+&lt;h2 id="异常">异常
+&lt;/h2>&lt;p>&lt;img src="C:%5cUsers%5cdyhes%5cAppData%5cRoaming%5cTypora%5ctypora-user-images%5cimage-20220417171405687.png"
+loading="lazy"
+alt="image-20220417171405687"
+>&lt;/p>
+&lt;ul>
+&lt;li>可以有多个catch语句块，每个代码块捕获一种异常。在某个try块后有两个不同的catch 块捕获两个相同类型的异常是语法错误。&lt;/li>
+&lt;li>使用catch语句，只能捕获Exception类及其子类的对象。因此，一个捕获Exception对象的catch语句块可以捕获所有“可捕获”的异常。&lt;/li>
+&lt;li>将catch(Exception e)放在别的catch块前面会使这些catch块都不执行，因此Java不会编译这个程序&lt;/li>
+&lt;/ul>
+&lt;p>Java 7 及以后的版本，允许在一个catch块中捕获多个异常。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="k">catch&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">SocketException&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">|&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">SecurityException&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">|&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">NullPointerException&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">e&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="泛型">泛型
+&lt;/h2>&lt;ul>
+&lt;li>不能定义泛型化数组&lt;/li>
+&lt;li>不能直接创建泛型类型的实例&lt;/li>
+&lt;li>泛型类型不能直接或间接继承自Throwable&lt;/li>
+&lt;li>不能定义静态泛型成员&lt;/li>
+&lt;li>不允许基类中有泛型参数，从泛型基类派生时，应该给其指定一个具体的类型&lt;/li>
+&lt;li>可以在普通类或泛型类中定义泛型方法&lt;/li>
+&lt;li>泛型方法支持使用“…”定义个数可变的参数&lt;/li>
+&lt;/ul>
+&lt;h2 id="泛型约束">泛型约束
+&lt;/h2>&lt;ul>
+&lt;li>类型约束&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">static&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">T&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">extends&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Comparable&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">T&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">min&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">T&lt;/span>&lt;span class="o">[]&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">a&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">//…&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">//T extends Comparable &amp;amp; Serializable&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">//多个约束条件中最多只能有一个是类，且必须放在第一位&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>
+&lt;p>类型通配符&lt;/p>
+&lt;p>在泛型约束中使用“?”，可以匹配任意类型。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">static&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">printList&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">List&lt;/span>&lt;span class="o">&amp;lt;?&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">lst&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">for&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Object&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">item&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">lst&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">item&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;h2 id="内部类">内部类
+&lt;/h2>&lt;p>一个类中包容许多方法和字段，有些字段和方法从逻辑上看具有比较紧密的联系，可以把它们“放在一块”，“视为一个整体”。&lt;/p>
+&lt;p>内部类可看成是外部类的成员，其地位等同于类中的其他成员。内部类编译以后，每个内部类都会产生一个.class文件，其文件名通常具有以下格式：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">外部类名$内部类名&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="comparable接口">Comparable接口
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//old&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">interface&lt;/span> &lt;span class="nc">Comparable&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">compareTo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Object&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">other&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">//new and recomended&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">inteface&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Comparable&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">T&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">compareTo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">T&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">other&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">X&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">compareTo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Y&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">//对象X和Y相等，返回0&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">//对象X&amp;lt;Y,返回-1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">//X&amp;gt;Y，返回1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>凡是支持大小比较的类型（比如Integer），都实现了Comparable接口。&lt;/p>
+&lt;h2 id="-and-equals">‘==’ and &lt;code>equals()&lt;/code>
+&lt;/h2>&lt;p>“ ==”施加于对象类型，是比较两个对象变量是否引用同一对象。如果需要比对对象的“内容（即各字段的值）”，通常是调用对象的 equals方法。&lt;/p>
+&lt;p>equals方法由Object类所定义，其默认实现如下：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">boolean&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">equals&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Object&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">obj&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">==&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">obj&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>子类可根据实际情况，“重写（Override）”Object类的equals方法&lt;/p>
+&lt;p>重写Object的equals方法，注意其&lt;strong>参数类型必须是“Object”&lt;/strong>&lt;/p>
+&lt;p>另外，为了让对象能放入各种容器中，通常还需要重写 hashCode方法。&lt;/p>
+&lt;h2 id="对象组合">对象组合
+&lt;/h2>&lt;p>一个对象包容另一个对象，称为“对象组合”&lt;/p>
+&lt;p>方式：&lt;/p>
+&lt;ul>
+&lt;li>A对象完全包容B对象，容器对象管理被包容对象的生命期&lt;/li>
+&lt;li>B对象是独立的，A对象引用现成的B对象&lt;/li>
+&lt;/ul>
+&lt;h2 id="cloneable">Cloneable
+&lt;/h2>&lt;p>JDK中提供了一个Cloneable接口，需要实现深复制的对象应该实现这一接口。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">interface&lt;/span> &lt;span class="nc">Cloneable&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>像这种根本就没有定义任何一个成员的接口，称为“标记接口”。&lt;/p>
+&lt;h2 id="collection">Collection
+&lt;/h2>&lt;p>&lt;img src="C:%5cUsers%5cdyhes%5cAppData%5cRoaming%5cTypora%5ctypora-user-images%5cimage-20220417184028233.png"
+loading="lazy"
+alt="image-20220417184028233"
+>&lt;/p>
+&lt;h2 id="iterator">Iterator
+&lt;/h2>&lt;p>Iterator接口定义了3个方法&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Iterator&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">E&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kt">boolean&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">hasNext&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// 是否还有下一个元素&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">E&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">next&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// 获取下一个元素&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">remove&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// 移除iterator返回的上一个元素&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>所有实现了Collection接口的集合对象，都提供了一个iterator()方法， 以获取一个iterator对象&lt;/p>
+&lt;p>JDK 5以后，Collection接口派生自Iterable，因此JDK中内置的所有集合都可以使 用新的foreach语句完成遍历工作&lt;/p>
+&lt;p>集合对象有一个forEach()方法，它可以接收一个Lambda表达式，可用于遍历集合元素， 它与foreach循环不是一回事， foreach循环是一种语法特性， forEach则是JDK为集合类型提供的一个方法。&lt;/p>
+&lt;p>如果在遍历时非要删除集合中的元素，则必须通过迭代器对象的remove方法， 而不能通过集合对象直接删除。&lt;/p>
+&lt;p>尽管确实可以在迭代时移除当前访问的元素，但并不推荐这么做，特别是在多线程环境下，会带来很大的麻烦。推荐的作法是使用Stream API中的filter()方法，过滤掉不需要的元素。&lt;/p>
+&lt;h2 id="hashtable">HashTable
+&lt;/h2>&lt;p>HashMap和HashTable两者功能与用法基本一样，但HashTable是&lt;strong>线程安全&lt;/strong>的， 另外，HashMap可以使用null作为Key。&lt;/p>
+&lt;h3 id="properties">Properties
+&lt;/h3>&lt;p>Properties派生自HashTable，可以方便地处理“属性-值”对，并且可以很方便地将其保存到文件中，在编程中很常用&lt;/p>
+&lt;h2 id="collections">Collections
+&lt;/h2>&lt;p>Java提供了一个工具类Collections，封装了一些集合的常规操作。&lt;/p>
+&lt;ul>
+&lt;li>更改集合中元素的顺序：reverse、rotate、shuffle、sort和swap&lt;/li>
+&lt;li>用一个集合填充另一个集合：copy、fill和replaceAll、 addAll&lt;/li>
+&lt;li>获取集合中的最大和最小元素：max、min&lt;/li>
+&lt;li>查找元素： binarySearch、 indexOfSubList和lastIndexOfSubList&lt;/li>
+&lt;li>创建包容多个相同元素的集合：nCopies&lt;/li>
+&lt;/ul>
+&lt;h2 id="函数式编程">函数式编程
+&lt;/h2>&lt;p>Java对“函数式编程”范式的支持，是从JDK 8引入Lambda表达式之后才开始的，主要包容以下几个部分：&lt;/p>
+&lt;ul>
+&lt;li>Lambda表达式与函数式接口特性（JDK 8起）&lt;/li>
+&lt;li>Stream API（JDK 8起）与Flow API（JDK 9起）&lt;/li>
+&lt;li>对JDK原有组件进行改造，以支持函数式编程范式&lt;/li>
+&lt;/ul>
+&lt;h3 id="函数式接口-1">函数式接口
+&lt;/h3>&lt;p>能接收一个Lambda表达式的变量，必须是接口类型，并且这种接口，还必 须是一种“函数式接口（functional interface）”。所谓“函数式接口”，就是“只定义有一个抽象方法的接口”。Java 8中，使用“@FunctionalInterface”标识一个“函数式接口”。&lt;/p>
+&lt;p>JDK8 以后接口可有默认方法和静态方法&lt;/p>
+&lt;h3 id="方法引用">方法引用
+&lt;/h3>&lt;p>&lt;code>ClassName::Method&lt;/code>&lt;/p>
+&lt;p>可以把方法引用看作针对仅仅涉及单一方法的Lambda的“语法 糖”&lt;/p>
+&lt;h3 id="stream-api">Stream API
+&lt;/h3>&lt;p>不同于文件操作中的Stream,而是&lt;strong>从支持数据处理操作的源生成的元素序列&lt;/strong>&lt;/p>
+&lt;p>Stream API采用一种“即抽取即使用即丢弃”的方式处理数据，不需要把所有数据都加载到内存中（集合就是这样的）才能工作，所以，能处理很大的数据集&lt;/p>
+&lt;p>Stream API中定义的数据处理函数，通常可以级联调用，构成一个数据处理链条&lt;/p>
+&lt;p>Stream API中定义的数据处理函数，可以分为&lt;strong>中间操作&lt;/strong>和&lt;strong>终端操作&lt;/strong>&lt;/p>
+&lt;p>intermediate operation&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>peek()&lt;/code>:similar to &lt;code>forEach()&lt;/code>&lt;/li>
+&lt;li>&lt;code>limit()&lt;/code>&lt;/li>
+&lt;li>&lt;code>skip()&lt;/code>&lt;/li>
+&lt;li>&lt;code>filter()&lt;/code>&lt;/li>
+&lt;li>&lt;code>sorted()&lt;/code>&lt;/li>
+&lt;li>&lt;code>map()&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>terminal operation&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>forEach()&lt;/code>&lt;/li>
+&lt;li>&lt;code>reduce()&lt;/code>&lt;/li>
+&lt;li>&lt;code>collect()&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h4 id="创建流对象">创建流对象
+&lt;/h4>&lt;ul>
+&lt;li>基于集合：所有集合对象都实现的Collection接口定义了一个Stream()或 parallelStream()方法，可以通过它来创建流对象&lt;/li>
+&lt;li>使用&lt;code>Stream.Of&lt;/code>&lt;/li>
+&lt;li>使用&lt;code>Stream.Builder&lt;/code>接口&lt;/li>
+&lt;li>针对int、long、double这三种原始数值类型，java 8提供了单独的流类型： IntStream、LongStream和DoubleStream&lt;/li>
+&lt;li>&lt;code>Stream.empty()&lt;/code>创建空流&lt;/li>
+&lt;/ul>
+&lt;h2 id="模块化开发">模块化开发
+&lt;/h2>&lt;p>JPMS（Java Platform Module System），是 JDK 9引入的最重要的新特性之一。&lt;/p>
+&lt;p>模块化之后，整个程序被分解为若干个严格限定依赖关系的模块。只要不显式声明导出，模块中的所有类外界都是不可访问的。&lt;/p>
+&lt;p>模块（module）是包含代码的可识别软件构件，使用了元数据（metadata）来描述模块及其与其他模块的关系。 可以把模块看成是一组用于代码重用的包（package）。模块化（ modularization）是指将系统分解成独立且相互连接的模块的过程。&lt;/p>
+&lt;p>打散后的JDK模块， 以.jmod作为文件扩展名。&lt;/p>
+&lt;p>模块之间存在着“单向”依赖关系，Java模块系统不允许模块之间 存在编译时的循环依赖&lt;/p>
+&lt;p>每个模块都隐式依赖于一个名为“java.base”的特殊模块，它是 一种“聚合器模块（aggregator module）”，这种类型的模块主要用于对其他模块进行逻辑分组，避免在module-info.java中导入太多的模块声明。&lt;/p>
+&lt;p>模块设计三个核心原则&lt;/p>
+&lt;ul>
+&lt;li>强封装性&lt;/li>
+&lt;li>定义良好的接口&lt;/li>
+&lt;li>显式依赖&lt;/li>
+&lt;/ul>
+&lt;h2 id="gui-javafx">GUI-JavaFX
+&lt;/h2>&lt;p>JavaFX在设计之初就考虑了应用MVC设计模式，整个JavaFX应用 框架围绕着MVC设计模式而展开。&lt;/p>
+&lt;p>&lt;img src="C:%5cUsers%5cdyhes%5cAppData%5cRoaming%5cTypora%5ctypora-user-images%5cimage-20220419095921802.png"
+loading="lazy"
+alt="image-20220419095921802"
+>&lt;/p>
+&lt;h2 id="javabean">JavaBean
+&lt;/h2>&lt;p>JavaBean可以看成是一种编程约定，按照这种约定编写Java类，开发者之间就易于协作，并且代码也易于重用，并且有一些开发工具（比如 NetBeans这样的IDE）能识别JavaBean所定义的各种属性、方法和事件。&lt;/p>
+&lt;p>&lt;img src="C:%5cUsers%5cdyhes%5cAppData%5cRoaming%5cTypora%5ctypora-user-images%5cimage-20220419101022585.png"
+loading="lazy"
+alt="image-20220419101022585"
+>&lt;/p>
+&lt;p>&lt;a class="link" href="http://www.blog.dyhes.cn/wp-content/uploads/2022/04/image-20220419101022585.png" target="_blank" rel="noopener"
+>http://www.blog.dyhes.cn/wp-content/uploads/2022/04/image-20220419101022585.png&lt;/a>&lt;/p></description></item><item><title>【Java】Basics</title><link>https://dyhes.github.io/p/javabasics/</link><pubDate>Sun, 20 Dec 2020 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/javabasics/</guid><description>&lt;h2 id="introduction">Introduction
+&lt;/h2>&lt;p>Every line of code that runs in Java must be inside a &lt;code>class&lt;/code>. A class should always start with an uppercase first letter.&lt;/p>
+&lt;p>The name of the java file &lt;strong>must match&lt;/strong> the class name. When saving the file, save it using the class name and add &amp;ldquo;.java&amp;rdquo; to the end of the filename.&lt;/p>
+&lt;p>Every program must contain the &lt;code>main()&lt;/code> method.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">static&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">main&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">[]&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">args&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="variables">Variables
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">type&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variablename&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">value&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">type&lt;/span>&lt;span class="o">[]&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">arrayname&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="data-types">Data Types
+&lt;/h3>&lt;h4 id="primitive-types">primitive types
+&lt;/h4>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th style="text-align: left">Data Type&lt;/th>
+&lt;th style="text-align: left">Size&lt;/th>
+&lt;th style="text-align: left">Description&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td style="text-align: left">byte&lt;/td>
+&lt;td style="text-align: left">1 byte&lt;/td>
+&lt;td style="text-align: left">Stores whole numbers from -128 to 127&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">short&lt;/td>
+&lt;td style="text-align: left">2 bytes&lt;/td>
+&lt;td style="text-align: left">Stores whole numbers from -32,768 to 32,767&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">int&lt;/td>
+&lt;td style="text-align: left">4 bytes&lt;/td>
+&lt;td style="text-align: left">Stores whole numbers from -2,147,483,648 to 2,147,483,647&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">long&lt;/td>
+&lt;td style="text-align: left">8 bytes&lt;/td>
+&lt;td style="text-align: left">Stores whole numbers from -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">float&lt;/td>
+&lt;td style="text-align: left">4 bytes&lt;/td>
+&lt;td style="text-align: left">Stores fractional numbers. Sufficient for storing 6 to 7 decimal digits&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">double&lt;/td>
+&lt;td style="text-align: left">8 bytes&lt;/td>
+&lt;td style="text-align: left">Stores fractional numbers. Sufficient for storing 15 decimal digits&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">boolean&lt;/td>
+&lt;td style="text-align: left">1 bit&lt;/td>
+&lt;td style="text-align: left">Stores true or false values&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">char&lt;/td>
+&lt;td style="text-align: left">2 bytes&lt;/td>
+&lt;td style="text-align: left">Stores a single character/letter or ASCII values&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h4 id="non-primitive">Non-primitive
+&lt;/h4>&lt;p>Non-primitive data types are called &lt;strong>reference types&lt;/strong> because they refer to objects.&lt;/p>
+&lt;ul>
+&lt;li>String&lt;/li>
+&lt;li>Arrays&lt;/li>
+&lt;li>Classes&lt;/li>
+&lt;li>Interfaces&lt;/li>
+&lt;/ul>
+&lt;h4 id="main-difference">main difference
+&lt;/h4>&lt;ul>
+&lt;li>Primitive types are &lt;strong>predefined&lt;/strong> in Java. Non-primitive types are created by the programmer and is not defined by Java (except for &lt;code>String&lt;/code>).&lt;/li>
+&lt;li>A primitive type has always a value, while non-primitive types can be &lt;code>null&lt;/code>.&lt;/li>
+&lt;li>A &lt;strong>primitive type&lt;/strong> starts with a &lt;strong>lowercase letter&lt;/strong>, while &lt;strong>non-primitive types&lt;/strong> starts with an &lt;strong>uppercase letter&lt;/strong>.&lt;/li>
+&lt;li>The size of a primitive type depends on the data type, while &lt;strong>non-primitive types have all the same size&lt;/strong>.&lt;/li>
+&lt;/ul>
+&lt;h3 id="final">final
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">final&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">myNum&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">15&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">//you couldn&amp;#39;t change it anymore&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">//just like const in js&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="name-rules">name rules
+&lt;/h3>&lt;p>The general rules for naming variables are:&lt;/p>
+&lt;ul>
+&lt;li>Names can contain &lt;strong>letters, digits, underscores, and dollar signs&lt;/strong>&lt;/li>
+&lt;li>Names must &lt;strong>begin with a letter&lt;/strong>&lt;/li>
+&lt;li>Names should start with a &lt;strong>lowercase&lt;/strong> letter and it &lt;strong>cannot contain whitespace&lt;/strong>&lt;/li>
+&lt;li>Names can also begin with &lt;strong>$ and _&lt;/strong> (but we will not use it in this tutorial)&lt;/li>
+&lt;li>Names are &lt;strong>case sensitive&lt;/strong> (&amp;ldquo;myVar&amp;rdquo; and &amp;ldquo;myvar&amp;rdquo; are different variables)&lt;/li>
+&lt;li>Reserved words (like Java keywords, such as &lt;code>int&lt;/code> or &lt;code>boolean&lt;/code>) cannot be used as names&lt;/li>
+&lt;/ul>
+&lt;h3 id="casting">Casting
+&lt;/h3>&lt;h4 id="widening-casting">Widening Casting
+&lt;/h4>&lt;p>Widening casting is done automatically when passing a smaller size type to a larger size type&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">myInt&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">9&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">myDouble&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">myInt&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="narrowing-casting">Narrowing Casting
+&lt;/h4>&lt;p>Narrowing casting must be done manually by placing the type in parentheses in front of the value&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">myDouble&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">9&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">78d&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">myInt&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">myDouble&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="overload">Overload
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">myMethod&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">myMethod&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">y&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kt">float&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">myMethod&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">float&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">myMethod&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">y&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="classes">Classes
+&lt;/h2>&lt;p>a class is a template for objects, and an object is an instance of a class.&lt;/p>
+&lt;h3 id="constructor">Constructor
+&lt;/h3>&lt;p>A constructor in Java is a &lt;strong>special method&lt;/strong> that is used to initialize objects. The constructor is called when an object of a class is created. It can be used to set initial values for object attributes&lt;/p>
+&lt;p>Note that the constructor name must &lt;strong>match the class name&lt;/strong>, and it cannot have a &lt;strong>return type&lt;/strong> (like &lt;code>void&lt;/code>).&lt;/p>
+&lt;h3 id="modifiers">Modifiers
+&lt;/h3>&lt;h4 id="access-modifiers">Access Modifiers
+&lt;/h4>&lt;ul>
+&lt;li>**public: **accessible for all classes&lt;/li>
+&lt;li>&lt;strong>protected:&lt;/strong> accessible in the same package and &lt;strong>subclasses&lt;/strong>&lt;/li>
+&lt;li>**default: **accessible in the same package&lt;/li>
+&lt;li>&lt;strong>private:&lt;/strong> only accessible within the declared class&lt;/li>
+&lt;/ul>
+&lt;h4 id="non-access-modifiers">Non-Access Modifiers
+&lt;/h4>&lt;h5 id="for-classes">for classes
+&lt;/h5>&lt;ul>
+&lt;li>&lt;strong>final&lt;/strong>: cannot be inherited&lt;/li>
+&lt;li>&lt;strong>abstract&lt;/strong>: cannot be used to create objects&lt;/li>
+&lt;/ul>
+&lt;h5 id="for-attributes-and-methods">for attributes and methods
+&lt;/h5>&lt;ul>
+&lt;li>&lt;strong>final&lt;/strong>: cannot be overridden/modified&lt;/li>
+&lt;li>&lt;strong>static&lt;/strong> :belongs to the class, rather than an object&lt;/li>
+&lt;li>&lt;strong>abstract&lt;/strong>: Can only be used in an abstract class, and can only be used on methods.&lt;/li>
+&lt;/ul>
+&lt;h3 id="main-concepts-of-oop">Main Concepts of OOP
+&lt;/h3>&lt;h4 id="encapsulation">Encapsulation
+&lt;/h4>&lt;ul>
+&lt;li>
+&lt;p>declare class variables/attributes as &lt;code>private&lt;/code>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>provide public &lt;strong>get&lt;/strong> and &lt;strong>set&lt;/strong> methods to access and update the value of a &lt;code>private&lt;/code> variable&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>To inherit from a class, use the &lt;code>extends&lt;/code> keyword.&lt;/p>
+&lt;h4 id="inheritance">Inheritance
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>subclass&lt;/strong> (child) - the class that inherits from another class&lt;/li>
+&lt;li>&lt;strong>superclass&lt;/strong> (parent) - the class being inherited from&lt;/li>
+&lt;/ul>
+&lt;h4 id="polymorphism">Polymorphism
+&lt;/h4>&lt;p>subclasses can override methods inherited from superclasses&lt;/p>
+&lt;h4 id="abstract">Abstract
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>Abstract class:&lt;/strong> is a restricted class that cannot be used to create objects (to access it, it must be inherited from another class).&lt;/li>
+&lt;li>&lt;strong>Abstract method:&lt;/strong> can only be used in an abstract class, and it does not have a body. The body is provided by the subclass (inherited from).&lt;/li>
+&lt;/ul>
+&lt;h3 id="interface">Interface
+&lt;/h3>&lt;p>An &lt;code>interface&lt;/code> is a completely &amp;ldquo;&lt;strong>abstract class&lt;/strong>&amp;rdquo; that is used to group related methods with empty bodies&lt;/p>
+&lt;p>To access the interface methods, the interface must be &amp;ldquo;implemented&amp;rdquo; (kinda like inherited) by another class with the &lt;code>implements&lt;/code> keyword (instead of &lt;code>extends&lt;/code>). The body of the interface method is provided by the &amp;ldquo;implement&amp;rdquo; class.&lt;/p>
+&lt;ul>
+&lt;li>On implementation of an interface, you must override all of its methods&lt;/li>
+&lt;li>Interface &lt;strong>methods&lt;/strong> are by default &lt;code>abstract&lt;/code> and &lt;code>public&lt;/code>&lt;/li>
+&lt;li>Interface &lt;strong>attributes&lt;/strong> are by default &lt;code>public&lt;/code>, &lt;code>static&lt;/code> and &lt;code>final&lt;/code>&lt;/li>
+&lt;li>An interface cannot contain a constructor (as it cannot be used to create objects)&lt;/li>
+&lt;/ul>
+&lt;h4 id="why">why
+&lt;/h4>&lt;ol>
+&lt;li>
+&lt;p>To achieve &lt;strong>security&lt;/strong> - hide certain details and only show the important details of an object (interface).&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Java does not support &amp;ldquo;multiple inheritance&amp;rdquo; (a class can only inherit from one superclass). However, it can be achieved with interfaces, because the class can &lt;strong>implement&lt;/strong> multiple interfaces. &lt;strong>Note:&lt;/strong> To implement multiple interfaces, separate them with a comma (see example below).&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;h3 id="inner-classes">Inner Classes
+&lt;/h3>&lt;p>In Java, it is also possible to nest classes (a class within a class). The purpose of nested classes is to group classes that belong together, which makes your code more &lt;strong>readable and maintainable&lt;/strong>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">class&lt;/span> &lt;span class="nc">OuterClass&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">10&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">InnerClass&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">y&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">5&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">Main&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">static&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">main&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">[]&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">args&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">OuterClass&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">myOuter&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">new&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">OuterClass&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">OuterClass&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">InnerClass&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">myInner&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">myOuter&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">new&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">InnerClass&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">myInner&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">y&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">myOuter&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">x&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="wrapper-classes">Wrapper Classes
+&lt;/h3>&lt;p>Wrapper classes provide a way to use primitive data types (&lt;code>int&lt;/code>, &lt;code>boolean&lt;/code>, etc..) as objects.&lt;/p>
+&lt;p>The table below shows the primitive type and the equivalent wrapper class:&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th style="text-align: left">Primitive Data Type&lt;/th>
+&lt;th style="text-align: left">Wrapper Class&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td style="text-align: left">byte&lt;/td>
+&lt;td style="text-align: left">Byte&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">short&lt;/td>
+&lt;td style="text-align: left">Short&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">int&lt;/td>
+&lt;td style="text-align: left">Integer&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">long&lt;/td>
+&lt;td style="text-align: left">Long&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">float&lt;/td>
+&lt;td style="text-align: left">Float&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">double&lt;/td>
+&lt;td style="text-align: left">Double&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">boolean&lt;/td>
+&lt;td style="text-align: left">Boolean&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">char&lt;/td>
+&lt;td style="text-align: left">Character&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h2 id="enums">Enums
+&lt;/h2>&lt;p>An &lt;code>enum&lt;/code> is a special &amp;ldquo;class&amp;rdquo; that represents a group of &lt;strong>constants&lt;/strong> (unchangeable variables, like &lt;code>final&lt;/code> variables).&lt;/p>
+&lt;p>To create an &lt;code>enum&lt;/code>, use the &lt;code>enum&lt;/code> keyword (instead of class or interface), and separate the constants with a comma. Note that they should be in uppercase letters&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">enum&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Level&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">LOW&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">MEDIUM&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">HIGH&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">//looping&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">for&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Level&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">myVar&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Level&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">values&lt;/span>&lt;span class="p">())&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">myVar&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>An &lt;code>enum&lt;/code> can, just like a &lt;code>class&lt;/code>, have attributes and methods. The only difference is that enum constants are &lt;code>public&lt;/code>, &lt;code>static&lt;/code> and &lt;code>final&lt;/code> (unchangeable - cannot be overridden).&lt;/p>
+&lt;p>An &lt;code>enum&lt;/code> cannot be used to create objects, and it cannot extend other classes (but it can implement interfaces).&lt;/p>
+&lt;h2 id="user-input">User Input
+&lt;/h2>&lt;p>The &lt;code>Scanner&lt;/code> class is used to get user input, and it is found in the &lt;code>java.util&lt;/code> package.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">java.util.Scanner&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// Import the Scanner class&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">Main&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">static&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">main&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">[]&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">args&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Scanner&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">myObj&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">new&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Scanner&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">in&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// Create a Scanner object&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Enter username&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userName&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">myObj&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">nextLine&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// Read user input&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Username is: &amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userName&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// Output user input&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th style="text-align: left">Method&lt;/th>
+&lt;th style="text-align: left">Description&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td style="text-align: left">&lt;code>nextBoolean()&lt;/code>&lt;/td>
+&lt;td style="text-align: left">Reads a &lt;code>boolean&lt;/code> value from the user&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&lt;code>nextByte()&lt;/code>&lt;/td>
+&lt;td style="text-align: left">Reads a &lt;code>byte&lt;/code> value from the user&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&lt;code>nextDouble()&lt;/code>&lt;/td>
+&lt;td style="text-align: left">Reads a &lt;code>double&lt;/code> value from the user&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&lt;code>nextFloat()&lt;/code>&lt;/td>
+&lt;td style="text-align: left">Reads a &lt;code>float&lt;/code> value from the user&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&lt;code>nextInt()&lt;/code>&lt;/td>
+&lt;td style="text-align: left">Reads a &lt;code>int&lt;/code> value from the user&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&lt;code>nextLine()&lt;/code>&lt;/td>
+&lt;td style="text-align: left">Reads a &lt;code>String&lt;/code> value from the user&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&lt;code>nextLong()&lt;/code>&lt;/td>
+&lt;td style="text-align: left">Reads a &lt;code>long&lt;/code> value from the user&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align: left">&lt;code>nextShort()&lt;/code>&lt;/td>
+&lt;td style="text-align: left">Reads a &lt;code>short&lt;/code> value from the user&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h2 id="collections">Collections
+&lt;/h2>&lt;h4 id="arraylist">ArrayList
+&lt;/h4>&lt;p>The &lt;code>ArrayList&lt;/code> class is a resizable array&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">ArrayList&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">cars&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">new&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ArrayList&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="linkedlist">LinkedList
+&lt;/h4>&lt;p>The &lt;code>LinkedList&lt;/code> class has all of the same methods as the &lt;code>ArrayList&lt;/code> class because they both implement the &lt;code>List&lt;/code> interface. But they work in different way.&lt;/p>
+&lt;h4 id="hashmap">HashMap
+&lt;/h4>&lt;p>A &lt;code>HashMap&lt;/code> however, store items in &amp;ldquo;&lt;strong>key&lt;/strong>/&lt;strong>value&lt;/strong>&amp;rdquo; pairs, and you can access them by an index of another type.(e.g. a &lt;code>String&lt;/code>)&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">HashMap&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">capitalCities&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">new&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">HashMap&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="hashset">HashSet
+&lt;/h4>&lt;p>A HashSet is a collection of items where every item is unique.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">HashSet&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">cars&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">new&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">HashSet&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="iterator">Iterator
+&lt;/h4>&lt;p>An &lt;code>Iterator&lt;/code> is an object that can be used to loop through collections.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// Import the ArrayList class and the Iterator class&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">java.util.ArrayList&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">java.util.Iterator&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">Main&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">static&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">main&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">[]&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">args&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Make a collection&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">ArrayList&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">cars&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">new&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ArrayList&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">cars&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Volvo&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">cars&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;BMW&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">cars&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Ford&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">cars&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Mazda&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Get the iterator&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Iterator&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">it&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">cars&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">iterator&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// Print the first item&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">it&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">next&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>To loop through a collection, use the &lt;code>hasNext()&lt;/code> and &lt;code>next()&lt;/code> methods of the &lt;code>Iterator&lt;/code>&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="k">while&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">it&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">hasNext&lt;/span>&lt;span class="p">())&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">it&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">next&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h5 id="removing-items">Removing items
+&lt;/h5>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">while&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">it&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">hasNext&lt;/span>&lt;span class="p">())&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Integer&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">it&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">next&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">if&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">10&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">it&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">remove&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>Note:&lt;/strong> Trying to remove items using a &lt;strong>for loop&lt;/strong> or a &lt;strong>for-each loop&lt;/strong> would not work correctly because the collection is changing size at the same time that the code is trying to loop.&lt;/p>
+&lt;h2 id="lambda">Lambda
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">parameter&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">expression&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">parameter1&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">parameter2&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">expression&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">parameter1&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">parameter2&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">code&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">block&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="thread">Thread
+&lt;/h2>&lt;p>Threads allows a program to operate more efficiently by doing multiple things at the same time.&lt;/p>
+&lt;p>Threads can be used to perform complicated tasks in the background without interrupting the main program.&lt;/p>
+&lt;h3 id="creating">Creating
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">Main&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">extends&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Thread&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">run&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;This code is running in a thread&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">//2&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">Main&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">implements&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Runnable&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">run&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;This code is running in a thread&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="running">Running
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">Main&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">extends&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Thread&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">static&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">main&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">[]&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">args&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Main&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">thread&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">new&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Main&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">thread&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">start&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;This code is outside of the thread&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">run&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;This code is running in a thread&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">//2&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">Main&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">implements&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Runnable&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">static&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">main&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">[]&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">args&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Main&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">obj&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">new&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Main&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Thread&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">thread&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">new&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Thread&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">obj&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">thread&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">start&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;This code is outside of the thread&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">run&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;This code is running in a thread&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="exceptions">Exceptions
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="k">try&lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">throw&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">...&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="k">catch&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Exception&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">e&lt;/span>&lt;span class="p">){&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="k">finally&lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item></channel></rss>
