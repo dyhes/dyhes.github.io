@@ -209,3 +209,9 @@ for (int i = 0; i < 1000; ++i) {
 - **容量缩小的唯一方式**是通过 `shrink_to_fit`（非强制），而 `resize` 本身不会主动缩小容量。
 
 如需进一步优化性能，可结合 `reserve` 预分配容量，避免频繁扩容。
+
+## `to_string`
+```cpp
+int num = 123;
+std::string str = std::to_string(num); // 输出："123"
+```

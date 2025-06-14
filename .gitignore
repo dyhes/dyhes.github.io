@@ -1,5 +1,6 @@
 public
 resources
+md-img-uploader
 .hugo_build.lock
 
 .DS_Store
