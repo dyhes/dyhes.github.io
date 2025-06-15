@@ -141,7 +141,7 @@ OpenFeign 是 Spring Cloud 生态中的声明式 HTTP 客户端，专为简化**
 
 ---
 
-### 二、**快速集成步骤**
+### **快速集成步骤**
 1. **添加依赖**  
    在项目中引入 Spring Cloud OpenFeign 依赖：
    ```xml

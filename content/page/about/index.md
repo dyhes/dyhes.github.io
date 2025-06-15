@@ -17,7 +17,7 @@ title: About
 
 # Something you may want to know
 
-## 1. Who am I?
+## Who am I?
 
 I am a cs student pursuing a master's degree, and I'm currently working as a full-stack developer.
 

@@ -12,7 +12,7 @@ tags:
 
 ---
 
-### 1. **实现原理**
+###  **实现原理**
 - **请求解密**：拦截请求体，解析JSON内容，若存在`userId`字段则解密其值。
 - **响应加密**：拦截响应体，解析JSON内容，若存在`userId`字段则加密其值。
 - **核心组件**：
@@ -22,7 +22,7 @@ tags:
 
 ---
 
-### 2. **实现步骤**
+###  **实现步骤**
 
 #### **2.1 定义加解密工具类**
 ```java
@@ -119,7 +119,7 @@ public class UserIdCryptoFilter implements GlobalFilter, Ordered {
 
 ---
 
-### 3. **关键实现细节**
+###  **关键实现细节**
 1. **JSON解析与修改**：
    - 使用`JsonParser`解析请求/响应体中的JSON数据。
    - 仅针对`userId`字段进行加解密，其他字段保持不变。
@@ -136,7 +136,7 @@ public class UserIdCryptoFilter implements GlobalFilter, Ordered {
 
 ---
 
-### 4. **配置与测试**
+###  **配置与测试**
 - **路由配置**（`application.yml`）：
   ```yaml
   spring:
@@ -161,7 +161,7 @@ public class UserIdCryptoFilter implements GlobalFilter, Ordered {
 
 ---
 
-### 5. **注意事项**
+###  **注意事项**
 - **密钥管理**：建议将AES密钥存储在安全配置中心（如Spring Cloud Config）。
 - **白名单机制**：可参考中的白名单配置，排除无需加解密的接口。
 - **版本兼容性**：通过请求头`crypto-version`标识加密算法版本，便于后续升级。
@@ -173,7 +173,7 @@ public class UserIdCryptoFilter implements GlobalFilter, Ordered {
 
 ---
 
-### 1. **流式响应体的分块特性**
+###  **流式响应体的分块特性**
 在 HTTP 响应中，数据可能以 **分块（Chunked）** 形式传输，每个 `DataBuffer` 仅包含部分数据。但在以下场景中，单个 `DataBuffer` 可能包含完整的 JSON 片段：
 - **小响应体**：若响应体较小（例如仅包含一个 JSON 对象），可能一次性加载到单个 `DataBuffer` 中。
 - **分块策略**：下游服务可能按逻辑分块（例如每行一个 JSON 对象），使每个 `DataBuffer` 是独立的 JSON 片段。
@@ -182,7 +182,7 @@ public class UserIdCryptoFilter implements GlobalFilter, Ordered {
 
 ---
 
-### 2. **响应式流的逐块处理**
+###  **响应式流的逐块处理**
 Spring Cloud Gateway 基于 Reactor 的响应式流模型，通过 `Flux<DataBuffer>` 按顺序处理数据块：
 - **`map` 操作符**：对每个 `DataBuffer` 独立处理，不依赖前后数据块的上下文。
 - **非阻塞性**：逐个处理分块，避免缓冲整个响应体，减少内存占用。
@@ -193,7 +193,7 @@ Spring Cloud Gateway 基于 Reactor 的响应式流模型，通过 `Flux<DataBuf
 
 ---
 
-### 3. **代码示例的潜在问题与优化**
+###  **代码示例的潜在问题与优化**
 用户提供的代码片段：
 ```java
 Flux.from(body).map(dataBuffer -> {
@@ -219,7 +219,7 @@ Flux.from(body).map(dataBuffer -> {
 
 ---
 
-### 4. **适用场景与注意事项**
+###  **适用场景与注意事项**
 - **适用场景**：
   - 短响应或分块对齐 JSON 结构的场景（例如日志流、逐行 JSON）。
   - 仅需修改局部字段且不破坏 JSON 结构的场景。
@@ -238,7 +238,7 @@ Flux.from(body).map(dataBuffer -> {
 
 ---
 
-### 一、实现原理
+### 实现原理
 1. **参数获取**  
    `@RequestParam` 参数会以 **查询字符串（Query String）** 的形式出现在 URL 中（例如 `?userId=123&userId=456`），可以通过 `ServerHttpRequest#getQueryParams()` 方法获取参数列表。
    
@@ -251,8 +251,8 @@ Flux.from(body).map(dataBuffer -> {
 
 ---
 
-### 二、具体实现步骤
-#### 1. **定义加解密工具类**
+### 具体实现步骤
+####  **定义加解密工具类**
 参考网页5中的 AES 工具类，支持对字符串进行加解密：
 ```java
 public class AESUtil {
@@ -266,7 +266,7 @@ public class AESUtil {
 }
 ```
 
-#### 2. **自定义全局过滤器**
+####  **自定义全局过滤器**
 通过 `GlobalFilter` 拦截并修改 `@RequestParam` 参数：
 ```java
 @Component
@@ -301,12 +301,12 @@ public class ParamCryptoFilter implements GlobalFilter, Ordered {
 
 ---
 
-### 三、关键实现细节
-#### 1. **列表参数处理**
+### 关键实现细节
+####  **列表参数处理**
 - **加密场景**：若参数是列表（如 `userId=123&userId=456`），需遍历每个值并加密。
 - **解密场景**：通过 `queryParams.get("encryptedUserId")` 获取所有加密值，解密后重新赋值给 `userId` 参数。
 
-#### 2. **请求重构**
+####  **请求重构**
 使用 `UriComponentsBuilder` 动态修改 URL 中的查询参数：
 ```java
 UriComponentsBuilder.fromUri(request.getURI())
@@ -314,13 +314,13 @@ UriComponentsBuilder.fromUri(request.getURI())
     .build().toUri();
 ```
 
-#### 3. **安全性增强**
+####  **安全性增强**
 - **密钥管理**：通过集成阿里云 KMS 或 Vault 实现密钥动态获取（参考网页5）。
 - **防重放攻击**：在参数中添加时间戳和随机数（`timestamp` + `nonce`），网关校验后拒绝重复或超时请求。
 
 ---
 
-### 四、注意事项
+### 注意事项
 1. **性能优化**  
    - 使用缓存（如 Caffeine）存储已处理的 `nonce`，避免重复解密。
    - 避免在网关层处理超大参数列表。
@@ -340,7 +340,7 @@ UriComponentsBuilder.fromUri(request.getURI())
 ## Json流式优化
 针对您提供的`UserIdFilter`过滤器，以下从JSON处理流程优化、性能提升、代码可维护性三个维度提出优化建议，并给出具体实现方案：
 
-### 一、JSON处理流程优化
+### JSON处理流程优化
 1. **采用流式解析替代全量加载**
 原始代码将整个响应体加载到字符串中进行处理，存在内存压力和性能瓶颈。建议改用Jackson的流式API（JsonParser/JsonGenerator）逐层处理：
 ```java
@@ -385,7 +385,7 @@ private void handlePagination(ObjectNode responseNode) {
 }
 ```
 
-### 二、性能优化
+### 性能优化
 1. **响应体缓存优化**  
 使用`CachedBodyOutputMessage`避免重复解析（参考网页2响应式编程注意事项）：
 ```java
@@ -409,7 +409,7 @@ this.mapper = mapper.copy()
     .configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, false);
 ```
 
-### 三、代码可维护性优化
+### 代码可维护性优化
 1. **异常处理改进**  
 增加更完善的错误处理机制（参考网页6的异常处理实践）：
 ```java
@@ -437,7 +437,7 @@ return super.writeWith(fluxBody
     .flux());
 ```
 
-### 四、综合优化方案
+### 综合优化方案
 将上述优化点整合后的核心代码结构：
 ```java
 @Override
@@ -466,7 +466,7 @@ public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 }
 ```
 
-### 五、性能监控建议（参考网页5）
+### 性能监控建议（参考网页5）
 1. 添加处理耗时统计：
 ```java
 long start = System.currentTimeMillis();

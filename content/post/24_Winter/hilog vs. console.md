@@ -9,7 +9,7 @@ tags:
 
 在HarmonyOS中，`hilog.info` 和 `console.info` 是两种不同的日志记录方式，主要用于调试和信息输出，但它们的应用场景和功能有所不同。
 
-### 1. `hilog.info`
+###  `hilog.info`
 - **用途**: `hilog.info` 是 HarmonyOS 提供的系统级日志工具，主要用于记录系统运行时的日志信息。
 - **特点**:
   - **系统集成**: `hilog` 是 HarmonyOS 的日志系统，支持不同级别的日志输出（如 DEBUG、INFO、WARN、ERROR 等）。
@@ -23,7 +23,7 @@ tags:
   hilog.info(0x0000, 'tag', 'This is an info message');
   ```
 
-### 2. `console.info`
+###  `console.info`
 - **用途**: `console.info` 是 JavaScript 标准的日志输出方法，主要用于开发调试阶段的信息输出。
 - **特点**:
   - **开发调试**: `console.info` 通常用于开发者在调试过程中输出信息，方便快速查看变量状态或程序执行流程。

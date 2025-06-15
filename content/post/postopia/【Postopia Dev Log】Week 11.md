@@ -62,27 +62,27 @@ public class RecordFieldChecker {
 ---
 
 ### 关键点解析
-#### 1. **Record 的特殊性**
+####  **Record 的特殊性**
 - **字段访问方式**：与普通类通过 `getDeclaredFields()` 不同，`Record` 使用 `getRecordComponents()` 获取字段元数据。
 - **不可变性**：`Record` 的字段默认是 `final` 的，构造时必须初始化，但运行时仍可通过反射检查其值是否非空。
 
-#### 2. **反射逻辑**
+####  **反射逻辑**
 - **获取字段组件**：`RecordComponent` 包含字段名、类型和访问器方法（如 `getAccessor()`）。
 - **调用访问器**：通过 `component.getAccessor().invoke(record)` 安全获取字段值，避免直接访问私有字段的权限问题。
 
-#### 3. **空值检查**
+####  **空值检查**
 - **`Objects.nonNull()`**：替代 `field.get(obj) != null` 的简洁方式，避免空指针异常。
 - **异常处理**：封装反射调用异常，增强健壮性。
 
 ---
 
 ### 使用示例
-#### 1. 定义 Record 类型
+####  定义 Record 类型
 ```java
 record User(Integer id, String name, String email) {}
 ```
 
-#### 2. 调用检查方法
+####  调用检查方法
 ```java
 User user1 = new User(1, "Alice", "alice@example.com");
 User user2 = new User(null, "Bob", "bob@example.com");
@@ -94,7 +94,7 @@ System.out.println(RecordFieldChecker.areAllFieldsNonNull(user2)); // false
 ---
 
 ### 扩展场景
-#### 1. **嵌套对象检查**
+####  **嵌套对象检查**
 若 `Record` 包含嵌套对象字段（如 `Address`），需递归检查：
 ```java
 return Arrays.stream(components)
@@ -105,7 +105,7 @@ return Arrays.stream(components)
     });
 ```
 
-#### 2. **过滤特定字段**
+####  **过滤特定字段**
 通过注解忽略某些字段（如 `@Nullable`）：
 ```java
 // 自定义注解
@@ -646,7 +646,7 @@ UpdateQuery updateQuery = UpdateQuery.builder("document_id")
 ---
 
 ### 典型示例
-#### 1. 基础调用
+####  基础调用
 ```java
 // 可传入任意数量参数
 printStrings();                // 零参数
@@ -654,7 +654,7 @@ printStrings("Hello");         // 一个参数
 printStrings("A", "B", "C");   // 多个参数
 ```
 
-#### 2. 结合其他参数
+####  结合其他参数
 ```java
 public static String format(String template, String... args) {
     return String.format(template, args);
@@ -663,7 +663,7 @@ public static String format(String template, String... args) {
 String result = format("Name: %s, Age: %s", "Alice", "30");
 ```
 
-#### 3. 与数组的互操作性
+####  与数组的互操作性
 可变参数可以与数组互相转换：
 ```java
 String[] arr = {"a", "b"};
@@ -715,7 +715,7 @@ printStrings(new String[] {"x", "y"});  // 匿名数组
 ---
 
 ### CascadeType 的成员与功能
-#### 1. **PERSIST**  
+####  **PERSIST**  
 - **功能**：级联保存操作。当父实体通过 `persist()` 方法保存时，关联的子实体（未持久化的）也会被自动保存。  
 - **示例**：  
   ```java
@@ -724,24 +724,24 @@ printStrings(new String[] {"x", "y"});  // 匿名数组
   ```
   保存 `Order` 对象时，其关联的 `Item` 列表会自动保存到数据库。
 
-#### 2. **REMOVE**  
+####  **REMOVE**  
 - **功能**：级联删除操作。删除父实体时，所有关联的子实体会被自动删除。  
 - **应用场景**：删除订单时连带删除所有订单项。  
 - **注意**：需配合数据库外键的 `ON DELETE CASCADE` 约束以实现递归删除。
 
-#### 3. **MERGE**  
+####  **MERGE**  
 - **功能**：级联合并更新。当父实体状态合并到数据库时（通过 `merge()` 方法），关联的子实体会同步更新。  
 - **典型用途**：修改父子关系时保持数据一致性。
 
-#### 4. **REFRESH**  
+####  **REFRESH**  
 - **功能**：级联刷新。刷新父实体（通过 `refresh()` 方法）时，关联的子实体会重新从数据库加载最新状态。  
 - **场景**：解决并发修改导致的数据不一致问题。
 
-#### 5. **DETACH**  
+####  **DETACH**  
 - **功能**：级联脱管。将父实体从持久化上下文中分离时，关联的子实体也会被分离。  
 - **适用场景**：避免游离对象导致的外键约束冲突。
 
-#### 6. **ALL**  
+#### **ALL**  
 - **功能**：包含以上所有级联操作（PERSIST、REMOVE、MERGE、REFRESH、DETACH）。  
 - **风险提示**：过度使用可能导致意外数据删除或性能问题，需谨慎选择。
 
@@ -790,12 +790,12 @@ printStrings(new String[] {"x", "y"});  // 匿名数组
 ---
 
 ### 级联类型与业务逻辑适配
-#### 1. `@OneToMany` 常用级联配置
+####  `@OneToMany` 常用级联配置
 - **`CascadeType.PERSIST`**：保存父实体时自动保存所有子实体（如保存学校时自动保存学生）
 - **`CascadeType.REMOVE`**：删除父实体时自动删除所有子实体（需配合 `orphanRemoval=true` 清理游离对象）
 - **`CascadeType.ALL`**：覆盖所有操作（需谨慎，可能误删数据）
 
-#### 2. `@ManyToOne` 谨慎使用的级联类型
+####  `@ManyToOne` 谨慎使用的级联类型
 - **`CascadeType.MERGE`**：子实体更新时同步父实体（如更新学生信息时同步学校信息）
 - **`CascadeType.PERSIST`**：保存子实体时自动创建父实体（需父实体不存在时使用）
 - **避免 `CascadeType.REMOVE`**：删除子实体不应级联删除父实体（违反业务逻辑）
@@ -877,7 +877,7 @@ Cron 表达式由 **6 或 7 个字段**组成，以空格分隔，格式为：
 4. **`/`**  
    定义间隔触发。例如 `0/5` 在秒字段表示从 0 秒开始，每 5 秒触发一次。
 5. **`,`**  
-   枚举多个值。例如 `2,4,6` 在星期字段表示周二、周四、周六触发。
+   枚举多个值。例如 `2,4,6` 在星期字段表示周周周六触发。
 6. **`L`**  
    表示“最后”：  
    - 在日期字段：`L` 表示月末最后一天。  
@@ -928,7 +928,7 @@ Spring Data JPA 默认提供的 `saveAll()` 方法虽然使用方便，但实际
 ---
 
 ### Hibernate 批处理优化方案
-#### 1. 核心配置
+####  核心配置
 ```yaml
 spring:
   jpa:
@@ -941,7 +941,7 @@ spring:
     url: jdbc:mysql://...?rewriteBatchedStatements=true  # MySQL 批处理优化
 ```
 
-#### 2. 代码实现
+####  代码实现
 ```java
 @Transactional
 public void batchInsert(List<Entity> entities) {
@@ -964,7 +964,7 @@ public void batchInsert(List<Entity> entities) {
 ---
 
 ### 事务分块与性能飞跃
-#### 1. 事务分块策略
+####  事务分块策略
 ```java
 @Transactional(propagation = Propagation.REQUIRES_NEW)
 public void batchInsertInTransaction(List<Entity> entities) {
@@ -975,7 +975,7 @@ public void batchInsertInTransaction(List<Entity> entities) {
 - 避免长事务锁表；
 - 结合批处理配置后，10 万条数据插入时间可从 80+ 秒降至 4 秒级别。
 
-#### 2. 性能对比
+####  性能对比
 | 数据量 | 原始方案 (`saveAll()`) | 优化方案 (批处理+事务分块) |
 |--------|------------------------|---------------------------|
 | 1 万   | 45s                   | 0.9s                     |
@@ -1043,7 +1043,7 @@ public void nativeBatchInsert(List<Entity> entities) {
 ---
 
 ### 原生 SQL 批处理的实现方式
-#### 1. 代码示例
+####  代码示例
 ```java
 @Transactional
 public void batchInsert(List<Entity> entities) {
@@ -1058,7 +1058,7 @@ public void batchInsert(List<Entity> entities) {
 }
 ```
 
-#### 2. 性能优化要点
+####  性能优化要点
 - **批处理配置**：在 `application.yml` 中启用 Hibernate 批处理：
   ```yaml
   spring.jpa.properties.hibernate.jdbc.batch_size: 100
@@ -1108,7 +1108,7 @@ public void batchInsert(List<Entity> entities) {
 ---
 
 ### 基础配置要求
-#### 1. **显式定义序列生成器**
+####  **显式定义序列生成器**
 - 需在实体类中通过 `@SequenceGenerator` 注解指定序列名称及参数：
   ```java
   @Id
@@ -1122,7 +1122,7 @@ public void batchInsert(List<Entity> entities) {
   ```
   **作用**：明确告诉 Hibernate 使用哪个数据库序列生成主键。
 
-#### 2. **数据库序列创建**
+####  **数据库序列创建**
 - **PostgreSQL 中手动创建序列**（若未自动生成）：
   ```sql
   CREATE SEQUENCE your_sequence_name
@@ -1137,7 +1137,7 @@ public void batchInsert(List<Entity> entities) {
 ---
 
 ### Hibernate 与数据库方言配置
-#### 1. **数据库方言设置**
+####  **数据库方言设置**
 - 在 `application.yml` 中指定 PostgreSQL 方言：
   ```yaml
   spring:
@@ -1148,7 +1148,7 @@ public void batchInsert(List<Entity> entities) {
   ```
   **原因**：不同数据库的序列生成逻辑不同，需明确适配。
 
-#### 2. **DDL 自动生成配置**
+####  **DDL 自动生成配置**
 - 启用 Hibernate 自动创建或更新表结构（可选）：
   ```yaml
   spring.jpa.hibernate.ddl-auto: update
@@ -1158,18 +1158,18 @@ public void batchInsert(List<Entity> entities) {
 ---
 
 ### 常见问题与优化
-#### 1. **避免序列冲突**
+####  **避免序列冲突**
 - **问题**：多个实体共用默认序列（如 `hibernate_sequence`）会导致主键冲突。
 - **解决**：为每个实体定义独立的序列名。
 
-#### 2. **性能优化**
+####  **性能优化**
 - **增大 `allocationSize`**：若设置为 50，则每次从数据库预取 50 个 ID，减少交互次数：
   ```java
   @SequenceGenerator(..., allocationSize = 50)
   ```
   **注意**：需同步修改数据库序列的 `INCREMENT BY 50`。
 
-#### 3. **验证序列是否生效**
+####  **验证序列是否生效**
 - **日志检查**：开启 SQL 日志，观察 INSERT 语句是否调用 `nextval('your_sequence_name')`：
   ```yaml
   spring.jpa.show-sql: true
@@ -1187,10 +1187,10 @@ public void batchInsert(List<Entity> entities) {
 ---
 
 ### 扩展场景
-#### 1. **分布式系统主键生成**
+####  **分布式系统主键生成**
 - **替代方案**：使用雪花算法（Snowflake）生成分布式 ID，完全脱离数据库序列。
 
-#### 2. **JPA 2.0 的 `@GeneratedValue` 增强**
+####  **JPA 2.0 的 `@GeneratedValue` 增强**
 - **简化配置**：Hibernate 5+ 支持隐式序列生成，但显式定义仍推荐用于生产环境。
 
 ---
@@ -2143,7 +2143,7 @@ while (cursor.hasNext()) {
 ### Spring Data Redis 的批量删除实现
 Spring Data Redis 提供了多种批量删除方式，具体选择需结合数据量和性能要求：
 
-#### 1. **基于 `RedisTemplate` 的批量删除**
+####  **基于 `RedisTemplate` 的批量删除**
 ```java
 // 直接通过键集合批量删除
 Set<String> keys = redisTemplate.keys("user:*");
@@ -2154,7 +2154,7 @@ if (!keys.isEmpty()) {
 - **优点**：代码简单，适合小规模数据。
 - **缺点**：`keys` 命令会阻塞 Redis 主线程，大数据量时可能引发性能问题。
 
-#### 2. **基于 `SCAN` 的分批删除（推荐）**
+####  **基于 `SCAN` 的分批删除（推荐）**
 ```java
 ScanOptions options = ScanOptions.scanOptions()
     .match("user:*")
@@ -2176,7 +2176,7 @@ if (!batchKeys.isEmpty()) {
 - **优点**：非阻塞，适合大数据量场景。
 - **注意**：需手动管理游标和内存。
 
-#### 3. **使用 Lua 脚本原子化删除**
+####  **使用 Lua 脚本原子化删除**
 ```java
 String script = "local keys = redis.call('KEYS', ARGV[1]) " +
                "for _, key in ipairs(keys) do " +
@@ -2197,14 +2197,14 @@ redisTemplate.execute(
 ### Redis 是否支持“查询后自动删除”？
 Redis **不直接支持查询后自动删除**，但可通过以下方式实现类似效果：
 
-#### 1. **结合 `EXPIRE` 和惰性删除**
+####  **结合 `EXPIRE` 和惰性删除**
 - 设置键的过期时间，依赖 Redis 的定期/惰性删除机制：
   ```java
   redisTemplate.expire(key, 60, TimeUnit.SECONDS); // 60秒后自动过期
   ```
 - **适用场景**：临时缓存数据。
 
-#### 2. **事务或 Pipeline 组合操作**
+####  **事务或 Pipeline 组合操作**
 在查询后显式删除数据java
 redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
     for (String key : keysToDelete) {
@@ -2215,7 +2215,7 @@ redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
 ```
 - **优点**：减少网络往返时间，提升性能。
 
-#### 3. **自定义 Lua 脚本**
+####  **自定义 Lua 脚本**
 通过脚本实现查询+删除的原子操作：
 ```lua
 -- 查询并删除匹配的键
@@ -2257,7 +2257,7 @@ return keys
 ---
 
 ### 优化方案
-#### 1. **使用批量查询命令**  
+####  **使用批量查询命令**  
    Redis 提供 `HMGET` 命令支持一次性获取多个字段值，结合 `SCAN` 的分批键名收集，可显著减少网络请求次数：
    ```java
    List<String> keys = new ArrayList<>();
@@ -2275,7 +2275,7 @@ return keys
    ```
    **优点**：单次网络请求获取多个数据，降低 RTT 影响。
 
-#### 2. **Pipeline 管道技术**  
+####  **Pipeline 管道技术**  
    将多个命令打包发送，减少网络往返次数：
    ```java
    List<User> batchUsers = new ArrayList<>();
@@ -2290,7 +2290,7 @@ return keys
    ```
    **适用场景**：适合需要原子性但无需事务的批量操作。
 
-#### 3. **Lua 脚本批量处理**  
+####  **Lua 脚本批量处理**  
    在 Redis 服务端执行脚本，避免多次网络通信：
    ```lua
    local keys = redis.call('SCAN', 0, 'MATCH', 'user:*', 'COUNT', 1000)
@@ -2302,7 +2302,7 @@ return keys
    ```
    **优势**：原子性执行，减少客户端与服务端交互。
 
-#### 4. **数据结构优化**  
+####  **数据结构优化**  
 - **分片存储**：将大 Hash 拆分为多个小 Hash（如按用户 ID 分片），减少单次操作的数据量。
 - **使用 Ziplist 编码**：通过调整 `hash-max-ziplist-entries` 和 `hash-max-ziplist-value` 参数，使小规模 Hash 以压缩格式存储，降低内存占用并提升查询速度。
 
@@ -2346,7 +2346,7 @@ public class User {
 ---
 
 ### 批量查询实现方案
-#### 1. **基于 `RedisTemplate` 的批量查询**
+####  **基于 `RedisTemplate` 的批量查询**
 通过 `opsForHash().multiGet()` 方法批量获取多个实体：
 ```java
 // 收集所有实体 ID
@@ -2363,7 +2363,7 @@ List<Object> results = redisTemplate.opsForHash()
 - 需手动拼接键名（如 `user:1`）。
 - 此方法适用于单个 Hash 键内多个字段的批量查询，不直接支持跨键查询。
 
-#### 2. **使用 Pipeline 批量查询跨键实体**
+####  **使用 Pipeline 批量查询跨键实体**
 通过 Pipeline 减少网络往返次数，高效获取多个键的完整 Hash 数据：
 ```java
 List<User> users = redisTemplate.executePipelined((RedisCallback<User>) connection -> {
@@ -2405,7 +2405,7 @@ List<User> users = redisTemplate.executePipelined((RedisCallback<User>) connecti
 ---
 
 ### 示例代码
-#### 1. 批量获取多个实体的全部属性（Pipeline）
+####  批量获取多个实体的全部属性（Pipeline）
 ```java
 List<User> users = redisTemplate.executePipelined((RedisCallback<User>) connection -> {
     userIds.forEach(id -> 
@@ -2415,7 +2415,7 @@ List<User> users = redisTemplate.executePipelined((RedisCallback<User>) connecti
 });
 ```
 
-#### 2. 批量获取指定字段（multiGet）
+####  批量获取指定字段（multiGet）
 ```java
 List<String> fields = Arrays.asList("name", "age");
 Map<Long, Map<String, Object>> results = new HashMap<>();

@@ -279,13 +279,13 @@ for (i, c) in s.chars().enumerate() {
 ---
 
 ### 进阶用法
-#### 1. 收集为 `Vec<(usize, char)>`
+####  收集为 `Vec<(usize, char)>`
 ```rust
 let indexed_chars: Vec<(usize, char)> = s.chars().enumerate().collect();
 // 输出：[(0, 'R'), (1, 'u'), (2, 's'), (3, 't')]
 ```
 
-#### 2. 查找特定字符的位置
+####  查找特定字符的位置
 ```rust
 if let Some((i, 'R')) = s.chars().enumerate().find(|&(_, c)| c == 'R') {
     println!("找到 'R' 在位置 {}", i); // 输出：找到 'R' 在位置 0
@@ -532,7 +532,7 @@ fn print_coords(&(x, y): &(i32, i32)) {
 
 ---
 
-### 4. **边界值的正确处理**
+###  **边界值的正确处理**
 • **`x..y` 的右边界 `y` 必须大于 `x`**  
   如果 `y <= x`，迭代器不会产生任何值（例如 `5..1` 为空区间）。
 
@@ -1159,19 +1159,19 @@ let empty: i32 = (0..0).fold(0, |acc, x| acc + x); // 0
 ---
 
 ### 典型应用场景
-#### 1. 数值聚合（求和、求积等）
+####  数值聚合（求和、求积等）
 ```rust
 // 求乘积
 let product = [2, 3, 4].iter().copied().reduce(|a, b| a * b); // Some(24)
 ```
 
-#### 2. 极值查找（无需初始值）
+####  极值查找（无需初始值）
 ```rust
 // 找最大值
 let max = vec![5, 2, 9, 1].into_iter().reduce(|a, b| a.max(b)); // Some(9)
 ```
 
-#### 3. 复杂对象归约（如自定义结构体）
+####  复杂对象归约（如自定义结构体）
 ```rust
 #[derive(Debug)]
 struct Point { x: i32, y: i32 }
@@ -1238,7 +1238,7 @@ enum List {
 ---
 
 ### 递归类型的大小问题与 Box 的作用
-#### 1. **问题：递归导致无限大小**
+####  **问题：递归导致无限大小**
 若直接定义 `Cons(i32, List)`（不使用 `Box`），Rust 编译器无法确定 `List` 的占用空间大小：
 ```rust
 // 错误示例：直接递归导致编译失败
@@ -1249,7 +1249,7 @@ enum List {
 ```
 原因：`Cons` 的大小需要包含其内部 `List` 的大小，而 `List` 的大小又依赖 `Cons`，形成无限递归。
 
-#### 2. **解决方案：使用 Box 间接存储**
+####  **解决方案：使用 Box 间接存储**
 通过 `Box<List>` 将下一节点存储在堆上，而非直接内联在 `Cons` 中：
 • **`Box` 的作用**：  
   `Box` 是一个指针（固定大小，通常为 8 或 16 字节），指向堆上的数据。编译器只需知道指针的大小，无需关心堆数据的具体大小。
@@ -1259,7 +1259,7 @@ enum List {
 ---
 
 ### Cons List 的实际使用
-#### 1. **构建链表**
+####  **构建链表**
 通过嵌套 `Cons` 和 `Box::new` 创建链表：
 ```rust
 use List::{Cons, Nil};
@@ -1268,7 +1268,7 @@ let list = Cons(1, Box::new(Cons(2, Box::new(Cons(3, Box::new(Nil))))));
 ```
 此时链表结构为：`1 -> 2 -> 3 -> Nil`，所有 `Cons` 节点通过 `Box` 分配在堆上。
 
-#### 2. **所有权与内存管理**
+####  **所有权与内存管理**
 • **所有权清晰**：每个 `Cons` 节点拥有其下一节点的所有权（通过 `Box`）。
 • **自动释放**：当 `Box` 离开作用域时，堆内存自动释放（因 `Box` 实现了 `Drop` trait）。
 
@@ -1323,7 +1323,7 @@ let list = Cons(1, Box::new(Cons(2, Box::new(Cons(3, Box::new(Nil))))));
 
 ### 解决方案：使用 `Arc<Mutex<T>>` 或 `Arc<RwLock<T>>`
 
-#### 1. 将数据包裹在 `Mutex` 中
+####  将数据包裹在 `Mutex` 中
 `Mutex` 提供线程安全的内部可变性（互斥锁），允许在锁定后修改数据：
 ```rust
 use std::sync::{Arc, Mutex};
@@ -1345,7 +1345,7 @@ fn main() {
 }
 ```
 
-#### 2. 使用 `RwLock` 优化读多写少场景
+####  使用 `RwLock` 优化读多写少场景
 `RwLock` 允许多个读操作或单个写操作，适合读多写少的场景：
 ```rust
 use std::sync::{Arc, RwLock};

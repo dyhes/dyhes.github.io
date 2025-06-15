@@ -105,7 +105,7 @@ public class UserService {
 
 ---
 
-### **四、注意事项**
+### **注意事项**
 1. **缓存一致性**  
    若数据被外部修改（如数据库直接更新），需配合 `@CacheEvict` 或 `@CachePut` 更新缓存，避免脏数据。
 2. **缓存穿透与雪崩**  
@@ -134,7 +134,7 @@ public class UserService {
 ---
 
 #### **主动配置过期时间的方式**
-##### 1. **全局统一配置**
+ **全局统一配置**
 - **Redis 全局 TTL**  
   在 `application.properties` 中设置所有缓存的默认过期时间：  
   ```properties
@@ -143,7 +143,7 @@ public class UserService {
 - **EhCache 配置文件**  
   通过 XML 文件为不同缓存区域（Cache Region）设置独立过期时间。
 
-##### 2. **基于注解的扩展配置**
+ **基于注解的扩展配置**
 - **自定义缓存名称格式**  
   在 `cacheNames` 中使用分隔符（如 `#`）嵌入过期时间：  
   ```java
@@ -154,7 +154,7 @@ public class UserService {
 - **派生注解增强**  
   创建扩展注解（如 `@CustomCacheable`），添加 `expire` 参数，通过 AOP 动态设置过期时间。
 
-##### 3. **手动编程控制**
+ **手动编程控制**
 - **RedisTemplate 操作**  
   直接使用 Redis API 设置带过期时间的缓存条目：  
   ```java
@@ -203,7 +203,7 @@ public class UserService {
 ---
 
 ### **支持的多场景缓存实现**
-#### 1. **无 Redis 的本地缓存（无需额外依赖）**
+####  **无 Redis 的本地缓存（无需额外依赖）**
 - **适用场景**：单机应用、轻量级缓存需求。
 - **实现方式**：  
   只需在启动类添加 `@EnableCaching` 注解，无需配置 Redis。例如：
@@ -214,14 +214,14 @@ public class UserService {
   ```
   此时 `@Cacheable` 通过 `ConcurrentHashMap` 实现本地缓存。
 
-#### 2. **Redis 作为分布式缓存（需依赖和配置）**
+####  **Redis 作为分布式缓存（需依赖和配置）**
 - **适用场景**：分布式系统、多节点共享缓存、持久化需求。
 - **依赖与配置**：  
   - 添加 Redis 依赖（如 `spring-boot-starter-data-redis`）；
   - 配置 Redis 连接信息（主机、端口、密码等）；
   - 自定义 `RedisCacheManager` 设置序列化方式、TTL 等参数。
 
-#### 3. **其他缓存技术（如 Ehcache、Caffeine）**
+####  **其他缓存技术（如 Ehcache、Caffeine）**
 - **实现方式**：  
   引入对应依赖（如 `spring-boot-starter-cache` + Ehcache）并配置 `CacheManager`，即可切换底层缓存实现。
 
@@ -279,7 +279,7 @@ public User getUserById(Long id) {
 ### **启用 Hibernate 二级缓存后的策略**
 若通过配置启用了 Hibernate 二级缓存，则缓存行为如下：
 
-#### 1. **实体级缓存**
+####  **实体级缓存**
 - **缓存实体对象**：  
   在实体类上添加 `@javax.persistence.Cacheable` 或 `@org.hibernate.annotations.Cache` 注解后，Hibernate 会自动缓存该实体类的实例（根据主键存储）。  
   ```java
@@ -291,7 +291,7 @@ public User getUserById(Long id) {
 - **缓存关联实体**：  
   若实体 A 关联实体 B（如 `@OneToMany`），且 B 被缓存，则查询 A 时会自动加载并缓存关联的 B 实例。
 
-#### 2. **查询缓存**
+####  **查询缓存**
 - **启用查询缓存**：  
   需在配置中设置 `hibernate.cache.use_query_cache=true`，并在查询方法上添加 `@QueryHints` 注解：  
   ```java
@@ -300,7 +300,7 @@ public User getUserById(Long id) {
   ```
   此时，相同参数和查询语句的结果会被缓存。
 
-#### 3. **缓存更新与失效**
+####  **缓存更新与失效**
 - **自动同步**：  
   当通过 Spring Data JPA 的 `save()` 或 `delete()` 方法修改数据时，Hibernate 会自动更新或清除相关缓存条目。
 - **手动清除**：  
@@ -389,7 +389,7 @@ Hibernate 二级缓存默认不启用，主要基于以下设计考量：
 
 ### 最佳实践建议
 
-#### 1. **按场景选择缓存技术**
+####  **按场景选择缓存技术**
 - **优先使用 Hibernate 二级缓存的场景**：  
   - 高频读取、低频更新的实体查询（如用户基本信息、配置表）；  
   - 需要自动管理缓存一致性的关联查询（如 `@OneToMany` 集合）。
@@ -397,11 +397,11 @@ Hibernate 二级缓存默认不启用，主要基于以下设计考量：
   - 业务层复杂计算结果的缓存（如报表统计）；  
   - 跨多数据源的聚合查询（如混合数据库和外部 API 的数据）。
 
-#### 2. **混合使用策略**
+####  **混合使用策略**
 - **示例**：  
   在电商系统中，用户基本信息（`User`）使用 Hibernate 二级缓存，而用户订单统计结果（通过 Service 方法计算）使用 `@Cacheable` 缓存到 Redis。这样既减少数据库压力，又避免重复计算。
 
-#### 3. **配置与调优**
+####  **配置与调优**
 - **Hibernate 二级缓存**：  
   - 使用 EhCache 或 Redis 作为缓存提供者，通过 `ehcache.xml` 配置 TTL 和内存策略；  
   - 为实体类添加 `@Cache(usage = READ_WRITE)` 注解，并启用查询缓存（`hibernate.cache.use_query_cache=true`）。
@@ -409,13 +409,13 @@ Hibernate 二级缓存默认不启用，主要基于以下设计考量：
   - 结合 `@CacheEvict` 在数据更新时清除缓存；  
   - 使用 SpEL 表达式定义细粒度缓存键（如 `key = "#userId + '_profile'"`）。
 
-#### 4. **一致性保障**
+####  **一致性保障**
 - **Hibernate 二级缓存**：  
   确保所有数据更新通过 Hibernate 进行（避免直接 JDBC 操作），否则需手动调用 `SessionFactory.getCache().evict()` 清除缓存。
 - **@Cacheable**：  
   在分布式环境中，使用集中式缓存（如 Redis）并设置合理的过期时间，防止节点间数据不一致。
 
-#### 5. **监控与评估**
+####  **监控与评估**
 - 通过日志（如 `spring.jpa.show-sql=true`）观察缓存命中率；  
 - 使用监控工具（如 Prometheus）分析缓存性能，及时调整 TTL 或淘汰策略。
 
@@ -707,7 +707,7 @@ configure(subprojects.findAll { it.name.endsWith('-web') }) {
 
 ---
 
-### **四、总结对比**
+### **总结对比**
 | **维度**         | `allprojects`                              | `subprojects`                              |
 |------------------|--------------------------------------------|--------------------------------------------|
 | **适用性**       | 根项目需与子项目共享配置时（较少见）         | 微服务场景的推荐选择，精准控制子模块配置     |
@@ -747,11 +747,11 @@ spring:
 ---
 
 ### 核心配置项解析
-#### 1. **Nacos 连接配置**
+####  **Nacos 连接配置**
 - **`server-addr`**: 必须与Nacos服务器地址一致，否则无法拉取配置。
 - **`namespace`** 和 **`group`**: 用于多环境隔离。例如生产环境使用独立的命名空间，开发测试环境通过分组区分。
 
-#### 2. **共享配置管理**
+####  **共享配置管理**
 通过 `shared-configs` 加载通用配置（如数据库、日志），避免重复定义：
 ```yaml
 shared-configs:
@@ -760,7 +760,7 @@ shared-configs:
 ```
 优先级：共享配置 < 扩展配置 < 应用专属配置。
 
-#### 3. **动态配置热更新**
+####  **动态配置热更新**
 在业务代码中通过 `@ConfigurationProperties` 注解绑定配置类，实现配置实时生效：
 ```java
 @ConfigurationProperties(prefix = "hm.cart")
@@ -772,7 +772,7 @@ public class CartProperties {
 ---
 
 ### 高级配置场景
-#### 1. **本地配置优先**
+####  **本地配置优先**
 通过 `spring.cloud.config.override-none=true` 强制本地配置覆盖远程配置：
 ```yaml
 spring:
@@ -781,7 +781,7 @@ spring:
       override-none: true  # 本地application.yaml优先级最高
 ```
 
-#### 2. **扩展配置文件**
+####  **扩展配置文件**
 使用 `extension-configs` 加载非共享的独立配置：
 ```yaml
 extension-configs:
@@ -789,7 +789,7 @@ extension-configs:
   - data-id: redis-cluster.yaml    # Redis集群配置
 ```
 
-#### 3. **多环境隔离**
+####  **多环境隔离**
 通过 `spring.profiles.active` 动态切换环境配置，结合Nacos的命名空间实现隔离：
 ```yaml
 spring:
@@ -988,13 +988,13 @@ public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
 ---
 
 ### 核心功能实现
-#### 1. 断言（Predicates）
+####  断言（Predicates）
 - **路径匹配**：`Path=/api/**`  
 - **请求方法**：`Method=GET,POST`  
 - **Header校验**：`Header=X-Request-Id, \d+`  
 - **权重路由**：`Weight=group1, 80`
 
-#### 2. 过滤器（Filters）
+####  过滤器（Filters）
 | 过滤器类型       | 示例配置                         | 功能说明                     |
 |------------------|----------------------------------|----------------------------|
 | 请求头操作       | `AddRequestHeader=X-Request-Red, A` | 添加请求头                  |
@@ -1002,7 +1002,7 @@ public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
 | 熔断器           | `CircuitBreaker=myCircuitBreaker` | 集成Hystrix/Resilience4J |
 | 限流             | `RequestRateLimiter=10rps`       | 基于Redis的令牌桶算法   |
 
-#### 3. 熔断配置
+####  熔断配置
 ```yaml
 filters:
   - name: CircuitBreaker
@@ -1014,7 +1014,7 @@ filters:
 ---
 
 ### 高级功能
-#### 1. 全局过滤器
+####  全局过滤器
 实现全局日志记录：
 ```java
 @Bean
@@ -1027,7 +1027,7 @@ public GlobalFilter globalFilter() {
 }
 ```
 
-#### 2. 动态路由
+####  动态路由
 通过Nacos配置中心实现动态更新：
 ```yaml
 spring:
@@ -1038,7 +1038,7 @@ spring:
         file-extension: yaml
 ```
 
-#### 3. 安全集成
+####  安全集成
 JWT鉴权示例：
 ```java
 public class JwtFilter implements GatewayFilter {
@@ -1854,7 +1854,7 @@ public class FixCorsResponseFilter implements GlobalFilter, Ordered {
 ---
 
 ### 跨模块注入的实现方式
-#### 1. 单接口单实现场景
+####  单接口单实现场景
 - **直接使用 `@Autowired`**  
   若目标模块中接口仅有一个实现类，直接注入接口即可，Spring 会自动按类型匹配。例如：
   ```java
@@ -1873,7 +1873,7 @@ public class FixCorsResponseFilter implements GlobalFilter, Ordered {
   }
   ```
 
-#### 2. 多实现类场景
+####  多实现类场景
 - **使用 `@Qualifier` 指定 Bean 名称**  
   若同一接口在多个模块中存在不同实现，需通过名称区分：
   ```java
@@ -2229,7 +2229,7 @@ const user = await fetch(`/api/users/${post.userId}`);
 
 你的Spring Cloud Gateway网关服务启动时报错，核心问题是Spring Boot自动配置机制尝试初始化数据源，但网关本身并不需要数据库连接。以下是分步解决方案：
 
-### 一、排除数据源自动配置（推荐方案）
+### 排除数据源自动配置（推荐方案）
 在网关服务的启动类上添加`exclude = DataSourceAutoConfiguration.class`参数，这是最直接的解决方案：
 ```java
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
@@ -2240,7 +2240,7 @@ public class GatewayApplication {
 }
 ```
 
-### 二、检查依赖冲突
+### 检查依赖冲突
 1. **排查是否存在数据库相关依赖**  
    检查`pom.xml/gradle`文件中是否误引入以下依赖：
    - `spring-boot-starter-jdbc`
@@ -2270,7 +2270,7 @@ public class GatewayApplication {
    </dependency>
    ```
 
-### 三、验证配置文件
+### 验证配置文件
 若项目中确实需要部分数据源配置（非常规情况），需完整配置数据库连接参数：
 ```yaml
 spring:
@@ -2281,12 +2281,12 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 ```
 
-### 四、版本兼容性检查
+### 版本兼容性检查
 若上述方法无效，需检查版本兼容性：
 1. Spring Boot与Spring Cloud版本需匹配（如Spring Cloud 2023.x需搭配Spring Boot 3.x）
 2. 确保`reactor-netty`版本兼容（参考网页2案例，可尝试升级到0.9.14.RELEASE）
 
-### 五、补充验证步骤
+### 补充验证步骤
 1. 清理Maven本地仓库（`~/.m2/repository`）
 2. 检查是否误激活了`dev`等包含数据库配置的Profile
 3. 删除`application.properties/yml`中所有与数据库相关的配置项
@@ -2302,7 +2302,7 @@ Spring Data JPA 的方法命名规范通过预定义的关键词和属性组合�
 
 ---
 
-### 一、**方法前缀与基本查询类型**
+### **方法前缀与基本查询类型**
 方法名以特定前缀开头，用于声明操作类型：
 - **`findBy`/`readBy`/`getBy`**：查询符合条件的记录（三者功能相似）；
 - **`countBy`**：统计符合条件的记录数量；
@@ -2318,7 +2318,7 @@ long countByAgeGreaterThan(int age);          // 统计年龄大于某值的用�
 
 ---
 
-### 二、**属性命名与多条件组合**
+### **属性命名与多条件组合**
 1. **属性匹配规则**  
    `By`后的字段名需与实体类属性**严格一致**（驼峰式命名），如实体有`firstName`字段，则方法名为`findByFirstName`。
    
@@ -2331,7 +2331,7 @@ long countByAgeGreaterThan(int age);          // 统计年龄大于某值的用�
 
 ---
 
-### 三、**比较操作符与复杂查询**
+### **比较操作符与复杂查询**
 方法名支持通过关键词实现条件筛选，常用操作符包括：
 - **`GreaterThan`/`LessThan`**：数值比较（`>`/`<`）；
 - **`Between`**：区间查询（`BETWEEN ?1 AND ?2`）；
@@ -2348,7 +2348,7 @@ List<User> findByFirstNameIn(List<String> names);    // 名字在指定集合中
 
 ---
 
-### 四、**排序与分页控制**
+### **排序与分页控制**
 1. **排序**  
    使用`OrderBy`后接属性名和方向（`Asc`/`Desc`）：  
    ```java
@@ -2361,7 +2361,7 @@ List<User> findByFirstNameIn(List<String> names);    // 名字在指定集合中
 
 ---
 
-### 五、**返回类型与聚合查询**
+### **返回类型与聚合查询**
 - **返回类型**：支持`List<T>`、`Optional<T>`、`Page<T>`、`Long`（统计结果）等；
 - **聚合操作**：通过`sumBy`、`avgBy`、`maxBy`等实现聚合计算。
 
@@ -2373,7 +2373,7 @@ Long countByStatus(String status);            // 统计状态匹配的记录数
 
 ---
 
-### 六、**其他高级特性**
+### **其他高级特性**
 - **去重查询**：`findDistinctByLastName`可去除重复记录；
 - **时间范围查询**：使用`After`/`Before`匹配时间字段。
 
@@ -2488,13 +2488,13 @@ public class User extends BaseEntity {
 
 ---
 
-### 一、问题根源
+### 问题根源
 Lombok 的 `@Builder` 注解默认仅处理当前类的属性，**不会自动包含父类字段**。当子类继承父类时，子类生成的 Builder 缺少父类字段的链式方法，导致无法通过 Builder 初始化父类属性。
 
 ---
 
-### 二、解决方案
-#### 1. **使用 `@SuperBuilder` 注解**（推荐）
+### 解决方案
+####  **使用 `@SuperBuilder` 注解**（推荐）
 Lombok 在 **1.18.2+** 版本中引入 `@SuperBuilder`，专门解决继承场景下的 Builder 问题。它会为父类和子类生成兼容的 Builder，支持链式设置父类字段。
 
 **步骤：**
@@ -2536,7 +2536,7 @@ Lombok 在 **1.18.2+** 版本中引入 `@SuperBuilder`，专门解决继承场�
 
 ---
 
-#### 2. **手动定义全参构造器 + `@Builder`**（兼容旧版本）
+####  **手动定义全参构造器 + `@Builder`**（兼容旧版本）
 若无法升级 Lombok，可通过手动编写全参构造器实现父类字段的传递。
 
 **步骤：**
@@ -2580,7 +2580,7 @@ Lombok 在 **1.18.2+** 版本中引入 `@SuperBuilder`，专门解决继承场�
 
 ---
 
-### 三、其他注意事项
+### 其他注意事项
 1. **避免混合使用 `@Builder` 和 `@SuperBuilder`**  
    若父类使用 `@Builder`，子类使用 `@SuperBuilder` 会导致冲突，需统一策略。
 
@@ -2592,7 +2592,7 @@ Lombok 在 **1.18.2+** 版本中引入 `@SuperBuilder`，专门解决继承场�
 
 ---
 
-### 四、总结
+### 总结
 | 方案           | 适用场景                     | 优点                     | 缺点                     |
 |----------------|----------------------------|-------------------------|-------------------------|
 | **@SuperBuilder** | Lombok ≥1.18.2，继承层级复杂 | 自动处理父类字段，代码简洁 | 需版本支持，配置依赖     |
@@ -2605,7 +2605,7 @@ Lombok 在 **1.18.2+** 版本中引入 `@SuperBuilder`，专门解决继承场�
 
 ---
 
-### 一、传统连接算法的复杂度分析
+### 传统连接算法的复杂度分析
 1. **嵌套循环连接（Nested Loop Join）**  
    这是最基础的连接方式，其时间复杂度为 **O(m×n)**，其中 m 和 n 是参与连接的两个表的大小。算法通过遍历两个表的每一行进行匹配，在无索引的情况下效率较低。
 
@@ -2617,7 +2617,7 @@ Lombok 在 **1.18.2+** 版本中引入 `@SuperBuilder`，专门解决继承场�
 
 ---
 
-### 二、现代优化算法与最坏情况分析
+### 现代优化算法与最坏情况分析
 1. **最坏情况最优连接（WCOJ）**  
    针对多表连接场景，传统二元连接的中间结果可能爆炸式增长（例如三角形连接可能产生 O(m³) 中间结果）。而 **WCOJ 算法（如 Leapfrog Triejoin）的复杂度与最终结果集大小线性相关**，而非输入数据的乘积，理论上可避免 O(mn) 的复杂度。
 
@@ -2626,7 +2626,7 @@ Lombok 在 **1.18.2+** 版本中引入 `@SuperBuilder`，专门解决继承场�
 
 ---
 
-### 三、实际性能影响因素
+### 实际性能影响因素
 1. **索引的作用**  
    在连接列上创建索引可将复杂度从 O(mn) 降至 **O(m log n)** 或更低。例如，B+树索引的查找复杂度为 O(log n)，显著提升连接效率。
 
@@ -2639,7 +2639,7 @@ Lombok 在 **1.18.2+** 版本中引入 `@SuperBuilder`，专门解决继承场�
 
 ---
 
-### 四、复杂度总结
+### 复杂度总结
 | 算法/场景              | 时间复杂度           | 适用条件                     |
 |-----------------------|---------------------|----------------------------|
 | 嵌套循环连接（无索引）  | O(m×n)              | 小表驱动大表                 |
@@ -2649,7 +2649,7 @@ Lombok 在 **1.18.2+** 版本中引入 `@SuperBuilder`，专门解决继承场�
 
 ---
 
-### 五、优化建议
+### 优化建议
 1. **索引优先**：在连接列和筛选条件列上创建复合索引。
 2. **选择高效算法**：通过 `EXPLAIN` 分析执行计划，强制使用哈希或排序合并连接。
 3. **限制结果集**：添加 `WHERE` 条件减少参与连接的数据量。

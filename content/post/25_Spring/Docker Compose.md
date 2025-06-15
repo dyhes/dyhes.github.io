@@ -106,13 +106,13 @@ services:
 ### **短格式（Short Syntax）**
 短格式是日常开发中最常用的简洁写法，适用于快速定义简单的数据挂载需求。
 
-#### 1. **基本结构**
+####  **基本结构**
 ```yaml
 volumes:
   - [宿主机路径|卷名]:[容器路径]:[权限]
 ```
 
-#### 2. **常见用法示例**
+####  **常见用法示例**
 | **场景**                     | **示例**                           | **说明**                                                                 |
 |-----------------------------|-----------------------------------|-------------------------------------------------------------------------|
 | **绑定挂载（Bind Mount）**    | `- /host/path:/container/path`   | 将宿主机的 `/host/path` 映射到容器的 `/container/path`，路径需存在或自动创建 |
@@ -126,7 +126,7 @@ volumes:
 ### **长格式（Long Syntax）**
 长格式（Compose v3.2+ 支持）提供更精细的配置选项，适用于复杂场景。
 
-#### 1. **基本结构**
+####  **基本结构**
 ```yaml
 volumes:
   - type: volume|bind|tmpfs
@@ -137,7 +137,7 @@ volumes:
     read_only: true|false
 ```
 
-#### 2. **示例与配置项**
+####  **示例与配置项**
 ```yaml
 volumes:
   - type: bind           # 绑定宿主机目录
@@ -345,7 +345,7 @@ docker-compose build --no-cache --pull app
 ---
 
 ### 核心命令及用法
-#### 1. **单独执行 `build` 命令**  
+####  **单独执行 `build` 命令**  
 通过 `docker-compose build` 重新构建所有服务的镜像，默认使用缓存加速构建。若需强制完全重建，需添加参数：  
 ```bash
 # 重建全部服务镜像（跳过缓存）
@@ -356,7 +356,7 @@ docker-compose build --no-cache web
 ```
 通过 `--no-cache` 参数禁用缓存，确保从头开始构建镜像。
 
-#### 2. **结合 `up` 命令触发重建**  
+####  **结合 `up` 命令触发重建**  
 通过 `docker-compose up` 的 `--build` 参数，可在启动服务时自动执行镜像重建：  
 ```bash
 # 重建并启动所有服务（推荐开发调试使用）
@@ -370,14 +370,14 @@ docker-compose up -d --build web
 ---
 
 ### 高级配置与参数
-#### 1. **拉取最新基础镜像**  
+####  **拉取最新基础镜像**  
 使用 `--pull` 参数强制从镜像仓库更新 `FROM` 指令中的基础镜像：  
 ```bash
 docker-compose build --pull
 ```
 确保构建基于最新依赖环境，避免基础镜像过期问题。
 
-#### 2. **传递构建参数**  
+####  **传递构建参数**  
 在 `docker-compose.yml` 中定义 `args` 或通过命令行动态注入变量：  
 ```yaml
 # docker-compose.yml 配置示例
@@ -394,7 +394,7 @@ docker-compose build --build-arg APP_ENV=staging
 ```
 适用于环境差异配置（如开发/生产环境切换）。
 
-#### 3. **并行构建加速**  
+####  **并行构建加速**  
 在 Docker Compose 3.4+ 版本中，启用并行构建缩短多服务重建时间：  
 ```bash
 docker-compose build --parallel
@@ -404,7 +404,7 @@ docker-compose build --parallel
 ---
 
 ### 清理与调试技巧
-#### 1. **删除旧容器与中间层**  
+####  **删除旧容器与中间层**  
 重建前可通过以下命令清理环境：  
 ```bash
 # 停止并删除所有关联容器（保留数据卷）
@@ -415,7 +415,7 @@ docker-compose build --force-rm
 ```
 `--force-rm` 参数强制删除中间容器。
 
-#### 2. **查看构建日志**  
+####  **查看构建日志**  
 通过日志排查构建失败原因：  
 ```bash
 docker-compose logs --tail=100 web
@@ -425,13 +425,13 @@ docker-compose logs --tail=100 web
 ---
 
 ### 典型场景示例
-#### 1. **全量重建并启动服务**  
+####  **全量重建并启动服务**  
 ```bash
 docker-compose down && docker-compose build --no-cache && docker-compose up -d
 ```
 适用于代码或依赖项大规模变更后的环境刷新。
 
-#### 2. **增量更新指定服务**  
+####  **增量更新指定服务**  
 ```bash
 docker-compose build --pull web && docker-compose up -d web
 ```

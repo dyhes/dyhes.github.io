@@ -18,7 +18,7 @@ Spring 的 `@Transactional` 注解在**自调用（self-invocation）** 场景�
 
 ---
 
-### ⚠️ 一、问题原因：Spring AOP 的代理机制限制
+### ⚠️ 问题原因：Spring AOP 的代理机制限制
 1. **代理机制原理**  
    Spring 的事务管理基于 AOP 代理实现：
    - 当调用 `@Transactional` 方法时，实际是通过 Spring 生成的**代理对象**触发事务逻辑（如开启/提交事务）。
@@ -41,7 +41,7 @@ Spring 的 `@Transactional` 注解在**自调用（self-invocation）** 场景�
 
 ---
 
-### 🔧 二、解决方案
+### 🔧 解决方案
 #### ✅ 方法 1：将事务方法拆分到另一个 Service 类
 通过依赖注入调用，确保通过代理对象触发事务：
 ```java
@@ -105,7 +105,7 @@ public class OrderService {
 
 ---
 
-### ⚡ 三、其他导致事务失效的场景
+### ⚡ 其他导致事务失效的场景
 1. **非 `public` 方法**  
    `@Transactional` 只能用于 `public` 方法，否则不生效。
 2. **异常被捕获未抛出**  

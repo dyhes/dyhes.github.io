@@ -89,7 +89,7 @@ OpenFeign 可以通过以下方式实现 **UserInfo 到 SpaceUserInfo 的自动 
 ### 字段名或结构不匹配时的解决方案
 **若字段名或类型不一致，需通过以下方式实现映射：**
 
-#### 1. **自定义 Feign 解码器**
+####  **自定义 Feign 解码器**
 - 实现 `Decoder` 接口，在 `decode()` 方法中手动转换 `UserInfo` 到 `SpaceUserInfo`。例如：
   ```java
   public class CustomDecoder implements Decoder {
@@ -106,7 +106,7 @@ OpenFeign 可以通过以下方式实现 **UserInfo 到 SpaceUserInfo 的自动 
   ```
 - 通过 `@FeignClient(configuration = CustomConfig.class)` 指定自定义配置类。
 
-#### 2. **使用 MapStruct 或 Jackson 注解**
+####  **使用 MapStruct 或 Jackson 注解**
 - **MapStruct**：定义映射接口自动生成转换代码：
   ```java
   @Mapper
@@ -122,7 +122,7 @@ OpenFeign 可以通过以下方式实现 **UserInfo 到 SpaceUserInfo 的自动 
   ) {}
   ```
 
-#### 3. **中间层转换**
+####  **中间层转换**
    在 Feign 接口中返回 `UserInfo`，调用后手动转换为 `SpaceUserInfo`：
    ```java
    @FeignClient(name = "user-service")
@@ -166,21 +166,21 @@ OpenFeign 可以通过以下方式实现 **UserInfo 到 SpaceUserInfo 的自动 
 ---
 
 ### 性能开销分析
-#### 1. **默认序列化/反序列化的开销**
+####  **默认序列化/反序列化的开销**
 - **自动映射的底层机制**：OpenFeign 默认使用 Jackson 进行 JSON 转换。若 `UserInfo` 和 `SpaceUserInfo` 的字段名和类型完全匹配，反序列化会直接填充对应字段，性能损耗极低（仅在反射解析 JSON 时产生微秒级耗时）。
 - **字段冗余的影响**：若 `UserInfo` 包含 `SpaceUserInfo` 没有的字段（如 `userId`、`email`），反序列化时会自动忽略多余字段，不会显著增加处理时间。
 
-#### 2. **手动映射的开销**
+####  **手动映射的开销**
 - **自定义解码器（Decoder）**：若通过自定义 `Decoder` 实现字段裁剪（如仅提取 `username`、`avatar` 等字段），需手动解析 JSON 或反射操作，可能引入 1-5ms 的额外耗时（取决于字段复杂度）。
 - **MapStruct 等工具**：编译期生成映射代码的工具（如 MapStruct）性能接近原生代码，几乎无额外开销。
 
-#### 3. **网络传输开销**
+####  **网络传输开销**
 - **数据传输量**：若 `UserInfo` 包含大量无用字段（如 `postCount`、`commentCount`），返回完整 `UserInfo` 再裁剪为 `SpaceUserInfo` 会增加网络传输时间。例如，多传输 10 个字段可能增加 1-2KB 数据量，对高并发场景影响较大。
 
 ---
 
 ### 是否需要额外接口优化？
-#### 1. **直接复用现有接口的优缺点**
+####  **直接复用现有接口的优缺点**
 - **优点**：
   - **代码简洁**：无需新增接口，减少服务端维护成本。
   - **兼容性**：适用于字段差异小、性能不敏感的场景（如低频调用）。
@@ -188,7 +188,7 @@ OpenFeign 可以通过以下方式实现 **UserInfo 到 SpaceUserInfo 的自动 
   - **冗余数据传输**：高频调用或字段差异大时，浪费带宽和序列化资源。
   - **潜在耦合风险**：若服务端 `UserInfo` 结构变更，客户端可能因字段裁剪不彻底而报错。
 
-#### 2. **新增专用接口的优缺点**
+####  **新增专用接口的优缺点**
 - **优点**：
   - **精准传输**：仅返回 `SpaceUserInfo` 所需字段，减少网络和序列化开销（尤其适合移动端或弱网环境）。
   - **解耦性**：服务端字段变更不影响客户端接口。
@@ -199,7 +199,7 @@ OpenFeign 可以通过以下方式实现 **UserInfo 到 SpaceUserInfo 的自动 
 ---
 
 ### 优化建议
-#### 1. **优先选择现有接口的场景**
+####  **优先选择现有接口的场景**
 - **字段差异小**：例如仅缺少 1-2 个字段。
 - **低频调用**：如每日调用量低于 1 万次。
 - **示例配置**：
@@ -209,7 +209,7 @@ OpenFeign 可以通过以下方式实现 **UserInfo 到 SpaceUserInfo 的自动 
   public record SpaceUserInfo(String username, String nickname) {}
   ```
 
-#### 2. **推荐新增接口的场景**
+####  **推荐新增接口的场景**
 - **高频调用**：如每秒数百次请求，需极致优化网络开销。
 - **字段差异大**：例如 `UserInfo` 包含 20 个字段，而 `SpaceUserInfo` 仅需 5 个。
 - **示例配置**：
@@ -219,7 +219,7 @@ OpenFeign 可以通过以下方式实现 **UserInfo 到 SpaceUserInfo 的自动 
   SpaceUserInfo getSpaceUserInfo(@PathVariable Long id);
   ```
 
-#### 3. **折中方案：自定义解码器**
+####  **折中方案：自定义解码器**
 - **适用场景**：需动态裁剪字段但不愿新增接口时。
 - **实现方式**：
   ```java

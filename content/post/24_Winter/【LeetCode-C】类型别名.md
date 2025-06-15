@@ -15,20 +15,20 @@ tags:
 ## 使用 `typedef` 定义类型别名
 `typedef` 是C语言延续到C++的关键字，用于为现有类型创建别名，适用于基本类型、指针、结构体等。
 
-#### 1. **基本用法**
+####  **基本用法**
 ```cpp
 typedef int Integer;      // 定义int的别名
 typedef int* IntPtr;      // 定义int指针的别名
 typedef void (*FuncPtr)(int, double); // 定义函数指针别名
 ```
 
-#### 2. **结构体与复杂类型**
+####  **结构体与复杂类型**
 ```cpp
 typedef struct { int x, y; } Point;  // 结构体别名
 typedef std::map<std::string, int> StringIntMap; // STL容器别名
 ```
 
-#### 3. **局限性**
+####  **局限性**
 - **语法冗长**：尤其在定义函数指针或模板时需复杂声明。
 - **不支持模板别名**：需通过结构体间接实现。
   ```cpp
@@ -42,14 +42,14 @@ typedef std::map<std::string, int> StringIntMap; // STL容器别名
 ## 使用 `using` 定义类型别名（C++11起）
 `using` 是C++11引入的更灵活方式，语法更直观，支持模板别名。
 
-#### 1. **基本用法**
+####  **基本用法**
 ```cpp
 using Integer = int;       // 等价于typedef int Integer
 using IntPtr = int*;       // 指针别名
 using FuncPtr = void(*)(int, double); // 函数指针别名
 ```
 
-#### 2. **模板别名**
+####  **模板别名**
 `using` 可直接定义模板别名，而 `typedef` 无法实现：
 ```cpp
 template <typename T>
@@ -57,7 +57,7 @@ using Vec = std::vector<T>;  // 模板别名
 Vec<int> numbers;            // 等价于std::vector<int>
 ```
 
-#### 3. **优势**
+####  **优势**
 - **语法清晰**：更接近变量声明风格，可读性更强。
 - **支持复杂类型**：如嵌套模板或函数指针：
   ```cpp
@@ -77,7 +77,7 @@ Vec<int> numbers;            // 等价于std::vector<int>
 ---
 
 ## 其他方法（不推荐）
-#### 1. **`#define` 宏定义**
+####  **`#define` 宏定义**
 虽然可以定义别名，但宏是文本替换，易引发错误：
 ```cpp
 #define IntPtr int*      // 可能导致变量声明歧义

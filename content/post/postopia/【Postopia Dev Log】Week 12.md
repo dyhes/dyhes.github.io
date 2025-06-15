@@ -328,7 +328,7 @@ public class CombinedExample {
 ---
 
 ### 使用示例
-#### 1. 基本用法
+####  基本用法
 ```java
 public class Person {
     private String[] hobbies;
@@ -344,7 +344,7 @@ Person p1 = new Person("阅读", "编程"); // 传入多个参数
 Person p2 = new Person();            // 不传参数（等效于空数组）
 ```
 
-#### 2. 与固定参数重载时的优先级
+####  与固定参数重载时的优先级
 当存在固定参数和可变长参数的重载构造函数时，**固定参数的构造函数会优先被调用**：
 ```java
 public class MyClass {
@@ -646,7 +646,7 @@ PostgreSQL 实现前缀搜索的核心在于合理利用索引和表达式优化
 ---
 
 ### **Java实体类初始化**
-#### 1. **直接初始化字段**
+####  **直接初始化字段**
 在字段定义时直接赋初始值`0L`，适用于所有未显式赋值的场景：
 ```java
 @Entity
@@ -660,7 +660,7 @@ public class Product {
 ```
 - **说明**：此方式在对象实例化时自动设置`stock`为0。若未显式赋值，持久化时字段值始终为0。
 
-#### 2. **通过构造函数初始化**
+####  **通过构造函数初始化**
 在实体类的构造函数中显式设置默认值：
 ```java
 @Entity
@@ -681,7 +681,7 @@ public class Product {
 ---
 
 ### **数据库默认值配置**
-#### 3. **使用`@Column`的`columnDefinition`属性**
+####  **使用`@Column`的`columnDefinition`属性**
 通过数据库DDL定义默认值，并强制JPA使用该配置：
 ```java
 @Entity
@@ -695,7 +695,7 @@ public class Product {
 ```
 - **效果**：插入记录时若未提供`stock`值，数据库自动填充0。此方法独立于Java对象状态，适用于数据库层面约束。
 
-#### 4. **结合`@DynamicInsert`避免NULL覆盖**
+####  **结合`@DynamicInsert`避免NULL覆盖**
 当字段允许Java对象为`null`但需数据库填充默认值时，需添加`@DynamicInsert`：
 ```java
 @Entity
@@ -713,7 +713,7 @@ public class Product {
 ---
 
 ### **混合策略（推荐）**
-#### 5. **Java初始化 + 数据库默认值**
+####  **Java初始化 + 数据库默认值**
 同时初始化字段和配置数据库默认值，避免层间差异：
 ```java
 @Entity

@@ -8,7 +8,7 @@ categories:
 
 If you're specifically looking for number sequence-based authentication codes (like OTPs, often consisting of 6 digits), the following options are most suitable:
 
-## 1. **TOTP (Time-based One-Time Password) using `twilio-otp` or `java-totp`**
+##  **TOTP (Time-based One-Time Password) using `twilio-otp` or `java-totp`**
 
    **TOTP** (Time-based One-Time Password) generates numeric sequences that change periodically (e.g., every 30 seconds). It is a commonly used mechanism for two-factor authentication (2FA), and it generates a sequence of numbers, typically 6 digits.
 
@@ -30,7 +30,7 @@ If you're specifically looking for number sequence-based authentication codes (l
      ```
       This will generate a 6-digit numeric OTP based on a time-window.
 
-## 2. **HOTP (HMAC-based One-Time Password) using `commons-codec`**
+##  **HOTP (HMAC-based One-Time Password) using `commons-codec`**
    **HOTP** generates numeric sequences based on a counter (not time-based like TOTP). It is also a number-based sequence and typically results in a 6-digit or longer OTP.
 
    - **Maven dependency**:
@@ -53,7 +53,7 @@ If you're specifically looking for number sequence-based authentication codes (l
      ```
       This approach generates a numeric sequence based on a secret key and counter value.
 
-## 3. **Custom Number Generation using `SecureRandom`**
+##  **Custom Number Generation using `SecureRandom`**
    If you just need a random sequence of numbers (e.g., for simple email verification codes), you can use `SecureRandom` to generate a numeric sequence.
 
    - **Example usage**:

@@ -12,7 +12,7 @@ tags:
 
 不过，TypeScript 提供了几种方式来定义和操作复杂的数据结构，类似于 `struct` 的功能：
 
-### 1. 使用 `interface`
+###  使用 `interface`
 `interface` 是 TypeScript 中定义对象形状的主要方式。你可以使用 `interface` 来定义一个结构化的数据类型。
 
 ```typescript
@@ -29,7 +29,7 @@ const person: Person = {
 };
 ```
 
-### 2. 使用 `type`
+###  使用 `type`
 `type` 是另一种定义复杂数据类型的方式，功能与 `interface` 类似。
 
 ```typescript
@@ -46,7 +46,7 @@ const person: Person = {
 };
 ```
 
-### 3. 使用 `class`
+###  使用 `class`
 如果你需要更复杂的行为（如方法），可以使用 `class` 来定义一个结构。
 
 ```typescript
@@ -70,7 +70,7 @@ const person = new Person("Charlie", 28, false);
 person.greet();
 ```
 
-### 4. 使用 `type` 和 `interface` 的组合
+###  使用 `type` 和 `interface` 的组合
 你可以将 `type` 和 `interface` 结合使用，以创建更复杂的数据结构。
 
 ```typescript
@@ -97,7 +97,7 @@ const person: Person = {
 };
 ```
 
-### 5. 使用 `readonly` 和 `optional` 属性
+###  使用 `readonly` 和 `optional` 属性
 你还可以使用 `readonly` 和 `?` 来定义只读和可选属性。
 
 ```typescript
@@ -120,7 +120,7 @@ const person: Person = {
 
 ---
 
-## 1. **`struct` 的基本概念**
+##  **`struct` 的基本概念**
 - **定义方式**：`struct` 是 ArkTS 中用于定义自定义组件的基础结构，通常与装饰器（如 `@Component` 和 `@Entry`）结合使用。
   ```typescript
   @Component
@@ -140,7 +140,7 @@ const person: Person = {
 
 ---
 
-## 2. **`struct` 的核心特性**
+##  **`struct` 的核心特性**
 ### （1）**`@Component` 装饰器**
 - `@Component` 是 ArkTS 中用于修饰 `struct` 的装饰器，使其具备组件化的能力。
 - 被 `@Component` 装饰的 `struct` 必须实现 `build()` 方法，用于定义组件的 UI 描述。
@@ -178,7 +178,7 @@ const person: Person = {
 
 ---
 
-## 3. **`struct` 的成员变量与函数**
+##  **`struct` 的成员变量与函数**
 ### （1）**成员变量**
 - 成员变量用于存储组件的状态和数据，通常使用装饰器（如 `@State`、`@Prop`、`@Link`）进行修饰。
 - 成员变量是私有的，不支持静态变量。
@@ -217,7 +217,7 @@ const person: Person = {
 
 ---
 
-## 4. **`struct` 的使用场景**
+##  **`struct` 的使用场景**
 ### （1）**自定义组件**
 - `struct` 是 ArkTS 中定义自定义组件的基础，开发者可以通过组合系统组件（如 `Text`、`Button`）和自定义逻辑来创建复杂的 UI 组件。
 
@@ -253,7 +253,7 @@ const person: Person = {
 
 ---
 
-## 5. **`struct` 的限制**
+##  **`struct` 的限制**
 - **不支持继承**：`struct` 不能继承其他类或接口。
 - **实例化**：`struct` 的实例化可以省略 `new` 关键字。
 - **命名规则**：自定义组件名、类名、函数名不能与系统组件名相同。

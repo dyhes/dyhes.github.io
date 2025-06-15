@@ -261,7 +261,7 @@ tags:
 ---
 
 #### 基本用法
-##### 1. 定义与初始化
+ 定义与初始化
 ```cpp
 #include <variant>
 #include <string>
@@ -276,7 +276,7 @@ v = "Hello";   // 存储 std::string
   v.emplace<std::string>("Construct in-place");
   ```
 
-##### 2. 类型检查
+ 类型检查
 使用 `std::holds_alternative` 检查当前存储的类型：
 ```cpp
 if (std::holds_alternative<int>(v)) {
@@ -286,7 +286,7 @@ if (std::holds_alternative<int>(v)) {
 }
 ```
 
-##### 3. 访问值
+ 访问值
 - **通过类型或索引**：
   ```cpp
   try {
@@ -307,7 +307,7 @@ if (std::holds_alternative<int>(v)) {
 ---
 
 #### 高级用法
-##### 1. 访问者模式（`std::visit`）
+ 访问者模式（`std::visit`）
 通过泛型 Lambda 或自定义访问者处理所有可能的类型：
 ```cpp
 // 泛型 Lambda
@@ -323,7 +323,7 @@ struct Visitor {
 std::visit(Visitor{}, v);
 ```
 
-##### 2. 状态查询与异常处理
+ 状态查询与异常处理
 - **获取当前类型索引**：
   ```cpp
   size_t idx = v.index();  // 返回当前类型的索引（0, 1, 2...）
@@ -336,7 +336,7 @@ std::visit(Visitor{}, v);
   }
   ```
 
-##### 3. 与 C++20 新特性结合
+ 与 C++20 新特性结合
 - **结构化绑定**（C++17+）：
   ```cpp
   auto [value] = std::get<0>(v);  // 解包特定类型的值
@@ -396,7 +396,7 @@ std::visit(Visitor{}, v);
 ---
 
 ### 基本用法
-##### 1. 使用 Lambda 表达式
+ 使用 Lambda 表达式
 通过泛型 Lambda 简化对 `std::variant` 的访问：
 ```cpp
 #include <variant>
@@ -411,7 +411,7 @@ int main() {
 ```
 - **优点**：代码简洁，无需显式类型判断。
 
-##### 2. 使用函数对象
+ 使用函数对象
 定义包含多个重载 `operator()` 的访问者对象，实现类型分派：
 ```cpp
 struct Visitor {
@@ -427,7 +427,7 @@ std::visit(Visitor{}, var);  // 输出 "Integer: 42"
 ---
 
 ### 高级用法
-##### 1. 多参数联合访问
+ 多参数联合访问
 同时处理多个 `std::variant` 对象，需覆盖所有可能的类型组合：
 ```cpp
 std::variant<int, double> var1 = 3.14;
@@ -439,7 +439,7 @@ std::visit([](auto a, auto b) {
 ```
 - **注意**：参数组合数量随 `std::variant` 类型数量指数级增长，需谨慎设计访问者逻辑。
 
-##### 2. 结合 `if constexpr` 类型判断
+ 结合 `if constexpr` 类型判断
 在泛型 Lambda 中通过编译时类型判断执行不同操作：
 ```cpp
 std::visit([](auto&& value) {
@@ -452,7 +452,7 @@ std::visit([](auto&& value) {
 ```
 - **优势**：减少重复代码，提升可维护性。
 
-##### 3. 处理返回值
+ 处理返回值
 所有分支必须返回相同类型，否则需显式转换：
 ```cpp
 auto result = std::visit([](auto&& arg) -> int {

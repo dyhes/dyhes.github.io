@@ -12,7 +12,7 @@ C++ STL 的 `unordered_map` 支持 `[]=` 操作符。
 本质为（**[operator\[\]](https://en.cppreference.com/w/cpp/container/map/operator_at)** 【unordered_set和set无此操作符】与元素的 operator=叠加所得）
 该操作符具有**插入和修改元素的双重功能**，具体行为如下：
 ---
-### 1. **`[]=` 操作符的核心功能**
+###  **`[]=` 操作符的核心功能**
 - **键存在时**：通过 `map[key] = value` 可以直接修改该键对应的值。
 - **键不存在时**：会自动插入一个以该键为索引的新元素，并将值初始化为默认类型（如 `int` 会初始化为 `0`，类对象调用默认构造函数），随后再赋值为 `value`。
 
@@ -155,27 +155,27 @@ m.insert(std::make_pair(1, "apple"));  // 使用pair插入键值对
 ### `std::pair`的创建方法  
 `std::pair`是C++标准库中的模板类，用于将两个值组合成单一实体。以下是其常见的创建方法：  
 
-#### 1. **直接构造**  
+####  **直接构造**  
 通过构造函数初始化键值对：  
 ```cpp
 std::pair<std::string, int> p1("apple", 3);  // 显式指定键值对类型
 std::pair p2("banana", 5);                   // C++17起支持自动类型推导（CTAD）
 ```
 
-#### 2. **使用`make_pair`函数**  
+####  **使用`make_pair`函数**  
 无需显式指定类型，自动推导类型：  
 ```cpp
 auto p3 = std::make_pair("orange", 7);  // 类型为std::pair<const char*, int>
 ```
 
-#### 3. **拷贝构造与赋值**  
+####  **拷贝构造与赋值**  
 通过已有`pair`对象初始化新对象：  
 ```cpp
 std::pair p4(p3);       // 拷贝构造
 std::pair p5 = p3;      // 赋值操作
 ```
 
-#### 4. **通过`emplace`或`insert`隐式构造**  
+####  **通过`emplace`或`insert`隐式构造**  
 在容器中直接构造`pair`（无需显式创建对象）：  
 ```cpp
 std::unordered_map<std::string, int> umap;
@@ -183,7 +183,7 @@ umap.emplace("pear", 2);          // 在容器内部构造pair
 umap.insert({"grape", 4});        // 使用初始化列表隐式转换为pair
 ```
 
-#### 5. **结构化绑定（C++17+）**  
+####  **结构化绑定（C++17+）**  
 从容器遍历时解构`pair`：  
 ```cpp
 for (const auto& [key, value] : umap) {  // 将pair解构为key和value

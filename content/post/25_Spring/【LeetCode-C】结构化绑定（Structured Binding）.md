@@ -135,7 +135,7 @@ auto tuple = std::tie(a, b, c);
 ---
 
 ### 主要应用场景  
-#### 1. **解包函数返回值**  
+####  **解包函数返回值**  
 当函数返回 `std::tuple` 或 `std::pair` 时，`std::tie` 可直接将返回值解包到变量中：  
 ```cpp
 std::set<int> s;
@@ -149,7 +149,7 @@ std::tie(iter, inserted) = s.insert(42);
 std::tie(std::ignore, inserted) = s.insert(42);  // 仅关注是否插入成功
 ```
 
-#### 2. **批量赋值**  
+####  **批量赋值**  
 将元组的值批量赋给多个变量：  
 ```cpp
 std::tuple<std::string, double, int> tup("apple", 3.14, 100);
@@ -157,7 +157,7 @@ std::string name; double price; int count;
 std::tie(name, price, count) = tup;  // name="apple", price=3.14, count=100
 ```
 
-#### 3. **结构体比较**  
+####  **结构体比较**  
 通过绑定结构体成员到元组，利用元组的字典序比较实现结构体的自定义比较逻辑：  
 ```cpp
 struct Person {
@@ -170,7 +170,7 @@ struct Person {
 };
 ```
 
-#### 4. **与 Lambda 表达式结合**  
+####  **与 Lambda 表达式结合**  
 在复杂逻辑中解包数据：  
 ```cpp
 auto process = [](const auto& data) {

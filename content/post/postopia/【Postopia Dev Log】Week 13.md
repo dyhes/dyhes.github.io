@@ -21,7 +21,7 @@ todo for now
 ---
 
 ### 服务端实现SSE推送
-#### 1. 使用`SseEmitter`创建SSE接口
+####  使用`SseEmitter`创建SSE接口
 通过`SseEmitter`实现服务端推送能力，每个客户端请求会创建一个长连接，支持流式返回数据。
 
 ```java
@@ -44,7 +44,7 @@ public class SseController {
 }
 ```
 
-#### 2. 转发外部SSE流到客户端
+####  转发外部SSE流到客户端
 服务端作为客户端，通过`OkHttp`请求外部SSE服务，并将接收到的数据转发给前端：
 ```java
 public void forwardExternalSSE(String externalUrl, String clientId) {
@@ -75,14 +75,14 @@ public void forwardExternalSSE(String externalUrl, String clientId) {
 ---
 
 ### 客户端通过CURL测试
-#### 1. 发送CURL请求
+####  发送CURL请求
 客户端通过以下命令订阅服务端的SSE流：
 ```bash
 curl -v http://localhost:8080/stream
 ```
 服务端会返回`text/event-stream`格式的响应头，并持续推送数据。
 
-#### 2. 处理流式响应
+####  处理流式响应
 客户端会以事件流形式接收数据，格式示例：
 ```
 data: {"message": "Event 1"}
@@ -147,7 +147,7 @@ data: {"message": "Event 2"}
 
 ---
 
-#### 1. **底层技术与编程模型**
+####  **底层技术与编程模型**
 - **WebFlux**  
   基于Reactor响应式编程模型，采用**非阻塞I/O**（如Netty或Reactor-Netty），通过`Flux<ServerSentEvent>`处理数据流。开发者通过声明式代码组合流操作（如`map`、`filter`），无需手动管理线程，天然支持背压（Backpressure）机制，避免数据过载。  
   ```java
@@ -179,7 +179,7 @@ data: {"message": "Event 2"}
 
 ---
 
-#### 2. **并发能力与资源消耗**
+####  **并发能力与资源消耗**
 - **WebFlux**  
   - **高并发**：基于EventLoop线程模型，单线程可处理数万连接，适合IoT、实时聊天等高并发场景。  
   - **低资源消耗**：占用少量线程（如CPU核心数），减少上下文切换开销。
@@ -190,7 +190,7 @@ data: {"message": "Event 2"}
 
 ---
 
-#### 3. **协议支持与扩展性**
+####  **协议支持与扩展性**
 - **WebFlux**  
   支持多种协议：**SSE**、**WebSocket**、HTTP/2等，可灵活适配不同实时通信需求。此外，无缝集成响应式生态组件（如R2DBC、WebClient）。
 
@@ -199,7 +199,7 @@ data: {"message": "Event 2"}
 
 ---
 
-#### 4. **错误处理与背压机制**
+####  **错误处理与背压机制**
 - **WebFlux**  
   - **背压支持**：通过`Flux`自动调节数据流速，防止客户端过载。  
   - **健壮的错误处理**：提供`onErrorResume`等操作符，可链式定义异常恢复逻辑。
@@ -210,7 +210,7 @@ data: {"message": "Event 2"}
 
 ---
 
-#### 5. **适用场景**
+####  **适用场景**
 - **WebFlux**  
   - 高并发实时应用（如股票行情、AI对话）。  
   - 微服务架构下的流式数据处理（如日志推送、实时监控）。
@@ -246,17 +246,17 @@ data: {"message": "Event 2"}
 ---
 
 ### 错误原因分析
-#### 1. **响应提前提交**
+####  **响应提前提交**
 - 你的代码中使用了`Flux.create`和`CompletableFuture.runAsync`开启异步线程处理SSE流。**若异步线程中已经通过`sink`开始发送数据（即响应体已开始写入），而Spring Security在过滤器链中检测到未认证/未授权的请求并尝试抛出异常**（如`AccessDeniedException`），此时响应头可能已部分提交，导致无法修改状态码或重定向。
 - **安全拦截器与异步线程的竞争条件**：主线程的Spring Security过滤器（如`FilterSecurityInterceptor`）可能在异步线程发送数据后才抛出异常，此时响应已不可修改。
 
-#### 2. **Spring Security默认行为冲突**
+####  **Spring Security默认行为冲突**
 - 默认情况下，Spring Security对未认证请求会重定向到登录页（状态码302），而SSE需要保持长连接（状态码200）。**响应头的冲突会导致异常无法正确处理**。
 
 ---
 
 ### 解决方案
-#### 1. **配置Spring Security以兼容SSE**
+####  **配置Spring Security以兼容SSE**
 禁用默认的重定向逻辑，改用**直接返回HTTP状态码**：
 ```java
 @Configuration
@@ -284,7 +284,7 @@ public class SecurityConfig {
 }
 ```
 
-#### 2. **调整异步处理逻辑**
+####  **调整异步处理逻辑**
 确保**安全验证完成后再启动异步任务**，避免响应提前提交：
 ```java
 @GetMapping(value = "summary", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
@@ -301,7 +301,7 @@ public Flux<ServerSentEvent<String>> summary(@RequestParam Long postId) {
 }
 ```
 
-#### 3. **使用响应式编程模型（推荐）**
+####  **使用响应式编程模型（推荐）**
 避免混合阻塞式线程（如`CompletableFuture`）与响应式流（`Flux`），改用`Schedulers`控制线程：
 ```java
 @GetMapping(value = "summary", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
@@ -316,7 +316,7 @@ public Flux<ServerSentEvent<String>> summary(@RequestParam Long postId) {
 }
 ```
 
-#### 4. **处理SSE流的异常**
+####  **处理SSE流的异常**
 通过`doOnError`捕获并处理异步操作中的异常，避免响应提前关闭：
 ```java
 public void summary(Sink<String> sink, Long postId) {
