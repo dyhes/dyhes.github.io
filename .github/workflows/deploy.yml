@@ -6,6 +6,9 @@ on:
     pull_request:
         branches: [master]
 
+env:
+  TZ: Asia/Shanghai  # 设置部署环境时区
+  
 jobs:
     build:
         runs-on: ubuntu-latest
