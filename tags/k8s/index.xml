@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>K8s on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/k8s/</link><description>Recent content in K8s on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 20 Jun 2025 20:39:20 +0800</lastBuildDate><atom:link href="https://dyhes.github.io/tags/k8s/index.xml" rel="self" type="application/rss+xml"/><item><title>【k8s】Fundamentals</title><link>https://dyhes.github.io/p/k8sfundamentals/</link><pubDate>Wed, 14 May 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/k8sfundamentals/</guid><description>&lt;h2 id="kubernetes-explained-in-6-minutes--k8s-architecture">&lt;strong>Kubernetes Explained in 6 Minutes | k8s Architecture&lt;/strong>
+&lt;/h2>&lt;p>&lt;a class="link" href="https://www.youtube.com/watch?v=TlHvYWVUZyc" target="_blank" rel="noopener"
+>https://www.youtube.com/watch?v=TlHvYWVUZyc&lt;/a>
+&lt;img src="https://i.ibb.co/fVy2MFQZ/image.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/4nYSrZFb/image-3.png"
+loading="lazy"
+>
+Pods are the smallest deployable units in k8s.&lt;/p>
+&lt;p>A pod hosts one or more containers and provide shared storage and networking for those containers&lt;/p>
+&lt;p>Pods are created and managed by the k8s control plane&lt;/p>
+&lt;h2 id="vs-docker-compose">v.s. Docker Compose
+&lt;/h2>&lt;p>Docker Compose 和 Kubernetes（k8s）在容器化技术生态中扮演着不同的角色，主要区别体现在功能定位、架构设计、适用场景和复杂度等方面。以下是两者的核心差异总结：&lt;/p>
+&lt;hr>
+&lt;h3 id="功能定位">&lt;strong>功能定位&lt;/strong>
+&lt;/h3>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>Docker Compose&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>核心作用&lt;/strong>：专注于单机环境下的多容器应用管理，通过简单的 YAML 文件定义服务、网络和存储，实现一键启动多容器应用。&lt;/li>
+&lt;li>&lt;strong>功能特性&lt;/strong>：
+&lt;ul>
+&lt;li>快速搭建本地开发环境，支持服务依赖关系定义（如数据库和 Web 服务联动）。&lt;/li>
+&lt;li>环境隔离（如开发、测试环境独立配置）。&lt;/li>
+&lt;li>手动管理容器生命周期（启动、停止、日志查看）。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Kubernetes&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>核心作用&lt;/strong>：面向大规模生产环境，提供跨集群的容器编排能力，支持自动化运维、高可用性和复杂场景的扩展。&lt;/li>
+&lt;li>&lt;strong>功能特性&lt;/strong>：
+&lt;ul>
+&lt;li>自动扩缩容（HPA）、滚动更新、故障自愈。&lt;/li>
+&lt;li>服务发现与负载均衡（内置 Service 和 DNS）。&lt;/li>
+&lt;li>动态存储管理（PV/PVC）、多租户隔离（Namespace）。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="架构设计">&lt;strong>架构设计&lt;/strong>
+&lt;/h3>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>Docker Compose&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>架构&lt;/strong>：单机架构，依赖 Docker Daemon 管理本地容器，通过 &lt;code>docker-compose.yml&lt;/code> 文件定义服务。&lt;/li>
+&lt;li>&lt;strong>组件&lt;/strong>：仅需 Docker 引擎和 Compose CLI，无需额外组件。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Kubernetes&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>架构&lt;/strong>：分布式集群架构，包含 Master 节点（API Server、Scheduler、Controller Manager）和 Worker 节点（运行 Pod）。&lt;/li>
+&lt;li>&lt;strong>组件&lt;/strong>：包含 Pod、Service、Deployment 等抽象层，支持跨主机调度和复杂的网络策略。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="配置文件与复杂度">&lt;strong>配置文件与复杂度&lt;/strong>
+&lt;/h3>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>Docker Compose&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>配置&lt;/strong>：简单直观的 YAML 文件，例如定义 Web 服务和数据库：
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">version&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;3&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">services&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">web&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">image&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx:latest&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">ports&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;80:80&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">db&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">image&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">mysql:5.7&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">environment&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">MYSQL_ROOT_PASSWORD=example&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>&lt;strong>学习成本&lt;/strong>：适合开发者和小型团队，无需深入理解分布式系统。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Kubernetes&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>配置&lt;/strong>：需要编写多个 YAML 文件定义 Deployment、Service 等，例如：
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">apps/v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Deployment&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx-deployment&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">replicas&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">3&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">selector&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">matchLabels&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">app&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">labels&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">app&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">containers&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">image&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx:1.14.2&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">ports&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">containerPort&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">80&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>&lt;strong>学习成本&lt;/strong>：需掌握集群管理、网络模型和存储编排等概念，适合有运维经验的团队。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="适用场景">&lt;strong>适用场景&lt;/strong>
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>场景&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Docker Compose&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Kubernetes&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>开发与测试&lt;/strong>&lt;/td>
+&lt;td>本地快速启动多容器应用，模拟生产环境依赖。&lt;/td>
+&lt;td>不适用，需依赖集群环境。&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>单机部署&lt;/strong>&lt;/td>
+&lt;td>适合小规模应用（如原型验证）。&lt;/td>
+&lt;td>不适用。&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>生产环境&lt;/strong>&lt;/td>
+&lt;td>无法满足高可用性和扩展需求。&lt;/td>
+&lt;td>支持数千节点、自动故障恢复和跨云部署。&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>微服务架构&lt;/strong>&lt;/td>
+&lt;td>仅支持简单服务交互。&lt;/td>
+&lt;td>管理数百个微服务，提供负载均衡和流量控制。&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="协同使用建议">&lt;strong>协同使用建议&lt;/strong>
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>开发阶段&lt;/strong>：使用 Docker Compose 快速构建镜像并测试服务间交互。&lt;/li>
+&lt;li>&lt;strong>生产阶段&lt;/strong>：通过 Kubernetes 部署容器集群，结合 Prometheus（监控）、Istio（服务网格）等工具实现云原生架构。&lt;/li>
+&lt;li>&lt;strong>迁移路径&lt;/strong>：可通过工具（如 Kompose）将 Compose 文件转换为 Kubernetes 资源描述文件。&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="总结">&lt;strong>总结&lt;/strong>
+&lt;/h3>&lt;p>Docker Compose 是&lt;strong>轻量级开发工具&lt;/strong>，适合快速启动和简单管理；Kubernetes 是&lt;strong>企业级编排平台&lt;/strong>，解决大规模、高可用场景的复杂性。两者互补而非竞争，实际项目中常结合使用：Compose 用于开发，Kubernetes 用于生产。&lt;/p>
+&lt;h2 id="docker-compose-vs-minikube">Docker Compose vs. Minikube
+&lt;/h2>&lt;p>Docker Compose 与 Minikube 是容器化开发中常用的两种工具，但其设计目标、适用场景和功能特性存在显著差异。以下从六个维度对比两者的核心区别：&lt;/p>
+&lt;hr>
+&lt;h3 id="设计目标与定位">设计目标与定位
+&lt;/h3>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>Docker Compose&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>单机容器编排工具&lt;/strong>：专注于在单台主机上快速启动和协调多个容器，通过简单的 YAML 文件定义服务、网络和存储。&lt;/li>
+&lt;li>&lt;strong>适用场景&lt;/strong>：开发/测试环境中快速启动依赖服务（如数据库、缓存），或小型项目的本地集成测试。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Minikube&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>本地 Kubernetes 模拟器&lt;/strong>：在单机环境中启动轻量级 Kubernetes 集群（通常基于虚拟机或 Docker 容器），用于学习和模拟生产级 Kubernetes 环境。&lt;/li>
+&lt;li>&lt;strong>适用场景&lt;/strong>：需要验证 Kubernetes 配置、测试集群功能，或实现开发环境与生产部署的一致性。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="架构差异">架构差异
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>特性&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Docker Compose&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Minikube&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>集群支持&lt;/strong>&lt;/td>
+&lt;td>仅支持单机部署，无集群概念&lt;/td>
+&lt;td>模拟多节点 Kubernetes 集群（单节点为主）&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>服务发现&lt;/strong>&lt;/td>
+&lt;td>依赖容器名称或自定义网络&lt;/td>
+&lt;td>内置 Kubernetes DNS 服务（如 Service 名称解析）&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>资源管理&lt;/strong>&lt;/td>
+&lt;td>手动分配端口和存储卷&lt;/td>
+&lt;td>支持 Kubernetes 的 PersistentVolume 和 StorageClass&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>跨节点通信&lt;/strong>&lt;/td>
+&lt;td>不支持&lt;/td>
+&lt;td>通过 CNI 插件支持跨节点 Pod 通信&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="部署场景对比">部署场景对比
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>场景&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Docker Compose&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Minikube&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>开发环境&lt;/strong>&lt;/td>
+&lt;td>快速启动本地服务依赖（如 MySQL、Redis）&lt;/td>
+&lt;td>需要验证 Kubernetes 配置或 Operator 行为时使用&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>测试环境&lt;/strong>&lt;/td>
+&lt;td>单机集成测试&lt;/td>
+&lt;td>模拟生产环境的滚动更新、故障自愈等特性&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>生产环境&lt;/strong>&lt;/td>
+&lt;td>不适用&lt;/td>
+&lt;td>需结合完整 Kubernetes 集群（如 EKS、GKE）&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="核心功能特性">核心功能特性
+&lt;/h3>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>Docker Compose 的优势&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>简单易用：通过 &lt;code>docker-compose up&lt;/code> 一键启动多容器服务。&lt;/li>
+&lt;li>轻量级：无集群管理开销，适合资源有限的本地开发。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Minikube 的进阶能力&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>自动化运维&lt;/strong>：支持 Kubernetes 的 Horizontal Pod Autoscaler（HPA）、滚动更新、蓝绿部署。&lt;/li>
+&lt;li>&lt;strong>生产级特性&lt;/strong>：内置 Service 和 Ingress 实现负载均衡，支持 Liveness/Readiness 探针。&lt;/li>
+&lt;li>&lt;strong>生态集成&lt;/strong>：与 Helm、Prometheus 等云原生工具链无缝对接。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="学习与维护成本">学习与维护成本
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>维度&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Docker Compose&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Minikube&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>学习曲线&lt;/strong>&lt;/td>
+&lt;td>低（仅需掌握 YAML 语法）&lt;/td>
+&lt;td>高（需理解 Pod、Deployment、Service 等概念）&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>运维复杂度&lt;/strong>&lt;/td>
+&lt;td>低（单机日志和监控）&lt;/td>
+&lt;td>高（需管理集群状态、网络策略和存储方案）&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>调试难度&lt;/strong>&lt;/td>
+&lt;td>直接通过容器日志排查问题&lt;/td>
+&lt;td>需熟悉 &lt;code>kubectl logs&lt;/code> 和 &lt;code>kubectl describe&lt;/code> 命令&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="使用建议">使用建议
+&lt;/h3>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>优先选择 Docker Compose 的场景&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>快速验证微服务本地交互逻辑。&lt;/li>
+&lt;li>需要同时启动多个轻量级服务（如 Spring Boot 应用 + PostgreSQL + Redis）。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>优先选择 Minikube 的场景&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>开发与生产环境需保持一致的 Kubernetes 配置（如 ConfigMap、Ingress）。&lt;/li>
+&lt;li>测试 Operator 或 Helm Chart 的本地行为。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>混合使用策略&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>开发阶段&lt;/strong>：用 Docker Compose 启动数据库等依赖服务，降低资源消耗。&lt;/li>
+&lt;li>&lt;strong>预发布阶段&lt;/strong>：通过 Minikube 验证 Kubernetes 部署配置，确保与生产环境对齐。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="总结-1">总结
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>工具&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>核心价值&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>局限性&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Docker Compose&lt;/td>
+&lt;td>极简的本地多容器协作&lt;/td>
+&lt;td>无法模拟集群特性，缺乏生产级运维能力&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Minikube&lt;/td>
+&lt;td>本地 Kubernetes 全功能模拟&lt;/td>
+&lt;td>学习成本高，单节点性能受限&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>根据实际需求灵活选择：&lt;strong>轻量级开发选 Docker Compose，生产兼容性验证选 Minikube&lt;/strong>。两者亦可结合使用，例如开发阶段用 Compose，部署前通过 Minikube 完成最终测试。&lt;/p>
+&lt;h2 id="what-is-kubernetes--kubernetes-explained-in-15-mins">&lt;strong>What is Kubernetes | Kubernetes explained in 15 mins&lt;/strong>
+&lt;/h2>&lt;p>&lt;a class="link" href="https://www.youtube.com/watch?v=VnvRFRk_51k" target="_blank" rel="noopener"
+>https://www.youtube.com/watch?v=VnvRFRk_51k&lt;/a>
+&lt;img src="https://i.ibb.co/tphfPPrb/image-2.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/VdWMsPL/image-4.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/9mJv4f7m/image-5.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>Usually one pod per application unless your main application needs some helper containers&lt;/p>
+&lt;ul>
+&lt;li>JS Application&lt;/li>
+&lt;li>Server (Java A)&lt;/li>
+&lt;li>DB&lt;/li>
+&lt;li>Message Broker&lt;/li>
+&lt;/ul>
+&lt;h2 id="kubernetes-crash-course-for-absolute-beginners">&lt;strong>Kubernetes Crash Course for Absolute Beginners&lt;/strong>
+&lt;/h2>&lt;p>&lt;a class="link" href="https://www.youtube.com/watch?v=s_o8dwzRlu4" target="_blank" rel="noopener"
+>https://www.youtube.com/watch?v=s_o8dwzRlu4&lt;/a>&lt;/p>
+&lt;h3 id="service">Service
+&lt;/h3>&lt;ul>
+&lt;li>Service: Permanent IP address&lt;/li>
+&lt;li>Lifecycle of Pod and Service not connected&lt;/li>
+&lt;li>replicas is connected to the same service (load balance)
+&lt;img src="https://i.ibb.co/JFC6CShQ/image-6.png"
+loading="lazy"
+>&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://i.ibb.co/Mk6tQnMW/image-9.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>Ingress: entry point&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/tW5x25B/image-7.png"
+loading="lazy"
+>&lt;/p>
+&lt;h2 id="configmap--secret">ConfigMap &amp;amp; Secret
+&lt;/h2>&lt;p>&lt;strong>ConfigMap&lt;/strong>:&lt;/p>
+&lt;ul>
+&lt;li>External Configuration of your application&lt;/li>
+&lt;li>for non-confidential data only
+Secret: Used to store secret data&lt;/li>
+&lt;/ul>
+&lt;h2 id="volume">Volume
+&lt;/h2>&lt;p>persistent (not gone when pod restarted) data storage
+&lt;img src="https://i.ibb.co/jZxkCg1f/image-8.png"
+loading="lazy"
+>&lt;/p>
+&lt;h3 id="deployment--statefulset">Deployment &amp;amp; StatefulSet
+&lt;/h3>&lt;p>Blue print and abstraction of pods&lt;/p>
+&lt;p>DB can’t be replicated via Deployment!&lt;/p>
+&lt;ul>
+&lt;li>Deployment: for stateless apps&lt;/li>
+&lt;li>StatefulSet: for stateful apps or databases (tedious)&lt;/li>
+&lt;/ul>
+&lt;p>DB are often hosted outside of k8s cluster&lt;/p>
+&lt;h2 id="k8s-configuration">K8s Configuration
+&lt;/h2>&lt;p>&lt;img src="https://i.ibb.co/CpvVkxxV/image-10.png"
+loading="lazy"
+>&lt;/p>
+&lt;ul>
+&lt;li>Attributes of ’spec’ is specific to the kind&lt;/li>
+&lt;li>third part ’status’ automatically generated and added by k8s&lt;/li>
+&lt;li>Etcd holds the current status of any k8s component&lt;/li>
+&lt;/ul>
+&lt;h2 id="minikube-and-kubectl">Minikube and Kubectl
+&lt;/h2>&lt;p>&lt;img src="https://i.ibb.co/TMnX4cwJ/image-11.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/RpSgfPGX/image-12.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/qFdWN1C6/image-13.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/ZRS0MSK3/image-14.png"
+loading="lazy"
+>&lt;/p>
+&lt;h3 id="practice">Practice
+&lt;/h3>&lt;p>&lt;img src="https://i.ibb.co/8gYygnX0/image-15.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/tPHWB5s7/image-16.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/Kpmknx0R/image-17.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/7JN34Yjf/image-18.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/QF5Mkpqx/image-19.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/ynt0hLFT/image-20.png"
+loading="lazy"
+>&lt;/p>
+&lt;ul>
+&lt;li>For pods, label is a required field.&lt;/li>
+&lt;li>For others(like deployments), label is optional but a good practice.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://i.ibb.co/WqB5s75/image-21.png"
+loading="lazy"
+>
+&lt;strong>selector&lt;/strong>: identify which pod belonging to a deployment&lt;/p>
+&lt;p>‘—’: you can have multiple yaml configurations within one file&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/6RpkKtmz/image-22.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/VYxxMmkX/image-23.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/BVJtv5XK/image-24.png"
+loading="lazy"
+>&lt;/p></description></item></channel></rss>

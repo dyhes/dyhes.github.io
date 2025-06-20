@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Spring on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/spring/</link><description>Recent content in Spring on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 20 Jun 2025 20:39:20 +0800</lastBuildDate><atom:link href="https://dyhes.github.io/tags/spring/index.xml" rel="self" type="application/rss+xml"/><item><title>【Spring Cloud】Deployment</title><link>https://dyhes.github.io/p/spring-clouddeployment/</link><pubDate>Sat, 31 May 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/spring-clouddeployment/</guid><description>&lt;h2 id="spring-cloud-应用">Spring Cloud 应用
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-groovy" data-lang="groovy">&lt;span class="line">&lt;span class="cl">&lt;span class="n">apply&lt;/span> &lt;span class="nl">plugin:&lt;/span> &lt;span class="s1">&amp;#39;org.springframework.boot&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//默认行为
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="n">bootJar&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">enabled&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">jar&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">enabled&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>执行&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">./gradlew clean build
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>构建普通jar包（用于被其他服务依赖）和bootJar包&lt;/p>
+&lt;h3 id="dockerfile">Dockerfile
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-dockerfile" data-lang="dockerfile">&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 选择轻量级基础镜像（推荐）&lt;/span>&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="k">FROM&lt;/span>&lt;span class="s"> eclipse-temurin:17.0.15_6-jre-ubi9-minimal&lt;/span>&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="c"># 设置工作目录&lt;/span>&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="k">WORKDIR&lt;/span>&lt;span class="s"> /app&lt;/span>&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="c"># 复制JAR文件到容器&lt;/span>&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="k">COPY&lt;/span> build/libs/gateway.jar app.jar&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="c"># 暴露服务端口（与实际端口一致）&lt;/span>&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="k">EXPOSE&lt;/span>&lt;span class="s"> 8080&lt;/span>&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="c"># 启动命令&lt;/span>&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="k">ENTRYPOINT&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;java&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;-jar&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;app.jar&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="nginx">Nginx
+&lt;/h2>&lt;p>Dockerfile&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-dockerfile" data-lang="dockerfile">&lt;span class="line">&lt;span class="cl">&lt;span class="k">FROM&lt;/span>&lt;span class="s"> nginx:stable-alpine&lt;/span>&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="k">RUN&lt;/span> rm /etc/nginx/conf.d/default.conf&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="k">COPY&lt;/span> nginx.conf /etc/nginx/conf.d/&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="k">COPY&lt;/span> dist/ /usr/share/nginx/html/&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="k">EXPOSE&lt;/span>&lt;span class="s"> 80&lt;/span>&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="k">CMD&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;nginx&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;-g&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;daemon off;&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>nginx.conf&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-nginx" data-lang="nginx">&lt;span class="line">&lt;span class="cl">&lt;span class="k">server&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kn">listen&lt;/span> &lt;span class="mi">80&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kn">server_name&lt;/span> &lt;span class="s">localhost&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kn">location&lt;/span> &lt;span class="s">/&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kn">root&lt;/span> &lt;span class="s">/usr/share/nginx/html&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kn">index&lt;/span> &lt;span class="s">index.html&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kn">try_files&lt;/span> &lt;span class="nv">$uri&lt;/span> &lt;span class="nv">$uri/&lt;/span> &lt;span class="s">/index.html&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kn">error_page&lt;/span> &lt;span class="mi">500&lt;/span> &lt;span class="mi">502&lt;/span> &lt;span class="mi">503&lt;/span> &lt;span class="mi">504&lt;/span> &lt;span class="s">/50x.html&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kn">location&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">/50x.html&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kn">root&lt;/span> &lt;span class="s">/usr/share/nginx/html&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="minikube">Minikube
+&lt;/h2>&lt;p>可能存在网络问题，在 Docker Desktop 提前拉取镜像后&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">minikube start --driver&lt;span class="o">=&lt;/span>docker &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span>--base-image&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;kicbase/stable:v0.0.45&amp;#34;&lt;/span> --memory&lt;span class="o">=&lt;/span>7500mb --cpus&lt;span class="o">=&lt;/span>&lt;span class="m">4&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="cp">#!/bin/bash
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cp">&lt;/span>kubectl apply -f k8s/namespace.yaml
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">kubectl apply -f k8s/volumes/
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">kubectl apply -f k8s/config/
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">kubectl apply -f k8s/infra/
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">kubectl apply -f k8s/backend/
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">kubectl apply -f k8s/frontend/
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="查看pod">查看pod
+&lt;/h3>&lt;p>kubectl get pods -n postopia&lt;/p>
+&lt;h3 id="查看deployment">查看deployment
+&lt;/h3>&lt;p>kubectl get deployments -n postopia&lt;/p>
+&lt;h3 id="查看原因">查看原因
+&lt;/h3>&lt;p>kubectl describe pod mysql -n postopia
+kubectl describe svc nacos -n postopia
+kubectl describe pod nacos -n postopia&lt;/p>
+&lt;p>kubectl describe pod user-service -n postopia&lt;/p>
+&lt;p>kubectl describe pod nacos-5bb4c6c67b-4gp4q -n postopia&lt;/p>
+&lt;h3 id="查看-logs">查看 logs
+&lt;/h3>&lt;p>kubectl logs -l app=mysql -n postopia&lt;/p>
+&lt;p>kubectl logs -l app=gateway -n postopia&lt;/p>
+&lt;p>kubectl logs -l app=comment-service -n postopia&lt;/p>
+&lt;p>kubectl logs -f comment-service-664bdb7c6d-x4trv -n postopia&lt;/p>
+&lt;p>kubectl logs -f space-service-577f84bfcc-x2vl5 -n postopia
+kubectl logs mysql-*&lt;/p>
+&lt;p>kubectl logs -f gateway-59bd97c779-x664w -n postopia&lt;/p>
+&lt;p>kubectl logs -n postopia -f user-service-67c8888fc7-7dcvq
+查看上次崩溃前日志
+kubectl logs -f mysql-697cc894c9-stzql -n postopia —previous&lt;/p>
+&lt;p>kubectl logs -f mysql-5656bc586-nktt5 -n postopia &amp;ndash;previous&lt;/p>
+&lt;p>kubectl logs -f mysql -n postopia&lt;/p>
+&lt;p>kubectl logs -f nacos-54b76d5dcc-mrgkd -n postopia &amp;ndash;previous&lt;/p>
+&lt;h3 id="查看环境变量">查看环境变量
+&lt;/h3>&lt;p>kubectl exec -it comment-service-664bdb7c6d-x4trv -n postopia &amp;ndash; env | grep REDIS_HOST&lt;/p>
+&lt;h3 id="查看目录">查看目录
+&lt;/h3>&lt;p>kubectl exec -it mysql-697cc894c9-stzql -n postopia &amp;ndash; ls /var/run/mysqld/&lt;/p>
+&lt;h3 id="重启-deployment">重启 Deployment
+&lt;/h3>&lt;p>kubectl rollout restart -n postopia deployment/&lt;deployment-name>&lt;/p>
+&lt;p>kubectl rollout restart deployment/nacos -n postopia&lt;/p>
+&lt;p>kubectl rollout restart -n postopia deployment/user-service&lt;/p>
+&lt;p>kubectl rollout restart deployment/comment -n postopia&lt;/p>
+&lt;h3 id="构建镜像">构建镜像
+&lt;/h3>&lt;p>eval $(minikube docker-env)&lt;/p>
+&lt;p>docker build -t postopia-nacos-mysql:latest ./nacos-mysql
+docker build -t postopia-es:latest ./elastic-search
+&lt;em># Build application services&lt;/em>&lt;/p>
+&lt;p>docker build -t postopia-gateway:latest ./gateway
+docker build -t postopia-user:latest ./user-service
+docker build -t postopia-space:latest ./space-service
+docker build -t postopia-post:latest ./post-service
+docker build -t postopia-comment:latest ./comment-service
+docker build -t postopia-message:latest ./message-service
+docker build -t postopia-vote:latest ./vote-service
+docker build -t postopia-opinion:latest ./opinion-service
+docker build -t postopia-search:latest ./search-service&lt;/p>
+&lt;h3 id="加载镜像">加载镜像
+&lt;/h3>&lt;p>minikube image load&lt;/p>
+&lt;h2 id="server">Server
+&lt;/h2>&lt;h2 id="kubernetes">Kubernetes
+&lt;/h2>&lt;p>to be continued&lt;/p>
+&lt;p>docker-compose -f compose-test.yaml up -d user-service&lt;/p>
+&lt;p>ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCutl60XhY0VKswZUESzBt3AdgqvPlNSIxJNbaSODfoUZwTsiioajG3II5mH0k9VKm6H8DYT0qwMrR2AieAVh1DOFJ1XN/vjSNXGOiF5mHkwui/nrU4bE8m6jg3AMKTPW2jpSSBh0zYstMeK50rLVu83Tt3sI7okMfTL9yATIwb+nGTsKyjEOmgG4909R88IrVJ6zuF0X0F/d5k8RoswO2i8BlOoM5jG0Jtla1fOj+w+B1AGNt0m1FXaLVjlk1sBYwM29qbBJzeET3BzHo17Q49kDfgzH/FpgIlEZordyoNc8pGx0WVp6OQtqlvq9+FF2/sYWQjsInjNSh8+PtYdv0upTiVgpG/Bx5xBuJIMrEqFXSTFcSH3sdr+rmZDIfc/V+vWaBa7D564CBH33WXZh2WkizOY+3VFhK7IDp6r3d6XkJPdUHI+orKfGFWUdnEFX/sDMn4jX/6vmE4muYxbwRniFZ1u17vgZCFwnhfNeSIIEOH+6dsQXztP6bN/761KUtOs2ST+LFNpw9mO+RPL4v2cIPqNNaqZ7Dufoy4/RlC2RbMIOGryFG+73JxmKeVwyiK2bFK0IAgV386BVunuhV0GLuBmjODa//c1KWDoKpTR1qJ0tduzlMvGN8uUuOnADZDrupUlmkwh6zx3xUHCdtWk1E917TjwZdy0sq2IqCy3Q== github-actions action@github&lt;/p></description></item><item><title>【Spring Cloud Gateway】Notes</title><link>https://dyhes.github.io/p/spring-cloud-gatewaynotes/</link><pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/spring-cloud-gatewaynotes/</guid><description>&lt;h2 id="flux-vs-mono">Flux vs. Mono
+&lt;/h2>&lt;p>Flux 和 Mono 是 Reactor 框架中实现响应式编程的核心类型，用于处理异步数据流。它们基于 Reactive Streams 规范，支持非阻塞、背压（Backpressure）等特性，适用于高并发场景。以下是两者的对比与解析：&lt;/p>
+&lt;hr>
+&lt;h3 id="核心概念">&lt;strong>核心概念&lt;/strong>
+&lt;/h3>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>Flux&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>定义&lt;/strong>：表示一个 &lt;strong>0到N个元素的异步序列&lt;/strong>，支持无限数据流（如实时事件流）或有限数据集（如数据库查询结果集）。&lt;/li>
+&lt;li>&lt;strong>信号类型&lt;/strong>：通过 &lt;code>onNext&lt;/code> 发送多个元素，最终以 &lt;code>onComplete&lt;/code> 或 &lt;code>onError&lt;/code> 终止流。&lt;/li>
+&lt;li>&lt;strong>典型场景&lt;/strong>：处理多个数据项（如消息队列、批量查询）或持续生成的事件流（如传感器数据）。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Mono&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>定义&lt;/strong>：表示 &lt;strong>0或1个元素的异步序列&lt;/strong>，用于单次结果操作（如 HTTP 请求、唯一 ID 查询）。&lt;/li>
+&lt;li>&lt;strong>信号类型&lt;/strong>：最多触发一次 &lt;code>onNext&lt;/code>，随后立即终止（&lt;code>onComplete&lt;/code> 或 &lt;code>onError&lt;/code>）。&lt;/li>
+&lt;li>&lt;strong>典型场景&lt;/strong>：返回单个对象（如用户信息）、无返回值的异步操作（如保存操作）。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="核心特性对比">&lt;strong>核心特性对比&lt;/strong>
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>特性&lt;/th>
+&lt;th>Flux&lt;/th>
+&lt;th>Mono&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>元素数量&lt;/strong>&lt;/td>
+&lt;td>0-N 个，支持无限流&lt;/td>
+&lt;td>0或1个&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>操作符&lt;/strong>&lt;/td>
+&lt;td>支持多元素操作（如 &lt;code>buffer&lt;/code>、&lt;code>flatMap&lt;/code>）&lt;/td>
+&lt;td>单元素操作（如 &lt;code>map&lt;/code>、&lt;code>flatMap&lt;/code>）&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>性能优化&lt;/strong>&lt;/td>
+&lt;td>适合批量数据处理，内存占用较高&lt;/td>
+&lt;td>单结果处理，轻量级&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>错误处理&lt;/strong>&lt;/td>
+&lt;td>错误终止整个流&lt;/td>
+&lt;td>直接传递错误信号&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="使用场景">&lt;strong>使用场景&lt;/strong>
+&lt;/h3>&lt;h4 id="flux-的典型应用">&lt;strong>Flux 的典型应用&lt;/strong>
+&lt;/h4>&lt;ol>
+&lt;li>&lt;strong>批量数据查询&lt;/strong>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">Flux&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">users&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userRepository&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">findAll&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// 查询所有用户&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>&lt;strong>实时事件流处理&lt;/strong>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">Flux&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Event&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">events&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Flux&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">interval&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Duration&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">ofSeconds&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">1&lt;/span>&lt;span class="p">))&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">map&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">tick&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">generateEvent&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// 每秒生成事件&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>&lt;strong>数据转换与聚合&lt;/strong>&lt;br>
+使用 &lt;code>flatMap&lt;/code> 和 &lt;code>groupBy&lt;/code> 对多个数据流进行合并或拆分。&lt;/li>
+&lt;/ol>
+&lt;h4 id="mono-的典型应用">&lt;strong>Mono 的典型应用&lt;/strong>
+&lt;/h4>&lt;ol>
+&lt;li>&lt;strong>单次数据库查询&lt;/strong>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">Mono&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">user&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userRepository&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">findById&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// 根据ID查询用户&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>&lt;strong>HTTP 请求响应&lt;/strong>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@GetMapping&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;/user/{id}&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Mono&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">getUser&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nd">@PathVariable&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userService&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">findUserById&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>&lt;strong>异步操作结果封装&lt;/strong>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">Mono&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Void&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">saveOperation&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userRepository&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">save&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">user&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="na">then&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// 保存后返回空&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="操作符与功能">&lt;strong>操作符与功能&lt;/strong>
+&lt;/h3>&lt;h4 id="共有操作符">&lt;strong>共有操作符&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>转换类&lt;/strong>：&lt;code>map&lt;/code>（元素转换）、&lt;code>flatMap&lt;/code>（异步转换）。&lt;/li>
+&lt;li>&lt;strong>过滤类&lt;/strong>：&lt;code>filter&lt;/code>（条件过滤）、&lt;code>take&lt;/code>（限制元素数量）。&lt;/li>
+&lt;li>&lt;strong>错误处理&lt;/strong>：&lt;code>onErrorResume&lt;/code>（错误降级）、&lt;code>retry&lt;/code>（重试机制）。&lt;/li>
+&lt;/ul>
+&lt;h4 id="特有操作符">&lt;strong>特有操作符&lt;/strong>
+&lt;/h4>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>类型&lt;/th>
+&lt;th>操作符&lt;/th>
+&lt;th>功能&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Flux&lt;/td>
+&lt;td>&lt;code>buffer(10)&lt;/code>&lt;/td>
+&lt;td>将元素按批次收集（如每10个一组）&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Flux&lt;/td>
+&lt;td>&lt;code>zipWith(otherFlux)&lt;/code>&lt;/td>
+&lt;td>合并两个流并按元素配对处理&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Mono&lt;/td>
+&lt;td>&lt;code>defaultIfEmpty()&lt;/code>&lt;/td>
+&lt;td>空值时返回默认值&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Mono&lt;/td>
+&lt;td>&lt;code>then(Mono)&lt;/code>&lt;/td>
+&lt;td>当前流完成后触发另一个流&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="代码示例">&lt;strong>代码示例&lt;/strong>
+&lt;/h3>&lt;h4 id="flux-示例">&lt;strong>Flux 示例&lt;/strong>
+&lt;/h4>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 创建包含多个元素的流并转换&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">Flux&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Integer&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">numbers&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Flux&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">just&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">1&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">2&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">3&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">map&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">n&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">n&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">2&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// 转换为 [2, 4, 6]&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">filter&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">n&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">n&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">3&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// 过滤出 [4, 6]&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">numbers&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">subscribe&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="p">::&lt;/span>&lt;span class="n">println&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="mono-示例">&lt;strong>Mono 示例&lt;/strong>
+&lt;/h4>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 模拟异步查询用户并处理结果&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">Mono&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userMono&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">userRepository&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">findById&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;123&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">flatMap&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">user&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">user&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">setName&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">user&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getName&lt;/span>&lt;span class="p">().&lt;/span>&lt;span class="na">toUpperCase&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Mono&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">just&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">user&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">})&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">onErrorResume&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">e&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Mono&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">just&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">new&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;fallback&amp;#34;&lt;/span>&lt;span class="p">)));&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// 错误时返回默认用户&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">userMono&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">subscribe&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h3 id="如何选择-flux-或-mono">&lt;strong>如何选择 Flux 或 Mono？&lt;/strong>
+&lt;/h3>&lt;ol>
+&lt;li>&lt;strong>数据量&lt;/strong>：需要处理多个元素时选 Flux，单个或无结果时选 Mono。&lt;/li>
+&lt;li>&lt;strong>性能&lt;/strong>：Mono 更轻量，适合高频单次操作；Flux 适合批量或流式处理。&lt;/li>
+&lt;li>&lt;strong>语义明确性&lt;/strong>：使用 Mono 可增强代码可读性（如明确表示“可能有或没有结果”）。&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="总结">&lt;strong>总结&lt;/strong>
+&lt;/h3>&lt;p>Flux 和 Mono 是响应式编程的基石，分别解决多元素和单元素异步流处理的问题。Flux 擅长复杂的数据流操作（如合并、批处理），而 Mono 在单结果场景中更高效直观。实际开发中需根据业务需求选择，例如在 Spring WebFlux 中，Controller 方法通常返回 Mono（单结果）或 Flux（列表或流）。&lt;/p>
+&lt;h2 id="serverhttprequestdecorator">ServerHttpRequestDecorator
+&lt;/h2>&lt;p>ServerHttpRequestDecorator 是 Spring WebFlux 框架中用于增强或修改 HTTP 请求的核心工具类，基于装饰器模式实现对请求的拦截和动态处理。以下是其核心特性、使用场景及示例的详细解析：&lt;/p>
+&lt;hr>
+&lt;h3 id="1-核心功能与作用">&lt;strong>1. 核心功能与作用&lt;/strong>
+&lt;/h3>&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>请求信息拦截与修改&lt;/strong>&lt;br>
+继承自 &lt;code>ServerHttpRequest&lt;/code>，通过重写 &lt;code>getHeaders()&lt;/code>、&lt;code>getBody()&lt;/code> 等方法，开发者可以修改请求头、请求体等关键信息。例如，动态添加请求头、解密请求内容或统一请求格式。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>装饰器模式实现&lt;/strong>&lt;br>
+在不改变原始 &lt;code>ServerHttpRequest&lt;/code> 对象的基础上扩展功能，支持链式调用和多层包装，适用于对请求进行非侵入式处理。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="2-关键方法与使用示例">&lt;strong>2. 关键方法与使用示例&lt;/strong>
+&lt;/h3>&lt;h4 id="常用方法">&lt;strong>常用方法&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>
+&lt;p>&lt;code>getHeaders()&lt;/code>&lt;br>
+重写此方法可动态修改请求头信息（如强制设置 &lt;code>Content-Type&lt;/code>）。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>getBody()&lt;/code>&lt;br>
+拦截请求体数据流（&lt;code>Flux&amp;lt;DataBuffer&amp;gt;&lt;/code>），允许对原始数据进行转换（如解密、日志记录）。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="代码示例-1">&lt;strong>代码示例&lt;/strong>
+&lt;/h4>&lt;p>&lt;strong>场景：强制设置请求头的 Content-Type&lt;/strong>&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">ContentRequestDecorator&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">extends&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ServerHttpRequestDecorator&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">ContentRequestDecorator&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ServerHttpRequest&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">delegate&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">super&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">delegate&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Override&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">HttpHeaders&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">getHeaders&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">HttpHeaders&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">headers&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">HttpHeaders&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">writableHttpHeaders&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kd">super&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getHeaders&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">headers&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">setContentType&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">MediaType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">APPLICATION_JSON&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// 强制设置为 JSON 类型&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">headers&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>应用方式&lt;/strong>&lt;br>
+在过滤器中包装原始请求：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">CustomFilter&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">implements&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">WebFilter&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Override&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Mono&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Void&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">filter&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ServerWebExchange&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">exchange&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">WebFilterChain&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">chain&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">ServerHttpRequest&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">decoratedRequest&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">new&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ContentRequestDecorator&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">exchange&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getRequest&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">chain&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">filter&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">exchange&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">mutate&lt;/span>&lt;span class="p">().&lt;/span>&lt;span class="na">request&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">decoratedRequest&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="na">build&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>场景：解密请求体内容&lt;/strong>&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">DecryptRequestDecorator&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">extends&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ServerHttpRequestDecorator&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Override&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Flux&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">DataBuffer&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">getBody&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">super&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getBody&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">map&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">buffer&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">encrypted&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">DataBufferUtils&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">releaseBufferToString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">buffer&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">decrypted&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">AesUtils&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">decrypt&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">encrypted&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// 自定义解密逻辑&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">bufferFactory&lt;/span>&lt;span class="p">().&lt;/span>&lt;span class="na">wrap&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">decrypted&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getBytes&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">});&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h3 id="3-典型应用场景">&lt;strong>3. 典型应用场景&lt;/strong>
+&lt;/h3>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>请求头动态处理&lt;/strong>&lt;br>
+例如统一添加认证头（如 &lt;code>Authorization&lt;/code>）或修复客户端缺失的 &lt;code>Content-Type&lt;/code>。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>请求体内容转换&lt;/strong>&lt;br>
+解密敏感数据、压缩/解压缩请求体，或记录原始请求内容用于调试。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>协议兼容性适配&lt;/strong>&lt;br>
+将非标准协议（如自定义二进制格式）转换为标准 HTTP 请求，方便后续处理。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>数据格式统一&lt;/strong>&lt;br>
+对异构客户端发送的 XML、表单数据等统一转换为 JSON，简化业务逻辑。&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="4-注意事项">&lt;strong>4. 注意事项&lt;/strong>
+&lt;/h3>&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>避免重复提交&lt;/strong>&lt;br>
+若直接操作请求体数据流，需确保数据仅被消费一次，否则会触发 &lt;code>IllegalStateException&lt;/code>。可通过缓存（如 &lt;code>Flux.cache()&lt;/code>）解决。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>性能优化&lt;/strong>&lt;br>
+高频请求处理需注意内存管理，推荐使用非阻塞式流处理（如 &lt;code>Flux.map&lt;/code> 代替同步循环）。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>与 ServerWebExchange 集成&lt;/strong>&lt;br>
+通常结合 &lt;code>ServerWebExchange.mutate()&lt;/code> 方法，将装饰后的请求注入过滤器链。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="5-相关类对比">&lt;strong>5. 相关类对比&lt;/strong>
+&lt;/h3>&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>ServerHttpRequest&lt;/strong>&lt;br>
+原始请求接口，提供基础请求信息访问能力。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>ServletServerHttpRequest&lt;/strong>&lt;br>
+针对 Servlet 容器的适配器，将 &lt;code>HttpServletRequest&lt;/code> 转换为响应式请求对象，通常与 &lt;code>ServerHttpRequestDecorator&lt;/code> 配合使用。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>通过合理应用 &lt;code>ServerHttpRequestDecorator&lt;/code>，开发者能够灵活控制请求处理流程，满足复杂的业务需求。&lt;/p>
+&lt;h2 id="serverhttpresponsedecorator">ServerHttpResponseDecorator
+&lt;/h2>&lt;p>在 Spring Cloud Gateway 中，&lt;code>ServerHttpResponseDecorator&lt;/code> 是一个用于包装并增强 &lt;code>ServerHttpResponse&lt;/code> 功能的工具类，主要用于拦截和修改网关的响应内容。以下是其核心特性和应用场景的详细介绍：&lt;/p>
+&lt;hr>
+&lt;h3 id="1-核心功能与作用-1">&lt;strong>1. 核心功能与作用&lt;/strong>
+&lt;/h3>&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>响应内容拦截与修改&lt;/strong>&lt;br>
+&lt;code>ServerHttpResponseDecorator&lt;/code> 继承自 &lt;code>ServerHttpResponse&lt;/code>，通过重写 &lt;code>writeWith()&lt;/code> 方法，开发者可以在响应体写入前或写入后对数据进行修改。例如，可以动态添加响应头、加密响应内容或记录日志。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>装饰器模式实现&lt;/strong>&lt;br>
+通过装饰器模式，&lt;code>ServerHttpResponseDecorator&lt;/code> 在不改变原始 &lt;code>ServerHttpResponse&lt;/code> 对象的基础上扩展功能，支持链式调用和多重包装。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="2-核心方法与使用示例">&lt;strong>2. 核心方法与使用示例&lt;/strong>
+&lt;/h3>&lt;h4 id="关键方法">&lt;strong>关键方法&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>
+&lt;p>&lt;code>writeWith(Publisher&amp;lt;DataBuffer&amp;gt; body)&lt;/code>&lt;br>
+重写此方法以拦截原始响应体的数据流，允许对 &lt;code>DataBuffer&lt;/code> 进行自定义处理（如字符串转换、JSON 序列化等）。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>getDelegate()&lt;/code>&lt;br>
+获取被装饰的原始 &lt;code>ServerHttpResponse&lt;/code> 实例，便于直接操作底层属性（如状态码、Cookie 等）。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="代码示例-2">&lt;strong>代码示例&lt;/strong>
+&lt;/h4>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">CustomResponseDecorator&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">extends&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ServerHttpResponseDecorator&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">CustomResponseDecorator&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ServerHttpResponse&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">delegate&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">super&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">delegate&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Override&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Mono&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Void&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">writeWith&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Publisher&lt;/span>&lt;span class="o">&amp;lt;?&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">extends&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">DataBuffer&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">body&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// 修改响应体内容（例如添加前缀）&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Flux&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">DataBuffer&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">modifiedBody&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Flux&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">from&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">body&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">map&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">buffer&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">content&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">DataBufferUtils&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">releaseBufferToString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">buffer&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">bufferFactory&lt;/span>&lt;span class="p">().&lt;/span>&lt;span class="na">wrap&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="s">&amp;#34;Modified: &amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">content&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="na">getBytes&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">});&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">super&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">writeWith&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">modifiedBody&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>在过滤器中应用该装饰器：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">CustomFilter&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">implements&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">GlobalFilter&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Override&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Mono&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Void&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">filter&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ServerWebExchange&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">exchange&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">GatewayFilterChain&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">chain&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">ServerHttpResponse&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">decoratedResponse&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">new&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">CustomResponseDecorator&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">exchange&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">getResponse&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">chain&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">filter&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">exchange&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">mutate&lt;/span>&lt;span class="p">().&lt;/span>&lt;span class="na">response&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">decoratedResponse&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="na">build&lt;/span>&lt;span class="p">());&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h3 id="3-典型应用场景-1">&lt;strong>3. 典型应用场景&lt;/strong>
+&lt;/h3>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>动态修改响应头&lt;/strong>&lt;br>
+例如添加安全相关的 &lt;code>Content-Security-Policy&lt;/code> 或自定义业务标识头。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>统一响应格式&lt;/strong>&lt;br>
+对后端服务的原始响应进行封装，统一错误码或标准化数据结构。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>日志记录与监控&lt;/strong>&lt;br>
+记录响应耗时、响应体大小等指标，集成监控系统。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>敏感数据脱敏&lt;/strong>&lt;br>
+在响应返回客户端前，对敏感字段（如手机号、身份证号）进行脱敏处理。&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="4-注意事项-1">&lt;strong>4. 注意事项&lt;/strong>
+&lt;/h3>&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>响应提交状态&lt;/strong>&lt;br>
+需通过 &lt;code>isCommitted()&lt;/code> 方法判断响应是否已提交，避免重复操作导致异常。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>性能影响&lt;/strong>&lt;br>
+响应体的拦截和修改涉及数据流操作，需注意内存消耗和延迟，建议使用非阻塞式处理。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="5-相关类与上下文">&lt;strong>5. 相关类与上下文&lt;/strong>
+&lt;/h3>&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>&lt;code>ServerWebExchange&lt;/code>&lt;/strong>&lt;br>
+网关请求的上下文对象，持有 &lt;code>ServerHttpRequest&lt;/code> 和 &lt;code>ServerHttpResponse&lt;/code>，是操作请求和响应的入口。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>&lt;code>ReactorServerHttpResponse&lt;/code>&lt;/strong>&lt;br>
+&lt;code>ServerHttpResponse&lt;/code> 的默认实现类，基于 Netty 的响应处理，其 &lt;code>HttpHeaders&lt;/code> 可直接修改。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>通过合理使用 &lt;code>ServerHttpResponseDecorator&lt;/code>，开发者可以灵活控制网关的响应行为，满足复杂业务需求。&lt;/p></description></item></channel></rss>

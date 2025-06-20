@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Molecule Docking on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/molecule-docking/</link><description>Recent content in Molecule Docking on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 14 Jun 2025 19:32:00 +0800</lastBuildDate><atom:link href="https://dyhes.github.io/tags/molecule-docking/index.xml" rel="self" type="application/rss+xml"/><item><title>【MD】Uni-Dock</title><link>https://dyhes.github.io/p/mduni-dock/</link><pubDate>Mon, 09 Jun 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/mduni-dock/</guid><description>&lt;h2 id="overall-structure">&lt;strong>Overall Structure&lt;/strong>
+&lt;/h2>&lt;p>The codebase is organized into several major components:
+&lt;strong>1&lt;/strong> &lt;strong>Core Library (&lt;strong>&lt;strong>src/lib/&lt;/strong>&lt;/strong>)&lt;/strong>: Contains fundamental data structures and algorithms
+&lt;strong>2&lt;/strong> &lt;strong>CUDA Implementation (&lt;strong>&lt;strong>src/cuda/&lt;/strong>&lt;/strong>)&lt;/strong>: GPU-accelerated components for performance
+&lt;strong>3&lt;/strong> &lt;strong>Main Application (&lt;strong>&lt;strong>src/main/&lt;/strong>&lt;/strong>)&lt;/strong>: Command-line interface and application entry point
+&lt;strong>4&lt;/strong> &lt;strong>Split Utility (&lt;strong>&lt;strong>src/split/&lt;/strong>&lt;/strong>)&lt;/strong>: Tool for processing multi-model PDBQT files&lt;/p>
+&lt;h2 id="workflow">Workflow
+&lt;/h2>&lt;p>A typical Uni-Dock workflow appears to be:
+1 Parse input files (receptors and ligands)
+2 Set up the scoring function and parameters
+3 Generate or load grid maps for efficient scoring
+4 Perform global search (docking)
+5 Refine and score the resulting poses
+6 Output the best conformations
+&lt;img src="https://i.ibb.co/BVShhPJq/image.png"
+loading="lazy"
+>&lt;/p>
+&lt;h2 id="file-format">File Format
+&lt;/h2>&lt;ul>
+&lt;li>
+&lt;p>PDBQT是AutoDock和AutoDock Vina等分子对接软件专用的格式，用于描述受体（如蛋白质）和配体（小分子）的结构信息。它在PDB格式基础上扩展了&lt;strong>电荷（Q）&lt;/strong> 和&lt;strong>原子类型（T）&lt;/strong> 两个关键字段&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>SDF（Structure-Data File）是化学信息学中通用的分子结构描述格式，主要用于存储小分子的&lt;strong>2D/3D结构&lt;/strong>、&lt;strong>化学性质&lt;/strong>及&lt;strong>实验数据&lt;/strong> （如生物活性）。常见于PubChem、DrugBank等数据库&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>unidock/src/lib/parse_pdbqt.cpp&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>unidock/src/split/split.cpp：处理 Multi-model PDBQT 多构象分子&lt;/p>
+&lt;ul>
+&lt;li>通过将每个模型提取到单独的文件中，以便在实际对接过程中更有效地处理。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="unidocksrcmainmaincpp">unidock/src/main/main.cpp
+&lt;/h2>&lt;p>&lt;strong>1&lt;/strong> &lt;strong>Command Line Interface&lt;/strong>: Uses Boost&amp;rsquo;s &lt;a class="link" href="vscode-file://vscode-app/Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/code/electron-sandbox/workbench/workbench.html" >program_options&lt;/a> library to process command-line arguments and configuration files.&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Input&lt;/strong>: Specifies receptors, flexible residues, and ligand files&lt;/li>
+&lt;li>&lt;strong>Search space&lt;/strong>: Defines the docking grid dimensions and positioning&lt;/li>
+&lt;li>&lt;strong>Output&lt;/strong>: Controls where results are stored&lt;/li>
+&lt;li>&lt;strong>Advanced options&lt;/strong>: Fine-tunes the docking algorithm behavior&lt;/li>
+&lt;li>&lt;strong>Misc options&lt;/strong>: Sets general parameters like CPU usage and random seed&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>Boost是C++领域最具影响力的开源程序库集合，由全球开发者社区共同维护，旨在为C++标准库提供扩展功能，被称为“准标准库”&lt;/p>&lt;/blockquote>
+&lt;blockquote>
+&lt;p>&lt;strong>残基&lt;/strong> （Residue）是生物大分子（如蛋白质、核酸）中构成其基本单元的组成部分，由氨基酸或核苷酸通过化学键连接后剩余的结构片段形成。
+分子对接中的&lt;strong>柔性残基&lt;/strong> （Flexible Residues）是指在对接过程中允许构象变化的受体蛋白残基。这类残基通常位于结合口袋内，其侧链或主链的灵活性会影响配体与受体的结合模式。通过模拟这些残基的动态调整，柔性残基对接能够更真实地反映生物分子间的相互作用，提升预测准确性。&lt;/p>&lt;/blockquote>
+&lt;p>&lt;strong>2&lt;/strong> &lt;strong>Docking Workflow Management&lt;/strong>: Handles various docking workflows including:&lt;/p>
+&lt;ul>
+&lt;li>Single ligand-receptor docking on CPU&lt;/li>
+&lt;li>Batch docking of multiple ligands on GPU&lt;/li>
+&lt;li>Paired batch processing for one-to-one ligand-protein docking&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>3&lt;/strong> &lt;strong>Memory Management&lt;/strong>: Implements GPU memory management strategies to optimize batch processing.&lt;/p>
+&lt;p>A sophisticated batch processing system:
+1 Classifies ligands into &lt;strong>size categories&lt;/strong> (small, medium, large, extra large)
+2 Processes ligands in batches to maximize GPU utilization
+3 Predicts memory requirements to determine optimal batch sizes&lt;/p></description></item></channel></rss>

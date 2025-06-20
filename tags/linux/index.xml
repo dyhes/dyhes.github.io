@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Linux on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/linux/</link><description>Recent content in Linux on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 20 Jun 2025 20:39:20 +0800</lastBuildDate><atom:link href="https://dyhes.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>【Linux】Script</title><link>https://dyhes.github.io/p/linuxscript/</link><pubDate>Sun, 13 Apr 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/linuxscript/</guid><description>&lt;h2 id="后台运行">后台运行
+&lt;/h2>&lt;p>在 Linux 服务器上，默认情况下直接通过 SSH 终端前台运行 Python 脚本时，&lt;strong>断开 SSH 连接会导致脚本停止运行&lt;/strong>。这是因为 SSH 会话终止时会发送挂断信号（SIGHUP），导致其子进程（即你的 Python 脚本）也被终止。但通过以下方法可实现断开连接后脚本持续运行：&lt;/p>
+&lt;hr>
+&lt;h3 id="默认行为与原理">&lt;strong>默认行为与原理&lt;/strong>
+&lt;/h3>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>直接运行脚本&lt;/strong>：&lt;br>
+若通过 &lt;code>python script.py&lt;/code> 直接运行，脚本会绑定到当前 SSH 会话。&lt;strong>断开连接后进程会被终止&lt;/strong>。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>原因&lt;/strong>：&lt;br>
+SSH 会话关闭时，系统会向所有关联进程发送 &lt;code>SIGHUP&lt;/code> 信号，导致进程树被终止。&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="保持脚本持续运行的方法">&lt;strong>保持脚本持续运行的方法&lt;/strong>
+&lt;/h3>&lt;h4 id="1">&lt;strong>1. &lt;code>nohup&lt;/code> 命令（简单后台运行）&lt;/strong>
+&lt;/h4>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">nohup python3 script.py &amp;gt; output.log 2&amp;gt;&lt;span class="p">&amp;amp;&lt;/span>&lt;span class="m">1&lt;/span> &lt;span class="p">&amp;amp;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>&lt;strong>作用&lt;/strong>：忽略 &lt;code>SIGHUP&lt;/code> 信号，将脚本输出重定向到日志文件，并在后台运行。&lt;/li>
+&lt;li>&lt;strong>优点&lt;/strong>：无需安装额外工具，适合临时任务。&lt;/li>
+&lt;li>&lt;strong>缺点&lt;/strong>：无法实时交互，需手动查看日志（如 &lt;code>tail -f output.log&lt;/code>）。&lt;/li>
+&lt;/ul>
+&lt;h4 id="2">&lt;strong>2. &lt;code>screen&lt;/code> / &lt;code>tmux&lt;/code>（会话管理工具）&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>安装与使用&lt;/strong>：
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 安装 screen（以 Ubuntu 为例）&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo apt install screen
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 创建新会话&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">screen -S mysession
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 运行脚本后按 Ctrl+A+D 退出会话&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 重连会话&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">screen -r mysession
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>&lt;strong>作用&lt;/strong>：创建虚拟终端会话，脚本在会话中运行，即使断开连接仍保留。&lt;/li>
+&lt;li>&lt;strong>适用场景&lt;/strong>：需交互式操作或分屏管理多任务。&lt;/li>
+&lt;/ul>
+&lt;h4 id="3">&lt;strong>3. &lt;code>systemd&lt;/code> 服务（长期守护进程）&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>步骤&lt;/strong>：
+&lt;ol>
+&lt;li>创建服务文件 &lt;code>/etc/systemd/system/my_script.service&lt;/code>：
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-ini" data-lang="ini">&lt;span class="line">&lt;span class="cl">&lt;span class="k">[Unit]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">Description&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">My Python Script&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">After&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">network.target&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">[Service]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">ExecStart&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">/usr/bin/python3 /path/to/script.py&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">WorkingDirectory&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">/path/to/script_dir&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">Restart&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">always&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">User&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">your_username&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">[Install]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">WantedBy&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">multi-user.target&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>启用并启动服务：
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo systemctl daemon-reload
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo systemctl start my_script
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo systemctl &lt;span class="nb">enable&lt;/span> my_script &lt;span class="c1"># 开机自启&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;li>&lt;strong>优点&lt;/strong>：支持进程监控、崩溃自动重启，适合生产环境。&lt;/li>
+&lt;/ul>
+&lt;h4 id="4">&lt;strong>4. &lt;code>tmux&lt;/code>（高级会话管理）&lt;/strong>
+&lt;/h4>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 安装 tmux&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo apt install tmux
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 新建会话并运行脚本&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">tmux new -s mysession
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">python3 script.py
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 按 Ctrl+B 后按 D 分离会话&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 重连会话&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">tmux attach -t mysession
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>&lt;strong>优势&lt;/strong>：支持多窗口分屏、会话持久化，功能比 &lt;code>screen&lt;/code> 更强大。&lt;/li>
+&lt;/ul>
+&lt;h4 id="5-supervisor专业进程管理">&lt;strong>5. Supervisor（专业进程管理）&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>安装与配置&lt;/strong>：
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo apt install supervisor
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 创建配置文件 /etc/supervisor/conf.d/my_app.conf&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>program:my_app&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">command&lt;/span>&lt;span class="o">=&lt;/span>python3 /path/to/script.py
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">autostart&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nb">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">autorestart&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nb">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">stderr_logfile&lt;/span>&lt;span class="o">=&lt;/span>/var/log/my_app.err.log
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">stdout_logfile&lt;/span>&lt;span class="o">=&lt;/span>/var/log/my_app.out.log
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>&lt;strong>作用&lt;/strong>：提供 Web 界面监控进程状态，支持日志轮转和多进程管理。&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="方法对比与选择建议">&lt;strong>方法对比与选择建议&lt;/strong>
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>方法&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>适用场景&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>核心优势&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>nohup&lt;/code>&lt;/td>
+&lt;td>临时任务快速启动&lt;/td>
+&lt;td>无需安装，命令简单&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>screen&lt;/code>/&lt;code>tmux&lt;/code>&lt;/td>
+&lt;td>需要交互或分屏操作的任务&lt;/td>
+&lt;td>会话持久化，支持重连&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>systemd&lt;/code>&lt;/td>
+&lt;td>长期运行的生产环境服务&lt;/td>
+&lt;td>自动重启，系统级守护&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>Supervisor&lt;/code>&lt;/td>
+&lt;td>多进程管理及可视化监控&lt;/td>
+&lt;td>日志管理、进程分组&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="注意事项">&lt;strong>注意事项&lt;/strong>
+&lt;/h3>&lt;ol>
+&lt;li>&lt;strong>日志管理&lt;/strong>：通过 &lt;code>&amp;gt; output.log&lt;/code> 或服务配置记录输出，避免资源占用失控。&lt;/li>
+&lt;li>&lt;strong>资源监控&lt;/strong>：长期运行需关注内存和 CPU 使用情况，防止脚本异常占用资源。&lt;/li>
+&lt;li>&lt;strong>脚本健壮性&lt;/strong>：添加异常处理逻辑（如 &lt;code>try-except&lt;/code>），避免因报错导致进程退出。&lt;/li>
+&lt;/ol>
+&lt;p>若需进一步优化（如分布式任务或状态持久化），可参考 &lt;code>foreverVM&lt;/code> 等工具实现代码永生不灭的高级功能。&lt;/p>
+&lt;h2 id="程序终止">程序终止
+&lt;/h2>&lt;p>在Linux系统中终止某个Python程序可以通过多种方式实现，具体方法根据实际场景和需求选择。以下是详细的操作步骤和注意事项：&lt;/p>
+&lt;hr>
+&lt;h3 id="精确终止指定python程序">&lt;strong>精确终止指定Python程序&lt;/strong>
+&lt;/h3>&lt;h4 id="1-查找目标进程的pid进程id">&lt;strong>1. 查找目标进程的PID（进程ID）&lt;/strong>
+&lt;/h4>&lt;p>使用 &lt;code>ps&lt;/code> 或 &lt;code>pgrep&lt;/code> 命令筛选出目标Python进程的PID：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">ps aux &lt;span class="p">|&lt;/span> grep python &lt;span class="p">|&lt;/span> grep -v grep
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>&lt;strong>作用&lt;/strong>：列出所有包含“python”关键字的进程，并排除&lt;code>grep&lt;/code>自身。&lt;/li>
+&lt;li>&lt;strong>示例输出&lt;/strong>：
+&lt;pre tabindex="0">&lt;code>user 1234 0.5 0.1 123456 7890 pts/0 S+ 10:00 python my_script.py
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>&lt;strong>PID&lt;/strong>是第二列的数字（例如&lt;code>1234&lt;/code>）。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="2-发送终止信号">&lt;strong>2. 发送终止信号&lt;/strong>
+&lt;/h4>&lt;p>通过PID向进程发送终止信号：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>正常终止（SIGTERM）&lt;/strong>：
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">kill&lt;/span> PID
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>允许程序执行清理操作（如保存数据、关闭文件）。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>强制终止（SIGKILL）&lt;/strong>：
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">kill&lt;/span> -9 PID
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>立即终止进程，不执行清理操作，适用于无响应的情况。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="通过进程名终止">&lt;strong>通过进程名终止&lt;/strong>
+&lt;/h3>&lt;h4 id="1-使用">&lt;strong>1. 使用&lt;code>pkill&lt;/code>命令&lt;/strong>
+&lt;/h4>&lt;p>根据进程名批量终止所有匹配的Python程序：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">pkill -f &lt;span class="s2">&amp;#34;python my_script.py&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>&lt;strong>参数&lt;/strong>：
+&lt;ul>
+&lt;li>&lt;code>-f&lt;/code>：匹配完整的命令行（包含参数）。&lt;/li>
+&lt;li>若不指定脚本名（如&lt;code>pkill python&lt;/code>），会终止所有Python进程，可能导致误杀。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="2-使用">&lt;strong>2. 使用&lt;code>killall&lt;/code>命令&lt;/strong>
+&lt;/h4>&lt;p>终止所有同名进程：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">killall python3
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>&lt;strong>注意&lt;/strong>：需指定Python解释器版本（如&lt;code>python3&lt;/code>），避免影响系统服务。&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="使用系统工具可视化终止">&lt;strong>使用系统工具可视化终止&lt;/strong>
+&lt;/h3>&lt;h4 id="1-1">&lt;strong>1. &lt;code>top&lt;/code>或&lt;code>htop&lt;/code>工具&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>操作步骤&lt;/strong>：
+&lt;ol>
+&lt;li>运行 &lt;code>top&lt;/code> 或 &lt;code>htop&lt;/code>（需安装）。&lt;/li>
+&lt;li>按 &lt;code>k&lt;/code>（在&lt;code>top&lt;/code>中）或选中进程后按 &lt;code>F9&lt;/code>（在&lt;code>htop&lt;/code>中）。&lt;/li>
+&lt;li>输入PID或选择信号（如&lt;code>SIGTERM&lt;/code>或&lt;code>SIGKILL&lt;/code>）终止进程。&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="2-监控工具的优势">&lt;strong>2. 监控工具的优势&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>实时查看CPU/内存占用，辅助定位异常进程。&lt;/li>
+&lt;li>适合需要动态管理多个进程的场景。&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="脚本自动化终止">&lt;strong>脚本自动化终止&lt;/strong>
+&lt;/h3>&lt;p>编写Shell脚本批量终止进程：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="cp">#!/bin/bash
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cp">&lt;/span>&lt;span class="nv">TARGET_SCRIPT&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;my_script.py&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">PIDS&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>pgrep -f &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$TARGET_SCRIPT&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">for&lt;/span> PID in &lt;span class="nv">$PIDS&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">do&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">kill&lt;/span> -15 &lt;span class="nv">$PID&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">done&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>&lt;strong>功能&lt;/strong>：优雅终止指定脚本的所有实例。&lt;/li>
+&lt;li>&lt;strong>定时任务&lt;/strong>：结合&lt;code>cron&lt;/code>定期清理无响应进程。&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="注意事项-1">&lt;strong>注意事项&lt;/strong>
+&lt;/h3>&lt;ol>
+&lt;li>&lt;strong>避免误杀系统进程&lt;/strong>：
+&lt;ul>
+&lt;li>使用&lt;code>grep&lt;/code>精确匹配脚本名或参数（如&lt;code>grep &amp;quot;my_script.py&amp;quot;&lt;/code>）。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>优先使用SIGTERM&lt;/strong>：
+&lt;ul>
+&lt;li>强制终止（&lt;code>kill -9&lt;/code>）可能导致数据损坏，仅作为最后手段。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>程序内优雅退出&lt;/strong>：
+&lt;ul>
+&lt;li>在Python代码中捕获&lt;code>SIGTERM&lt;/code>信号，实现资源清理：
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span> &lt;span class="nn">signal&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nn">sys&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span> &lt;span class="nf">cleanup&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sig&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">frame&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Exiting...&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">sys&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">exit&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">signal&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">signal&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">signal&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">SIGTERM&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">cleanup&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>适用于长期运行的服务。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="总结">&lt;strong>总结&lt;/strong>
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>精确终止&lt;/strong>：推荐先通过&lt;code>ps&lt;/code>或&lt;code>pgrep&lt;/code>查找PID，再用&lt;code>kill&lt;/code>操作。&lt;/li>
+&lt;li>&lt;strong>批量操作&lt;/strong>：谨慎使用&lt;code>pkill&lt;/code>或&lt;code>killall&lt;/code>，避免影响其他进程。&lt;/li>
+&lt;li>&lt;strong>复杂场景&lt;/strong>：结合脚本或系统工具动态管理进程。&lt;/li>
+&lt;/ul></description></item><item><title>【Linux】CUDA 版本</title><link>https://dyhes.github.io/p/linuxcuda-%E7%89%88%E6%9C%AC/</link><pubDate>Mon, 31 Mar 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/linuxcuda-%E7%89%88%E6%9C%AC/</guid><description>&lt;p>在Linux系统中查看CUDA版本，可以通过以下多种方法实现，每种方法适用于不同场景或安装配置：&lt;/p>
+&lt;hr>
+&lt;h2 id="使用">&lt;strong>使用 &lt;code>nvcc&lt;/code> 编译器命令&lt;/strong>
+&lt;/h2>&lt;p>输入命令：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">nvcc --version
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>输出示例：&lt;/p>
+&lt;pre tabindex="0">&lt;code>nvcc: NVIDIA (R) Cuda compiler driver
+...
+Cuda compilation tools, release 11.2, V11.2.67
+&lt;/code>&lt;/pre>&lt;p>&lt;strong>说明&lt;/strong>：&lt;code>nvcc&lt;/code> 是CUDA的编译器驱动，直接显示当前使用的CUDA运行时（Runtime）版本。&lt;br>
+&lt;strong>注意&lt;/strong>：需确保CUDA的&lt;code>bin&lt;/code>目录已添加到系统环境变量&lt;code>PATH&lt;/code>中。&lt;/p>
+&lt;hr>
+&lt;h2 id="查看版本文件">&lt;strong>查看版本文件 &lt;code>version.txt&lt;/code>&lt;/strong>
+&lt;/h2>&lt;p>运行命令：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">cat /usr/local/cuda/version.txt
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>输出示例：&lt;/p>
+&lt;pre tabindex="0">&lt;code>CUDA Version 11.2.67
+&lt;/code>&lt;/pre>&lt;p>&lt;strong>说明&lt;/strong>：CUDA默认安装路径为&lt;code>/usr/local/cuda&lt;/code>，该文件直接记录版本号。若安装了多个CUDA版本，需检查具体子目录（如&lt;code>/usr/local/cuda-11.2&lt;/code>）。&lt;/p>
+&lt;hr>
+&lt;h2 id="使用-1">&lt;strong>使用 &lt;code>nvidia-smi&lt;/code> 工具&lt;/strong>
+&lt;/h2>&lt;p>输入命令：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">nvidia-smi
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>输出示例：&lt;/p>
+&lt;pre tabindex="0">&lt;code>+---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 560.70 Driver Version: 560.70 CUDA Version: 12.6 |
+...
+&lt;/code>&lt;/pre>&lt;p>&lt;strong>说明&lt;/strong>：此工具显示的是NVIDIA驱动支持的&lt;strong>最高CUDA版本&lt;/strong>，而非实际安装的运行时版本。若需运行CUDA程序，需确保安装的运行时版本≤驱动支持的版本。&lt;/p>
+&lt;hr>
+&lt;h2 id="检查cuda安装目录">&lt;strong>检查CUDA安装目录&lt;/strong>
+&lt;/h2>&lt;p>查看默认安装路径：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">ls /usr/local/cuda*
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>若存在多个版本，会显示类似目录：&lt;/p>
+&lt;pre tabindex="0">&lt;code>cuda-10.1 cuda-11.2 cuda-12.6
+&lt;/code>&lt;/pre>&lt;p>&lt;strong>说明&lt;/strong>：通过目录名可直观查看已安装的CUDA版本，符号链接&lt;code>/usr/local/cuda&lt;/code>指向当前默认版本。&lt;/p>
+&lt;hr>
+&lt;h2 id="通过环境变量">&lt;strong>通过环境变量 &lt;code>CUDA_HOME&lt;/code>&lt;/strong>
+&lt;/h2>&lt;p>若配置了环境变量，可运行：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo&lt;/span> &lt;span class="nv">$CUDA_HOME&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cat &lt;span class="nv">$CUDA_HOME&lt;/span>/version.txt
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>说明&lt;/strong>：适用于自定义安装路径的场景，需确保环境变量已正确设置。&lt;/p>
+&lt;hr>
+&lt;h2 id="版本差异说明">&lt;strong>版本差异说明&lt;/strong>
+&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>&lt;code>nvidia-smi&lt;/code> vs &lt;code>nvcc&lt;/code>&lt;/strong>：前者显示驱动支持的版本，后者显示实际使用的运行时版本，两者可能不同（如驱动支持CUDA 12.6但实际安装CUDA 11.2）。&lt;/li>
+&lt;li>&lt;strong>多版本管理&lt;/strong>：可通过更新符号链接&lt;code>/usr/local/cuda&lt;/code>或调整环境变量切换版本。&lt;/li>
+&lt;/ul>
+&lt;p>建议优先使用&lt;code>nvcc --version&lt;/code>和&lt;code>version.txt&lt;/code>确认实际安装版本，结合&lt;code>nvidia-smi&lt;/code>验证驱动兼容性。&lt;/p></description></item><item><title>【Linux】文件传输</title><link>https://dyhes.github.io/p/linux%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93/</link><pubDate>Wed, 19 Mar 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/linux%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93/</guid><description>&lt;p>使用 Python paramiko 从服务器A往服务器B传输文件时突然无法建立SSH连接&lt;/p>
+&lt;p>无法 ping 通，mac上也无法ping 通，可能是因为云服务器B的安全设置
+但mac ssh可以正常连接 而服务器 A ssh 无法连接&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo systemctl status ssh
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>输出为
+3月 18 20:42:58 ubun sshd[2161323]: Accepted publickey for LinHP from 10.63.73.193 port 54224 ssh2: ED25519 SHA256:UYeM7K2FrBnqkAL9NhA73XGb3lDKK4YBW9/8e&amp;gt;
+3月 18 20:42:58 ubun sshd[2161323]: pam_unix(sshd:session): session opened for user LinHP by (uid=0)
+3月 18 20:49:17 ubun sshd[2165862]: Accepted publickey for LinHP from 10.63.73.193 port 54352 ssh2: ED25519 SHA256:UYeM7K2FrBnqkAL9NhA73XGb3lDKK4YBW9/8e&amp;gt;
+3月 18 20:49:17 ubun sshd[2165862]: pam_unix(sshd:session): session opened for user LinHP by (uid=0)
+3月 18 20:58:18 ubun sshd[2172643]: Accepted publickey for LinHP from 10.63.73.193 port 54497 ssh2: ED25519 SHA256:UYeM7K2FrBnqkAL9NhA73XGb3lDKK4YBW9/8e&amp;gt;
+3月 18 20:58:18 ubun sshd[2172643]: pam_unix(sshd:session): session opened for user LinHP by (uid=0)
+3月 18 21:12:01 ubun sshd[2182111]: Accepted publickey for LinHP from 10.63.73.193 port 54563 ssh2: ED25519 SHA256:UYeM7K2FrBnqkAL9NhA73XGb3lDKK4YBW9/8e&amp;gt;
+3月 18 21:12:01 ubun sshd[2182111]: pam_unix(sshd:session): session opened for user LinHP by (uid=0)
+3月 19 10:13:18 ubun sshd[2712696]: Accepted publickey for LinHP from 10.63.73.193 port 55045 ssh2: ED25519 SHA256:UYeM7K2FrBnqkAL9NhA73XGb3lDKK4YBW9/8e&amp;gt;
+3月 19 10:13:18 ubun sshd[2712696]: pam_unix(sshd:session): session opened for user LinHP by (uid=0)&lt;/p>
+&lt;p>猜测可能由于session过多&lt;/p></description></item><item><title>【Linux】磁盘</title><link>https://dyhes.github.io/p/linux%E7%A3%81%E7%9B%98/</link><pubDate>Tue, 18 Mar 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/linux%E7%A3%81%E7%9B%98/</guid><description>&lt;p>在Linux系统中，查看磁盘空间是日常管理的重要操作，以下是常用的命令及方法，结合不同场景的需求进行整理：&lt;/p>
+&lt;h3 id="基础命令">&lt;strong>基础命令&lt;/strong>
+&lt;/h3>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>&lt;code>df&lt;/code> 命令&lt;/strong>&lt;br>
+• &lt;strong>功能&lt;/strong>：查看文件系统的整体磁盘空间使用情况（如总容量、已用空间、剩余空间及挂载点）&lt;br>
+• &lt;strong>常用选项&lt;/strong>：&lt;br>
+◦ &lt;code>df -h&lt;/code>：以易读格式（GB/MB）显示所有已挂载文件系统的信息&lt;br>
+◦ &lt;code>df -i&lt;/code>：显示inode使用情况（适用于检查小文件过多导致空间占满的问题）&lt;br>
+◦ &lt;code>df -T&lt;/code>：显示文件系统类型（如ext4、xfs）&lt;br>
+• &lt;strong>示例&lt;/strong>：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">$ df -h
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Filesystem Size Used Avail Use% Mounted on
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">/dev/sda1 50G 40G 10G 80% /
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>&lt;code>du&lt;/code> 命令&lt;/strong>&lt;br>
+• &lt;strong>功能&lt;/strong>：统计目录或文件的具体磁盘占用&lt;br>
+• &lt;strong>常用选项&lt;/strong>：&lt;br>
+◦ &lt;code>du -sh &amp;lt;目录&amp;gt;&lt;/code>：汇总显示目录总大小（如 &lt;code>du -sh /home&lt;/code>）&lt;br>
+◦ &lt;code>du -h --max-depth=1&lt;/code>：显示当前目录下一级子目录的大小&lt;br>
+◦ &lt;code>du -ah | sort -rh | head -n 10&lt;/code>：列出当前目录下最大的前10个文件&lt;br>
+• &lt;strong>示例&lt;/strong>：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">$ du -sh /var/log
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">2.5G /var/log
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="进阶工具">&lt;strong>进阶工具&lt;/strong>
+&lt;/h3>&lt;ol start="3">
+&lt;li>
+&lt;p>&lt;strong>&lt;code>lsblk&lt;/code> 命令&lt;/strong>&lt;br>
+• &lt;strong>功能&lt;/strong>：显示块设备信息（如硬盘、分区及挂载点）&lt;br>
+• &lt;strong>常用选项&lt;/strong>：&lt;br>
+◦ &lt;code>lsblk&lt;/code>：列出所有块设备的树状结构（包含设备名称、大小、类型）&lt;br>
+◦ &lt;code>lsblk -f&lt;/code>：显示文件系统类型、UUID等详细信息&lt;br>
+• &lt;strong>示例&lt;/strong>：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">$ lsblk
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINT
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sda 8:0 &lt;span class="m">0&lt;/span> 100G &lt;span class="m">0&lt;/span> disk
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">├─sda1 8:1 &lt;span class="m">0&lt;/span> 50G &lt;span class="m">0&lt;/span> part /
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">└─sda2 8:2 &lt;span class="m">0&lt;/span> 50G &lt;span class="m">0&lt;/span> part /data
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>&lt;code>fdisk&lt;/code> 命令&lt;/strong>&lt;br>
+• &lt;strong>功能&lt;/strong>：查看磁盘分区表及详细信息&lt;br>
+• &lt;strong>常用命令&lt;/strong>：&lt;br>
+◦ &lt;code>sudo fdisk -l&lt;/code>：列出所有磁盘的分区信息（需root权限）&lt;br>
+• &lt;strong>示例&lt;/strong>：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">$ sudo fdisk -l
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Disk /dev/sda: &lt;span class="m">100&lt;/span> GiB, &lt;span class="m">107374182400&lt;/span> bytes
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>&lt;code>lsof&lt;/code> 命令&lt;/strong>&lt;br>
+• &lt;strong>功能&lt;/strong>：查找被删除但仍被进程占用的文件（释放隐藏空间）&lt;br>
+• &lt;strong>示例&lt;/strong>：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">$ lsof &lt;span class="p">|&lt;/span> grep deleted
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">java &lt;span class="m">1234&lt;/span> user 1w REG 8,1 5G &lt;span class="m">123456&lt;/span> /var/log/app.log &lt;span class="o">(&lt;/span>deleted&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>◦ 重启相关进程后可释放占用的空间。&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="图形化工具">&lt;strong>图形化工具&lt;/strong>
+&lt;/h3>&lt;ol start="6">
+&lt;li>&lt;strong>GNOME 磁盘工具&lt;/strong>&lt;br>
+• 适用于桌面环境，提供可视化界面查看磁盘信息、分区及健康状态。&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="场景化排查技巧">&lt;strong>场景化排查技巧&lt;/strong>
+&lt;/h3>&lt;p>• &lt;strong>快速定位大文件/目录&lt;/strong>：&lt;br>
+• 结合 &lt;code>du&lt;/code> 和 &lt;code>sort&lt;/code>：&lt;code>du -ah / | sort -rh | head -n 20&lt;/code>。&lt;br>
+• &lt;strong>日志文件清理&lt;/strong>：&lt;br>
+• 检查 &lt;code>/var/log&lt;/code> 目录，删除或压缩旧日志（如 &lt;code>*.log&lt;/code>）。&lt;br>
+• &lt;strong>Docker 空间管理&lt;/strong>：&lt;br>
+• 使用 &lt;code>docker system df&lt;/code> 查看镜像、容器及卷的占用。&lt;/p>
+&lt;hr>
+&lt;h3 id="总结">&lt;strong>总结&lt;/strong>
+&lt;/h3>&lt;p>• &lt;strong>常规监控&lt;/strong>：优先使用 &lt;code>df -h&lt;/code> 和 &lt;code>du -sh&lt;/code>。&lt;br>
+• &lt;strong>深入分析&lt;/strong>：结合 &lt;code>lsblk&lt;/code> 查看设备结构，用 &lt;code>find&lt;/code> 或 &lt;code>lsof&lt;/code> 定位隐藏问题。&lt;br>
+• &lt;strong>定期清理&lt;/strong>：重点关注 &lt;code>/tmp&lt;/code>、&lt;code>/var/log&lt;/code> 及用户主目录。&lt;/p>
+&lt;p>如需进一步优化磁盘空间，可参考清理缓存、卸载冗余软件包等方法。&lt;/p></description></item><item><title>【Linux】Basics</title><link>https://dyhes.github.io/p/linuxbasics/</link><pubDate>Mon, 07 Nov 2022 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/linuxbasics/</guid><description>&lt;h2 id="history">History
+&lt;/h2>&lt;p>When Linus Torvalds was studying at the University of Helsinki, he was using a version of the UNIX operating system called &amp;lsquo;Minix&amp;rsquo;. Linus and other users sent requests for modifications and improvements to Minix&amp;rsquo;s creator, Andrew Tanenbaum, but he felt that they weren&amp;rsquo;t necessary. That&amp;rsquo;s when Linus decided to create his own operating system that would take into account users&amp;rsquo; comments and suggestions for improvements.&lt;/p>
+&lt;p>In 1991, ideal conditions existed that would create Linux. In essence, Linus Torvalds had a kernel but no programs of his own, Richard Stallman and GNU had programs but no working kernel. Late in 1991, Linus Torvalds had his kernel and a few GNU programs wrapped around it so it would work well enough to show other people what he had done.&lt;/p>
+&lt;h2 id="distributions">Distributions
+&lt;/h2>&lt;p>The three most popular Desktop distributions of Linux are;&lt;/p>
+&lt;ol>
+&lt;li>&lt;a class="link" href="https://www.linux.org/resources/fedora.12/" target="_blank" rel="noopener"
+>Fedora&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://www.linux.org/resources/ubuntu-desktop.10/" target="_blank" rel="noopener"
+>Ubuntu&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://www.linux.org/resources/linux-mint.16/" target="_blank" rel="noopener"
+>Linux Mint&lt;/a>&lt;/li>
+&lt;/ol>
+&lt;p>The four most popular Server versions of Linux are;&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://www.linux.org/resources/debian.11/" target="_blank" rel="noopener"
+>Debian&lt;/a>&lt;/p>
+&lt;p>The Debian Project was founded by Ian Murdock in 1993. Debian gets its name from the combination of Ian Murdock and his wife Debra&amp;rsquo;s name (Deb-Ian) .Despite its not-for-profit status, Debian is an extremely versatile distribution. It forms the base of many user-friendly distributions like Ubuntu, Linspire and Xandros.&lt;/p>
+&lt;p>mv sources.list.old sources.list&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://www.linux.org/resources/centos.8/" target="_blank" rel="noopener"
+>CentOS&lt;/a> (Linux.org runs on a CentOS Linux VPS)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://www.linux.org/resources/opensuse.15/" target="_blank" rel="noopener"
+>OpenSUSE&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://www.linux.org/resources/slackware.9/" target="_blank" rel="noopener"
+>Slackware&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="install-new-software">install new software
+&lt;/h2>&lt;ul>
+&lt;li>dpkg&lt;/li>
+&lt;li>dselect&lt;/li>
+&lt;li>rpm&lt;/li>
+&lt;li>yum&lt;/li>
+&lt;/ul>
+&lt;h2 id="file-system">File System
+&lt;/h2>&lt;h3 id="heading">/
+&lt;/h3>&lt;p>This will get you into the &amp;lsquo;root&amp;rsquo; or main directory, not /root&lt;/p>
+&lt;h4 id="root">root
+&lt;/h4>&lt;p>root user&amp;rsquo;s home directory&lt;/p>
+&lt;h4 id="home">home
+&lt;/h4>&lt;p>directory that contains non-root user&amp;rsquo;s home directory&lt;/p>
+&lt;h4 id="bin">bin
+&lt;/h4>&lt;p>bin/ is one of the most important directories in Linux. You&amp;rsquo;ll find all of the most used commands there. Right now you should be seeing a lot of red (or green, depending on your version of Linux). Those are programs.&lt;/p>
+&lt;h4 id="sbin">sbin
+&lt;/h4>&lt;p>This directory is like /bin in that it has frequently used programs in it, but they&amp;rsquo;re only meant to be used by root.&lt;/p>
+&lt;h4 id="etc">etc
+&lt;/h4>&lt;p>This houses most of the configuration files for Linux.&lt;/p>
+&lt;h4 id="dev">dev
+&lt;/h4>&lt;p>These are the devices that your system uses or can use.&lt;/p>
+&lt;h4 id="boot">boot
+&lt;/h4>&lt;p>where the Linux kernel usually is.&lt;/p>
+&lt;h4 id="tmp">tmp
+&lt;/h4>&lt;p>/tmp is a directory that is used to store temporary files, as the name may suggest.&lt;/p>
+&lt;h4 id="var">var
+&lt;/h4>&lt;p>/var is a directory for certain files that may change their size (i.e. variable size) For example, there are a few excellent databases for Linux. One is called MySQL. Normally, MySQL keeps its data in a subdirectory of /var called /var/mysql/.&lt;/p>
+&lt;h4 id="usr">usr
+&lt;/h4>&lt;p>unix system resources&lt;/p>
+&lt;p>containing dynamically combined programs, user files and manually-installed programs&lt;/p>
+&lt;p>The usr/ directory contains files and programs meant to be used by all of the users on the system.&lt;/p>
+&lt;h4 id="lib">lib
+&lt;/h4>&lt;p>/lib is for library files. That&amp;rsquo;s where the name /lib comes from.&lt;/p>
+&lt;h4 id="other-directories">other directories
+&lt;/h4>&lt;p>Most installations of Linux will also provide these directories:&lt;/p>
+&lt;p>/mnt
+/cdrom
+/floppy&lt;/p>
+&lt;p>These shouldn&amp;rsquo;t contain anything. Later on, we&amp;rsquo;ll explain in more detail what these are for. Let&amp;rsquo;s just say that in Linux, if you want to see what&amp;rsquo;s on a floppy disk or a CD, you&amp;rsquo;re not going to be able to just click on an &amp;lsquo;a:&amp;rsquo; icon or a &amp;rsquo;d:&amp;rsquo; icon. You&amp;rsquo;re going to do&lt;/p>
+&lt;h3 id="file-permission">File Permission
+&lt;/h3>&lt;p>Let&amp;rsquo;s look at what these symbols mean:&lt;/p>
+&lt;p>start with -(d for directories)&lt;/p>
+&lt;h4 id="three-entity-types">three entity types
+&lt;/h4>&lt;ul>
+&lt;li>owner&lt;/li>
+&lt;li>group&lt;/li>
+&lt;li>world&lt;/li>
+&lt;/ul>
+&lt;h5 id="permission-symbol">permission symbol
+&lt;/h5>&lt;ul>
+&lt;li>r:read 4&lt;/li>
+&lt;li>w:write 2&lt;/li>
+&lt;li>x:execute 1&lt;/li>
+&lt;/ul>
+&lt;h2 id="file-backup">File Backup
+&lt;/h2>&lt;h3 id="tar">tar
+&lt;/h3>&lt;p>an archiving utility&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">tar -cvf&lt;span class="o">(&lt;/span>create verbose file&lt;span class="o">)&lt;/span> tarname files
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">tar -czvf&lt;span class="o">(&lt;/span>create zip verbose file&lt;span class="o">)&lt;/span> tar.gzName files
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&amp;rsquo;tar&amp;rsquo; just assembles the files together into only one file. There is no reduction in the size of these files (the tarball might even be bigger!) Now we would have to do one more thing in order to reduce this file into a more manageable size: use &amp;lsquo;gzip&amp;rsquo;.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">tar -zxvpf my_tar_file.tar.gz
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>-z - unzip the file first
+-x - extract the files from the tarball
+-v - &amp;amp;quot;verbose&amp;amp;quot; (i.e tar tells you what files it&amp;rsquo;s extracting)
+-p - preserves dates, permissions of the original files
+-f - use the file in question (if you don&amp;rsquo;t specify this, tar just sort of sits around doing nothing)&lt;/p>
+&lt;h3 id="gzip">gzip
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">gzip tar_file.tar
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>the file extension becomes .tar.gz&lt;/p>
+&lt;h2 id="text-editor">Text Editor
+&lt;/h2>&lt;h3 id="vi">vi
+&lt;/h3>&lt;p>The most popular text editor for Linux is called &amp;lsquo;vi&amp;rsquo;. This is a program that comes from UNIX. There is a more recent version called &amp;lsquo;vim&amp;rsquo; which means &amp;lsquo;vi improved&amp;rsquo;.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">ESC + i start editing
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ESC + :w save
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ESC + ：wq save and quit
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ESC + :q quit without saving
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ESC + :q! quit without saving and warning
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="joe">joe
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">Ctrl+k+h
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="pico">pico
+&lt;/h3>&lt;p>&amp;hellip;&lt;/p>
+&lt;h2 id="user">User
+&lt;/h2>&lt;h3 id="adduser">adduser
+&lt;/h3>&lt;p>create a new user or update default new user information&lt;/p>
+&lt;h2 id="userdel">userdel
+&lt;/h2>&lt;p>delete a user&lt;/p>
+&lt;h3 id="passwd">passwd
+&lt;/h3>&lt;p>change user password&lt;/p>
+&lt;h2 id="package">Package
+&lt;/h2>&lt;h3 id="slackware">slackware
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">installpkg file.tgz
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">removepkg file.tgz
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">upgradepkg file.tgz
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="debian">debian
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">dpkg file.deb
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">(&lt;/span>advanced package tool&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">apt-setup
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">apt-get update
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">apt-get install package.deb
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">apt-get remove package.deb
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">apt-get upgrade &lt;span class="o">[&lt;/span>p&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="commands">Commands
+&lt;/h2>&lt;h3 id="shutdown">shutdown
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">shutdown -h&lt;span class="o">(&lt;/span>halt&lt;span class="o">)&lt;/span> now
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">shutdown -r&lt;span class="o">(&lt;/span>reboot&lt;span class="o">)&lt;/span> now
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">shutdown -r now
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">shutdown -h +5 &lt;span class="o">(&lt;/span>&lt;span class="m">5&lt;/span> minutes&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="man">man
+&lt;/h3>&lt;p>This command will show the manual for a command or program. The manual is a file that shows you how to use the command and list the different options for the command in question.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">man mkdir
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="info">info
+&lt;/h3>&lt;p>Typing info [command name] will get you more information on a command and is more current than most man files and perhaps a little more readable. In fact, some &amp;lsquo;man&amp;rsquo; files will actually tell you to consult the &amp;lsquo;info&amp;rsquo; file. The &amp;lsquo;info&amp;rsquo; files are not always installed automatically. so you may want to consult your own version of Linux about these files.&lt;/p>
+&lt;h3 id="whatis">whatis
+&lt;/h3>&lt;p>display one-line manual page descriptions&lt;/p>
+&lt;h3 id="apropos">apropos
+&lt;/h3>&lt;p>search the manual page names and descriptions&lt;/p>
+&lt;h3 id="chmod">chmod
+&lt;/h3>&lt;p>Change access permissions&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">chmod &lt;span class="m">644&lt;/span> myDoc.txt
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="chown">chown
+&lt;/h3>&lt;p>Change file owner and group&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">chown owner.group filename
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">chown bob.bob example.txt
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="last">last
+&lt;/h3>&lt;p>show a listing of last logged in users&lt;/p>
+&lt;h3 id="df">df
+&lt;/h3>&lt;p>report file system disk space usage&lt;/p>
+&lt;h3 id="free">free
+&lt;/h3>&lt;p>Display amount of free and used memory in the system&lt;/p>
+&lt;h3 id="du">du
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">du -b filename
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="ps">ps
+&lt;/h3>&lt;p>report a snapshot of the current processes&lt;/p>
+&lt;h3 id="kill">kill
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">kill&lt;/span> PID
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>kill a process&lt;/p>
+&lt;h3 id="mkdir">mkdir
+&lt;/h3>&lt;p>make directories&lt;/p>
+&lt;h3 id="rmdir">rmdir
+&lt;/h3>&lt;p>remove empty directories&lt;/p>
+&lt;h3 id="rm">rm
+&lt;/h3>&lt;p>remove files or directories&lt;/p>
+&lt;h3 id="mv">mv
+&lt;/h3>&lt;p>move or rename files&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">mv tonyd/&lt;span class="o">(&lt;/span>dir&lt;span class="o">)&lt;/span> my_friends/&lt;span class="o">(&lt;/span>dir&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="cp">cp
+&lt;/h3>&lt;p>copy files and directories&lt;/p>
+&lt;h3 id="touch">touch
+&lt;/h3>&lt;p>change file timestamps&lt;/p>
+&lt;h3 id="find">find
+&lt;/h3>&lt;p>search for files&lt;/p>
+&lt;h3 id="grep">grep
+&lt;/h3>&lt;p>prints lines that contain a match for one or more patterns&lt;/p>
+&lt;h3 id="who">who
+&lt;/h3>&lt;p>prints information about users who are currently logged on.&lt;/p>
+&lt;h3 id="tee">tee
+&lt;/h3>&lt;p>read from standard input and write to standard output and files&lt;/p>
+&lt;p>&amp;gt; does the same without |&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">ls -l &lt;span class="p">|&lt;/span> tee directory_listing
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">date &amp;gt; directory_listing
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">date &amp;gt;&amp;gt; directory_listing&lt;span class="o">(&lt;/span>append&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="whereis">whereis
+&lt;/h3>&lt;p>locate the binary,source, and manual page files for a command&lt;/p>
+&lt;h3 id="which">which
+&lt;/h3>&lt;p>locate a command&lt;/p>
+&lt;h3 id="echo">echo
+&lt;/h3>&lt;p>display a line of text&lt;/p>
+&lt;h3 id="wc">wc
+&lt;/h3>&lt;p>print newline, word, and byte counts for each file&lt;/p>
+&lt;h3 id="dir">dir
+&lt;/h3>&lt;p>list directory contents&lt;/p>
+&lt;h3 id="pwd">pwd
+&lt;/h3>&lt;p>print working directory&lt;/p>
+&lt;h3 id="cal">cal
+&lt;/h3>&lt;p>displays a calendar and the adte of Easter&lt;/p>
+&lt;h3 id="tab">&amp;lt;TAB&amp;gt;
+&lt;/h3>&lt;p>auto complete&lt;/p>
+&lt;h3 id="up-arrow">up arrow
+&lt;/h3>&lt;p>show last command&lt;/p>
+&lt;h3 id="down-arrw">down arrw
+&lt;/h3>&lt;p>most recent commands&lt;/p></description></item></channel></rss>

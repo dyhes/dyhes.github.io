@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kafka on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/kafka/</link><description>Recent content in Kafka on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 20 Jun 2025 20:39:20 +0800</lastBuildDate><atom:link href="https://dyhes.github.io/tags/kafka/index.xml" rel="self" type="application/rss+xml"/><item><title>【kafka】Fundamentals</title><link>https://dyhes.github.io/p/kafkafundamentals/</link><pubDate>Wed, 05 Mar 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/kafkafundamentals/</guid><description>&lt;p>&lt;img src="https://i.ibb.co/hxgg6J4Z/image.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/ycC8sNZD/image-2.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/VW9s6q0L/image-3.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/XkFbw3F7/image-4.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/nqXkN4RV/image-5.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/C3PZ90Lp/image-6.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/VWpbSWZf/image-7.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/FLL1fzzt/image-8.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/d4QZ1rJW/image-9.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/vCWR5tFp/image-10.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/BV8Lw3qw/image-11.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/C39qGZ6r/image-12.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/JWP3hsDW/image-13.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/LdJS3BFK/image-14.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/KcbNLhFw/image-15.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/hxZDX1C0/image-16.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/GfzmWbPq/image-17.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/5gtZ5ggq/image-18.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/xKqhDr0Q/image-19.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/PzbXhGyD/image-20.png"
+loading="lazy"
+>
+only latest value of key-x&lt;/p></description></item><item><title>【Kafka】Stream</title><link>https://dyhes.github.io/p/kafkastream/</link><pubDate>Wed, 05 Mar 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/kafkastream/</guid><description>&lt;p>Kafka 和 Kafka Streams 的区别主要体现在定位、功能和应用场景上，以下是两者的核心差异：&lt;/p>
+&lt;hr>
+&lt;h2 id="定位与核心功能">&lt;strong>定位与核心功能&lt;/strong>
+&lt;/h2>&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>Kafka&lt;/strong>&lt;br>
+是一个 &lt;strong>分布式消息系统&lt;/strong> 和 &lt;strong>流处理平台&lt;/strong>，主要用于构建实时数据管道，提供高吞吐、持久化的消息发布与订阅服务。&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>核心能力&lt;/strong>：数据存储、消息传输、副本容错（通过多副本机制确保数据高可用）。&lt;/li>
+&lt;li>&lt;strong>典型场景&lt;/strong>：日志聚合、事件源、系统解耦、削峰填谷。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Kafka Streams&lt;/strong>&lt;br>
+Kafka Streams 是一个用于&lt;strong>处理和分析&lt;/strong>存储在 Kafka 系统中的数据的客户端库。
+是 Kafka 的 &lt;strong>客户端库&lt;/strong>（非独立平台），专为流处理设计，提供实时数据转换、聚合等高级操作。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>核心能力&lt;/strong>：流处理逻辑（如窗口计算、状态管理、连接操作）、支持事件时间语义、Exactly-Once 处理。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>典型场景&lt;/strong>：实时监控告警、流式 ETL、复杂事件处理。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="数据处理模型">&lt;strong>数据处理模型&lt;/strong>
+&lt;/h2>&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>Kafka&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>以 &lt;strong>消息队列&lt;/strong> 为核心，数据按主题（Topic）分区存储，支持顺序读写和持久化。&lt;/li>
+&lt;li>不处理数据内容，仅负责传输和存储。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Kafka Streams&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>提供 &lt;strong>流处理抽象&lt;/strong>（如 KStream 和 KTable），支持动态处理数据流：
+&lt;ul>
+&lt;li>&lt;strong>KStream&lt;/strong>：代表无限数据集，每条记录独立处理（如过滤、映射）。&lt;/li>
+&lt;li>&lt;strong>KTable&lt;/strong>：动态表结构，支持聚合更新（如计数、窗口统计）。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>内置状态存储（State Store），实现有状态计算（如 Join 操作）。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="依赖与部署">&lt;strong>依赖与部署&lt;/strong>
+&lt;/h2>&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>Kafka&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>需独立部署集群（Broker 节点），依赖 ZooKeeper 管理元数据。&lt;/li>
+&lt;li>作为基础设施，与其他系统（如 Spark、Flink）解耦。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Kafka Streams&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>以 &lt;strong>轻量级库&lt;/strong> 形式嵌入应用（仅需 Kafka 依赖），无需额外部署资源管理器或调度器。&lt;/li>
+&lt;li>直接利用 Kafka 的分区机制实现水平扩展，通过 Consumer Rebalance 动态调整并行度。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="时间语义支持">&lt;strong>时间语义支持&lt;/strong>
+&lt;/h2>&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>Kafka&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>提供消息的时间戳（事件时间或摄入时间），但不参与时间相关的计算。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Kafka Streams&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>支持 &lt;strong>事件时间（Event Time）&lt;/strong> 和 &lt;strong>处理时间（Processing Time）&lt;/strong>，通过 &lt;code>TimestampExtractor&lt;/code> 接口定义时间语义。&lt;/li>
+&lt;li>实现基于时间的窗口操作（如滑动窗口、会话窗口），并处理迟到数据。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="适用场景对比">&lt;strong>适用场景对比&lt;/strong>
+&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>场景&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Kafka&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Kafka Streams&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>数据传输&lt;/strong>&lt;/td>
+&lt;td>高吞吐消息队列（如日志传输）&lt;/td>
+&lt;td>不适用&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>实时计算&lt;/strong>&lt;/td>
+&lt;td>需配合其他框架（如 Flink）&lt;/td>
+&lt;td>直接处理（如实时聚合、复杂事件处理）&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>状态管理&lt;/strong>&lt;/td>
+&lt;td>无&lt;/td>
+&lt;td>内置状态存储（如窗口计数）&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>端到端 Exactly-Once&lt;/strong>&lt;/td>
+&lt;td>需手动实现&lt;/td>
+&lt;td>原生支持（通过事务和幂等 Producer）&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h2 id="总结">&lt;strong>总结&lt;/strong>
+&lt;/h2>&lt;p>Kafka 是流式数据的“高速公路”，负责高效传输与存储；而 Kafka Streams 是“实时处理引擎”，直接在数据流上执行计算逻辑。两者结合可构建端到端的实时数据处理管道，例如：Kafka 接收原始数据 → Kafka Streams 处理并生成结果 → 结果写回 Kafka 供下游消费。&lt;/p></description></item><item><title>【Kafka】使用场景</title><link>https://dyhes.github.io/p/kafka%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/</link><pubDate>Tue, 04 Mar 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/kafka%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/</guid><description>&lt;p>Kafka 等消息中间件（Message Broker）并非仅为微服务架构设计，在单体应用（Monolithic）中同样有广泛的应用场景。以下是具体分析：&lt;/p>
+&lt;hr>
+&lt;h2 id="微服务架构中的典型应用场景">&lt;strong>微服务架构中的典型应用场景&lt;/strong>
+&lt;/h2>&lt;p>微服务架构通过消息中间件实现服务解耦、异步通信和分布式协调，这是其核心优势之一：&lt;/p>
+&lt;ol>
+&lt;li>&lt;strong>服务解耦&lt;/strong>：例如订单服务将消息发布到 Kafka 主题后，库存、支付等服务作为消费者独立处理消息，无需同步调用。&lt;/li>
+&lt;li>&lt;strong>实时数据流处理&lt;/strong>：Kafka 的高吞吐量和分区机制支持微服务间的实时数据传输，如用户行为跟踪、日志聚合等。&lt;/li>
+&lt;li>&lt;strong>容错与扩展性&lt;/strong>：Kafka 的副本机制和多消费者模式保障了微服务在节点故障或流量激增时的稳定性。&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h2 id="单体架构中使用消息中间件的场景">&lt;strong>单体架构中使用消息中间件的场景&lt;/strong>
+&lt;/h2>&lt;p>即使应用未拆分为微服务，消息中间件仍能解决以下问题：&lt;/p>
+&lt;h4 id="模块间解耦">&lt;strong>模块间解耦&lt;/strong>
+&lt;/h4>&lt;p>在单体应用中，不同模块可通过消息队列实现异步通信。例如：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>电商场景&lt;/strong>：用户下单后，订单模块将消息写入队列，库存、物流等模块异步消费，避免同步调用导致的性能瓶颈。&lt;/li>
+&lt;li>&lt;strong>日志收集&lt;/strong>：单体应用将日志统一发送到 Kafka，后续由独立服务进行存储或分析，避免日志处理阻塞主业务逻辑。&lt;/li>
+&lt;/ul>
+&lt;h4 id="异步处理与响应优化">&lt;strong>异步处理与响应优化&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>耗时操作异步化&lt;/strong>：如邮件发送、文件导出等任务，通过消息队列剥离主流程，提升用户体验（如网页6提到的“订单处理无需等待邮件发送完成”）。&lt;/li>
+&lt;li>&lt;strong>流量削峰&lt;/strong>：在高并发场景（如秒杀活动）中，消息队列暂存请求，后端按处理能力逐步消费，防止系统过载。&lt;/li>
+&lt;/ul>
+&lt;h4 id="事件驱动架构">&lt;strong>事件驱动架构&lt;/strong>
+&lt;/h4>&lt;p>单体应用可通过消息中间件实现内部事件驱动：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>状态变更通知&lt;/strong>：例如用户注册后触发积分发放、短信通知等操作，通过订阅“用户注册”主题实现松耦合。&lt;/li>
+&lt;li>&lt;strong>数据一致性保障&lt;/strong>：通过消息持久化和重试机制，确保关键操作（如支付状态更新）的最终一致性。&lt;/li>
+&lt;/ul>
+&lt;h4 id="日志与监控">&lt;strong>日志与监控&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>集中式日志管理&lt;/strong>：单体应用将日志推送至 Kafka，便于后续接入 Elasticsearch 等工具进行实时分析。&lt;/li>
+&lt;li>&lt;strong>系统监控&lt;/strong>：服务器性能指标（CPU、内存等）通过消息队列传输，实现实时告警或可视化。&lt;/li>
+&lt;/ul>
+&lt;h4 id="遗留系统改造">&lt;strong>遗留系统改造&lt;/strong>
+&lt;/h4>&lt;p>在单体向微服务过渡阶段，消息中间件可作为中间层：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>逐步拆分&lt;/strong>：将部分功能模块迁移为独立服务，通过消息队列与原系统通信。&lt;/li>
+&lt;li>&lt;strong>技术异构&lt;/strong>：例如旧系统使用 Java，新模块用 Python 开发，通过 Kafka 实现跨语言通信。&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="技术选型建议">&lt;strong>技术选型建议&lt;/strong>
+&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>高吞吐场景&lt;/strong>：优先选择 Kafka（支持百万级消息/秒）。&lt;/li>
+&lt;li>&lt;strong>轻量级需求&lt;/strong>：RabbitMQ 或 ActiveMQ 更适合简单队列和低延迟场景。&lt;/li>
+&lt;li>&lt;strong>物联网与边缘计算&lt;/strong>：MQTT 协议（如网页8所述）更适配设备间通信。&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="总结">&lt;strong>总结&lt;/strong>
+&lt;/h2>&lt;p>消息中间件的核心价值在于&lt;strong>解耦生产与消费、保障可靠通信、提升系统扩展性&lt;/strong>，这些需求在单体架构中同样存在。例如：&lt;/p>
+&lt;ul>
+&lt;li>Kafka 在单体应用中的日志收集、异步任务处理等场景已成熟应用；&lt;/li>
+&lt;li>消息队列的流量削峰能力对高并发单体系统至关重要。&lt;/li>
+&lt;/ul>
+&lt;p>因此，&lt;strong>是否使用消息中间件取决于具体业务需求，而非仅限于架构风格&lt;/strong>。&lt;/p></description></item></channel></rss>
