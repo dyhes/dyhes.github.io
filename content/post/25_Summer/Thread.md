@@ -1,5 +1,5 @@
 ---
-title: 【Java】多线程
+title: 【Java】Thread
 date: 2025-06-20 00:00:00+0000
 categories: 
 - temple
