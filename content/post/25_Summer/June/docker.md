@@ -199,15 +199,11 @@ Docker通过**操作系统级虚拟化**技术，以容器为载体解决了环�
 
 - **原理**：通过Hypervisor（如VMware ESXi）在物理硬件上创建完全隔离的虚拟机，每个虚拟机运行独立操作系统。Hypervisor模拟完整硬件环境，无需修改客户机操作系统[3,5](@ref)。
 
-- 
-
-  代表技术
-
-  ：
+- 代表技术：
 
   - **VMware ESXi**：企业级虚拟化平台，支持动态资源分配、实时迁移（vMotion），广泛用于数据中心整合[5,8](@ref)。
   - **Microsoft Hyper-V**：集成于Windows Server，支持嵌套虚拟化，适用于混合云环境[5](@ref)。
-
+  
 - **优势**：兼容性强，支持异构操作系统（Windows/Linux）。
 
 - **局限**：Hypervisor层引入性能开销（约5-20%）[5](@ref)。
@@ -232,15 +228,11 @@ Docker通过**操作系统级虚拟化**技术，以容器为载体解决了环�
 
 - **原理**：共享宿主机内核，通过Namespace和Cgroups实现进程隔离，无需独立操作系统[3,5](@ref)。
 
-- 
-
-  代表技术
-
-  ：
+- 代表技术：
 
   - **LXC（Linux Containers）**：早期Linux容器引擎，Docker的前身基础[3](@ref)。
   - **OpenVZ**：基于Linux内核的OS级虚拟化，支持资源隔离但需定制内核[3](@ref)。
-
+  
 - **对比Docker**：更接近系统底层，适合需要直接管理内核资源的场景。
 
 **2. 容器编排生态**
@@ -253,23 +245,15 @@ Docker通过**操作系统级虚拟化**技术，以容器为载体解决了环�
 
 - **原理**：整合物理存储设备（SAN/NAS）为统一“存储池”，实现动态分配与数据迁移[3,6](@ref)。
 
-- 
-
-  技术方案
-
-  ：
+- 技术方案：
 
   - **硬件方案**：存储阵列（如EMC VMAX）提供卷管理。
   - **软件方案**：分布式存储（如Ceph）、虚拟SAN（如VMware vSAN）[6](@ref)。
-
-- 
-
-  核心功能
-
-  ：
+  
+- 核心功能：
 
   - 精简配置（Thin Provisioning）
-  - 快照与克隆
+- 快照与克隆
   - 异地数据复制（容灾）
 
 - **应用场景**：云存储、备份恢复系统[4](@ref)。
@@ -354,54 +338,34 @@ Docker通过**操作系统级虚拟化**技术，以容器为载体解决了环�
 - **原理**：
   容器通过 `docker0` 网桥互联，IP 由 DHCP 分配（如 `172.17.0.0/16`）。外部访问需端口映射（`-p 80:80`），本质是 iptables DNAT 规则[4,7](@ref)。
 
-- 
-
-  特点
-
-  ：
+- 特点：
 
   - ✅ 容器间通过 IP 或容器名通信（需自定义网络）。
   - ❌ 外部访问需显式端口映射。
-
-- 
-
-  命令示例
-
-  ：
+  
+- 命令示例：
 
   ```
-  docker run -d --name web nginx  # 默认使用 bridge
+docker run -d --name web nginx  # 默认使用 bridge
   docker network create my-bridge  # 创建自定义桥接网络[7](@ref)
-  ```
+```
 
 #### **2. Host 模式**
 
 - **原理**：
   容器共享宿主机 Network Namespace，直接使用主机 IP 和端口，无虚拟网卡[1,3](@ref)。
 
-- 
-
-  适用场景
-
-  ：
+- 适用场景：
 
   - 高性能需求（如网络监控工具），避免 NAT 开销。
   - 需直接暴露服务的场景（如 Prometheus 抓取节点数据）。
-
-- 
-
-  限制
-
-  ：
+  
+- 限制：
 
   - ❌ 端口冲突风险（容器与宿主机端口共用）。
   - ❌ 无网络隔离，安全性低。
-
-- 
-
-  命令示例
-
-  ：
+  
+- 命令示例：
 
   ```
   docker run -d --net=host --name nginx-host nginx
@@ -412,45 +376,29 @@ Docker通过**操作系统级虚拟化**技术，以容器为载体解决了环�
 - **原理**：
   新容器共享指定容器的 Network Namespace（同 IP、端口）[1,5](@ref)。
 
-- 
-
-  典型用例
-
-  ：
+- **典型用例**：
 
   - Kubernetes Pod 内容器互通（通过 `localhost` 直接通信）。
   - Sidecar 模式（日志收集器共享业务容器的网络）。
-
-- 
-
-  命令示例
-
-  ：
+  
+- **命令示例**：
 
   ```
-  docker run -d --name base-container alpine sleep 3600
+docker run -d --name base-container alpine sleep 3600
   docker run -d --net=container:base-container --name sidecar nginx
-  ```
+```
 
 #### **4. None 模式**
 
 - **原理**：
   容器仅有 `lo` 回环接口，无外部网络连接[2,6](@ref)。
 
-- 
-
-  使用场景
-
-  ：
+- 使用场景：
 
   - 离线数据处理（如安全审计）。
   - 需完全自定义网络的场景（手动配置 veth 或 VPN）。
-
-- 
-
-  命令示例
-
-  ：
+  
+- 命令示例：
 
   ```
   docker run -d --net=none --name isolated-container alpine
@@ -461,20 +409,12 @@ Docker通过**操作系统级虚拟化**技术，以容器为载体解决了环�
 - **原理**：
   基于 VXLAN 隧道实现跨主机容器通信，用于 Docker Swarm/Kubernetes 集群[1,8](@ref)。
 
-- 
-
-  核心优势
-
-  ：
+- 核心优势：
 
   - ✅ 自动服务发现（DNS 解析服务名）。
   - ✅ 内置负载均衡（VIP 分发流量到多个副本）。
-
-- 
-
-  命令示例
-
-  ：
+  
+- 命令示例：
 
   ```
   docker network create -d overlay my-overlay  # Swarm 模式下有效
@@ -485,20 +425,12 @@ Docker通过**操作系统级虚拟化**技术，以容器为载体解决了环�
 - **原理**：
   容器直接绑定物理网卡（如 `eth0`），拥有独立 MAC 和 IP，像物理设备一样接入局域网[9](@ref)。
 
-- 
-
-  适用场景
-
-  ：
+- 适用场景：
 
   - IoT 设备模拟（每个容器代表一个设备）。
   - 需固定 IP 的传统应用迁移。
-
-- 
-
-  配置示例
-
-  ：
+  
+- 配置示例：
 
   ```
   docker network create -d macvlan \
@@ -897,17 +829,7 @@ Docker 提供四种重启策略，通过 `--restart` 参数指定，由 Docker �
 
 3. **`on-failure[:max-retries]`**
 
-   - 
-
-     行为
-
-     ：仅当容器
-
-     异常退出
-
-     （退出状态码非
-
-      
+   - 行为：仅当容器异常退出（退出状态码非 
 
      ```
      0
@@ -917,9 +839,9 @@ Docker 提供四种重启策略，通过 `--restart` 参数指定，由 Docker �
 
      - 可指定最大重启次数（如 `on-failure:3`），超限后放弃重启。
      - 若不设上限（`on-failure`），会无限重试[2,3,5](@ref)。
-
+     
    - **场景**：批处理任务或可能偶发故障的服务，避免正常退出后无意义重启[3,6](@ref)。
-
+   
 4. **`unless-stopped`**
 
    - **行为**：容器退出时自动重启，**除非被手动停止**（`docker stop`）。

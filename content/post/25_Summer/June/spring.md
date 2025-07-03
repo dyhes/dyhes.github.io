@@ -4492,3 +4492,65 @@ fetch(url, { credentials: 'include' });
 - **允许配置**：`allowCredentials=false` + `allowHeaders` 包含 `Authorization`（或 `*`）是 **完全可行的标准方案**。
 - **安全实践**：通配符 `*` 仅在无凭证时安全，同时需通过域名白名单和最小权限原则降低风险[1,6](@ref)。
 - **典型用例**：前后端分离项目中，前端通过 `Authorization: Bearer <token>` 调用跨域 API[3,6](@ref)。
+
+## Spring Webflux
+
+WebFlux与HTTP协议的关系可以从以下几个方面综合理解：
+
+### ⚙️ 1. **WebFlux的核心定位**
+
+WebFlux是Spring Framework 5引入的**响应式Web框架**，旨在处理高并发、非阻塞的请求。它支持HTTP协议作为核心通信方式，但不仅限于HTTP。其设计目标是通过异步非阻塞模型（基于Reactor库）提升HTTP请求处理的吞吐量和资源利用率[1,2,4,8](@ref)。
+
+------
+
+### 🔧 2. **HTTP协议的直接支持**
+
+- 
+
+  HTTP请求处理
+
+  ：WebFlux提供完整的HTTP服务器和客户端支持：
+
+  - **服务端**：通过`RouterFunction`和`HandlerFunction`定义路由与处理逻辑，或使用注解（如`@RestController`）处理HTTP请求[4,6,8](@ref)。
+  - **客户端**：通过非阻塞的`WebClient`发起HTTP请求，支持响应式流处理（如`Mono`/`Flux`）[4,8](@ref)。
+
+- **协议兼容性**：支持HTTP/1.1、HTTP/2，以及HTTPS加密协议[2,8](@ref)。
+
+------
+
+### 🌐 3. **超越HTTP的协议扩展**
+
+尽管HTTP是主要应用场景，WebFlux还支持其他协议：
+
+- **WebSocket**：用于双向实时通信（如聊天应用），通过`WebSocketHandler`处理会话[5](@ref)。
+- **Server-Sent Events (SSE)**：支持服务器向客户端推送实时事件流[2,8](@ref)。
+- **TCP/UDP**：通过Reactor Netty等实现非阻塞的底层网络通信[3](@ref)。
+
+------
+
+### ⚡️ 4. **HTTP性能优化特性**
+
+WebFlux对HTTP协议的增强体现在其异步机制：
+
+- **非阻塞I/O**：使用事件循环（如Netty）处理请求，避免线程阻塞，显著提升高并发下的吞吐量[2,7,8](@ref)。
+- **背压机制（Backpressure）**：通过`Flux`/`Mono`控制数据流速率，防止HTTP请求过载导致消费者崩溃[4,8](@ref)。
+- **多路复用**：HTTP/2支持下，单连接可并行处理多个请求，减少延迟[2,8](@ref)。
+
+------
+
+### 🛠️ 5. **与传统HTTP处理的区别**
+
+- 对比Spring MVC
+
+  ：
+
+  - **阻塞 vs 非阻塞**：Spring MVC基于Servlet API（同步阻塞），而WebFlux使用非阻塞模型，更适合高并发HTTP场景[2,7](@ref)。
+  - **编程模型**：WebFlux支持函数式路由，提供更灵活的HTTP端点定义方式[4,6](@ref)。
+
+- **资源利用**：传统HTTP服务需为每个请求分配线程，WebFlux以少量线程处理更多请求，资源消耗更低[2,8](@ref)。
+
+------
+
+### 💎 总结
+
+**WebFlux的核心是HTTP协议的内容**，但作为响应式框架，它扩展了HTTP的能力（如异步、背压），并支持更多实时通信协议（如WebSocket）。**其价值在于通过非阻塞模型优化HTTP服务性能，而非定义新的协议标准**。对于纯HTTP应用，需根据并发需求选择阻塞（Spring MVC）或非阻塞（WebFlux）方案[2,4,8](@ref)。
