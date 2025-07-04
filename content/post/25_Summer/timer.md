@@ -20,11 +20,7 @@ tags:
 
    - **缺陷**：单线程执行，任务阻塞或异常会导致整个调度终止；系统时间修改影响调度准确性[1,2,7](@ref)。
 
-   - 
-
-     示例
-
-     ：
+   - 示例：
 
      ```
      Timer timer = new Timer();
@@ -35,23 +31,19 @@ tags:
          }
      }, 2000, 1000); // 延迟2秒，间隔1秒
      ```
-
+   
 2. **`ScheduledExecutorService`**
 
    - **特点**：基于线程池（支持多任务并发），异常隔离（单任务失败不影响整体），提供`scheduleAtFixedRate`（固定速率）和`scheduleWithFixedDelay`（固定延迟）[1,7,9](@ref)。
 
    - **优势**：相比`Timer`更健壮，适合生产环境。
 
-   - 
-
-     示例
-
-     ：
+   - 示例：
 
      ```
-     ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
      executor.scheduleAtFixedRate(() -> System.out.println("Task"), 2, 3, TimeUnit.SECONDS);
-     ```
+```
 
 ------
 
@@ -61,21 +53,13 @@ tags:
 
    - **特点**：Spring 3.0+内置，无需额外依赖，支持Cron表达式、固定速率（`fixedRate`）、固定延迟（`fixedDelay`）[1,6,8](@ref)。
 
-   - 
-
-     配置步骤
-
-     ：
+   - 配置步骤：
 
      1. 启动类加`@EnableScheduling`。
      2. 方法加`@Scheduled(cron = "0/5 * * * * ?")`。
-
-   - 
-
-     线程池优化
-
-     ：
-
+     
+   - 线程池优化：
+   
      ```
      @Bean
      public ThreadPoolTaskScheduler taskScheduler() {
@@ -84,7 +68,7 @@ tags:
          return scheduler;
      }
      ```
-
+   
 2. **`ScheduledExecutorFactoryBean`**
 
    - **特点**：Spring对`ScheduledThreadPoolExecutor`的封装，支持XML配置线程池参数[1](@ref)。
@@ -200,20 +184,12 @@ public class TaskRegistry {
 
 **核心思路**：节点执行任务前获取分布式锁，确保集群中仅一个节点执行任务。
 
-- 
-
-  实现方式
-
-  ：
+- 实现方式：
 
   1. **Redis 锁**：通过 `SET key value NX EX` 命令获取锁，设置超时时间（如30秒）[2,7](@ref)。
   2. **ZooKeeper 锁**：创建临时有序节点，最小节点获得锁[8](@ref)。
-
-- 
-
-  执行流程
-
-  ：
+  
+- 执行流程：
 
   ```
   graph TD
@@ -229,24 +205,16 @@ public class TaskRegistry {
 
 **核心思路**：设计主从架构，主节点宕机时从节点接管任务。
 
-- 
+- 实现步骤：
 
-  实现步骤
-
-  ：
-
-  1. 
-
-     主节点选举
-
-     ：
+  1. 主节点选举：
 
      - 使用 ZooKeeper 临时节点竞争主节点身份[8](@ref)；
-     - 或通过 Redis 的 `SETNX` 抢主[7](@ref)。
-
-  2. **心跳检测**：主节点定期更新DB/Redis中的心跳时间戳，从节点监控该时间戳，超时未更新则触发抢主[7](@ref)。
-
-  3. **任务接管**：新主节点加载持久化的未完成任务并调度。
+   - 或通过 Redis 的 `SETNX` 抢主[7](@ref)。
+     
+2. **心跳检测**：主节点定期更新DB/Redis中的心跳时间戳，从节点监控该时间戳，超时未更新则触发抢主[7](@ref)。
+  
+3. **任务接管**：新主节点加载持久化的未完成任务并调度。
 
 **关键配置**：
 
@@ -259,15 +227,11 @@ public class TaskRegistry {
 **核心问题**：任务执行中节点宕机导致状态卡在“执行中”。
 ​**解决方案**​：
 
-1. 
-
-   超时重置
-
-   ：
+1. 超时重置：
 
    - 为任务设置最大执行时长（如30分钟）；
    - 若任务状态长期为“执行中”且超时，自动重置为“未开始”，允许其他节点重试[2,7](@ref)。
-
+   
 2. **幂等性设计**：业务逻辑需支持重复执行（如数据库操作加唯一索引）。
 
 ------
@@ -284,27 +248,15 @@ public class TaskRegistry {
 
 ### ⚠️ **六、注意事项**
 
-1. 
-
-   时间精度
-
-   ：
+1. 时间精度：
 
    - `ScheduledExecutorService` 在节点时钟不同步时可能重复执行，需部署 NTP 服务同步时间[3](@ref)。
 
-2. 
-
-   资源隔离
-
-   ：
+2. 资源隔离：
 
    - CPU 密集型与 I/O 密集型任务使用独立线程池，避免相互阻塞[2](@ref)。
 
-3. 
-
-   监控告警
-
-   ：
+3. 监控告警：
 
    - 记录任务调度日志（节点IP、开始/结束时间），接入 Prometheus 监控执行成功率[6](@ref)。
 
@@ -334,14 +286,10 @@ ThreadPoolTaskScheduler 和 ScheduledExecutorService 是 Java 中用于任务调
 | **依赖**     | 无需额外依赖                                       | 需集成 Spring 环境                             |
 | **底层实现** | `ScheduledThreadPoolExecutor` + `DelayedWorkQueue` | 封装 `ScheduledExecutorService`，扩展调度功能  |
 
-- 
-
-  说明
-
-  ：
+- 说明：
 
   - `ScheduledExecutorService` 是 Java 标准库的一部分，适合非 Spring 项目[4,8,10](@ref)。
-  - `ThreadPoolTaskScheduler` 依赖 Spring 容器，提供更便捷的配置和集成能力[3,5,6](@ref)。
+- `ThreadPoolTaskScheduler` 依赖 Spring 容器，提供更便捷的配置和集成能力[3,5,6](@ref)。
 
 ------
 
@@ -355,14 +303,10 @@ ThreadPoolTaskScheduler 和 ScheduledExecutorService 是 Java 中用于任务调
 | **Cron 表达式**  | ❌ 不支持                        | ✅ `schedule(task, CronTrigger)`                |
 | **动态启停任务** | 需手动管理 `ScheduledFuture`    | 内置 `ScheduledFuture` 管理（支持 `cancel()`） |
 
-- 
-
-  关键差异
-
-  ：
+- 关键差异：
 
   - **Cron 支持**：`ThreadPoolTaskScheduler` 可直接解析 Cron 表达式，适用于复杂时间规则（如“每天 8:00 执行”）[3,6](@ref)。
-  - **动态控制**：`ThreadPoolTaskScheduler` 提供更便捷的任务启停接口，适合需动态调整的场景（如数据库配置更新）[6](@ref)。
+- **动态控制**：`ThreadPoolTaskScheduler` 提供更便捷的任务启停接口，适合需动态调整的场景（如数据库配置更新）[6](@ref)。
 
 ------
 
@@ -374,38 +318,24 @@ ThreadPoolTaskScheduler 和 ScheduledExecutorService 是 Java 中用于任务调
 | **线程命名**   | 需自定义 `ThreadFactory`               | 内置 `setThreadNamePrefix()`                      |
 | **拒绝策略**   | 支持 `RejectedExecutionHandler`        | 支持 Spring 任务拒绝策略（如 `CallerRunsPolicy`） |
 
-- 
-
-  示例配置
-
-  ：
-
-  
-
-  ScheduledExecutorService
-
-  ：
+- 示例配置：ScheduledExecutorService：
 
   ```
-  ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(5);
+ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(5);
   ```
 
-  
-
-  ThreadPoolTaskScheduler
-
-  （Spring 配置）：
+  ThreadPoolTaskScheduler（Spring 配置）：
 
   ```
-  @Bean
+@Bean
   public ThreadPoolTaskScheduler taskScheduler() {
-      ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
+    ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
       scheduler.setPoolSize(10);
       scheduler.setThreadNamePrefix("task-");
       return scheduler;
-  }
+}
   ``` [3,6](@ref)
-  ```
+```
 
 ------
 

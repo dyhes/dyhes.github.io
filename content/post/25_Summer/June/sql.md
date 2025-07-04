@@ -1,6 +1,6 @@
 ---
 title: 【Mysql】sql
-date: 2025-06-2 00:00:00+0000
+date: 2025-06-02 00:00:00+0000
 categories: [nutrition, willow]
 tags:
 - Mysql
