@@ -1,0 +1,1671 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>DSA on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/dsa/</link><description>Recent content in DSA on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 04 Jul 2025 11:55:43 +0800</lastBuildDate><atom:link href="https://dyhes.github.io/tags/dsa/index.xml" rel="self" type="application/rss+xml"/><item><title>【DSA】KMP &amp; BM &amp; Sunday</title><link>https://dyhes.github.io/p/dsakmp-bm-sunday/</link><pubDate>Sun, 29 Jun 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/dsakmp-bm-sunday/</guid><description>&lt;h2 id="字符串匹配">字符串匹配
+&lt;/h2>&lt;p>以下是主流字符串匹配算法的系统梳理，涵盖核心思想、时间复杂度、适用场景及优缺点，结合技术原理与工程实践综合呈现：&lt;/p>
+&lt;hr>
+&lt;h3 id="-一算法分类与概览">📊 &lt;strong>一、算法分类与概览&lt;/strong>
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>算法类型&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>代表算法&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>时间复杂度&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>核心思想&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>适用场景&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>基本算法&lt;/strong>&lt;/td>
+&lt;td>暴力匹配 (Brute Force)&lt;/td>
+&lt;td>O(m*n)&lt;/td>
+&lt;td>逐字符比较&lt;/td>
+&lt;td>短文本、简单场景&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>单模式匹配&lt;/strong>&lt;/td>
+&lt;td>KMP&lt;/td>
+&lt;td>O(m+n)&lt;/td>
+&lt;td>失效函数避免回溯&lt;/td>
+&lt;td>通用场景、理论教学&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>Boyer-Moore (BM)&lt;/td>
+&lt;td>O(n/m) ~ O(m*n)&lt;/td>
+&lt;td>反向匹配+双启发规则&lt;/td>
+&lt;td>长模式串、实际应用&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>Sunday&lt;/td>
+&lt;td>O(n/m) 平均&lt;/td>
+&lt;td>BM改进+关注下一字符&lt;/td>
+&lt;td>快速匹配、中长文本&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>Rabin-Karp&lt;/td>
+&lt;td>O(n*m) 平均&lt;/td>
+&lt;td>哈希值比较&lt;/td>
+&lt;td>多模式匹配基础&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>多模式匹配&lt;/strong>&lt;/td>
+&lt;td>Trie树&lt;/td>
+&lt;td>O(m) 建树, O(n) 匹配&lt;/td>
+&lt;td>前缀树结构&lt;/td>
+&lt;td>词典匹配、单词查询&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>Aho-Corasick (AC自动机)&lt;/td>
+&lt;td>O(n+m+k)&lt;/td>
+&lt;td>Trie+KMP思想&lt;/td>
+&lt;td>敏感词过滤、病毒检测&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="-二基本匹配算法暴力法-brute-force">🔍 &lt;strong>二、基本匹配算法：暴力法 (Brute Force)&lt;/strong>
+&lt;/h3>&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>原理&lt;/strong>：主串从每个字符开始与模式串逐位比较，失败后主串回溯到下一位置重新匹配&lt;a class="link" href="@ref" >1,3&lt;/a>。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>时间复杂度&lt;/strong>：最坏 O(m*n)（m, n为模式串和主串长度）。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>优点&lt;/strong>：实现简单，短文本效率高。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>缺点&lt;/strong>：长文本效率低，回溯冗余。&lt;/p>
+&lt;/li>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;p>代码示例（Java）&lt;/p>
+&lt;p>：&lt;/p>
+&lt;pre tabindex="0">&lt;code>for (int i = 0; i &amp;lt;= n - m; i++) {
+int j = 0;
+while (j &amp;lt; m &amp;amp;&amp;amp; text[i+j] == pattern[j]) j++;
+if (j == m) return i; // 匹配成功
+}
+&lt;/code>&lt;/pre>&lt;hr>
+&lt;h3 id="-三经典单模式匹配算法">⚙️ &lt;strong>三、经典单模式匹配算法&lt;/strong>
+&lt;/h3>&lt;h4 id="1-kmp算法-knuth-morris-pratt">1. &lt;strong>KMP算法 (Knuth-Morris-Pratt)&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>核心思想&lt;/strong>：利用&lt;strong>部分匹配表&lt;/strong>（next数组）记录模式串前缀后缀的最长公共长度。匹配失败时，模式串右移位数 = 已匹配字符数 - next[j]，避免主串回溯&lt;a class="link" href="@ref" >6,7,8&lt;/a>。&lt;/p>
+&lt;/li>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;p>关键步骤&lt;/p>
+&lt;p>：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>预处理&lt;/strong>：计算next数组（O(m)）。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>匹配&lt;/strong>：主串指针不回溯，模式串按next数组跳跃（O(n)）。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>时间复杂度&lt;/strong>：O(m+n)。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>优势&lt;/strong>：理论高效，适合模式串较长场景。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>局限性&lt;/strong>：实现复杂，实际性能常低于BM&lt;a class="link" href="@ref" >3&lt;/a>。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="2-boyer-moore-bm算法">2. &lt;strong>Boyer-Moore (BM)算法&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;p>核心思想&lt;/p>
+&lt;p>：&lt;/p>
+&lt;p>反向匹配&lt;/p>
+&lt;p>（从模式串末尾开始） +&lt;/p>
+&lt;p>双启发规则&lt;/p>
+&lt;p>9,10&lt;/p>
+&lt;p>：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>坏字符规则 (Bad Character)&lt;/strong>：主串中不匹配的字符若不在模式串中，则跳过整个模式串；若存在，则对齐模式串中最右出现位置。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>好后缀规则 (Good Suffix)&lt;/strong>：已匹配的后缀子串在模式串中再次出现时，对齐其最右位置。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>移动策略&lt;/strong>：取两规则计算值的最大值。&lt;/p>
+&lt;/li>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;p>时间复杂度&lt;/p>
+&lt;p>：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>最坏 O(m*n)（如全相同字符）。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>平均 O(n/m)（跳跃性强）&lt;a class="link" href="@ref" >9,10&lt;/a>。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>优势&lt;/strong>：工业级高效（如&lt;code>grep&lt;/code>工具），长模式串优势显著。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>缺点&lt;/strong>：预处理开销大。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="3-rabin-karp算法">3. &lt;strong>Rabin-Karp算法&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>核心思想&lt;/strong>：将模式串哈希值 H(p) 与主串中每个长度为m的子串哈希值比较。若哈希值相等，则进一步验证字符匹配&lt;a class="link" href="@ref" >2,4&lt;/a>。&lt;/li>
+&lt;li>&lt;strong>优化&lt;/strong>：滚动哈希（如多项式哈希），使相邻子串哈希值计算 O(1)。&lt;/li>
+&lt;li>&lt;strong>时间复杂度&lt;/strong>：平均 O(n+m)，最坏 O(m*n)（哈希冲突时）。&lt;/li>
+&lt;li>&lt;strong>适用场景&lt;/strong>：多模式匹配基础（如AC自动机预处理）。&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="-四高效单模式变种">⚡ &lt;strong>四、高效单模式变种&lt;/strong>
+&lt;/h3>&lt;h4 id="1-sunday算法">1. &lt;strong>Sunday算法&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;p>改进点&lt;/p>
+&lt;p>：BM的简化版，匹配失败时关注&lt;/p>
+&lt;p>主串中下一字符&lt;/p>
+&lt;p>：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>若该字符不在模式串中，跳过模式串长度+1。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>若存在，对齐模式串中最右出现位置&lt;a class="link" href="@ref" >3,10&lt;/a>。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>优势&lt;/strong>：实现简单，平均性能优于BM（尤其英文文本）&lt;a class="link" href="@ref" >3&lt;/a>。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="2-horspool算法">2. &lt;strong>Horspool算法&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>简化BM&lt;/strong>：仅用坏字符规则，且对齐模式串中最右字符（非任意字符）&lt;a class="link" href="@ref" >1,10&lt;/a>。&lt;/li>
+&lt;li>&lt;strong>适用场景&lt;/strong>：中等长度模式串。&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="-五多模式匹配算法">🌐 &lt;strong>五、多模式匹配算法&lt;/strong>
+&lt;/h3>&lt;h4 id="1-trie树-字典树">1. &lt;strong>Trie树 (字典树)&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>原理&lt;/strong>：将模式集构建树结构，边为字符。匹配时沿树遍历主串，到达叶节点即匹配成功&lt;a class="link" href="@ref" >4,5&lt;/a>。&lt;/li>
+&lt;li>&lt;strong>时间复杂度&lt;/strong>：建树 O(M)（M为模式集总长），匹配 O(n)。&lt;/li>
+&lt;li>&lt;strong>局限&lt;/strong>：仅适用精确匹配，内存占用高。&lt;/li>
+&lt;/ul>
+&lt;h4 id="2-aho-corasick-ac自动机">2. &lt;strong>Aho-Corasick (AC自动机)&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;p>核心思想&lt;/p>
+&lt;p>：Trie + KMP的next数组：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>Fail指针&lt;/strong>：匹配失败时跳转到最长后缀前缀节点（类似KMP）&lt;a class="link" href="@ref" >4,5&lt;/a>。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>时间复杂度&lt;/strong>：O(n + m + k)（k为匹配次数）。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>应用&lt;/strong>：敏感词过滤（如腾讯内容安全服务）&lt;a class="link" href="@ref" >5&lt;/a>。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="-六应用场景与选型建议">🛠️ &lt;strong>六、应用场景与选型建议&lt;/strong>
+&lt;/h3>&lt;ol>
+&lt;li>&lt;strong>短文本/简单场景&lt;/strong>：暴力法（如Java &lt;code>String.indexOf()&lt;/code>）&lt;a class="link" href="@ref" >2&lt;/a>。&lt;/li>
+&lt;li>&lt;strong>单模式长文本&lt;/strong>：BM/Sunday（如文本编辑器搜索）&lt;a class="link" href="@ref" >9,10&lt;/a>。&lt;/li>
+&lt;li>&lt;strong>多模式匹配&lt;/strong>：AC自动机（如敏感词过滤）&lt;a class="link" href="@ref" >4,5&lt;/a>。&lt;/li>
+&lt;li>&lt;strong>动态模式集&lt;/strong>：Rabin-Karp（可扩展性高）&lt;a class="link" href="@ref" >2&lt;/a>。&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>💡 &lt;strong>性能提示&lt;/strong>：实际效率受字符集分布（如DNA序列用BM跳跃强）、模式串长度、硬件缓存等因素影响。例如，短模式串时暴力法常优于KMP&lt;a class="link" href="@ref" >1,3&lt;/a>。&lt;/p>&lt;/blockquote>
+&lt;p>如需特定算法代码实现（如BM的坏字符表构建、AC自动机的Fail指针生成），可进一步提供语言和场景说明。&lt;/p>
+&lt;h2 id="kmp">KMP
+&lt;/h2>&lt;p>KMP算法（Knuth-Morris-Pratt算法）是一种高效的&lt;strong>单模式字符串匹配算法&lt;/strong>，由Donald Knuth、Vaughan Pratt和James H. Morris于1977年联合提出。其核心思想是通过预处理模式串生成&lt;strong>部分匹配表（next数组）&lt;/strong>，在匹配失败时避免主串回溯，仅调整模式串的位置，将时间复杂度优化至&lt;strong>O(n+m)&lt;/strong>（n为主串长度，m为模式串长度）。以下是详细解析：&lt;/p>
+&lt;hr>
+&lt;h3 id="-一算法核心思想">🔍 &lt;strong>一、算法核心思想&lt;/strong>
+&lt;/h3>&lt;h4 id="1-解决暴力匹配的缺陷">1. &lt;strong>解决暴力匹配的缺陷&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>暴力匹配（Brute-Force）&lt;/strong>：主串与模式串逐字符比较，失败时主串回溯至起始位置+1，模式串复位，时间复杂度 &lt;strong>O(m×n)&lt;/strong>&lt;a class="link" href="@ref" >3,10&lt;/a>。&lt;/li>
+&lt;li>&lt;strong>KMP优化&lt;/strong>：匹配失败时，主串指针不回溯，模式串利用 &lt;strong>next数组&lt;/strong> 跳转到&lt;strong>最长相同前后缀&lt;/strong>的下一位置继续匹配，减少无效比较&lt;a class="link" href="@ref" >1,8&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;h4 id="2-关键概念最长相同前后缀">2. &lt;strong>关键概念：最长相同前后缀&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>前缀&lt;/strong>：不包含最后一个字符的子串（如&amp;quot;ABC&amp;quot;的前缀为&amp;quot;A&amp;quot;、&amp;ldquo;AB&amp;rdquo;）。&lt;/li>
+&lt;li>&lt;strong>后缀&lt;/strong>：不包含第一个字符的子串（如&amp;quot;ABC&amp;quot;的后缀为&amp;quot;BC&amp;quot;、&amp;ldquo;C&amp;rdquo;）。&lt;/li>
+&lt;li>&lt;strong>最长相同前后缀&lt;/strong>：如&amp;quot;ABABA&amp;quot;的最长相同前后缀为&amp;quot;ABA&amp;quot;（长度3）&lt;a class="link" href="@ref" >3,10&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="-二next数组部分匹配表">⚙️ &lt;strong>二、next数组（部分匹配表）&lt;/strong>
+&lt;/h3>&lt;h4 id="1-next数组的定义">1. &lt;strong>next数组的定义&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>&lt;code>next[j]&lt;/code>表示：模式串下标&lt;code>0~j&lt;/code>的子串中，&lt;strong>最长相同前后缀的长度&lt;/strong>。
+​&lt;strong>示例&lt;/strong>​：模式串&lt;code>&amp;quot;ABABC&amp;quot;&lt;/code>的next数组为&lt;code>[0,0,1,2,0]&lt;/code>&lt;a class="link" href="@ref" >2,8&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;h4 id="2-next数组的构建步骤">2. &lt;strong>next数组的构建步骤&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>初始化&lt;/strong>：&lt;code>next[0] = 0&lt;/code>（单字符无前后缀），指针&lt;code>i=1&lt;/code>（后缀尾），&lt;code>j=0&lt;/code>（前缀尾）。&lt;/p>
+&lt;/li>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;p>迭代计算&lt;/p>
+&lt;p>：&lt;/p>
+&lt;ul>
+&lt;li>若&lt;code>pattern[i] == pattern[j]&lt;/code>，则&lt;code>j++&lt;/code>，&lt;code>next[i] = j&lt;/code>，&lt;code>i++&lt;/code>。&lt;/li>
+&lt;li>若不等且&lt;code>j &amp;gt; 0&lt;/code>，则&lt;code>j = next[j-1]&lt;/code>（回退至上一匹配位置）。&lt;/li>
+&lt;li>若&lt;code>j = 0&lt;/code>，则&lt;code>next[i] = 0&lt;/code>，&lt;code>i++&lt;/code>&lt;a class="link" href="@ref" >8,10&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>构建过程示例（模式串：&amp;ldquo;ABABA&amp;rdquo;）&lt;/strong>：&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>字符索引&lt;/th>
+&lt;th>0&lt;/th>
+&lt;th>1&lt;/th>
+&lt;th>2&lt;/th>
+&lt;th>3&lt;/th>
+&lt;th>4&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>字符&lt;/td>
+&lt;td>A&lt;/td>
+&lt;td>B&lt;/td>
+&lt;td>A&lt;/td>
+&lt;td>B&lt;/td>
+&lt;td>A&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>next值&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>1&lt;/td>
+&lt;td>2&lt;/td>
+&lt;td>3&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="-三匹配流程">🔄 &lt;strong>三、匹配流程&lt;/strong>
+&lt;/h3>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>初始化指针&lt;/strong>：主串指针&lt;code>i=0&lt;/code>，模式串指针&lt;code>j=0&lt;/code>。&lt;/p>
+&lt;/li>
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;p>逐字符比较&lt;/p>
+&lt;p>：&lt;/p>
+&lt;ul>
+&lt;li>若&lt;code>text[i] == pattern[j]&lt;/code>，则&lt;code>i++&lt;/code>, &lt;code>j++&lt;/code>。&lt;/li>
+&lt;li>若&lt;code>j = m&lt;/code>（模式串完全匹配），记录位置，并令&lt;code>j = next[j-1]&lt;/code>继续搜索。&lt;/li>
+&lt;li>若字符不等且&lt;code>j &amp;gt; 0&lt;/code>，则&lt;code>j = next[j-1]&lt;/code>（模式串跳转）。&lt;/li>
+&lt;li>若&lt;code>j = 0&lt;/code>，则&lt;code>i++&lt;/code>（主串后移）&lt;a class="link" href="@ref" >4,8&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>匹配示例&lt;/strong>：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>主串：&lt;/p>
+&lt;pre tabindex="0">&lt;code>&amp;#34;ABABABCABAB&amp;#34;
+&lt;/code>&lt;/pre>&lt;p>，模式串：&lt;/p>
+&lt;pre tabindex="0">&lt;code>&amp;#34;ABABC&amp;#34;
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>匹配至&lt;code>i=4&lt;/code>（主串&amp;rsquo;C&amp;rsquo;≠模式串&amp;rsquo;B&amp;rsquo;）→ &lt;code>j = next[3] = 2&lt;/code> → 跳过&amp;quot;AB&amp;quot;比较，继续匹配&lt;a class="link" href="@ref" >4&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="-四性能分析">📊 &lt;strong>四、性能分析&lt;/strong>
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>指标&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>说明&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>时间复杂度&lt;/strong>&lt;/td>
+&lt;td>预处理：&lt;strong>O(m)&lt;/strong>，匹配：&lt;strong>O(n)&lt;/strong>，总计 &lt;strong>O(n+m)&lt;/strong>&lt;a class="link" href="@ref" >1,8&lt;/a>。&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>空间复杂度&lt;/strong>&lt;/td>
+&lt;td>需存储&lt;code>next&lt;/code>数组：&lt;strong>O(m)&lt;/strong>&lt;a class="link" href="@ref" >1&lt;/a>。&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>对比暴力匹配&lt;/strong>&lt;/td>
+&lt;td>避免主串回溯，尤其适合&lt;strong>模式串重复度高&lt;/strong>或&lt;strong>主串极长&lt;/strong>的场景&lt;a class="link" href="@ref" >3&lt;/a>。&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h4 id="与bm算法对比">&lt;strong>与BM算法对比&lt;/strong>：
+&lt;/h4>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>特性&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>KMP&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>BM（Boyer-Moore）&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>匹配方向&lt;/strong>&lt;/td>
+&lt;td>从左向右&lt;/td>
+&lt;td>从右向左&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>跳跃能力&lt;/strong>&lt;/td>
+&lt;td>依赖next数组，跳跃较保守&lt;/td>
+&lt;td>双启发规则（坏字符+好后缀），跳跃性强&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>适用场景&lt;/strong>&lt;/td>
+&lt;td>小字符集、模式串重复度高&lt;/td>
+&lt;td>大字符集（如英文、DNA序列）&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="-五优缺点与应用场景">⚖️ &lt;strong>五、优缺点与应用场景&lt;/strong>
+&lt;/h3>&lt;h4 id="-优点">✅ &lt;strong>优点&lt;/strong>：
+&lt;/h4>&lt;ol>
+&lt;li>&lt;strong>理论高效&lt;/strong>：最坏情况下仍保持线性时间复杂度。&lt;/li>
+&lt;li>&lt;strong>无回溯&lt;/strong>：主串指针单向移动，适合流式数据处理&lt;a class="link" href="@ref" >4&lt;/a>。&lt;/li>
+&lt;/ol>
+&lt;h4 id="-缺点">❌ &lt;strong>缺点&lt;/strong>：
+&lt;/h4>&lt;ol>
+&lt;li>&lt;strong>空间开销&lt;/strong>：需存储&lt;code>next&lt;/code>数组，模式串极长时可能影响性能。&lt;/li>
+&lt;li>&lt;strong>实现复杂&lt;/strong>：理解&lt;code>next&lt;/code>数组构建逻辑有一定门槛。&lt;/li>
+&lt;li>&lt;strong>特定场景低效&lt;/strong>：模式串无重复时（如&amp;quot;ABCDE&amp;quot;），性能接近暴力匹配&lt;a class="link" href="@ref" >1,3&lt;/a>。&lt;/li>
+&lt;/ol>
+&lt;h4 id="-应用场景">🛠️ &lt;strong>应用场景&lt;/strong>：
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>文本编辑器&lt;/strong>：查找/替换功能（如VS Code）。&lt;/li>
+&lt;li>&lt;strong>生物信息学&lt;/strong>：DNA序列模式匹配（如&amp;quot;ATCG&amp;quot;重复片段检测）。&lt;/li>
+&lt;li>&lt;strong>网络安全&lt;/strong>：病毒特征码扫描&lt;a class="link" href="@ref" >8,9&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="-六代码实现python示例">💻 &lt;strong>六、代码实现（Python示例）&lt;/strong>
+&lt;/h3>&lt;pre tabindex="0">&lt;code>def kmp_search(text, pattern):
+def build_next(p):
+next_arr = [0] * len(p)
+j = 0 # 前缀尾指针
+for i in range(1, len(p)): # i为后缀尾指针
+while j &amp;gt; 0 and p[i] != p[j]:
+j = next_arr[j-1] # 回退至上一匹配位置
+if p[i] == p[j]:
+j += 1
+next_arr[i] = j
+return next_arr
+next_arr = build_next(pattern)
+i, j = 0, 0 # 主串和模式串指针
+res = []
+while i &amp;lt; len(text):
+if text[i] == pattern[j]:
+i += 1
+j += 1
+elif j &amp;gt; 0:
+j = next_arr[j-1] # 模式串跳转
+else:
+i += 1 # 主串后移
+if j == len(pattern): # 完全匹配
+res.append(i - j)
+j = next_arr[j-1] # 继续搜索下一匹配
+return res
+# 测试
+text = &amp;#34;ABABABABCABAB&amp;#34;
+pattern = &amp;#34;ABABC&amp;#34;
+print(kmp_search(text, pattern)) # 输出: [2]（匹配起始位置）
+&lt;/code>&lt;/pre>&lt;hr>
+&lt;h3 id="-总结">💎 &lt;strong>总结&lt;/strong>
+&lt;/h3>&lt;p>KMP算法通过 &lt;strong>预处理模式串&lt;/strong> 生成&lt;code>next&lt;/code>数组，在匹配失败时&lt;strong>智能跳转模式串位置&lt;/strong>，避免主串回溯，实现了高效的字符串匹配。尽管在模式串无重复时优势减弱，但其理论完备性和线性时间复杂度使其在&lt;strong>重复模式匹配&lt;/strong>、&lt;strong>流式数据处理&lt;/strong>等场景中不可替代。理解&lt;code>next&lt;/code>数组的构建逻辑（即&lt;strong>最长相同前后缀&lt;/strong>）是掌握该算法的关键，而结合具体场景选择KMP或BM等算法，能进一步提升工程效率&lt;a class="link" href="@ref" >1,8,9&lt;/a>。&lt;/p>
+&lt;h2 id="bm">BM
+&lt;/h2>&lt;p>以下是关于BM（Boyer-Moore）算法的详细解析，结合其核心原理、规则实现、复杂度分析及代码示例进行系统阐述：&lt;/p>
+&lt;hr>
+&lt;h3 id="-一算法概述">🔍 一、算法概述
+&lt;/h3>&lt;p>BM算法由Bob Boyer和J Strother Moore于1977年提出，是一种&lt;strong>高效的单模式字符串匹配算法&lt;/strong>。其核心思想是通过&lt;strong>反向匹配&lt;/strong>（从模式串末尾向前比较）和&lt;strong>启发式跳跃规则&lt;/strong>，跳过不必要的字符比较，显著提升匹配效率。实际应用中（如文本编辑器、&lt;code>grep&lt;/code>工具），其性能通常优于KMP算法3-5倍&lt;a class="link" href="@ref" >3,6&lt;/a>。&lt;/p>
+&lt;h4 id="-核心特征">⚡ 核心特征：
+&lt;/h4>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>反向匹配&lt;/strong>：从模式串末尾向前比较字符。&lt;/p>
+&lt;/li>
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;p>双启发规则&lt;/p>
+&lt;p>：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>坏字符规则&lt;/strong>（Bad Character Rule）&lt;/li>
+&lt;li>&lt;strong>好后缀规则&lt;/strong>（Good Suffix Rule）&lt;/li>
+&lt;/ul>
+&lt;ol start="3">
+&lt;li>&lt;strong>跳跃式移动&lt;/strong>：失败时根据规则计算最大跳跃距离，避免逐字符移动。&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="-二核心规则详解">⚙️ 二、核心规则详解
+&lt;/h3>&lt;h4 id="1-坏字符规则">1. &lt;strong>坏字符规则&lt;/strong>
+&lt;/h4>&lt;p>当模式串与文本串字符不匹配时，文本串中的该字符称为&lt;strong>坏字符&lt;/strong>。规则通过预处理记录模式串中每个字符的最后出现位置，计算跳跃距离：&lt;/p>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;p>Case 1&lt;/p>
+&lt;p>：坏字符在模式串中存在&lt;/p>
+&lt;p>跳跃距离&lt;/p>
+&lt;p>= 坏字符在模式串中的当前位置 - 该字符在模式串中最后一次出现的位置&lt;/p>
+&lt;p>2,6&lt;/p>
+&lt;p>。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;em>示例&lt;/em>：模式串&lt;code>&amp;quot;EXAMPLE&amp;quot;&lt;/code>，坏字符&lt;code>'P'&lt;/code>在位置6，其最后出现位置为4 → 跳跃距离 = 6-4=2&lt;a class="link" href="@ref" >8&lt;/a>。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Case 2&lt;/strong>：坏字符不在模式串中
+直接跳跃整个模式串长度（&lt;code>m&lt;/code>位）&lt;a class="link" href="@ref" >3&lt;/a>。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>预处理&lt;/strong>：构建坏字符表&lt;code>bc[]&lt;/code>（数组下标为字符ASCII值，值为最后出现位置）：&lt;/p>
+&lt;pre tabindex="0">&lt;code>def build_bc(pattern):
+bc = [-1] * 256 # 初始化所有字符位置为-1
+for i, char in enumerate(pattern):
+bc[ord(char)] = i # 更新字符最后出现位置
+return bc
+&lt;/code>&lt;/pre>&lt;h4 id="2-好后缀规则">2. &lt;strong>好后缀规则&lt;/strong>
+&lt;/h4>&lt;p>当模式串后缀与文本串匹配但前一个字符失配时，该后缀称为&lt;strong>好后缀&lt;/strong>。规则分三种情况处理：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Case 1&lt;/strong>：好后缀在模式串前部再次出现
+将最靠右的匹配子串与好后缀对齐&lt;a class="link" href="@ref" >4,6&lt;/a>。&lt;/li>
+&lt;li>&lt;strong>Case 2&lt;/strong>：无完整匹配，但好后缀的后缀与模式串前缀匹配
+将最长匹配前缀对齐好后缀后缀&lt;a class="link" href="@ref" >6&lt;/a>。&lt;/li>
+&lt;li>&lt;strong>Case 3&lt;/strong>：无任何匹配
+直接跳跃整个模式串长度（&lt;code>m&lt;/code>位）&lt;a class="link" href="@ref" >4&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>预处理&lt;/strong>：构建好后缀表&lt;code>gs[]&lt;/code>（需先计算后缀数组&lt;code>suff[i]&lt;/code>，表示以&lt;code>i&lt;/code>结尾的子串与模式串后缀的最长匹配长度）：&lt;/p>
+&lt;pre tabindex="0">&lt;code>def build_gs(pattern):
+m = len(pattern)
+suff = [0] * m
+gs = [m] * m # 初始化为m（Case 3）
+# 计算suff数组
+suff[m-1] = m
+for i in range(m-2, -1, -1):
+k = 0
+while (i - k &amp;gt;= 0 and pattern[i - k] == pattern[m-1 - k]):
+k += 1
+suff[i] = k
+# 更新gs数组（Case 1 &amp;amp; 2）
+j = 0
+for i in range(m-1, -1, -1):
+if suff[i] == i+1: # 前缀=后缀
+while j &amp;lt; m-1-i:
+gs[j] = m-1-i
+j += 1
+for i in range(m-1):
+gs[m-1-suff[i]] = m-1-i # Case 1
+return gs
+&lt;/code>&lt;/pre>&lt;h4 id="-规则应用优先级">📊 规则应用优先级：
+&lt;/h4>&lt;p>每次失配时，取两规则计算的跳跃距离&lt;strong>最大值&lt;/strong>：
+&lt;code>jump = max(bc_shift, gs_shift)&lt;/code>&lt;a class="link" href="@ref" >3,6&lt;/a>。&lt;/p>
+&lt;hr>
+&lt;h3 id="-三算法执行流程">🔄 三、算法执行流程
+&lt;/h3>&lt;ol>
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;p>预处理&lt;/p>
+&lt;p>：&lt;/p>
+&lt;ul>
+&lt;li>构建坏字符表&lt;code>bc[]&lt;/code>（时间复杂度&lt;code>O(m)&lt;/code>）&lt;/li>
+&lt;li>构建好后缀表&lt;code>gs[]&lt;/code>（时间复杂度&lt;code>O(m)&lt;/code>）&lt;/li>
+&lt;/ul>
+&lt;ol start="2">
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;p>匹配阶段&lt;/p>
+&lt;p>：&lt;/p>
+&lt;ul>
+&lt;li>模式串与文本串右对齐，从右向左比较字符。&lt;/li>
+&lt;li>若完全匹配，记录位置并右移继续搜索。&lt;/li>
+&lt;li>若失配，按&lt;code>max(bc_shift, gs_shift)&lt;/code>跳跃&lt;a class="link" href="@ref" >5,6&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>伪代码&lt;/strong>：&lt;/p>
+&lt;pre tabindex="0">&lt;code>def bm_search(text, pattern):
+bc = build_bc(pattern)
+gs = build_gs(pattern)
+n, m = len(text), len(pattern)
+i = 0 # 文本串当前对齐位置
+while i &amp;lt;= n - m:
+j = m - 1 # 从模式串末尾开始比较
+while j &amp;gt;= 0 and text[i+j] == pattern[j]:
+j -= 1
+if j &amp;lt; 0: # 完全匹配
+print(&amp;#34;Match at:&amp;#34;, i)
+i += gs[0] # 继续搜索下一位置
+else:
+# 计算坏字符跳跃距离
+bc_shift = j - bc.get(ord(text[i+j]), -1)
+# 计算好后缀跳跃距离
+gs_shift = gs[j]
+i += max(bc_shift, gs_shift, 1) # 至少移动1位
+return -1
+&lt;/code>&lt;/pre>&lt;hr>
+&lt;h3 id="-四复杂度分析">📈 四、复杂度分析
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>指标&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>说明&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>预处理时间&lt;/strong>&lt;/td>
+&lt;td>&lt;code>O(m + σ)&lt;/code>（σ为字符集大小，如ASCII为256）&lt;a class="link" href="@ref" >5&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>匹配时间&lt;/strong>&lt;/td>
+&lt;td>最好&lt;code>O(n/m)&lt;/code>（如全坏字符跳跃），最坏&lt;code>O(mn)&lt;/code>（如重复字符）&lt;a class="link" href="@ref" >3,6&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>空间占用&lt;/strong>&lt;/td>
+&lt;td>&lt;code>O(m + σ)&lt;/code>（存储&lt;code>bc[]&lt;/code>和&lt;code>gs[]&lt;/code>）&lt;a class="link" href="@ref" >5&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>&lt;strong>典型场景&lt;/strong>：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>高跳跃性&lt;/strong>：模式串较长且字符分布分散时，性能接近&lt;code>O(n/m)&lt;/code>。&lt;/li>
+&lt;li>&lt;strong>低效场景&lt;/strong>：模式串为重复字符（如&lt;code>&amp;quot;AAAA&amp;quot;&lt;/code>），退化至&lt;code>O(mn)&lt;/code>&lt;a class="link" href="@ref" >6&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="-五优缺点与应用场景-1">⚖️ 五、优缺点与应用场景
+&lt;/h3>&lt;h4 id="-优势">✅ &lt;strong>优势&lt;/strong>：
+&lt;/h4>&lt;ol>
+&lt;li>&lt;strong>实际效率高&lt;/strong>：长模式串下比KMP快3-5倍，尤其在英文文本中&lt;a class="link" href="@ref" >3,6&lt;/a>。&lt;/li>
+&lt;li>&lt;strong>跳跃能力强&lt;/strong>：坏字符规则在字符集大时效果显著（如DNA序列）。&lt;/li>
+&lt;/ol>
+&lt;h4 id="-局限">❌ &lt;strong>局限&lt;/strong>：
+&lt;/h4>&lt;ol>
+&lt;li>预处理开销大，短模式串时不如暴力法。&lt;/li>
+&lt;li>实现复杂，需维护两个预处理数组。&lt;/li>
+&lt;/ol>
+&lt;h4 id="-适用场景">🛠️ &lt;strong>适用场景&lt;/strong>：
+&lt;/h4>&lt;ul>
+&lt;li>文本编辑器（如VS Code、Sublime的搜索功能）&lt;/li>
+&lt;li>病毒扫描（高效匹配特征码）&lt;/li>
+&lt;li>大字符集数据（如生物信息学中的基因序列匹配）&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="-六完整python示例">💻 六、完整Python示例
+&lt;/h3>&lt;pre tabindex="0">&lt;code>def boyer_moore(text, pattern):
+def build_bc(p):
+bc = [-1] * 256
+for i, c in enumerate(p):
+bc[ord(c)] = i
+return bc
+def build_gs(p):
+m = len(p)
+gs = [m] * m
+suff = [0] * m
+suff[m-1] = m
+# 计算suff数组
+for i in range(m-2, -1, -1):
+k = 0
+while (i - k &amp;gt;= 0 and p[i - k] == p[m-1 - k]):
+k += 1
+suff[i] = k
+# Case 1 &amp;amp; 2更新
+j = 0
+for i in range(m-1, -1, -1):
+if suff[i] == i + 1:
+while j &amp;lt; m-1-i:
+gs[j] = m-1-i
+j += 1
+for i in range(m-1):
+if suff[i] &amp;gt; 0:
+gs[m-1-suff[i]] = m-1-i
+return gs
+bc_table = build_bc(pattern)
+gs_table = build_gs(pattern)
+n, m = len(text), len(pattern)
+i = 0
+while i &amp;lt;= n - m:
+j = m-1
+while j &amp;gt;= 0 and text[i+j] == pattern[j]:
+j -= 1
+if j &amp;lt; 0:
+return i # 匹配成功
+else:
+bc_shift = j - bc_table[ord(text[i+j])]
+gs_shift = gs_table[j]
+i += max(bc_shift, gs_shift, 1)
+return -1 # 匹配失败
+&lt;/code>&lt;/pre>&lt;hr>
+&lt;h3 id="-总结-1">💎 总结
+&lt;/h3>&lt;p>BM算法通过&lt;strong>反向匹配&lt;/strong>与&lt;strong>双启发规则&lt;/strong>的协同，实现了匹配过程中的大规模跳跃，成为工程实践中最高效的单模式匹配算法之一。其优势在长模式串和大字符集场景下尤为显著，但需注意预处理开销和边缘场景的性能波动。理解其规则设计与跳跃逻辑，对优化高频字符串操作（如日志分析、基因比对）至关重要&lt;a class="link" href="@ref" >3,5,6&lt;/a>。&lt;/p>
+&lt;h2 id="sunday">Sunday
+&lt;/h2>&lt;p>以下是关于 &lt;strong>SUNDAY算法&lt;/strong> 的详细解析，涵盖核心思想、匹配规则、时间复杂度、代码实现及优化策略，结合技术原理与工程实践进行系统阐述：&lt;/p>
+&lt;hr>
+&lt;h3 id="-一算法概述-1">🔍 &lt;strong>一、算法概述&lt;/strong>
+&lt;/h3>&lt;p>&lt;strong>SUNDAY算法&lt;/strong> 由 Daniel M.Sunday 于 1990 年提出，是一种 &lt;strong>高效的单模式字符串匹配算法&lt;/strong>。其核心思想是通过 &lt;strong>跳跃式移动模式串&lt;/strong>，在匹配失败时跳过尽可能多的无效字符，从而提升匹配效率。与 Boyer-Moore（BM）算法类似，但 SUNDAY 算法采用 &lt;strong>从前往后匹配&lt;/strong> 的顺序，且关注点不同&lt;a class="link" href="@ref" >1,6&lt;/a>。&lt;/p>
+&lt;h4 id="-核心特征-1">⚡ &lt;strong>核心特征&lt;/strong>：
+&lt;/h4>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>匹配方向&lt;/strong>：从左向右匹配（与 BM 算法的从右向左相反）。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>关键启发点&lt;/strong>：匹配失败时，关注 &lt;strong>文本串中参与匹配的最末字符的下一位字符&lt;/strong>（称为 &lt;strong>关注字符&lt;/strong>）。&lt;/p>
+&lt;/li>
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;p>跳跃策略&lt;/p>
+&lt;p>：根据关注字符是否在模式串中出现，决定移动步长：&lt;/p>
+&lt;ul>
+&lt;li>若未出现 → 移动步长 = 模式串长度 + 1。&lt;/li>
+&lt;li>若出现 → 移动步长 = 模式串长度 - 该字符在模式串中最右出现的位置&lt;a class="link" href="@ref" >2,7&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="-二算法原理与匹配流程">⚙️ &lt;strong>二、算法原理与匹配流程&lt;/strong>
+&lt;/h3>&lt;h4 id="1-预处理构建移动表shift-table">&lt;strong>1. 预处理：构建移动表（Shift Table）&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>目的&lt;/strong>：记录模式串中每个字符 &lt;strong>最右出现位置&lt;/strong> 到模式串末尾的距离 + 1（即跳跃步长）。&lt;/p>
+&lt;/li>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;p>步骤&lt;/p>
+&lt;p>：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>初始化一个长度为 256（ASCII 字符集）的数组 &lt;code>shift[]&lt;/code>，默认值设为 &lt;code>m + 1&lt;/code>（&lt;code>m&lt;/code> 为模式串长度）。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>遍历模式串，更新每个字符的跳跃步长：&lt;code>shift[char] = m - i&lt;/code>（&lt;code>i&lt;/code> 为字符位置）&lt;a class="link" href="@ref" >3,6&lt;/a>。&lt;/p>
+&lt;/li>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;p>示例&lt;/p>
+&lt;p>（模式串&lt;/p>
+&lt;pre tabindex="0">&lt;code>&amp;#34;search&amp;#34;
+&lt;/code>&lt;/pre>&lt;p>）：&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>字符&lt;/th>
+&lt;th>&lt;code>s&lt;/code>&lt;/th>
+&lt;th>&lt;code>e&lt;/code>&lt;/th>
+&lt;th>&lt;code>a&lt;/code>&lt;/th>
+&lt;th>&lt;code>r&lt;/code>&lt;/th>
+&lt;th>&lt;code>c&lt;/code>&lt;/th>
+&lt;th>&lt;code>h&lt;/code>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>跳跃步长&lt;/td>
+&lt;td>6&lt;/td>
+&lt;td>5&lt;/td>
+&lt;td>4&lt;/td>
+&lt;td>3&lt;/td>
+&lt;td>2&lt;/td>
+&lt;td>1&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h4 id="2-匹配过程">&lt;strong>2. 匹配过程&lt;/strong>
+&lt;/h4>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>对齐模式串&lt;/strong>：将模式串与文本串左对齐，起始位置 &lt;code>pos = 0&lt;/code>。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>逐字符比较&lt;/strong>：从左向右比较模式串与文本串对应字符。&lt;/p>
+&lt;/li>
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;p>匹配失败处理&lt;/p>
+&lt;p>：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>计算关注字符：&lt;code>T[pos + m]&lt;/code>（&lt;code>m&lt;/code> 为模式串长度）。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>查移动表&lt;/p>
+&lt;pre tabindex="0">&lt;code>shift[]
+&lt;/code>&lt;/pre>&lt;p>：&lt;/p>
+&lt;ul>
+&lt;li>若 &lt;code>shift[T[pos + m]] = m + 1&lt;/code> → 移动步长 = &lt;code>m + 1&lt;/code>。&lt;/li>
+&lt;li>否则 → 移动步长 = &lt;code>shift[T[pos + m]]&lt;/code>。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>更新位置：&lt;code>pos += shift[T[pos + m]]&lt;/code>&lt;a class="link" href="@ref" >3,7&lt;/a>。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="3-匹配示例">&lt;strong>3. 匹配示例&lt;/strong>
+&lt;/h4>&lt;p>&lt;strong>文本串&lt;/strong>：&lt;code>&amp;quot;substring searching&amp;quot;&lt;/code>
+​&lt;strong>模式串&lt;/strong>​：&lt;code>&amp;quot;search&amp;quot;&lt;/code>
+​&lt;strong>步骤&lt;/strong>​：&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>初始对齐&lt;/strong>：&lt;/p>
+&lt;pre tabindex="0">&lt;code>substring searching
+search ↑ 关注字符：&amp;#39;i&amp;#39;（不在模式串中）
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>移动步长 = 6 + 1 = 7 → 跳到 &lt;code>'n'&lt;/code> 处&lt;a class="link" href="@ref" >2,5&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>二次对齐&lt;/strong>：&lt;/p>
+&lt;pre tabindex="0">&lt;code>substring searching
+search ↑ 关注字符：&amp;#39;r&amp;#39;（在模式串第 3 位）
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>移动步长 = 6 - 3 = 3 → 对齐两个 &lt;code>'r'&lt;/code>&lt;a class="link" href="@ref" >5,7&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>匹配成功&lt;/strong>：&lt;/p>
+&lt;pre tabindex="0">&lt;code>substring searching
+search ✓
+&lt;/code>&lt;/pre>&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="-三时间复杂度分析">📊 &lt;strong>三、时间复杂度分析&lt;/strong>
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>场景&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>时间复杂度&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>说明&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>最佳情况&lt;/strong>&lt;/td>
+&lt;td>O(n/m)&lt;/td>
+&lt;td>每次匹配失败时关注字符均不在模式串中（如模式串无重复字符）&lt;a class="link" href="@ref" >3&lt;/a>。&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>最坏情况&lt;/strong>&lt;/td>
+&lt;td>O(m*n)&lt;/td>
+&lt;td>模式串重复度高（如 &lt;code>&amp;quot;aaaaa&amp;quot;&lt;/code>），每次仅移动 1 位&lt;a class="link" href="@ref" >5&lt;/a>。&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>平均情况&lt;/strong>&lt;/td>
+&lt;td>O(n)&lt;/td>
+&lt;td>实际应用中跳跃效率高（如英文文本）&lt;a class="link" href="@ref" >3&lt;/a>。&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="-四优缺点与适用场景">⚖️ &lt;strong>四、优缺点与适用场景&lt;/strong>
+&lt;/h3>&lt;h4 id="-优势-1">✅ &lt;strong>优势&lt;/strong>：
+&lt;/h4>&lt;ol>
+&lt;li>&lt;strong>实现简单&lt;/strong>：代码量少于 KMP/BM，预处理仅需构建移动表&lt;a class="link" href="@ref" >6,7&lt;/a>。&lt;/li>
+&lt;li>&lt;strong>跳跃能力强&lt;/strong>：在大字符集（如英文、DNA序列）中平均跳跃步长大。&lt;/li>
+&lt;li>&lt;strong>匹配顺序灵活&lt;/strong>：无需固定比较方向（可优化为优先比较低概率字符）&lt;a class="link" href="@ref" >5&lt;/a>。&lt;/li>
+&lt;/ol>
+&lt;h4 id="-局限-1">❌ &lt;strong>局限&lt;/strong>：
+&lt;/h4>&lt;ol>
+&lt;li>&lt;strong>最坏情况效率低&lt;/strong>：模式串重复度高时退化为暴力匹配。&lt;/li>
+&lt;li>&lt;strong>依赖字符集&lt;/strong>：需预分配移动表空间（ASCII 为 256，Unicode 需优化）&lt;a class="link" href="@ref" >3&lt;/a>。&lt;/li>
+&lt;/ol>
+&lt;h4 id="-适用场景-1">🛠️ &lt;strong>适用场景&lt;/strong>：
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>文本编辑器&lt;/strong>：快速查找/替换（如 Sublime Text）。&lt;/li>
+&lt;li>&lt;strong>日志分析&lt;/strong>：在大量日志中搜索关键词。&lt;/li>
+&lt;li>&lt;strong>生物信息学&lt;/strong>：基因序列匹配（ATCG 字符集小，跳跃高效）&lt;a class="link" href="@ref" >4,7&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="-五代码实现python">💻 &lt;strong>五、代码实现（Python）&lt;/strong>
+&lt;/h3>&lt;pre tabindex="0">&lt;code>def sunday_search(text, pattern):
+m, n = len(pattern), len(text)
+if m == 0:
+return 0
+# 构建移动表（默认步长 m+1）
+shift = [m + 1] * 256 # ASCII 字符集
+for i, char in enumerate(pattern):
+shift[ord(char)] = m - i # 更新字符步长
+pos = 0
+while pos &amp;lt;= n - m:
+# 尝试匹配
+j = 0
+while j &amp;lt; m and text[pos + j] == pattern[j]:
+j += 1
+if j == m: # 匹配成功
+return pos
+# 计算关注字符位置
+if pos + m &amp;gt;= n: # 边界检查
+break
+focus_char = text[pos + m]
+# 根据移动表跳跃
+pos += shift[ord(focus_char)]
+return -1 # 未找到
+# 测试
+text = &amp;#34;substring searching&amp;#34;
+pattern = &amp;#34;search&amp;#34;
+print(sunday_search(text, pattern)) # 输出: 10
+&lt;/code>&lt;/pre>&lt;hr>
+&lt;h3 id="-六优化策略">🧠 &lt;strong>六、优化策略&lt;/strong>
+&lt;/h3>&lt;ol>
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;p>避免最坏情况&lt;/p>
+&lt;p>：&lt;/p>
+&lt;ul>
+&lt;li>检测模式串重复性，若重复度高则切换至 KMP 算法&lt;a class="link" href="@ref" >5&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;ol start="2">
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;p>动态字符集处理&lt;/p>
+&lt;p>：&lt;/p>
+&lt;ul>
+&lt;li>Unicode 文本使用哈希表替代数组存储移动表，节省空间。&lt;/li>
+&lt;/ul>
+&lt;ol start="3">
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;p>多模式匹配扩展&lt;/p>
+&lt;p>：&lt;/p>
+&lt;ul>
+&lt;li>结合 AC 自动机，实现高效多模式匹配（如敏感词过滤）&lt;a class="link" href="@ref" >4&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="-总结-2">💎 &lt;strong>总结&lt;/strong>
+&lt;/h3>&lt;p>SUNDAY 算法以 &lt;strong>简洁的实现&lt;/strong> 和 &lt;strong>高效的跳跃能力&lt;/strong> 在字符串匹配领域占据独特地位。其核心在于 &lt;strong>利用关注字符预判无效区域&lt;/strong>，大幅减少比较次数。尽管在最坏情况下性能受限，但在大字符集、低重复模式的场景中（如自然语言、生物序列），其平均效率接近理论最优值。工程实践中，可结合场景特性动态选择匹配算法（如短模式用暴力法，长模式用 SUNDAY/BM），以达到最佳性能&lt;a class="link" href="@ref" >3,7&lt;/a>。&lt;/p></description></item><item><title>【DSA】Red-Black Tree</title><link>https://dyhes.github.io/p/dsared-black-tree/</link><pubDate>Sun, 29 Jun 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/dsared-black-tree/</guid><description>&lt;p>&lt;img src="https://lizhicdn.search.qq.com/cdn/ybimages/1001/1001_184133/229830fe10d6d74a54f3a678629f8816.jpg"
+loading="lazy"
+alt="img"
+>&lt;/p>
+&lt;p>红黑树是一种&lt;strong>自平衡二叉查找树&lt;/strong>，通过颜色约束和旋转操作保证动态操作的高效性，在插入、删除等操作后仍能维持近似平衡，确保最坏情况下的时间复杂度为 &lt;code>O(\log n)&lt;/code>。以下从核心性质、操作原理、应用场景等维度系统解析：&lt;/p>
+&lt;hr>
+&lt;h3 id="--一核心性质与平衡原理">🔴 ⚫ &lt;strong>一、核心性质与平衡原理&lt;/strong>
+&lt;/h3>&lt;p>红黑树必须满足5条性质：&lt;/p>
+&lt;ol>
+&lt;li>&lt;strong>节点颜色&lt;/strong>：每个节点非红即黑。&lt;/li>
+&lt;li>&lt;strong>根节点黑色&lt;/strong>：根节点必须是黑色。&lt;/li>
+&lt;li>&lt;strong>叶子节点黑色&lt;/strong>：所有叶子节点（NIL哨兵节点）均为黑色&lt;a class="link" href="@ref" >1,3&lt;/a>。&lt;/li>
+&lt;li>&lt;strong>红色节点限制&lt;/strong>：红色节点的子节点必须是黑色（不存在连续红色节点）。&lt;/li>
+&lt;li>&lt;strong>黑高一致&lt;/strong>：从任意节点到其后代叶子节点的路径包含相同数量的黑色节点（称为&lt;strong>黑高&lt;/strong>，Black Height）&lt;a class="link" href="@ref" >1,6&lt;/a>。&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>💡 &lt;strong>平衡性保障&lt;/strong>：&lt;/p>
+&lt;ul>
+&lt;li>性质4和5确保最长路径长度不超过最短路径的2倍（最长路径黑红相间，最短路径全黑）&lt;a class="link" href="@ref" >3&lt;/a>。&lt;/li>
+&lt;li>含 &lt;code>n&lt;/code> 个节点的红黑树高度满足 &lt;code>h \leq 2\log_2(n+1)&lt;/code>，避免退化为链表&lt;a class="link" href="@ref" >1,6&lt;/a>。&lt;/li>
+&lt;/ul>&lt;/blockquote>
+&lt;hr>
+&lt;h3 id="-二核心操作旋转与修复">🔄 &lt;strong>二、核心操作：旋转与修复&lt;/strong>
+&lt;/h3>&lt;h4 id="-1-旋转操作调整结构">⚙️ &lt;strong>1. 旋转操作（调整结构）&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>左旋&lt;/strong>：以节点 &lt;code>x&lt;/code> 为支点，将其右子节点 &lt;code>y&lt;/code> 提升为父节点，&lt;code>x&lt;/code> 成为 &lt;code>y&lt;/code> 的左子树，并调整子树关系。&lt;/li>
+&lt;li>&lt;strong>右旋&lt;/strong>：以节点 &lt;code>y&lt;/code> 为支点，将其左子节点 &lt;code>x&lt;/code> 提升为父节点，&lt;code>y&lt;/code> 成为 &lt;code>x&lt;/code> 的右子树&lt;a class="link" href="@ref" >1,6&lt;/a>。
+​&lt;strong>作用&lt;/strong>​：调整拓扑结构，不破坏二叉搜索树性质。&lt;/li>
+&lt;/ul>
+&lt;h4 id="-2-插入操作默认染红">➕ &lt;strong>2. 插入操作（默认染红）&lt;/strong>
+&lt;/h4>&lt;p>插入新节点时&lt;strong>初始设为红色&lt;/strong>（避免破坏黑高），再根据父节点颜色修复：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>Case 1&lt;/strong>：父节点为黑 → 直接插入。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Case 2&lt;/strong>：父节点和叔节点均为红 → 将父、叔染黑，祖父染红，递归修复祖父节点。&lt;/p>
+&lt;/li>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;p>Case 3&lt;/p>
+&lt;p>：父节点红、叔节点黑 → 通过旋转调整：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>LL/RR型&lt;/strong>：父节点与祖父节点互换颜色，右旋/左旋祖父。&lt;/li>
+&lt;li>&lt;strong>LR/RL型&lt;/strong>：先旋转父节点转换为LL/RR型，再按上一步处理&lt;a class="link" href="@ref" >1,5&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>插入修复策略总结&lt;/strong>：&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>父节点&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>叔节点&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>操作&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>黑&lt;/td>
+&lt;td>-&lt;/td>
+&lt;td>直接插入&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>红&lt;/td>
+&lt;td>红&lt;/td>
+&lt;td>父、叔染黑，祖父染红，递归修复祖父&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>红&lt;/td>
+&lt;td>黑&lt;/td>
+&lt;td>旋转祖父节点并交换颜色（具体见Case 3）&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h4 id="-3-删除操作双黑修复">✖️ &lt;strong>3. 删除操作（双黑修复）&lt;/strong>
+&lt;/h4>&lt;p>删除黑色节点可能破坏黑高，需引入&lt;strong>双黑节点&lt;/strong>（逻辑标记，代表需补足一个黑色）：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>Case 1&lt;/strong>：被删节点为红 → 直接删除。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Case 2&lt;/strong>：被删节点为黑，子节点为红 → 用子节点替代并染黑。&lt;/p>
+&lt;/li>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;p>Case 3&lt;/p>
+&lt;p>：被删节点为黑，子节点为黑 → 删除后子节点标记为双黑，分情况修复：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>兄弟节点红&lt;/strong>：旋转父节点，转换为兄弟节点黑的情况。&lt;/li>
+&lt;li>&lt;strong>兄弟节点黑&lt;/strong>：根据兄弟子节点的颜色进行旋转和重染色&lt;a class="link" href="@ref" >3,6&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>双黑修复策略总结&lt;/strong>：&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>兄弟节点颜色&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>兄弟子节点颜色&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>操作&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>红&lt;/td>
+&lt;td>任意&lt;/td>
+&lt;td>旋转父节点，转换为兄弟黑&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>黑&lt;/td>
+&lt;td>远侄节点红&lt;/td>
+&lt;td>旋转父节点，交换父与兄弟颜色，远侄染黑&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>黑&lt;/td>
+&lt;td>远侄黑、近侄红&lt;/td>
+&lt;td>旋转兄弟节点，交换兄弟与近侄颜色，转换为上一种情况&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>黑&lt;/td>
+&lt;td>兄弟子节点全黑&lt;/td>
+&lt;td>兄弟染红，父节点标记为双黑（若父原为红则染黑；若黑则递归修复父节点）&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="-三红黑树-vs-avl树">⚖️ &lt;strong>三、红黑树 vs. AVL树&lt;/strong>
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>特性&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>红黑树&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>AVL树&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>平衡标准&lt;/strong>&lt;/td>
+&lt;td>黑高一致（非严格平衡）&lt;/td>
+&lt;td>左右子树高度差 ≤ 1&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>插入/删除&lt;/strong>&lt;/td>
+&lt;td>旋转次数少，效率高&lt;/td>
+&lt;td>频繁旋转，效率较低&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>查找效率&lt;/strong>&lt;/td>
+&lt;td>略低于AVL（树高更高）&lt;/td>
+&lt;td>更高（树高更小）&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>适用场景&lt;/strong>&lt;/td>
+&lt;td>频繁增删的动态数据集&lt;/td>
+&lt;td>查询为主的数据集&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;blockquote>
+&lt;p>💡 &lt;strong>工程选择&lt;/strong>：Java的&lt;code>TreeMap&lt;/code>、Linux内核调度器、数据库索引（如MongoDB）均采用红黑树，因其在动态操作中综合性能更优&lt;a class="link" href="@ref" >1,4&lt;/a>。&lt;/p>&lt;/blockquote>
+&lt;hr>
+&lt;h3 id="-四应用场景与工程实践">🛠️ &lt;strong>四、应用场景与工程实践&lt;/strong>
+&lt;/h3>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>数据库索引&lt;/strong>：MongoDB使用红黑树实现范围查询，兼顾插入与查询效率&lt;a class="link" href="@ref" >1&lt;/a>。&lt;/p>
+&lt;/li>
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;p>语言标准库&lt;/p>
+&lt;p>：&lt;/p>
+&lt;ul>
+&lt;li>Java的&lt;code>TreeMap&lt;/code>、&lt;code>TreeSet&lt;/code>基于红黑树，保证有序性操作高效&lt;a class="link" href="@ref" >4&lt;/a>。&lt;/li>
+&lt;li>C++ STL的&lt;code>map&lt;/code>、&lt;code>set&lt;/code>同样采用红黑树实现&lt;a class="link" href="@ref" >6&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;ol start="3">
+&lt;li>
+&lt;p>&lt;strong>操作系统内核&lt;/strong>：Linux内核用红黑树管理进程调度队列和内存区域&lt;a class="link" href="@ref" >1&lt;/a>。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>文件系统&lt;/strong>：如Ext3文件系统使用红黑树跟踪目录项，加速文件查找&lt;a class="link" href="@ref" >6&lt;/a>。&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="-五代码实现关键c示例">💻 &lt;strong>五、代码实现关键（C++示例）&lt;/strong>
+&lt;/h3>&lt;pre tabindex="0">&lt;code>enum Color { RED, BLACK };
+template&amp;lt;typename T&amp;gt;
+struct RBTreeNode {
+T key;
+Color color;
+RBTreeNode* left;
+RBTreeNode* right;
+RBTreeNode* parent;
+RBTreeNode(T k) : key(k), color(RED), left(nullptr), right(nullptr), parent(nullptr) {}
+};
+template&amp;lt;typename T&amp;gt;
+class RBTree {
+public:
+RBTree() : root(nullptr) {}
+void Insert(T key) {
+RBTreeNode&amp;lt;T&amp;gt;* node = new RBTreeNode&amp;lt;T&amp;gt;(key);
+// 1. 二叉查找树插入
+RBTreeNode&amp;lt;T&amp;gt;* parent = nullptr;
+RBTreeNode&amp;lt;T&amp;gt;* current = root;
+while (current) {
+parent = current;
+if (key &amp;lt; current-&amp;gt;key) current = current-&amp;gt;left;
+else current = current-&amp;gt;right;
+}
+node-&amp;gt;parent = parent;
+if (!parent) root = node;
+else if (key &amp;lt; parent-&amp;gt;key) parent-&amp;gt;left = node;
+else parent-&amp;gt;right = node;
+// 2. 修复红黑树性质
+InsertFixup(node);
+}
+private:
+void InsertFixup(RBTreeNode&amp;lt;T&amp;gt;* node) {
+while (node-&amp;gt;parent &amp;amp;&amp;amp; node-&amp;gt;parent-&amp;gt;color == RED) {
+if (node-&amp;gt;parent == node-&amp;gt;parent-&amp;gt;parent-&amp;gt;left) {
+RBTreeNode&amp;lt;T&amp;gt;* uncle = node-&amp;gt;parent-&amp;gt;parent-&amp;gt;right;
+if (uncle &amp;amp;&amp;amp; uncle-&amp;gt;color == RED) { // Case 2: 叔节点红
+node-&amp;gt;parent-&amp;gt;color = BLACK;
+uncle-&amp;gt;color = BLACK;
+node-&amp;gt;parent-&amp;gt;parent-&amp;gt;color = RED;
+node = node-&amp;gt;parent-&amp;gt;parent;
+} else { // Case 3: 叔节点黑
+if (node == node-&amp;gt;parent-&amp;gt;right) {
+node = node-&amp;gt;parent;
+LeftRotate(node);
+}
+node-&amp;gt;parent-&amp;gt;color = BLACK;
+node-&amp;gt;parent-&amp;gt;parent-&amp;gt;color = RED;
+RightRotate(node-&amp;gt;parent-&amp;gt;parent);
+}
+} else { // 对称处理
+// ...
+}
+}
+root-&amp;gt;color = BLACK; // 根节点始终为黑
+}
+void LeftRotate(RBTreeNode&amp;lt;T&amp;gt;* x) {
+RBTreeNode&amp;lt;T&amp;gt;* y = x-&amp;gt;right;
+x-&amp;gt;right = y-&amp;gt;left;
+if (y-&amp;gt;left) y-&amp;gt;left-&amp;gt;parent = x;
+y-&amp;gt;parent = x-&amp;gt;parent;
+if (!x-&amp;gt;parent) root = y;
+else if (x == x-&amp;gt;parent-&amp;gt;left) x-&amp;gt;parent-&amp;gt;left = y;
+else x-&amp;gt;parent-&amp;gt;right = y;
+y-&amp;gt;left = x;
+x-&amp;gt;parent = y;
+}
+RBTreeNode&amp;lt;T&amp;gt;* root;
+};
+&lt;/code>&lt;/pre>&lt;hr>
+&lt;h3 id="-总结">💎 &lt;strong>总结&lt;/strong>
+&lt;/h3>&lt;p>红黑树通过&lt;strong>颜色约束&lt;/strong>与&lt;strong>旋转策略&lt;/strong>在动态操作中维持近似平衡，其设计权衡了严格平衡（AVL树）与操作效率，成为工程实践中&lt;strong>高频增删场景&lt;/strong>的首选结构。核心在于：&lt;/p>
+&lt;ol>
+&lt;li>&lt;strong>插入修复&lt;/strong>：通过递归染色和旋转消除连续红节点；&lt;/li>
+&lt;li>&lt;strong>删除修复&lt;/strong>：双黑节点标记与兄弟节点协同调整黑高；&lt;/li>
+&lt;li>&lt;strong>性能优势&lt;/strong>：牺牲部分查找效率换取更高的插入/删除吞吐量&lt;a class="link" href="@ref" >1,6&lt;/a>。&lt;/li>
+&lt;/ol>
+&lt;p>深入理解红黑树，可掌握数据结构的动态平衡本质，并为数据库、操作系统等底层系统开发奠定基础。&lt;/p></description></item><item><title>【DSA】图算法</title><link>https://dyhes.github.io/p/dsa%E5%9B%BE%E7%AE%97%E6%B3%95/</link><pubDate>Thu, 26 Jun 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/dsa%E5%9B%BE%E7%AE%97%E6%B3%95/</guid><description>&lt;h2 id="最小生成树">最小生成树
+&lt;/h2>&lt;p>以下是Kruskal与Prim算法的全面对比，从算法原理到应用场景的系统分析：&lt;/p>
+&lt;hr>
+&lt;h3 id="-1-基本思想与算法过程">⚙️ 1. &lt;strong>基本思想与算法过程&lt;/strong>
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>维度&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Kruskal算法&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Prim算法&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>核心策略&lt;/strong>&lt;/td>
+&lt;td>&lt;strong>边优先&lt;/strong>：按权重升序选择边，避免成环&lt;a class="link" href="@ref" >1,7&lt;/a>&lt;/td>
+&lt;td>&lt;strong>顶点优先&lt;/strong>：从起点扩展，选择连接已选与未选顶点集的最小边&lt;a class="link" href="@ref" >9,10&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>初始化&lt;/strong>&lt;/td>
+&lt;td>所有边排序，每个顶点独立为树&lt;a class="link" href="@ref" >4&lt;/a>&lt;/td>
+&lt;td>指定起点，初始化包含该顶点的生成树&lt;a class="link" href="@ref" >1,10&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>迭代过程&lt;/strong>&lt;/td>
+&lt;td>逐边检查，用并查集合并子树&lt;a class="link" href="@ref" >7&lt;/a>&lt;/td>
+&lt;td>逐顶点加入，更新邻接边优先级&lt;a class="link" href="@ref" >9&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>终止条件&lt;/strong>&lt;/td>
+&lt;td>选中 &lt;code>V-1&lt;/code> 条边（&lt;code>V&lt;/code>为顶点数）&lt;a class="link" href="@ref" >4&lt;/a>&lt;/td>
+&lt;td>所有顶点加入生成树&lt;a class="link" href="@ref" >10&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="-2-数据结构与实现差异">🧱 2. &lt;strong>数据结构与实现差异&lt;/strong>
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>组件&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Kruskal算法&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Prim算法&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>关键数据结构&lt;/strong>&lt;/td>
+&lt;td>&lt;strong>并查集 (Union-Find)&lt;/strong>：检测环并合并连通分量&lt;a class="link" href="@ref" >1,7&lt;/a>&lt;/td>
+&lt;td>&lt;strong>优先队列 (最小堆)&lt;/strong>：高效选取当前最小边&lt;a class="link" href="@ref" >1,10&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>存储依赖&lt;/strong>&lt;/td>
+&lt;td>需存储所有边，适合邻接表&lt;a class="link" href="@ref" >2&lt;/a>&lt;/td>
+&lt;td>需访问邻接点，适合邻接矩阵或邻接表&lt;a class="link" href="@ref" >9&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>空间复杂度&lt;/strong>&lt;/td>
+&lt;td>&lt;code>O(E + V)&lt;/code>（边与顶点存储）&lt;a class="link" href="@ref" >2&lt;/a>&lt;/td>
+&lt;td>&lt;code>O(V^2)&lt;/code>（邻接矩阵）或 &lt;code>O(E + V)&lt;/code>（邻接表+堆）&lt;a class="link" href="@ref" >3&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="-3-时间复杂度对比">⏱️ 3. &lt;strong>时间复杂度对比&lt;/strong>
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>场景&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Kruskal算法&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Prim算法&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>基础实现&lt;/strong>&lt;/td>
+&lt;td>&lt;code>O(E \log E)&lt;/code>（排序主导）&lt;a class="link" href="@ref" >3&lt;/a>&lt;/td>
+&lt;td>&lt;code>O(V^2)&lt;/code>（邻接矩阵遍历）&lt;a class="link" href="@ref" >3&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>优化实现&lt;/strong>&lt;/td>
+&lt;td>&lt;code>O(E \alpha(V))&lt;/code>（并查集路径压缩）&lt;a class="link" href="@ref" >7&lt;/a>&lt;/td>
+&lt;td>&lt;code>O(E \log V)&lt;/code>（二叉堆优化）&lt;a class="link" href="@ref" >9&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>稠密图（边数≈V²）&lt;/strong>&lt;/td>
+&lt;td>较慢（排序开销大）&lt;a class="link" href="@ref" >1&lt;/a>&lt;/td>
+&lt;td>&lt;strong>更快&lt;/strong>（顶点操作高效）&lt;a class="link" href="@ref" >5&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>稀疏图（边数≪V²）&lt;/strong>&lt;/td>
+&lt;td>&lt;strong>更快&lt;/strong>（仅处理有效边）&lt;a class="link" href="@ref" >2&lt;/a>&lt;/td>
+&lt;td>较慢（堆操作频繁）&lt;a class="link" href="@ref" >5&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="-4-适用场景与优缺点">🌐 4. &lt;strong>适用场景与优缺点&lt;/strong>
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>场景&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>推荐算法&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>原因&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>稀疏图（如社交网络）&lt;/strong>&lt;/td>
+&lt;td>&lt;strong>Kruskal&lt;/strong>&lt;/td>
+&lt;td>仅需排序有限边，并查集合并高效&lt;a class="link" href="@ref" >2,8&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>稠密图（如电网）&lt;/strong>&lt;/td>
+&lt;td>&lt;strong>Prim&lt;/strong>&lt;/td>
+&lt;td>顶点扩展避免全局排序，邻接矩阵操作更直接&lt;a class="link" href="@ref" >5,10&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>动态图（边权频繁更新）&lt;/strong>&lt;/td>
+&lt;td>Kruskal&lt;/td>
+&lt;td>并查集动态维护连通性更灵活&lt;a class="link" href="@ref" >7&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>不连通图&lt;/strong>&lt;/td>
+&lt;td>&lt;strong>Kruskal&lt;/strong>&lt;/td>
+&lt;td>天然支持生成最小生成森林（多棵树）&lt;a class="link" href="@ref" >1&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>需记录树结构&lt;/strong>&lt;/td>
+&lt;td>Prim&lt;/td>
+&lt;td>迭代过程直接记录父子关系&lt;a class="link" href="@ref" >9&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="-5-实际应用案例">🛠️ 5. &lt;strong>实际应用案例&lt;/strong>
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>Kruskal&lt;/strong>
+&lt;ul>
+&lt;li>&lt;strong>通信网络设计&lt;/strong>：低成本连接分散节点（如5G基站布局）&lt;a class="link" href="@ref" >8&lt;/a>。&lt;/li>
+&lt;li>&lt;strong>聚类分析&lt;/strong>：合并相似数据点（如客户分群）&lt;a class="link" href="@ref" >8&lt;/a>。&lt;/li>
+&lt;li>&lt;strong>交通规划&lt;/strong>：稀疏路网的最小成本联通（如乡村道路建设）&lt;a class="link" href="@ref" >6&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>Prim&lt;/strong>
+&lt;ul>
+&lt;li>&lt;strong>电网拓扑优化&lt;/strong>：稠密变电站的高效连接&lt;a class="link" href="@ref" >10&lt;/a>。&lt;/li>
+&lt;li>&lt;strong>图像分割&lt;/strong>：像素相似性优先的区域合并&lt;a class="link" href="@ref" >8&lt;/a>。&lt;/li>
+&lt;li>&lt;strong>物流路径规划&lt;/strong>：仓库密集区域的配送路线优化&lt;a class="link" href="@ref" >8&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="-总结选择策略">💎 &lt;strong>总结选择策略&lt;/strong>
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>首选Kruskal&lt;/strong>：边数远小于顶点数时（稀疏图），或需处理不连通图&lt;a class="link" href="@ref" >1,7&lt;/a>。&lt;/li>
+&lt;li>&lt;strong>首选Prim&lt;/strong>：边数接近完全图时（稠密图），或需频繁查询邻接边&lt;a class="link" href="@ref" >5,10&lt;/a>。&lt;/li>
+&lt;li>&lt;strong>混合策略&lt;/strong>：超大规模图可结合Boruvka算法（多子树并行合并）提升效率&lt;a class="link" href="@ref" >8&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>两种算法均支持负权边，但要求无负环&lt;a class="link" href="@ref" >1&lt;/a>。实际选择需综合&lt;strong>图结构特征&lt;/strong>、&lt;strong>性能需求&lt;/strong>及&lt;strong>实现复杂度&lt;/strong>，例如社交网络推荐Kruskal，而芯片布线常用Prim。&lt;/p>&lt;/blockquote>
+&lt;h2 id="最短路径">最短路径
+&lt;/h2>&lt;p>以下是Dijkstra、Bellman-Ford和Floyd三种最短路径算法的综合对比，从核心原理到应用场景的系统分析：&lt;/p>
+&lt;hr>
+&lt;h3 id="-1-算法原理与策略对比">⚙️ &lt;strong>1. 算法原理与策略对比&lt;/strong>
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>维度&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Dijkstra算法&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Bellman-Ford算法&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Floyd算法&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>核心思想&lt;/strong>&lt;/td>
+&lt;td>贪心策略：每次选择当前距离源点最近的顶点，逐步扩展最短路径树&lt;/td>
+&lt;td>动态规划：通过多次松弛操作逐步逼近最短路径&lt;/td>
+&lt;td>动态规划：插点法，通过中间点更新任意两点间最短路径&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>策略类型&lt;/strong>&lt;/td>
+&lt;td>单源最短路径&lt;/td>
+&lt;td>单源最短路径&lt;/td>
+&lt;td>多源最短路径&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>初始化&lt;/strong>&lt;/td>
+&lt;td>源点距离为0，其他顶点距离为∞&lt;/td>
+&lt;td>同Dijkstra&lt;/td>
+&lt;td>距离矩阵：对角线为0，直接边为权重，其他为∞&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>迭代过程&lt;/strong>&lt;/td>
+&lt;td>每次选择未访问顶点中距离最小的顶点，更新其邻接点&lt;/td>
+&lt;td>对所有边进行V-1轮松弛操作（V为顶点数）&lt;/td>
+&lt;td>三重循环：以每个顶点k为中间点，更新所有i→j路径&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>终止条件&lt;/strong>&lt;/td>
+&lt;td>所有顶点被访问或优先队列为空&lt;/td>
+&lt;td>完成V-1轮松弛，或某轮无更新&lt;/td>
+&lt;td>所有顶点均作为中间点被遍历一次&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="-2-时间复杂度与空间复杂度">⏱️ &lt;strong>2. 时间复杂度与空间复杂度&lt;/strong>
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>算法&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>时间复杂度&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>空间复杂度&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>优化方式&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>Dijkstra&lt;/strong>&lt;/td>
+&lt;td>- 朴素实现：O(V²)（邻接矩阵） - 堆优化：O((V+E)logV)（二叉堆）&lt;/td>
+&lt;td>O(V)&lt;/td>
+&lt;td>优先队列（堆）减少查找最小值开销&lt;a class="link" href="@ref" >6,7&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>Bellman-Ford&lt;/strong>&lt;/td>
+&lt;td>O(V·E)&lt;/td>
+&lt;td>O(V)&lt;/td>
+&lt;td>SPFA优化：队列减少冗余松弛，平均O(E)，最坏O(VE)&lt;a class="link" href="@ref" >10&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>Floyd&lt;/strong>&lt;/td>
+&lt;td>O(V³)&lt;/td>
+&lt;td>O(V²)&lt;/td>
+&lt;td>无显著优化，动态规划状态压缩&lt;a class="link" href="@ref" >1,4&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="-3-适用场景与限制">🧩 &lt;strong>3. 适用场景与限制&lt;/strong>
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>特性&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Dijkstra&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Bellman-Ford&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Floyd&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>负权边处理&lt;/strong>&lt;/td>
+&lt;td>❌ 无法处理（贪心策略失效）&lt;/td>
+&lt;td>✅ 可处理，并能检测负权环&lt;/td>
+&lt;td>✅ 可处理，但不能有负权回路&lt;a class="link" href="@ref" >4,9&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>负权环检测&lt;/strong>&lt;/td>
+&lt;td>不支持&lt;/td>
+&lt;td>✅ 第V轮松弛仍可更新则存在负权环&lt;/td>
+&lt;td>不支持&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>适用图类型&lt;/strong>&lt;/td>
+&lt;td>稠密图（朴素）或稀疏图（堆优化）&lt;/td>
+&lt;td>稀疏图（边较少时效率较高）&lt;/td>
+&lt;td>小规模图（V≤500）&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>特殊场景&lt;/strong>&lt;/td>
+&lt;td>- 路由协议（OSPF） - 网络延迟优化&lt;/td>
+&lt;td>- 含负权的金融模型 - 运输成本计算&lt;/td>
+&lt;td>- 任意两点最短路径矩阵 - 传递闭包计算&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="-4-实际应用案例">🌐 &lt;strong>4. 实际应用案例&lt;/strong>
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>Dijkstra&lt;/strong>
+&lt;ul>
+&lt;li>&lt;strong>5G网络路由&lt;/strong>：基站间低延迟通信（边权非负）&lt;a class="link" href="@ref" >4&lt;/a>&lt;/li>
+&lt;li>&lt;strong>物流配送&lt;/strong>：城市间最短路径规划（无负权交通网）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>Bellman-Ford/SPFA&lt;/strong>
+&lt;ul>
+&lt;li>&lt;strong>金融风险分析&lt;/strong>：信用链路径中存在负权（如债务抵消）&lt;a class="link" href="@ref" >9&lt;/a>&lt;/li>
+&lt;li>&lt;strong>游戏AI寻路&lt;/strong>：动态调整路径权重（如地形惩罚为负）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>Floyd&lt;/strong>
+&lt;ul>
+&lt;li>&lt;strong>社交网络分析&lt;/strong>：计算任意用户间的最短关系链&lt;a class="link" href="@ref" >1&lt;/a>&lt;/li>
+&lt;li>&lt;strong>交通枢纽规划&lt;/strong>：机场/车站间全互通最短路径预计算&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="-5-核心优缺点总结">⚖️ &lt;strong>5. 核心优缺点总结&lt;/strong>
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>算法&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>优点&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>缺点&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>Dijkstra&lt;/strong>&lt;/td>
+&lt;td>- 效率高（堆优化） - 易扩展（A*算法基础）&lt;/td>
+&lt;td>- 不支持负权边 - 堆优化实现复杂&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>Bellman-Ford&lt;/strong>&lt;/td>
+&lt;td>- 支持负权边和环检测 - 实现简单&lt;/td>
+&lt;td>- 效率低（O(V·E)） - SPFA最坏不稳定&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>Floyd&lt;/strong>&lt;/td>
+&lt;td>- 代码简洁（三重循环） - 全源最短路&lt;/td>
+&lt;td>- 立方级复杂度 - 仅适合小规模图&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="-选择策略">💎 &lt;strong>选择策略&lt;/strong>
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>选Dijkstra&lt;/strong>：边权非负且需高效单源路径（如导航系统）&lt;a class="link" href="@ref" >4,7&lt;/a>&lt;/li>
+&lt;li>&lt;strong>选Bellman-Ford&lt;/strong>：含负权边或需检测负环（如金融风控）&lt;a class="link" href="@ref" >9,11&lt;/a>&lt;/li>
+&lt;li>&lt;strong>选Floyd&lt;/strong>：小规模图且需任意两点最短路径（如网络中心性分析）&lt;a class="link" href="@ref" >1,2&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>三种算法共同限制：&lt;strong>负权回路&lt;/strong>会导致无解（Bellman-Ford可检测但不可解）。实际选择需结合&lt;strong>数据规模&lt;/strong>、&lt;strong>边权特性&lt;/strong>及&lt;strong>问题类型&lt;/strong>，例如芯片布线常用Dijkstra，而物流成本优化倾向Bellman-Ford&lt;a class="link" href="@ref" >5,10&lt;/a>。&lt;/p>&lt;/blockquote>
+&lt;h2 id="关键路径">关键路径
+&lt;/h2>&lt;p>以下是关键路径算法（Critical Path Method, CPM）的全面解析，结合其核心原理、计算步骤、实现方式及应用场景，参考权威资料进行说明：&lt;/p>
+&lt;hr>
+&lt;h3 id="-一算法核心思想">📌 &lt;strong>一、算法核心思想&lt;/strong>
+&lt;/h3>&lt;p>关键路径算法是一种&lt;strong>项目管理工具&lt;/strong>，用于确定项目中耗时最长的任务序列（即关键路径），该路径的时长决定了项目的最短完成时间。关键路径上的任务若有延迟，将直接导致整个项目延期&lt;a class="link" href="@ref" >1,6,9&lt;/a>。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>核心目标&lt;/strong>：识别项目中的关键任务，优化资源分配，缩短总工期。&lt;/p>
+&lt;/li>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;p>理论基础&lt;/p>
+&lt;p>：基于&lt;/p>
+&lt;p>有向无环图（DAG）&lt;/p>
+&lt;p>的拓扑结构，其中：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>节点&lt;/strong>表示&lt;strong>事件&lt;/strong>（如任务开始/结束）&lt;a class="link" href="@ref" >5&lt;/a>；&lt;/li>
+&lt;li>&lt;strong>边&lt;/strong>表示&lt;strong>活动&lt;/strong>（任务），权重为活动持续时间&lt;a class="link" href="@ref" >5,9&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="-二算法执行步骤">🔍 &lt;strong>二、算法执行步骤&lt;/strong>
+&lt;/h3>&lt;h4 id="1-构建项目网络图">&lt;strong>1. 构建项目网络图&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>活动定义&lt;/strong>：列出所有任务及其持续时间（例如：设计需5天，编码需10天）&lt;a class="link" href="@ref" >3,9&lt;/a>；&lt;/li>
+&lt;li>&lt;strong>依赖关系&lt;/strong>：明确任务间逻辑顺序（如“测试”必须在“编码”完成后）&lt;a class="link" href="@ref" >9&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;h4 id="2-正向计算最早时间forward-pass">&lt;strong>2. 正向计算最早时间（Forward Pass）&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>最早开始时间（ES）&lt;/strong>：活动所有前置任务完成的最早时间；&lt;/p>
+&lt;/li>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;p>最早完成时间（EF）&lt;/p>
+&lt;p>：ES + 活动持续时间&lt;/p>
+&lt;p>5,6&lt;/p>
+&lt;p>。&lt;/p>
+&lt;p>计算规则&lt;/p>
+&lt;p>：从起点开始，按拓扑顺序迭代：&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;code>ES_B = max(EF_A)&lt;/code> （A是B的前置任务）
+​&lt;strong>示例&lt;/strong>​：若任务A（ES=0，持续3天）→任务B（ES=3，持续4天），则B的EF=7&lt;a class="link" href="@ref" >5&lt;/a>。&lt;/p>&lt;/blockquote>
+&lt;h4 id="3-反向计算最晚时间backward-pass">&lt;strong>3. 反向计算最晚时间（Backward Pass）&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>最晚完成时间（LF）&lt;/strong>：不延误项目的活动最晚完成时间；&lt;/p>
+&lt;/li>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;p>最晚开始时间（LS）&lt;/p>
+&lt;p>：LF - 活动持续时间&lt;/p>
+&lt;p>6,9&lt;/p>
+&lt;p>。&lt;/p>
+&lt;p>计算规则&lt;/p>
+&lt;p>：从终点（LF=EF）开始，逆拓扑顺序迭代：&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;code>LF_A = min(LS_B)&lt;/code> （B是A的后继任务）
+​&lt;strong>示例&lt;/strong>​：若项目终点EF=16，任务C（需2天）的LF=16，则LS_C=14&lt;a class="link" href="@ref" >5&lt;/a>。&lt;/p>&lt;/blockquote>
+&lt;h4 id="4-确定关键路径">&lt;strong>4. 确定关键路径&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>总浮动时间（Slack）&lt;/strong>：&lt;code>Slack = LS - ES&lt;/code>（或&lt;code>LF - EF&lt;/code>）；&lt;/li>
+&lt;li>&lt;strong>关键活动&lt;/strong>：Slack = 0 的任务，其连接路径即为关键路径&lt;a class="link" href="@ref" >5,9&lt;/a>。
+​&lt;strong>示例&lt;/strong>​：下表中活动A、B、D的Slack=0，组成关键路径：
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>​&lt;strong>活动&lt;/strong>​&lt;/th>
+&lt;th>​&lt;strong>ES&lt;/strong>​&lt;/th>
+&lt;th>​&lt;strong>EF&lt;/strong>​&lt;/th>
+&lt;th>​&lt;strong>LS&lt;/strong>​&lt;/th>
+&lt;th>​&lt;strong>LF&lt;/strong>​&lt;/th>
+&lt;th>​&lt;strong>Slack&lt;/strong>​&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>A&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>3&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>3&lt;/td>
+&lt;td>0 ✅&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>B&lt;/td>
+&lt;td>3&lt;/td>
+&lt;td>7&lt;/td>
+&lt;td>3&lt;/td>
+&lt;td>7&lt;/td>
+&lt;td>0 ✅&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>C&lt;/td>
+&lt;td>3&lt;/td>
+&lt;td>5&lt;/td>
+&lt;td>5&lt;/td>
+&lt;td>7&lt;/td>
+&lt;td>2&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>D&lt;/td>
+&lt;td>7&lt;/td>
+&lt;td>10&lt;/td>
+&lt;td>7&lt;/td>
+&lt;td>10&lt;/td>
+&lt;td>0 ✅&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="-三数据结构与实现">⚙️ &lt;strong>三、数据结构与实现&lt;/strong>
+&lt;/h3>&lt;h4 id="1-图存储结构">&lt;strong>1. 图存储结构&lt;/strong>
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>邻接表&lt;/strong>：适合稀疏图，节省空间，便于遍历后继节点（常用C/Java实现）&lt;a class="link" href="@ref" >3,6&lt;/a>；&lt;/li>
+&lt;li>&lt;strong>邻接矩阵&lt;/strong>：适合稠密图，快速查询边权重（C++常用）&lt;a class="link" href="@ref" >7&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;h4 id="2-关键算法步骤">&lt;strong>2. 关键算法步骤&lt;/strong>
+&lt;/h4>&lt;pre tabindex="0">&lt;code>// 伪代码示例（邻接表实现）
+void criticalPath() {
+topologicalSort(); // 拓扑排序确定计算顺序
+forwardPass(); // 计算ES/EF
+backwardPass(); // 计算LS/LF
+for (活动 in 所有活动) {
+if (LS == ES)
+标记为关键活动; // 生成关键路径
+}
+}
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>&lt;strong>时间复杂度&lt;/strong>：O(V+E)（V为事件数，E为活动数）&lt;a class="link" href="@ref" >6&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="-四应用场景分析">🏗️ &lt;strong>四、应用场景分析&lt;/strong>
+&lt;/h3>&lt;ol>
+&lt;li>&lt;strong>项目管理&lt;/strong>
+&lt;ul>
+&lt;li>&lt;strong>建筑项目&lt;/strong>：识别主体结构施工为关键路径，优先保障资源&lt;a class="link" href="@ref" >9&lt;/a>；&lt;/li>
+&lt;li>&lt;strong>软件开发&lt;/strong>：优化测试与部署序列，缩短上线周期&lt;a class="link" href="@ref" >6&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>人工智能与优化&lt;/strong>
+&lt;ul>
+&lt;li>&lt;strong>任务调度&lt;/strong>：在分布式系统中协调GPU计算任务，减少训练时间（如深度学习）&lt;a class="link" href="@ref" >8&lt;/a>；&lt;/li>
+&lt;li>&lt;strong>风险预测&lt;/strong>：结合机器学习预测关键路径延误概率&lt;a class="link" href="@ref" >8&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>制造业与物流&lt;/strong>
+&lt;ul>
+&lt;li>&lt;strong>生产线优化&lt;/strong>：识别装配流程瓶颈（如等待零件时间），调整资源分配&lt;a class="link" href="@ref" >1,9&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="-五优缺点与挑战">⚖️ &lt;strong>五、优缺点与挑战&lt;/strong>
+&lt;/h3>&lt;h4 id="优点">&lt;strong>优点&lt;/strong>：
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>可视化依赖&lt;/strong>：清晰展示任务逻辑关系&lt;a class="link" href="@ref" >9&lt;/a>；&lt;/li>
+&lt;li>&lt;strong>资源优化&lt;/strong>：聚焦关键任务，避免资源浪费&lt;a class="link" href="@ref" >6&lt;/a>；&lt;/li>
+&lt;li>&lt;strong>进度监控&lt;/strong>：实时预警延误风险&lt;a class="link" href="@ref" >1&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;h4 id="局限">&lt;strong>局限&lt;/strong>：
+&lt;/h4>&lt;ul>
+&lt;li>&lt;strong>依赖精确时间估计&lt;/strong>：若任务时间预估不准，路径可能失效&lt;a class="link" href="@ref" >9&lt;/a>；&lt;/li>
+&lt;li>&lt;strong>动态调整需求&lt;/strong>：新增任务需重新计算路径（可通过增量更新优化）&lt;a class="link" href="@ref" >6&lt;/a>；&lt;/li>
+&lt;li>&lt;strong>忽略资源约束&lt;/strong>：未考虑资源冲突（需结合资源平衡技术）&lt;a class="link" href="@ref" >1&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="-六关键路径优化策略">💎 &lt;strong>六、关键路径优化策略&lt;/strong>
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>策略&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>方法&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>适用场景&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>任务压缩&lt;/strong>&lt;/td>
+&lt;td>增加资源缩短关键任务时间（如加班/加人）&lt;/td>
+&lt;td>紧急项目期限&lt;a class="link" href="@ref" >9&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>快速跟进&lt;/strong>&lt;/td>
+&lt;td>并行执行部分任务（如设计与采购同步）&lt;/td>
+&lt;td>依赖关系灵活的任务&lt;a class="link" href="@ref" >2&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>资源平滑&lt;/strong>&lt;/td>
+&lt;td>从非关键任务抽调资源至关键路径&lt;/td>
+&lt;td>资源受限项目&lt;a class="link" href="@ref" >1&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="总结">&lt;strong>总结&lt;/strong>
+&lt;/h3>&lt;p>关键路径算法通过&lt;strong>网络图建模&lt;/strong>与&lt;strong>动态时间计算&lt;/strong>，精准定位项目核心瓶颈，是优化工期的核心工具。其应用已从传统工程延伸至AI调度、云计算等领域。实际使用时需注意：&lt;/p>
+&lt;ol>
+&lt;li>结合&lt;strong>实时监控工具&lt;/strong>（如板栗看板）动态更新路径&lt;a class="link" href="@ref" >9&lt;/a>；&lt;/li>
+&lt;li>在&lt;strong>资源受限&lt;/strong>或&lt;strong>时间不确定性高&lt;/strong>的项目中，需辅以风险缓冲设计（如关键链方法）&lt;a class="link" href="@ref" >1&lt;/a>。&lt;/li>
+&lt;/ol></description></item></channel></rss>

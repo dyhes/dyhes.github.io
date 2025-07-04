@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Spring Cloud on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/spring-cloud/</link><description>Recent content in Spring Cloud on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 04 Jul 2025 11:55:43 +0800</lastBuildDate><atom:link href="https://dyhes.github.io/tags/spring-cloud/index.xml" rel="self" type="application/rss+xml"/><item><title>【Spring】Cloud Basics</title><link>https://dyhes.github.io/p/springcloud-basics/</link><pubDate>Tue, 04 Mar 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/springcloud-basics/</guid><description>&lt;p>Spring Cloud provides tools for developers to quickly build some of the common patterns in &lt;strong>distributed&lt;/strong> systems (e.g. &lt;strong>configuration management, service discovery, circuit breakers, intelligent routing, micro-proxy, control bus, short lived microservices and contract testing&lt;/strong>). Coordination of distributed systems leads to boiler plate patterns, and using Spring Cloud developers can quickly stand up services and applications that implement those patterns. They will work well in any distributed environment, including the developer’s own laptop, bare metal data centres, and managed platforms such as Cloud Foundry.&lt;/p>
+&lt;h2 id="the-beginners-guide-to-spring-cloud---ryan-baxter">&lt;a class="link" href="https://www.youtube.com/watch?v=aO3W-lYnw-o" target="_blank" rel="noopener"
+>The Beginner’s Guide To Spring Cloud - Ryan Baxter&lt;/a>&lt;!-- {"fold":true} -->
+&lt;/h2>&lt;p>&lt;img src="https://i.ibb.co/qL1hdPWy/image.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/8gSK1nWP/image-2.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/k639vkcc/image-4.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/3Y9LS7vy/image-3.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/xt9MWkYb/image-5.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/84s1ysNH/image-6.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/bjDtDzwC/image-7.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://i.ibb.co/9mC2nLwd/image-8.png"
+loading="lazy"
+>&lt;/p>
+&lt;h2 id="spring-office-hours-s3e5---distributed-applications-with-spring-cloud">&lt;a class="link" href="https://www.youtube.com/watch?v=C1ujgyu4NWA" target="_blank" rel="noopener"
+>Spring Office Hours: S3E5 - Distributed Applications with Spring Cloud&lt;/a>
+&lt;/h2>&lt;ul>
+&lt;li>Service Discovery
+&lt;ul>
+&lt;li>Spring Cloud Netflix Eureka&lt;/li>
+&lt;li>Spring Cloud Consul&lt;/li>
+&lt;li>Spring Cloud Zookeeper&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="deekseek">DeekSeek
+&lt;/h2>&lt;p>Spring Cloud 是一个由多个子项目组成的微服务工具集，每个子项目专注于解决分布式系统中的特定问题。以下是其核心子项目及其作用的详细解释：&lt;/p>
+&lt;hr>
+&lt;h3 id="核心服务治理组件">&lt;strong>核心服务治理组件&lt;/strong>
+&lt;/h3>&lt;ol>
+&lt;li>&lt;strong>Spring Cloud Netflix&lt;/strong>
+&lt;ul>
+&lt;li>&lt;strong>Eureka&lt;/strong>：服务注册与发现的核心组件，维护全局服务实例清单，支持服务动态扩缩容。&lt;/li>
+&lt;li>&lt;strong>Ribbon&lt;/strong>：客户端负载均衡器，提供轮询、随机等多种策略，优化服务间调用。&lt;/li>
+&lt;li>&lt;strong>Hystrix&lt;/strong>：熔断器机制，通过隔离故障服务防止级联故障，支持服务降级和超时控制。&lt;/li>
+&lt;li>&lt;strong>Zuul&lt;/strong>（已逐步被替代）：API 网关，提供路由转发、请求过滤及监控功能。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>Netflix OSS
+Netflix OSS 是指 Netflix 开源软件（Netflix Open Source Software，简称 Netflix OSS）的组件
+Netflix OSS 提供了一系列专注于解决分布式系统问题的组件，主要包括：
+&lt;strong>Eureka&lt;/strong>：服务注册与发现系统，帮助微服务动态定位彼此的网络地址。
+&lt;strong>Hystrix&lt;/strong>：容错库，通过断路器模式防止服务故障扩散，支持熔断和降级。
+&lt;strong>Zuul&lt;/strong>：API 网关，用于路由请求、过滤流量及执行身份验证等边缘服务功能。
+&lt;strong>Ribbon&lt;/strong>：客户端负载均衡器，与 Eureka 集成实现智能路由。
+&lt;strong>Archaius&lt;/strong>：动态配置管理工具，支持实时更新微服务配置。
+&lt;strong>Feign&lt;/strong>：声明式 HTTP 客户端，简化服务间通信。&lt;/p>&lt;/blockquote>
+&lt;ol start="2">
+&lt;li>&lt;strong>Spring Cloud Gateway&lt;/strong>
+&lt;ul>
+&lt;li>新一代 API 网关，支持动态路由、限流、熔断集成，替代 Zuul 成为官方推荐方案。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="配置与通信管理">&lt;strong>配置与通信管理&lt;/strong>
+&lt;/h3>&lt;ol start="3">
+&lt;li>
+&lt;p>&lt;strong>Spring Cloud Config&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>集中式配置管理，支持 Git/SVN 存储配置，实现配置动态刷新和版本控制。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Spring Cloud Bus&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>基于消息代理（如 RabbitMQ/Kafka）的配置刷新总线，联动 Config 实现集群配置实时同步。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Spring Cloud OpenFeign&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>声明式 REST 客户端，整合 Ribbon 和 Hystrix，简化服务调用接口定义。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="分布式系统支持">&lt;strong>分布式系统支持&lt;/strong>
+&lt;/h3>&lt;ol start="6">
+&lt;li>
+&lt;p>&lt;strong>Spring Cloud Stream&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>消息驱动微服务框架，抽象化消息中间件（如 Kafka/RabbitMQ），统一消息生产与消费模型。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Spring Cloud Sleuth &amp;amp; Zipkin&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Sleuth&lt;/strong>：生成分布式请求链路跟踪 ID，记录服务调用链；&lt;strong>Zipkin&lt;/strong>：可视化跟踪数据，用于性能分析和故障定位。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Spring Cloud Consul/Zookeeper&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>替代 Eureka&lt;/strong> 的服务注册中心方案，Consul 额外支持健康检查与键值存储，Zookeeper 强调强一致性。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="其他关键组件">&lt;strong>其他关键组件&lt;/strong>
+&lt;/h3>&lt;ol start="9">
+&lt;li>
+&lt;p>&lt;strong>Spring Cloud Security&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>提供 OAuth2 安全认证、鉴权及加密功能，保护微服务 API 接口。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Spring Cloud Task&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>管理短期任务（如批处理），支持任务调度与状态跟踪，适用于一次性数据处理场景。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Spring Cloud Circuit Breaker&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>统一熔断器抽象层，兼容 Hystrix、Resilience4J 等多种实现，增强系统容错能力。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="版本与生态">&lt;strong>版本与生态&lt;/strong>
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>版本命名&lt;/strong>：采用伦敦地铁站名（如 Greenwich、Hoxton），子项目版本通过依赖清单（BOM）统一管理。&lt;/li>
+&lt;li>&lt;strong>与 Spring Boot 关系&lt;/strong>：基于 Spring Boot 的自动配置能力实现快速集成，形成「Spring Boot 开发单体服务 + Spring Cloud 治理分布式系统」的协作模式。&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="总结">&lt;strong>总结&lt;/strong>
+&lt;/h3>&lt;p>Spring Cloud 通过模块化设计，将 Netflix OSS、Consul 等第三方组件与自研工具深度整合，覆盖了微服务架构中的服务通信、配置管理、容错、监控等全生命周期需求。开发者可按需选择子项目，灵活构建高可用分布式系统。&lt;/p>
+&lt;h2 id="spring-cloud-openfeign-http">Spring Cloud OpenFeign （HTTP）
+&lt;/h2>&lt;p>Spring Cloud OpenFeign is a library for creating declarative REST clients in Spring applications. It allows developers to easily &lt;strong>make HTTP requests&lt;/strong> to &lt;strong>other microservices or remote services&lt;/strong>, without having to manually write the low-level code to handle the requests and responses. OpenFeign is built on top of the OpenFeign declarative HTTP client, which is a simple, lightweight library for creating HTTP clients in Java.&lt;/p>
+&lt;p>OpenFeign 是 Spring Cloud 生态中的声明式 HTTP 客户端，专为简化&lt;strong>微服务间通信&lt;/strong>而设计。以下是其核心功能与实践价值的综合介绍：&lt;/p>
+&lt;hr>
+&lt;h3 id="核心特性与优势">&lt;strong>核心特性与优势&lt;/strong>
+&lt;/h3>&lt;ol>
+&lt;li>&lt;strong>声明式接口调用&lt;/strong>&lt;br>
+OpenFeign 通过 Java 接口和注解（如 &lt;code>@GetMapping&lt;/code>）描述 HTTP 请求，开发者无需手动处理 URL 拼接或请求序列化，代码简洁且易于维护。例如，定义一个接口即可完成远程服务调用：
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@FeignClient&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;user-service&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">interface&lt;/span> &lt;span class="nc">UserServiceClient&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@GetMapping&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;/users/{id}&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">User&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">getUserById&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nd">@PathVariable&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;id&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Long&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>&lt;strong>动态代理机制&lt;/strong>
+Feign 会在运行时为 @FeignClient 注解的接口生成动态代理对象。当调用 getUserById 方法时，代理对象会根据接口上的注解（如 @GetMapping 、 @PathVariable ）自动构造 HTTP 请求，并将请求发送到 user-service 服务的 /users/{id} 接口 。
+&lt;strong>服务发现与负载均衡&lt;/strong>
+name = &amp;ldquo;user-service&amp;rdquo; 表示通过服务注册中心（如 Eureka、Consul）查找名为 user-service 的微服务实例列表。
+Feign 默认集成 Ribbon，会对多个实例进行负载均衡（例如轮询策略。&lt;/p>&lt;/blockquote>
+&lt;ol start="2">
+&lt;li>&lt;strong>集成负载均衡与服务发现&lt;/strong>&lt;br>
+默认集成 Ribbon 实现客户端负载均衡，并与 Eureka、Nacos 等服务注册中心无缝协作，自动发现服务实例。&lt;/li>
+&lt;li>&lt;strong>扩展性与灵活性&lt;/strong>&lt;br>
+支持自定义编码器、解码器、拦截器和错误处理器，例如通过 &lt;code>FeignConfig&lt;/code> 类注入自定义配置。&lt;/li>
+&lt;li>&lt;strong>熔断与降级&lt;/strong>&lt;br>
+结合 Hystrix（Spring Cloud 2.2 前默认支持）或 Resilience4j，可通过 &lt;code>FallbackFactory&lt;/code> 实现服务不可用时的优雅降级。&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="快速集成步骤">&lt;strong>快速集成步骤&lt;/strong>
+&lt;/h3>&lt;ol>
+&lt;li>&lt;strong>添加依赖&lt;/strong>&lt;br>
+在项目中引入 Spring Cloud OpenFeign 依赖：
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;dependency&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;groupId&amp;gt;&lt;/span>org.springframework.cloud&lt;span class="nt">&amp;lt;/groupId&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;artifactId&amp;gt;&lt;/span>spring-cloud-starter-openfeign&lt;span class="nt">&amp;lt;/artifactId&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/dependency&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>&lt;strong>启用 Feign 客户端&lt;/strong>&lt;br>
+在主启动类添加 &lt;code>@EnableFeignClients&lt;/code> 注解以扫描并注册 Feign 接口。&lt;/li>
+&lt;li>&lt;strong>定义客户端接口&lt;/strong>&lt;br>
+使用 &lt;code>@FeignClient&lt;/code> 注解声明服务名称和降级策略，例如：
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@FeignClient&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;user-service&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">fallbackFactory&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">UserServiceClientFallbackFactory&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">interface&lt;/span> &lt;span class="nc">UserServiceClient&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="cm">/*...*/&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="高级配置与优化">&lt;strong>高级配置与优化&lt;/strong>
+&lt;/h3>&lt;ol>
+&lt;li>&lt;strong>超时与重试&lt;/strong>&lt;br>
+通过配置文件或自定义 &lt;code>Retryer&lt;/code> 实现请求超时和重试策略，例如设置最大重试次数为 5 次、间隔 1 秒：
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">feign&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">client&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">config&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">default&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">connectTimeout&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">5000&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">readTimeout&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">5000&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">retryer&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">com.example.config.CustomRetryer&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>&lt;strong>日志调试&lt;/strong>&lt;br>
+启用详细日志记录以监控请求细节，支持 &lt;code>BASIC&lt;/code>、&lt;code>HEADERS&lt;/code> 或 &lt;code>FULL&lt;/code> 级别：
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">logging&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">level&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">com.example.feign&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">DEBUG&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>&lt;strong>错误处理&lt;/strong>&lt;br>
+自定义 &lt;code>ErrorDecoder&lt;/code> 解析异常响应，例如将 HTTP 错误码转换为业务异常。&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="最佳实践防腐层acl设计">&lt;strong>最佳实践：防腐层（ACL）设计&lt;/strong>
+&lt;/h3>&lt;p>在微服务架构中，推荐通过&lt;strong>防腐层&lt;/strong>隔离外部依赖，避免外部服务变更直接影响核心业务逻辑：&lt;/p>
+&lt;ol>
+&lt;li>&lt;strong>定义内部 DTO&lt;/strong>&lt;br>
+将外部接口返回的数据转换为内部领域模型，例如 &lt;code>ExchangeRateDTO&lt;/code>。&lt;/li>
+&lt;li>&lt;strong>封装 Facade 接口&lt;/strong>&lt;br>
+在基础设施层实现调用逻辑，例如通过 &lt;code>ExchangeRateFacade&lt;/code> 封装 OpenFeign 客户端，并集成缓存、兜底策略等功能：
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@Service&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">ExchangeRateFacadeImpl&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">implements&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ExchangeRateFacade&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Resource&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">RemoteService&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">remoteService&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Override&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ExchangeRateDTO&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">getRate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">currency&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1">// 调用 OpenFeign 客户端，并添加缓存/降级逻辑&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>&lt;strong>业务层依赖抽象&lt;/strong>&lt;br>
+应用服务仅依赖防腐层接口，实现与外部服务的解耦。&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="适用场景与生态整合">&lt;strong>适用场景与生态整合&lt;/strong>
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>微服务通信&lt;/strong>：适用于需要高频、简洁的 HTTP 调用场景。&lt;/li>
+&lt;li>&lt;strong>多云架构&lt;/strong>：兼容多种服务注册中心（如 Nacos、Eureka）。&lt;/li>
+&lt;li>&lt;strong>分布式追踪&lt;/strong>：与 Sleuth、Zipkin 集成实现链路监控。&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;p>通过上述设计，OpenFeign 不仅降低了微服务调用的复杂度，还通过扩展机制和架构最佳实践提升了系统的稳定性和可维护性。&lt;/p>
+&lt;h2 id="spring-cloud-stream-message-queue">Spring Cloud Stream (Message Queue)
+&lt;/h2>&lt;p>cross micro-services communication&lt;/p>
+&lt;ul>
+&lt;li>need an answer imediately: HTTP&lt;/li>
+&lt;li>or not: Message Queue&lt;/li>
+&lt;/ul>
+&lt;p>Spring Cloud Stream make it easy to interface with different message systems (e.g. one microservice use rabbitMQ, one use kafka)&lt;/p>
+&lt;p>这句话是正确的。Spring Cloud Stream 的核心设计目标正是为了简化与不同消息中间件的集成，使得微服务能够灵活切换或混合使用不同的消息系统（如RabbitMQ和Kafka），而无需修改业务逻辑。以下是其实现原理及支持的机制：&lt;/p>
+&lt;h3 id="统一编程模型">统一编程模型
+&lt;/h3>&lt;p>Spring Cloud Stream 通过&lt;strong>绑定器（Binder）抽象层&lt;/strong>屏蔽了底层消息系统的差异。开发者只需使用标准的注解（如 &lt;code>@Input&lt;/code>、&lt;code>@Output&lt;/code>）定义消息通道，编写统一的业务逻辑代码。例如：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">interface&lt;/span> &lt;span class="nc">MyProcessor&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Input&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;input&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">SubscribableChannel&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">input&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nd">@Output&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;output&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">MessageChannel&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">output&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>无论底层是 RabbitMQ 还是 Kafka，代码结构完全一致。&lt;/p>
+&lt;h3 id="灵活切换消息中间件">灵活切换消息中间件
+&lt;/h3>&lt;p>通过&lt;strong>配置文件&lt;/strong>即可指定具体的消息系统。例如：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 使用 Kafka&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">spring.cloud.stream.binders.kafka.type&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">kafka&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">spring.cloud.stream.bindings.input.destination&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">my-topic&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c"># 使用 RabbitMQ&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">spring.cloud.stream.binders.rabbit.type&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">rabbit&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">spring.cloud.stream.bindings.input.destination&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">my-queue&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>不同微服务可独立配置各自的 Binder，实现一个服务用 Kafka、另一个用 RabbitMQ 的场景。&lt;/p>
+&lt;h3 id="binder-机制的核心作用">Binder 机制的核心作用
+&lt;/h3>&lt;p>Binder 是连接应用与消息中间件的桥梁，官方提供 RabbitMQ 和 Kafka 的默认实现。例如：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Kafka Binder&lt;/strong>：将消息通道映射到 Kafka 的 Topic 和 Partition&lt;/li>
+&lt;li>&lt;strong>RabbitMQ Binder&lt;/strong>：将消息通道映射到 Exchange 和 Queue
+这种设计使得应用无需感知底层消息系统的实现细节（如 Kafka 的分区机制或 RabbitMQ 的交换机类型）。&lt;/li>
+&lt;/ul>
+&lt;h3 id="实际应用场景示例">实际应用场景示例
+&lt;/h3>&lt;p>假设系统包含两个微服务：&lt;/p>
+&lt;ol>
+&lt;li>&lt;strong>订单服务&lt;/strong>使用 RabbitMQ 发送订单消息：&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="l">spring.cloud.stream.binders.rabbit.type=rabbit&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="l">spring.cloud.stream.bindings.output.destination=orderQueue&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ol start="2">
+&lt;li>&lt;strong>库存服务&lt;/strong>使用 Kafka 消费消息：&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="l">spring.cloud.stream.binders.kafka.type=kafka&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="l">spring.cloud.stream.bindings.input.destination=orderTopic&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>两个服务通过不同的消息中间件通信，但业务代码完全无需修改。&lt;/p>
+&lt;h3 id="需要注意的局限性">需要注意的局限性
+&lt;/h3>&lt;p>尽管 Spring Cloud Stream 提供了高度抽象，但在以下场景仍需关注底层特性：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>性能调优&lt;/strong>：Kafka 的批量发送配置与 RabbitMQ 的预取数量设置不同&lt;/li>
+&lt;li>&lt;strong>高级功能&lt;/strong>：如 Kafka 的 Exactly-Once 语义或 RabbitMQ 的插件机制&lt;/li>
+&lt;li>&lt;strong>监控指标&lt;/strong>：不同 Binder 暴露的监控指标存在差异&lt;/li>
+&lt;/ul>
+&lt;p>综上，Spring Cloud Stream 通过抽象层和标准化编程模型，确实能够简化不同消息系统的集成，使混合使用 RabbitMQ、Kafka 等中间件的微服务架构成为可能。但深度优化时仍需结合具体消息中间件的特性进行调整。&lt;/p>
+&lt;h2 id="spring-cloud-kubernetes">Spring Cloud Kubernetes
+&lt;/h2>&lt;p>Spring Cloud Kubernetes provides implementations of well known Spring Cloud interfaces allowing developers to build and run Spring Cloud applications on Kubernetes. While this project may be useful to you when building a cloud native application, it is also not a requirement in order to deploy a Spring Boot app on Kubernetes. If you are just getting started in your journey to running your Spring Boot app on Kubernetes you can accomplish a lot with nothing more than a basic Spring Boot app and Kubernetes itself. To learn more, you can get started by reading the &lt;a class="link" href="https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#cloud-deployment-kubernetes" target="_blank" rel="noopener"
+>Spring Boot reference documentation for deploying to Kubernetes&lt;/a> and also working through the workshop material &lt;a class="link" href="https://hackmd.io/@ryanjbaxter/spring-on-k8s-workshop" target="_blank" rel="noopener"
+>Spring and Kubernetes&lt;/a>.&lt;/p></description></item></channel></rss>

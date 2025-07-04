@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Python on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/python/</link><description>Recent content in Python on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 04 Jul 2025 11:55:43 +0800</lastBuildDate><atom:link href="https://dyhes.github.io/tags/python/index.xml" rel="self" type="application/rss+xml"/><item><title>【Python】venv</title><link>https://dyhes.github.io/p/pythonvenv/</link><pubDate>Tue, 18 Mar 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/pythonvenv/</guid><description>&lt;p>Python虚拟环境是开发者管理项目依赖的核心工具，它通过为每个项目创建独立的Python运行环境，解决版本冲突和环境混乱问题。以下是关于Python虚拟环境的详细介绍：&lt;/p>
+&lt;h3 id="虚拟环境的核心作用与原理">虚拟环境的核心作用与原理
+&lt;/h3>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>依赖隔离&lt;/strong>&lt;br>
+虚拟环境允许每个项目拥有独立的Python解释器、第三方库及二进制文件，避免全局环境中的包版本冲突。例如，项目A可使用Django 3.2，而项目B使用Django 4.0，两者互不影响。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>环境可移植性&lt;/strong>&lt;br>
+通过导出&lt;code>requirements.txt&lt;/code>文件（使用&lt;code>pip freeze &amp;gt; requirements.txt&lt;/code>），可快速在其它设备重建相同的依赖环境。这种机制特别适合团队协作和持续集成场景。&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;h3 id="创建与激活虚拟环境">创建与激活虚拟环境
+&lt;/h3>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>创建方法&lt;/strong>&lt;br>
+• &lt;strong>内置venv模块&lt;/strong>（推荐）：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">python -m venv /path/to/env_name
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>此命令会生成包含Python解释器、脚本目录和库文件的独立环境。建议将虚拟环境命名为&lt;code>.venv&lt;/code>或与项目相关的名称（如&lt;code>project_env&lt;/code>）。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>激活方式&lt;/strong>&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>操作系统&lt;/th>
+&lt;th>激活命令&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Windows&lt;/td>
+&lt;td>&lt;code>env_name\Scripts\activate&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>macOS/Linux&lt;/td>
+&lt;td>&lt;code>source env_name/bin/activate&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>激活后命令行会显示&lt;code>(env_name)&lt;/code>前缀，表示已进入隔离环境。&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;/li>
+&lt;/ol>
+&lt;h3 id="环境管理与实践技巧">环境管理与实践技巧
+&lt;/h3>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>依赖管理&lt;/strong>&lt;br>
+• 在虚拟环境中使用&lt;code>pip install&lt;/code>安装的包仅作用于当前环境
+• 通过&lt;code>pip list&lt;/code>查看已安装包，&lt;code>pip uninstall&lt;/code>移除不需要的依赖
+• 导出依赖文件后，可用&lt;code>pip install -r requirements.txt&lt;/code>批量安装&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>注意事项&lt;/strong>&lt;br>
+• 避免将虚拟环境目录（如&lt;code>.venv&lt;/code>）提交到版本控制系统
+• 使用&lt;code>deactivate&lt;/code>命令退出环境后，所有操作将恢复至全局环境
+• 建议为每个项目单独创建虚拟环境，特别是存在不同Python版本需求时&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;h3 id="进阶工具推荐">进阶工具推荐
+&lt;/h3>&lt;ol>
+&lt;li>&lt;strong>virtualenvwrapper&lt;/strong>&lt;br>
+提供更便捷的环境管理命令：
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">mkvirtualenv myenv &lt;span class="c1"># 创建并激活环境&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">workon myenv &lt;span class="c1"># 切换环境&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">rmvirtualenv myenv &lt;span class="c1"># 删除环境&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>需先通过&lt;code>pip install virtualenvwrapper&lt;/code>安装，并配置Shell启动文件。&lt;/li>
+&lt;/ol>
+&lt;h3 id="典型应用场景">典型应用场景
+&lt;/h3>&lt;p>• &lt;strong>多项目开发&lt;/strong>：同时维护需要不同Python版本的遗留系统与新型项目
+• &lt;strong>依赖冲突调试&lt;/strong>：隔离测试特定库版本对代码的影响
+• &lt;strong>持续集成/部署&lt;/strong>：在纯净环境中验证安装流程的可靠性&lt;/p>
+&lt;p>通过合理使用虚拟环境，开发者能显著提升代码的可维护性和团队协作效率。对于使用PyCharm、VS Code等IDE的用户，这些工具通常提供虚拟环境自动检测和图形化管理功能，进一步简化操作流程。&lt;/p></description></item><item><title>【Python】fstring</title><link>https://dyhes.github.io/p/pythonfstring/</link><pubDate>Mon, 03 Mar 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/pythonfstring/</guid><description>&lt;h1 id="python">【Python】
+&lt;/h1>&lt;h2 id="f-string">f-string
+&lt;/h2>&lt;p>在 Python 中，可以通过 &lt;strong>f-strings&lt;/strong>（格式化字符串字面值）实现类似 JavaScript 模板字符串 &lt;code>a ${variable} bbbb&lt;/code> 的功能。以下是具体用法和对比：&lt;/p>
+&lt;hr>
+&lt;h3 id="python-的-f-strings-语法">Python 的 f-strings 语法
+&lt;/h3>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>基本语法&lt;/strong>&lt;br>
+在字符串前添加 &lt;code>f&lt;/code> 或 &lt;code>F&lt;/code> 前缀，用 &lt;code>{}&lt;/code> 包裹变量名即可直接插入值：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">name&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;张三&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">greeting&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;你好，&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">！&amp;#34;&lt;/span> &lt;span class="c1"># 输出：你好，张三！&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>支持表达式&lt;/strong>&lt;br>
+可以在 &lt;code>{}&lt;/code> 内执行运算、调用函数等：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">price&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">100&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">total&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;总价：&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">price&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="mf">1.1&lt;/span>&lt;span class="si">:&lt;/span>&lt;span class="s2">.2f&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">元&amp;#34;&lt;/span> &lt;span class="c1"># 输出：总价：110.00元&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>多行字符串&lt;/strong>&lt;br>
+通过三引号 &lt;code>&amp;quot;&amp;quot;&amp;quot;&lt;/code> 或 &lt;code>'''&lt;/code> 实现多行模板字符串：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">user_info&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;&amp;#34;&amp;#34;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="s2">姓名：&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="s2">年龄：&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">age&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="s2">&amp;#34;&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="与其他方法的对比">与其他方法的对比
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>方法&lt;/th>
+&lt;th>示例&lt;/th>
+&lt;th>特点&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>f-strings&lt;/strong>&lt;/td>
+&lt;td>&lt;code>f&amp;quot;Value: {x}&amp;quot;&lt;/code>&lt;/td>
+&lt;td>语法简洁，直接内嵌变量和表达式&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>str.format()&lt;/strong>&lt;/td>
+&lt;td>&lt;code>&amp;quot;Value: {}&amp;quot;.format(x)&lt;/code>&lt;/td>
+&lt;td>兼容旧版本，支持复杂格式控制&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>% 格式化&lt;/strong>&lt;/td>
+&lt;td>&lt;code>&amp;quot;Value: %s&amp;quot; % x&lt;/code>&lt;/td>
+&lt;td>Python 2 遗留方法，逐渐被淘汰&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="与-javascript-的差异">与 JavaScript 的差异
+&lt;/h3>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>符号不同&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>JavaScript 使用反引号和 &lt;code>${}&lt;/code>（如 &lt;code>`Hello ${name}`&lt;/code>）。&lt;/li>
+&lt;li>Python 使用 &lt;code>f&lt;/code> 前缀和 &lt;code>{}&lt;/code>（如 &lt;code>f&amp;quot;Hello {name}&amp;quot;&lt;/code>）。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>功能扩展&lt;/strong>&lt;br>
+Python 的 f-strings 支持更丰富的格式控制，例如：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">num&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mf">3.14159&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">formatted&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;保留两位小数：&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">num&lt;/span>&lt;span class="si">:&lt;/span>&lt;span class="s2">.2f&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="c1"># 输出：保留两位小数：3.14&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="最佳实践">最佳实践
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>优先使用 f-strings&lt;/strong>：语法简洁，可读性强，且性能优于其他方法（Python 3.6+ 支持）。&lt;/li>
+&lt;li>&lt;strong>复杂场景用 str.format()&lt;/strong>：例如需要动态生成格式字符串时。&lt;/li>
+&lt;/ul>
+&lt;p>如果需要更详细的字符串操作示例（如连接、类型转换），可参考 Python 变量定义相关教程。&lt;/p></description></item><item><title>【Python】.venv</title><link>https://dyhes.github.io/p/python.venv/</link><pubDate>Mon, 13 Jan 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/python.venv/</guid><description>&lt;p>The .venv directory is typically a folder that contains a &lt;strong>virtual environment&lt;/strong> for Python projects. A virtual environment is a self-contained directory that holds a specific version of Python and any packages or libraries your project requires. This helps isolate your project’s dependencies from the global Python environment on your system, ensuring that each project has its own environment and dependencies without interfering with other projects.
+When you execute a Python script in VS Code, if it’s using a .venv directory, it means that the script is running within this virtual environment. The .venv directory is often created by using the python -m venv .venv command or through VS Code’s environment setup.
+Key points about .venv:&lt;/p>
+&lt;ul>
+&lt;li>It’s not a Python package itself but a directory.&lt;/li>
+&lt;li>It helps in managing dependencies for a specific project.&lt;/li>
+&lt;li>You can activate it using source .venv/bin/activate (Linux/macOS) or .venv\Scripts\activate (Windows) in the terminal.&lt;/li>
+&lt;/ul>
+&lt;p>⠀VS Code typically detects virtual environments and allows you to select the appropriate interpreter for your project, ensuring that Python uses the version and packages from the virtual environment rather than the system-wide installation.&lt;/p></description></item></channel></rss>
