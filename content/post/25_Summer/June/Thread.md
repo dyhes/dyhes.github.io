@@ -121,7 +121,7 @@ Java中的`Thread`类是`java.lang`包的核心类，用于实现多线程编程
 
 Java的`Thread`类是多线程编程的基石，通过`start()`、状态管理、同步机制等实现并发控制。深入理解其生命周期、中断机制及同步策略，是构建高效安全并发应用的关键。实践中应结合`Runnable`、线程池（如`ExecutorService`）等高级工具提升可维护性。
 
-## `Thread`类默认实现
+## `Thread` 类默认实现
 
 Java中的`Thread`类默认实现包含多个关键行为，这些行为在未显式重写或指定时自动生效。以下是其核心默认实现的系统梳理：
 
@@ -214,7 +214,175 @@ Thread类的默认实现聚焦于**基础框架搭建**与**安全约束**：
 - 依赖**父线程属性**（优先级、守护状态）确保环境一致性。
   ​**开发者需主动注入任务逻辑**​（`Runnable`或重写`run()`）并理解默认行为，才能有效利用多线程能力。
 
-## Thread Join()
+## run()
+
+源码
+
+```java
+    @Override
+    public void run() {
+        if (target != null) {
+            target.run();
+        }
+    }
+```
+
+## Runnable
+
+Thread 类实现 `Runnable` 接口是 Java 多线程设计的核心思想之一，其背后蕴含了职责分离、灵活性和框架兼容性等多重考量。以下从设计哲学、技术实现和实际应用三个维度详细解析原因：
+
+------
+
+### 🔧 **一、设计哲学：职责分离与组合优于继承**
+
+1. **统一任务执行标准**
+   `Runnable` 接口定义了线程任务的唯一方法 `run()`，而 `Thread` 作为线程的载体，通过实现 `Runnable` 接口，自身也成为一个可执行的任务。这种设计使得：
+   - **任务与线程解耦**：`Runnable` 仅描述任务逻辑，`Thread` 负责线程的创建、调度和管理。
+   - **灵活组合**：用户可通过继承 `Thread` 重写 `run()`（自身即任务），或向 `Thread` 传入外部 `Runnable` 对象（委托执行任务），实现任务逻辑的多样化封装[1,5](@ref)。
+2. **规避单继承限制**
+   Java 不支持多继承，若 `Thread` 未实现 `Runnable`，则通过继承 `Thread` 定义任务的方式会永久占用类的继承权。而实现 `Runnable` 接口后：
+   - 开发者可选择更灵活的 **组合模式**（传入 `Runnable` 任务），避免因继承 `Thread` 导致无法继承其他业务类的问题[4,7](@ref)。
+
+------
+
+### ⚙️ **二、技术实现：委托机制与默认逻辑**
+
+1. **源码中的委托模式**
+   在 `Thread` 类的源码中，通过 `target` 字段支持外部任务：
+
+   ```
+   public class Thread implements Runnable {
+       private Runnable target; // 存储外部任务
+       @Override
+       public void run() {
+           if (target != null) {
+               target.run(); // 委托执行外部任务
+           }
+       }
+   }
+   ```
+
+   - **默认行为**：直接继承 `Thread` 时，需重写 `run()` 方法（覆盖默认逻辑）。
+   - **外部任务**：通过构造函数传入 `Runnable` 对象时，`Thread.run()` 会调用其 `target.run()`[3,5](@ref)。
+
+2. **支持两种任务定义方式**
+
+   - 
+
+     方式1（继承 Thread）
+
+     ：
+
+     ```
+     class MyThread extends Thread {
+         @Override public void run() { /* 自定义逻辑 */ }
+     }
+     new MyThread().start();
+     ```
+
+   - 
+
+     方式2（组合 Runnable）
+
+     ：
+
+     ```
+     class MyTask implements Runnable {
+         @Override public void run() { /* 自定义逻辑 */ }
+     }
+     new Thread(new MyTask()).start();
+     ```
+
+   两种方式最终均通过 `Thread.run()` 统一执行，体现了接口的适配性[4,8](@ref)。
+
+------
+
+### 🚀 **三、实际应用：灵活性与生态兼容**
+
+1. **任务复用与线程池集成**
+
+   - **资源共享**：同一个 `Runnable` 任务可被多个 `Thread` 实例执行（如线程池中的任务队列），避免重复创建任务对象[4,7](@ref)。
+
+   - 
+
+     线程池兼容
+
+     ：Java 并发框架（如
+
+      
+
+     ```
+     ExecutorService
+     ```
+
+     ）直接接受
+
+      
+
+     ```
+     Runnable
+     ```
+
+      
+
+     任务，与
+
+      
+
+     ```
+     Thread
+     ```
+
+      
+
+     解耦：
+
+     ```
+     ExecutorService pool = Executors.newFixedThreadPool(2);
+     pool.submit(() -> System.out.println("Runnable任务")); // 无需绑定Thread实例
+     ```
+
+2. **函数式编程支持**
+   `Runnable` 是函数式接口（仅有一个抽象方法），可直接用 Lambda 表达式简化代码：
+
+   ```
+   new Thread(() -> System.out.println("Lambda任务")).start(); 
+   ```
+
+   若 `Thread` 未实现 `Runnable`，此写法将无法成立[4,5](@ref)。
+
+3. **框架设计的扩展性**
+
+   - **Callable/Future 兼容**：`Callable` 作为 `Runnable` 的增强版（支持返回值），通过 `FutureTask` 适配 `Runnable` 接口，最终仍由 `Thread` 执行。
+   - **虚拟线程支持**：Java 21 的虚拟线程（`Thread.startVirtualThread()`）直接接受 `Runnable` 任务，延续了统一的任务抽象[5,8](@ref)。
+
+------
+
+### ⚖️ **四、继承Thread vs 实现Runnable的对比**
+
+| **维度**       | **继承 Thread**              | **实现 Runnable**                  |
+| -------------- | ---------------------------- | ---------------------------------- |
+| **任务定义**   | 重写 `run()`，任务与线程绑定 | 实现 `run()`，任务可独立于线程存在 |
+| **继承灵活性** | 占用继承权，无法继承其他类   | 可继承其他类，无限制               |
+| **任务复用**   | 一个线程实例只能执行自身任务 | 同一任务可被多个线程执行           |
+| **函数式支持** | 不支持 Lambda                | 支持 Lambda 表达式                 |
+| **线程池兼容** | 需包装成 `Runnable` 提交     | 直接提交任务对象                   |
+
+> 💡 **设计启示**：`Thread` 实现 `Runnable` 本质是 **“自身即任务”** 与 **“委托外部任务”** 的辩证统一，既保留了传统用法，又为现代并发框架铺平道路。
+
+------
+
+### 💎 **总结**
+
+Thread 实现 `Runnable` 接口的核心价值在于：
+
+1. **统一性**：通过 `run()` 方法统一所有线程任务的执行入口。
+2. **解耦性**：分离线程控制（`Thread`）与任务逻辑（`Runnable`），支持组合优于继承。
+3. **扩展性**：为线程池、函数式编程、虚拟线程等高级特性提供底层兼容。
+
+这一设计是 Java 并发模型的基石，深刻体现了 **“简单性不应牺牲灵活性”** 的工程哲学[1,5,7](@ref)。实际开发中，**优先使用 `Runnable`**（或 `Callable`）配合线程池，已成为现代 Java 并发的黄金实践。
+
+## Join()
 
 在Java中，`Thread.join()`方法等待的**不是显式的信号量或事件**，而是**目标线程终止（即线程执行结束）的状态变化**。其底层实现依赖于JVM内部的线程状态管理与同步机制，具体原理如下：
 

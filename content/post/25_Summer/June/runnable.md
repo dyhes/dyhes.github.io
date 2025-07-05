@@ -323,8 +323,6 @@ CompletableFuture.supplyAsync(() -> "Hello")
   ⚠️ 避免无界队列导致的 OOM（优先自定义 `ThreadPoolExecutor`）。
   ⚠️ 超时设置与异常处理是保障系统健壮性的关键。
 
-
-
 ## FutureTask
 
 是的，`FutureTask` 确实**实现了 `Runnable` 接口**，并且**内部持有一个 `Callable` 类型的字段**。以下是具体分析：

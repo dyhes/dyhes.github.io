@@ -40,19 +40,15 @@ ThreadLocal 是 Java 多线程编程中的核心类，用于实现**线程级别
 
 1. **线程独享资源管理**
 
-   - 
-
-     数据库连接
-
-     ：每个线程持有独立连接，避免并发冲突。
+   - 数据库连接：每个线程持有独立连接，避免并发冲突。
 
      ```
      private static ThreadLocal<Connection> connectionHolder = ThreadLocal.withInitial(() -> DriverManager.getConnection(DB_URL));
      public static Connection getConnection() { return connectionHolder.get(); }
      ```
-
+     
    - **日期格式化工具**：解决 `SimpleDateFormat` 非线程安全问题，无需加锁。
-
+   
 2. **全局变量跨方法传递**
 
    - 在 Web 请求中存储用户会话信息（如用户 ID、权限），避免在多个方法间显式传递参数。
@@ -80,9 +76,9 @@ ThreadLocal 是 Java 多线程编程中的核心类，用于实现**线程级别
 
 2. **规避策略**
 
-   - **强制调用
+   - *强制调用
 
-      
+     
 
      ```
      remove()

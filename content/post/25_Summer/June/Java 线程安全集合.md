@@ -59,57 +59,20 @@ Map<String, String> syncMap = Collections.synchronizedMap(new HashMap<>());
 
 #### 2. **写时复制集合**
 
-- **
-
-  ```
-  CopyOnWriteArrayList
-  ```
-
-   
-
-  /
-
-   
-
-  ```
-  CopyOnWriteArraySet
-  ```
-
-  **
-
-  - **机制**：写操作（增删改）时复制整个数组，新副本修改后替换旧数据。
+- CopyOnWriteArrayList / CopyOnWriteArraySet
+- **机制**：写操作（增删改）时复制整个数组，新副本修改后替换旧数据。
   - 特点：
     - 读操作无锁，基于快照迭代（避免`ConcurrentModificationException`）；
     - 写操作性能低（适合**读多写少**场景）。
-  - **示例**：监听器列表、配置管理等低频更新场景。
+- **示例**：监听器列表、配置管理等低频更新场景。
 
 #### 3. **并发队列**
 
-- **
-
-  ```
-  ConcurrentLinkedQueue
-  ```
-
-  **
-
+- ConcurrentLinkedQueue
   - 无锁实现（基于CAS），非阻塞线程安全队列。
-
-- **
-
-  ```
-  ConcurrentSkipListMap
-  ```
-
-  /
-
-  ```
-  ConcurrentSkipListSet
-  ```
-
-  **
-
-  - 基于跳表（Skip List）的有序集合，支持高并发访问。
+  
+- ConcurrentSkipListMap / ConcurrentSkipListSet
+- 基于跳表（Skip List）的有序集合，支持高并发访问。
 
 #### 4. **阻塞队列（`BlockingQueue`）**
 
@@ -246,19 +209,13 @@ ConcurrentHashMap 是 Java 并发包（`java.util.concurrent`）中核心的线�
 
 - 锁机制升级：
 
-  - **CAS +
-
-    ```
-    synchronized
-    ```
-
-    **：
+  - CAS + synchronized：
 
     - **空桶插入**：使用 CAS 无锁操作（如 `tabAt` 定位桶后 CAS 写入）。
     - **非空桶操作**：对桶的头节点加 `synchronized` 锁，遍历链表/红黑树更新。
-
+    
   - **读操作**：仍无锁，依赖 `volatile` 修饰的 `Node.val` 和 `next` 指针保证可见性。
-
+  
 - 优势：
 
   - 锁粒度细化到**单个桶**，并发度更高（与桶数量正相关）。
@@ -624,36 +581,13 @@ BlockingQueue 是 Java 并发包（`java.util.concurrent`）中用于**解决生
 
 2. **线程安全实现**
 
-   - 锁与条件变量：基于 
-
-     ```
-     ReentrantLock 
-     ```
-
-     和 
-
-     ```
-     Condition
-     ```
-
-     （如 
-
-     ```
-     notEmpty
-     ```
-
-     ```
-     notFull
-     ```
-
-     ）实现同步。
+   - 锁与条件变量：基于 ReentrantLock 和 Condition（如 notEmpty，notFull）实现同步。
 
      - 示例：`ArrayBlockingQueue` 使用一个锁控制读写，`LinkedBlockingQueue` 采用分离锁（`putLock`和 `takeLock`）提升吞吐量。
-
+     
    - **数据可见性**：通过 `volatile` 变量保证多线程下状态的可见性。
 
 3. **数据结构与边界**
-
    - **有界队列**（如 `ArrayBlockingQueue`）：需指定固定容量，避免内存溢出。
    - **无界队列**（如 `LinkedBlockingQueue`）：默认容量为 `Integer.MAX_VALUE`，可能引发内存风险。
    - **特殊队列**：`SynchronousQueue` 无容量，生产消费必须一一匹配。
@@ -924,162 +858,6 @@ ArrayBlockingQueue 通过 **循环数组 + 单锁 + 双条件变量** 的简洁�
 
 > 实际开发中，**优先评估并发强度和资源限制**。若遇性能瓶颈，可考虑 `LinkedBlockingQueue` 或 `Disruptor`（高性能无锁队列），但后者实现复杂度显著增加。
 
-## 单锁
-
-LinkedBlockingQueue 是 Java 并发包（`java.util.concurrent`）中基于**链表实现的有界/无界阻塞队列**，通过**双锁分离技术**实现高并发性能，是生产者-消费者模型的经典实现。以下从核心原理、源码机制、性能优化及实践场景展开深入解析：
-
-------
-
-### ⚙️ **一、核心特性与设计思想**
-
-1. **数据结构**
-   - **链表结构**：由单向链表节点构成，每个节点包含数据项（`item`）和后继指针（`next`）。
-   - **哨兵节点**：头节点（`head`）始终为哑节点（`item=null`），尾节点（`last`）指向最新插入元素。
-   - 容量控制：
-     - 默认无界（`capacity=Integer.MAX_VALUE`），但建议显式指定容量避免 OOM。
-     - 实际容量通过 `final int capacity` 固定，不可动态调整。
-2. **线程安全机制**
-   - 双锁分离（Take/Put Lock）：
-     - `takeLock`：控制出队（消费）操作，关联条件变量 `notEmpty`（队列空时阻塞消费者）。
-     - `putLock`：控制入队（生产）操作，关联条件变量 `notFull`（队列满时阻塞生产者）。
-   - **原子计数器**：`AtomicInteger count` 记录元素数量，保证并发修改的可见性。
-3. **阻塞行为**
-   - `put(e)`：队列满时阻塞生产者线程，直到有空位或线程被中断。
-   - `take()`：队列空时阻塞消费者线程，直到有新元素或线程被中断。
-   - 支持超时操作：`offer(e, timeout, unit)` 和 `poll(timeout, unit)`。
-
-------
-
-### 🔧 **二、核心操作源码解析**
-
-#### **1. 入队操作（`put()`）流程**
-
-```
-public void put(E e) throws InterruptedException {
-    Node<E> node = new Node<>(e);  // 创建新节点
-    putLock.lockInterruptibly();   // 获取可中断的写锁
-    try {
-        while (count.get() == capacity) {  // 队列满时循环等待
-            notFull.await();               // 阻塞在 notFull 条件
-        }
-        enqueue(node);                     // 链表尾部插入节点
-        int c = count.getAndIncrement();   // 原子递增计数器
-        if (c + 1 < capacity) {            // 插入后仍有空位
-            notFull.signal();               // 唤醒其他生产者
-        }
-    } finally {
-        putLock.unlock();
-    }
-    if (c == 0) {  // 插入前队列为空
-        signalNotEmpty();  // 唤醒消费者（需先获取 takeLock）
-    }
-}
-```
-
-**关键逻辑**：
-
-- 唤醒优化：
-  - 插入后队列未满 → 唤醒一个阻塞的生产者（避免无效唤醒）。
-  - 插入前队列为空 → 唤醒阻塞的消费者（`signalNotEmpty()` 内部需获取 `takeLock`）。
-- **入队操作**：`enqueue(node)` 仅操作尾指针，时间复杂度 O(1)。
-
-#### **2. 出队操作（`take()`）流程**
-
-```
-public E take() throws InterruptedException {
-    takeLock.lockInterruptibly();    // 获取可中断的读锁
-    try {
-        while (count.get() == 0) {   // 队列空时循环等待
-            notEmpty.await();        // 阻塞在 notEmpty 条件
-        }
-        E x = dequeue();             // 移除头节点后继（实际首元素）
-        int c = count.getAndDecrement(); // 原子递减计数器
-        if (c > 1) {                 // 取出前队列至少有两个元素
-            notEmpty.signal();        // 唤醒其他消费者
-        }
-        return x;
-    } finally {
-        takeLock.unlock();
-    }
-    if (c == capacity) {  // 取出前队列满
-        signalNotFull();   // 唤醒生产者（需先获取 putLock）
-    }
-}
-```
-
-**关键逻辑**：
-
-- **出队操作**：`dequeue()` 将头节点的 `next` 设为新头，并置空旧头（避免内存泄漏）。
-- **唤醒优化**：类似入队，仅在必要时唤醒对方角色。
-
-------
-
-### ⚡ **三、性能优势与瓶颈**
-
-#### **1. 高并发性能的关键**
-
-| **机制**         | **作用**                                 | **性能收益**                                      |
-| ---------------- | ---------------------------------------- | ------------------------------------------------- |
-| **读写锁分离**   | 生产者与消费者互不竞争锁资源             | 吞吐量显著高于单锁队列（如 `ArrayBlockingQueue`） |
-| **链表结构**     | 插入/删除仅修改指针，无需数据搬迁        | 时间复杂度 O(1)，无数组复制的开销                 |
-| **条件唤醒优化** | 仅当队列状态变化可能解除对方阻塞时才唤醒 | 减少无效线程切换，降低 CPU 开销                   |
-
-#### **2. 性能瓶颈**
-
-- **GC 压力**：频繁增删导致节点对象创建/回收，可能触发 Young GC 或 Full GC。
-- 锁竞争：
-  - 同一角色多线程竞争（如多个生产者争 `putLock`）。
-  - `count` 的原子操作在高并发下可能成为热点。
-- **内存占用**：每个节点含对象头+指针，空间利用率低于数组结构。
-
-------
-
-### 🛠️ **四、适用场景与最佳实践**
-
-#### **1. 典型应用场景**
-
-- **生产者-消费者模型**：缓冲任务/数据，解耦生产与消费速率（如订单处理系统）。
-- **线程池任务队列**：作为 `ThreadPoolExecutor` 的任务缓冲队列（如 `newFixedThreadPool`）。
-- **数据流管道**：连接处理阶段，确保数据有序传递（如日志过滤流水线）。
-
-#### **2. 最佳实践**
-
-| **实践要点**         | **说明**                                                     |
-| -------------------- | ------------------------------------------------------------ |
-| **显式设置队列容量** | 避免默认无界队列引发 OOM（如 `new LinkedBlockingQueue<>(1000)`） |
-| **使用超时 API**     | 避免永久阻塞（如 `offer(e, 500, TimeUnit.MILLISECONDS)`）    |
-| **监控队列大小**     | 通过 `size()` 和 `remainingCapacity()` 动态调整生产/消费策略 |
-| **避免存储大对象**   | 减少 GC 压力，可存储引用或拆分数据                           |
-| **优雅关闭线程**     | 中断阻塞的 `put/take` 线程，捕获 `InterruptedException` 并恢复中断状态 |
-
-------
-
-### ⚖️ **五、与替代方案的对比**
-
-| **队列实现**                | **优势**                             | **劣势**                       | **适用场景**                                  |
-| --------------------------- | ------------------------------------ | ------------------------------ | --------------------------------------------- |
-| **`ArrayBlockingQueue`**    | 内存紧凑（数组连续存储），无节点开销 | 单锁设计，吞吐量低             | 内存敏感、中低并发场景                        |
-| **`ConcurrentLinkedQueue`** | 无锁 CAS 实现，超高吞吐              | 无阻塞机制，需自旋等待         | 超高并发且无需阻塞（如事件总线）              |
-| **`SynchronousQueue`**      | 直接传递任务，零延迟                 | 无缓冲能力，生产消费需严格配对 | 高响应要求的任务调度（如 `CachedThreadPool`） |
-
-> **选型建议**：
->
-> - 需平衡吞吐与内存 → **`LinkedBlockingQueue`（指定容量）**；
-> - 极端内存限制 → **`ArrayBlockingQueue`**；
-> - 极限吞吐需求 → **`ConcurrentLinkedQueue` + 自定义阻塞层**。
-
-------
-
-### 💎 **总结**
-
-LinkedBlockingQueue 通过**双锁分离 + 链表结构 + 条件唤醒优化**，成为高并发场景下生产者-消费者模型的理想选择：
-
-1. **设计精髓**：读写锁分离最大化并发吞吐，原子计数器保障线程安全；
-2. **适用边界**：适合读/写操作均衡且需缓冲能力的场景，避免用于极端内存敏感或超高吞吐无阻塞需求；
-3. **演进方向**：动态容量需求可参考美团 `ResizableCapacityLinkedBlockingQueue`，或结合 `Disruptor` 无锁队列进一步优化性能。
-
-> 实际开发中，**优先通过压力测试验证容量与吞吐量**，结合监控（如队列堆积告警）动态调整参数，以充分发挥其并发优势。
-
 ## LinkedBlockingQueue
 
 LinkedBlockingQueue 是 Java 并发包（`java.util.concurrent`）中基于**链表实现的有界/无界阻塞队列**，通过**双锁分离技术**实现高并发性能，是生产者-消费者模型的经典实现。以下从核心原理、源码机制、性能优化及实践场景展开深入解析：
@@ -1110,7 +888,7 @@ LinkedBlockingQueue 是 Java 并发包（`java.util.concurrent`）中基于**链
 
 #### **1. 入队操作（`put()`）流程**
 
-```java
+```
 public void put(E e) throws InterruptedException {
     Node<E> node = new Node<>(e);  // 创建新节点
     putLock.lockInterruptibly();   // 获取可中断的写锁
@@ -1141,7 +919,7 @@ public void put(E e) throws InterruptedException {
 
 #### **2. 出队操作（`take()`）流程**
 
-```java
+```
 public E take() throws InterruptedException {
     takeLock.lockInterruptibly();    // 获取可中断的读锁
     try {
