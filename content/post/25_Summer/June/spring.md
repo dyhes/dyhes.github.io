@@ -188,11 +188,7 @@ AOP（Aspect-Oriented Programming，面向切面编程）是一种编程范式�
 
 3. **通知（Advice）**
 
-   - 
-
-     作用
-
-     ：定义切面在连接点的具体行为，分五种类型：
+   - 作用：定义切面在连接点的具体行为，分五种类型：
 
      | **通知类型**      | **执行时机**               | **应用场景**                           |
      | ----------------- | -------------------------- | -------------------------------------- |
@@ -201,54 +197,38 @@ AOP（Aspect-Oriented Programming，面向切面编程）是一种编程范式�
      | `@AfterThrowing`  | 目标方法抛出异常后         | 异常处理、事务回滚                     |
      | `@After`          | 目标方法结束后（无论成败） | 资源清理（如关闭连接）                 |
      | `@Around`         | 目标方法执行前后           | 性能监控、事务管理、缓存 [5,6](@ref)。 |
-
+   
 4. **切入点（Pointcut）**
 
    - **定义**：通过表达式匹配一组连接点（如`execution(* com.service.*.*(..))`匹配包下所有方法）[1,5](@ref)。
 
-   - 
-
-     表达式语法
-
-     ：
+   - 表达式语法：
 
      ```
-     execution(* com.example.service.UserService.*(..))  // 匹配UserService所有方法
+   execution(* com.example.service.UserService.*(..))  // 匹配UserService所有方法
      @annotation(com.example.Loggable)                  // 匹配带@Loggable注解的方法
-     ```
-
+   ```
+   
 5. **织入（Weaving）**
 
    - **定义**：将切面应用到目标对象创建代理的过程。
 
-   - 
-
-     时机
-
-     ：
+   - 时机：
 
      - **编译时**（AspectJ）：性能高但需额外编译器。
-     - **运行时**（Spring AOP）：通过动态代理实现，无需编译支持[4,6](@ref)。
+- **运行时**（Spring AOP）：通过动态代理实现，无需编译支持[4,6](@ref)。
 
 ------
 
 ### 🛠️ **三、AOP的实现机制**
 
-1. 
-
-   动态代理
-
-   
+1. 动态代理
 
    - **JDK动态代理**：基于接口，要求目标类实现接口。
 
    - **CGLIB代理**：基于子类继承，可代理无接口的类（Spring默认优先JDK，无接口则用CGLIB）[4,6](@ref)。
 
-   - 
-
-     代理流程
-
-     ：
+   - 代理流程：
 
      ```
      graph LR
@@ -276,29 +256,19 @@ AOP（Aspect-Oriented Programming，面向切面编程）是一种编程范式�
 
 4. **性能监控**
 
-   - 使用
-
-     ```
-     @Around
-     ```
-
-     统计方法执行耗时
-
-     5
-
-     ：
+   - 使用 @Around 统计方法执行耗时：
 
      ```
      @Around("execution(* com.service.*.*(..))")
      public Object monitorTime(ProceedingJoinPoint pjp) throws Throwable {
-         long start = System.currentTimeMillis();
+       long start = System.currentTimeMillis();
          Object result = pjp.proceed();
-         long time = System.currentTimeMillis() - start;
+       long time = System.currentTimeMillis() - start;
          log.info("方法 {} 耗时 {} ms", pjp.getSignature(), time);
-         return result;
+       return result;
      }
-     ```
-
+   ```
+   
 5. **缓存优化**
 
    - 通过AOP拦截查询方法，实现缓存逻辑与业务解耦[10,11](@ref)。
@@ -336,15 +306,11 @@ AOP通过**动态代理技术**将横切关注点模块化，是OOP的重要补�
 
 2. **应用场景**：日志、事务、安全等**重复性功能**的解耦。
 
-3. 
-
-   选型建议
-
-   ：
+3. 选型建议：
 
    - 常规Spring应用 → **Spring AOP**（简单易用）。
    - 高性能需求 → **AspectJ**（无运行时损耗）。
-
+   
 4. **最佳实践**：优先使用注解声明切面，避免过度AOP导致调用链路复杂化[5,8](@ref)。
 
 ## @Aspect
@@ -496,22 +462,14 @@ AOP通过**动态代理技术**将横切关注点模块化，是OOP的重要补�
 
 - **作用**：提供目标方法的执行上下文信息，包括方法签名、参数、目标对象等[1,6,8](@ref)。
 
-- 
-
-  关键方法
-
-  ：
+- 关键方法：
 
   - `getArgs()`：获取方法参数值（`Object[]`）。
   - `getSignature()`：获取方法签名（方法名、返回类型等）。
   - `getTarget()`：获取被代理的目标对象。
   - `getThis()`：获取 AOP 代理对象。
-
-- 
-
-  示例
-
-  ：
+  
+- 示例：
 
   ```
   @Before("execution(* com.example.UserService.*(..))")
@@ -527,20 +485,12 @@ AOP通过**动态代理技术**将横切关注点模块化，是OOP的重要补�
 
 - **作用**：继承 `JoinPoint`，额外提供 `proceed()` 方法控制目标方法的执行[1,8](@ref)。
 
-- 
-
-  关键方法
-
-  ：
+- 关键方法：
 
   - `proceed()`：执行目标方法，返回结果。
   - `proceed(Object[] args)`：修改参数后执行目标方法。
-
-- 
-
-  示例
-
-  ：
+  
+- 示例：
 
   ```
   @Around("execution(* com.example.UserService.*(..))")
@@ -558,20 +508,12 @@ AOP通过**动态代理技术**将横切关注点模块化，是OOP的重要补�
 
 #### 1. **返回值绑定（`@AfterReturning`）**
 
-- 
-
-  参数要求
-
-  ：
+- 参数要求：
 
   - 通过 `returning` 属性指定参数名。
   - 参数类型需匹配目标方法的返回值（或使用 `Object` 通用类型）[1,8](@ref)。
-
-- 
-
-  示例
-
-  ：
+  
+- 示例：
 
   ```
   @AfterReturning(value = "execution(* UserService.getUser(..))", returning = "user")
@@ -582,20 +524,12 @@ AOP通过**动态代理技术**将横切关注点模块化，是OOP的重要补�
 
 #### 2. **异常绑定（`@AfterThrowing`）**
 
-- 
-
-  参数要求
-
-  ：
+- 参数要求：
 
   - 通过 `throwing` 属性指定参数名。
   - 参数类型需为 `Throwable` 或其子类[1,7](@ref)。
-
-- 
-
-  示例
-
-  ：
+  
+- 示例：
 
   ```
   @AfterThrowing(value = "execution(* UserService.*(..))", throwing = "ex")
@@ -612,11 +546,7 @@ AOP通过**动态代理技术**将横切关注点模块化，是OOP的重要补�
 
 - **场景**：在 `@Around` 中获取自定义注解的属性值[5](@ref)。
 
-- 
-
-  示例
-
-  ：
+- 示例：
 
   ```
   @Around("@annotation(modify)")
@@ -631,11 +561,7 @@ AOP通过**动态代理技术**将横切关注点模块化，是OOP的重要补�
 
 - **场景**：在 Web 切面中获取 HTTP 请求对象[5](@ref)。
 
-- 
-
-  示例
-
-  ：
+- 示例：
 
   ```
   @Before("webLogPointcut()")
@@ -662,27 +588,15 @@ AOP通过**动态代理技术**将横切关注点模块化，是OOP的重要补�
 
 ### ⚠️ **五、注意事项**
 
-1. 
-
-   参数顺序
-
-   ：
+1. 参数顺序：
 
    - `JoinPoint` 或 `ProceedingJoinPoint` 必须是**第一个参数**，其他参数按需添加[1,8](@ref)。
 
-2. 
-
-   类型匹配
-
-   ：
+2. 类型匹配：
 
    - 绑定返回值或异常时，参数类型需与目标方法一致（如返回值类型为 `User`，则参数应为 `User user`）[1](@ref)。
 
-3. 
-
-   性能影响
-
-   ：
+3. 性能影响：
 
    - 频繁操作 `JoinPoint.getArgs()` 可能影响性能，建议在必要时使用。
 
@@ -706,58 +620,28 @@ Spring AOP中的**切入点表达式（Pointcut Expression）** 用于精确指�
 execution([修饰符] 返回类型 [包.类.方法] (参数) [throws 异常])
 ```
 
-- 
-
-  通配符
-
-  ：
+- 通配符：
 
   - `*`：匹配任意类型或名称（如返回值、包、类、方法名）。
 
-  - ```
-    ..
-    ```
-
-    ：
-
-    - 在包路径中：匹配任意层级的子包（如 `com..service.*` 匹配 `com` 下所有子包中的 `service` 包）[1,6](@ref)。
+  - `..`：
+  - 在包路径中：匹配任意层级的子包（如 `com..service.*` 匹配 `com` 下所有子包中的 `service` 包）[1,6](@ref)。
     - 在参数中：匹配任意个数、任意类型的参数（如 `(..)`）。
 
-- 
-
-  示例
-
-  ：
+- 示例：
 
   ```
-  execution(public * com.example.service.*.save*(..)) 
+execution(public * com.example.service.*.save*(..)) 
   ```
 
-  匹配
-
-   
-
+  匹配 
+  
   ```
-  com.example.service
+com.example.service 
   ```
 
-   
+  包下所有类的 save 开头的 public 方法，参数任意
 
-  包下所有类的
-
-   
-
-  ```
-  save
-  ```
-
-   
-
-  开头的 public 方法，参数任意
-
-  1,6
-
-  。
 
 ------
 
@@ -769,14 +653,10 @@ execution([修饰符] 返回类型 [包.类.方法] (参数) [throws 异常])
 within(包路径或类名)
 ```
 
-- 
-
-  示例
-
-  ：
+- 示例：
 
   - `within(com.example.service.UserService)`：匹配 `UserService` 类的所有方法。
-  - `within(com.example.service..*)`：匹配 `service` 包及其子包下所有类的方法[2,7](@ref)。
+- `within(com.example.service..*)`：匹配 `service` 包及其子包下所有类的方法[2,7](@ref)。
 
 ------
 
@@ -788,31 +668,14 @@ within(包路径或类名)
 @annotation(注解类型)
 ```
 
-- 
-
-  示例
-
-  ：
+- 示例：
 
   ```
   @annotation(com.example.anno.Log)
   ```
 
-  匹配所有标注了
-
-   
-
-  ```
-  @Log
-  ```
-
-   
-
-  注解的方法
-
-  2,5
-
-  。
+  匹配所有标注了 @Log 注解的方法。
+  
 
 ------
 
@@ -824,14 +687,10 @@ within(包路径或类名)
 args(参数类型)
 ```
 
-- 
-
-  示例
-
-  ：
+- 示例：
 
   - `args(java.lang.String)`：匹配第一个参数为 `String` 的方法。
-  - `args(.., int)`：匹配最后一个参数为 `int` 的方法[3,7](@ref)。
+- `args(.., int)`：匹配最后一个参数为 `int` 的方法[3,7](@ref)。
 
 ------
 
@@ -937,11 +796,7 @@ public void saveOrAuditMethods() {}
 
    - **注册机制**：依赖**类路径扫描**（`@ComponentScan`），Spring 自动检测并创建单例 Bean。
 
-   - 
-
-     示例
-
-     ：
+   - 示例：
 
      ```
      @Service // 派生自 @Component
@@ -949,18 +804,14 @@ public void saveOrAuditMethods() {}
          // 业务逻辑
      }
      ```
-
+   
 2. **@Bean**
 
    - **作用对象**：**方法级别**的注解，标注在返回对象的方法上。
 
    - **注册机制**：需在 **`@Configuration` 配置类**中显式定义，方法体包含 Bean 的创建逻辑。
 
-   - 
-
-     示例
-
-     ：
+   - 示例：
 
      ```
      @Configuration
@@ -1171,31 +1022,19 @@ public class ConfigB {
   - 类**不能是 `final`**（需支持 CGLIB 子类代理）。
   - 嵌套配置类必须声明为 **`static`**[8,11](@ref)。
 
-- 
+- 避免混用：
 
-  避免混用
-
-  ：
-
-  在
-
-   
+  在 
 
   ```
   @Component
   ```
 
-   
-
-  类中定义
-
-   
+   类中定义 
 
   ```
-  @Bean
+  @Bean 
   ```
-
-   
 
   方法时，需
 

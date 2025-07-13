@@ -14,16 +14,10 @@ tags:
 
 ### ⚙️ 1. **默认机制：基于Offset的分页**
 
-- 
-
-  实现原理
-
-  
-
-  通过
+- 实现原理通过
 
   ```
-  PageRequest.of(page, size)
+PageRequest.of(page, size)
   ```
 
   创建
@@ -50,17 +44,11 @@ tags:
   SELECT * FROM users ORDER BY id LIMIT 10 OFFSET 10000; -- 查询第1001页（每页10条）
   ```
 
-  1,3,6
-
-- 
-
-  深度分页性能问题
-
-  
+- 深度分页性能问题
 
   - **全表扫描风险**：数据库需先扫描`OFFSET + size`条记录（如`OFFSET 10000`需扫描前10000条），再返回目标数据，导致I/O和CPU资源消耗剧增[6](@ref)。
   - **延迟与资源浪费**：当`OFFSET`值超过10万时，查询响应时间可能从毫秒级升至秒级[6](@ref)。
-
+  
 - **适用场景**
   数据量较小（如总页数<100）或仅需前几页数据的场景。
 
@@ -68,62 +56,36 @@ tags:
 
 ### 🎯 2. **优化方案：游标分页（Cursor-based Pagination）**
 
-- 
+- 核心思想
 
-  核心思想
-
-  
-
-  不再依赖页码，而是基于
-
-  最后一条记录的标识
-
-  （如主键ID、时间戳）定位下一页数据：
+  不再依赖页码，而是基于最后一条记录的标识（如主键ID、时间戳）定位下一页数据：
 
   ```
-  SELECT * FROM users WHERE id > last_id ORDER BY id LIMIT 10; -- 游标分页示例
+SELECT * FROM users WHERE id > last_id ORDER BY id LIMIT 10; -- 游标分页示例
   ```
 
-  6,7
-
-- 
-
-  优势
-
-  
+- 优势
 
   - **常数级性能**：无论深度如何，查询时间仅与`LIMIT size`相关，避免`OFFSET`的全表扫描[6](@ref)。
   - **数据一致性**：避免因分页期间数据增删导致的重复或遗漏（如使用自增ID或时间戳排序）[6](@ref)。
-
-- 
-
-  Spring Data JPA实现步骤
-
   
+- Spring Data JPA实现步骤
 
-  1. 
-
-     Repository层
-
-     ：使用
+  1. Repository层：使用
 
      ```
      @Query
      ```
 
      定义游标查询：
-
+     
      ```
      @Query("SELECT u FROM User u WHERE u.id > :cursorId ORDER BY u.id")
      List<User> findNextPage(@Param("cursorId") Long cursorId, Pageable pageable);
      ```
-
-  2. 
-
-     Service层
-
-     ：传递游标参数：
-
+     
+  2. Service层：传递游标参数：
+  
      ```
      public Page<User> getUsers(Long cursorId, int size) {
          Pageable pageable = PageRequest.of(0, size); // 页码固定为0
@@ -133,12 +95,8 @@ tags:
          return new PageImpl<>(users, pageable, hasNext ? users.size() : 0);
      }
      ```
-
-  3. 
-
-     返回结构
-
-     ：响应中包含游标标识（如最后一条记录的ID）：
+     
+  3. 返回结构：响应中包含游标标识（如最后一条记录的ID）：
 
      ```
      {
@@ -146,7 +104,7 @@ tags:
        "nextCursor": 1024 // 下一页的起始游标
      }
      ```
-
+  
   7,8
 
 ------
@@ -164,23 +122,15 @@ tags:
 
 ### 🛠️ 4. **实际选择建议**
 
-- 
-
-  优先游标分页的场景
-
-  
+- 优先游标分页的场景
 
   - 用户连续翻页（如无限滚动列表）[6,7](@ref)。
   - 单次查询数据量超过10万条，或需访问超过100页的深度[6](@ref)。
-
-- 
-
-  仍用Offset分页的场景
-
   
+- 仍用Offset分页的场景
 
   - 后台管理系统（需精确统计总数、跳转任意页）[8](@ref)。
-  - 数据量小于1万条，或仅需前几页数据[1](@ref)。
+- 数据量小于1万条，或仅需前几页数据[1](@ref)。
 
 > 💡 **关键提示**：若必须使用Offset分页且需优化性能，可考虑：
 >
@@ -215,29 +165,17 @@ Spring Data JPA的`Pageable`默认通过Offset分页实现，深度分页时需�
 
 - **实现方式**：将游标（如`lastId`）作为响应返回客户端，客户端下次请求时通过参数（如`?cursor=1000&size=10`）回传[1,8](@ref)。
 
-- 
-
-  优点
-
-  ：
+- **优点**：
 
   - **无状态服务**：服务端无需存储，天然支持分布式架构。
-  - **低开销**：避免额外存储组件的网络和资源消耗。
+- **低开销**：避免额外存储组件的网络和资源消耗。
   - **简单可靠**：适用于99%的连续分页场景（如无限滚动）。
 
-- 
-
-  缺点
-
-  ：
+- **缺点**：
 
   - 不支持跨设备或跳页（但游标分页本就不适合跳页）。
 
-- 
-
-  示例代码
-
-  ：
+- **示例代码**：
 
   ```
   // 响应结构
@@ -249,39 +187,23 @@ Spring Data JPA的`Pageable`默认通过Offset分页实现，深度分页时需�
 
 #### 2️⃣ **Redis存储（特定场景使用）**
 
-- 
-
-  适用场景
-
-  ：
+- **适用场景**：
 
   - **分页状态需跨设备共享**（如用户A在手机端分页到第5页，电脑端需自动续接）。
   - **分页会话需长期保留**（如分页导出任务可能中断后恢复）[6,7](@ref)。
-
-- 
-
-  实现要点
-
-  ：
+  
+- **实现要点**：
 
   - **键设计**：`cursor:{sessionId}:{queryId}`（如`cursor:user123:export-task-1`）。
-  - **存储类型**：`String`（简单游标值）或 `Hash`（多字段游标）。
+- **存储类型**：`String`（简单游标值）或 `Hash`（多字段游标）。
   - **过期时间**：设置TTL避免内存泄漏（如`EXPIRE cursor:user123:export-task-1 3600`）。
 
-- 
-
-  缺点
-
-  ：
+- **缺点**：
 
   - **增加复杂度**：需维护Redis连接、序列化、异常处理。
   - **性能损耗**：相比客户端回传，多一次网络请求（1~2ms延迟）[6](@ref)。
-
-- 
-
-  示例代码
-
-  ：
+  
+- **示例代码**：
 
   ```
   public String saveCursor(String sessionId, String queryId, String cursorValue) {
@@ -295,12 +217,7 @@ Spring Data JPA的`Pageable`默认通过Offset分页实现，深度分页时需�
 
 - **场景**：需持久化分页状态（如审计需求）。
 
-- 
-
-  问题
-
-  ：
-
+- **问题**：
   - **性能差**：每次分页需读写数据库，拖慢响应。
   - **无必要**：游标是临时状态，数据库应存业务数据而非上下文[1,4](@ref)。
 
@@ -314,15 +231,11 @@ Spring Data JPA的`Pageable`默认通过Offset分页实现，深度分页时需�
 
 2. **并发控制**：对同一分页会话加分布式锁（如Redisson），避免并发更新游标[6](@ref)。
 
-3. 
-
-   清理机制
-
-   ：
+3. **清理机制**：
 
    - 客户端主动通知结束时删除游标。
    - 设置TTL自动清理（如30分钟）。
-
+   
 4. **性能监控**：关注Redis内存和QPS，避免游标数据膨胀。
 
 ------

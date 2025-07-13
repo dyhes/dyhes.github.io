@@ -23,18 +23,14 @@ Caffeine 是一款基于 Java 8 的高性能本地缓存库，由 Google Guava C
 
    - **基于容量**：通过 `maximumSize` 限制条目数量，或通过 `maximumWeight` 结合权重函数（如数据大小）控制内存占用[3,6](@ref)。
 
-   - 
-
-     基于时间
-
-     ：
+   - 基于时间：
 
      - `expireAfterWrite`：写入后固定时间过期（如 10 分钟）；
-     - `expireAfterAccess`：最后一次访问/写入后固定时间过期；
+   - `expireAfterAccess`：最后一次访问/写入后固定时间过期；
      - `refreshAfterWrite`：写入后定时刷新（异步加载新值，不阻塞请求）[3,5,6](@ref)。
 
    - **基于引用**：支持弱引用（`weakKeys`/`weakValues`）或软引用（`softValues`），允许 JVM 在内存不足时回收缓存[5,6](@ref)。
-
+   
 3. **异步与自动加载**
 
    - **异步加载（AsyncCache）**：返回 `CompletableFuture`，适用于非阻塞编程模型，默认使用 `ForkJoinPool` 执行加载任务[3,7](@ref)。
@@ -51,19 +47,11 @@ Caffeine 是一款基于 Java 8 的高性能本地缓存库，由 Google Guava C
 
 1. **缓存淘汰机制**
 
-   - 采用
-
-     惰性删除
-
-     与
-
-     定期批量清理
-
-     结合的策略：
+   - 采用惰性删除与定期批量清理结合的策略：
 
      - 读/写操作时检查过期时间，异步回收过期条目；
-     - 后台线程定期执行清理任务，减少主线程阻塞[3,6](@ref)。
-
+   - 后台线程定期执行清理任务，减少主线程阻塞[3,6](@ref)。
+   
 2. **内存管理优化**
 
    - **权重控制**：通过 `Weigher` 接口为不同条目分配权重，避免大对象占用过多内存[6](@ref)。
@@ -150,11 +138,7 @@ Spring Boot 结合 Caffeine（本地缓存）和 Redis（分布式缓存）实�
 
 ### 📐 **一、多级缓存架构设计**
 
-1. 
-
-   请求流程
-
-   
+1. 请求流程
 
    ```
    请求 → Caffeine（L1，进程内）→ 命中则返回  
@@ -163,12 +147,8 @@ Spring Boot 结合 Caffeine（本地缓存）和 Redis（分布式缓存）实�
           ↓ 未命中  
           数据库 → 回填Redis和Caffeine
    ```
-
-2. 
-
-   核心优势
-
    
+2. 核心优势
 
    - **高性能**：Caffeine 提供纳秒级访问，承载 80% 以上热点请求[4](@ref)
    - **容量分层**：Redis 存储全量数据，Caffeine 仅存高频热点[1](@ref)
@@ -561,26 +541,12 @@ public Order getOrder(String orderId) {
 
 ### 🔍 **六、扩展：解决多级缓存的典型问题**
 
-- 
-
-  缓存穿透
-
-  ：在多级缓存的
-
-   
+- 缓存穿透：在多级缓存的 get 方法中，对空值进行短时间缓存：
 
   ```
-  get
-  ```
-
-   
-
-  方法中，对空值进行短时间缓存：
-
-  ```
-  if (value == null) {
+if (value == null) {
       redisCache.put(key, NULL_OBJECT, 30, TimeUnit.SECONDS); // 缓存空值[5](@ref)
-  }
+}
   ```
 
 - 

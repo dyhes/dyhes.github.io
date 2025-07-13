@@ -18,36 +18,23 @@ tags:
 
    - **原理**：分析服务器日志（如Nginx、Tomcat访问日志），统计单位时间内的请求量。
 
-   - 
-
-     步骤
-
-     ：
-
-     - 提取日志中的请求时间戳（例如`grep 'GET /api' access.log | cut -d ' ' -f4 | uniq -c`）[2](@ref)；
+   - **步骤**：
+- 提取日志中的请求时间戳（例如`grep 'GET /api' access.log | cut -d ' ' -f4 | uniq -c`）[2](@ref)；
      - 按秒/分钟聚合请求数，公式：`QPS = 总请求数 / 时间窗口（秒）`[1](@ref)；
 
    - **适用场景**：历史数据分析、非实时监控。
 
 2. **压力测试工具**（推荐）
 
-   - 
-
-     工具选择
-
-     ：
+   - 工具选择：
 
      - **JMeter**：通过`聚合报告（Aggregate Report）`的`Throughput`字段直接获取QPS[3,8](@ref)；
-     - **wrk/ab**：命令行工具，结果中的`Requests/sec`即QPS（如`wrk -t12 -c400 -d30s http://api`）[6,4](@ref)。
-
-   - 
-
-     关键配置
-
-     ：
-
+  - **wrk/ab**：命令行工具，结果中的`Requests/sec`即QPS（如`wrk -t12 -c400 -d30s http://api`）[6,4](@ref)。
+     
+- 关键配置：
+   
      - 设置并发线程数（`-c`）、测试时长（`-d`）；
-     - 使用**常量吞吐量定时器**（JMeter）控制请求速率[3](@ref)。
+- 使用**常量吞吐量定时器**（JMeter）控制请求速率[3](@ref)。
 
 ------
 
@@ -55,57 +42,41 @@ tags:
 
 1. **代码埋点 + 时间窗口算法**
 
-   - 
-
-     滑动窗口实现
-
-     ：
+   - 滑动窗口实现：
 
      - 用环形数组（Ring Buffer）分桶存储，每200ms一个桶，记录请求计数[5](@ref)；
 
      - 每秒聚合最近5个桶的数据（窗口=1秒），计算实时QPS：
 
        ```
-       QPS = (桶ₜ计数总和) / 1.0
+     QPS = (桶ₜ计数总和) / 1.0
        ```
 
    - **开源组件**：阿里Sentinel、Google Guava RateLimiter均采用此算法[5,2](@ref)。
-
+   
 2. **监控系统集成**
 
-   - 
-
-     Prometheus + Grafana
-
-     ：
+   - Prometheus + Grafana：
 
      - 代码中调用`Counter.Inc()`打点；
-     - PromQL查询：`rate(api_requests_total[1s])`[5](@ref)；
-
-   - **优势**：动态可视化、告警联动。
+  - PromQL查询：`rate(api_requests_total[1s])`[5](@ref)；
+     
+- **优势**：动态可视化、告警联动。
 
 ------
 
 ### ⚙️ **三、分布式系统测量**
 
-- 
-
-  集群QPS计算
-
-  ：
+- 集群QPS计算：
 
   ```
-  \text{集群QPS} = \sum(\text{单实例QPS}) \times \text{负载均衡效率系数（通常0.8~0.95）}
+\text{集群QPS} = \sum(\text{单实例QPS}) \times \text{负载均衡效率系数（通常0.8~0.95）}
   ```
 
-- 
-
-  注意事项
-
-  ：
+- 注意事项：
 
   - 需聚合所有节点日志（如ELK Stack）[2](@ref)；
-  - 排除健康检查等非业务请求[4](@ref)。
+- 排除健康检查等非业务请求[4](@ref)。
 
 ------
 

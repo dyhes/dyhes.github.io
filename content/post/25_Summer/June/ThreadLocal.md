@@ -76,38 +76,26 @@ ThreadLocal 是 Java 多线程编程中的核心类，用于实现**线程级别
 
 2. **规避策略**
 
-   - *强制调用
-
-     
-
-     ```
-     remove()
-     ```
-
-     **：
+   - 强制调用remove()：
 
      使用
-
-      
 
      ```
      try-finally
      ```
 
-      
-
      确保清理，尤其在池化线程中：
 
      ```
-     try {
+  try {
          threadLocal.set(data); // 设置值
-         // ...执行业务逻辑
+      // ...执行业务逻辑
      } finally {
          threadLocal.remove();  // 必须清理！
      }
-     ```
-
-   - **避免存储大对象**：减少因泄漏导致的内存压力。
+  ```
+     
+- **避免存储大对象**：减少因泄漏导致的内存压力。
 
 ------
 
@@ -149,22 +137,16 @@ ThreadLocal变量与普通变量（包括线程内部定义的普通变量）的
 
    - **作用域**：线程级别，跨方法共享（例如在Controller、Service、Dao层均可访问同一线程的ThreadLocal值）。
 
-   - 
-
-     示例
-
-     ：
+   - 示例：
 
      ```
-     private static final ThreadLocal<User> userHolder = ThreadLocal.withInitial(() -> new User());
+   private static final ThreadLocal<User> userHolder = ThreadLocal.withInitial(() -> new User());
      // 线程A和线程B通过userHolder.get()获取各自独立的User对象
-     ```
-
+   ```
+   
 2. **普通变量**
 
-   - 
-
-     局部变量
+   - 局部变量
 
      （方法内定义）：
 
@@ -172,40 +154,28 @@ ThreadLocal变量与普通变量（包括线程内部定义的普通变量）的
 
      - 作用域：方法级别，线程安全（每个线程有独立栈帧）。
 
-     - 
-
-       示例
-
-       ：
+     - 示例：
 
        ```
-       public void run() {
+  public void run() {
            int localVar = 10; // 每个线程的run()方法中有自己的localVar副本
-       }
+  }
        ```
 
-   - 
-
-     成员变量
-
-     （线程类内部定义）：
-
+   - 成员变量（线程类内部定义）：
+   
      - 存储位置：堆内存中，被所有线程共享。
-
+   
      - 作用域：对象实例级别，若多个线程操作同一对象实例，则成员变量被共享（非线程安全）。
 
-     - 
-
-       示例
-
-       ：
+     - 示例：
 
        ```
-       class MyRunnable implements Runnable {
+  class MyRunnable implements Runnable {
            private int sharedVar; // 被所有线程共享
-           public void run() { sharedVar++; } // 需加锁保证安全
+      public void run() { sharedVar++; } // 需加锁保证安全
          }
-       ```
+  ```
 
 ------
 
@@ -248,11 +218,7 @@ ThreadLocal变量与普通变量（包括线程内部定义的普通变量）的
 - **原因**：
   ThreadLocalMap的Key（ThreadLocal）是弱引用，Value是强引用。若ThreadLocal未被强引用且未调用`remove()`，GC会回收Key，导致Entry变为`(null, Value)`，而Value因线程存活无法回收（尤其线程池中）。
 
-- 
-
-  解决方案
-
-  ：
+- **解决方案**：
 
   使用后必须调用
 
@@ -261,7 +227,7 @@ ThreadLocal变量与普通变量（包括线程内部定义的普通变量）的
   ```
 
   清理：
-
+  
   ```
   try {
       userHolder.set(currentUser); // 设置值
@@ -284,20 +250,14 @@ ThreadLocal变量与普通变量（包括线程内部定义的普通变量）的
 
 > **ThreadLocal典型用例**：
 >
-> 1. 替换非线程安全的
->
->    ```
->    SimpleDateFormat
->    ```
->
->    ：
+> 1. 替换非线程安全的 SimpleDateFormat：
 >
 >    ```
 >    private static final ThreadLocal<DateFormat> dateFormatHolder = 
 >        ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
->    ```
->
-> 2. Spring的`RequestContextHolder`、事务管理器（跨层传递请求上下文）。
+>   ```
+>    
+>2. Spring的`RequestContextHolder`、事务管理器（跨层传递请求上下文）。
 
 ------
 
@@ -323,11 +283,7 @@ ThreadLocalMap的键（Key）设计为弱引用（WeakReference），是Java为�
 
 - **后果**：ThreadLocal对象因被强引用而无法被垃圾回收（GC），导致其长期占用内存，直到线程销毁（线程池场景下线程可能永不销毁）。
 
-- 
-
-  示例场景
-
-  ：
+- 示例场景：
 
   ```
   ThreadLocal<String> tl = new ThreadLocal<>();

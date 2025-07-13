@@ -41,12 +41,8 @@ tags:
    - 示例：
 
      ```
-ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+     ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
      executor.scheduleAtFixedRate(() -> System.out.println("Task"), 2, 3, TimeUnit.SECONDS);
-```
-
-------
-
 ### 🔄 二、Spring生态方案
 
 1. **`@Scheduled`注解**
@@ -59,8 +55,7 @@ ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
      2. 方法加`@Scheduled(cron = "0/5 * * * * ?")`。
      
    - 线程池优化：
-   
-     ```
+
      @Bean
      public ThreadPoolTaskScheduler taskScheduler() {
          ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
@@ -68,7 +63,7 @@ ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
          return scheduler;
      }
      ```
-   
+
 2. **`ScheduledExecutorFactoryBean`**
 
    - **特点**：Spring对`ScheduledThreadPoolExecutor`的封装，支持XML配置线程池参数[1](@ref)。
@@ -81,18 +76,14 @@ ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
 
    - **特点**：支持分布式调度、任务持久化（数据库存储）、动态配置（运行时修改触发规则）、集群容错[1,5,6](@ref)。
 
-   - 
-
-     核心组件
-
-     ：
+   - 核心组件：
 
      - `Job`：任务接口。
-     - `Trigger`：触发策略（如`CronTrigger`）。
+   - `Trigger`：触发策略（如`CronTrigger`）。
      - `Scheduler`：调度控制器。
 
    - **适用场景**：高可靠、复杂调度（如跨节点任务分片）。
-
+   
 2. **分布式调度框架**
 
    - **XXL-JOB**：开箱即用的管理界面、任务分片、失败告警；依赖MySQL，轻量级[5](@ref)。
@@ -130,24 +121,16 @@ ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
 
 **核心思路**：将任务定义与状态存储到外部存储（如数据库、Redis），节点重启后重新加载任务。
 
-- 
-
-  实现步骤
-
-  ：
+- 实现步骤：
 
   1. **任务定义存储**：创建任务注册表（如MySQL表），记录任务ID、执行周期、上次执行时间、状态（未开始/执行中/已完成）[2,3](@ref)。
 
   2. **宕机恢复**：节点启动时扫描注册表，加载未完成的定时任务到 `ScheduledExecutorService`[3](@ref)。
 
-  3. 
-
-     状态更新
-
-     ：
+  3. 状态更新：
 
      - 任务开始前更新状态为“执行中”，并记录节点IP与时间戳；
-     - 任务完成后更新为“已完成”[7](@ref)。
+- 任务完成后更新为“已完成”[7](@ref)。
 
 **示例代码（任务注册与加载）**：
 
@@ -321,23 +304,21 @@ ThreadPoolTaskScheduler 和 ScheduledExecutorService 是 Java 中用于任务调
 - 示例配置：ScheduledExecutorService：
 
   ```
-ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(5);
+  ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(5);
   ```
 
   ThreadPoolTaskScheduler（Spring 配置）：
 
   ```
-@Bean
+  @Bean
   public ThreadPoolTaskScheduler taskScheduler() {
     ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
       scheduler.setPoolSize(10);
       scheduler.setThreadNamePrefix("task-");
       return scheduler;
-}
+  }
   ``` [3,6](@ref)
-```
 
-------
 
 ### 🛠️ **4. 异常处理与集成能力**
 
@@ -347,14 +328,10 @@ ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(5);
 | **Spring 集成** | ❌ 需手动整合                         | ✅ 无缝兼容 `@Scheduled`、事件监听等机制        |
 | **任务上下文**  | 无                                   | ✅ 可访问 Spring 上下文（如 `@Autowired` 注入） |
 
-- 
-
-  说明
-
-  ：
+- 说明：
 
   - `ThreadPoolTaskScheduler` 在任务中可直接调用 Spring Bean，适合需要依赖注入的业务逻辑[3,6](@ref)。
-  - `ScheduledExecutorService` 需自行处理线程内 Spring 上下文（如通过 `ThreadLocal`）[4](@ref)。
+- `ScheduledExecutorService` 需自行处理线程内 Spring 上下文（如通过 `ThreadLocal`）[4](@ref)。
 
 ------
 
@@ -414,15 +391,11 @@ Quartz 是一个功能强大的开源 **Java 作业调度框架**，由 OpenSymp
 
 - **多线程架构**：初始化 worker 线程池执行任务，支持高并发。
 
-- 
-
-  模块化设计
-
-  ：
+- 模块化设计：
 
   - **`ThreadPool`**：管理任务执行线程（默认大小 10，可配置）。
   - **`JobStore`**：存储任务和触发器信息，支持内存（`RAMJobStore`）或数据库（`JDBCJobStore`）。
-
+  
 - **事件监听**：提供 `SchedulerListener`、`JobListener` 等接口，支持任务执行前后的自定义逻辑（如日志、告警）[1](@ref)。
 
 ------
@@ -435,27 +408,23 @@ Quartz 是一个功能强大的开源 **Java 作业调度框架**，由 OpenSymp
 
 - 示例代码：
 
-  ```
+```
   Trigger trigger = TriggerBuilder.newTrigger()
       .withSchedule(SimpleScheduleBuilder.simpleSchedule()
           .withIntervalInSeconds(10)
           .repeatForever())
       .build();
-  ```
+```
 
 #### 2. **CronTrigger**
 
-- 
-
-  Cron 表达式
-
-  ：由 7 个字段组成（秒 分 时 日 月 周 年），支持特殊字符：
+- Cron 表达式：由 7 个字段组成（秒 分 时 日 月 周 年），支持特殊字符：
 
   - `*`：任意值
   - `?`：忽略日/周字段冲突
   - `L`：最后一天（如 `0 0 23 L * ?` 表示每月最后一天 23 点执行）
   - `#`：第 N 个周几（如 `0 15 10 ? * 6#3` 表示每月第三个周五 10:15 执行）[3,5](@ref)
-
+  
 - 常用示例：
 
   - 每小时执行：`0 0 * * * ?`
@@ -465,64 +434,37 @@ Quartz 是一个功能强大的开源 **Java 作业调度框架**，由 OpenSymp
 
 ### 🌐 **四、集群与高可用**[1,4](@ref)
 
-- 
-
-  集群模式
-
-  ：
+- 集群模式：
 
   - 通过数据库（如 MySQL）共享任务状态，避免单点故障。
   - 支持故障切换和负载均衡，多个调度器节点协同工作。
-
-- 
-
-  配置步骤
-
-  ：
+  
+- 配置步骤：
 
   1. 创建数据库表（使用 Quartz 提供的 SQL 脚本）。
 
-  2. 修改
+  2. 修改   quartz.properties ：
 
-      
-
-     ```
-     quartz.properties
-     ```
-
-     ：
-
-     ```
+  
+   ```
      org.quartz.jobStore.class=org.quartz.impl.jdbcjobstore.JobStoreTX
-     org.quartz.jobStore.isClustered=true
+   org.quartz.jobStore.isClustered=true
      org.quartz.jobStore.dataSource=myDS  # 配置数据库连接
-     ```
+   ```
 
 ------
 
 ### 🧩 **五、企业级特性**[1,8](@ref)
 
-1. 
-
-   持久化
-
-   
+1. 持久化
 
    - 任务状态保存到数据库，重启后自动恢复未完成的任务。
 
-2. 
-
-   事务管理
-
-   
+2. 事务管理
 
    - 支持 JTA 事务，确保任务执行与业务逻辑的原子性。
 
-3. 
-
-   插件机制
-
-   
+3. 插件机制
 
    - 可扩展 `SchedulerPlugin` 等接口，自定义调度策略（如动态修改 Cron 表达式）。
 
@@ -530,11 +472,7 @@ Quartz 是一个功能强大的开源 **Java 作业调度框架**，由 OpenSymp
 
 ### 🌱 **六、Spring Boot 集成**[2,8](@ref)
 
-1. 
-
-   依赖配置
-
-   ：
+1. 依赖配置：
 
    ```
    <dependency>
@@ -542,12 +480,8 @@ Quartz 是一个功能强大的开源 **Java 作业调度框架**，由 OpenSymp
        <artifactId>spring-boot-starter-quartz</artifactId>
    </dependency>
    ```
-
-2. 
-
-   定义 Job 类
-
-   ：
+   
+2. 定义 Job 类：
 
    ```
    public class MyJob implements Job {
@@ -557,12 +491,8 @@ Quartz 是一个功能强大的开源 **Java 作业调度框架**，由 OpenSymp
        }
    }
    ```
-
-3. 
-
-   自动配置
-
-   ：
+   
+3. 自动配置：
 
    - Spring Boot 自动创建 `Scheduler`，通过 `application.yml` 配置线程池、存储方式等。
 
@@ -624,11 +554,7 @@ XXL-JOB 采用 **“调度中心 + 执行器” 的分布式架构**，实现调
 
    - 将大任务拆分为多个子任务并行执行，显著提升处理效率。
 
-   - 
-
-     代码示例
-
-     ：
+   - 代码示例：
 
      ```
      @XxlJob("shardingJob")  
@@ -640,13 +566,10 @@ XXL-JOB 采用 **“调度中心 + 执行器” 的分布式架构**，实现调
          return ReturnT.SUCCESS;  
      }  
      ```
-
-     路由策略支持故障转移、轮询、一致性 HASH 等
-
-     4,7
-
-     。
-
+     
+     路由策略支持故障转移、轮询、一致性 HASH 等。
+     
+   
 3. **高可用与容错机制**
 
    - **故障转移**：节点宕机时自动切换至健康节点[1,6](@ref)。
@@ -671,32 +594,20 @@ XXL-JOB 采用 **“调度中心 + 执行器” 的分布式架构**，实现调
 
 - **数据库初始化**：执行 SQL 脚本 `tables_xxl_job.sql`[4,7](@ref)。
 
-- 
+- 启动方式：
 
-  启动方式
-
-  ：
-
-  - 
-
-    本地运行
-
-    ：
+  - 本地运行：
 
     ```
-    java -jar xxl-job-admin.jar --spring.datasource.url=jdbc:mysql://localhost:3306/xxl_job  
+  java -jar xxl-job-admin.jar --spring.datasource.url=jdbc:mysql://localhost:3306/xxl_job  
     ```
 
-  - 
-
-    Docker 部署
-
-    ：
+  - Docker 部署：
 
     ```
     docker run -d -p 8080:8080 -e PARAMS="--spring.datasource.url=..." xuxueli/xxl-job-admin:2.4.0  
     ```
-
+  
 - **访问管理台**：`http://localhost:8080/xxl-job-admin`（默认账号 `admin/123456`）[4](@ref)。
 
 #### **2. 执行器集成（Spring Boot 项目）**
@@ -799,68 +710,42 @@ XXL-JOB 通过 **解耦设计** 与 **全异步流程** 解决了分布式任务
 
 1. **任务调度能力**
 
-   - 
-
-     Quartz
-
-     ：
+   - Quartz：
 
      - 支持Cron表达式、固定间隔等复杂调度策略[1,6](@ref)。
      - 任务持久化到数据库，重启可恢复[2](@ref)。
-
-   - 
-
-     XXL-JOB
-
-     ：
-
+     
+   - XXL-JOB：
+   
      - 除Cron外，支持API触发、父子任务依赖、分片广播[4,8](@ref)。
-     - **动态生效**：任务参数、状态修改实时生效[6,7](@ref)。
-
+   - **动态生效**：任务参数、状态修改实时生效[6,7](@ref)。
+   
 2. **集群与高可用**
 
-   - 
-
-     Quartz
-
-     ：
+   - Quartz：
 
      - 集群节点通过数据库行锁竞争任务，负载不均衡，存在单点瓶颈[2,7](@ref)。
 
-   - 
-
-     XXL-JOB
-
-     ：
+   - XXL-JOB：
 
      - 调度中心集群通过DB锁或ZK选主，执行器支持故障自动转移[3,8](@ref)。
-     - 心跳检测机制（30秒/次），自动剔除宕机节点[8](@ref)。
-
+   - 心跳检测机制（30秒/次），自动剔除宕机节点[8](@ref)。
+   
 3. **运维监控**
-
-   - **Quartz**：无原生管理界面，需自行开发监控系统[1,7](@ref)。
-
-   - 
-
-     XXL-JOB
-
-     ：
-
-     - 提供**可视化控制台**，实时查看任务日志、执行状态、成功率统计[3,6](@ref)。
-     - 支持邮件/钉钉告警，任务失败自动触发[4](@ref)。
+- **Quartz**：无原生管理界面，需自行开发监控系统[1,7](@ref)。
+   
+- XXL-JOB：
+   
+  - 提供**可视化控制台**，实时查看任务日志、执行状态、成功率统计[3,6](@ref)。
+   - 支持邮件/钉钉告警，任务失败自动触发[4](@ref)。
 
 4. **性能与扩展性**
-
    - **Quartz**：单机调度吞吐量约500任务/秒，集群扩展需手动分库分表[7,8](@ref)。
-
-   - 
-
-     XXL-JOB
-
-     ：
-
+   
+   - XXL-JOB：
+   
      - 异步调度设计，吞吐量达1200任务/秒[8](@ref)。
-     - 执行器动态注册，支持弹性扩容[4,6](@ref)。
+   - 执行器动态注册，支持弹性扩容[4,6](@ref)。
 
 ------
 
@@ -877,23 +762,15 @@ XXL-JOB 通过 **解耦设计** 与 **全异步流程** 解决了分布式任务
 
 ### ⚠️ **四、局限性对比**
 
-- 
-
-  Quartz
-
-  ：
+- Quartz：
 
   - **代码侵入性强**：调度逻辑与业务耦合，影响性能[4,7](@ref)。
   - **无分片机制**：无法处理海量数据并行任务[7](@ref)。
-
-- 
-
-  XXL-JOB
-
-  ：
+  
+- XXL-JOB：
 
   - **分片功能较弱**：需开发者手动实现分片逻辑（例：`ShardingUtil.getShardingVo()`）[8](@ref)。
-  - **中心化风险**：调度中心若未集群部署，可能成为单点故障[3,7](@ref)。
+- **中心化风险**：调度中心若未集群部署，可能成为单点故障[3,7](@ref)。
 
 ------
 
@@ -913,20 +790,12 @@ XXL-JOB 通过 **解耦设计** 与 **全异步流程** 解决了分布式任务
 
 ### 🔧 **六、扩展能力补充**
 
-- 
-
-  XXL-JOB
-
-  ：
+- XXL-JOB：
 
   - 支持**GLUE脚本任务**（Java/Python/PHP等），动态更新代码[4](@ref)。
   - 整合Spring Boot仅需3步：依赖 → 配置 → 注解`@XxlJob`[6,8](@ref)。
-
-- 
-
-  Quartz
-
-  ：
+  
+- Quartz：
 
   - 可通过**监听器**（`JobListener`）扩展任务生命周期事件[1](@ref)。
 
@@ -947,11 +816,7 @@ XXL-JOB 实现动态提交附带执行参数且仅执行一次的定时任务，
 
 #### 1. **通过管理界面手动创建**（适合临时任务）
 
-- 
-
-  步骤
-
-  ：
+- 步骤：
 
   1. 登录 XXL-JOB 管理台，进入任务管理页面；
   2. 点击“新增任务”，填写任务信息：
@@ -964,32 +829,20 @@ XXL-JOB 实现动态提交附带执行参数且仅执行一次的定时任务，
      - **任务参数**：填写 JSON 或键值对参数（如 `{"orderId":1001}`）；
      - **执行一次**：调度类型选择一次任务后自动失效[1,6](@ref)。
   3. 保存后任务会在指定时间触发一次，执行后自动停止。
-
+  
 - **优点**：操作简单，无需编码。
 
 #### 2. **通过 API 动态提交**（适合程序触发）
 
-- 
+- 步骤：
 
-  步骤
-
-  ：
-
-  1. 
-
-     调用调度中心 API
-
-     ：
+  1. **调用调度中心 API**：
 
      ```
-     POST /api/jobinfo/add
+  POST /api/jobinfo/add
      ```
 
-  2. 
-
-     请求体示例
-
-     ：
+  2. **请求体示例**：
 
      ```
      {
@@ -1004,17 +857,13 @@ XXL-JOB 实现动态提交附带执行参数且仅执行一次的定时任务，
        "triggerNextTime": 0           // 立即生效
      }
      ```
-
+     
   3. **鉴权**：需在 Header 中添加 `XXL-JOB-ACCESS-TOKEN`（与调度中心配置一致）[4,6](@ref)。
-
-- 
-
-  关键点
-
-  ：
+  
+- 关键点：
 
   - `scheduleConf` 设置为精确到秒的 CRON 表达式；
-  - 任务执行后自动归档，不会再次触发。
+- 任务执行后自动归档，不会再次触发。
 
 ------
 
@@ -1058,36 +907,20 @@ public ReturnT<String> execute() {
 
 ### ⚠️ **三、注意事项**
 
-1. 
-
-   参数安全性
-
-   ：
+1. 参数安全性：
 
    - 避免传递敏感数据，或对参数加密；
    - 执行器需校验参数合法性，防止注入攻击[6](@ref)。
-
-2. 
-
-   任务生命周期
-
-   ：
+   
+2. 任务生命周期：
 
    - 单次任务执行后状态变为 **已停止**，需手动或调用 API 删除[4](@ref)。
 
-3. 
-
-   时间精度
-
-   ：
+3. 时间精度：
 
    - CRON 表达式需精确到秒（如 `ss mm HH dd MM ? yyyy`），确保只触发一次。
 
-4. 
-
-   集群环境
-
-   ：
+4. 集群环境：
 
    - 调度中心需集群部署，避免单点故障导致任务丢失[5](@ref)。
 
@@ -1129,11 +962,7 @@ XXL-JOB 的 `scheduleType` 定义了任务触发规则，动态提交任务时�
 
    - **功能**：基于 Cron 表达式触发任务，适用于复杂时间规则（如每天凌晨执行）。
 
-   - 
-
-     API 参数示例
-
-     ：
+   - API 参数示例：
 
      ```
      {
@@ -1141,9 +970,9 @@ XXL-JOB 的 `scheduleType` 定义了任务触发规则，动态提交任务时�
        "scheduleConf": "0 0 2 * * ?"  // 每天凌晨2点执行
      }
      ```
-
+     
    - **场景**：定期报表生成、定时数据清洗[1,7](@ref)。
-
+   
 2. **FIX_RATE**（固定速率）
 
    - **功能**：按固定间隔重复执行（从任务启动后开始计时）。
@@ -1324,11 +1153,7 @@ XXL-JOB 实现任务的分布式调度主要依赖其**中心化调度 + 分布�
 
 - **统一调度中枢**：负责管理任务配置、触发调度、监控状态，支持集群部署（多节点共享同一数据库），通过数据库锁（`xxl_job_lock`）保证分布式环境下任务调度的唯一性[3,8](@ref)。
 
-- 
-
-  功能模块
-
-  ：
+- 功能模块：
 
   - **任务管理**：通过Web界面动态配置任务（CRON表达式、路由策略、重试机制等）。
   - **调度线程池**：多线程触发任务，避免单点阻塞（快慢线程池隔离，慢任务自动降级）[1,8](@ref)。
@@ -1348,43 +1173,31 @@ XXL-JOB 实现任务的分布式调度主要依赖其**中心化调度 + 分布�
 
 调度中心根据配置的**路由策略**选择执行器节点，确保任务均匀分配：
 
-- 
-
-  常用策略
-
-  ：
+- 常用策略：
 
   - **故障转移（FAILOVER）**：优先选择上次成功的节点，失败自动切换[3,8](@ref)。
-  - **忙碌转移（BUSY_OVER）**：选择空闲节点执行，避免节点过载。
+- **忙碌转移（BUSY_OVER）**：选择空闲节点执行，避免节点过载。
   - **分片广播（SHARDING_BROADCAST）**：所有执行器并行执行同一任务，配合分片参数处理不同数据子集[6,7](@ref)。
-  - **一致性HASH**：任务固定分配到特定节点，减少节点变动的影响[8](@ref)。
+- **一致性HASH**：任务固定分配到特定节点，减少节点变动的影响[8](@ref)。
 
 #### 2. **分片任务处理**
 
-- 
-
-  动态数据分片
-
-  ：
+- 动态数据分片：
 
   - 调度中心广播任务时传递分片参数（当前分片索引 `index`、总分片数 `total`）。
 
   - 执行器通过 `ShardingUtil.getShardingVo()` 获取参数，按分片处理数据（如按ID取模分片查询）[6,7](@ref)。
 
-  - 
-
-    示例代码
-
-    ：
+  - 示例代码：
 
     ```
-    @XxlJob("shardingJob")
+  @XxlJob("shardingJob")
     public void shardingTask() {
-        ShardingVO shard = ShardingUtil.getShardingVo();
+      ShardingVO shard = ShardingUtil.getShardingVo();
         List<Data> dataSubset = fetchDataByShard(shard.getIndex(), shard.getTotal());
-        process(dataSubset);
+      process(dataSubset);
     }
-    ```
+  ```
 
 #### 3. **高可用与容错**
 
@@ -1394,15 +1207,11 @@ XXL-JOB 实现任务的分布式调度主要依赖其**中心化调度 + 分布�
 
 #### 4. **时间轮调度算法**
 
-- 
-
-  高效触发任务
-
-  ：
+- 高效触发任务：
 
   - **ScheduleThread**：预读未来5秒任务，加载至时间轮槽位。
   - **RingThread**：每秒检测当前槽位任务并触发，减少数据库轮询压力[8](@ref)。
-
+  
 - **过期策略**：若任务错过触发时间，可选择忽略或立即补偿执行一次（`FIRE_ONCE_NOW`）[1,3](@ref)。
 
 ------
@@ -1419,32 +1228,20 @@ XXL-JOB 实现任务的分布式调度主要依赖其**中心化调度 + 分布�
 
 ### 🧩 **四、关键优化设计**
 
-1. 
-
-   弹性扩缩容
-
-   
+1. 弹性扩缩容
 
    - 新增执行器自动注册并参与任务分配；节点下线后，下次调度重新分配分片[1,8](@ref)。
 
-2. 
-
-   全异步流程
-
-   
+2. 全异步流程
 
    - 调度触发、任务执行、结果回调全链路异步化，避免阻塞调度线程，支持长任务运行[1,8](@ref)。
 
-3. 
-
-   阻塞处理策略
-
-   
+3. 阻塞处理策略
 
    - 针对密集调度场景提供策略：
-     - **单机串行**（默认）：任务排队执行。
+  - **单机串行**（默认）：任务排队执行。
      - **丢弃后续调度**：跳过新调度请求。
-     - **覆盖之前调度**：终止运行中任务，执行新调度[1,3](@ref)。
+  - **覆盖之前调度**：终止运行中任务，执行新调度[1,3](@ref)。
 
 ------
 
@@ -1474,23 +1271,15 @@ XXL-JOB 实现任务调度与错误重试的核心机制基于其**中心化调�
 
 - **统一调度中枢**：负责任务的触发、路由和状态监控，支持集群部署（多节点共享同一数据库），通过数据库锁（`xxl_job_lock`）保证分布式环境下调度唯一性[3,5](@ref)。
 
-- 
-
-  时间轮算法
-
-  ：
+- 时间轮算法：
 
   - **ScheduleThread**：预读未来5秒内的任务，加载至时间轮的环形队列中，减少数据库轮询压力[3](@ref)。
   - **RingThread**：每秒检测当前时间槽位任务并触发执行，避免任务堆积或遗漏[3](@ref)。
-
-- 
-
-  调度线程池隔离
-
-  ：
+  
+- 调度线程池隔离：
 
   - **快线程池**：处理常规任务（如短时任务）。
-  - **慢线程池**：处理长耗时任务，避免阻塞调度线程[5](@ref)。
+- **慢线程池**：处理长耗时任务，避免阻塞调度线程[5](@ref)。
 
 #### 2. **任务触发流程**
 
