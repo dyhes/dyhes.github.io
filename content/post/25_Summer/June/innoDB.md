@@ -112,8 +112,7 @@ MyISAM是MySQL早期（5.5版本前）的默认存储引擎，以其**高性能�
 
 1. **存储结构与文件组成**
 
-   - 
-     三文件分离：
+   - 三文件分离：
      - `.frm`：存储表结构定义（MySQL 8.0后废弃）
      - `.MYD`（MyData）：存储实际数据
      - `.MYI`（MyIndex）：存储索引数据
@@ -132,11 +131,7 @@ MyISAM是MySQL早期（5.5版本前）的默认存储引擎，以其**高性能�
 
    - **B-Tree索引**：主键/二级索引均存储数据行物理地址（非聚簇索引），查询需两次寻址。
 
-   - 
-
-     全文索引（Fulltext）
-
-     ：
+   - 全文索引（Fulltext）：
 
      - 支持 `CHAR`/`VARCHAR`/`TEXT` 字段的文本搜索（`MATCH ... AGAINST`语法）
      - **MySQL 5.6前唯一支持全文索引的引擎**，5.6后InnoDB才跟进。
@@ -145,20 +140,12 @@ MyISAM是MySQL早期（5.5版本前）的默认存储引擎，以其**高性能�
 
 4. **并发控制与锁机制**
 
-   - 
-
-     表级锁（Table Lock）
-
-     ：
+   - 表级锁（Table Lock）：
 
      - 读操作加共享锁（S锁），写操作加排他锁（X锁）。
      - **高并发写入瓶颈**：写操作会阻塞全表读写。
 
-   - 
-
-     并发插入优化
-
-     ：
+   - 并发插入优化：
 
      - 若表无空洞（未删除数据），允许读操作同时插入新数据（`SET GLOBAL concurrent_insert=2`）。
 
@@ -2488,11 +2475,7 @@ RC级别的设计目标是**优先保证数据实时性而非一致性**：
 
 - **开销来源**：Read View生成的主要开销是**全局锁竞争**和**活跃事务列表拷贝**，高并发时可能成为瓶颈。
 
-- 
-
-  场景差异
-
-  ：
+- 场景差异：
 
   - **RC级别**：高频生成开销大，适合短事务、实时性要求高的场景；
   - **RR级别**：单次生成开销小，适合读多写少、需一致性的场景。
@@ -2518,11 +2501,7 @@ InnoDB 存储引擎在执行数据删除操作时，仅会标记记录的 `delet
 
 - **周期性运行**：Purge 线程默认每秒运行一次，通过参数 `innodb_purge_threads` 可配置线程数量。
 
-- 
-
-  空间压力触发
-
-  ：
+- 空间压力触发：
 
   - 当脏页比例超过 `innodb_max_dirty_pages_pct` 时，会触发强制刷脏页，间接加速 Purge。
   - Undo Log 空间不足时，系统会优先清理旧的 Undo 日志，释放空间。
@@ -2544,11 +2523,7 @@ InnoDB 存储引擎在执行数据删除操作时，仅会标记记录的 `delet
 
 #### **`ALTER TABLE` 重建**
 
-- 
-
-  命令示例
-
-  ：
+- 命令示例：
 
   ```
   ALTER TABLE table_name ENGINE = InnoDB; -- 重建表结构
@@ -2558,11 +2533,7 @@ InnoDB 存储引擎在执行数据删除操作时，仅会标记记录的 `delet
 
 #### **在线碎片整理（仅限 MariaDB/Facebook 分支）**
 
-- 
-
-  配置参数
-
-  ：
+- 配置参数：
 
   ```
   innodb_defragment = ON          -- 启用在线整理
@@ -2579,11 +2550,7 @@ InnoDB 存储引擎在执行数据删除操作时，仅会标记记录的 `delet
 
 - **空间重用**：新插入的数据会优先填充被删除记录留下的空洞（页内碎片）。
 
-- 
-
-  页分裂与合并
-
-  ：
+- 页分裂与合并：
 
   - 更新导致数据增长时，可能触发页分裂，产生新碎片；
   - 若更新后数据缩小，可能触发页合并，减少碎片。
@@ -2657,9 +2624,7 @@ WHERE ENGINE = 'InnoDB' AND TABLE_NAME = 'your_table';
 
 #### ✅ **二进制存储压缩（核心优化）**
 
-- 
-
-  方法
+- 方法
 
   ：将UUID转换为16字节的
 
@@ -2671,9 +2636,7 @@ WHERE ENGINE = 'InnoDB' AND TABLE_NAME = 'your_table';
 
   ```
   CHAR(36)
-  ```
-
-  ：
+  ```：
 
   ```
   CREATE TABLE users (
@@ -2684,20 +2647,12 @@ WHERE ENGINE = 'InnoDB' AND TABLE_NAME = 'your_table';
       VALUES (UUID_TO_BIN(UUID()), 'Alice');
   ```
 
-- 
-
-  性能提升
-
-  ：
+- 性能提升：
 
   - 索引大小减少55%（36字节→16字节）。
   - 范围查询速度提升30%。
 
-- 
-
-  查询转换
-
-  ：
+- 查询转换：
 
   ```
   SELECT * FROM users WHERE id = UUID_TO_BIN('f5a96171-0045-11e5-9cc7-fcaa1490706f');
@@ -2705,9 +2660,7 @@ WHERE ENGINE = 'InnoDB' AND TABLE_NAME = 'your_table';
 
 #### ⏱️ **时间前缀重排（减少页分裂）**
 
-- 
-
-  原理
+- 原理
 
   ：调整UUID的字节顺序，将时间戳前置（如MySQL 8.0的
 
@@ -2722,22 +2675,14 @@ WHERE ENGINE = 'InnoDB' AND TABLE_NAME = 'your_table';
       VALUES (UUID_TO_BIN(UUID(), 1), 'Bob'); -- 第二个参数1表示时间戳前置
   ```
 
-- 
-
-  优势
-
-  ：
+- 优势：
 
   - 新数据按时间近似顺序插入，减少页分裂60%。
   - 范围查询基于时间范围时效率更高。
 
 #### 🔍 **覆盖索引与查询优化**
 
-- 
-
-  避免全表扫描
-
-  ：
+- 避免全表扫描：
 
   对高频查询字段建立二级索引，并利用覆盖索引避免回表：
 
@@ -2746,9 +2691,7 @@ WHERE ENGINE = 'InnoDB' AND TABLE_NAME = 'your_table';
   SELECT id FROM users WHERE name = 'Alice'; -- 覆盖索引扫描
   ```
 
-- 
-
-  强制索引
+- 强制索引
 
   （极端场景）：
 
@@ -2758,9 +2701,7 @@ WHERE ENGINE = 'InnoDB' AND TABLE_NAME = 'your_table';
 
 #### 🧩 **组合索引（分布式场景）**
 
-- 
-
-  适用场景
+- 适用场景
 
   ：分库分表时，使用“分片ID + UUID”组合主键：
 
@@ -2772,11 +2713,7 @@ WHERE ENGINE = 'InnoDB' AND TABLE_NAME = 'your_table';
   );
   ```
 
-- 
-
-  优势
-
-  ：
+- 优势：
 
   - 同一分片内数据物理连续，减少I/O随机性。
   - 二级索引可仅使用`uuid`字段。
@@ -2819,9 +2756,7 @@ WHERE ENGINE = 'InnoDB' AND TABLE_NAME = 'your_table';
 
 2. 
 
-   监控页分裂
-
-   ：
+   监控页分裂：
 
    ```
    SHOW STATUS LIKE 'innodb_page%'; -- 关注分裂次数
@@ -2888,11 +2823,7 @@ InnoDB存储引擎的索引主要基于**B+树（B+ Tree）** 数据结构实现
 
    - **默认16KB页**：与磁盘块对齐，一次I/O读取一页。
 
-   - 
-
-     页内组成
-
-     ：
+   - 页内组成：
 
      - `Header`：存储前后页指针（维护双向链表）。
      - `User Records`：按主键顺序存储数据行。
@@ -2906,11 +2837,7 @@ InnoDB存储引擎的索引主要基于**B+树（B+ Tree）** 数据结构实现
 
 3. **查询流程示例**
 
-   - 
-
-     二级索引查询
-
-     ：
+   - 二级索引查询：
 
      ```
      SELECT * FROM users WHERE name = 'Alice';  -- 假设name是二级索引  

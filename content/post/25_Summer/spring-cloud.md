@@ -142,11 +142,7 @@ Dubbo 是由阿里巴巴开源的高性能 **Java RPC 框架**，现为 **Apache
 
    - **负载均衡**：提供随机、轮询、最少活跃调用、一致性哈希等策略[4,7](@ref)。
 
-   - 
-
-     容错机制
-
-     ：
+   - 容错机制：
 
      - `Failover`：失败自动切换节点（默认）
      - `Failsafe`：忽略异常，返回空结果
@@ -312,11 +308,7 @@ public class MyCustomRule extends AbstractLoadBalancerRule {
 
 #### **基础配置**
 
-- 
-
-  启用负载均衡
-
-  ：
+- 启用负载均衡：
 
   通过
 
@@ -332,9 +324,7 @@ public class MyCustomRule extends AbstractLoadBalancerRule {
 
 的负载均衡能力
 
-  1,8
-
-  ：
+  1,8：
 
   ```
   @Bean
@@ -344,11 +334,7 @@ public class MyCustomRule extends AbstractLoadBalancerRule {
   }
   ```
 
-- 
-
-  服务调用
-
-  ：
+- 服务调用：
 
   使用服务名（非 IP）发起请求：
 
@@ -358,11 +344,7 @@ public class MyCustomRule extends AbstractLoadBalancerRule {
 
 #### **策略配置**
 
-- 
-
-  配置文件方式
-
-  ：
+- 配置文件方式：
 
   ```
   service-provider:
@@ -370,11 +352,7 @@ public class MyCustomRule extends AbstractLoadBalancerRule {
       NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
   ```
 
-- 
-
-  Java Config 方式
-
-  ：
+- Java Config 方式：
 
   ```
   @Configuration
@@ -388,11 +366,7 @@ public class MyCustomRule extends AbstractLoadBalancerRule {
 
 #### **高级配置**
 
-- 
-
-  超时与重试
-
-  ：
+- 超时与重试：
 
   ```
   ribbon:
@@ -402,17 +376,11 @@ public class MyCustomRule extends AbstractLoadBalancerRule {
     MaxAutoRetriesNextServer: 1 # 切换实例重试次数
   ```
 
-- 
-
-  禁用 Eureka
-
-  ：
+- 禁用 Eureka：
 
   手动指定服务列表
 
-  6
-
-  ：
+  6：
 
   ```
   ribbon:
@@ -433,9 +401,7 @@ public class MyCustomRule extends AbstractLoadBalancerRule {
 
 3. 
 
-   Ribbon 的局限性
-
-   ：
+   Ribbon 的局限性：
 
    - Netflix 已停止维护，新特性支持有限[6](@ref)。
    - 配置复杂度高（如多策略组合）[6](@ref)。
@@ -463,9 +429,7 @@ Spring Cloud LoadBalancer 是 Spring Cloud 官方推出的**客户端负载均�
 
 #### **客户端负载均衡**
 
-- 
-
-  与服务端负载均衡的区别
+- 与服务端负载均衡的区别
 
 - **服务端负载均衡**（如 Nginx、F5）：请求先到独立负载均衡器，再由其转发到服务实例，客户端不感知实例信息[8](@ref)。
   - **客户端负载均衡**：负载逻辑嵌入客户端进程，客户端从注册中心（如 Eureka、Nacos）获取服务列表，自行选择实例并直接调用，避免单点故障，提升性能[1,6](@ref)。
@@ -522,11 +486,7 @@ public ReactorLoadBalancer<ServiceInstance> customLoadBalancer(...) {
 
 - 原生适配 `WebClient`，支持响应式非阻塞调用，提升高并发场景吞吐量[1,2](@ref)。
 
-- 
-
-  示例代码
-
-  ：
+- 示例代码：
 
   ```
   @Bean
@@ -674,11 +634,7 @@ Spring Cloud Gateway 是 Spring Cloud 生态中的核心 API 网关组件，基�
 
    - **响应式编程**：基于 WebFlux 和 Reactor Netty，支持异步 I/O，单机吞吐量可达 3 万+ QPS[2,8](@ref)。
 
-   - 
-
-     三大核心组件
-
-     ：
+   - 三大核心组件：
 
      - **路由（Route）**：定义转发规则（ID、目标 URI、断言、过滤器）[1,7](@ref)。
      - **断言（Predicate）**：基于 Java 8 函数式接口，匹配请求条件（如路径、Header、时间等）[1,5](@ref)。
@@ -696,9 +652,7 @@ Spring Cloud Gateway 是 Spring Cloud 生态中的核心 API 网关组件，基�
 
 #### **动态路由**
 
-- 
-
-  匹配规则
+- 匹配规则
 
   ：支持 12 种内置断言，常用配置示例：
 
@@ -722,11 +676,7 @@ Spring Cloud Gateway 是 Spring Cloud 生态中的核心 API 网关组件，基�
 | **全局过滤器** | 所有路由生效（如认证、日志） | `AddRequestHeader=X-Gateway-Request, true`                   |
 | **局部过滤器** | 特定路由生效（如路径重写）   | `RewritePath=/old/(?<segment>.*), /new/$\{segment}`[5,6](@ref) |
 
-- 
-
-  自定义过滤器
-
-  ：
+- 自定义过滤器：
 
   ```
   @Component
@@ -744,11 +694,7 @@ Spring Cloud Gateway 是 Spring Cloud 生态中的核心 API 网关组件，基�
 
 #### **高级治理能力**
 
-- 
-
-  限流与熔断
-
-  ：
+- 限流与熔断：
 
   - 集成 Redis 令牌桶算法限流：
 
@@ -863,9 +809,7 @@ Feign 和 OpenFeign 都是微服务架构中用于**声明式 HTTP 服务调用*
 
 #### **注解兼容性**
 
-- 
-
-  Feign
+- Feign
 
 仅支持
 
@@ -890,15 +834,11 @@ Feign 和 OpenFeign 都是微服务架构中用于**声明式 HTTP 服务调用*
   User getUser(@Param("id") Long id);
   ```
 
-- 
-
-  OpenFeign
+- OpenFeign
 
 直接兼容 Spring MVC 注解，接口定义与 Controller 一致，降低学习成本
 
-  3,6
-
-  ：
+  3,6：
 
   ```
   @FeignClient(name = "user-service")
@@ -913,9 +853,7 @@ Feign 和 OpenFeign 都是微服务架构中用于**声明式 HTTP 服务调用*
 - **Feign**
   编解码器仅支持基础类型（JSON/XML），定制需实现 `Encoder`/`Decoder`，且**缺乏拦截器支持**​[7](@ref)。
 
-- 
-
-  OpenFeign
+- OpenFeign
 
 提供完整扩展点：
 
@@ -928,9 +866,7 @@ Feign 和 OpenFeign 都是微服务架构中用于**声明式 HTTP 服务调用*
 - **Feign**
   强依赖 Ribbon（已停更），需独立配置负载策略（如 `RandomRule`）[2,5](@ref)。
 
-- 
-
-  OpenFeign
+- OpenFeign
 
 - 默认集成 **Spring Cloud LoadBalancer**（替代 Ribbon），支持响应式负载均衡[3](@ref)；
   - 无缝兼容 **Sentinel**/**Resilience4j** 实现熔断降级[7](@ref)。
@@ -971,9 +907,7 @@ spring:
 - **Feign**
   需整合 Hystrix（已停更）实现熔断，降级逻辑需写 `fallback` 类[3,7](@ref)。
 
-- 
-
-  OpenFeign
+- OpenFeign
 
 - 支持 **Fallback Factory**：捕获异常动态降级[7](@ref)；
   - 整合 **Spring Cloud CircuitBreaker**：统一熔断 API[6](@ref)。
@@ -986,11 +920,7 @@ spring:
 
 - **Feign**：Netflix 停更后生态停滞，**仅适合旧项目维护**[1,2](@ref)。
 
-- 
-
-  OpenFeign
-
-  ：
+- OpenFeign：
 
   - 成为 Spring Cloud **官方标准组件**，持续更新；
   - 深度集成 **云原生生态**（Kubernetes、Service Mesh）[6](@ref)。
@@ -1042,31 +972,23 @@ graph TD
 
 #### **熔断降级**
 
-- 
-
-  Hystrix
+- Hystrix
 
 - 基于**失败比率**触发熔断，缺少响应时间熔断支持[6,9](@ref)。
   - 降级需硬编码 `fallback` 方法，灵活性低[8](@ref)。
 
-- 
-
-  Sentinel
+- Sentinel
 
 - 支持**异常比例**、**慢调用比例**（响应时间阈值）、**异常数**三种熔断策略[3,6](@ref)。
   - 结合 `@SentinelResource` 注解，可动态配置降级逻辑[3,9](@ref)。
 
 #### **流量控制**
 
-- 
-
-  Hystrix
+- Hystrix
 
 - **无内置限流功能**，依赖线程池/信号量隔离间接限流[8,9](@ref)。
 
-- 
-
-  Sentinel
+- Sentinel
 
 - 支持 **QPS**、**并发线程数**、**热点参数**、**链路入口**等多维度限流[3,9](@ref)。
   - 提供 **Warm Up**（预热）、**匀速排队**（漏桶算法）等高级流控模式[6,8](@ref)。
@@ -1080,9 +1002,7 @@ graph TD
 
 #### **系统保护与扩展性**
 
-- 
-
-  Sentinel 独有功能
+- Sentinel 独有功能
 
 - **系统自适应保护**：根据 CPU 负载、平均 RT 等指标动态限流[3,9](@ref)。
   - **热点参数限流**：针对高频参数（如用户 ID）单独限制[3,6](@ref)。
@@ -1166,9 +1086,7 @@ Sentinel 是阿里巴巴开源的**分布式系统流量治理组件**，以流�
 
 2. **熔断降级（Circuit Breaking & Degradation）**
 
-   - 
-
-     熔断机制
+   - 熔断机制
 
      ：基于三种状态切换：
 
@@ -1176,11 +1094,7 @@ Sentinel 是阿里巴巴开源的**分布式系统流量治理组件**，以流�
      - **Open**：触发熔断，请求直接拒绝。
      - **Half-Open**：试探性放行少量请求，成功则关闭熔断[7,9](@ref)。
 
-   - 
-
-     降级策略
-
-     ：
+   - 降级策略：
 
      - **慢调用比例**（响应时间超阈值）。
      - **异常比例/数量**（错误率超阈值）[2,4](@ref)。
@@ -1207,9 +1121,7 @@ Sentinel 是阿里巴巴开源的**分布式系统流量治理组件**，以流�
 
    - **规则（Rule）**：定义流量控制、熔断降级的阈值和策略[6](@ref)。
 
-   - 
-
-     Slot 责任链
+   - Slot 责任链
 
      ：处理资源的插槽链，包含关键组件：
 
@@ -1229,11 +1141,7 @@ Sentinel 是阿里巴巴开源的**分布式系统流量治理组件**，以流�
 
 1. **快速集成（Spring Cloud）**
 
-   - 
-
-     依赖引入
-
-     ：
+   - 依赖引入：
 
      ```
      <dependency>
@@ -1242,11 +1150,7 @@ Sentinel 是阿里巴巴开源的**分布式系统流量治理组件**，以流�
      </dependency>
      ```
 
-   - 
-
-     配置控制台
-
-     ：
+   - 配置控制台：
 
      ```
      spring:
@@ -1256,11 +1160,7 @@ Sentinel 是阿里巴巴开源的**分布式系统流量治理组件**，以流�
              dashboard: localhost:8080  # Sentinel控制台地址
      ```
 
-   - 
-
-     注解定义资源
-
-     ：
+   - 注解定义资源：
 
      ```
      @GetMapping("/api")
@@ -1763,11 +1663,7 @@ Seata 提供的四种事务模式（AT、TCC、SAGA、XA）在**一致性**的�
 
 - **一致性类型**：**强一致性**（基于两阶段提交协议 2PC）[1,4,5](@ref)。
 
-- 
-
-  实现机制
-
-  ：
+- 实现机制：
 
   - **第一阶段（Prepare）**：所有参与者（如数据库）执行本地事务但不提交，锁定资源并返回“就绪”状态。
   - **第二阶段（Commit/Rollback）**：事务协调器（TC）根据所有参与者的状态决定全局提交或回滚，参与者同步执行[4,8](@ref)。
@@ -1906,9 +1802,7 @@ Seata 提供的四种事务模式（AT、TCC、SAGA、XA）在**一致性**的�
 
 表
 
-     4
-
-     ：
+     4：
 
      ```
      CREATE TABLE undo_log (id BIGINT AUTO_INCREMENT, branch_id BIGINT, xid VARCHAR(100), ...);
@@ -2066,26 +1960,20 @@ C -->|否| E[选AT]
 
 1. 
 
-   AT 模式
-
-   ：
+   AT 模式：
 
    - 需所有数据库创建 `undo_log` 表，PostgreSQL 需手动建表[5](@ref)。
    - 默认读未提交，高并发时用 `SELECT FOR UPDATE` 避免脏写[4](@ref)。
 
 2. 
 
-   TCC 模式
-
-   ：
+   TCC 模式：
 
    - 需保证 `confirm/cancel` 幂等（网络重试可能导致重复调用）[6](@ref)。
 
 3. 
 
-   生产建议
-
-   ：
+   生产建议：
 
    - **TC 高可用**：部署 Seata-Server 集群 + Nacos 注册中心[2,3](@ref)。
    - **监控**：集成 Seata Dashboard 跟踪事务状态与回滚日志。

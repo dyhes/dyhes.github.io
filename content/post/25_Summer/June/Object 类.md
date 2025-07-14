@@ -145,9 +145,7 @@ Object 类中的 `wait()`、`notify()`、`notifyAll()` 以及 Thread 类的 `sle
 
 - **调用条件**：必须在 `synchronized` 同步块或方法内调用，否则抛出 `IllegalMonitorStateException`。
 
-- 重载形式
-
-  ：
+- 重载形式：
 
   - `wait()`：无限期等待；
   - `wait(long timeout)`：等待指定毫秒；

@@ -208,11 +208,7 @@ for (ConsumerRecord record : records) {
 
   - **核心特点**：消息**绝不丢失**，但**可能重复消费**。
 
-  - 
-
-    消费端表现
-
-    ：
+  - 消费端表现：
 
     - 消费者可能因网络故障、Rebalance 或 ACK 提交失败等原因，多次收到同一条消息[1,2,5](@ref)。
     - 例如：消费者处理消息后未及时提交偏移量就崩溃，重启后会重新拉取并处理该消息[5](@ref)。
@@ -223,11 +219,7 @@ for (ConsumerRecord record : records) {
 
   - **核心特点**：消息**既不丢失也不重复**（理想状态）。
 
-  - 
-
-    消费端表现
-
-    ：
+  - 消费端表现：
 
     - 通过**事务机制**将消息处理与偏移量提交绑定为原子操作，避免重复消费[3,6](@ref)。
     - 但需注意：**故障恢复时仍可能重放未提交事务的消息**（如 Kafka 事务超时），实际仍需业务层幂等兜底[3,6](@ref)。
@@ -260,11 +252,7 @@ for (ConsumerRecord record : records) {
 
   - **优势**：理论上消除重复，简化业务逻辑。
 
-  - 
-
-    限制
-
-    ：
+  - 限制：
 
     - 性能开销大（事务协调、Barrier 对齐）[4,6](@ref)；
     - 仅支持部分数据源（如 Kafka 内部流计算，跨数据库/RPC 需额外事务补偿）[3,5](@ref)。
@@ -291,9 +279,7 @@ for (ConsumerRecord record : records) {
 
 - **谨慎使用 Exactly Once**：仅在流计算（Kafka → Flink → Kafka）或纯 Kafka 内部链路中使用，避免跨系统事务复杂性[3,6](@ref)。
 
-- 
-
-  幂等设计必备
+- 幂等设计必备
 
   ：无论选择哪种语义，消费端必须通过以下任一方式实现幂等：
 
@@ -471,20 +457,12 @@ public void batchConsume(List<ConsumerRecord<String, String>> records) {
 
 **关键点**：
 
-- 
-
-  唯一标识生成规则
-
-  ：
+- 唯一标识生成规则：
 
   - 优先使用业务主键（如订单号）的哈希值，避免依赖 Kafka 内部位移（再平衡时可能变化）[6,8](@ref)。
   - 无业务主键时，用复合键 `topic+partition+offset` 作为兜底[3](@ref)。
 
-- 
-
-  Redis 操作优化
-
-  ：
+- Redis 操作优化：
 
   - 使用 `SETNX`（或 `SET key value NX EX`）保证原子性写入和过期时间[6](@ref)。
   - 批量执行 `SETNX` 减少网络开销（如 Redis Pipeline）[8](@ref)。
@@ -524,11 +502,7 @@ redisClient.pipeline(pipe -> {
 
    - **场景**：Redis 宕机时去重失效。
 
-   - 
-
-     方案
-
-     ：
+   - 方案：
 
      - 降级至数据库唯一约束（如 `ON CONFLICT IGNORE`）[5](@ref)；
      - 业务逻辑层实现幂等性（如状态机、版本号控制）[2,7](@ref)。
@@ -553,11 +527,7 @@ redisClient.pipeline(pipe -> {
 
    - 启用 `enable.idempotence=true` + `isolation.level=read_committed`，配合事务生产者确保端到端精确一次[3,7](@ref)。
 
-   - 
-
-     代码示例
-
-     ：
+   - 代码示例：
 
      ```
      @Transactional
@@ -632,11 +602,7 @@ redisClient.pipeline(pipe -> {
 
    - **原理**：为每个请求生成全局唯一 ID（如 UUID、Snowflake ID），在缓存（Redis）或数据库中记录处理状态。
 
-   - 
-
-     流程
-
-     ：
+   - 流程：
 
      - 请求到达时检查 ID 是否已存在 → 存在则返回历史结果；
      - 不存在则执行业务，成功后存储 ID 及结果。
@@ -645,11 +611,7 @@ redisClient.pipeline(pipe -> {
 
 3. **Token 机制（一次性令牌）**
 
-   - 
-
-     原理
-
-     ：
+   - 原理：
 
      - 客户端预获取 Token（服务端生成并存储）；
      - 业务请求携带 Token，服务端校验后删除 Token，仅允许一次有效操作。
@@ -682,33 +644,25 @@ redisClient.pipeline(pipe -> {
 
 1. 
 
-   幂等与防重的区别
-
-   ：
+   幂等与防重的区别：
 
    - 幂等性关注操作结果一致性（如多次支付不重复扣款），防重关注数据唯一性（如订单号不重复）[7](@ref)。
 
 2. 
 
-   事务边界
-
-   ：
+   事务边界：
 
    - 防重表插入需与业务操作在同一事务中，否则可能因部分失败导致数据不一致[1](@ref)。
 
 3. 
 
-   异常处理
-
-   ：
+   异常处理：
 
    - 乐观锁冲突、唯一键冲突等需明确返回相同结果（如“请求已处理”），而非抛出业务异常[6](@ref)。
 
 4. 
 
-   性能权衡
-
-   ：
+   性能权衡：
 
    - 悲观锁、分布式锁在高并发下可能成为瓶颈，优先选择无锁方案（如乐观锁）[7](@ref)。
 
@@ -923,9 +877,7 @@ try {
 
 ```
   true
-  ```
-
-  ：
+  ```：
 
   ```
   spring.kafka.consumer.enable-auto-commit: true
@@ -952,11 +904,7 @@ spring:
       ack-mode: manual_immediate  # 手动提交模式（每条提交）或 manual（批量提交）
 ```
 
-- 
-
-  提交模式选择
-
-  ：
+- 提交模式选择：
 
   - `manual_immediate`：每条消息处理完后立即提交（低吞吐场景）[6,7](@ref)。
   - `manual`：批量处理完后统一提交（高吞吐场景）[7](@ref)。

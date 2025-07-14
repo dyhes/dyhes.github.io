@@ -882,9 +882,7 @@ Processor 接口和 AbstractProcessor 是 Java 注解处理机制中的核心组
 
 - **需减少样板代码**：避免手动解析注解支持范围或版本兼容性。
 
-- 
-
-  示例代码：
+- 示例代码：
 
 ```
   @AutoService(Processor.class) // Google AutoService 自动注册
@@ -1235,29 +1233,17 @@ Reflections 是一个强大的 Java 元数据扫描与查询库，它通过简�
 
 2. **丰富的查询功能**
 
-   - 
-
-     类型查询
-
-     ：
+   - 类型查询：
 
      - 查找子类：`getSubTypesOf(SomeInterface.class)`
      - 查找注解标记的类：`getTypesAnnotatedWith(MyAnnotation.class)`
 
-   - 
-
-     方法与字段查询
-
-     ：
+   - 方法与字段查询：
 
      - 注解方法：`getMethodsAnnotatedWith(Path.class)`
      - 特定字段：`getFieldsAnnotatedWith(Id.class)`
 
-   - 
-
-     资源文件查询
-
-     ：
+   - 资源文件查询：
 
      - 匹配配置文件：`getResources(Pattern.compile(".*\\.properties"))` [3,5,6](@ref)。
 
@@ -1304,11 +1290,7 @@ Maven 配置：
 
    基础操作示例
 
-- 
-
-     扫描带注解的类
-
-     ：
+- 扫描带注解的类：
 
      ```
      Reflections reflections = new Reflections("com.example");
@@ -1316,11 +1298,7 @@ Maven 配置：
      controllers.forEach(clazz -> System.out.println("控制器: " + clazz.getName()));
      ```
 
-   - 
-
-     查找接口实现类
-
-     ：
+   - 查找接口实现类：
 
      ```
      Set<Class<? extends Plugin>> plugins = reflections.getSubTypesOf(Plugin.class);
@@ -1384,11 +1362,7 @@ Maven 配置：
 
    - **问题**：全量扫描大型项目可能导致启动延迟（尤其首次扫描）。
 
-   - 
-
-     优化方案
-
-     ：
+   - 优化方案：
 
      - 缩小扫描范围：精确指定包路径（如 `new Reflections("com.example.core")`）。
      - 启用缓存：将扫描结果序列化为 JSON/XML，后续直接加载避免重复扫描。
@@ -1678,11 +1652,7 @@ public class AdminController {
 
 - **单向依赖**：Class对象是`.class`文件在JVM中的运行时映射，没有`.class`文件则无法生成Class对象[2,8](@ref)。
 
-- 
-
-  功能互补
-
-  ：
+- 功能互补：
 
   - `.class`文件提供**静态类定义**，确保跨平台一致性（“一次编译，到处运行”）[6,7](@ref)。
   - Class对象提供**动态运行时能力**，支撑反射、实例创建、多态等特性[1,10](@ref)。
@@ -1703,11 +1673,7 @@ public class AdminController {
 
 - **本质**：Classpath 是 JVM 用于查找类文件（`.class`）和资源文件（如配置文件、JAR包）的路径集合[1,2,4](@ref)。
 
-- 
-
-  作用
-
-  ：
+- 作用：
 
   - 指导 JVM 在编译或运行时加载用户程序依赖的类和库。
   - 管理项目内部类与第三方库（如通过 `lib/*.jar` 引入外部依赖）[3,11](@ref)。
@@ -1728,9 +1694,7 @@ public class AdminController {
 
 #### **类加载顺序与冲突**
 
-- 
-
-  搜索顺序
+- 搜索顺序
 
   ：JVM 按 Classpath 中路径的
 
@@ -1746,32 +1710,20 @@ public class AdminController {
   java -cp lib/A.jar:lib/B.jar Main  # 优先加载 A.jar 中的类
   ```
 
-- 
-
-  冲突解决
-
-  ：
+- 冲突解决：
 
   - 多个JAR包含同名类时，依赖路径顺序。
   - 使用构建工具（如 Maven/Gradle）管理依赖版本，或通过 `<exclusions>` 排除冲突包[3,9](@ref)。
 
 #### **类加载器与Classpath的关系**
 
-- 
-
-  双亲委派模型
-
-  ：
+- 双亲委派模型：
 
   1. **Bootstrap ClassLoader**：加载 `JRE_HOME/lib` 核心类（如 `rt.jar`）。
   2. **Extension ClassLoader**：加载 `JRE_HOME/lib/ext` 扩展类。
   3. **Application ClassLoader**：加载 Classpath 中的用户类[10,11](@ref)。
 
-- 
-
-  自定义类加载器
-
-  ：
+- 自定义类加载器：
 
   - Tomcat 为每个 Web 应用创建独立的 `WebAppClassLoader`，隔离不同应用的 Classpath，避免冲突[5,10](@ref)。
 
@@ -1783,11 +1735,7 @@ public class AdminController {
 
 - **格式**：`包名.类名`（如 `java.lang.String`），包名以点号分隔层级[7,8](@ref)。
 
-- 
-
-  作用
-
-  ：
+- 作用：
 
   - **唯一标识类**：避免不同包下同名类的冲突（如 `com.util.Date` 与 `java.util.Date`）。
   - **精准定位类**：在源码中通过 `import` 引入，或在反射中通过 `Class.forName()` 加载[7,8](@ref)。
@@ -1796,11 +1744,7 @@ public class AdminController {
 
 - **路径转换**：源码中的 `java.lang.Object` → Class文件中的 `java/lang/Object.class`（点号替换为斜杠）[7](@ref)。
 
-- 
-
-  描述符引用
-
-  ：
+- 描述符引用：
 
   - 字段类型：`Ljava/lang/Object;`（`L` + 全限定名 + `;`）。
   - 方法签名：`(ILjava/lang/String;)V`（参数类型 + 返回值类型）[7](@ref)。
@@ -1811,18 +1755,14 @@ public class AdminController {
 
 1. 
 
-   类加载流程
-
-   ：
+   类加载流程：
 
    - JVM 将完全限定名转换为文件路径（如 `com/example/MyClass.class`）。
    - 按 Classpath 顺序扫描目录或JAR包，定位该路径的字节码文件[10,11](@ref)。
 
 2. 
 
-   资源加载
-
-   ：
+   资源加载：
 
    ```
    // 从Classpath根目录加载资源
@@ -1831,9 +1771,7 @@ public class AdminController {
 
 3. 
 
-   动态加载场景
-
-   ：
+   动态加载场景：
 
    - **热部署**：自定义类加载器监听Classpath变化，重新加载修改后的类[10](@ref)。
 
@@ -1941,11 +1879,7 @@ while (entries.hasMoreElements()) {
 
 - **预建索引**：扫描类路径并缓存类/注解元数据，后续查询极快[6](@ref)。
 
-- 
-
-  示例代码
-
-  ：
+- 示例代码：
 
   ```
   Reflections reflections = new Reflections("com.example", new SubTypesScanner());
@@ -1957,11 +1891,7 @@ while (entries.hasMoreElements()) {
 
 - **优势**：支持模块化系统（JPMS），扫描速度更快，API更简洁[6](@ref)。
 
-- 
-
-  示例
-
-  ：
+- 示例：
 
   ```
   try (ScanResult scan = new ClassGraph().acceptPackages("com.example").scan()) {
@@ -1977,11 +1907,7 @@ while (entries.hasMoreElements()) {
 
    - **首次扫描慢**：全量遍历类路径（尤其大型项目）。
 
-   - 
-
-     优化方案
-
-     ：
+   - 优化方案：
 
      - 使用Reflections的缓存机制[6](@ref)。
      - 限定扫描范围（如精确包路径）[6](@ref)。
@@ -2054,11 +1980,7 @@ graph TD
     TypeElement --> 类/接口/枚举/注解
 ```
 
-- 
-
-  父子关系
-
-  ：
+- 父子关系：
 
   - 父级：`PackageElement`（包）
   - 子级：`VariableElement`（字段）、`ExecutableElement`（方法/构造器）[3,8](@ref)。
@@ -2371,9 +2293,7 @@ JAR（Java ARchive）包是Java平台的核心打包格式，用于将多个类�
 
 2. **构建工具自动化**
 
-   - 
-
-     Maven
+   - Maven
 
      ：配置
 
@@ -2406,9 +2326,7 @@ JAR（Java ARchive）包是Java平台的核心打包格式，用于将多个类�
 
      。
 
-   - 
-
-     Gradle
+   - Gradle
 
      ：通过
 
@@ -2502,11 +2420,7 @@ ClassLoader解析JAR包的过程涉及Java类加载机制的核心原理，其�
 
 - **JAR文件本质**：JAR（Java ARchive）是基于ZIP格式的压缩文件，包含`.class`文件、资源（如图片/配置文件）及元数据（如`META-INF/MANIFEST.MF`）[1,3](@ref)。
 
-- 
-
-  类路径（Classpath）
-
-  ：
+- 类路径（Classpath）：
 
   ClassLoader通过类路径定位JAR包。类路径可指定为：
 
@@ -2525,9 +2439,7 @@ ClassLoader加载JAR中的类时，严格遵循**双亲委派机制**：
 
 2. 
 
-   父加载器逐级尝试
-
-   ：
+   父加载器逐级尝试：
 
    - `BootstrapClassLoader`：加载JRE核心类（`rt.jar`等）。
    - `ExtClassLoader`：加载`jre/lib/ext`目录的扩展类。
@@ -2555,18 +2467,14 @@ ClassLoader加载JAR中的类时，严格遵循**双亲委派机制**：
 
 2. 
 
-   类查找与加载
-
-   ：
+   类查找与加载：
 
    - 调用`findClass(String className)`，根据类名（如`com.example.MyClass`）转换为JAR内路径（`com/example/MyClass.class`）。
    - 从JAR中读取该`.class`文件的字节流。
 
 3. 
 
-   字节码处理
-
-   ：
+   字节码处理：
 
    - **验证**：检查字节码符合JVM规范（如魔数`0xCAFEBABE`）。
    - **定义类**：调用`defineClass(byte[] b, int off, int len)`，将字节码转换为JVM内部的`Class`对象[4,7](@ref)。
@@ -2578,11 +2486,7 @@ ClassLoader加载JAR中的类时，严格遵循**双亲委派机制**：
 
 ### ⚠️ **类加载顺序与冲突解决**
 
-- 
-
-  类路径顺序决定优先级
-
-  ：
+- 类路径顺序决定优先级：
 
   若多个JAR包含同名类（如
 
@@ -2620,17 +2524,13 @@ ClassLoader加载JAR中的类时，严格遵循**双亲委派机制**：
 
 3. 
 
-   Web容器类加载
-
-   ：
+   Web容器类加载：
 
    如Tomcat的
 
    ```
    WebAppClassLoader
-   ```
-
-   ：
+   ```：
 
    - 优先加载`WEB-INF/classes`中的类。
    - 次优加载`WEB-INF/lib/*.jar`。
@@ -2642,11 +2542,7 @@ ClassLoader加载JAR中的类时，严格遵循**双亲委派机制**：
 
 - **解析本质**：ClassLoader通过**双亲委派**确保核心类安全，通过**URLClassLoader**定位并转换JAR中的字节码为可执行类。
 
-- 
-
-  避坑指南
-
-  ：
+- 避坑指南：
 
   - **避免类冲突**：规范包名或使用模块化（JPMS）[3](@ref)。
   - **资源泄露**：动态加载的`URLClassLoader`需手动`close()`（Java 7+）[2](@ref)。
@@ -2691,11 +2587,7 @@ JVM通过三级类加载器逐级搜索，确保核心类优先加载：
 
    - 加载Classpath中用户自定义类及第三方JAR（如项目`lib/`目录）[5,6](@ref)。
 
-   - 
-
-     工作流程
-
-     ：
+   - 工作流程：
 
      - 遍历Classpath每个条目（目录或JAR）。
      - 在目录中按包路径查找`.class`文件（如`com/example/MyClass.class`）。
@@ -2732,11 +2624,7 @@ JAR本质是ZIP格式压缩文件，类加载器将其视为虚拟目录结构�
 
    - **反射API**：通过`ClassLoader.getResource()`获取类文件路径（如`jar:file:/app/lib/utils.jar!/com/util/StringUtils.class`）[1](@ref)。
 
-   - 
-
-     命令行工具
-
-     ：
+   - 命令行工具：
 
      - `jps`查看Java进程ID → `jinfo <pid>`输出类路径[1](@ref)。
      - `jar tf app.jar`列出JAR内容[6](@ref)。
@@ -3135,11 +3023,7 @@ JVM通过 **ZIP中央目录索引 → 类名路径映射 → 按需懒加载 →
 
 #### **核心功能**
 
-- 
-
-  依赖管理
-
-  ：
+- 依赖管理：
 
   ```
   <dependencies>
@@ -3152,22 +3036,14 @@ JVM通过 **ZIP中央目录索引 → 类名路径映射 → 按需懒加载 →
   </dependencies>
   ```
 
-- 
-
-  构建生命周期控制
-
-  ：
+- 构建生命周期控制：
 
   - **clean**：删除`target`目录[10](@ref)。
   - **compile**：编译主代码。
   - **test**：运行单元测试。
   - **package**：生成JAR/WAR包[8,10](@ref)。
 
-- 
-
-  多模块聚合
-
-  ：
+- 多模块聚合：
 
   ```
   <!-- 父模块（packaging=pom） -->

@@ -20,11 +20,7 @@ Kubernetes（K8s）的组件协同工作，实现容器化应用的自动化部�
 
    - **核心职责**：集群操作的唯一入口，提供RESTful API，处理用户命令（如`kubectl`）及内部组件通信[1,3,5](@ref)。
 
-   - 
-
-     关键功能
-
-     ：
+   - 关键功能：
 
      - 认证授权（RBAC）、API注册与发现。
      - 校验资源定义并写入`etcd`存储。
@@ -34,11 +30,7 @@ Kubernetes（K8s）的组件协同工作，实现容器化应用的自动化部�
 
    - **核心职责**：分布式键值数据库，存储集群所有状态数据（如Pod、Service配置）[1,3,5](@ref)。
 
-   - 
-
-     关键特性
-
-     ：
+   - 关键特性：
 
      - 高可用设计，支持多副本同步。
      - 仅通过API Server修改数据，确保一致性。
@@ -47,11 +39,7 @@ Kubernetes（K8s）的组件协同工作，实现容器化应用的自动化部�
 
    - **核心职责**：运行控制器循环，监控集群状态并驱动其向目标状态收敛[1,4,6](@ref)。
 
-   - 
-
-     主要控制器类型
-
-     ：
+   - 主要控制器类型：
 
      - **Node Controller**：检测节点故障并处理。
      - **Deployment Controller**：管理无状态应用的滚动更新与回滚。
@@ -62,11 +50,7 @@ Kubernetes（K8s）的组件协同工作，实现容器化应用的自动化部�
 
    - **核心职责**：为新创建的Pod选择合适的工作节点[1,3,5](@ref)。
 
-   - 
-
-     调度策略
-
-     ：
+   - 调度策略：
 
      - **预选（Predicates）**：过滤满足条件的节点（如资源余量、端口冲突）。
      - **优选（Priorities）**：对节点打分（如负载均衡、数据局部性），选择最优节点。
@@ -81,11 +65,7 @@ Kubernetes（K8s）的组件协同工作，实现容器化应用的自动化部�
 
    - **核心职责**：节点上的“代理”，管理Pod生命周期[1,4,6](@ref)。
 
-   - 
-
-     关键功能
-
-     ：
+   - 关键功能：
 
      - 接收来自API Server的Pod配置，调用容器运行时（如Docker）启停容器。
      - 监控容器状态并上报至API Server。
@@ -95,11 +75,7 @@ Kubernetes（K8s）的组件协同工作，实现容器化应用的自动化部�
 
    - **核心职责**：维护节点网络规则，实现Service的负载均衡与服务发现[1,5,6](@ref)。
 
-   - 
-
-     工作模式
-
-     ：
+   - 工作模式：
 
      - **iptables/IPVS**：将访问Service IP（ClusterIP）的请求转发至后端Pod（默认模式）。
      - **Userspace**（旧版）：通过代理端口转发流量。
@@ -200,41 +176,25 @@ Kubernetes Scheduler 选择节点的过程是一个**分层决策机制**，分�
 
 1. **亲和性（Affinity）**
 
-   - 
-
-     节点亲和性
-
-     ：
+   - 节点亲和性：
 
      - **硬约束（`requiredDuringScheduling`）**：必须满足标签匹配（如 `zone=foo`），否则 Pod 阻塞[6,7](@ref)。
      - **软约束（`preferredDuringScheduling`）**：优先匹配标签（如 `disk=ssd`），但允许调度到其他节点[6,7](@ref)。
 
-   - 
-
-     Pod 间亲和性
-
-     ：
+   - Pod 间亲和性：
 
      - **`podAffinity`**：强制或倾向与指定 Pod 同节点（如 Web 服务与 Redis 同节点）。
      - **`podAntiAffinity`**：避免与指定 Pod 同节点（如避免同一服务的多个副本集中部署）[3,7](@ref)。
 
 2. **污点与容忍（Taints & Tolerations）**
 
-   - 
-
-     污点效果
-
-     ：
+   - 污点效果：
 
      - `NoSchedule`：禁止新 Pod 调度。
      - `NoExecute`：驱逐已有 Pod（若不容忍）。
      - `PreferNoSchedule`：尽量避免调度[3,6](@ref)。
 
-   - 
-
-     容忍配置
-
-     ：
+   - 容忍配置：
 
      ```
      tolerations:
@@ -260,9 +220,7 @@ Kubernetes Scheduler 选择节点的过程是一个**分层决策机制**，分�
 
 4. 
 
-   监控调度失败
-
-   ：
+   监控调度失败：
 
    ```
    kubectl describe pod <name>  # 查看 Events 字段中的 FailedScheduling 原因
@@ -308,20 +266,12 @@ etcd 是一个**高可用、强一致性的分布式键值存储系统**，由 C
 
 #### **集群架构**
 
-- 
-
-  节点角色
-
-  ：
+- 节点角色：
 
   - **Leader**：唯一处理写请求，同步日志至 Follower。
   - **Follower**：响应读请求，参与 Leader 选举和日志复制[1,6,7](@ref)。
 
-- 
-
-  数据复制流程
-
-  ：
+- 数据复制流程：
 
   1. 客户端写请求发送至任意节点，转发至 Leader。
   2. Leader 生成日志条目，通过 Raft 同步至多数节点（如 3 节点需 2 节点确认）。
@@ -459,21 +409,13 @@ ConfigMap 是 Kubernetes 中用于**管理非机密性配置数据**的核心 AP
 
 #### **命令行创建**
 
-- 
-
-  字面量注入
-
-  ：
+- 字面量注入：
 
   ```
   kubectl create configmap app-config --from-literal=LOG_LEVEL=DEBUG --from-literal=API_URL=https://api.example.com
   ```
 
-- 
-
-  文件/目录注入
-
-  ：
+- 文件/目录注入：
 
   ```
   kubectl create configmap file-config --from-file=./config.properties  # 单文件
@@ -502,9 +444,7 @@ binaryData:                                 # 二进制数据（Base64 编码）
 
 #### **环境变量注入**
 
-- 
-
-  单键注入
+- 单键注入
 
   ：直接引用特定键值
 
@@ -517,9 +457,7 @@ binaryData:                                 # 二进制数据（Base64 编码）
           key: LOG_LEVEL
   ```
 
-- 
-
-  全量注入
+- 全量注入
 
   ：ConfigMap 所有键值转为环境变量
 
@@ -543,9 +481,7 @@ env:
 
 #### **卷挂载（最常用）**
 
-- 
-
-  完整挂载
+- 完整挂载
 
   ：ConfigMap 每个键生成独立文件
 
@@ -559,9 +495,7 @@ env:
       mountPath: /etc/app-config
   ```
 
-- 
-
-  子路径挂载
+- 子路径挂载
 
   ：仅挂载特定键到指定路径
 
@@ -684,11 +618,7 @@ Secret 是 Kubernetes 中用于**安全存储和管理敏感数据**的核心 AP
 
 - **用途**：存储任意键值对数据（如数据库密码）。
 
-- 
-
-  创建方式
-
-  ：
+- 创建方式：
 
   ```
   kubectl create secret generic my-secret \
@@ -700,11 +630,7 @@ Secret 是 Kubernetes 中用于**安全存储和管理敏感数据**的核心 AP
 
 - **用途**：存储私有镜像仓库认证信息。
 
-- 
-
-  创建方式
-
-  ：
+- 创建方式：
 
   ```
   kubectl create secret docker-registry regcred \
@@ -717,11 +643,7 @@ Secret 是 Kubernetes 中用于**安全存储和管理敏感数据**的核心 AP
 
 - **用途**：存储 TLS 证书和私钥（HTTPS 服务）。
 
-- 
-
-  创建方式
-
-  ：
+- 创建方式：
 
   ```
   kubectl create secret tls tls-cert \
@@ -742,11 +664,7 @@ Secret 是 Kubernetes 中用于**安全存储和管理敏感数据**的核心 AP
 
 - **特点**：简单但**不支持热更新**（需重启 Pod）。
 
-- 
-
-  示例
-
-  ：
+- 示例：
 
   ```
   env:
@@ -761,11 +679,7 @@ Secret 是 Kubernetes 中用于**安全存储和管理敏感数据**的核心 AP
 
 - **特点**：支持**热更新**（kubelet 每分钟同步文件）。
 
-- 
-
-  示例
-
-  ：
+- 示例：
 
   ```
   volumeMounts:
@@ -786,11 +700,7 @@ Secret 是 Kubernetes 中用于**安全存储和管理敏感数据**的核心 AP
 
 #### **安全加固**
 
-- 
-
-  启用 etcd 加密
-
-  ：
+- 启用 etcd 加密：
 
   ```
   # encryption-config.yaml
@@ -809,9 +719,7 @@ Secret 是 Kubernetes 中用于**安全存储和管理敏感数据**的核心 AP
 
 - **外部集成**：使用 **HashiCorp Vault** 或 **SealedSecret**（GitOps 安全方案）[3,7](@ref)。
 
-- 
-
-  自动轮换
+- 自动轮换
 
   ：通过 Cert-Manager 自动更新 TLS 证书：
 
@@ -829,9 +737,7 @@ Secret 是 Kubernetes 中用于**安全存储和管理敏感数据**的核心 AP
 
 - **不可变 Secret**（v1.19+）：设置 `immutable: true` 防止误修改[4](@ref)。
 
-- 
-
-  审计日志
+- 审计日志
 
   ：监控异常 Secret 访问行为：
 
@@ -849,9 +755,7 @@ Secret 是 Kubernetes 中用于**安全存储和管理敏感数据**的核心 AP
 
 3. 
 
-   更新策略
-
-   ：
+   更新策略：
 
    - **环境变量**：必须重启 Pod。
    - **文件挂载**：自动更新（需应用支持动态加载）[4,6](@ref)。
@@ -883,9 +787,7 @@ Secret 在 Kubernetes 中创建后，由 API Server 负责将其存储到 etcd �
 
 用户通过以下两种主要方式定义 Secret：
 
-- 
-
-  命令式创建
+- 命令式创建
 
 使用
 
@@ -919,9 +821,7 @@ Secret 在 Kubernetes 中创建后，由 API Server 负责将其存储到 etcd �
 
   。
 
-- 
-
-  声明式创建（YAML 文件）
+- 声明式创建（YAML 文件）
 
 用户需手动对敏感数据 Base64 编码，再写入 YAML：
 
@@ -1019,11 +919,7 @@ Secret 在 Kubernetes 中创建后，由 API Server 负责将其存储到 etcd �
 
 ### 🔄 **Secret 更新与同步**
 
-- 
-
-  更新机制
-
-  ：
+- 更新机制：
 
   - 修改 Secret 后，etcd 中数据实时更新。
   - 挂载 Secret 的 Pod 会**自动同步**（约 1-2 分钟），无需重启[3,6](@ref)。
@@ -1194,11 +1090,7 @@ Controller Manager 是 Kubernetes 控制平面的核心组件，负责通过**�
 
    - **故障处理**：定期检查节点心跳，失联超时（默认 5 分钟）后标记为 `NotReady`，并驱逐其上 Pod[3,7](@ref)。
 
-   - 
-
-     关键参数
-
-     ：
+   - 关键参数：
 
      - `--node-monitor-grace-period=40s`（节点失联宽限期）
      - `--pod-eviction-timeout=5m`（Pod 驱逐超时）[3](@ref)。
@@ -1214,11 +1106,7 @@ Controller Manager 是 Kubernetes 控制平面的核心组件，负责通过**�
 
 4. **ResourceQuota Controller**
 
-   - 
-
-     多级限制
-
-     ：
+   - 多级限制：
 
      - 容器级：限制 CPU/内存；
      - Namespace 级：限制 Pod 数量、Service 数量等[7](@ref)。
@@ -1234,18 +1122,14 @@ Controller Manager 是 Kubernetes 控制平面的核心组件，负责通过**�
 
 2. **性能调优**
 
-   - 
-
-     并发控制
+   - 并发控制
 
      ：根据集群规模调整控制器并发数：
 
      - `--concurrent-deployment-syncs=10`（增大 Deployment 处理并发）
      - `--concurrent-service-syncs=5`（Service 同步并发）[1,3](@ref)。
 
-   - 
-
-     资源限制
+   - 资源限制
 
      ：避免资源竞争，为容器设置合理资源配额：
 
@@ -1255,11 +1139,7 @@ Controller Manager 是 Kubernetes 控制平面的核心组件，负责通过**�
        limits: { cpu: "2", memory: "2Gi" }
      ```
 
-   - 
-
-     监控指标
-
-     ：
+   - 监控指标：
 
      - `kube_controller_manager_reconcile_duration_seconds`（调谐延迟）
      - `kube_controller_manager_event_queue_depth`（事件队列深度）[1,6](@ref)。
@@ -1270,11 +1150,7 @@ Controller Manager 是 Kubernetes 控制平面的核心组件，负责通过**�
 
 1. **自定义控制器（Custom Controller）**
 
-   - 
-
-     开发流程
-
-     ：
+   - 开发流程：
 
      1. 定义 CRD（Custom Resource Definition）；
      2. 使用 `client-go` 库编写调谐逻辑；
@@ -1345,11 +1221,7 @@ Kubernetes 控制器是确保集群实际状态与用户期望状态一致的核
 
 #### **核心功能**
 
-- 
-
-  滚动更新（RollingUpdate）
-
-  ：
+- 滚动更新（RollingUpdate）：
 
   逐步替换旧 Pod，通过参数
 
@@ -1377,11 +1249,7 @@ Kubernetes 控制器是确保集群实际状态与用户期望状态一致的核
       maxUnavailable: 25%
   ```
 
-- 
-
-  版本回滚
-
-  ：
+- 版本回滚：
 
   保存历史 ReplicaSet 记录，支持一键回退到任意版本：
 
@@ -1389,11 +1257,7 @@ Kubernetes 控制器是确保集群实际状态与用户期望状态一致的核
   kubectl rollout undo deployment/nginx --to-revision=2  # 回滚到版本2[3,5](@ref)
   ```
 
-- 
-
-  副本扩缩容
-
-  ：
+- 副本扩缩容：
 
   动态调整 Pod 数量：
 
@@ -1408,9 +1272,7 @@ Kubernetes 控制器是确保集群实际状态与用户期望状态一致的核
 
 1. 
 
-   创建 Deployment
-
-   ：
+   创建 Deployment：
 
    ```
    apiVersion: apps/v1
@@ -1438,9 +1300,7 @@ Kubernetes 控制器是确保集群实际状态与用户期望状态一致的核
 
 2. 
 
-   更新镜像
-
-   ：
+   更新镜像：
 
    ```
    kubectl set image deployment/nginx-deploy nginx=nginx:1.20  # 触发滚动更新[3,7](@ref)
@@ -1448,9 +1308,7 @@ Kubernetes 控制器是确保集群实际状态与用户期望状态一致的核
 
 3. 
 
-   监控与回滚
-
-   ：
+   监控与回滚：
 
    ```
    kubectl rollout status deployment/nginx-deploy  # 查看更新状态
@@ -1463,11 +1321,7 @@ Kubernetes 控制器是确保集群实际状态与用户期望状态一致的核
 
 #### **StatefulSet：有状态应用管理**
 
-- 
-
-  核心特性
-
-  ：
+- 核心特性：
 
   - **稳定网络标识**：Pod 名称固定（如 `mysql-0`、`mysql-1`），DNS 解析不变[6,8](@ref)。
   - **持久化存储**：Pod 重启后仍挂载相同 PersistentVolume（PVC 绑定）[8](@ref)。
@@ -1477,11 +1331,7 @@ Kubernetes 控制器是确保集群实际状态与用户期望状态一致的核
 
 #### **DaemonSet：节点级守护进程**
 
-- 
-
-  核心场景
-
-  ：
+- 核心场景：
 
   - 所有节点运行日志收集器（Fluentd）[6,7](@ref)。
   - 节点监控代理（Prometheus Node Exporter）[7](@ref)。
@@ -1491,11 +1341,7 @@ Kubernetes 控制器是确保集群实际状态与用户期望状态一致的核
 
 #### **Job/CronJob：任务调度**
 
-- 
-
-  Job
-
-  ：
+- Job：
 
   确保一次性任务完成（如数据清洗），支持并行执行：
 
@@ -1504,11 +1350,7 @@ Kubernetes 控制器是确保集群实际状态与用户期望状态一致的核
   parallelism: 2    # 同时运行2个Pod[6,7](@ref)
   ```
 
-- 
-
-  CronJob
-
-  ：
+- CronJob：
 
   定时触发 Job（如每日2:00备份数据库）：
 
@@ -1540,34 +1382,26 @@ Kubernetes 控制器是确保集群实际状态与用户期望状态一致的核
 
 1. 
 
-   Deployment 优化
-
-   ：
+   Deployment 优化：
 
    - 设置 `revisionHistoryLimit` 限制历史版本数量（默认10），避免etcd存储压力[3](@ref)。
    - 使用 `progressDeadlineSeconds` 定义部署超时阈值（默认600秒）[1](@ref)。
 
 2. 
 
-   StatefulSet 存储配置
-
-   ：
+   StatefulSet 存储配置：
 
    - 通过 `volumeClaimTemplates` 动态创建PVC，确保每个Pod独立存储[8](@ref)。
 
 3. 
 
-   探针精细化配置
-
-   ：
+   探针精细化配置：
 
    - 避免 `LivenessProbe` 误杀慢启动应用（如设置 `initialDelaySeconds: 30`）[1](@ref)。
 
 4. 
 
-   安全更新策略
-
-   ：
+   安全更新策略：
 
    - 生产环境避免使用 `latest` 镜像标签，明确指定版本号[5](@ref)。
 
@@ -1594,9 +1428,7 @@ StatefulSet 是 Kubernetes 中专门用于管理**有状态应用（Stateful App
 
 2. **持久化存储绑定**
 
-   - 
-
-     独立存储卷
+   - 独立存储卷
 
      ：通过
 
@@ -1788,9 +1620,7 @@ ReplicaSet 是 Kubernetes 中用于保障无状态应用高可用的核心控制
 
 1. **扩缩容（Scaling）**
 
-   - 
-
-     手动调整
+   - 手动调整
 
      ：修改
 
@@ -1810,15 +1640,11 @@ ReplicaSet 是 Kubernetes 中用于保障无状态应用高可用的核心控制
      kubectl scale rs/nginx-rs --replicas=5
      ```
 
-   - 
-
-     自动扩缩容（HPA）
+   - 自动扩缩容（HPA）
 
      ：基于 CPU/内存等指标动态调整副本数
 
-     6
-
-     ：
+     6：
 
      ```
      apiVersion: autoscaling/v2
@@ -1857,11 +1683,7 @@ ReplicaSet 是 Kubernetes 中用于保障无状态应用高可用的核心控制
 
 - **ReplicaSet 定位**：基础副本控制器，专注副本数维护，缺乏高级发布策略[3,7](@ref)。
 
-- 
-
-  Deployment 优势
-
-  ：
+- Deployment 优势：
 
   - 管理 ReplicaSet 生命周期，支持**滚动更新**、**回滚**（通过 `kubectl rollout undo`）[3,7](@ref)。
   - 每个更新版本对应一个新 ReplicaSet，旧 ReplicaSet 保留用于回滚（由 `.spec.revisionHistoryLimit`控制保留数量）[7](@ref)。
@@ -1933,17 +1755,13 @@ ReplicaSet 是 Kubernetes 中用于保障无状态应用高可用的核心控制
 
 1. 
 
-   避免脑裂（Split-Brain）
-
-   ：
+   避免脑裂（Split-Brain）：
 
    - 主节点（Pod-0）优先启动并确立领导权后，从节点（Pod-1）再启动加入集群，防止多主冲突[3,5](@ref)。
 
 2. 
 
-   减少竞争条件
-
-   ：
+   减少竞争条件：
 
    - 节点按序启动，确保集群成员变更有序（如Etcd节点加入需已知节点投票），避免并发加入导致共识失败[1,4](@ref)。
 
@@ -2089,11 +1907,7 @@ D --> E[调整 Deployment/ReplicaSet]
 
 - **指标采集层**：通过 Metrics Server（基础资源）或 Prometheus Adapter（自定义指标）实时收集数据[1,4](@ref)。
 
-- 
-
-  决策计算
-
-  ：
+- 决策计算：
 
   核心算法：
 
@@ -2165,11 +1979,7 @@ metrics:
 
 当 Pod 因资源不足无法调度时，自动触发节点扩容：
 
-- 
-
-  配置要点
-
-  ：
+- 配置要点：
 
   - 节点添加后延迟缩容（`scale-down-delay-after-add=10m`）[2](@ref)。
   - 节点利用率阈值（`scale-down-utilization-threshold=0.5`）[2](@ref)。
@@ -2224,20 +2034,12 @@ metrics:
 
 #### **KEDA（事件驱动扩缩容）**
 
-- 
-
-  核心能力
-
-  ：
+- 核心能力：
 
   - 缩容至零（`minReplicaCount: 0`）[8](@ref)。
   - 基于事件源（Kafka、RabbitMQ 队列深度）扩缩[2,8](@ref)。
 
-- 
-
-  配置示例
-
-  ：
+- 配置示例：
 
   ```
   triggers:
@@ -2464,11 +2266,7 @@ sequenceDiagram
 
 - **故障自愈**：K8s 监控 Pod 状态，自动重启失败容器或迁移至健康节点（NodeController）[3,7](@ref)。
 
-- 
-
-  存储/网络扩展
-
-  ：
+- 存储/网络扩展：
 
   - Docker 提供本地卷 → K8s 通过 **PV/PVC** 对接云存储（如 AWS EBS）[6](@ref)。
   - Docker 单机网络 → K8s 通过 **CNI 插件**（如 Calico）实现跨节点网络策略[1,8](@ref)。
@@ -2629,21 +2427,13 @@ Kubernetes 中的探针（Probes）是用于监控容器健康状态的核心机
 
 - **目的**：检测容器是否仍在正常运行。若失败，Kubernetes 会重启容器（遵循 Pod 的重启策略）[1,3,6](@ref)。
 
-- 
-
-  适用场景
-
-  ：
+- 适用场景：
 
   - 应用死锁（进程存在但无法响应）。
   - 内存泄漏导致服务僵死。
   - 内部逻辑错误使服务不可恢复[5,9](@ref)。
 
-- 
-
-  典型配置
-
-  ：
+- 典型配置：
 
   ```
   livenessProbe:
@@ -2659,21 +2449,13 @@ Kubernetes 中的探针（Probes）是用于监控容器健康状态的核心机
 
 - **目的**：判断容器是否准备好接收流量。若失败，Kubernetes 会从 Service 的 Endpoints 中移除该 Pod，停止向其转发流量（不重启容器）[1,6,8](@ref)。
 
-- 
-
-  适用场景
-
-  ：
+- 适用场景：
 
   - 应用启动时需加载大量数据或配置文件。
   - 依赖外部服务（如数据库）未就绪。
   - 临时过载无法处理新请求[5,9](@ref)。
 
-- 
-
-  典型配置
-
-  ：
+- 典型配置：
 
   ```
   readinessProbe:
@@ -2688,21 +2470,13 @@ Kubernetes 中的探针（Probes）是用于监控容器健康状态的核心机
 
 - **目的**：确保慢启动应用完成初始化。在启动探针成功前，**存活/就绪探针不会生效**。若失败，容器会被重启[1,3,6](@ref)。
 
-- 
-
-  适用场景
-
-  ：
+- 适用场景：
 
   - Java 应用（启动耗时数分钟）。
   - 需初始化数据库或加载大文件的场景。
   - 避免存活探针过早杀死未完成启动的容器[5,9](@ref)。
 
-- 
-
-  典型配置
-
-  ：
+- 典型配置：
 
   ```
   startupProbe:
@@ -2764,18 +2538,14 @@ Kubernetes 中的探针（Probes）是用于监控容器健康状态的核心机
 
 1. 
 
-   启动阶段
-
-   ：
+   启动阶段：
 
    - **启动探针** 优先执行，成功后才启用存活/就绪探针[3,6](@ref)。
    - 例：Java 应用启动需 3 分钟，启动探针配置 `failureThreshold: 30`（周期 10 秒），最长容忍 300 秒初始化。
 
 2. 
 
-   运行阶段
-
-   ：
+   运行阶段：
 
    - **存活探针** 周期性检查，失败则重启容器。
    - **就绪探针** 周期性检查，失败则从 Service 摘除流量（但**不重启**）[1,8](@ref)。
@@ -2788,9 +2558,7 @@ Kubernetes 中的探针（Probes）是用于监控容器健康状态的核心机
 
 1. 
 
-   区分探针用途
-
-   ：
+   区分探针用途：
 
    - 存活探针 → 处理**不可恢复故障**（需重启）。
    - 就绪探针 → 处理**临时不可用**（需摘流量）。
@@ -2798,25 +2566,19 @@ Kubernetes 中的探针（Probes）是用于监控容器健康状态的核心机
 
 2. 
 
-   避免过度重启
-
-   ：
+   避免过度重启：
 
    - 频繁重启可能掩盖根本问题（如代码 Bug），需结合日志分析[5](@ref)。
 
 3. 
 
-   长时任务处理
-
-   ：
+   长时任务处理：
 
    - 批处理任务（如 Job）可能无需存活探针，避免任务中途被重启[5](@ref)。
 
 4. 
 
-   参数调优示例
-
-   ：
+   参数调优示例：
 
    ```
    # Java 服务完整配置
@@ -2860,11 +2622,7 @@ Kubernetes 中的存储系统是支撑有状态应用的核心组件，通过抽
 
 - **生命周期**：与 Pod 绑定（临时卷）或独立于 Pod（持久卷）。
 
-- 
-
-  类型
-
-  ：
+- 类型：
 
   - **临时卷**：如 `emptyDir`，随 Pod 销毁而删除[1,6](@ref)。
   - **持久卷**：如 `PersistentVolume`（PV），数据独立于 Pod 存在[3,5](@ref)。
@@ -2873,11 +2631,7 @@ Kubernetes 中的存储系统是支撑有状态应用的核心组件，通过抽
 
 - **角色**：集群级别的存储资源（如云磁盘、NFS），由管理员预先创建或动态供给[3,7](@ref)。
 
-- 
-
-  关键属性
-
-  ：
+- 关键属性：
 
   - `capacity`：存储容量（如 100Gi）。
   - `accessModes`：访问模式（`ReadWriteOnce`、`ReadOnlyMany`、`ReadWriteMany`）。
@@ -2892,11 +2646,7 @@ Kubernetes 中的存储系统是支撑有状态应用的核心组件，通过抽
 
 - **作用**：动态创建 PV 的模板，定义存储后端（如 AWS EBS、Ceph）和参数[1,8](@ref)。
 
-- 
-
-  核心配置
-
-  ：
+- 核心配置：
 
   ```
   apiVersion: storage.k8s.io/v1
@@ -2920,11 +2670,7 @@ Kubernetes 中的存储系统是支撑有状态应用的核心组件，通过抽
 
   - **特点**：数据随 Pod 删除而销毁，支持内存挂载（`emptyDir.medium: Memory`）[1,6](@ref)。
 
-  - 
-
-    示例
-
-    ：
+  - 示例：
 
     ```
     volumes:
@@ -2945,11 +2691,7 @@ Kubernetes 中的存储系统是支撑有状态应用的核心组件，通过抽
 
   - **优势**：支持多节点读写（`ReadWriteMany`），适合共享配置。
 
-  - 
-
-    示例
-
-    ：
+  - 示例：
 
     ```
     volumes:
@@ -2994,11 +2736,7 @@ Kubernetes 中的存储系统是支撑有状态应用的核心组件，通过抽
 
 #### **静态供给**
 
-- 
-
-  步骤
-
-  ：
+- 步骤：
 
   1. 管理员创建 PV（如 NFS 卷）。
   2. 用户创建 PVC 请求存储。
@@ -3006,11 +2744,7 @@ Kubernetes 中的存储系统是支撑有状态应用的核心组件，通过抽
 
 #### **动态供给**
 
-- 
-
-  步骤
-
-  ：
+- 步骤：
 
   1. 用户创建 PVC（指定 StorageClass）。
   2. StorageClass 调用 Provisioner（如 Ceph CSI）动态创建 PV。
@@ -3054,21 +2788,13 @@ spec:
 
 #### **故障排查指南**
 
-- 
-
-  PVC 长期 Pending
-
-  ：
+- PVC 长期 Pending：
 
   - 检查 StorageClass 配置是否正确[1](@ref)。
   - 确认 PV 资源充足或 Provisioner 运行正常。
   - 查看 Provisioner 日志：`kubectl logs -n kube-system <provisioner-pod>`。
 
-- 
-
-  挂载失败
-
-  ：
+- 挂载失败：
 
   - 验证访问模式（如 `ReadWriteMany` 需文件存储支持）[6](@ref)。
   - 检查网络存储后端连通性（如 NFS 服务器状态）。
@@ -3125,11 +2851,7 @@ volumeBindingMode: WaitForFirstConsumer # 卷绑定模式
 
    - **功能**：指定存储驱动，负责 PV 的创建/删除/扩容。
 
-   - 
-
-     类型
-
-     ：
+   - 类型：
 
      - 内置驱动（如 `kubernetes.io/aws-ebs`）[1,2](@ref)。
      - 自定义驱动（如 NFS Provisioner `nfs-provisioner`）[1,7](@ref)。
@@ -3192,11 +2914,7 @@ volumeBindingMode: WaitForFirstConsumer # 卷绑定模式
 
    - **场景**：在 AWS 中为数据库动态申请 EBS 卷。
 
-   - 
-
-     配置
-
-     ：
+   - 配置：
 
      ```
      provisioner: ebs.csi.aws.com
@@ -3209,11 +2927,7 @@ volumeBindingMode: WaitForFirstConsumer # 卷绑定模式
 
    - **场景**：使用节点本地 SSD 运行 Redis。
 
-   - 
-
-     配置
-
-     ：
+   - 配置：
 
      ```
      provisioner: kubernetes.io/no-provisioner  # 需手动预创建 PV
@@ -3267,11 +2981,7 @@ StorageClass 是 Kubernetes 动态存储管理的核心组件，通过解耦存�
 
 - **NFS** 是一种基于 **TCP/IP 协议** 的分布式文件系统协议，由 Sun 公司于 1984 年开发。它允许客户端透明地访问远程服务器上的文件，如同操作本地文件系统 [1,4](@ref)。
 
-- 
-
-  核心价值
-
-  ：
+- 核心价值：
 
   - **资源共享**：多台计算机共享同一存储空间，减少数据冗余。
   - **跨平台兼容**：支持不同操作系统（Linux、Unix、Windows 等）间的文件共享 [3,6](@ref)。
@@ -3281,11 +2991,7 @@ StorageClass 是 Kubernetes 动态存储管理的核心组件，通过解耦存�
 
 - **功能**：NFS 通过 RPC 机制实现远程服务调用。RPC 服务（如 `rpcbind`）监听固定端口 **111**，负责注册和分配 NFS 服务的动态端口（如 `rpc.nfsd`、`rpc.mountd`）[2,6](@ref)。
 
-- 
-
-  工作流程
-
-  ：
+- 工作流程：
 
   1. NFS 服务器启动时向 RPC 注册端口。
   2. 客户端通过 RPC 查询服务端端口。
@@ -3410,11 +3116,7 @@ echo "/nfs/upload 192.168.1.0/24(rw,sync,all_squash,anonuid=210,anongid=210)" >>
 
 - **加密传输**：NFSv4 支持 Kerberos 认证（替代明文传输）[3,6](@ref)。
 
-- 
-
-  权限最小化
-
-  ：
+- 权限最小化：
 
   - 禁用 `no_root_squash`，避免 root 权限泄露。
   - 使用 `all_squash` + `anonuid` 限制客户端权限 [1,7](@ref)。
@@ -3427,11 +3129,7 @@ echo "/nfs/upload 192.168.1.0/24(rw,sync,all_squash,anonuid=210,anongid=210)" >>
 
    - **原因**：防火墙阻塞、RPC 未启动、`/etc/exports` 配置错误。
 
-   - 
-
-     解决
-
-     ：
+   - 解决：
 
      ```
      systemctl status rpcbind nfs-server  # 检查服务状态
@@ -3502,9 +3200,7 @@ Ceph 是一个开源的**统一分布式存储系统**，旨在为海量数据�
 
 #### **CRUSH 算法**
 
-- 
-
-  原理
+- 原理
 
   ：通过伪随机哈希计算数据位置，避免中心元数据瓶颈。输入包括：
 
@@ -3522,11 +3218,7 @@ Ceph 是一个开源的**统一分布式存储系统**，旨在为海量数据�
 - **作用**：逻辑容器，聚合多个对象（Object）并映射到 OSD 组。映射关系为：
   `\text{Object} \xrightarrow{\text{hash}} \text{PG} \xrightarrow{\text{CRUSH}} \text{OSD}`
 
-- 
-
-  配置要点
-
-  ：
+- 配置要点：
 
   - PG 数量影响负载均衡（过少导致热点，过多增加元数据开销）。
   - 状态机管理（如 `active+clean` 表示数据健康）[2,8](@ref)。
@@ -3567,20 +3259,12 @@ Ceph 是一个开源的**统一分布式存储系统**，旨在为海量数据�
 
 #### **性能调优实践**
 
-- 
-
-  硬件选型
-
-  ：
+- 硬件选型：
 
   - OSD 磁盘：NVMe SSD 用于高性能池，HDD 用于容量池。
   - 网络：万兆/InfiniBand 避免带宽瓶颈。
 
-- 
-
-  参数优化
-
-  ：
+- 参数优化：
 
   ```
   # 增加 PG 数量（需计算：Total PGs = (OSDs × 100) / Replica）
@@ -3742,11 +3426,7 @@ PV 的生命周期包含以下阶段[4,6](@ref)：
 - **绑定流程**：
   PVC 创建 → 匹配可用 PV → 绑定后 PVC 状态为 `Bound` → Pod 挂载 PVC 使用存储[7](@ref)。
 
-- 
-
-  动态供应示例
-
-  ：
+- 动态供应示例：
 
   ```
   # PVC 请求动态创建 PV
@@ -3791,9 +3471,7 @@ PV 的生命周期包含以下阶段[4,6](@ref)：
 
      ，确保 Pod 调度到正确节点
 
-     5
-
-     ：
+     5：
 
      ```
      nodeAffinity:
@@ -3847,9 +3525,7 @@ PV 的生命周期包含以下阶段[4,6](@ref)：
 
 1. 
 
-   用户创建 PVC
-
-   ：
+   用户创建 PVC：
 
    指定容量、访问模式等需求：
 
@@ -3869,9 +3545,7 @@ PV 的生命周期包含以下阶段[4,6](@ref)：
 
 2. 
 
-   Kubernetes 匹配 PV
-
-   ：
+   Kubernetes 匹配 PV：
 
    - **静态模式**：从预创建的 PV 池中选择符合条件的 PV[1](@ref)。
    - **动态模式**：通过 StorageClass 调用 Provisioner（如 NFS Provisioner）自动创建 PV[6](@ref)。
@@ -3983,21 +3657,13 @@ spec:
 
 #### **故障排查指南**
 
-- 
-
-  PVC 长期 Pending
-
-  ：
+- PVC 长期 Pending：
 
   1. 检查 PV 资源是否充足（`kubectl get pv`）。
   2. 验证 StorageClass 配置是否正确（`kubectl describe storageclass`）。
   3. 查看 Provisioner 日志（如 NFS Provisioner Pod 日志）[6](@ref)。
 
-- 
-
-  挂载失败
-
-  ：
+- 挂载失败：
 
   1. 确认 PVC 与目标 PV 的访问模式兼容。
   2. 检查网络存储连通性（如 NFS 服务器可达性）[1](@ref)。
@@ -4010,11 +3676,7 @@ PVC 是 Kubernetes 存储管理的核心抽象层：
 
 - **核心价值**：通过声明式资源请求，实现存储资源的**按需分配**与**精细化管控**，避免存储滥用引发的系统故障[2,6](@ref)。
 
-- 
-
-  生产实践
-
-  ：
+- 生产实践：
 
   - **静态绑定**适用于固定存储需求（如预分配高性能 SSD）。
   - **动态绑定**结合 StorageClass 是云原生场景的首选，支持弹性扩展与自动化运维[1,3](@ref)。
@@ -4074,11 +3736,7 @@ Kubernetes（K8s）负载均衡器是集群流量管理的核心组件，负责�
 
 #### **底层实现技术**
 
-- 
-
-  kube-proxy
-
-  ：
+- kube-proxy：
 
   - **iptables模式**：通过Linux内核iptables规则转发，但性能随规则数量下降。
   - **IPVS模式**：高性能内核级负载均衡，支持轮询（RR）、最少连接（LC）等算法[1,7](@ref)。
@@ -4152,9 +3810,7 @@ K8s支持多种流量分发策略，通过Service或Ingress配置：
 
 - 分配IP池并启用二层通告
 
-     7
-
-     ：
+     7：
 
      ```
      apiVersion: metallb.io/v1beta1
@@ -4226,11 +3882,7 @@ Kubernetes（K8s）的服务发现是其容器编排的核心功能，解决了�
 
 - **作用**：为一组Pod提供稳定的虚拟IP（ClusterIP）和DNS名称，标签选择器动态关联Pod[3,7](@ref)。
 
-- 
-
-  类型与场景
-
-  ：
+- 类型与场景：
 
   - `ClusterIP`（默认）：集群内部通信，如微服务间调用[3,6](@ref)。
   - `NodePort`：通过节点IP+端口暴露服务，适用于测试环境[3,7](@ref)。
@@ -4245,9 +3897,7 @@ Kubernetes（K8s）的服务发现是其容器编排的核心功能，解决了�
 
 #### **DNS 服务发现：默认推荐方式**
 
-- 
-
-  CoreDNS
+- CoreDNS
 
   （K8s 1.11+默认组件）：
 
@@ -4264,11 +3914,7 @@ Kubernetes（K8s）的服务发现是其容器编排的核心功能，解决了�
 
 - **作用**：监听Service/Endpoint变化，生成iptables/IPVS规则，将ClusterIP流量转发到后端Pod[4,5](@ref)。
 
-- 
-
-  模式对比
-
-  ：
+- 模式对比：
 
   - **iptables**：简单但规则量大时性能下降。
   - **IPVS**：内核级负载均衡，支持最小连接、加权轮询等算法，适合大规模集群[4,7](@ref)。
@@ -4279,20 +3925,12 @@ Kubernetes（K8s）的服务发现是其容器编排的核心功能，解决了�
 
 #### **Headless Service 实战**
 
-- 
-
-  适用场景
-
-  ：
+- 适用场景：
 
   - 有状态服务（如Zookeeper、MySQL集群），需Pod直接互访[7,8](@ref)。
   - 客户端需自定义负载均衡策略（如基于地理位置的路由）[8](@ref)。
 
-- 
-
-  配置示例
-
-  ：
+- 配置示例：
 
   ```
   spec:
@@ -4303,15 +3941,11 @@ Kubernetes（K8s）的服务发现是其容器编排的核心功能，解决了�
 
 #### **外部服务集成**
 
-- 
-
-  ExternalName
+- ExternalName
 
   ：无缝代理外部服务（如公有云RDS）
 
-  3,7
-
-  ：
+  3,7：
 
   ```
   spec:
@@ -4337,9 +3971,7 @@ Kubernetes（K8s）的服务发现是其容器编排的核心功能，解决了�
 
    - **缓存**：启用`cache`插件减少API调用[8,9](@ref)。
 
-   - 
-
-     负载均衡
+   - 负载均衡
 
      ：通过
 
@@ -4349,9 +3981,7 @@ Kubernetes（K8s）的服务发现是其容器编排的核心功能，解决了�
 
      插件实现加权轮询
 
-     8
-
-     ：
+     8：
 
      ```
      my-service.default.svc.cluster.local {
@@ -4441,9 +4071,7 @@ C --> F[Pod 3]
 
 - **EndpointSlice**：动态记录 Service 关联的 Pod IP 和端口（替代旧版 Endpoints），实时响应 Pod 变化[1,7](@ref)。
 
-- 
-
-  kube-proxy
+- kube-proxy
 
   ：运行在每个节点，监听 Service 变更并生成转发规则：
 
@@ -4527,11 +4155,7 @@ Service 是 Kubernetes 服务治理的**基石**，通过 **ClusterIP 稳定访�
 
 - **对外暴露**：结合 `LoadBalancer` 与 `Ingress` 实现七层路由与 TLS 终结[1,3](@ref)。
 
-- 
-
-  特殊场景
-
-  ：
+- 特殊场景：
 
   - 有状态应用 → `Headless Service`
   - 外部服务集成 → `ExternalName`
@@ -4571,11 +4195,7 @@ Service 是 Kubernetes 服务治理的**基石**，通过 **ClusterIP 稳定访�
 - **工作原理**：
   分配虚拟 IP（ClusterIP），kube-proxy 通过 iptables/IPVS 规则将流量转发到后端 Pod [3,6](@ref)。
 
-- 
-
-  高级配置
-
-  ：
+- 高级配置：
 
   ```
   spec:
@@ -4596,11 +4216,7 @@ Service 是 Kubernetes 服务治理的**基石**，通过 **ClusterIP 稳定访�
 - **核心机制**：
   每个节点开放静态端口（默认 30000-32767），流量经节点端口 → ClusterIP → Pod[7,8](@ref)。
 
-- 
-
-  典型问题
-
-  ：
+- 典型问题：
 
   - **安全风险**：直接暴露节点 IP，需配置防火墙限制访问源 IP[4](@ref)。
   - **端口冲突**：手动指定端口易冲突，建议自动分配[1](@ref)。
@@ -4610,22 +4226,14 @@ Service 是 Kubernetes 服务治理的**基石**，通过 **ClusterIP 稳定访�
 - **云平台集成**：
   自动创建云负载均衡器，分配公网 IP，并关联 NodePort 端口[6,8](@ref)。
 
-- 
-
-  流量策略
-
-  ：
+- 流量策略：
 
   - `externalTrafficPolicy: Cluster`（默认）：可能丢失客户端 IP（跨节点转发）。
   - `externalTrafficPolicy: Local`：保留客户端 IP，但需 Pod 与节点共存[6](@ref)。
 
 #### **Headless Service**
 
-- 
-
-  核心价值
-
-  ：
+- 核心价值：
 
   DNS 查询返回所有 Pod IP（如
 
@@ -4677,11 +4285,7 @@ Service 是 Kubernetes 服务治理的**基石**，通过 **ClusterIP 稳定访�
 
 - **暴露层**：NodePort 轻量但风险高，LoadBalancer 强大但有云依赖。
 
-- 
-
-  特殊场景
-
-  ：
+- 特殊场景：
 
   - 有状态服务 → Headless（无头服务）
   - 外部集成 → ExternalName（透明代理）
@@ -4704,11 +4308,7 @@ Ingress 是 Kubernetes 中管理外部访问集群内部服务的核心机制，
 
    - **作用**：定义路由规则（如域名、路径），指定流量如何转发到后端 Service[1,4](@ref)。
 
-   - 
-
-     示例 YAML
-
-     ：
+   - 示例 YAML：
 
      ```
      apiVersion: networking.k8s.io/v1
@@ -4735,11 +4335,7 @@ Ingress 是 Kubernetes 中管理外部访问集群内部服务的核心机制，
 
    - **功能**：监听 Ingress 规则变化，动态生成代理配置（如 Nginx、Traefik）并重载[1,6](@ref)。
 
-   - 
-
-     工作流程
-
-     ：
+   - 工作流程：
 
      1. 监控 API Server 的 Ingress 变更；
      2. 生成代理配置文件（如 Nginx 的 `nginx.conf`）；
@@ -4785,11 +4381,7 @@ Ingress 是 Kubernetes 中管理外部访问集群内部服务的核心机制，
 
 1. **安装 Ingress Controller（以 Nginx 为例）**
 
-   - 
-
-     Helm 部署（推荐）
-
-     ：
+   - Helm 部署（推荐）：
 
      ```
      helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
@@ -4801,9 +4393,7 @@ Ingress 是 Kubernetes 中管理外部访问集群内部服务的核心机制，
 
 2. **配置路由规则**
 
-   - 
-
-     域名路由
+   - 域名路由
 
      ：
 
@@ -4823,9 +4413,7 @@ Ingress 是 Kubernetes 中管理外部访问集群内部服务的核心机制，
 
 3. **HTTPS 配置**
 
-   - 
-
-     生成 TLS 证书
+   - 生成 TLS 证书
 
      ：
 
@@ -4833,9 +4421,7 @@ Ingress 是 Kubernetes 中管理外部访问集群内部服务的核心机制，
      openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt
      ```
 
-   - 
-
-     创建 Secret
+   - 创建 Secret
 
      ：
 
@@ -4843,9 +4429,7 @@ Ingress 是 Kubernetes 中管理外部访问集群内部服务的核心机制，
      kubectl create secret tls my-tls --key tls.key --cert tls.crt
      ```
 
-   - 
-
-     Ingress 引用
+   - Ingress 引用
 
      ：
 
@@ -4874,21 +4458,13 @@ Ingress 是 Kubernetes 中管理外部访问集群内部服务的核心机制，
 
 - **核心价值**：统一入口管理多服务，支持七层路由、SSL 终止和负载均衡，替代繁琐的 NodePort 管理[1,5](@ref)。
 
-- 
-
-  选型建议
-
-  ：
+- 选型建议：
 
   - **公有云**：LoadBalancer + Ingress Controller；
   - **私有云**：HostNetwork + DaemonSet（高性能需求）；
   - **开发测试**：NodePort 快速验证[2,5](@ref)。
 
-- 
-
-  进阶优化
-
-  ：
+- 进阶优化：
 
   - **HPA 集成**：根据流量自动扩缩 Controller Pod；
   - **WAF 注解**：通过注解添加 Web 应用防火墙规则（如 Nginx 的 `modsecurity`）[6,7](@ref)。
@@ -4956,11 +4532,7 @@ graph LR
 
 - **需求**：通过同一域名暴露 `web-service` 和 `api-service`
 
-- 
-
-  配置
-
-  ：
+- 配置：
 
   ```
   # Ingress 规则
@@ -4979,11 +4551,7 @@ graph LR
 
 #### **HTTPS 安全访问**
 
-- 
-
-  Ingress 配置 TLS
-
-  ：
+- Ingress 配置 TLS：
 
   ```
   spec:
@@ -5040,11 +4608,7 @@ graph LR
     E --> F[业务 Pod]
 ```
 
-- 
-
-  关键点
-
-  ：
+- 关键点：
 
   - LoadBalancer 将流量导向 Ingress Controller 的 Service（类型为 `LoadBalancer` 或 `NodePort`）[1,6](@ref)。
   - Ingress Controller 直接访问 Pod IP（**跳过 kube-proxy**），减少转发延迟[6](@ref)。
@@ -5117,11 +4681,7 @@ spec:
 
 - **场景**：将 `/api/v1/user` 重写为 `/user` 转发到后端。
 
-- 
-
-  实现
-
-  ：
+- 实现：
 
   ```
   annotations:
@@ -5151,11 +4711,7 @@ spec:
 
 - **问题**：gRPC 长连接导致负载不均。
 
-- 
-
-  方案
-
-  ：
+- 方案：
 
   ```
   annotations:
@@ -5181,11 +4737,7 @@ spec:
 
 - **HPA 扩缩容**：为 Ingress Controller 配置 HPA，根据 CPU/内存自动扩缩[5](@ref)。
 
-- 
-
-  资源请求限制
-
-  ：
+- 资源请求限制：
 
   ```
   resources:
@@ -5266,11 +4818,7 @@ Ingress Controller Service 类型设为 `LoadBalancer`，MetalLB 自动分配 IP
 
 - **原理**：在每个集群节点上开放固定端口（默认 `30000-32767`），外部通过 `节点IP:端口` 访问，流量经节点转发到 Service 再到 Pod[2,3,6](@ref)。
 
-- 
-
-  配置示例
-
-  ：
+- 配置示例：
 
   ```
   apiVersion: v1
@@ -5289,11 +4837,7 @@ Ingress Controller Service 类型设为 `LoadBalancer`，MetalLB 自动分配 IP
 
 - **适用场景**：开发测试环境、临时访问[2,6](@ref)。
 
-- 
-
-  缺点
-
-  ：
+- 缺点：
 
   - 需手动管理节点 IP 和端口；
   - 节点故障时需切换 IP；
@@ -5303,11 +4847,7 @@ Ingress Controller Service 类型设为 `LoadBalancer`，MetalLB 自动分配 IP
 
 - **原理**：云平台（如 AWS/GCP）自动创建负载均衡器，分配公网 IP，流量直达 Service[2,7,8](@ref)。
 
-- 
-
-  配置示例
-
-  ：
+- 配置示例：
 
   ```
   apiVersion: v1
@@ -5327,11 +4867,7 @@ Ingress Controller Service 类型设为 `LoadBalancer`，MetalLB 自动分配 IP
 
 - **适用场景**：公有云环境生产部署[2,8](@ref)。
 
-- 
-
-  缺点
-
-  ：
+- 缺点：
 
   - 依赖云厂商，私有环境需自建方案（如 MetalLB）；
   - 每个 Service 独立 LB 成本高[8](@ref)。
@@ -5618,11 +5154,7 @@ ENTRYPOINT ["python", "app.py"]
 CMD ["--debug"]
 ```
 
-- 
-
-  运行效果
-
-  ：
+- 运行效果：
 
   ```
   docker run my-app                 # 执行 python app.py --debug
@@ -5645,11 +5177,7 @@ ENTRYPOINT ["/bin/bash", "-c"]  # 允许任意命令输入
 CMD ["echo 'Ready for commands'"]  # 默认提示
 ```
 
-- 
-
-  运行效果
-
-  ：
+- 运行效果：
 
   ```
   docker run debug-container "ls /app"  # 执行 ls /app
@@ -5668,9 +5196,7 @@ CMD ["echo 'Ready for commands'"]  # 默认提示
 
    - **原因**：Exec 格式直接执行命令，未触发 Shell 解析[3](@ref)。
 
-   - 
-
-     解决
+   - 解决
 
      ：显式调用 Shell 或使用脚本包装：
 
@@ -5682,9 +5208,7 @@ CMD ["echo 'Ready for commands'"]  # 默认提示
 
    - **案例**：`ENTRYPOINT ["echo"]` + `CMD ["Hello"]` → `docker run <image> "Test"` 输出 `Test`（丢失 `Hello`）。
 
-   - 
-
-     优化
+   - 优化
 
      ：固定前缀 + 可变参数：
 
@@ -5874,11 +5398,7 @@ containers:
 
 #### **避免 Shell 格式陷阱**
 
-- 
-
-  错误配置
-
-  ：
+- 错误配置：
 
   ```
   command: echo Hello  # Shell 格式，实际执行 `/bin/sh -c "echo Hello"`
@@ -5937,11 +5457,7 @@ args: ["-c", "ls /app; java -jar app.jar"]  # 分号分隔命令
 
 - **标签的本质**：键值对（Key-Value）形式的元数据，附加于 Kubernetes 资源对象（如 Pod、Node、Service 等）上，用于标识资源的属性或分类[1,2,6](@ref)。
 
-- 
-
-  核心价值
-
-  ：
+- 核心价值：
 
   - **资源组织**：将逻辑相关的资源分组（如 `env=prod`、`app=nginx`），实现多维度管理[3,7](@ref)。
   - **松耦合关联**：解耦资源间依赖关系（如 Service 通过标签选择器关联 Pod）[2,7](@ref)。
@@ -5973,9 +5489,7 @@ args: ["-c", "ls /app; java -jar app.jar"]  # 分号分隔命令
 
 #### **核心应用场景**
 
-- 
-
-  Service 发现
+- Service 发现
 
   ：Service 通过选择器匹配后端 Pod（示例配置）：
 
@@ -6013,11 +5527,7 @@ args: ["-c", "ls /app; java -jar app.jar"]  # 分号分隔命令
 
 #### **YAML 配置示例**
 
-- 
-
-  Deployment 关联 Pod
-
-  ：
+- Deployment 关联 Pod：
 
   ```
   apiVersion: apps/v1
@@ -6103,9 +5613,7 @@ Kubernetes（K8s）集群安全是一个系统性工程，需从网络、认证�
 
    - **作用**：限制Pod间通信，仅允许授权流量。例如，只允许前端Pod访问后端服务，禁止其他访问[2,9](@ref)。
 
-   - 
-
-     配置示例
+   - 配置示例
 
      ：
 
@@ -6141,9 +5649,7 @@ Kubernetes（K8s）集群安全是一个系统性工程，需从网络、认证�
 
 2. **RBAC（基于角色的访问控制）**
 
-   - 
-
-     核心概念
+   - 核心概念
 
      ：
 
@@ -6154,18 +5660,14 @@ Kubernetes（K8s）集群安全是一个系统性工程，需从网络、认证�
      | `RoleBinding`        | 将角色绑定到用户/ServiceAccount     | 单个命名空间 |
      | `ClusterRoleBinding` | 全局绑定角色                        | 全局         |
 
-   - 
-
-     实践
+   - 实践
 
      ：
 
      - 开发人员：仅能查看命名空间内Pod日志。
      - 运维人员：可操作Deployment，但禁止访问Secrets[2,6](@ref)。
 
-   - 
-
-     审计命令
+   - 审计命令
 
      ：定期检查权限分配：
 
@@ -6190,9 +5692,7 @@ Kubernetes（K8s）集群安全是一个系统性工程，需从网络、认证�
 
 2. **运行时安全**
 
-   - 
-
-     安全上下文（SecurityContext）
+   - 安全上下文（SecurityContext）
 
      ：限制容器权限
 
@@ -6207,9 +5707,7 @@ Kubernetes（K8s）集群安全是一个系统性工程，需从网络、认证�
        capabilities: drop: ["ALL"]      # 放弃所有特权
      ```
 
-   - 
-
-     Pod安全策略替代方案
+   - Pod安全策略替代方案
 
      ：
 
@@ -6235,9 +5733,7 @@ Kubernetes（K8s）集群安全是一个系统性工程，需从网络、认证�
 
    - **关键日志源**：API Server审计日志、容器运行时日志（containerd）[2,4](@ref)。
 
-   - 
-
-     审计配置
+   - 审计配置
 
      ：记录敏感操作（如Secrets访问）
 
@@ -6268,9 +5764,7 @@ Kubernetes（K8s）集群安全是一个系统性工程，需从网络、认证�
 
 2. **集群加固工具**
 
-   - 
-
-     kube-bench
+   - kube-bench
 
      ：检查CIS基准合规性
 

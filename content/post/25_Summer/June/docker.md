@@ -547,10 +547,7 @@ docker run -d --net=container:base-container --name sidecar nginx
 1. **管理卷操作**
 
    - 
-
-     创建与查看
-
-     ：
+     创建与查看：
 
      ```
      docker volume create my-vol  # 创建命名卷
@@ -617,25 +614,11 @@ docker run -d --net=container:base-container --name sidecar nginx
      docker run -d -v shared-data:/app/logs container2
      ```
 
-   - 
-
-     方案2
-
-     ：通过
-
-```
-     --volumes-from
-     ```
-
-继承挂载（适合 Sidecar 日志收集）
-
-     6,7
-
-     ：
+   - 方案2：通过 --volumes-from 继承挂载（适合 Sidecar 日志收集）
 
      ```
-     docker run -d --name logger -v /logs busybox
-     docker run -d --volumes-from logger app-server
+      docker run -d --name logger -v /logs busybox
+      docker run -d --volumes-from logger app-server
      ```
 
 2. **数据备份与恢复**
@@ -869,25 +852,17 @@ Docker 提供四种重启策略，通过 `--restart` 参数指定，由 Docker �
 
 3. **数据持久化**
 
-   - 容器重启时，临时文件系统会被重置，关键数据需通过卷（Volume）或绑定挂载（Bind Mount）持久化
-
-     1
-
-     ：
+   - 容器重启时，临时文件系统会被重置，关键数据需通过卷（Volume）或绑定挂载（Bind Mount）持久化：
 
      ```
-     docker run -d --restart always -v /host/data:/container/data my-app
+  docker run -d --restart always -v /host/data:/container/data my-app
      ```
 
 4. **策略生效条件**
 
    - **仅后台容器**：`--restart` 仅适用于 `-d` 模式（后台运行），不可与 `--rm`（退出后删除）共用[5,6](@ref)。
 
-   - 
-
-     Docker 服务自启
-
-     ：需确保 Docker 守护进程随系统启动：
+   - Docker 服务自启：需确保 Docker 守护进程随系统启动：
 
      ```
      systemctl enable docker  # 启用开机自启[1](@ref)
@@ -1129,7 +1104,7 @@ CMD ["java", "-jar", "app.jar"]
 
 ```
      --target
-     ```
+```
 
 仅构建特定阶段，用于调试或测试：
 
@@ -1151,16 +1126,16 @@ CMD ["java", "-jar", "app.jar"]
 
 ```
      package.json
-     ```
+```
 
      、
-
+    
      ```
      pom.xml
      ```
-
+    
      ），再复制源码，最大化利用构建缓存：
-
+    
      ```
      COPY package*.json ./   # 先复制依赖文件
      RUN npm install
@@ -1261,11 +1236,7 @@ Cgroups 限制容器对物理资源的占用：
 
 - **veth pair + 网桥**：容器通过虚拟网卡（veth）连接到宿主机网桥（如 `docker0`），实现独立 IP 和端口分配。
 
-- 
-
-  网络模式
-
-  ：
+- 网络模式：
 
   - `bridge`（默认）：容器通过 NAT 与外部通信。
   - `host`：共享宿主机网络栈（牺牲隔离性换取性能）。
@@ -1364,24 +1335,24 @@ CGroup（Control Groups）是 Linux 内核提供的资源管理机制，用于�
 
 ```
      cpu.cfs_quota_us
-     ```
+```
 
      （周期内可用时间）和
 
 ```
      cpu.cfs_period_us
-     ```
+```
 
      （周期长度）限制 CPU 时间片
-
+    
      3,6
-
+    
      。
-
+    
      示例
-
+    
      ：设置进程组最多使用 50% CPU：
-
+    
      ```
      echo 50000 > /sys/fs/cgroup/cpu/group1/cpu.cfs_quota_us  # 50ms/100ms
      echo 100000 > /sys/fs/cgroup/cpu/group1/cpu.cfs_period_us
@@ -1395,18 +1366,18 @@ CGroup（Control Groups）是 Linux 内核提供的资源管理机制，用于�
 
 ```
      memory.limit_in_bytes
-     ```
+```
 
 设置内存上限，超限触发 OOM（Out-of-Memory）终止进程
 
      4,7
-
+    
      。
-
+    
      示例
-
+    
      ：限制内存为 100MB：
-
+    
      ```
      echo 100M > /sys/fs/cgroup/memory/group1/memory.limit_in_bytes
      ```
@@ -1419,18 +1390,18 @@ CGroup（Control Groups）是 Linux 内核提供的资源管理机制，用于�
 
 ```
      blkio.throttle.read_bps_device
-     ```
+```
 
 限制磁盘读写速率
 
      1,8
-
+    
      。
-
+    
      示例
-
+    
      ：限制磁盘读速率为 1MB/s：
-
+    
      ```
      echo "8:0 1048576" > /sys/fs/cgroup/blkio/group1/blkio.throttle.read_bps_device
      ```
@@ -1466,32 +1437,20 @@ CGroup（Control Groups）是 Linux 内核提供的资源管理机制，用于�
 
 #### **通过文件系统操作**
 
-- 
-
-  挂载子系统
-
-  ：
+- 挂载子系统：
 
   ```
-  mount -t cgroup -o cpu,memory cgroup /sys/fs/cgroup
+mount -t cgroup -o cpu,memory cgroup /sys/fs/cgroup
   ```
 
-- 
-
-  创建控制组
-
-  ：
+- 创建控制组：
 
   ```
   mkdir /sys/fs/cgroup/cpu/group1
   echo 50000 > /sys/fs/cgroup/cpu/group1/cpu.cfs_quota_us
   ```
-
-- 
-
-  添加进程
-
-  ：
+  
+- 添加进程：
 
   ```
   echo $$ > /sys/fs/cgroup/cpu/group1/tasks  # 将当前进程加入 group1
@@ -1522,15 +1481,11 @@ group mysql_group {
 2. **资源超限导致 OOM**
    调整 `memory.oom_control` 禁用 OOM Killer，或增加内存上限[4](@ref)。
 
-3. 
-
-   多核 CPU 绑定
-
-使用
+3. **多核 CPU 绑定使用**
 
 ```
    cpuset
-   ```
+```
 
 子系统绑定进程到指定核心：
 
@@ -1586,7 +1541,7 @@ docker exec -it nginx /bin/bash  # 进入名为 nginx 容器的 Bash 终端[1,6]
 
 ```
   /bin/sh
-  ```
+```
 
   ：
 
@@ -1631,7 +1586,7 @@ docker exec -it web_server ps aux  # 查看容器内进程[3](@ref)
 
 ```
    -u root
-   ```
+```
 
 以 root 用户执行：
 

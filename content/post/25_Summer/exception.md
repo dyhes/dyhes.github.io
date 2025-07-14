@@ -21,11 +21,7 @@ Java 异常体系基于 `Throwable` 类，分为两大分支：
 
    - **定义**：JVM 或系统资源耗尽导致的严重问题，程序无法恢复。
 
-   - 
-
-     常见类型
-
-     ：
+   - 常见类型：
 
      - `OutOfMemoryError`：堆内存耗尽[1,5](@ref)
      - `StackOverflowError`：递归过深导致栈溢出[1,3](@ref)
@@ -37,11 +33,7 @@ Java 异常体系基于 `Throwable` 类，分为两大分支：
 
      - **特点**：编译器强制处理（不处理则编译失败），通常由外部因素引发（如文件缺失）。
 
-     - 
-
-       常见类型
-
-       ：
+     - 常见类型：
 
        | 异常类型                 | 触发场景                         |
        | ------------------------ | -------------------------------- |
@@ -53,11 +45,7 @@ Java 异常体系基于 `Throwable` 类，分为两大分支：
 
      - **特点**：编译器不强制处理，由代码逻辑错误引发（如空指针、越界）。
 
-     - 
-
-       常见类型
-
-       ：
+     - 常见类型：
 
        | 异常类型                         | 触发场景                               |
        | -------------------------------- | -------------------------------------- |
@@ -117,9 +105,7 @@ Java 提供四种关键字处理异常：
 
 4. **`try-with-resources`（Java 7+）**
 
-   - 
-
-     自动关闭资源
+   - 自动关闭资源
 
      （如流、连接），避免
 
@@ -420,11 +406,7 @@ Java字节流体系是Java I/O库的核心组成部分，主要用于处理二�
 
   - **构造方法**：`FileInputStream(File file)` 或 `FileInputStream(String path)`。
 
-  - 
-
-    示例
-
-    ：
+  - 示例：
 
     ```
     try (InputStream is = new FileInputStream("data.bin")) {
@@ -458,11 +440,7 @@ Java字节流体系是Java I/O库的核心组成部分，主要用于处理二�
 
   - **功能**：读取基本数据类型（如`readInt()`, `readDouble()`）[3,6](@ref)。
 
-  - 
-
-    典型用法
-
-    ：
+  - 典型用法：
 
     ```
     try (DataInputStream dis = new DataInputStream(new FileInputStream("data.bin"))) {
@@ -529,9 +507,7 @@ graph TD
 
 #### **装饰器模式的应用**
 
-- 
-
-  核心思想
+- 核心思想
 
   ：通过嵌套流叠加功能，例如：
 
@@ -552,9 +528,7 @@ graph TD
 
 1. **资源管理**
 
-   - 
-
-     必须关闭流
+   - 必须关闭流
 
      ：使用
 
@@ -564,9 +538,7 @@ graph TD
 
      （Java 7+）自动关闭，防止资源泄漏
 
-     2,4
-
-     ：
+     2,4：
 
      ```
      try (OutputStream os = new FileOutputStream("out.bin")) {
@@ -730,9 +702,7 @@ Java字符流体系是处理文本数据的核心机制，通过**字符编码�
 
 - **性能对比**：处理100MB文本文件时，缓冲流比基础字符流快50倍以上[4](@ref)。
 
-- 
-
-  最佳实践
+- 最佳实践
 
   ：始终用缓冲流包装基础流（如
 
@@ -821,11 +791,7 @@ Unicode本身定义字符与码位的映射关系，实际存储需通过**转�
 
 - **起源**：1990年由Unicode联盟（非营利组织，成员包括微软、苹果等）发起，旨在取代区域性编码（如ISO 8859-1）[4](@ref)。
 
-- 
-
-  里程碑版本
-
-  ：
+- 里程碑版本：
 
   - 1994年：Unicode 1.0发布，覆盖7,000字符[1](@ref)。
   - 2005年：4.1.0版本支持藏文、缅甸文等[1](@ref)。
@@ -839,9 +805,7 @@ Unicode本身定义字符与码位的映射关系，实际存储需通过**转�
 
    - **操作系统**：Windows/macOS/Linux内核均采用UTF-16或UTF-8，实现全球语言无缝显示[8](@ref)。
 
-   - 
-
-     编程语言
+   - 编程语言
 
      ：Python 3默认使用Unicode字符串（
 
@@ -873,9 +837,7 @@ Unicode本身定义字符与码位的映射关系，实际存储需通过**转�
 
    - **原因**：编码不一致（如文件用GBK保存但用UTF-8读取）[6](@ref)。
 
-   - 
-
-     解决
+   - 解决
 
      ：统一使用UTF-8，并在读写时显式声明编码：
 
@@ -944,11 +906,7 @@ System.out.println("Default Charset: " + Charset.defaultCharset().name()); // �
 
 - **文件读写**：使用`FileReader`/`FileWriter`会采用JVM默认编码（如GBK），若文件实际为UTF-8则乱码[6,7](@ref)。
 
-- 
-
-  字节与字符串转换
-
-  ：
+- 字节与字符串转换：
 
   ```
   byte[] bytes = str.getBytes(); // 使用JVM默认编码，非UTF-16！
@@ -987,11 +945,7 @@ String text = new String(utf8Bytes, StandardCharsets.UTF_8);
 
 - **I/O层面**：JVM默认编码**由操作系统决定**（通常为UTF-8），但**必须显式指定**以避免乱码。
 
-- 
-
-  关键原则
-
-  ：
+- 关键原则：
 
   > 📢 永远不要信任默认编码！在`InputStreamReader`、`getBytes()`、`new String()`等操作中强制声明字符集（如`StandardCharsets.UTF_8`）[7,8,10](@ref)。
 
@@ -1007,11 +961,7 @@ Java NIO（New I/O 或 Non-blocking I/O）是 Java 1.4 引入的高性能 I/O �
 
 - **双向通信**：支持读写双向操作（传统 I/O 的流是单向的）[1,3](@ref)。
 
-- 
-
-  类型
-
-  ：
+- 类型：
 
   - `FileChannel`：文件读写（支持内存映射）
   - `SocketChannel`/`ServerSocketChannel`：TCP 网络通信
@@ -1021,19 +971,11 @@ Java NIO（New I/O 或 Non-blocking I/O）是 Java 1.4 引入的高性能 I/O �
 
 - **数据中转站**：所有数据通过 Buffer 与 Channel 交互，本质是内存块（底层为数组）[2,5](@ref)。
 
-- 
-
-  核心属性
-
-  ：
+- 核心属性：
 
   - `capacity`（容量）、`position`（当前位置）、`limit`（读写边界）
 
-- 
-
-  操作流程
-
-  ：
+- 操作流程：
 
   ```
   ByteBuffer buffer = ByteBuffer.allocate(1024); // 分配缓冲区
@@ -1049,11 +991,7 @@ Java NIO（New I/O 或 Non-blocking I/O）是 Java 1.4 引入的高性能 I/O �
 
 - **多路复用核心**：单线程监听多个 Channel 的 I/O 事件（如连接、读、写），避免线程阻塞[2,3](@ref)。
 
-- 
-
-  事件类型
-
-  ：
+- 事件类型：
 
   | 事件                     | 说明             |
   | ------------------------ | ---------------- |
@@ -1072,9 +1010,7 @@ Java NIO（New I/O 或 Non-blocking I/O）是 Java 1.4 引入的高性能 I/O �
 
 #### **多路复用机制**
 
-- 
-
-  Selector 轮询
+- Selector 轮询
 
   ：通过
 
@@ -1084,9 +1020,7 @@ Java NIO（New I/O 或 Non-blocking I/O）是 Java 1.4 引入的高性能 I/O �
 
 阻塞直到至少一个 Channel 就绪，再处理事件
 
-  2,6
-
-  ：
+  2,6：
 
   ```
   Selector selector = Selector.open();
@@ -1115,9 +1049,7 @@ Java NIO（New I/O 或 Non-blocking I/O）是 Java 1.4 引入的高性能 I/O �
 
   （内存映射文件）**：将文件映射到内存，直接操作内存避免用户态-内核态拷贝
 
-  3
-
-  ：
+  3：
 
   ```
   FileChannel channel = FileChannel.open(Paths.get("data.txt"));
@@ -1133,9 +1065,7 @@ Java NIO（New I/O 或 Non-blocking I/O）是 Java 1.4 引入的高性能 I/O �
 
   **：文件直传网络（如大文件下载）
 
-  3
-
-  ：
+  3：
 
   ```
   FileChannel srcChannel = new FileInputStream("data.log").getChannel();
@@ -1272,25 +1202,19 @@ public class SelectorCheck {
 
 1. 
 
-   事件注册
-
-   ：
+   事件注册：
 
    - 通过 `epoll_ctl` 一次性注册 FD，避免每次调用重复拷贝（`select`/`poll` 需每次传递全量 FD）[4,5](@ref)。
 
 2. 
 
-   就绪列表
-
-   ：
+   就绪列表：
 
    - 内核维护**就绪 FD 链表**，`epoll_wait` 直接返回活跃事件，无需遍历全部 FD[4](@ref)。
 
 3. 
 
-   触发模式
-
-   ：
+   触发模式：
 
    - **水平触发（LT）**：默认模式，事件未处理会重复通知（兼容 Java NIO 默认行为）[5](@ref)。
    - **边缘触发（ET）**：状态变化时仅通知一次，需非阻塞 IO 一次读完数据（Netty 优化使用）[5](@ref)。
@@ -1312,9 +1236,7 @@ public class SelectorCheck {
 
 1. 
 
-   显式指定非阻塞模式
-
-   ：
+   显式指定非阻塞模式：
 
    ```
    channel.configureBlocking(false); // 必须设置，否则注册失败[7](@ref)
@@ -1322,9 +1244,7 @@ public class SelectorCheck {
 
 2. 
 
-   合理处理就绪事件
-
-   ：
+   合理处理就绪事件：
 
    - 在 `isReadable()` 事件中循环读取数据，避免 ET 模式数据丢失[5](@ref)。
 
@@ -1347,9 +1267,7 @@ public class SelectorCheck {
 
 3. 
 
-   监控 FD 泄漏
-
-   ：
+   监控 FD 泄漏：
 
    - Linux 命令 `lsof -p <pid> | wc -l` 检查进程 FD 数量[5](@ref)。
 
@@ -1376,9 +1294,7 @@ kqueue 是 BSD 系统（如 FreeBSD、macOS）中高效的事件驱动 I/O 多�
 
 - **无轮询机制**：与传统 `select`/`poll` 的全量扫描不同，kqueue 采用事件回调机制，仅当注册的事件（如套接字可读、文件修改）发生时，内核主动通知应用，避免 CPU 空转[1,3](@ref)。
 
-- 
-
-  内核事件队列
+- 内核事件队列
 
   ：内核维护一个 
 

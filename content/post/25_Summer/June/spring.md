@@ -29,11 +29,7 @@ Spring框架是Java企业级应用开发的核心基础设施，其设计哲学�
 
 - **IoC容器**：由`BeanFactory`和`ApplicationContext`实现，负责Bean的实例化、配置及依赖注入。对象不再主动创建依赖，而是通过容器被动注入[1,4](@ref)。
 
-- 
-
-  依赖注入方式
-
-  ：
+- 依赖注入方式：
 
   - **Setter注入**：通过JavaBean属性赋值。
   - **构造器注入**：强制依赖初始化，避免空指针[5](@ref)。
@@ -55,20 +51,12 @@ Spring框架是Java企业级应用开发的核心基础设施，其设计哲学�
 
 - **核心目的**：解耦横切逻辑（如事务、日志）与业务代码，提升模块化[4,5](@ref)。
 
-- 
-
-  实现机制
-
-  ：
+- 实现机制：
 
   - **动态代理**：对实现接口的类使用JDK代理，否则用CGLIB字节码增强[5](@ref)。
   - **切面定义**：通过`@Aspect`注解声明切点（Pointcut）和通知（Advice）[5](@ref)。
 
-- 
-
-  典型场景
-
-  ：
+- 典型场景：
 
   - 声明式事务管理（`@Transactional`）。
   - 安全权限校验、性能监控[4](@ref)。
@@ -115,11 +103,7 @@ Spring框架是Java企业级应用开发的核心基础设施，其设计哲学�
 
 - **测试框架**：提供`Spring TestContext`模块，支持JUnit/TestNG集成测试，可模拟容器环境[1,4](@ref)。
 
-- 
-
-  微服务生态
-
-  ：
+- 微服务生态：
 
   - **Spring Boot**：自动化配置、内嵌服务器，快速启动应用[6](@ref)。
   - **Spring Cloud**：服务发现（Eureka）、配置中心（Config）等微服务组件[6](@ref)。
@@ -869,9 +853,7 @@ public void saveOrAuditMethods() {}
 
 2. **@Bean 的核心场景**
 
-   - 
-
-     集成第三方库
+   - 集成第三方库
 
      ：将外部类（如数据库驱动、工具类）注册为 Bean。
 
@@ -1101,9 +1083,7 @@ public class ConfigB {
 
 - **@Autowired** 支持更灵活的注入位置：
 
-  - 
-
-    构造器注入
+  - 构造器注入
 
     （推荐用于强制依赖）：
 
@@ -1119,9 +1099,7 @@ public class ConfigB {
     }
     ```
 
-  - 
-
-    Setter 方法注入
+  - Setter 方法注入
 
     （可选依赖）：
 
@@ -1214,11 +1192,7 @@ public class ConfigB {
 
    - **问题**：`@Autowired`无法直接注入静态字段（注入值为`null`）[2](@ref)。
 
-   - 
-
-     解决方案
-
-     ：
+   - 解决方案：
 
      ```
      @Component
@@ -1234,9 +1208,7 @@ public class ConfigB {
 
 2. **构造器注入的简化**
 
-   - 
-
-     Lombok应用
+   - Lombok应用
 
      ：自动生成含
 
@@ -1246,9 +1218,7 @@ public class ConfigB {
 
      的构造器
 
-     1,4
-
-     ：
+     1,4：
 
      ```
      @Service
@@ -1289,25 +1259,13 @@ Spring Bean的生命周期是Spring框架的核心机制之一，涵盖Bean从�
 
 #### **属性赋值（Population）**
 
-- 
-
-  依赖注入
-
-  ：
+- 依赖注入：
 
   - 通过 `@Autowired`、`@Value` 或XML配置注入属性和依赖对象[4,6](@ref)。
 
-  - 
+  - 循环依赖解决：
 
-    循环依赖解决
-
-    ：
-
-    - 
-
-      三级缓存机制
-
-      ：
+    - 三级缓存机制：
 
       - `singletonFactories`（三级）：存储未初始化的Bean工厂。
       - `earlySingletonObjects`（二级）：存储提前暴露的Bean引用。
@@ -1321,9 +1279,7 @@ Spring Bean的生命周期是Spring框架的核心机制之一，涵盖Bean从�
 
 1. 
 
-   Aware接口回调
-
-   ：
+   Aware接口回调：
 
    - `BeanNameAware`：注入Bean的ID。
    - `BeanFactoryAware`：注入BeanFactory容器。
@@ -1331,9 +1287,7 @@ Spring Bean的生命周期是Spring框架的核心机制之一，涵盖Bean从�
 
 2. 
 
-   BeanPostProcessor前置处理
-
-   ：
+   BeanPostProcessor前置处理：
 
    - `postProcessBeforeInitialization()`：在初始化前修改Bean（如属性增强）[1,7](@ref)。
 
@@ -1349,9 +1303,7 @@ Spring Bean的生命周期是Spring框架的核心机制之一，涵盖Bean从�
 
 4. 
 
-   BeanPostProcessor后置处理
-
-   ：
+   BeanPostProcessor后置处理：
 
    - `postProcessAfterInitialization()`：生成代理对象（如AOP动态代理）[1,4,7](@ref)。
 
@@ -1393,11 +1345,7 @@ Spring Bean的生命周期是Spring框架的核心机制之一，涵盖Bean从�
 
 - **场景**：Bean A 依赖 Bean B，同时 Bean B 依赖 Bean A。
 
-- 
-
-  解决方案
-
-  ：
+- 解决方案：
 
   1. **构造器注入**：Spring无法解决，需避免使用。
   2. **Setter/字段注入**：通过三级缓存逐步暴露半成品Bean[3,5](@ref)。
@@ -1429,25 +1377,19 @@ graph TD
 
 1. 
 
-   初始化逻辑
-
-   ：
+   初始化逻辑：
 
    - 轻量级操作（如缓存加载）用 `@PostConstruct`，资源密集型操作（如连接池）用异步线程[9](@ref)。
 
 2. 
 
-   销毁逻辑
-
-   ：
+   销毁逻辑：
 
    - 数据库连接、线程池等资源释放写在 `@PreDestroy` 方法中[7,9](@ref)。
 
 3. 
 
-   避免陷阱
-
-   ：
+   避免陷阱：
 
    - 同类方法调用不触发AOP代理（需通过容器获取Bean）[4,5](@ref)。
 
@@ -1467,11 +1409,7 @@ graph TD
 
    - **本质**：依赖赋值是实例化的一部分，对象在构造完成后**已包含所有必需的依赖**，无需后续额外步骤[2,4,7](@ref)。
 
-   - 
-
-     示例代码
-
-     ：
+   - 示例代码：
 
      ```
      public class UserService {
@@ -1502,11 +1440,7 @@ graph TD
     D --> E[初始化回调]
 ```
 
-- 
-
-  关键点
-
-  ：
+- 关键点：
 
   - **阶段 1**：实例化 + 构造器注入（**同步完成**）[2,6](@ref)。
   - **阶段 2**：实例化后，进行设值注入或属性注入（通过反射调用 setter 或直接赋值字段）[4,6](@ref)。
@@ -1538,11 +1472,7 @@ graph TD
 - **设计原理**：
   构造器注入是**对象创建的必要条件**。Spring 必须在调用构造方法时提供所有参数，否则无法实例化对象。这与设值注入（对象可先存在后修改）有本质区别[4,7](@ref)。
 
-- 
-
-  优势体现
-
-  ：
+- 优势体现：
 
   - **强不变性**：依赖可通过 `final` 修饰，确保对象不可变。
   - **避免空指针**：杜绝依赖未初始化就被使用的风险[7](@ref)。
@@ -1567,11 +1497,7 @@ graph TD
 
 - **设值注入/属性注入**：依赖赋值在**实例化之后、初始化之前**完成。
 
-- 
-
-  最佳实践
-
-  ：
+- 最佳实践：
 
   - 关键依赖 → 用构造器注入（保证不可变性、避免空指针）[7](@ref)。
   - 可选依赖 → 用设值注入（灵活配置）[4](@ref)。
@@ -1741,11 +1667,7 @@ Spring Boot 的自动配置（Auto-Configuration）是其核心特性之一，�
 
 #### **`@SpringBootApplication` 注解** [1,3,4](@ref)
 
-- 
-
-  组成
-
-  ：
+- 组成：
 
   - `@SpringBootConfiguration`：标记当前类为配置类（等价于 `@Configuration`）。
   - `@ComponentScan`：扫描当前包及子包下的组件（如 `@Service`、`@Controller`）。
@@ -1756,11 +1678,7 @@ Spring Boot 的自动配置（Auto-Configuration）是其核心特性之一，�
 - **`@Import(AutoConfigurationImportSelector.class)`**：
   通过 `AutoConfigurationImportSelector` 加载所有候选配置类。
 
-- 
-
-  加载流程
-
-  ：
+- 加载流程：
 
   1. 扫描所有 `META-INF/spring.factories` 文件，读取 `org.springframework.boot.autoconfigure.EnableAutoConfiguration` 键下的配置类全限定名。
   2. 过滤排除项（如通过 `exclude` 属性或配置文件指定）。
@@ -1779,11 +1697,7 @@ Spring Boot 的自动配置（Auto-Configuration）是其核心特性之一，�
 
 #### **自动配置类与 Starter 机制** [2,4,5](@ref)
 
-- 
-
-  自动配置类
-
-  ：
+- 自动配置类：
 
   以
 
@@ -1806,11 +1720,7 @@ Spring Boot 的自动配置（Auto-Configuration）是其核心特性之一，�
   }
   ```
 
-- 
-
-  Starter 的作用
-
-  ：
+- Starter 的作用：
 
   每个 Starter（如
 
@@ -2037,11 +1947,7 @@ public @interface ConditionalOnProdEnv {}
 
    - **场景**：多个条件注解存在依赖关系（如B依赖A，但A的条件后执行）。
 
-   - 
-
-     解决
-
-     ：
+   - 解决：
 
      - 使用`@AutoConfigureOrder`控制配置类顺序。
      - 将依赖条件合并到同一配置类中[2](@ref)。
@@ -2101,11 +2007,7 @@ Spring Boot中的`@ConfigurationProperties`和`@EnableConfigurationProperties`�
 | `@ConfigurationProperties`       | 将配置文件（如`application.yml`）中的属性**按前缀绑定到Java类的字段**上 | 需配合注册机制生效             |
 | `@EnableConfigurationProperties` | **启用配置绑定功能**，将`@ConfigurationProperties`类注册为Spring Bean | 依赖`@ConfigurationProperties` |
 
-- 
-
-  协同流程
-
-  ：
+- 协同流程：
 
   1. `@ConfigurationProperties`定义绑定规则（前缀、字段映射）。
   2. `@EnableConfigurationProperties`激活绑定逻辑并注册Bean到容器[1,6](@ref)。
@@ -2248,20 +2150,12 @@ public class DataSourceConfig {
 
 #### **配置未生效**
 
-- 
-
-  原因
-
-  ：
+- 原因：
 
   - 缺少`@EnableConfigurationProperties`或配置类未注册。
   - 属性前缀拼写错误或字段名不匹配。
 
-- 
-
-  解决
-
-  ：
+- 解决：
 
   - 检查是否启用配置绑定。
   - 使用`--debug`启动参数查看自动配置报告[6](@ref)。
@@ -2325,18 +2219,14 @@ public class DataSourceConfig {
 
 ### ⚙️ **传统 Spring 项目中必须显式启用事务**
 
-- 
-
-  需要手动启用
+- 需要手动启用
 
 在非 Spring Boot 的 Spring 项目中（如 XML 配置的旧项目），必须通过以下方式之一启用事务管理：
 
   - **注解驱动**：在配置类添加 `@EnableTransactionManagement`[4,5](@ref)。
   - **XML 配置**：使用 `<tx:annotation-driven />` 标签[8](@ref)。
 
-- 
-
-  作用原理
+- 作用原理
 
 ```
   @EnableTransactionManagement
@@ -2405,11 +2295,7 @@ public class DataSourceConfig {
 
    - 当 Spring 容器检测到 `@Transactional` 注解时，会为目标 Bean（如 Service 类）创建**代理对象**。
 
-   - 
-
-     代理类型
-
-     ：
+   - 代理类型：
 
      - 若目标类实现了接口 → 使用 **JDK 动态代理**（基于接口）。
      - 若目标类无接口 → 使用 **CGLIB 字节码增强**（基于类）[3,7](@ref)。
@@ -2434,11 +2320,7 @@ public class DataSourceConfig {
        G -- 否 --> I[提交事务]
      ```
 
-   - 
-
-     关键步骤
-
-     ：
+   - 关键步骤：
 
      - **开启事务**：通过 `PlatformTransactionManager` 获取数据库连接，关闭自动提交（`autoCommit=false`）。
      - **绑定资源**：将连接绑定到当前线程的 `ThreadLocal`（通过 `TransactionSynchronizationManager`）[7,8](@ref)。
@@ -2450,11 +2332,7 @@ public class DataSourceConfig {
 
 - **作用**：抽象事务操作（开启、提交、回滚），适配不同持久化框架（JDBC、JPA 等）。
 
-- 
-
-  常见实现
-
-  ：
+- 常见实现：
 
   - `DataSourceTransactionManager`：用于 JDBC 或 MyBatis。
   - `JpaTransactionManager`：用于 JPA/Hibernate。
@@ -2487,11 +2365,7 @@ public class DataSourceConfig {
 
    - **原因**：类内方法 `A` 调用 `B`（`@Transactional`）时，`B` 通过 `this` 调用（非代理对象），绕过事务拦截器[4,6](@ref)。
 
-   - 
-
-     解决
-
-     ：
+   - 解决：
 
      - 通过依赖注入自身代理：`self.methodB()`（需开启 `exposeProxy=true`）[6](@ref)。
      - 使用 `AopContext.currentProxy()` 获取代理对象[6](@ref)。
@@ -2504,11 +2378,7 @@ public class DataSourceConfig {
 
    - **原因**：默认仅对 `RuntimeException` 回滚。若捕获异常未抛出或抛出检查异常（如 `IOException`），事务不回滚[2,5](@ref)。
 
-   - 
-
-     解决
-
-     ：
+   - 解决：
 
      ```
      @Transactional(rollbackFor = Exception.class) // 指定所有异常回滚
@@ -2534,18 +2404,14 @@ public class DataSourceConfig {
 
 2. 
 
-   关键设计思想
-
-   ：
+   关键设计思想：
 
    - **关注点分离**：业务逻辑与事务管理解耦（AOP 实现）。
    - **资源绑定**：通过 `ThreadLocal` 确保同一线程内事务资源一致[7,8](@ref)。
 
 3. 
 
-   性能优化
-
-   ：
+   性能优化：
 
    - 避免在事务中执行远程调用或复杂计算（长事务阻塞连接）。
    - 只读事务（`readOnly=true`）可启用数据库优化策略[5,7](@ref)。
@@ -2639,9 +2505,7 @@ public class DataSourceConfig {
 
 #### **无注解时的事务行为**
 
-- 
-
-  默认加入外层事务
+- 默认加入外层事务
 
 若被调方法无
 
@@ -2660,9 +2524,7 @@ public class DataSourceConfig {
   - 若外层方法有事务，则**加入该事务**（共用同一事务上下文）。
   - 若外层无事务，则**以非事务方式执行**（无事务保护）。
 
-- 
-
-  风险
+- 风险
 
 - 若被调方法需独立事务（如记录日志，不受主业务回滚影响），则无法实现。
   - 若被调方法抛异常且未被捕获，会导致整个外层事务回滚[3,5,8](@ref)。
@@ -2733,20 +2595,14 @@ public class LogService {
 
 - **问题**：同类中方法A（无事务）调用方法B（有`@Transactional`），B的事务失效[1,2](@ref)。
 
-- 
-
-  解决
-
-  ：
+- 解决：
 
   - 将方法B抽取到另一个Bean中。
   - 使用AOP代理：`((MyService) AopContext.currentProxy()).methodB()`（需开启`exposeProxy=true`）[2](@ref)。
 
 #### **异常处理规范**
 
-- 
-
-  回滚规则
+- 回滚规则
 
   ：默认仅回滚
 
@@ -2772,9 +2628,7 @@ public class LogService {
   @Transactional(rollbackFor = Exception.class)
   ```
 
-- 
-
-  避免吞异常
+- 避免吞异常
 
   ：捕获异常后需重新抛出或标记回滚：
 
@@ -2968,9 +2822,7 @@ Spring Data JPA 的默认实现类 `SimpleJpaRepository` 已通过 `@Transaction
 
 #### **(1) 在 Repository 接口中声明自定义方法**
 
-- 
-
-  需手动添加 `@Transactional`**：
+- 需手动添加 `@Transactional`**：
   若在自定义的 Repository 接口中新增方法（如 `findByCustomCondition`），​**默认不继承事务
 
   ，必须显式标注
@@ -2995,11 +2847,7 @@ Spring Data JPA 的默认实现类 `SimpleJpaRepository` 已通过 `@Transaction
 
 #### **(2) 自定义 Repository 实现类**
 
-- 
-
-  需手动添加事务
-
-  ：
+- 需手动添加事务：
 
   若通过
 
@@ -3044,9 +2892,7 @@ Spring Data JPA 的默认实现类 `SimpleJpaRepository` 已通过 `@Transaction
 
 #### **(3) 使用 `@Modifying` 的更新/删除操作**
 
-- 
-
-  强制要求 `@Transactional`**：
+- 强制要求 `@Transactional`**：
   自定义的 JPQL/SQL 更新或删除操作（通过 `@Query` + `@Modifying`），​**必须显式添加 `@Transactional`
 
   ，否则会因默认的只读事务配置而失败
@@ -3082,9 +2928,7 @@ Spring Data JPA 的默认实现类 `SimpleJpaRepository` 已通过 `@Transaction
 
 1. 
 
-   区分读写操作
-
-   ：
+   区分读写操作：
 
    - 只读查询：显式标注 `@Transactional(readOnly = true)` 以优化性能[6](@ref)。
    - 写操作：使用 `@Transactional`（默认传播行为 `REQUIRED`）。
@@ -3141,9 +2985,7 @@ Spring Data JPA 的默认实现类 `SimpleJpaRepository` 已通过 `@Transaction
 
 ### 🛠️ **ORM 框架的协同优化**
 
-- 
-
-  Hibernate/JPA 性能提升
+- Hibernate/JPA 性能提升
 
 在 Spring + Hibernate 组合中，只读事务会触发以下优化：
 
@@ -3162,9 +3004,7 @@ Spring Data JPA 的默认实现类 `SimpleJpaRepository` 已通过 `@Transaction
 
 ### 🌐 **分布式架构适配**
 
-- 
-
-  读写分离路由
+- 读写分离路由
 
 在主从数据库架构中，只读事务会被自动路由到只读副本（从库），分担主库压力，提升系统整体并发能力
 
@@ -3172,9 +3012,7 @@ Spring Data JPA 的默认实现类 `SimpleJpaRepository` 已通过 `@Transaction
 
   。
 
-  示例
-
-  ：
+  示例：
 
   ```
   @Transactional(readOnly = true)
@@ -3275,22 +3113,14 @@ public class UserService {
 
 #### **缓存后端配置**
 
-- 
-
-  本地缓存（Caffeine）
-
-  ：
+- 本地缓存（Caffeine）：
 
   ```
   spring.cache.type=caffeine
   spring.cache.caffeine.spec=maximumSize=500,expireAfterWrite=10s
   ```
 
-- 
-
-  Redis 缓存
-
-  ：
+- Redis 缓存：
 
   ```
   spring.cache.type=redis
@@ -3543,9 +3373,7 @@ Spring Cache 通过**声明式注解**和**统一抽象层**，大幅简化缓�
 
 #### **按缓存分区设置不同 TTL**
 
-- 
-
-  Redis 示例
+- Redis 示例
 
   ：通过
 
@@ -3555,9 +3383,7 @@ Spring Cache 通过**声明式注解**和**统一抽象层**，大幅简化缓�
 
 为不同分区指定过期时间
 
-  3,4
-
-  ：
+  3,4：
 
   ```
   @Bean
@@ -3574,15 +3400,11 @@ Spring Cache 通过**声明式注解**和**统一抽象层**，大幅简化缓�
 
 #### **扩展注解支持按方法级设置 TTL**
 
-- 
-
-  自定义注解
+- 自定义注解
 
   ：通过 AOP 解析注解中的过期参数
 
-  3,4
-
-  ：
+  3,4：
 
   ```
   @Cacheable(value = "users#300")  // 300 秒过期
@@ -3654,11 +3476,7 @@ Spring Cache 通过**声明式注解**和**统一抽象层**，大幅简化缓�
 
 - **默认行为**：Spring Cache **不强制设置过期时间**，需依赖底层缓存实现（Redis/Caffeine/Ehcache）的显式配置。
 
-- 
-
-  最佳实践
-
-  ：
+- 最佳实践：
 
   - ✅ **全局 TTL**：通过配置文件统一管理（如 `spring.cache.redis.time-to-live`）。
   - ✅ **分区级 TTL**：使用 `RedisCacheManager` 为不同业务场景定制过期策略。
@@ -3784,11 +3602,7 @@ Spring Cache 通过**声明式注解**和**统一抽象层**，大幅简化缓�
 
    - **开发环境**：使用全局配置允许本地源（如 `http://localhost:3000`）[7](@ref)。
 
-   - 
-
-     生产环境
-
-     ：
+   - 生产环境：
 
      - 通过 Nginx 设置 CORS 头部，减少业务代码侵入[7,8](@ref)。
      - 敏感接口（如支付）严格限定源和方法。
@@ -4065,9 +3879,7 @@ fetch(url, { credentials: 'include' });
 
    - **原因**：服务端未返回 `Access-Control-Allow-Credentials: true` 或 `Access-Control-Allow-Origin` 包含通配符 `*`[2,4](@ref)。
 
-   - 
-
-     解决
+   - 解决
 
      ：检查响应头是否同时满足：
 
@@ -4093,11 +3905,7 @@ fetch(url, { credentials: 'include' });
 
 - **作用**：控制跨域请求是否可携带用户凭证（Cookie 等）。
 
-- 
-
-  必要条件
-
-  ：
+- 必要条件：
 
   - 服务端：`Access-Control-Allow-Credentials: true` + 明确域名（非 `*`）[1,3](@ref)。
   - 客户端：启用 `withCredentials` 或 `credentials: 'include'`[8,9](@ref)。
@@ -4234,9 +4042,7 @@ WebFlux是Spring Framework 5引入的**响应式Web框架**，旨在处理高并
 
 ### 🔧 **HTTP协议的直接支持**
 
-- 
-
-  HTTP请求处理
+- HTTP请求处理
 
   ：WebFlux提供完整的HTTP服务器和客户端支持：
 
@@ -4269,9 +4075,7 @@ WebFlux对HTTP协议的增强体现在其异步机制：
 
 ### 🛠️ **与传统HTTP处理的区别**
 
-- 对比Spring MVC
-
-  ：
+- 对比Spring MVC：
 
   - **阻塞 vs 非阻塞**：Spring MVC基于Servlet API（同步阻塞），而WebFlux使用非阻塞模型，更适合高并发HTTP场景[2,7](@ref)。
   - **编程模型**：WebFlux支持函数式路由，提供更灵活的HTTP端点定义方式[4,6](@ref)。

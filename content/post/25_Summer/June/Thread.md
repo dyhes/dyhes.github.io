@@ -267,11 +267,7 @@ Thread 类实现 `Runnable` 接口是 Java 多线程设计的核心思想之一�
 
 2. **支持两种任务定义方式**
 
-   - 
-
-     方式1（继承 Thread）
-
-     ：
+   - 方式1（继承 Thread）：
 
      ```
      class MyThread extends Thread {
@@ -280,11 +276,7 @@ Thread 类实现 `Runnable` 接口是 Java 多线程设计的核心思想之一�
      new MyThread().start();
      ```
 
-   - 
-
-     方式2（组合 Runnable）
-
-     ：
+   - 方式2（组合 Runnable）：
 
      ```
      class MyTask implements Runnable {
@@ -303,9 +295,7 @@ Thread 类实现 `Runnable` 接口是 Java 多线程设计的核心思想之一�
 
    - **资源共享**：同一个 `Runnable` 任务可被多个 `Thread` 实例执行（如线程池中的任务队列），避免重复创建任务对象[4,7](@ref)。
 
-   - 
-
-     线程池兼容
+   - 线程池兼容
 
      ：Java 并发框架（如
 
@@ -794,13 +784,9 @@ try {
 
 - **`yield()`**：主线程可主动让出CPU，但效果不保证，适用于优化资源分配，**非同步控制**。
 
-- 
-
-  ```
+- ```
   interrupt()
-  ```
-
-  ：
+  ```：
 
   - 中断自身：需显式检查状态或处理阻塞异常；
   - 中断子线程：需目标线程协作响应，否则无效。

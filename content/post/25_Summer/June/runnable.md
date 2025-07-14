@@ -843,9 +843,7 @@ if (!executorService.awaitTermination(60, TimeUnit.SECONDS)) {
 
    ```
    ThreadPoolExecutor
-   ```
-
-   ：
+   ```：
 
    ```
    new ThreadPoolExecutor(corePoolSize, maxPoolSize, keepAliveTime, unit, new ArrayBlockingQueue<>(capacity));
