@@ -7,41 +7,31 @@ categories:
 tags:
 - LeetCode-C
 ---
-
 ## 随机数
 
 以下是C++中随机数生成的系统介绍，涵盖传统方法、现代库、分布类型及实践建议：
 
-------
 
+------
 ### 🔧 **传统方法：`rand()`与`srand()`**
 
 - 基本原理
-
   ```
   rand()
   ```
-
    生成
-
   ```
   0
   ```
-
   到
-
   ```
   RAND_MAX
   ```
-
   （通常为32767）的伪随机整数。需配合 
-
   ```
   srand(seed) 
   ```
-
   设置种子，否则每次运行序列相同。
-
   ```
   #include <cstdlib>
   #include <ctime>
@@ -51,14 +41,12 @@ tags:
       float frac = rand() / static_cast<float>(RAND_MAX); // [0,1)浮点数[1](@ref)
   }
   ```
-
 - 局限性
-
   - 分布不均匀（模运算导致低位重复）[7](@ref)
   - 随机性质量低，周期短，不适合加密或高精度模拟[6,8](@ref)。
 
-------
 
+------
 ### ⚙️ **现代C++11随机数库（`<random>`）**
 
 #### **核心组件**
@@ -70,7 +58,6 @@ tags:
 | **随机数分布器** | `uniform_int_distribution`    | 均匀整数分布                                       |
 |                  | `normal_distribution`         | 正态分布                                           |
 | **种子源**       | `std::random_device`          | 基于硬件的真随机数（可能回退为伪随机）[3,9](@ref)  |
-
 #### **代码示例**
 
 ```
@@ -87,8 +74,8 @@ int main() {
 }
 ```
 
-------
 
+------
 ### 📊 **常用随机数分布类型**
 
 | **分布类型**         | **类名**                         | **应用场景**                       | **示例代码**                                  |
@@ -98,8 +85,8 @@ int main() {
 | **正态分布**         | `std::normal_distribution`       | 统计学、自然现象模拟（身高、误差） | `norm(gen)` 生成高斯分布随机数[2,8](@ref)     |
 | **伯努利分布**       | `std::bernoulli_distribution`    | 二值事件（如抛硬币）               | `dis(gen)` 返回true的概率为0.6[3](@ref)       |
 
-------
 
+------
 ### ⚠️ **关键实践建议**
 
 1. **种子管理**
@@ -112,8 +99,8 @@ int main() {
    - 传统 `rand() % N` 在 `N` 非 `RAND_MAX+1` 因子时分布不均[7](@ref)。
    - 浮点数范围错误：`rand() / RAND_MAX` 结果为整数除法，需显式转浮点[1](@ref)。
 
-------
 
+------
 ### 🎯 **应用场景**
 
 - **游戏开发**：敌人行为、道具掉落（均匀分布）[8](@ref)
@@ -121,61 +108,51 @@ int main() {
 - **密码学**：密钥生成（需结合 `std::random_device`）[8](@ref)
 - **数据增强**：机器学习数据集扩充（随机扰动）[8](@ref)
 
-------
 
+------
 ### 💎 总结
 
 - **基础需求**：用 `rand()` + `srand(time(nullptr))` 快速实现。
 - **高质量需求**：必选 `<random>` 库，组合引擎（如 `mt19937`）与分布器（如 `uniform_int_distribution`）。
 - **特殊分布**：直接使用正态、伯努利等高级分布器简化代码[3,8](@ref)。
-
 > 完整代码示例及进阶技巧可参考：[C++随机数生成技术详解](https://wenku.csdn.net/doc/5s8qjpqw6r)[6](@ref)；[现代C++随机数应用](https://wenku.csdn.net/doc/32k7baj6ob)[8](@ref)。
-
 ## 万能头
 
 在C++中，**万能头文件**特指 `<bits/stdc++.h>`，它是一个非标准但广泛用于竞赛编程的头文件，通过预处理器一次性包含几乎所有C++标准库头文件。以下是其核心要点：
 
-------
 
+------
 ### 🔍 **万能头文件是什么？**
 
 - **定义**：`<bits/stdc++.h>` 是GCC编译器特有的头文件，内部聚合了C++标准库的绝大多数头文件（如`<iostream>`、`<vector>`、`<algorithm>`等）[1,4](@ref)。
 - **目的**：简化代码编写，避免手动包含多个头文件，尤其适用于算法竞赛和快速原型开发[1,2](@ref)。
 
-------
 
+------
 ### ⚖️ **优缺点分析**
 
 #### ✅ **优点**
 
 1. 高效便捷
-
    - 一行代码替代数十行头文件包含，提升编码效率[2,8](@ref)。
    - 竞赛中避免因漏写头文件导致编译失败[1,10](@ref)。
-   
 2. **覆盖全面**
    支持STL容器、字符串处理、数学计算、输入输出等常用功能，涵盖C++11/14/17特性[4,7](@ref)。
-
 #### ❌ **缺点**
 
 1. 编译性能下降
-
    - 包含大量未使用的头文件，显著增加编译时间（大型项目编译时间可能增长300%+）[1](@ref)。
    - 示例：1万行代码的编译时间从8.5秒增至21.4秒[1](@ref)。
-   
 2. 可移植性差
-
    - 仅支持GCC和Clang（需GNU C++库），**MSVC等编译器不支持**[1,4](@ref)。
    - 跨平台项目可能因头文件缺失编译失败。
-   
 3. **命名污染**
    与`using namespace std;`结合易引发命名冲突（如自定义类`list`与`std::list`混淆）[1,8](@ref)。
-
 4. **学习障碍**
    初学者过度依赖会忽略各头文件的具体作用，影响对C++标准库的理解[2,8](@ref)。
 
-------
 
+------
 ### 🌐 **编译器支持情况**
 
 | 编译器 | 支持情况      | 版本要求 |
@@ -183,11 +160,10 @@ int main() {
 | GCC    | ✅ 完全支持    | 4.8+     |
 | Clang  | ⚠️ 需GNU C++库 | 3.4+     |
 | MSVC   | ❌ 不支持      | -        |
-
 [1,4](@ref)
 
-------
 
+------
 ### 🛠️ **适用场景 vs 规避场景**
 
 | **场景类型**      | **建议** | **示例**                          |
@@ -197,40 +173,32 @@ int main() {
 | 大型工程项目      | ❌ 避免   | Chromium、LLVM等生产代码[1](@ref) |
 | 跨平台开发        | ❌ 避免   | Windows/Linux混合编译             |
 | 严格编译时效要求  | ❌ 避免   | CI/CD流水线                       |
-
 [1,8](@ref)
 
-------
 
+------
 ### 🔧 **替代方案**
 
 1. **手动包含常用头文件**
    精选高频头文件组合，如：
-
    ```
    #include <iostream>
    #include <vector>
    #include <algorithm>
    #include <string>
    ```
-
    [1,9](@ref)
-
 2. **自定义聚合头文件**
    创建`my_std.hpp`，按需包含项目所需头文件：
-
    ```
    #pragma once
    #include <vector>
    #include <map>
    #include <algorithm>
    ```
-
    [1,3](@ref)
-
 3. **条件编译兼容**
    跨平台时区分编译器：
-
    ```
    #if defined(__GNUC__) && !defined(__clang__)
        #include <bits/stdc++.h>
@@ -239,38 +207,33 @@ int main() {
        // 手动补充其他头文件
    #endif
    ```
-
    [1](@ref)
-
 4. **C++20模块（未来趋势）**
    使用标准库模块替代头文件：
-
    ```
    import std.core;  // 提案中，尚未完全实现
    ```
-
    [1](@ref)
 
-------
 
+------
 ### 💎 **实践建议**
 
 - **竞赛场景**：直接使用`#include <bits/stdc++.h> + using namespace std;`，专注解题效率[2,10](@ref)。
 - **学习阶段**：**手动包含头文件**，深入理解各库的归属（如`<vector>`定义容器、`<cmath>`提供数学函数）[8,9](@ref)。
 - **工程项目**：用**预编译头（PCH）** 技术优化编译速度，而非万能头[1](@ref)。
 
-------
 
+------
 ### 📌 总结
 
 `<bits/stdc++.h>`是C++竞赛编程的“利器”，但需警惕其编译开销和可移植性缺陷。**理解头文件的作用机制**比盲目依赖万能头更重要——正如Bjarne Stroustrup所言：“用抽象管理复杂性，而非消除对复杂性的认知。”[1](@ref) 合理选择工具，方能平衡效率与工程严谨性。
-
 ## 快排
 
 快速排序中的左右指针法和快慢指针法是两种不同的分区（Partition）策略，它们在实现逻辑、指针移动方式和适用场景上存在显著差异。以下从核心原理、实现步骤、效率和应用场景四个维度进行对比分析：
 
-------
 
+------
 ### 🔍 **核心原理与指针定义**
 
 - **左右指针法（对撞指针）**
@@ -286,8 +249,8 @@ int main() {
     - `fast`：遍历整个数组，发现小于基准值的元素时与`slow`交换并右移`slow`[9](@ref)。
   - **终止条件**：`fast`遍历完数组，最后将基准值与`slow`位置交换[9](@ref)。
 
-------
 
+------
 ### ⚙️ **分区过程与代码实现**
 
 #### **左右指针法步骤**
@@ -297,7 +260,6 @@ int main() {
 3. 交换`arr[left]`和`arr[right]`，重复直至`left >= right`。
 4. 交换基准值与`arr[right]`，完成分区[6,7](@ref)。
    ​**代码片段**​：
-
 ```
 while (left < right) {
     while (left < right && arr[right] >= key) right--;
@@ -306,11 +268,9 @@ while (left < right) {
 }
 swap(arr[begin], arr[right]);    // 基准值归位
 ```
-
 #### **快慢指针法步骤**
 
 1. 选择基准值（如`arr[0]`），`slow`指向起始位置。
-
 2. ```
    fast
    ```
@@ -337,6 +297,8 @@ for fast in range(begin+1, end+1):
 swap(arr[begin], arr[slow])  // 基准值归位
 ```
 
+
+
 ------
 
 ### ⏱️ **效率与稳定性对比**
@@ -347,6 +309,8 @@ swap(arr[begin], arr[slow])  // 基准值归位
 | **交换次数**   | 较多（需多次左右交换）[7](@ref)                  | 较少（仅与慢指针交换）[9](@ref) |
 | **稳定性**     | 不稳定（交换可能打乱相等元素顺序）[7](@ref)      | 不稳定（同左）[9](@ref)         |
 | **边界处理**   | 需注意指针移动顺序（如先右后左）[6](@ref)        | 逻辑简单，不易越界[9](@ref)     |
+
+
 
 ------
 
@@ -360,6 +324,8 @@ swap(arr[begin], arr[slow])  // 基准值归位
   - 数据量中等且需减少交换次数的场景[3,9](@ref)。
 
 > 💡 **实践建议**：若需避免最坏时间复杂度（如有序数组），**两者均需结合随机化基准值或三数取中法**[6,8](@ref)。
+
+
 
 ------
 
@@ -375,6 +341,8 @@ swap(arr[begin], arr[slow])  // 基准值归位
 ## 三路快排
 
 三路快速排序（3-Way QuickSort）是传统快速排序的优化版本，通过将数组划分为**小于基准值**、**等于基准值**和**大于基准值**三个区域，显著提升对**含大量重复元素数组**的排序效率。以下从核心原理、实现步骤、性能分析到应用场景进行全面解析：
+
+
 
 ------
 
@@ -392,6 +360,8 @@ swap(arr[begin], arr[slow])  // 基准值归位
 
 - **高效处理重复元素**：当重复元素占比高时，时间复杂度从传统快排的 **O(n²) 优化至 O(n)**[3,8](@ref)。
 - **减少递归深度**：等于区不参与递归，子问题规模更均衡[7,9](@ref)。
+
+
 
 ------
 
@@ -442,6 +412,8 @@ def three_way_quicksort(arr, low, high):
     three_way_quicksort(arr, gt+1, high) # 排序大于区
 ```
 
+
+
 ------
 
 ### ⏱️ **时间复杂度与空间复杂度**
@@ -455,6 +427,8 @@ def three_way_quicksort(arr, low, high):
 
 > 💡 **关键点**：通过**随机化基准值**或**三数取中法**（选左、中、右三元素的中位数）可避免最坏情况[6,8](@ref)。
 
+
+
 ------
 
 ### 🚀 **性能优化技巧**
@@ -465,6 +439,8 @@ def three_way_quicksort(arr, low, high):
    等于区元素已有序，跳过递归减少函数调用开销[7](@ref)。
 3. **随机化基准值**
    交换`arr[low]`与随机位置的元素，降低最坏情况概率[6,9](@ref)。
+
+
 
 ------
 
@@ -477,6 +453,8 @@ def three_way_quicksort(arr, low, high):
 | **适用场景**     | 重复元素较少                       | **大量重复元素**（如日志数据、用户行为数据）[3,9](@ref) |
 | **代码复杂度**   | 简单（双指针）                     | 略复杂（三指针+交换逻辑）[7](@ref)                      |
 
+
+
 ------
 
 ### 💻 **代码实现（C++示例）**
@@ -485,25 +463,20 @@ def three_way_quicksort(arr, low, high):
 #include <iostream>
 #include <vector>
 using namespace std;
-
 void swap(int& a, int& b) {
     int temp = a;
     a = b;
     b = temp;
 }
-
 void threeWayQuickSort(vector<int>& arr, int low, int high) {
     if (low >= high) return;
-    
     // 三数取中优化基准值选择
     int mid = low + (high - low) / 2;
     if (arr[mid] < arr[low]) swap(arr[low], arr[mid]);
     if (arr[high] < arr[low]) swap(arr[low], arr[high]);
     if (arr[mid] < arr[high]) swap(arr[mid], arr[high]);
-    
     int pivot = arr[low];
     int lt = low, gt = high, current = low + 1;
-    
     while (current <= gt) {
         if (arr[current] < pivot) {
             swap(arr[current], arr[lt]);
@@ -515,11 +488,12 @@ void threeWayQuickSort(vector<int>& arr, int low, int high) {
             current++;
         }
     }
-    
     threeWayQuickSort(arr, low, lt - 1);
     threeWayQuickSort(arr, gt + 1, high);
 }
 ```
+
+
 
 ------
 
@@ -528,6 +502,8 @@ void threeWayQuickSort(vector<int>& arr, int low, int high) {
 - **高重复数据集**：如用户行为日志、传感器数据、词频统计等[3,9](@ref)。
 - **稳定性要求低**：快排本身不稳定，但三路快排通过减少交换次数提升效率。
 - **大规模数据排序**：工业级排序库（如Java的`Arrays.sort()`）在检测到重复元素时自动切换三路快排[3](@ref)。
+
+
 
 ------
 
@@ -544,6 +520,8 @@ void threeWayQuickSort(vector<int>& arr, int low, int high) {
 
 单调栈（Monotonic Stack）是一种特殊的栈数据结构，其核心特性是栈内元素始终保持**单调递增或单调递减**的顺序。它通过动态维护元素的单调性，高效解决序列中“下一个更大/更小元素”、“区间最值”等经典问题，时间复杂度为均摊 O(n)。以下是其核心内容详解：
 
+
+
 ------
 
 ### ⚙️ 定义与基本特性
@@ -559,6 +537,8 @@ void threeWayQuickSort(vector<int>& arr, int low, int high) {
 
 - 普通栈仅支持后进先出（LIFO），无顺序约束。
 - 单调栈在入栈时需**弹出破坏单调性的元素**，确保栈内有序[1,7](@ref)。
+
+
 
 ------
 
@@ -585,6 +565,8 @@ for (int i = 0; i < nums.length; i++) {
 ```
 
 **时间复杂度分析**：每个元素最多入栈、出栈各一次，整体 O(n)[1,3,7](@ref)。
+
+
 
 ------
 
@@ -613,6 +595,8 @@ for (int i = 0; i < nums.length; i++) {
 - **问题**：对于每天温度，求需等待几天才有更高温度。
 - **解法**：单调递减栈，记录下标差（`i - 栈顶索引`）[4,6](@ref)。
 
+
+
 ------
 
 ### ⚠️ 实现模板与技巧
@@ -630,6 +614,8 @@ for (int i = 0; i < nums.length; i++) {
 - **忽略重复元素**：若值可重复，需在比较条件中处理等号（如 `>=` 或 `<=`）[4](@ref)。
 - **混淆值与索引**：比较时需用 `nums[stack.peek()]` 而非 `stack.peek()`[3,7](@ref)。
 
+
+
 ------
 
 ### 🚀 进阶应用与优化
@@ -642,6 +628,8 @@ for (int i = 0; i < nums.length; i++) {
    - 优化股票跨度问题：单调栈维护价格递减序列，快速定位前一个更高价日[1,5](@ref)。
 3. **循环数组处理**
    - 扩展数组为 `2n` 长度，用 `i % n` 模拟环形遍历[4,6](@ref)。
+
+
 
 ------
 
@@ -666,6 +654,8 @@ for (int i = 0; i < nums.length; i++) {
 
 单调队列（Monotonic Queue）是一种基于双端队列（Deque）实现的数据结构，其核心特性是**队列内元素始终保持单调递增或单调递减的顺序**。它通过动态维护数据的单调性，高效解决滑动窗口极值、动态规划优化等问题，将时间复杂度从暴力解的 O(n²) 降低至 **O(n)**。以下是其核心内容详解：
 
+
+
 ------
 
 ### ⚙️ 定义与核心特性
@@ -676,6 +666,8 @@ for (int i = 0; i < nums.length; i++) {
 2. 与普通队列的区别：
    - 普通队列仅支持 FIFO（先进先出），无顺序约束。
    - 单调队列在入队时需**动态剔除破坏单调性的元素**，并支持双端操作（队头出队、队尾入队）[3,8](@ref)。
+
+
 
 ------
 
@@ -705,6 +697,8 @@ for (int i = 0; i < nums.length; i++) {
 | 插入 `-3` | `push(-3)`              | `[3,-1,-3]`      | `3`             |
 | 插入 `5`  | 移除 `-1,-3`，`push(5)` | `[5]`            | `5`             |
 
+
+
 ------
 
 ### 📊 典型应用场景
@@ -726,6 +720,8 @@ for (int i = 0; i < nums.length; i++) {
 - **接雨水问题**：结合单调递减队列动态计算凹槽水量[6](@ref)。
 - **最长递增子数组**：单调递增队列维护连续递增序列[6](@ref)。
 
+
+
 ------
 
 ### ⚖️ 实现模板与复杂度
@@ -735,23 +731,19 @@ for (int i = 0; i < nums.length; i++) {
 ```
 import java.util.Deque;
 import java.util.LinkedList;
-
 class MonotonicQueue {
     private Deque<Integer> deque = new LinkedList<>();
-    
     public void push(int value) {
         while (!deque.isEmpty() && deque.getLast() < value) {
             deque.removeLast();  // 移除队尾小于当前值的元素
         }
         deque.addLast(value);
     }
-    
     public void pop(int value) {
         if (!deque.isEmpty() && deque.getFirst() == value) {
             deque.removeFirst();  // 移除过期队头元素
         }
     }
-    
     public int max() {
         return deque.getFirst();  // 返回当前最大值
     }
@@ -785,6 +777,8 @@ vector<int> maxSlidingWindow(vector<int>& nums, int k) {
 | 查询极值  | O(1)       | -          |
 | 整体遍历  | O(n)       | -          |
 
+
+
 ------
 
 ### ⚠️ 常见错误与技巧
@@ -795,6 +789,8 @@ vector<int> maxSlidingWindow(vector<int>& nums, int k) {
    - 比较时需包含等号（如 `>=` 或 `<=`），避免遗漏同值元素[7](@ref)。
 3. 边界处理：
    - 虚拟首尾元素（如补 `0`）可简化代码，避免空队列判断[1,7](@ref)。
+
+
 
 ------
 
@@ -819,6 +815,8 @@ vector<int> maxSlidingWindow(vector<int>& nums, int k) {
 ## __builtin_popcount
 
 `__builtin_popcount` 是 GCC 和 Clang 编译器提供的内置函数，用于高效计算**无符号整数二进制表示中 `1` 的个数**（Population Count）。以下从核心原理、使用场景、性能优化到替代方案进行全面解析：
+
+
 
 ------
 
@@ -851,6 +849,8 @@ int __builtin_popcountll(unsigned long long x); // 64位整数
 
   - **查表法**：预计算 8 位整数的 `1` 的数量表（256 元素），分段查表求和[4,7](@ref)。
 
+
+
 ------
 
 ### ⚡ **性能优势与对比**
@@ -863,6 +863,8 @@ int __builtin_popcountll(unsigned long long x); // 64位整数
 | 逐位循环                     | O(n)       | 简单实现                         | 20x 慢 [4,7](@ref)   |
 
 > ✅ **实测案例**：对 1 亿次 `__builtin_popcount` 调用耗时约 **21ms**，而手动循环实现需 **500ms+**[1](@ref)。
+
+
 
 ------
 
@@ -894,6 +896,8 @@ int __builtin_popcountll(unsigned long long x); // 64位整数
   int down_steps = __builtin_popcount(path); // 统计向下次数
   ```
 
+
+
 ------
 
 ### ⚠️ **局限性与注意事项**
@@ -908,6 +912,8 @@ int __builtin_popcountll(unsigned long long x); // 64位整数
    - **高性能场景**：优先依赖硬件指令（需检测 CPU 支持性）。
    - **跨平台场景**：使用 C++20 标准库 `std::popcount`（`<bit>` 头文件）[6](@ref)。
 
+
+
 ------
 
 ### 🔄 **替代方案（C++20 前）**
@@ -917,6 +923,8 @@ int __builtin_popcountll(unsigned long long x); // 64位整数
 | **Brian Kernighan** | `while (n) { n &= n-1; count++; }`     | `1` 的位数较少时       |
 | **查表法**          | 预计算 `table[256]`，分段求和[7](@ref) | 频繁调用且内存允许     |
 | **二分法**          | 分治合并（见上文）                     | 无硬件加速且需稳定性能 |
+
+
 
 ------
 
@@ -933,6 +941,8 @@ int __builtin_popcountll(unsigned long long x); // 64位整数
 ## __lg
 
 `__lg` 是 GCC 和 Clang 编译器提供的内置函数（**非标准 C++ 函数**），用于高效计算无符号整数的二进制表示中**最高有效位（MSB）的位置**（从 0 开始计数）。以下是其核心原理、使用场景、实现方式及注意事项的详细解析：
+
+
 
 ------
 
@@ -958,6 +968,8 @@ int __builtin_popcountll(unsigned long long x); // 64位整数
 
    - **必须为无符号整数类型**（如 `unsigned int`、`uint64_t`）。
    - **禁止输入 `x = 0`**：此时行为未定义（可能导致程序崩溃或错误结果）[1,2](@ref)。
+
+
 
 ------
 
@@ -993,6 +1005,8 @@ int __builtin_popcountll(unsigned long long x); // 64位整数
 
      。
 
+
+
 ------
 
 ### ⚡ **性能对比**
@@ -1005,6 +1019,8 @@ int __builtin_popcountll(unsigned long long x); // 64位整数
 | `std::log2(x)`        | O(1)       | 需浮点数结果（非整数索引） | 10x 慢（含浮点转换） |
 
 > 💡 **实测案例**：对 1 亿次 `__lg` 调用，硬件加速仅需 **15ms**，而手动位操作需 **50ms+**[1](@ref)。
+
+
 
 ------
 
@@ -1048,6 +1064,8 @@ int __builtin_popcountll(unsigned long long x); // 64位整数
      int bits_required = __lg(n) + 1;  // 计算表示 n 所需的最小比特数
      ```
 
+
+
 ------
 
 ### ⚠️ **注意事项与替代方案**
@@ -1080,6 +1098,8 @@ int __builtin_popcountll(unsigned long long x); // 64位整数
    | **通用算法**   | 二分法 + 位操作                        | 见上文软件算法实现                          |
    | **浮点数兼容** | `std::log2(x)` + 取整                  | `int pos = static_cast<int>(std::log2(x));` |
 
+
+
 ------
 
 ### 💎 **总结**
@@ -1099,6 +1119,8 @@ int __builtin_popcountll(unsigned long long x); // 64位整数
 ## using
 
 在 C++ 中，`using` 和 `typedef` 均用于定义类型别名，但二者在语法、功能和使用场景上存在显著差异。以下是结合 C++11 及后续标准的详细对比分析：
+
+
 
 ------
 
@@ -1125,6 +1147,8 @@ int __builtin_popcountll(unsigned long long x); // 64位整数
   ```
 
   **优势**：类似赋值语法，复杂类型声明更易读[1,3,4](@ref)。
+
+
 
 ------
 
@@ -1170,6 +1194,8 @@ Vec<int> numbers;            // 直接使用
   template <typename T>
   using EnableIfInt = typename std::enable_if<std::is_integral<T>::value, T>::type;
   ```
+
+
 
 ------
 
@@ -1223,6 +1249,8 @@ public:
 Derived d(42);        // 调用 Base(int)[4,9](@ref)
 ```
 
+
+
 ------
 
 ### ⚖️ **使用场景与推荐实践**
@@ -1241,6 +1269,8 @@ Derived d(42);        // 调用 Base(int)[4,9](@ref)
 2. **旧代码维护**：保留 `typedef` 以保证兼容性。
 3. **命名空间引入**：局部作用域使用 `using NS::member`，避免全局 `using namespace`[6,8](@ref)。
 
+
+
 ------
 
 ### 💎 **总结**
@@ -1258,6 +1288,8 @@ Derived d(42);        // 调用 Base(int)[4,9](@ref)
 ## 局部变量
 
 在C++中，代码块（由花括号`{}`界定）内部的变量定义是否会被编译器“外提”，以及定义在内部与外部的性能差异，需从作用域、存储位置和编译器优化三个角度综合分析。以下是具体结论：
+
+
 
 ------
 
@@ -1296,6 +1328,8 @@ Derived d(42);        // 调用 Base(int)[4,9](@ref)
 
   这种优化避免了重复分配栈空间，但变量生命周期仍严格限定在块内。
 
+
+
 ------
 
 ### ⚡ **性能差异分析**
@@ -1321,6 +1355,8 @@ Derived d(42);        // 调用 Base(int)[4,9](@ref)
 | **寄存器优化机会** | 高（短生命周期）     | 低（需长期占用）   |
 
 > ✅ **关键结论**：在未覆盖（无命名冲突）且开启编译器优化时，**内部定义通常更优**，因更符合局部性原则，利于缓存和寄存器分配。
+
+
 
 ------
 
@@ -1369,6 +1405,8 @@ Derived d(42);        // 调用 Base(int)[4,9](@ref)
 4. **编译器优化指令**：
 
    - 使用`-O2`/`-O3`优化级别，允许编译器合并栈分配（如将相邻块的变量存储地址外提），减少栈指针操作次数。
+
+
 
 ------
 
