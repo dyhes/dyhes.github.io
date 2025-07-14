@@ -1747,8 +1747,7 @@ MVCC 通过 **多版本数据快照** 实现读操作的无阻塞，确保每次
    - **隐藏字段**：每行数据包含 `DB_TRX_ID`（最近修改的事务ID）和 `DB_ROLL_PTR`（指向 undo log 历史版本的指针）。
    - Read View 生成：
      - **RC 隔离级别下**：**每个 SQL 语句执行时** 生成独立的 Read View，记录当前活跃事务 ID 列表及最大事务 ID。
-     - 可见性规则
-       ：仅读取满足以下条件的数据版本：
+     - 可见性规则：仅读取满足以下条件的数据版本：
        - 行数据的 `DB_TRX_ID` **小于当前 Read View 的最小活跃事务 ID**（说明修改已提交）；
    - 或 `DB_TRX_ID` **不在活跃事务列表中**（说明事务已提交）。
 2. **防脏读原理**
@@ -2149,8 +2148,7 @@ WHERE ENGINE = 'InnoDB' AND TABLE_NAME = 'your_table';
 
 #### ✅ **二进制存储压缩（核心优化）**
 
-- 方法
-  ：将UUID转换为16字节的
+- 方法：将UUID转换为16字节的
   ```
   BINARY(16)
   ```
@@ -2175,8 +2173,7 @@ WHERE ENGINE = 'InnoDB' AND TABLE_NAME = 'your_table';
   ```
 #### ⏱️ **时间前缀重排（减少页分裂）**
 
-- 原理
-  ：调整UUID的字节顺序，将时间戳前置（如MySQL 8.0的
+- 原理：调整UUID的字节顺序，将时间戳前置（如MySQL 8.0的
   ```
   UUID_TO_BIN(uuid, 1)
   ```
@@ -2203,8 +2200,7 @@ WHERE ENGINE = 'InnoDB' AND TABLE_NAME = 'your_table';
   ```
 #### 🧩 **组合索引（分布式场景）**
 
-- 适用场景
-  ：分库分表时，使用“分片ID + UUID”组合主键：
+- 适用场景：分库分表时，使用“分片ID + UUID”组合主键：
   ```
   CREATE TABLE users (
       shard_id TINYINT,      -- 分片标识

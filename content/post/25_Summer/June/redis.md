@@ -264,8 +264,7 @@ struct __attribute__ ((__packed__)) sdshdr8 {
     char buf[];         // 柔性数组，存储实际数据
 };
 ```
-- 五种 SDS 类型
-  ：根据字符串长度动态选择头类型，节省内存：
+- 五种 SDS 类型：根据字符串长度动态选择头类型，节省内存：
   - **`sdshdr8`**（≤256B）、**`sdshdr16`**（≤64KB）、**`sdshdr32`**（≤4GB）、**`sdshdr64`**（≤16EB）。
 - 例如短字符串用 `sdshdr8`，头仅占 3 字节（`len`+`alloc`+`flags`）。
 #### **SDS 的关键优化**
@@ -1367,8 +1366,7 @@ commands.set("key", "value");  // 基于Netty，支持异步IO[5](@ref)
 1. **槽位均衡**：定期检查 `CLUSTER SLOTS`，避免数据倾斜[4](@ref)。
 2. **持久化配置**：所有节点开启 `AOF + RDB`，防止重启后集群状态丢失[3](@ref)。
 3. 
-   内核优化
-   ：关闭透明大页（THP），避免内存延迟：
+   内核优化：关闭透明大页（THP），避免内存延迟：
    ```
    echo never > /sys/kernel/mm/transparent_hugepage/enabled[3](@ref)
    ```

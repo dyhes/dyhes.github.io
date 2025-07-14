@@ -1991,8 +1991,7 @@ D --> F[所有线程继续执行]
 2. **检查状态**：若屏障已损坏（`generation.broken`），抛出 `BrokenBarrierException`。
 3. **计数器减1**：`int index = --count`。
 4. 
-   触发屏障
-   ：若
+   触发屏障：若
 ```
    index == 0
    ```：

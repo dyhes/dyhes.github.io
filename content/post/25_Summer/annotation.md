@@ -1436,8 +1436,7 @@ public class AdminController {
 > - 若未显式配置，Classpath 默认为当前目录（`.`）[4](@ref)。
 #### **类加载顺序与冲突**
 
-- 搜索顺序
-  ：JVM 按 Classpath 中路径的
+- 搜索顺序：JVM 按 Classpath 中路径的
   声明顺序
   查找类文件，找到即停止，后续同名类被忽略
   9,11
@@ -1921,8 +1920,7 @@ JAR（Java ARchive）包是Java平台的核心打包格式，用于将多个类�
    ```
    - `c`：创建，`v`：输出详情，`f`：指定文件名，`m`：指定清单文件。
 2. **构建工具自动化**
-   - Maven
-     ：配置
+   - Maven：配置
      ```
      maven-shade-plugin
      ```
@@ -1945,8 +1943,7 @@ JAR（Java ARchive）包是Java平台的核心打包格式，用于将多个类�
      生成可执行JAR
      8
      。
-   - Gradle
-     ：通过
+   - Gradle：通过
      ```
      shadowJar
      ```

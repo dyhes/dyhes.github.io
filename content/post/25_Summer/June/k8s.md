@@ -369,8 +369,7 @@ binaryData:                                 # 二进制数据（Base64 编码）
 
 #### **环境变量注入**
 
-- 单键注入
-  ：直接引用特定键值
+- 单键注入：直接引用特定键值
   ```
   env:
     - name: LOG_LEVEL
@@ -379,8 +378,7 @@ binaryData:                                 # 二进制数据（Base64 编码）
           name: app-config
           key: LOG_LEVEL
   ```
-- 全量注入
-  ：ConfigMap 所有键值转为环境变量
+- 全量注入：ConfigMap 所有键值转为环境变量
   ```
   envFrom:
     - configMapRef:
@@ -399,8 +397,7 @@ env:
 ```
 #### **卷挂载（最常用）**
 
-- 完整挂载
-  ：ConfigMap 每个键生成独立文件
+- 完整挂载：ConfigMap 每个键生成独立文件
   ```
   volumes:
     - name: config-volume
@@ -410,8 +407,7 @@ env:
     - name: config-volume
       mountPath: /etc/app-config
   ```
-- 子路径挂载
-  ：仅挂载特定键到指定路径
+- 子路径挂载：仅挂载特定键到指定路径
   ```
   volumeMounts:
     - name: config-volume
@@ -598,8 +594,7 @@ Secret 是 Kubernetes 中用于**安全存储和管理敏感数据**的核心 AP
 #### **密钥动态管理**
 
 - **外部集成**：使用 **HashiCorp Vault** 或 **SealedSecret**（GitOps 安全方案）[3,7](@ref)。
-- 自动轮换
-  ：通过 Cert-Manager 自动更新 TLS 证书：
+- 自动轮换：通过 Cert-Manager 自动更新 TLS 证书：
   ```
   apiVersion: cert-manager.io/v1
   kind: Certificate
@@ -612,8 +607,7 @@ Secret 是 Kubernetes 中用于**安全存储和管理敏感数据**的核心 AP
 #### **配置与监控**
 
 - **不可变 Secret**（v1.19+）：设置 `immutable: true` 防止误修改[4](@ref)。
-- 审计日志
-  ：监控异常 Secret 访问行为：
+- 审计日志：监控异常 Secret 访问行为：
   ```
   kube-apiserver --audit-log-path=/var/log/kubernetes/audit.log[3,7](@ref)
   ```
@@ -919,12 +913,10 @@ Controller Manager 是 Kubernetes 控制平面的核心组件，负责通过**�
    - **Leader Election 机制**：多实例运行时，通过 etcd 分布式锁选举主实例（Leader），备实例（Follower）热备，主故障时自动切换[1,4](@ref)。
    - 配置参数：`--leader-elect=true` 启用选举[1,3](@ref)。
 2. **性能调优**
-   - 并发控制
-     ：根据集群规模调整控制器并发数：
+   - 并发控制：根据集群规模调整控制器并发数：
      - `--concurrent-deployment-syncs=10`（增大 Deployment 处理并发）
      - `--concurrent-service-syncs=5`（Service 同步并发）[1,3](@ref)。
-   - 资源限制
-     ：避免资源竞争，为容器设置合理资源配额：
+   - 资源限制：避免资源竞争，为容器设置合理资源配额：
      ```
      resources:
        requests: { cpu: "100m", memory: "256Mi" }
@@ -1158,8 +1150,7 @@ StatefulSet 是 Kubernetes 中专门用于管理**有状态应用（Stateful App
      `<pod-name>.<svc-name>.<namespace>.svc.cluster.local`（如 `mysql-0.mysql.default.svc.cluster.local`）[1,3,8](@ref)。
    - **直接访问**：客户端可通过 DNS 精确访问特定 Pod，无需负载均衡[2,7](@ref)。
 2. **持久化存储绑定**
-   - 独立存储卷
-     ：通过
+   - 独立存储卷：通过
 ```
      volumeClaimTemplates
 ```
@@ -1334,8 +1325,7 @@ ReplicaSet 是 Kubernetes 中用于保障无状态应用高可用的核心控制
 ### ⚖️ **管理操作与实战技巧**
 
 1. **扩缩容（Scaling）**
-   - 手动调整
-     ：修改
+   - 手动调整：修改
 ```
      replicas
 ```
@@ -1347,8 +1337,7 @@ ReplicaSet 是 Kubernetes 中用于保障无状态应用高可用的核心控制
      ```
      kubectl scale rs/nginx-rs --replicas=5
      ```
-   - 自动扩缩容（HPA）
-     ：基于 CPU/内存等指标动态调整副本数
+   - 自动扩缩容（HPA）：基于 CPU/内存等指标动态调整副本数
      6：
      ```
      apiVersion: autoscaling/v2
@@ -2652,8 +2641,7 @@ Ceph 是一个开源的**统一分布式存储系统**，旨在为海量数据�
 
 #### **CRUSH 算法**
 
-- 原理
-  ：通过伪随机哈希计算数据位置，避免中心元数据瓶颈。输入包括：
+- 原理：通过伪随机哈希计算数据位置，避免中心元数据瓶颈。输入包括：
   - 集群拓扑（CRUSH Map）
   - 故障域策略（如跨机架/主机）
   - 数据权重（如 SSD 权重高于 HDD）
@@ -3253,8 +3241,7 @@ Kubernetes（K8s）的服务发现是其容器编排的核心功能，解决了�
   ```
 #### **外部服务集成**
 
-- ExternalName
-  ：无缝代理外部服务（如公有云RDS）
+- ExternalName：无缝代理外部服务（如公有云RDS）
   3,7：
   ```
   spec:
@@ -3275,8 +3262,7 @@ Kubernetes（K8s）的服务发现是其容器编排的核心功能，解决了�
    - **`None`策略**：完全自定义DNS配置，满足特殊需求[8](@ref)。
 2. **CoreDNS 高性能配置**：
    - **缓存**：启用`cache`插件减少API调用[8,9](@ref)。
-   - 负载均衡
-     ：通过
+   - 负载均衡：通过
      ```
      loadbalance
      ```
@@ -3360,8 +3346,7 @@ C --> E[Pod 2]
 C --> F[Pod 3]
 ```
 - **EndpointSlice**：动态记录 Service 关联的 Pod IP 和端口（替代旧版 Endpoints），实时响应 Pod 变化[1,7](@ref)。
-- kube-proxy
-  ：运行在每个节点，监听 Service 变更并生成转发规则：
+- kube-proxy：运行在每个节点，监听 Service 变更并生成转发规则：
   - **iptables 模式**：通过 NAT 规则转发（默认），适合中小集群[1,7](@ref)。
   - **IPVS 模式**：内核级负载均衡，支持最小连接/哈希等算法，适合大规模集群[1,7](@ref)。
 - **CoreDNS**：解析 Service DNS 名称到 ClusterIP[2,7](@ref)。
@@ -4178,8 +4163,7 @@ resources: {}  # 无任何设置
   ```
   limits
   ```
-  限制运行时资源
-  ：通过 Linux 
+  限制运行时资源：通过 Linux
   cgroups** 强制限制容器资源使用：
   - **CPU 超限**：通过 `cpu.cfs_quota_us` 限制使用量，不会杀死容器[6](@ref)。
   - **内存超限**：触发 `OOMKilled` 并重启容器[1,6](@ref)。
@@ -4319,15 +4303,13 @@ CMD ["echo 'Ready for commands'"]  # 默认提示
    - **解决**：前台运行应用，如 `CMD ["nginx", "-g", "daemon off;"]`[10,11](@ref)。
 2. **环境变量不生效**
    - **原因**：Exec 格式直接执行命令，未触发 Shell 解析[3](@ref)。
-   - 解决
-     ：显式调用 Shell 或使用脚本包装：
+   - 解决：显式调用 Shell 或使用脚本包装：
      ```
      ENTRYPOINT ["sh", "-c", "echo $ENV_VAR"]
      ```
 3. **参数覆盖异常**
    - **案例**：`ENTRYPOINT ["echo"]` + `CMD ["Hello"]` → `docker run <image> "Test"` 输出 `Test`（丢失 `Hello`）。
-   - 优化
-     ：固定前缀 + 可变参数：
+   - 优化：固定前缀 + 可变参数：
      ```
      ENTRYPOINT ["echo", "Prefix:"]
      CMD ["Default"]
@@ -4570,8 +4552,7 @@ args: ["-c", "ls /app; java -jar app.jar"]  # 分号分隔命令
 - **复合逻辑**：多条件用逗号分隔，表示 `AND` 关系（如 `env=prod,app=nginx`）[4,7](@ref)。
 #### **核心应用场景**
 
-- Service 发现
-  ：Service 通过选择器匹配后端 Pod（示例配置）：
+- Service 发现：Service 通过选择器匹配后端 Pod（示例配置）：
   ```
   apiVersion: v1
   kind: Service

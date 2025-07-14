@@ -1040,8 +1040,7 @@ graph LR
 
 #### **避免 Concurrent Mode Failure**
 
-- 预留空间
-  ：调整老年代触发回收阈值，避免过早耗尽空间：
+- 预留空间：调整老年代触发回收阈值，避免过早耗尽空间：
   ```
   -XX:CMSInitiatingOccupancyFraction=75  # 老年代占用 75% 时启动 CMS
   ```
@@ -1052,13 +1051,11 @@ graph LR
 - **大对象分离**：通过 `-XX:PretenureSizeThreshold` 将大对象直接分配至老年代，减少碎片产生。
 #### **资源优化**
 
-- 线程数调整
-  ：手动设置并发线程数，避免过度争抢 CPU：
+- 线程数调整：手动设置并发线程数，避免过度争抢 CPU：
   ```
   -XX:ConcGCThreads=2  # 限制并发线程数
   ```
-- 禁用无关功能
-  ：关闭类卸载以减少开销：
+- 禁用无关功能：关闭类卸载以减少开销：
   ```
   -XX:-CMSClassUnloadingEnabled  # JDK8 元空间默认不卸载类
   ```
@@ -1569,8 +1566,7 @@ graph LR
 
 #### **反射机制**
 
-- 动态操作类
-  ：通过Class对象获取方法/字段并调用：
+- 动态操作类：通过Class对象获取方法/字段并调用：
   ```
   Class<?> clazz = Class.forName("com.example.MyClass");
   Method method = clazz.getMethod("myMethod");
@@ -1586,8 +1582,7 @@ graph LR
 - **去虚拟化**：若类层次分析（CHA）确认唯一实现，将虚调用转为静态绑定。
 #### **框架设计**
 
-- Spring容器
-  ：通过
+- Spring容器：通过
   ```
   ClassMetadata
   ```
@@ -1764,8 +1759,7 @@ JVM 通过分层策略提升方法调用效率：
      ```
 2. **方法调用的高效定位**
    - **编译阶段**：每个方法在方法表中分配**固定索引**（如 `sound()` 位于索引 2）。
-   - 运行时
-     ：调用指令（如
+   - 运行时：调用指令（如
 ```
      invokevirtual
      ```
@@ -1814,8 +1808,7 @@ JVM 通过分层策略提升方法调用效率：
 #### **接口实现的灵活性**
 
 - **多接口自由组合**：一个类可实现多个接口（如 `class MyClass implements InterfaceA, InterfaceB`），但不同类实现相同接口的**顺序可能不同**（例如类A先实现`InterfaceA`后`InterfaceB`，类B顺序相反）。
-- 影响索引位置
-  ：每个类在构建itable时，会按
+- 影响索引位置：每个类在构建itable时，会按
   接口声明顺序
   将接口方法分组存入方法表。因此，同一接口方法在不同类中的
   物理偏移量可能不同

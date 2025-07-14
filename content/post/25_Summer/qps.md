@@ -36,7 +36,7 @@ tags:
      - 用环形数组（Ring Buffer）分桶存储，每200ms一个桶，记录请求计数[5](@ref)；
      - 每秒聚合最近5个桶的数据（窗口=1秒），计算实时QPS：
        ```
-     QPS = (桶ₜ计数总和) / 1.0
+       QPS = (桶ₜ计数总和) / 1.0
        ```
    - **开源组件**：阿里Sentinel、Google Guava RateLimiter均采用此算法[5,2](@ref)。
 2. **监控系统集成**
@@ -51,7 +51,7 @@ tags:
 
 - 集群QPS计算：
   ```
-\text{集群QPS} = \sum(\text{单实例QPS}) \times \text{负载均衡效率系数（通常0.8~0.95）}
+  \text{集群QPS} = \sum(\text{单实例QPS}) \times \text{负载均衡效率系数（通常0.8~0.95）}
   ```
 - 注意事项：
   - 需聚合所有节点日志（如ELK Stack）[2](@ref)；
@@ -96,10 +96,7 @@ JMeter 是由 Apache 软件基金会开发的开源性能测试工具，主要�
    - **消息中间件**：JMS、Kafka、MQTT[1,3](@ref)。
    - **其他**：FTP、TCP、SMTP、LDAP 等[3,8](@ref)。
 2. **高并发模拟**
-   - 线程组（Thread Group）
-     ：定义虚拟用户数（线程数）、启动时间（Ramp-Up）、循环次数
-     2,6
-     。
+   - 线程组（Thread Group）：定义虚拟用户数（线程数）、启动时间（Ramp-Up）、循环次数
      - *示例*：100 线程 + 10 秒 Ramp-Up = 每秒启动 10 个用户[6,10](@ref)。
    - **分布式测试**：通过 Master-Slave 架构联合多台机器突破单机并发限制[1,3](@ref)。
 3. **测试元件丰富**
@@ -137,14 +134,11 @@ JMeter 是由 Apache 软件基金会开发的开源性能测试工具，主要�
 3. 
    启动方式
 - **GUI模式**：调试脚本（双击 `jmeter.bat`）[5,7](@ref)。
-   - 命令行模式
-     ：正式压测（资源消耗低）：
+   - 命令行模式：正式压测（资源消耗低）：
      ```
      jmeter -n -t test.jmx -l result.jtl -e -o ./report
      ```[2,7](@ref)
      ```
-
-
 
 ------
 

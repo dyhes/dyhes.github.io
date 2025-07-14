@@ -712,8 +712,7 @@ public void saveOrAuditMethods() {}
    - **简化配置**：配合 `@ComponentScan` 自动装配，减少样板代码。
    - **限制**：**无法用于第三方库**（因无法修改源码添加注解）[1,3,5](@ref)。
 2. **@Bean 的核心场景**
-   - 集成第三方库
-     ：将外部类（如数据库驱动、工具类）注册为 Bean。
+   - 集成第三方库：将外部类（如数据库驱动、工具类）注册为 Bean。
      ```
      @Bean
      public RestTemplate restTemplate() {
@@ -1016,8 +1015,7 @@ public class ConfigB {
      }
      ```
 2. **构造器注入的简化**
-   - Lombok应用
-     ：自动生成含
+   - Lombok应用：自动生成含
      ```
      @Autowired
      ```
@@ -2174,8 +2172,7 @@ public class LogService {
   - 使用AOP代理：`((MyService) AopContext.currentProxy()).methodB()`（需开启`exposeProxy=true`）[2](@ref)。
 #### **异常处理规范**
 
-- 回滚规则
-  ：默认仅回滚
+- 回滚规则：默认仅回滚
   ```
   RuntimeException
   ```
@@ -2191,8 +2188,7 @@ public class LogService {
   ```
   @Transactional(rollbackFor = Exception.class)
   ```
-- 避免吞异常
-  ：捕获异常后需重新抛出或标记回滚：
+- 避免吞异常：捕获异常后需重新抛出或标记回滚：
   ```
   try {
       // ...
@@ -2829,8 +2825,7 @@ Spring Cache 通过**声明式注解**和**统一抽象层**，大幅简化缓�
   ```
 #### **按缓存分区设置不同 TTL**
 
-- Redis 示例
-  ：通过
+- Redis 示例：通过
 ```
   RedisCacheManager
   ```
@@ -2850,15 +2845,13 @@ Spring Cache 通过**声明式注解**和**统一抽象层**，大幅简化缓�
   ```
 #### **扩展注解支持按方法级设置 TTL**
 
-- 自定义注解
-  ：通过 AOP 解析注解中的过期参数
+- 自定义注解：通过 AOP 解析注解中的过期参数
   3,4：
   ```
   @Cacheable(value = "users#300")  // 300 秒过期
   public User getUser(Long id) { ... }
   ```
-实现原理
-  ：重写
+实现原理：重写
 ```
   RedisCacheManager
   ```
@@ -3234,8 +3227,7 @@ fetch(url, { credentials: 'include' });
 
 1. **跨域请求仍被阻止**
    - **原因**：服务端未返回 `Access-Control-Allow-Credentials: true` 或 `Access-Control-Allow-Origin` 包含通配符 `*`[2,4](@ref)。
-   - 解决
-     ：检查响应头是否同时满足：
+   - 解决：检查响应头是否同时满足：
      - 明确域名（非 `*`） + `Allow-Credentials: true` + 客户端启用 `withCredentials`[3,7](@ref)。
 2. **预检请求失败**
    - **场景**：OPTIONS 请求未包含 `Allow-Credentials` 头。
@@ -3369,8 +3361,7 @@ WebFlux是Spring Framework 5引入的**响应式Web框架**，旨在处理高并
 ------
 ### 🔧 **HTTP协议的直接支持**
 
-- HTTP请求处理
-  ：WebFlux提供完整的HTTP服务器和客户端支持：
+- HTTP请求处理：WebFlux提供完整的HTTP服务器和客户端支持：
   - **服务端**：通过`RouterFunction`和`HandlerFunction`定义路由与处理逻辑，或使用注解（如`@RestController`）处理HTTP请求[4,6,8](@ref)。
   - **客户端**：通过非阻塞的`WebClient`发起HTTP请求，支持响应式流处理（如`Mono`/`Flux`）[4,8](@ref)。
 - **协议兼容性**：支持HTTP/1.1、HTTP/2，以及HTTPS加密协议[2,8](@ref)。

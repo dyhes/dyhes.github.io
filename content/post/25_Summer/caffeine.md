@@ -501,8 +501,7 @@ if (value == null) {
       redisCache.put(key, NULL_OBJECT, 30, TimeUnit.SECONDS); // 缓存空值[5](@ref)
 }
   ```
-- 缓存雪崩
-  ：为 Redis 的 TTL 添加随机扰动：
+- 缓存雪崩：为 Redis 的 TTL 添加随机扰动：
   ```
   .entryTtl(Duration.ofMinutes(30 + ThreadLocalRandom.current().nextInt(10)));
   ```
