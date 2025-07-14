@@ -50,7 +50,6 @@ umap.insert({"banana", 5});  // 仅当键不存在时插入
 ### 总结
 `unordered_map` 的 `[]=` 操作符提供了便捷的键值操作方式，但其隐式的插入行为需要谨慎处理。在需要高性能或严格避免无效键插入时，建议结合 `find()` 或 `emplace()` 使用。
 
-
 ## 遍历
 
 在C++中，`std::map`和`std::unordered_map`的遍历方法高度相似，但由于底层实现不同（红黑树 vs 哈希表），需要注意顺序问题。以下是具体方法及适用场景：
@@ -214,7 +213,6 @@ for (const auto& [key, value] : umap) {  // 将pair解构为key和value
 | 容器隐式构造       | 直接插入到`map`或`unordered_map` | 高效，避免临时对象拷贝             |
 
 ---
-
 
 ## Range-Based Loop
 是的，在 C++ 中，`std::set` 完全支持使用**基于范围的 for 循环**（range-based for loop）进行遍历，且这是 C++11 及后续版本中推荐的简洁方式。

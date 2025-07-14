@@ -156,9 +156,6 @@ $$
 L_i=-logP(Y=y_i|X=x_i)
 $$
 
-
-
-
 ### Regularization
 
 prevent the model from doing too well on training data
@@ -586,7 +583,6 @@ $$
   $$
   \alpha_t=\frac{\alpha_0}{\sqrt{t}}
   $$
-  
 
 ### early stopping
 
@@ -722,8 +718,6 @@ where $c_t$ is the cell state and $h_t$ is the hidden state
   \newline
   h_t^l=o\bigodot tanh(c_t^l)
   $$
-
-  
 
 ## Attention
 
@@ -1063,7 +1057,6 @@ $$
   $$
   F1@t=2*\frac{Precision@t*Recall@t}{Precision@t+Reca}
   $$
-  
 
 ## Generative Model
 
@@ -1220,8 +1213,6 @@ after training, throw away decoder and use encoder for a downstream task
   Decoder input $z$, output mean $\mu_{x|z}$ and (diagonal) covariance $\sum_{x|z}$
 
   sample $x$ from Gaussian with mean  $\mu_{x|z}$ and (diagonal) covariance $\sum_{x|z}$ 
-
-
 
 ![image-20221005201326846](https://i.ibb.co/1Tv4GGP/image-20221005201326846.png)
 

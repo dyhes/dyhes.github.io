@@ -229,8 +229,6 @@ propagation delay
 
 ![image-20221006153800437](https://i.ibb.co/dgN0Hj9/image-20221006153800437.png)
 
-
-
 ![image-20221006154133008](https://i.ibb.co/4gKGvPK/image-20221006154133008.png)
 
 ### History
@@ -495,8 +493,6 @@ DNS query and reply messages, both have same format
     * recursion avaliable
     * reply is authoritative
 
-    
-
 ![image-20221008222553158](https://i.ibb.co/LJF1Sb7/image-20221008222553158.png)
 
 ### P2P
@@ -730,8 +726,6 @@ goal: detect errors in transmitted segment
   used by receiver to tell sender the sequence number of the next byte that's expected to be received from the sender
 
   serves as a cumulative acknowledgement for all bytes of data that have occurred before that sequence number and 
-
-
 
 #### congestion control
 
@@ -1059,8 +1053,6 @@ routing among routers within same AS ("netwrok")
 * routers in different AS can run different intra-domain routing protocols
 * gateway router: at "edge" of its own AS, has link(s) to router(s) in other AS'es
 
-
-
 most common intra-AS routing protocols
 
 * RIP routing information protocol
@@ -1072,8 +1064,6 @@ most common intra-AS routing protocols
 routing among AS'es
 
 * gateways perform inter-domian routing
-
-
 
 BGP( Border Gateway Protocol): the de facto inter-domain routing protocol
 
@@ -1184,8 +1174,6 @@ why
 * single shared broadcast channel
 * two or more simultaneous transmissions by nodes: interference
   * collision if node receives two or more signals at the same time
-
-
 
 * distributed algorithm that determines how nodes share channel, i.e. ,determine which node can transmit
 * communication about channel sharing must use channel itself

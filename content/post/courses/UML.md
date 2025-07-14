@@ -288,8 +288,6 @@ categories:
 
 ![image-20220421114354571](https://i.ibb.co/86mzZ2m/image-20220421114354571.png)
 
-
-
 #### 需求开发
 
 ![image-20220421114446279](https://i.ibb.co/x7thByJ/image-20220421114446279.png)
@@ -350,8 +348,6 @@ categories:
 #### 过程模型
 
 软件开发过程
-
-
 
 ###### 瀑布式模型
 
@@ -635,10 +631,6 @@ categories:
 
 ![image-20220422184634737](https://i.ibb.co/yNwgvgK/image-20220422184634737.png)
 
-
-
-
-
 ###### 数据流图
 
 ![image-20220422190620697](https://i.ibb.co/pQ4W9YB/image-20220422190620697.png)
@@ -777,8 +769,6 @@ UML（Unified Modeling Language）是一种统一的、标准化的建模语言
   运用于整个UML模型中的公共机制、扩展机制
 
 ![image-20220422210117052](https://i.ibb.co/vDgtm8Q/image-20220422210117052.png)
-
-
 
 ##### 基本构造块
 

@@ -137,7 +137,6 @@ Makefile 和 CMakeLists.txt 是两种不同的构建系统工具，它们在语�
 - 若项目需要快速验证或仅在单一平台运行，优先使用Makefile。  
 - 若涉及多平台协作或依赖复杂库（如Qt、Boost），CMake是更优解。
 
-
 gpg --armor --export 8ADB7E150F4034C5
 
 ## 外部依赖

@@ -167,12 +167,8 @@ docker build -t postopia-search:latest ./search-service
 
 ## Server
 
-
-
 ## Kubernetes
 to be continued
-
-
 
 docker-compose -f compose-test.yaml up -d user-service
 

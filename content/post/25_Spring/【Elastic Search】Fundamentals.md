@@ -82,7 +82,6 @@ Elasticsearch（简称ES）是一个基于Apache Lucene构建的开源分布式�
 ### 总结
 Elasticsearch凭借其分布式架构、实时处理能力和丰富的生态系统，成为大数据领域的核心工具。无论是构建搜索引擎、日志分析平台，还是实现复杂的业务分析，均可通过灵活的分片策略和查询语法满足需求。对于企业而言，合理选择自建集群或云托管方案，结合监控工具（如X-Pack）优化性能，是充分发挥其价值的关键。
 
-
 ## 倒排索引
 
 ####  **核心概念与结构**  
@@ -525,7 +524,6 @@ ElasticSearch 中的 **Index**、**Shard** 和 **Segment** 是层级递进的数
 - Shard 通过分片机制实现分布式存储，Segment 通过倒排索引和合并优化查询效率。  
 - 合理规划 Shard 数量和 Segment 合并策略是性能调优的关键。
 
-
 ## acknowledged 和 shards_acknowledged
 在 Elasticsearch 的索引操作响应中，`acknowledged` 和 `shards_acknowledged` 分别表示以下含义：
 
@@ -572,8 +570,6 @@ ElasticSearch 中的 **Index**、**Shard** 和 **Segment** 是层级递进的数
 
 : 搜索结果中提供的索引操作示例和说明，包括创建、删除和查看索引的响应字段解释。
 
-
-
 ## Keyword type family
 
 在 Elasticsearch 中，**Keyword 类型家族**专为结构化数据的精确匹配和高效处理设计，适用于需要原样存储、无需分词的场景。以下是其核心成员及特性：
@@ -597,7 +593,7 @@ ElasticSearch 中的 **Index**、**Shard** 和 **Segment** 是层级递进的数
 
 ---
 
-#### **`constant_keyword` 类型（7.9+ 版本引入）**
+#### **`constant_keyword` 类型（9+ 版本引入）**
 - **核心特性**：  
   - **固定值约束**：字段值全局固定，所有文档的该字段必须为同一值（或缺失）。例如日志索引中固定环境标识 `env: "prod"`。  
   - **优化存储**：仅存储一次值，减少重复数据占用空间。  
@@ -606,7 +602,7 @@ ElasticSearch 中的 **Index**、**Shard** 和 **Segment** 是层级递进的数
 
 ---
 
-#### **`wildcard` 类型（7.10+ 版本引入）**
+#### **`wildcard` 类型（10+ 版本引入）**
 - **核心特性**：  
   - **非结构化文本优化**：针对高基数或大值字段（如日志消息、URL路径）设计，支持 `wildcard`（通配符）和 `regexp`（正则）查询。  
   - **存储压缩**：采用前缀编码（如 "abcdef" → "abc*"），提升模糊查询性能。  

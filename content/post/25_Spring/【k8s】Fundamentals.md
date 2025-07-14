@@ -8,11 +8,9 @@ tags:
 - k8s
 ---
 
-
 ## **Kubernetes Explained in 6 Minutes | k8s Architecture**
 https://www.youtube.com/watch?v=TlHvYWVUZyc
 ![](https://i.ibb.co/fVy2MFQZ/image.png)
-
 
 ![](https://i.ibb.co/4nYSrZFb/image-3.png)
 Pods are the smallest deployable units in k8s.
@@ -116,7 +114,6 @@ Docker Compose 和 Kubernetes（k8s）在容器化技术生态中扮演着不同
 ### **总结**  
 Docker Compose 是**轻量级开发工具**，适合快速启动和简单管理；Kubernetes 是**企业级编排平台**，解决大规模、高可用场景的复杂性。两者互补而非竞争，实际项目中常结合使用：Compose 用于开发，Kubernetes 用于生产。
 
-
 ## Docker Compose vs. Minikube
 Docker Compose 与 Minikube 是容器化开发中常用的两种工具，但其设计目标、适用场景和功能特性存在显著差异。以下从六个维度对比两者的核心区别：
 
@@ -195,7 +192,6 @@ Docker Compose 与 Minikube 是容器化开发中常用的两种工具，但其�
 | Minikube          | 本地 Kubernetes 全功能模拟         | 学习成本高，单节点性能受限         |
 
 根据实际需求灵活选择：**轻量级开发选 Docker Compose，生产兼容性验证选 Minikube**。两者亦可结合使用，例如开发阶段用 Compose，部署前通过 Minikube 完成最终测试。
-
 
 ## **What is Kubernetes | Kubernetes explained in 15 mins**
 https://www.youtube.com/watch?v=VnvRFRk_51k

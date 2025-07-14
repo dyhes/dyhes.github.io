@@ -396,8 +396,6 @@ the bottom of the stack is $<any, start>$ where
 * $any$ is any dummy symbol
 * $start$ is the start of state of the DFA
 
-
-
 * Define $goto[i,A]=j$ if $state_i\rightarrow^{A}state_j$
 * $goto$ is just the transition function of the DFA
 

@@ -27,9 +27,6 @@ Spring Cloud provides tools for developers to quickly build some of the common p
 
 ![](https://i.ibb.co/9mC2nLwd/image-8.png)
 
-
-
-
 ## [Spring Office Hours: S3E5 - Distributed Applications with Spring Cloud](https://www.youtube.com/watch?v=C1ujgyu4NWA)
 * Service Discovery
   * Spring Cloud Netflix Eureka

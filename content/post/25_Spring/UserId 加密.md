@@ -24,7 +24,7 @@ tags:
 
 ###  **实现步骤**
 
-#### **2.1 定义加解密工具类**
+#### **1 定义加解密工具类**
 ```java
 public class AESUtil {
     private static final String AES_KEY = "your-32byte-secret-key";
@@ -63,7 +63,7 @@ public class AESUtil {
 
 ---
 
-#### **2.2 自定义全局过滤器**
+#### **2 自定义全局过滤器**
 ```java
 @Component
 public class UserIdCryptoFilter implements GlobalFilter, Ordered {

@@ -123,7 +123,7 @@ ServerHttpRequestDecorator 是 Spring WebFlux 框架中用于增强或修改 HTT
 
 ---
 
-### **1. 核心功能与作用**
+### **核心功能与作用**
 - **请求信息拦截与修改**  
   继承自 `ServerHttpRequest`，通过重写 `getHeaders()`、`getBody()` 等方法，开发者可以修改请求头、请求体等关键信息。例如，动态添加请求头、解密请求内容或统一请求格式。
 
@@ -132,7 +132,7 @@ ServerHttpRequestDecorator 是 Spring WebFlux 框架中用于增强或修改 HTT
 
 ---
 
-### **2. 关键方法与使用示例**
+### **关键方法与使用示例**
 #### **常用方法**
 - `getHeaders()`  
   重写此方法可动态修改请求头信息（如强制设置 `Content-Type`）。
@@ -185,7 +185,7 @@ public class DecryptRequestDecorator extends ServerHttpRequestDecorator {
 
 ---
 
-### **3. 典型应用场景**
+### **典型应用场景**
 1. **请求头动态处理**  
    例如统一添加认证头（如 `Authorization`）或修复客户端缺失的 `Content-Type`。
 
@@ -200,7 +200,7 @@ public class DecryptRequestDecorator extends ServerHttpRequestDecorator {
 
 ---
 
-### **4. 注意事项**
+### **注意事项**
 - **避免重复提交**  
   若直接操作请求体数据流，需确保数据仅被消费一次，否则会触发 `IllegalStateException`。可通过缓存（如 `Flux.cache()`）解决。
 
@@ -212,7 +212,7 @@ public class DecryptRequestDecorator extends ServerHttpRequestDecorator {
 
 ---
 
-### **5. 相关类对比**
+### **相关类对比**
 - **ServerHttpRequest**  
   原始请求接口，提供基础请求信息访问能力。
 
@@ -225,7 +225,7 @@ public class DecryptRequestDecorator extends ServerHttpRequestDecorator {
 
 ---
 
-### **1. 核心功能与作用**
+### **核心功能与作用**
 - **响应内容拦截与修改**  
   `ServerHttpResponseDecorator` 继承自 `ServerHttpResponse`，通过重写 `writeWith()` 方法，开发者可以在响应体写入前或写入后对数据进行修改。例如，可以动态添加响应头、加密响应内容或记录日志。
   
@@ -234,7 +234,7 @@ public class DecryptRequestDecorator extends ServerHttpRequestDecorator {
 
 ---
 
-### **2. 核心方法与使用示例**
+### **核心方法与使用示例**
 #### **关键方法**
 - `writeWith(Publisher<DataBuffer> body)`  
   重写此方法以拦截原始响应体的数据流，允许对 `DataBuffer` 进行自定义处理（如字符串转换、JSON 序列化等）。
@@ -274,7 +274,7 @@ public class CustomFilter implements GlobalFilter {
 
 ---
 
-### **3. 典型应用场景**
+### **典型应用场景**
 1. **动态修改响应头**  
    例如添加安全相关的 `Content-Security-Policy` 或自定义业务标识头。
    
@@ -289,7 +289,7 @@ public class CustomFilter implements GlobalFilter {
 
 ---
 
-### **4. 注意事项**
+### **注意事项**
 - **响应提交状态**  
   需通过 `isCommitted()` 方法判断响应是否已提交，避免重复操作导致异常。
   
@@ -298,7 +298,7 @@ public class CustomFilter implements GlobalFilter {
 
 ---
 
-### **5. 相关类与上下文**
+### **相关类与上下文**
 - **`ServerWebExchange`**  
   网关请求的上下文对象，持有 `ServerHttpRequest` 和 `ServerHttpResponse`，是操作请求和响应的入口。
   

@@ -167,7 +167,6 @@ Applications can then:
 * Either link to the compiled host code (this is the most common case),
 * Or **ignore** the modified host code (if any) and use the CUDA driver API (see [Driver API](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#driver-api)) to load and execute the *PTX* code or *cubin* object.
 
-
 #### Just-in-Time Compilation
 Any *PTX* code loaded by an application at runtime is **compiled further to binary code** by the device driver. This is called *just-in-time compilation*. Just-in-time compilation increases application load time, but allows the application to **benefit** from any new compiler improvements coming with each new device driver. It is also the only way for applications to run on devices that **did not exist** at the time the application was compiled.
 
@@ -215,7 +214,6 @@ cudaError_t err = cudaGetLastError();  // 验证初始化状态
 ```
 
 The runtime creates a CUDA context for each device in the system (see [Context](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#context) for more details on CUDA contexts). This context is the **primary context** for this device and is initialized at **the first runtime** function which requires an active context on this device. It is **shared among all the host threads** of the application. As part of this context creation, the device code is just-in-time compiled if necessary (see [Just-in-Time Compilation](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#just-in-time-compilation)) and loaded into device memory. This all happens transparently.
-
 
 #### Device Memory
 Device memory can be allocated either as ***linear memory*** or as ***CUDA arrays***.
@@ -590,7 +588,6 @@ thread_block g = this_thread_block();
 
 * Cluster Group
 This group object represents all the threads launched in a single cluster. Refer to [Thread Block Clusters](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#thread-block-clusters). The APIs are available on all hardware with Compute **Capability 9.0+**. In such cases, when a non-cluster grid is launched, the APIs assume a **1x1x1** cluster.
-
 
 * Grid Group
 This group object represents all the threads launched in a single grid. APIs other than sync() are available at all times, but to be able to synchronize across the grid, you need to use the **cooperative launch API**.

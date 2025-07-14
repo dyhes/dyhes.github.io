@@ -22,7 +22,7 @@ tags:
 ---
 
 ### **保持脚本持续运行的方法**
-#### **1. `nohup` 命令（简单后台运行）**
+#### **`nohup` 命令（简单后台运行）**
 ```bash
 nohup python3 script.py > output.log 2>&1 &
 ```
@@ -30,7 +30,7 @@ nohup python3 script.py > output.log 2>&1 &
 - **优点**：无需安装额外工具，适合临时任务。
 - **缺点**：无法实时交互，需手动查看日志（如 `tail -f output.log`）。
 
-#### **2. `screen` / `tmux`（会话管理工具）**
+#### **`screen` / `tmux`（会话管理工具）**
 - **安装与使用**：
   ```bash
   # 安装 screen（以 Ubuntu 为例）
@@ -44,7 +44,7 @@ nohup python3 script.py > output.log 2>&1 &
 - **作用**：创建虚拟终端会话，脚本在会话中运行，即使断开连接仍保留。
 - **适用场景**：需交互式操作或分屏管理多任务。
 
-#### **3. `systemd` 服务（长期守护进程）**
+#### **`systemd` 服务（长期守护进程）**
 - **步骤**：
   1. 创建服务文件 `/etc/systemd/system/my_script.service`：
      ```ini
@@ -69,7 +69,7 @@ nohup python3 script.py > output.log 2>&1 &
      ```
 - **优点**：支持进程监控、崩溃自动重启，适合生产环境。
 
-#### **4. `tmux`（高级会话管理）**
+#### **`tmux`（高级会话管理）**
 ```bash
 # 安装 tmux
 sudo apt install tmux
@@ -82,7 +82,7 @@ tmux attach -t mysession
 ```
 - **优势**：支持多窗口分屏、会话持久化，功能比 `screen` 更强大。
 
-#### **5. Supervisor（专业进程管理）**
+#### **Supervisor（专业进程管理）**
 - **安装与配置**：
   ```bash
   sudo apt install supervisor
@@ -121,7 +121,7 @@ tmux attach -t mysession
 ---
 
 ### **精确终止指定Python程序**
-#### **1. 查找目标进程的PID（进程ID）**
+#### **查找目标进程的PID（进程ID）**
 使用 `ps` 或 `pgrep` 命令筛选出目标Python进程的PID：
 ```bash
 ps aux | grep python | grep -v grep
@@ -133,7 +133,7 @@ ps aux | grep python | grep -v grep
   ```
   - **PID**是第二列的数字（例如`1234`）。
 
-#### **2. 发送终止信号**
+#### **发送终止信号**
 通过PID向进程发送终止信号：
 - **正常终止（SIGTERM）**：
   ```bash
@@ -149,7 +149,7 @@ ps aux | grep python | grep -v grep
 ---
 
 ### **通过进程名终止**
-#### **1. 使用`pkill`命令**
+#### **使用`pkill`命令**
 根据进程名批量终止所有匹配的Python程序：
 ```bash
 pkill -f "python my_script.py"
@@ -158,7 +158,7 @@ pkill -f "python my_script.py"
   - `-f`：匹配完整的命令行（包含参数）。
   - 若不指定脚本名（如`pkill python`），会终止所有Python进程，可能导致误杀。
 
-#### **2. 使用`killall`命令**
+#### **使用`killall`命令**
 终止所有同名进程：
 ```bash
 killall python3
@@ -168,13 +168,13 @@ killall python3
 ---
 
 ### **使用系统工具可视化终止**
-#### **1. `top`或`htop`工具**
+#### **`top`或`htop`工具**
 - **操作步骤**：
   1. 运行 `top` 或 `htop`（需安装）。
   2. 按 `k`（在`top`中）或选中进程后按 `F9`（在`htop`中）。
   3. 输入PID或选择信号（如`SIGTERM`或`SIGKILL`）终止进程。
 
-#### **2. 监控工具的优势**
+#### **监控工具的优势**
 - 实时查看CPU/内存占用，辅助定位异常进程。
 - 适合需要动态管理多个进程的场景。
 

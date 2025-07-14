@@ -435,8 +435,6 @@ ISBL（Infotmation System Base Language）
 
   ![image-20220322002502544](https://i.ibb.co/54F7G83/image-20220322002502544.png)
 
-  
-
 #### 更新语句：PUT,HOLD,UPDATE,DELETE,DROP
 
 * 插入：-建立新元组-PUT
@@ -914,8 +912,6 @@ E-R模型
 
 #### 数据库运行和维护
 
-
-
 ## 简介
 
 SQL语言的前身是**SQUARE**（Specifying  Queries As Relational Expression）语 言，是1974年由Boyce和Chamberlin提出 的，并在IBM公司的关系数据库系统 System R上实现，后改名为**SEQUEL**（ Structured English QUEry Language） 语言，SEUQUEL简称SQL
@@ -947,7 +943,6 @@ SQL语言支持数据库的三级模式结构，在SQL语言中，关系模式�
 * 视图
 
   从一个或多个基本表导出的“虚表”，可在视图上再定义视图，只存放定义而不存放数据
-
 
 ## 数据定义
 
@@ -1029,10 +1024,8 @@ SQL语言支持数据库的三级模式结构，在SQL语言中，关系模式�
   [DROP <colname> [CASCADE|RESTRICT]]
   
   [ALTER<colname> <datatype>]
-  
-  
-  
-  ALTER TABLE Student ADD S_entrance DATE；
+
+ALTER TABLE Student ADD S_entrance DATE；
   
   ALTER TABLE Student ADD S_entrance DATE；
   
@@ -1047,15 +1040,7 @@ SQL语言支持数据库的三级模式结构，在SQL语言中，关系模式�
   * 删除视图
   * 间接修改视图定义：删除+创建
 
-  
-
-  
-
-  
-
-  
-
-  * 创建索引
+* 创建索引
 
     CREATE [UNIQUE] [CLUSTER] INDEX <idxname> ON <tablename> (
 
@@ -1068,8 +1053,6 @@ SQL语言支持数据库的三级模式结构，在SQL语言中，关系模式�
   * 间接修改索引定义：删除+创建
 
   ![image-20220426103755768](https://i.ibb.co/z2PSyXs/image-20220426103755768.png)
-
-
 
 ### 索引（内模式）
 
@@ -1098,9 +1081,8 @@ SQL语言支持数据库的三级模式结构，在SQL语言中，关系模式�
 
   ```sql
   CREATE [UNIQUE][CLUSTER] INDEX <indexName> ON <tableName> (<colName>[<order>][,<colName>[order]]...);
-  
-  
-  CREATE UNIQUE INDEX Stusno ON Student（Sno）；
+
+CREATE UNIQUE INDEX Stusno ON Student（Sno）；
   CREATE UNIQUE INDEX Coucno ON Course（Cno）；
   CREATE UNIQUE INDEX SCno ON SC（Sno ASC，Cno DESC）；
   ```
@@ -1116,12 +1098,6 @@ SQL语言支持数据库的三级模式结构，在SQL语言中，关系模式�
   ```
 
 ## 数据操纵
-
-
-
-
-
-
 
 ### 数据查询
 
@@ -1199,9 +1175,7 @@ FROM <tableOrViewName>[， <tableOrViewName> ] …
   [NOT] LIKE ‘<匹配串>’ [ESCAPE ‘ <换码字符>’]
   ```
 
-  
-
-  ```sql
+```sql
   SELECT Sname
   FROM Student
   WHERE Sdept='CS';
@@ -1429,7 +1403,6 @@ WHERE Grade >=(SELECT AVG(Grade)
 FROM SC y
 WHERE y.Sno=x.Sno);
 
-
 ```
 
 带有EXISTS谓词的子查询不返回任何数据 ，只产生逻辑真值“true”或逻辑假值 “false”。 
@@ -1491,8 +1464,6 @@ SCZ.Cno= SCY.Cno));## 查询至少选修了学生95002选修的全部课程的�
 UNION|INTERSECT|EXCEPT
 <queryBlock>
 ```
-
-
 
 * 并
 
@@ -1734,7 +1705,6 @@ GRANT <authority1>[,<authority2>]...
 TO <userName>[,<userName>]...
 [WITH GRANT OPTION];
 
-
 #case
 GRANT SELECT
 ON TABLE Student
@@ -1765,7 +1735,6 @@ TO U8;
 REVOKE <authority1>[,<authority2>]...
 [ON <targetType> <targetName>]
 FROM <userName>[,<userName>]...;
-
 
 REVOKE UPDATE(Sno)
 ON TABLE Student
@@ -1805,7 +1774,6 @@ FROM <tableorview>[,<tableorview>] ...
 [WHERE <condition>]
 [GROUP BY <colname1> [HAVING <condition>]]
 [ORDER BY <colname2> [ASC|DESC]]；
-
 
 EXEC SQL SELECT Sno, Sname, Ssex, Sage, 
 Sdept
@@ -2080,9 +2048,8 @@ ON SC；
   [PRIMARY KEY Statement
   |FOREIGN KEY Statement
   |CHECK Statement]
-  
-  
-  CREATE TABLE Student
+
+CREATE TABLE Student
   （Sno NUMERIC（6）
   CONSTRAINT C1 CHECK （Sno BETWEEN 90000 AND 99999）,
   Sname CHAR（20）
@@ -2152,7 +2119,6 @@ new.Eno，new.Sal，CURRENT_USER，
 CURRENT_TIMESTAMP）；
 END IF；
 END；
-
 
 DROP TRIGGER <triggerName> ON <t>；
 ```
@@ -2477,11 +2443,7 @@ DBA将整个数据库复制到磁带或另一个磁盘上保存起来的过程�
 
 所有事务分两个阶段对数据项加锁和解锁，在读写之前获得锁，释放锁之后不再申请和获得其他封锁
 
-
-
 并行执行的所有事务均遵守两阶段封锁协议，则对这些事务的所有并行调度策略都是可串行化的
-
-
 
 遵循第三级封锁协议必然遵守两阶段封锁协议
 

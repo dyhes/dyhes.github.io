@@ -11,7 +11,7 @@ tags:
 
  Java对象契约（Object Contract）指Java中所有对象必须遵守的行为规范，这些规范由Object类定义的核心方法约定构成，确保对象在集合操作、比较、多线程交互等场景下行为一致且可靠。以下是关键组成部分及其实质：
 
-### ⚖️ 一、核心方法契约
+### ⚖️ 核心方法契约
 1. **equals()方法**  
    * **契约要求**：  
      - **自反性**：x.equals(x)必须返回true。  
@@ -36,7 +36,7 @@ tags:
      - 默认实现为**浅拷贝**，需重写以实现深拷贝（如递归调用子对象clone()）。  
 
 ⠀
-### 🔗 二、契约式设计（Design by Contract）的扩展
+### 🔗 契约式设计（Design by Contract）的扩展
 Java虽未原生支持契约式编程（DbC），但通过工具和注解模拟类似思想：
 ```java
 @Contract("null -> fail; !null -> !null") // 参数非空则返回非空
@@ -48,7 +48,7 @@ public String process(String input) {
 * **Objects.requireNonNull()** ：显式守卫前置条件（如参数非空）。
 
 ⠀
-### ⚙️ 三、实际应用场景
+### ⚙️ 实际应用场景
 1. **集合框架**  
    * `HashMap`依赖`hashCode()`和`equals()`定位键值对。违反契约会导致数据重复或丢失。  
    * `HashSet`内部使用`HashMap`，相同约束适用。  
@@ -60,7 +60,7 @@ public String process(String input) {
      - 或标记为`transient`  
 
 ⠀
-### 💎 四、重要性总结
+### 💎 重要性总结
 * **行为一致性** ：确保对象在集合、比较、并发等场景下行为可靠。
 * **框架兼容性** ：Java集合、序列化、反射等机制依赖对象契约。
 * **代码健壮性** ：遵守契约可避免隐蔽Bug（如HashMap逻辑错误）。

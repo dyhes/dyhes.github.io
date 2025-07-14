@@ -113,7 +113,6 @@ print_str(literal);
 
 通过理解这些区别，可以更高效地选择适合场景的字符串类型，平衡性能与灵活性。
 
-
 ## `HashMap` 
 以下是关于 Rust 中 `HashMap` 的详细介绍，综合其核心特性、使用方法和优化策略：
 
@@ -415,7 +414,6 @@ fn my_atoi(s: String) -> i32 {
 ---
 
 如需处理中文数字转换或自定义进制系统，可参考支持多进制的库（如 `chinese-number`）。
-
 
 ## fn parameter
 在 Rust 中，**这两个函数签名不等价**，且第一个写法存在语法错误。以下是详细解析：
@@ -1043,7 +1041,6 @@ Rust 编译器通过以下步骤确定如何调用 `PartialEq` 的方法：
 
 通过理解这些规则，可以避免语法错误并编写更符合 Rust 惯用法的代码。
 
-
 ## `Iterator.next()`
 
 在 Rust 中，`Iterator::next` 方法被设计为 `&mut self` 的**可变方法**，这一设计的核心原因与迭代器的内部状态管理和 Rust 的所有权系统密切相关。以下是具体解析：
@@ -1214,7 +1211,6 @@ let centroid = points.into_iter().reduce(|acc, p| Point {
 ### 总结
 `Iterator::reduce` 是 Rust 中处理元素归约的利器，特别适合需要动态处理空迭代器的场景。理解其与 `fold` 的差异（初始值需求、返回值类型）和适用场景，能帮助开发者在集合操作中编写更简洁、安全的代码。对于需要并行处理或复杂归约逻辑的场景，可结合 `rayon` 库或自定义迭代器扩展功能 。
 
-
 ## Cons
 在 Rust 中，**Cons** 是一种用于构建递归数据结构的模式，尤其常见于实现链表（如 Lisp 中的 Cons List）。其核心思想是通过枚举（`enum`）和智能指针（如 `Box`）的组合，解决递归类型在编译时大小未知的问题。以下是详细解析：
 
@@ -1308,7 +1304,6 @@ let list = Cons(1, Box::new(Cons(2, Box::new(Cons(3, Box::new(Nil))))));
 • **性能权衡**：牺牲连续内存访问效率，换取动态扩展的灵活性。
 
 如需深入实现细节（如自定义 `Deref` 和 `Drop`），可参考 Rust 官方文档或智能指针专题教程。
-
 
 ## `Mutex<T>`
 要解决“无法修改 `Arc` 中的数据，因为未实现 `DerefMut`”的错误，需要结合 **内部可变性** 机制。以下是分步解决方案：
@@ -1406,7 +1401,6 @@ let current = progress.load(Ordering::Relaxed);
 * `(0..=255).contains(&digit)`
 * `TryFrom` is a simple and safe type conversion that may fail in a controlled way under some circumstances. Basically, this is the same as `From`. The main difference is that this should return a `Result` type instead of the target type itself. 
 * AsRef and AsMut allow for cheap reference-to-reference conversions. 
-
 
 as_ref?
 

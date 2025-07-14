@@ -5,7 +5,6 @@ categories:
   - star
 ---
 
-
 ## Instruction
 
 ### definition
@@ -45,8 +44,6 @@ categories:
 * program counter  (PC) 
 
   The register containing the address  of the instruction in the  program being executed
-
-
 
 ### type
 

@@ -12,7 +12,6 @@ cmake .. \
 -DCMAKE_CXX_COMPILER=/home/bingxing2/home/scx6625/wbx/models/kokkos4.2/kokkos-4.2.00/bin/nvcc_wrapper \
 -DCMAKE_BUILD_TYPE=Release
 
-
 cmake .. \
   -DCMAKE_INSTALL_PREFIX=/home/bingxing2/home/scx6625/wbx/models/kokkos4.2/install/kernel \
   -DKokkos_ENABLE_CUDA=ON \

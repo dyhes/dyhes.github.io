@@ -13,7 +13,7 @@ tags:
 
 ------
 
-### ⚙️ **1. 方法定义与返回值**
+### ⚙️ **方法定义与返回值**
 
 - **`Runnable`**
 
@@ -35,7 +35,7 @@ tags:
 
 ------
 
-### ⚠️ **2. 异常处理机制**
+### ⚠️ **异常处理机制**
 
 - **`Runnable`**
 
@@ -61,7 +61,7 @@ tags:
 
 ------
 
-### 🔌 **3. 执行方式与线程池兼容性**
+### 🔌 **执行方式与线程池兼容性**
 
 - **`Runnable`**
   - 可通过 `Thread` 类直接启动（`new Thread(runnable).start()`）或提交给 `ExecutorService`。
@@ -72,7 +72,7 @@ tags:
 
 ------
 
-### 📊 **4. 主要区别对比表**
+### 📊 **主要区别对比表**
 
 | **特性**         | **Runnable**                            | **Callable**                       |
 | ---------------- | --------------------------------------- | ---------------------------------- |
@@ -84,7 +84,7 @@ tags:
 
 ------
 
-### 🧩 **5. 线程状态监控与结果获取**
+### 🧩 **线程状态监控与结果获取**
 
 - **`Runnable`**
   - 通过 `Future.isDone()` 判断任务完成状态，但无法获取结果或异常详情。
@@ -94,7 +94,7 @@ tags:
 
 ------
 
-### 💡 **6. 适用场景**
+### 💡 **适用场景**
 
 - **`Runnable`**：
   简单异步任务（如事件日志、线程池基础任务）。
@@ -133,7 +133,7 @@ Integer result = futureCallable.get(); // 返回100
 
 ------
 
-### ⚙️ **一、Future 的核心定位与作用**
+### ⚙️ **Future 的核心定位与作用**
 
 `Future` 是 Java 并发编程中**异步计算结果的容器**（位于 `java.util.concurrent` 包），代表一个尚未完成的异步任务的结果。其核心价值在于：
 
@@ -147,7 +147,7 @@ Integer result = futureCallable.get(); // 返回100
 
 ------
 
-### 🔧 **二、核心方法解析**
+### 🔧 **核心方法解析**
 
 | **方法**                                        | **功能说明**                                                 |
 | ----------------------------------------------- | ------------------------------------------------------------ |
@@ -164,7 +164,7 @@ Integer result = futureCallable.get(); // 返回100
 
 ------
 
-### ⚡ **三、典型使用场景**
+### ⚡ **典型使用场景**
 
 1. **并行计算**
    将大任务拆分为子任务并行执行，通过 `Future` 列表统一收集结果：
@@ -205,9 +205,9 @@ Integer result = futureCallable.get(); // 返回100
 
 ------
 
-### 🧩 **四、实现原理与核心类**
+### 🧩 **实现原理与核心类**
 
-#### 1. **状态管理机制**
+#### **状态管理机制**
 
 `FutureTask`（`Future` 的核心实现类）通过 7 种状态管理任务生命周期：
 
@@ -223,7 +223,7 @@ private static final int INTERRUPTED = 6;  // 已中断
 
 状态转换通过 **CAS（Compare-And-Swap）** 保证原子性。
 
-#### 2. **核心实现类对比**
+#### **核心实现类对比**
 
 | **类名**                | **特点**                                                     | **适用场景**                               |
 | ----------------------- | ------------------------------------------------------------ | ------------------------------------------ |
@@ -242,7 +242,7 @@ private static final int INTERRUPTED = 6;  // 已中断
 
 ------
 
-### ⚠️ **五、注意事项与最佳实践**
+### ⚠️ **注意事项与最佳实践**
 
 1. **线程池关闭**
    务必调用 `executor.shutdown()`，避免线程泄漏。
@@ -283,7 +283,7 @@ private static final int INTERRUPTED = 6;  // 已中断
 
 ------
 
-### 🔄 **六、演进与替代方案**
+### 🔄 **演进与替代方案**
 
 #### `Future` 的局限性：
 
@@ -329,7 +329,7 @@ CompletableFuture.supplyAsync(() -> "Hello")
 
 ------
 
-### 🔧 **1. 实现 `Runnable` 接口**
+### 🔧 **实现 `Runnable` 接口**
 
 `FutureTask` 实现了 `RunnableFuture` 接口，而 `RunnableFuture` 同时继承了 `Runnable` 和 `Future` 接口。因此：
 
@@ -346,7 +346,7 @@ thread.start();
 
 ------
 
-### 📦 **2. 内部持有 `Callable` 字段**
+### 📦 **内部持有 `Callable` 字段**
 
 `FutureTask` 的核心设计是**统一封装任务**：
 
@@ -385,7 +385,7 @@ thread.start();
 
 ------
 
-### 🔄 **3. 任务执行流程**
+### 🔄 **任务执行流程**
 
 当调用 `FutureTask.run()` 时：
 
@@ -407,7 +407,7 @@ CompletionStage 是 Java 8 引入的核心异步编程接口（位于 `java.util
 
 ------
 
-### ⚙️ **一、核心定位与设计思想**
+### ⚙️ **核心定位与设计思想**
 
 1. 阶段化任务抽象
    - 一个异步计算流程可拆分为多个相互依赖的 `CompletionStage` 子任务，形成**任务流水线**。
@@ -419,7 +419,7 @@ CompletionStage 是 Java 8 引入的核心异步编程接口（位于 `java.util
 
 ------
 
-### 🧩 **二、核心任务模型与函数式接口**
+### 🧩 **核心任务模型与函数式接口**
 
 `CompletionStage` 子任务的操作类型由函数式接口决定，分为三类：
 
@@ -439,9 +439,9 @@ stage.thenApply(x -> x * 2)      // 输入整数x，输出2x
 
 ------
 
-### ⛓️ **三、任务编排能力详解**
+### ⛓️ **任务编排能力详解**
 
-#### 1. **串行关系（Sequential）**
+#### **串行关系（Sequential）**
 
 通过 `then*` 系列方法实现阶段顺序执行：
 
@@ -453,7 +453,7 @@ stage.thenApply(x -> x * 2)      // 输入整数x，输出2x
 userStage.thenCompose(user -> orderService.getOrders(user.getId()));
 ```
 
-#### 2. **并行组合（Combination）**
+#### **并行组合（Combination）**
 
 合并多个独立任务的结果：
 
@@ -464,7 +464,7 @@ userStage.thenCompose(user -> orderService.getOrders(user.getId()));
 weightStage.thenCombine(heightStage, (w, h) -> w / (h * h));
 ```
 
-#### 3. **聚合关系（AND/OR）**
+#### **聚合关系（AND/OR）**
 
 控制多个任务的完成触发条件：
 
@@ -481,7 +481,7 @@ CompletableFuture.allOf(urlFutures)
         .count());
 ```
 
-#### 4. **异常处理**
+#### **异常处理**
 
 支持链式捕获异常，避免中断流水线：
 
@@ -495,7 +495,7 @@ stage.exceptionally(ex -> "Fallback")
 
 ------
 
-### ⚙️ **四、底层实现机制**
+### ⚙️ **底层实现机制**
 
 1. 状态驱动
    - 每个 `CompletionStage` 维护任务状态（未完成、完成、异常），通过 **CAS 原子操作**更新。
@@ -506,7 +506,7 @@ stage.exceptionally(ex -> "Fallback")
 
 ------
 
-### 🚀 **五、典型应用场景**
+### 🚀 **典型应用场景**
 
 1. 微服务调用链
 
@@ -540,7 +540,7 @@ stage.exceptionally(ex -> "Fallback")
 
 ------
 
-### ⚠️ **六、注意事项**
+### ⚠️ **注意事项**
 
 1. **避免阻塞回调**
    回调中执行阻塞操作（如同步 I/O）会拖慢整个流水线，需改用异步 I/O 或指定专用线程池。
@@ -572,7 +572,7 @@ CompletableFuture 是 Java 8 引入的异步编程工具，实现了 `Future` �
 
 ------
 
-### 🔧 **一、核心特性与设计定位**
+### 🔧 **核心特性与设计定位**
 
 1. **异步结果容器**
    - 表示一个可能未完成的异步计算结果，支持手动设置结果（`complete(T)`）或异常终止（`completeExceptionally(Throwable)`）。
@@ -586,9 +586,9 @@ CompletableFuture 是 Java 8 引入的异步编程工具，实现了 `Future` �
 
 ------
 
-### ⚙️ **二、核心 API 详解**
+### ⚙️ **核心 API 详解**
 
-#### **1. 创建异步任务**
+#### **创建异步任务**
 
 | **方法**                   | **功能**                                 |
 | -------------------------- | ---------------------------------------- |
@@ -602,7 +602,7 @@ CompletableFuture 是 Java 8 引入的异步编程工具，实现了 `Future` �
 CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> "Hello");
 ```
 
-#### **2. 链式回调方法**
+#### **链式回调方法**
 
 | **方法**                                         | **用途**                                       |
 | ------------------------------------------------ | ---------------------------------------------- |
@@ -618,7 +618,7 @@ future.thenApply(s -> s + " World")
       .thenAccept(System.out::println); // 输出 "Hello World"
 ```
 
-#### **3. 多任务组合**
+#### **多任务组合**
 
 | **方法**                                   | **场景**                               |
 | ------------------------------------------ | -------------------------------------- |
@@ -635,7 +635,7 @@ future1.thenCombine(future2, (a, b) -> a + b)
        .thenAccept(sum -> System.out.println("Sum: " + sum)); // 输出 5
 ```
 
-#### **4. 异常处理**
+#### **异常处理**
 
 ```
 CompletableFuture.supplyAsync(() -> {
@@ -647,7 +647,7 @@ CompletableFuture.supplyAsync(() -> {
 
 ------
 
-### ⚡ **三、典型应用场景**
+### ⚡ **典型应用场景**
 
 1. **并行计算优化**
    将大任务拆分为子任务并行执行，通过 `allOf` 聚合结果，提升吞吐量：
@@ -682,7 +682,7 @@ CompletableFuture.supplyAsync(() -> {
 
 ------
 
-### ⚠️ **四、注意事项与最佳实践**
+### ⚠️ **注意事项与最佳实践**
 
 1. **线程池选择**
    - **CPU 密集型**：固定大小线程池（`Executors.newFixedThreadPool`）避免过度切换。
@@ -697,7 +697,7 @@ CompletableFuture.supplyAsync(() -> {
 
 ------
 
-### 💎 **五、与传统 Future 的核心差异**
+### 💎 **与传统 Future 的核心差异**
 
 | **特性**     | **Future**             | **CompletableFuture**                |
 | ------------ | ---------------------- | ------------------------------------ |
@@ -708,7 +708,7 @@ CompletableFuture.supplyAsync(() -> {
 
 ------
 
-### 🚀 **六、综合应用示例**
+### 🚀 **综合应用示例**
 
 ```
 ExecutorService executor = Executors.newFixedThreadPool(4);
@@ -747,7 +747,7 @@ CompletableFuture 是 Java 异步编程的**核心进化**，通过链式调用�
 
 ------
 
-### 🔧 **一、接口层级与设计定位**
+### 🔧 **接口层级与设计定位**
 
 1. **`Executor`**
 
@@ -769,9 +769,9 @@ CompletableFuture 是 Java 异步编程的**核心进化**，通过链式调用�
 
 ------
 
-### ⚙️ **二、核心功能对比**
+### ⚙️ **核心功能对比**
 
-#### **1. 任务提交方式**
+#### **任务提交方式**
 
 | **功能**         | **Executor**        | **ExecutorService**                     |
 | ---------------- | ------------------- | --------------------------------------- |
@@ -788,7 +788,7 @@ Future<Integer> future = executorService.submit(() -> 42);
 Integer result = future.get(); // 阻塞获取结果
 ```
 
-#### **2. 生命周期管理**
+#### **生命周期管理**
 
 | **能力**       | **Executor** | **ExecutorService**                  |
 | -------------- | ------------ | ------------------------------------ |
@@ -805,7 +805,7 @@ if (!executorService.awaitTermination(60, TimeUnit.SECONDS)) {
 }
 ```
 
-#### **3. 批量任务与高级控制**
+#### **批量任务与高级控制**
 
 - **批量提交**：
   `ExecutorService` 支持 `invokeAll()`（等待所有任务完成）和 `invokeAny()`（任一任务完成即返回）。
@@ -814,7 +814,7 @@ if (!executorService.awaitTermination(60, TimeUnit.SECONDS)) {
 
 ------
 
-### 🧩 **三、适用场景分析**
+### 🧩 **适用场景分析**
 
 | **场景**                  | **推荐接口**      | **原因**                                            |
 | ------------------------- | ----------------- | --------------------------------------------------- |
@@ -825,7 +825,7 @@ if (!executorService.awaitTermination(60, TimeUnit.SECONDS)) {
 
 ------
 
-### ⚠️ **四、生产实践注意事项**
+### ⚠️ **生产实践注意事项**
 
 1. 避免无界队列
 
@@ -859,7 +859,7 @@ if (!executorService.awaitTermination(60, TimeUnit.SECONDS)) {
 
 ------
 
-### 💎 **五、总结：核心差异全景图**
+### 💎 **总结：核心差异全景图**
 
 | **特性**         | **Executor**      | **ExecutorService**           |
 | ---------------- | ----------------- | ----------------------------- |
@@ -878,7 +878,7 @@ Executors 是 Java 并发编程中用于**简化线程池创建和管理**的核
 
 ------
 
-### 🔧 **一、Executors 的核心功能与架构定位**
+### 🔧 **Executors 的核心功能与架构定位**
 
 1. **线程池封装**
    Executors 封装了 `ThreadPoolExecutor` 和 `ScheduledThreadPoolExecutor` 的复杂配置，提供开箱即用的线程池实例。
@@ -896,7 +896,7 @@ Executors 是 Java 并发编程中用于**简化线程池创建和管理**的核
 
 ------
 
-### 🧩 **二、Executors 提供的线程池类型及特点**
+### 🧩 **Executors 提供的线程池类型及特点**
 
 以下是六种常用线程池的对比：
 
@@ -913,7 +913,7 @@ Executors 是 Java 并发编程中用于**简化线程池创建和管理**的核
 
 ------
 
-### ⚡ **三、适用场景分析**
+### ⚡ **适用场景分析**
 
 - **CPU 密集型**（计算逻辑为主）→ `FixedThreadPool`（限制并发线程数）。
 - **I/O 密集型**（等待资源为主）→ `CachedThreadPool`（弹性扩缩容）。
@@ -923,9 +923,9 @@ Executors 是 Java 并发编程中用于**简化线程池创建和管理**的核
 
 ------
 
-### 💻 **四、基本使用示例**
+### 💻 **基本使用示例**
 
-#### 1. **固定线程池处理并发任务**
+#### **固定线程池处理并发任务**
 
 ```
 ExecutorService executor = Executors.newFixedThreadPool(4);
@@ -938,7 +938,7 @@ executor.shutdown();  // 停止接收新任务
 executor.awaitTermination(60, TimeUnit.SECONDS);  // 等待剩余任务完成
 ```
 
-#### 2. **定时任务调度**
+#### **定时任务调度**
 
 ```
 ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
@@ -948,7 +948,7 @@ scheduler.schedule(() -> System.out.println("Delayed Task"), 3, TimeUnit.SECONDS
 scheduler.scheduleAtFixedRate(() -> System.out.println("Periodic Task"), 1, 2, TimeUnit.SECONDS);
 ```
 
-#### 3. **获取异步结果（Future）**
+#### **获取异步结果（Future）**
 
 ```
 ExecutorService executor = Executors.newCachedThreadPool();
@@ -962,7 +962,7 @@ System.out.println("Result: " + result);  // 输出: 42
 
 ------
 
-### ⚠️ **五、注意事项与最佳实践**
+### ⚠️ **注意事项与最佳实践**
 
 1. **关闭线程池**
    必须调用 `shutdown()` 或 `shutdownNow()` 避免资源泄漏，推荐结合 `awaitTermination` 等待任务结束。
@@ -1000,7 +1000,7 @@ Executors 的核心价值在于**降低并发编程复杂度**，通过预置线
 
 ------
 
-### 🔧 一、核心参数配置（7大核心参数）
+### 🔧 核心参数配置（7大核心参数）
 
 `ThreadPoolExecutor` 的构造函数包含以下参数，需根据业务需求调整：
 
@@ -1071,7 +1071,7 @@ Executors 的核心价值在于**降低并发编程复杂度**，通过预置线
 
 ------
 
-### ⚙️ 二、完整配置示例
+### ⚙️ 完整配置示例
 
 ```java
 import java.util.concurrent.*;
@@ -1105,7 +1105,7 @@ public class CustomThreadPool {
 
 ------
 
-### 🛠️ 三、高级优化技巧
+### 🛠️ 高级优化技巧
 
 1. **动态参数调整**
    通过 `setCorePoolSize()` 和 `setMaximumPoolSize()` 运行时调整线程数，适应流量波动。
@@ -1131,7 +1131,7 @@ public class CustomThreadPool {
 
 ------
 
-### ⚠️ 四、生产环境建议
+### ⚠️ 生产环境建议
 
 - **避免使用无界队列**：防止任务堆积导致 OOM。
 - **线程命名规范**：通过自定义 `ThreadFactory` 明确线程用途（如 `order-thread-1`），简化日志排查。

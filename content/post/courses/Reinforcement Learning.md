@@ -427,8 +427,6 @@ TD learning
   * sample tuple $(s_t,a_t,r_t,s_{t+1})$
   * $V^{\pi}(s_t)=V^{\pi}(s_t)+\alpha([r_t+\gamma V^{\pi}(s_{t+1})]-V^{\pi}(s_t))$
 
-
-
 ## Lecture 4 (model-free control)
 
 * on-policy learning
@@ -465,7 +463,6 @@ Q^{\pi_i}(s,\pi_{i+1}(s)) & = \sum_{a\in A}\pi_{i+1}(a|s)Q^{\pi}(s,a) \\
  & = \frac{\epsilon}{|A|}\sum_{a\in A}Q^{\pi_i}(s,a)+(1-\epsilon)max_aQ^{\pi_i}(s,a)
 \end{split}
 $$
-
 
 ### Greedy in the Limit of Infinite Exploration(GLIE)
 
@@ -599,7 +596,6 @@ $$
   $$
   MSVE(w)=\sum_{s\in S}d(s)(V^{\pi}(s)-\hat{V}^{\pi}(s;w))^2
   $$
-  
 
 ### Monte Carlo Value Function Approximation
 
@@ -674,7 +670,6 @@ $$
   \Delta w=\alpha (r+\gamma\,max_{a'}\hat{Q}(s',a';w)-\hat{Q}(s,a;w))\nabla_w\hat{Q}^{\pi}(s,a;w)
   $$
 
-
 ## Lecture 6 (Deep Q Learning)
 
 * Linear VFA often work well given the right set of features 
@@ -715,7 +710,6 @@ $$
   $$
   P(i)=\frac{p_i^{\alpha}}{\sum_kp_k^{\alpha n}}
   $$
-  
 
 #### Fixed Q-Targets
 
@@ -828,8 +822,6 @@ summary
 
 * if expert policy is suboptimal then the resulting policy is a mixture of somewhat arbitrary policies which have expert in the convex hull
 * in practice: pick the best one of this set and pick the corresponding reward function
-
-
 
 ## Lecture 8-10 (Policy Gradient)
 

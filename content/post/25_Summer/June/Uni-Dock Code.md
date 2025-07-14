@@ -30,7 +30,6 @@ A typical Uni-Dock workflow appears to be:
 * unidock/src/split/split.cpp：处理 Multi-model PDBQT 多构象分子
   * 通过将每个模型提取到单独的文件中，以便在实际对接过程中更有效地处理。
 
-
 ## unidock/src/main/main.cpp
 **1** **Command Line Interface**: Uses Boost's [program_options](vscode-file://vscode-app/Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/code/electron-sandbox/workbench/workbench.html) library to process command-line arguments and configuration files.
 * **Input**: Specifies receptors, flexible residues, and ligand files
@@ -48,7 +47,6 @@ A typical Uni-Dock workflow appears to be:
 * Single ligand-receptor docking on CPU
 * Batch docking of multiple ligands on GPU
 * Paired batch processing for one-to-one ligand-protein docking
-
 
 **3** **Memory Management**: Implements GPU memory management strategies to optimize batch processing.
 

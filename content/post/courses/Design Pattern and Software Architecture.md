@@ -18,7 +18,6 @@ categories:
 * 安全性
 * 业务质量(cost, schedule, staff, resources)
 
-
 **编程的三个层次**
 
 * 面向过程
@@ -1005,7 +1004,6 @@ class Monk(override val nextHandler: Priest, override val name: String = "monk",
 class Bishop(override val nextHandler: Priest, override val name: String = "bishop", override val authority: Vampire = Vampire.Marquess) : Priest {}
 
 class Pope(override val name: String = "pope", override val authority: Vampire = Vampire.Duke, override val nextHandler: Priest? = null) : Priest {}
-
 
 fun chainOfResponsibilityDemo(){
     val pope = Pope()

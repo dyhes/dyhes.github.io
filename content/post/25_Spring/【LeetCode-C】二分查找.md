@@ -8,7 +8,6 @@ tags:
 - LeetCode-C
 ---
 
-
 在 C++ STL 中，std::vector 结合 <algorithm> 头文件提供的二分查找算法可实现快速二分查找。
 * `std::lower_bound‌`
   返回第一个 ‌**不小于目标值**‌ 的元素的迭代器。若未找到，返回 end()‌
