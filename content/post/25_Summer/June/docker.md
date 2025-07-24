@@ -294,8 +294,8 @@ Docker通过**操作系统级虚拟化**技术，以容器为载体解决了环�
   - ❌ 外部访问需显式端口映射。
 - 命令示例：
   ```
-docker run -d --name web nginx  # 默认使用 bridge
-docker network create my-bridge  # 创建自定义桥接网络[7](@ref)
+  docker run -d --name web nginx  # 默认使用 bridge
+  docker network create my-bridge  # 创建自定义桥接网络[7](@ref)
 
 #### **Host 模式**
 
@@ -699,11 +699,9 @@ docker run -d \
 
 #### **关键差异点**
 
-- 
+- **路径存在性检查**
 
-  路径存在性检查
-
-- 绑定卷：宿主机路径不存在时，`--mount` 会报错，`-v` 会自动创建（可能导致权限问题）[9](@ref)。
+- **绑定卷**：宿主机路径不存在时，`--mount` 会报错，`-v` 会自动创建（可能导致权限问题）[9](@ref)。
   - 管理卷：自动创建目录，无需手动干预。
 
 - **只读控制**
@@ -839,7 +837,7 @@ Docker 提供四种重启策略，通过 `--restart` 参数指定，由 Docker �
    - 容器重启时，临时文件系统会被重置，关键数据需通过卷（Volume）或绑定挂载（Bind Mount）持久化：
 
      ```
-  docker run -d --restart always -v /host/data:/container/data my-app
+    docker run -d --restart always -v /host/data:/container/data my-app
      ```
 
 4. **策略生效条件**
@@ -940,36 +938,24 @@ vim /var/lib/docker/containers/<容器ID>/hostconfig.json
 
 ### 🔍 **调试与监控**
 
-- 
-
-  查看重启策略
-
-  ：
+- 查看重启策略：
 
   ```
-  docker inspect nginx --format '{{.HostConfig.RestartPolicy.Name}}'
+docker inspect nginx --format '{{.HostConfig.RestartPolicy.Name}}'
   ```
 
-- 
-
-  检查重启次数
-
-  ：
+- 检查重启次数：
 
   ```
-  docker inspect nginx --format '{{.RestartCount}}'  # 显示已重启次数[6](@ref)
+docker inspect nginx --format '{{.RestartCount}}'  # 显示已重启次数[6](@ref)
   ```
 
-- 
-
-  分析退出原因
-
-  ：
+- 分析退出原因：
 
   ```
-  docker ps -a  # 查看 Exited 状态码[2,6](@ref)
+docker ps -a  # 查看 Exited 状态码[2,6](@ref)
   docker logs nginx  # 定位错误日志
-  ```
+```
 
 
 

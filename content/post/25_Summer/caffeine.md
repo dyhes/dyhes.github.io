@@ -203,7 +203,7 @@ public class CacheConfig {
 ------
 ### 🧩 **多级缓存管理器实现**
 
-```
+```java
 public class MultiLevelCacheManager implements CacheManager {
     private final CacheManager level1; // Caffeine
     private final CacheManager level2; // Redis
@@ -269,7 +269,7 @@ public class MultiLevelCacheManager implements CacheManager {
 ------
 ### 🛠️ **业务层使用示例**
 
-```
+```java
 @Service
 public class ProductService {
     @Autowired
@@ -296,7 +296,7 @@ public class ProductService {
 1. **数据一致性保障**
    - **双删策略**：更新数据后同时清除两级缓存（如上例 `@CacheEvict`）
    - **Pub/Sub 同步**：通过 Redis 发布订阅，通知其他节点失效本地缓存[1](@ref)
-   ```
+   ```Java
    // Redis 消息监听示例
    @Bean
    public MessageListenerAdapter listenerAdapter() {
@@ -310,18 +310,18 @@ public class ProductService {
    ```
 2. **防缓存穿透**
    - 缓存空值（短TTL）：
-   ```
+   ```java
    if (product == null) {
        level2.put(key, NULL_OBJECT, 30, TimeUnit.SECONDS); // 缓存空对象
    }
    ```
 3. **防雪崩机制**
    - Redis TTL 添加随机扰动：
-   ```
+   ```java
    redisTemplate.opsForValue().set(key, value, 30 + random.nextInt(10), TimeUnit.MINUTES);
    ```
 4. **性能监控**
-   ```
+   ```java
    // 获取Caffeine统计信息
    CacheStats stats = caffeineCache.getNativeCache().stats();
    log.info("L1命中率: {}", stats.hitRate());
@@ -352,7 +352,7 @@ public class ProductService {
 
 #### **多级缓存管理器**（Caffeine + Redis）
 
-```
+```java
 @Configuration
 public class CacheConfig {
 
@@ -385,7 +385,7 @@ public class CacheConfig {
 ```
 #### **单级Redis缓存管理器**（独立配置）
 
-```
+```java
 @Bean("pureRedisCacheManager")
 public CacheManager pureRedisCacheManager(RedisConnectionFactory factory) {
     RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
@@ -400,7 +400,7 @@ public CacheManager pureRedisCacheManager(RedisConnectionFactory factory) {
 
 #### **多级缓存接口**（热点数据）
 
-```
+```java
 @Service
 public class ProductService {
 
@@ -413,7 +413,7 @@ public class ProductService {
 ```
 #### **单级Redis缓存接口**（普通数据）
 
-```
+```java
 @Service
 public class UserService {
 
@@ -426,7 +426,7 @@ public class UserService {
 ```
 #### **动态条件控制**（更精细的粒度）
 
-```
+```java
 @Cacheable(cacheManager = "multiLevelCacheManager", value = "products", 
            condition = "#isHot == true") // 仅当isHot=true时启用多级缓存
 public Product getProduct(Long id, boolean isHot) {
@@ -440,7 +440,7 @@ public Product getProduct(Long id, boolean isHot) {
 
 #### 定义注解 `@MultiLevelCache`
 
-```
+```java
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Cacheable(cacheManager = "multiLevelCacheManager")
@@ -451,7 +451,7 @@ public @interface MultiLevelCache {
 ```
 #### 在目标接口上使用
 
-```
+```java
 @MultiLevelCache(value = "orders", key = "#orderId") // 自动走多级缓存
 public Order getOrder(String orderId) {
     // ...
@@ -464,7 +464,7 @@ public Order getOrder(String orderId) {
 
 1. **缓存一致性**
    - 更新多级缓存数据时，需同时清除本地和Redis缓存：
-     ```
+     ```java
      @CacheEvict(cacheManager = "multiLevelCacheManager", value = "hot_products", key = "#id")
      public void updateProduct(Long id) { ... }
      ```
@@ -474,7 +474,7 @@ public Order getOrder(String orderId) {
    - 非热点数据禁止使用多级缓存，减少内存压力。
 3. **监控区分**
    - 独立监控两类缓存命中率：
-     ```
+     ```java
      // 多级缓存监控
      caffeineCacheManager.getCache("hot_products").getNativeCache().stats().hitRate();
      // Redis缓存监控
@@ -497,9 +497,9 @@ public Order getOrder(String orderId) {
 
 - 缓存穿透：在多级缓存的 get 方法中，对空值进行短时间缓存：
   ```
-if (value == null) {
+  if (value == null) {
       redisCache.put(key, NULL_OBJECT, 30, TimeUnit.SECONDS); // 缓存空值[5](@ref)
-}
+  }
   ```
 - 缓存雪崩：为 Redis 的 TTL 添加随机扰动：
   ```
@@ -651,3 +651,445 @@ if (value == null) {
 >
 > - 简单场景 → **自定义CacheManager**（快速生效）[1,2](@ref)；
 > - 复杂逻辑 → **自定义注解+AOP**（如动态TTL+自动刷新）[6,8](@ref)。
+## 延迟双删
+
+在Spring应用中实现延迟双删策略，需结合缓存注解（如`@CacheEvict`）与异步延迟删除机制，解决高并发下缓存与数据库的数据一致性问题。以下是两种主流实现方案及核心实践：
+
+
+------
+### ⚙️ **延迟双删的核心原理**
+
+**问题场景**：
+在并发更新时，若仅删除一次缓存，可能出现：
+1. 线程A删除缓存 → 更新数据库（耗时操作）
+2. 线程B在A更新完成前读取数据库旧数据 → 将旧数据写入缓存
+3. 线程A更新完成，但缓存已被B污染，导致后续请求读取脏数据。
+**延迟双删流程**：
+1. **首次删除缓存**：更新数据库前删除缓存，防止旧数据被读取。
+2. **更新数据库**：执行业务数据更新。
+3. **延迟二次删除**：等待一段时间（如500ms）后再次删除缓存，确保并发读操作已完成，避免脏数据残留。
+
+
+------
+### 🛠️ **实现方案一：基于AOP切面 + 自定义注解**
+
+#### **定义自定义注解**
+
+```
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface DelayDoubleDelete {
+    String cacheName();  // 缓存名称
+    long delay() default 500; // 延迟时间（毫秒）
+}
+```
+#### **实现AOP切面（核心逻辑）**
+
+```
+@Aspect
+@Component
+public class DelayDoubleDeleteAspect {
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @Around("@annotation(delayDelete)")
+    public Object doDelayDelete(ProceedingJoinPoint joinPoint, DelayDoubleDelete delayDelete) throws Throwable {
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        Method method = signature.getMethod();
+        
+        // 1. 首次删除缓存
+        String cacheName = delayDelete.cacheName();
+        Set<String> keys = redisTemplate.keys(cacheName + ":*"); // 模糊匹配Key
+        redisTemplate.delete(keys);
+        
+        // 2. 执行数据库更新
+        Object result = joinPoint.proceed();
+        
+        // 3. 延迟二次删除（异步线程）
+        CompletableFuture.runAsync(() -> {
+            try {
+                Thread.sleep(delayDelete.delay());
+                Set<String> keysAgain = redisTemplate.keys(cacheName + ":*");
+                redisTemplate.delete(keysAgain);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+        
+        return result;
+    }
+}
+```
+#### **业务层使用示例**
+
+```
+@Service
+public class UserService {
+    @DelayDoubleDelete(cacheName = "userCache", delay = 500)
+    public void updateUser(User user) {
+        userRepository.save(user); // 更新数据库
+    }
+}
+```
+
+
+------
+### 🔌 **实现方案二：增强CacheManager（非侵入式）**
+
+若希望无侵入式集成，可包装Spring Cache的`CacheManager`，自动为`@CacheEvict`添加延迟双删逻辑。
+#### **包装Cache与CacheManager**
+
+```
+public class EnhancedCache implements Cache {
+    private final Cache delegate;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final long delay;
+
+    @Override
+    public void evict(Object key) {
+        delegate.evict(key); // 首次删除
+        CompletableFuture.runAsync(() -> {
+            try {
+                Thread.sleep(delay);
+                delegate.evict(key); // 延迟二次删除
+            } catch (InterruptedException ignored) {}
+        });
+    }
+}
+
+public class EnhancedCacheManager implements CacheManager {
+    private final CacheManager delegate;
+    private final long delay;
+
+    @Override
+    public Cache getCache(String name) {
+        return new EnhancedCache(delegate.getCache(name), delay);
+    }
+}
+```
+#### **注册增强CacheManager至Spring容器**
+
+```
+@Configuration
+public class CacheConfig {
+    @Bean
+    public CacheManager cacheManager(RedisConnectionFactory factory) {
+        RedisCacheManager defaultManager = RedisCacheManager.create(factory);
+        return new EnhancedCacheManager(defaultManager, 500); // 延迟500ms
+    }
+}
+```
+**效果**：所有使用`@CacheEvict`的方法自动触发延迟双删。
+
+
+------
+### ⚠️ **关键注意事项**
+
+1. **延迟时间设置**
+   - 建议**500ms-1000ms**，根据业务SQL平均执行时间调整。
+   - 可通过SpEL动态设置：`@DelayDoubleDelete(delay = "#{T(java.lang.Math).min(1000, #user.updateTime)})`。
+2. **缓存Key的匹配**
+   - 使用`redisTemplate.keys(pattern)`需谨慎，避免模糊匹配导致误删。
+   - 推荐**精确Key定位**：在注解中指定Key表达式（如`key = "#user.id"`）。
+3. **线程池优化**
+   - 异步删除需使用独立线程池，避免阻塞主线程：
+     ```
+     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(4);
+     executor.schedule(() -> deleteCache(key), delay, TimeUnit.MILLISECONDS);
+     ```
+4. **适用场景限制**
+   - **读多写少**：频繁写操作会导致缓存频繁失效，降低性能。
+   - **最终一致性**：延迟双删不保证强一致，适用于容忍毫秒级延迟的业务。
+
+
+------
+### 📊 **方案对比**
+
+| **方案**         | 侵入性 | 灵活性 | 维护性                   | 适用场景          |
+| ---------------- | ------ | ------ | ------------------------ | ----------------- |
+| AOP + 自定义注解 | 中     | 高     | 需维护切面逻辑           | 需精细控制缓存Key |
+| 增强CacheManager | 低     | 中     | 全局生效，无需改业务代码 | 全项目统一策略    |
+
+
+------
+### 💎 **总结**
+
+- **首选AOP方案**：需定制化缓存清理逻辑时（如模糊删除、多级缓存），使用自定义注解更灵活。
+- **无侵入方案**：若项目广泛使用`@CacheEvict`，增强`CacheManager`可快速生效。
+- **兜底策略**：结合**短TTL**（如30s）确保极端情况下缓存自动失效，双重保障数据一致性。
+> 完整代码参考：[GitHub示例](https://github.com/example/delay-double-delete)
+## CacheManager 增强
+
+在 Spring 环境下，`EnhancedCache` 的延迟双删机制与事务回滚的冲突核心在于：**事务回滚时数据库操作被撤销，但异步的二次删除仍会执行，导致新写入的缓存被误删**。以下是优化方案与原理说明：
+
+
+------
+### ⚠️ **问题根源**
+
+```
+CompletableFuture.runAsync(() -> {
+    Thread.sleep(delay);
+    delegate.evict(key); // 事务回滚后仍执行二次删除
+});
+```
+- **风险**：若数据库事务回滚，二次删除会清除其他线程写入的新缓存（如新插入的数据），造成数据不一致。
+
+
+------
+### 🔧 **解决方案：绑定二次删除到事务提交**
+
+#### **核心改造思路**
+
+将二次删除操作延迟到事务提交后执行，若事务回滚则取消删除任务：
+```
+@Override
+public void evict(Object key) {
+    delegate.evict(key); // 首次删除
+
+    // 仅在事务提交后执行二次删除
+    TransactionSynchronizationManager.registerSynchronization(
+        new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                scheduleSecondEvict(key); // 提交后调度二次删除
+            }
+        }
+    );
+}
+
+private void scheduleSecondEvict(Object key) {
+    CompletableFuture.runAsync(() -> {
+        try {
+            Thread.sleep(delay);
+            delegate.evict(key);
+        } catch (InterruptedException ignored) {}
+    });
+}
+```
+**原理**：
+- `TransactionSynchronization.afterCommit()` 确保二次删除仅在事务成功提交后触发。
+- 若事务回滚，`afterCommit()` 不会执行，避免误删新缓存。
+#### **处理无事务场景**
+
+若当前无事务，直接执行异步删除：
+```
+@Override
+public void evict(Object key) {
+    delegate.evict(key); 
+    
+    if (TransactionSynchronizationManager.isActualTransactionActive()) {
+        // 绑定到事务提交
+        TransactionSynchronizationManager.registerSynchronization(...);
+    } else {
+        // 无事务时直接异步删除
+        scheduleSecondEvict(key);
+    }
+}
+```
+
+
+------
+### ⚙️ **增强健壮性**
+
+#### **线程池隔离**
+
+使用独立线程池，避免阻塞事务线程：
+```
+private final ScheduledExecutorService executor = 
+    Executors.newScheduledThreadPool(4);
+
+private void scheduleSecondEvict(Object key) {
+    executor.schedule(() -> delegate.evict(key), delay, TimeUnit.MILLISECONDS);
+}
+```
+#### **事务回滚补偿**
+
+若事务回滚需撤销首次删除（复杂场景）：
+```
+@Override
+public void evict(Object key) {
+    Object cachedValue = delegate.get(key).orElse(null); // 备份旧值
+    delegate.evict(key); // 首次删除
+
+    TransactionSynchronizationManager.registerSynchronization(
+        new TransactionSynchronization() {
+            @Override
+            public void afterCompletion(int status) {
+                if (status == STATUS_ROLLED_BACK) {
+                    delegate.put(key, cachedValue); // 回滚时恢复旧缓存
+                } else if (status == STATUS_COMMITTED) {
+                    scheduleSecondEvict(key); // 提交后二次删除
+                }
+            }
+        }
+    );
+}
+```
+**注意**：此方案适用于**强一致性要求**的场景，但需考虑缓存恢复的并发安全问题。
+
+
+------
+### 📊 **方案对比**
+
+| **方案**               | 一致性保障     | 复杂度 | 适用场景              |
+| ---------------------- | -------------- | ------ | --------------------- |
+| 事务提交后触发二次删除 | 避免误删新缓存 | 中     | 通用场景（推荐）      |
+| 回滚时恢复旧缓存       | 强一致性       | 高     | 金融/支付等高敏感业务 |
+
+
+------
+### 💎 **总结**
+
+- **优先事务绑定**：通过 `TransactionSynchronization.afterCommit()` 确保二次删除仅在事务提交后执行。
+- **备份恢复慎用**：仅在必要时恢复旧缓存，避免并发冲突。
+- **延迟双删本质**：该机制适用于**最终一致性**场景，若需强一致性，建议结合分布式事务（如 TCC）。
+> 完整代码示例参考：[GitHub Gist](https://gist.github.com/example)
+> 扩展阅读：[Spring 事务与缓存协同设计](https://spring.io/guides)
+## AOP
+
+在Spring框架中，通过自定义AOP切面结合自定义注解方案，**可以识别事务是否回滚**，但需依赖Spring的事务管理机制和线程上下文状态。以下是具体实现方案及注意事项：
+
+
+------
+### 🔍 核心实现方案
+
+#### **通过 `TransactionSynchronizationManager` 主动查询事务状态**
+
+在切面中可直接检查当前事务的标记状态：
+```
+@Aspect
+@Component
+public class CustomAspect {
+    @Around("@annotation(com.example.CustomAnnotation)")
+    public Object aroundAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
+        try {
+            Object result = joinPoint.proceed(); // 执行业务方法
+            // 检查事务是否被标记为回滚
+            if (TransactionSynchronizationManager.isActualTransactionActive() 
+                && TransactionAspectSupport.currentTransactionStatus().isRollbackOnly()) {
+                System.out.println("【事务已标记回滚】");
+            }
+            return result;
+        } catch (Exception ex) {
+            // 若业务方法抛出异常，事务通常已标记回滚
+            System.out.println("【事务因异常回滚】");
+            throw ex;
+        }
+    }
+}
+```
+- 原理：
+  - `TransactionAspectSupport.currentTransactionStatus().isRollbackOnly()` 返回 `true` 表示事务已被标记为回滚（例如调用 `setRollbackOnly()` 或满足回滚规则的异常）。
+  - `TransactionSynchronizationManager.isActualTransactionActive()` 检查当前是否存在活动事务。
+- **适用场景**：在方法执行后检测事务状态。
+
+
+------
+#### **注册事务同步回调（推荐）**
+
+通过 `TransactionSynchronization` 监听事务提交或回滚事件：
+```
+@Around("@annotation(com.example.CustomAnnotation)")
+public Object aroundAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
+    // 注册事务同步器
+    TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+        @Override
+        public void afterCompletion(int status) {
+            if (status == STATUS_ROLLED_BACK) {
+                System.out.println("【事务已回滚】");
+            } else if (status == STATUS_COMMITTED) {
+                System.out.println("【事务已提交】");
+            }
+        }
+    });
+    return joinPoint.proceed();
+}
+```
+- 原理：
+  - `afterCompletion` 回调在事务完成时触发，参数 `status` 标识事务状态（`STATUS_ROLLED_BACK` 或 `STATUS_COMMITTED`）。
+- **优势**：无需主动查询，由事务管理器自动通知，准确性高。
+
+
+------
+#### **在切面中直接获取 `TransactionStatus`**
+
+若自定义切面在事务切面**之后**执行（优先级更低），可直接注入事务状态：
+```
+@Aspect
+@Component
+@Order(Ordered.LOWEST_PRECEDENCE) // 确保优先级低于事务切面
+public class CustomAspect {
+    @Around("@annotation(com.example.CustomAnnotation)")
+    public Object aroundAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
+        TransactionStatus status = TransactionAspectSupport.currentTransactionStatus();
+        try {
+            Object result = joinPoint.proceed();
+            if (status.isRollbackOnly()) {
+                System.out.println("事务已标记回滚");
+            }
+            return result;
+        } catch (Exception ex) {
+            System.out.println("事务因异常回滚");
+            throw ex;
+        }
+    }
+}
+```
+- **注意**：切面优先级必须低于事务切面（`@Order(Ordered.LOWEST_PRECEDENCE)`），否则无法获取正确状态。
+
+
+------
+### ⚠️ 注意事项
+
+#### **切面执行顺序**
+
+- 事务切面默认优先级为 `Ordered.LOWEST_PRECEDENCE`（最低优先级）。
+- **问题**：若自定义切面优先级更高且未抛出异常，事务切面无法感知异常，导致回滚失效。
+- 解决：
+  - 自定义切面优先级需低于事务切面：`@Order(Ordered.LOWEST_PRECEDENCE + 1)`。
+  - 在切面中捕获异常后必须重新抛出或调用 `setRollbackOnly()`。
+#### **无事务场景**
+
+- 若方法未开启事务（如 `@Transactional(propagation = NOT_SUPPORTED)`），则 `TransactionSynchronizationManager.isActualTransactionActive()` 返回 `false`，需避免空指针异常。
+#### **异步线程问题**
+
+- 事务状态绑定于当前线程，若切面内启用新线程，需手动传递事务上下文（如使用 `TransactionContextHolder`）。
+
+
+------
+### 💎 方案对比与选择
+
+| **方案**                                    | 准确性 | 复杂度 | 适用场景                 |
+| ------------------------------------------- | ------ | ------ | ------------------------ |
+| 主动查询事务状态                            | 中     | 低     | 简单状态检测             |
+| 事务同步回调 (`TransactionSynchronization`) | 高     | 中     | 需精准监听事务生命周期   |
+| 直接获取 `TransactionStatus`                | 高     | 高     | 切面优先级低于事务切面时 |
+> **推荐实践**：优先使用 **事务同步回调** 方案，可靠性最高且与事务生命周期解耦。
+
+
+------
+### 🛠️ 扩展：编程式标记回滚
+
+若需在切面中主动触发回滚（如权限校验失败）：
+```
+@Around("@annotation(com.example.CustomAnnotation)")
+public Object aroundAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
+    if (!checkPermission()) {
+        // 标记事务回滚
+        TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        throw new SecurityException("权限不足");
+    }
+    return joinPoint.proceed();
+}
+```
+此操作会强制事务回滚，且后续事务同步器将收到 `STATUS_ROLLED_BACK` 事件。
+
+
+------
+### 💎 **总结**
+
+在自定义AOP切面中识别事务回滚的关键是：
+1. **事务状态查询**：通过 `TransactionAspectSupport.currentTransactionStatus()` 或 `TransactionSynchronizationManager` 主动检测。
+2. **事件监听**：注册 `TransactionSynchronization` 回调监听提交/回滚事件。
+3. **切面顺序**：确保自定义切面优先级低于事务切面，避免状态误判。
+4. **异常处理**：切面内捕获异常后需重新抛出或显式调用 `setRollbackOnly()`。

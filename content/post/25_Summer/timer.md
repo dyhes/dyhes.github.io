@@ -303,7 +303,7 @@ Quartz 是一个功能强大的开源 **Java 作业调度框架**，由 OpenSymp
 
 
 ------
-### ⚙️ **核心概念与组件**[1,4,7](@ref)
+### ⚙️ **核心概念与组件
 
 1. **Job（任务）**
    - 需实现 `Job` 接口的 `execute()` 方法，定义具体任务逻辑。
@@ -323,7 +323,7 @@ Quartz 是一个功能强大的开源 **Java 作业调度框架**，由 OpenSymp
 
 
 ------
-### 🏗️ **架构设计**[1,6](@ref)
+### 🏗️ **架构设计**
 
 - **多线程架构**：初始化 worker 线程池执行任务，支持高并发。
 - 模块化设计：
@@ -371,7 +371,7 @@ Quartz 是一个功能强大的开源 **Java 作业调度框架**，由 OpenSymp
      org.quartz.jobStore.class=org.quartz.impl.jdbcjobstore.JobStoreTX
    org.quartz.jobStore.isClustered=true
      org.quartz.jobStore.dataSource=myDS  # 配置数据库连接
-   ```
+```
 
 
 ------
@@ -492,7 +492,7 @@ XXL-JOB 采用 **“调度中心 + 执行器” 的分布式架构**，实现调
 - 启动方式：
   - 本地运行：
     ```
-  java -jar xxl-job-admin.jar --spring.datasource.url=jdbc:mysql://localhost:3306/xxl_job  
+    java -jar xxl-job-admin.jar --spring.datasource.url=jdbc:mysql://localhost:3306/xxl_job  
     ```
   - Docker 部署：
     ```
@@ -689,10 +689,10 @@ XXL-JOB 实现动态提交附带执行参数且仅执行一次的定时任务，
 - 步骤：
   1. **调用调度中心 API**：
      ```
-  POST /api/jobinfo/add
+     POST /api/jobinfo/add
      ```
   2. **请求体示例**：
-     ```
+     ```java
      {
        "jobGroup": 2,                // 执行器ID
        "jobDesc": "一次性订单任务",
@@ -717,7 +717,7 @@ XXL-JOB 实现动态提交附带执行参数且仅执行一次的定时任务，
 在任务逻辑中，通过以下方式获取参数：
 #### **Bean 模式（方法形式）**
 
-```
+```java
 @Component
 public class OrderJobHandler {
     @XxlJob("orderJobHandler")
@@ -733,7 +733,7 @@ public class OrderJobHandler {
 - **说明**：参数通过 `param` 字符串传入，需自行解析为 JSON 或 Map[1,6](@ref)。
 #### **使用上下文对象（高级）**
 
-```
+```java
 @XxlJob("orderJobHandler")
 public ReturnT<String> execute() {
     // 获取任务上下文
@@ -937,7 +937,7 @@ XXL-JOB 实现任务的分布式调度主要依赖其**中心化调度 + 分布�
   - 执行器通过 `ShardingUtil.getShardingVo()` 获取参数，按分片处理数据（如按ID取模分片查询）[6,7](@ref)。
   - 示例代码：
     ```
-  @XxlJob("shardingJob")
+    @XxlJob("shardingJob")
     public void shardingTask() {
       ShardingVO shard = ShardingUtil.getShardingVo();
         List<Data> dataSubset = fetchDataByShard(shard.getIndex(), shard.getTotal());
