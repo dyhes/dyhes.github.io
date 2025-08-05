@@ -1,0 +1,542 @@
+<!doctype html><html lang=en-us dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='Caffeine Caffeine 是一款基于 Java 8 的高性能本地缓存库，由 Google Guava Cache 改进而来，现已成为 Spring Boot 默认的本地缓存实现。其设计专注于高并发、低延迟场景，通过创新的算法和灵活的配置优化缓存命中率与内存管理。以下从核心特性、工作原理、使用场景等方面展开详细介绍：\n🔥 核心特性 高性能与高命中率 Window TinyLFU 算法：Caffeine 采用混合了 LRU（最近最少使用）和 LFU（最不常使用）优势的算法，通过频率统计智能保留热点数据，命中率接近理论最优值，尤其在高并发场景下显著优于传统 LRU 算法3,4,5。 无锁并发设计：基于 Java 8 的 StampedLock 和分段锁技术，减少线程竞争，支持高吞吐量访问（O(1) 时间复杂度）3,5。 灵活的缓存策略 基于容量：通过 maximumSize 限制条目数量，或通过 maximumWeight 结合权重函数（如数据大小）控制内存占用3,6。 基于时间： expireAfterWrite：写入后固定时间过期（如 10 分钟）； expireAfterAccess：最后一次访问/写入后固定时间过期； refreshAfterWrite：写入后定时刷新（异步加载新值，不阻塞请求）3,5,6。 基于引用：支持弱引用（weakKeys/weakValues）或软引用（softValues），允许 JVM 在内存不足时回收缓存5,6。 异步与自动加载 异步加载（AsyncCache）：返回 CompletableFuture，适用于非阻塞编程模型，默认使用 ForkJoinPool 执行加载任务3,7。 同步加载（LoadingCache）：通过 CacheLoader 实现缓存未命中时自动加载数据，避免手动处理逻辑5,7。 扩展功能 淘汰监听：removalListener 可捕获条目移除事件（如过期、手动删除），便于日志或资源清理3,5。 统计监控：recordStats() 启用命中率、加载耗时等统计，辅助性能优化3,7。 ⚙️ 工作原理与关键技术 缓存淘汰机制 采用惰性删除与定期批量清理结合的策略： 读/写操作时检查过期时间，异步回收过期条目； 后台线程定期执行清理任务，减少主线程阻塞3,6。 内存管理优化 权重控制：通过 Weigher 接口为不同条目分配权重，避免大对象占用过多内存6。 智能驱逐：结合容量、时间、引用策略，确保内存占用可控（例如 maximumWeight 与 weigher 配合）5,6。 刷新与过期区别 策略 触发条件 行为 适用场景 expireAfterWrite 写入后超时 阻塞请求直至新值加载完成 强一致性场景（如配置数据） refreshAfterWrite 写入后超时 返回旧值并异步刷新，不阻塞请求 高并发读场景（如热点数据） 🚀 适用场景 高频访问数据缓存 Web 请求结果、用户会话信息、商品详情等，减少数据库压力，提升响应速度（如电商首页热点商品）4,7。 计算密集型任务优化 缓存图像处理结果、大数据分析中间值，避免重复计算（如实时报表生成）4,6。 微服务架构中的本地缓存层 作为三级缓存（L1）与 Redis（L2）、数据库（L3）协同： L1（Caffeine）：进程内缓存，纳秒级访问； L2（Redis）：跨进程共享，减少数据库查询； 数据一致性通过 TTL 或消息通知保障4,6。 高并发系统 如秒杀系统库存缓存，通过 refreshAfterWrite 异步更新，避免缓存击穿3,4。 ⚖️ 与其他缓存库对比 特性 Caffeine Guava Cache Redis 算法 Window TinyLFU LRU 多种（如 LRU） 并发性能 ⭐⭐⭐⭐（无锁优化） ⭐⭐（锁竞争） ⭐⭐⭐（网络延迟） 内存管理 灵活（权重/大小） 基础 依赖外部配置 适用场景 本地缓存 小规模本地缓存 分布式缓存 💻 基础代码示例 // 同步加载缓存（自动加载数据） LoadingCache<String, User> cache = Caffeine.newBuilder() .maximumSize(1000) .expireAfterWrite(10, TimeUnit.MINUTES) .refreshAfterWrite(1, TimeUnit.MINUTES) .recordStats() .build(key -> userDao.getUserById(key)); // 获取数据（自动加载未命中条目） User user = cache.get("user123"); // 异步加载缓存 AsyncLoadingCache<String, User> asyncCache = Caffeine.newBuilder() .buildAsync((key, executor) -> userDao.getUserAsync(key)); CompletableFuture<User> future = asyncCache.get("user456"); ⚠️ 常见问题与优化 缓存命中率低 优化：增大 maximumSize、调整过期时间（如延长 expireAfterAccess）、检查数据加载逻辑2,6。 内存占用过高 优化：使用 maximumWeight 限制权重、启用 weakValues 或 softValues2,6。 缓存雪崩 预防：分散过期时间（如随机 TTL）、结合 refreshAfterWrite 异步刷新3,4。 💎 总结 Caffeine 凭借 Window TinyLFU 算法、无锁并发和灵活的策略组合，成为 Java 本地缓存的标杆。其适用于高并发、低延迟场景，如微服务缓存层、热点数据加速等。通过与分布式缓存（如 Redis）组成多级缓存，可进一步优化系统性能。开发者可通过丰富的配置（容量、时间、权重）和监控功能（recordStats）实现精细化调优3,4,5。\n'><title>【Postopia】caffeine</title><link rel=canonical href=https://dyhes.github.io/p/postopiacaffeine/><link rel=stylesheet href=/scss/style.min.ea1f7646c279669425f58c5155bd1818fd82b2535fde9b2ddae2b7eaefa8f89c.css><meta property='og:title' content="【Postopia】caffeine"><meta property='og:description' content='Caffeine Caffeine 是一款基于 Java 8 的高性能本地缓存库，由 Google Guava Cache 改进而来，现已成为 Spring Boot 默认的本地缓存实现。其设计专注于高并发、低延迟场景，通过创新的算法和灵活的配置优化缓存命中率与内存管理。以下从核心特性、工作原理、使用场景等方面展开详细介绍：\n🔥 核心特性 高性能与高命中率 Window TinyLFU 算法：Caffeine 采用混合了 LRU（最近最少使用）和 LFU（最不常使用）优势的算法，通过频率统计智能保留热点数据，命中率接近理论最优值，尤其在高并发场景下显著优于传统 LRU 算法3,4,5。 无锁并发设计：基于 Java 8 的 StampedLock 和分段锁技术，减少线程竞争，支持高吞吐量访问（O(1) 时间复杂度）3,5。 灵活的缓存策略 基于容量：通过 maximumSize 限制条目数量，或通过 maximumWeight 结合权重函数（如数据大小）控制内存占用3,6。 基于时间： expireAfterWrite：写入后固定时间过期（如 10 分钟）； expireAfterAccess：最后一次访问/写入后固定时间过期； refreshAfterWrite：写入后定时刷新（异步加载新值，不阻塞请求）3,5,6。 基于引用：支持弱引用（weakKeys/weakValues）或软引用（softValues），允许 JVM 在内存不足时回收缓存5,6。 异步与自动加载 异步加载（AsyncCache）：返回 CompletableFuture，适用于非阻塞编程模型，默认使用 ForkJoinPool 执行加载任务3,7。 同步加载（LoadingCache）：通过 CacheLoader 实现缓存未命中时自动加载数据，避免手动处理逻辑5,7。 扩展功能 淘汰监听：removalListener 可捕获条目移除事件（如过期、手动删除），便于日志或资源清理3,5。 统计监控：recordStats() 启用命中率、加载耗时等统计，辅助性能优化3,7。 ⚙️ 工作原理与关键技术 缓存淘汰机制 采用惰性删除与定期批量清理结合的策略： 读/写操作时检查过期时间，异步回收过期条目； 后台线程定期执行清理任务，减少主线程阻塞3,6。 内存管理优化 权重控制：通过 Weigher 接口为不同条目分配权重，避免大对象占用过多内存6。 智能驱逐：结合容量、时间、引用策略，确保内存占用可控（例如 maximumWeight 与 weigher 配合）5,6。 刷新与过期区别 策略 触发条件 行为 适用场景 expireAfterWrite 写入后超时 阻塞请求直至新值加载完成 强一致性场景（如配置数据） refreshAfterWrite 写入后超时 返回旧值并异步刷新，不阻塞请求 高并发读场景（如热点数据） 🚀 适用场景 高频访问数据缓存 Web 请求结果、用户会话信息、商品详情等，减少数据库压力，提升响应速度（如电商首页热点商品）4,7。 计算密集型任务优化 缓存图像处理结果、大数据分析中间值，避免重复计算（如实时报表生成）4,6。 微服务架构中的本地缓存层 作为三级缓存（L1）与 Redis（L2）、数据库（L3）协同： L1（Caffeine）：进程内缓存，纳秒级访问； L2（Redis）：跨进程共享，减少数据库查询； 数据一致性通过 TTL 或消息通知保障4,6。 高并发系统 如秒杀系统库存缓存，通过 refreshAfterWrite 异步更新，避免缓存击穿3,4。 ⚖️ 与其他缓存库对比 特性 Caffeine Guava Cache Redis 算法 Window TinyLFU LRU 多种（如 LRU） 并发性能 ⭐⭐⭐⭐（无锁优化） ⭐⭐（锁竞争） ⭐⭐⭐（网络延迟） 内存管理 灵活（权重/大小） 基础 依赖外部配置 适用场景 本地缓存 小规模本地缓存 分布式缓存 💻 基础代码示例 // 同步加载缓存（自动加载数据） LoadingCache<String, User> cache = Caffeine.newBuilder() .maximumSize(1000) .expireAfterWrite(10, TimeUnit.MINUTES) .refreshAfterWrite(1, TimeUnit.MINUTES) .recordStats() .build(key -> userDao.getUserById(key)); // 获取数据（自动加载未命中条目） User user = cache.get("user123"); // 异步加载缓存 AsyncLoadingCache<String, User> asyncCache = Caffeine.newBuilder() .buildAsync((key, executor) -> userDao.getUserAsync(key)); CompletableFuture<User> future = asyncCache.get("user456"); ⚠️ 常见问题与优化 缓存命中率低 优化：增大 maximumSize、调整过期时间（如延长 expireAfterAccess）、检查数据加载逻辑2,6。 内存占用过高 优化：使用 maximumWeight 限制权重、启用 weakValues 或 softValues2,6。 缓存雪崩 预防：分散过期时间（如随机 TTL）、结合 refreshAfterWrite 异步刷新3,4。 💎 总结 Caffeine 凭借 Window TinyLFU 算法、无锁并发和灵活的策略组合，成为 Java 本地缓存的标杆。其适用于高并发、低延迟场景，如微服务缓存层、热点数据加速等。通过与分布式缓存（如 Redis）组成多级缓存，可进一步优化系统性能。开发者可通过丰富的配置（容量、时间、权重）和监控功能（recordStats）实现精细化调优3,4,5。\n'><meta property='og:url' content='https://dyhes.github.io/p/postopiacaffeine/'><meta property='og:site_name' content='飞鸿踏雪泥'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='Postopia'><meta property='article:published_time' content='2025-07-02T00:00:00+00:00'><meta property='article:modified_time' content='2025-07-31T19:25:11+08:00'><meta name=twitter:title content="【Postopia】caffeine"><meta name=twitter:description content='Caffeine Caffeine 是一款基于 Java 8 的高性能本地缓存库，由 Google Guava Cache 改进而来，现已成为 Spring Boot 默认的本地缓存实现。其设计专注于高并发、低延迟场景，通过创新的算法和灵活的配置优化缓存命中率与内存管理。以下从核心特性、工作原理、使用场景等方面展开详细介绍：\n🔥 核心特性 高性能与高命中率 Window TinyLFU 算法：Caffeine 采用混合了 LRU（最近最少使用）和 LFU（最不常使用）优势的算法，通过频率统计智能保留热点数据，命中率接近理论最优值，尤其在高并发场景下显著优于传统 LRU 算法3,4,5。 无锁并发设计：基于 Java 8 的 StampedLock 和分段锁技术，减少线程竞争，支持高吞吐量访问（O(1) 时间复杂度）3,5。 灵活的缓存策略 基于容量：通过 maximumSize 限制条目数量，或通过 maximumWeight 结合权重函数（如数据大小）控制内存占用3,6。 基于时间： expireAfterWrite：写入后固定时间过期（如 10 分钟）； expireAfterAccess：最后一次访问/写入后固定时间过期； refreshAfterWrite：写入后定时刷新（异步加载新值，不阻塞请求）3,5,6。 基于引用：支持弱引用（weakKeys/weakValues）或软引用（softValues），允许 JVM 在内存不足时回收缓存5,6。 异步与自动加载 异步加载（AsyncCache）：返回 CompletableFuture，适用于非阻塞编程模型，默认使用 ForkJoinPool 执行加载任务3,7。 同步加载（LoadingCache）：通过 CacheLoader 实现缓存未命中时自动加载数据，避免手动处理逻辑5,7。 扩展功能 淘汰监听：removalListener 可捕获条目移除事件（如过期、手动删除），便于日志或资源清理3,5。 统计监控：recordStats() 启用命中率、加载耗时等统计，辅助性能优化3,7。 ⚙️ 工作原理与关键技术 缓存淘汰机制 采用惰性删除与定期批量清理结合的策略： 读/写操作时检查过期时间，异步回收过期条目； 后台线程定期执行清理任务，减少主线程阻塞3,6。 内存管理优化 权重控制：通过 Weigher 接口为不同条目分配权重，避免大对象占用过多内存6。 智能驱逐：结合容量、时间、引用策略，确保内存占用可控（例如 maximumWeight 与 weigher 配合）5,6。 刷新与过期区别 策略 触发条件 行为 适用场景 expireAfterWrite 写入后超时 阻塞请求直至新值加载完成 强一致性场景（如配置数据） refreshAfterWrite 写入后超时 返回旧值并异步刷新，不阻塞请求 高并发读场景（如热点数据） 🚀 适用场景 高频访问数据缓存 Web 请求结果、用户会话信息、商品详情等，减少数据库压力，提升响应速度（如电商首页热点商品）4,7。 计算密集型任务优化 缓存图像处理结果、大数据分析中间值，避免重复计算（如实时报表生成）4,6。 微服务架构中的本地缓存层 作为三级缓存（L1）与 Redis（L2）、数据库（L3）协同： L1（Caffeine）：进程内缓存，纳秒级访问； L2（Redis）：跨进程共享，减少数据库查询； 数据一致性通过 TTL 或消息通知保障4,6。 高并发系统 如秒杀系统库存缓存，通过 refreshAfterWrite 异步更新，避免缓存击穿3,4。 ⚖️ 与其他缓存库对比 特性 Caffeine Guava Cache Redis 算法 Window TinyLFU LRU 多种（如 LRU） 并发性能 ⭐⭐⭐⭐（无锁优化） ⭐⭐（锁竞争） ⭐⭐⭐（网络延迟） 内存管理 灵活（权重/大小） 基础 依赖外部配置 适用场景 本地缓存 小规模本地缓存 分布式缓存 💻 基础代码示例 // 同步加载缓存（自动加载数据） LoadingCache<String, User> cache = Caffeine.newBuilder() .maximumSize(1000) .expireAfterWrite(10, TimeUnit.MINUTES) .refreshAfterWrite(1, TimeUnit.MINUTES) .recordStats() .build(key -> userDao.getUserById(key)); // 获取数据（自动加载未命中条目） User user = cache.get("user123"); // 异步加载缓存 AsyncLoadingCache<String, User> asyncCache = Caffeine.newBuilder() .buildAsync((key, executor) -> userDao.getUserAsync(key)); CompletableFuture<User> future = asyncCache.get("user456"); ⚠️ 常见问题与优化 缓存命中率低 优化：增大 maximumSize、调整过期时间（如延长 expireAfterAccess）、检查数据加载逻辑2,6。 内存占用过高 优化：使用 maximumWeight 限制权重、启用 weakValues 或 softValues2,6。 缓存雪崩 预防：分散过期时间（如随机 TTL）、结合 refreshAfterWrite 异步刷新3,4。 💎 总结 Caffeine 凭借 Window TinyLFU 算法、无锁并发和灵活的策略组合，成为 Java 本地缓存的标杆。其适用于高并发、低延迟场景，如微服务缓存层、热点数据加速等。通过与分布式缓存（如 Redis）组成多级缓存，可进一步优化系统性能。开发者可通过丰富的配置（容量、时间、权重）和监控功能（recordStats）实现精细化调优3,4,5。\n'><link rel="shortcut icon" href=/github.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label="Toggle Menu">
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu_b567f26f71c49c33.png width=300 height=300 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>飞鸿踏雪泥</a></h1><h2 class=site-description>没有记录，就没有发生</h2></div></header><ol class=menu-social><li><a href=https://leetcode.cn/u/dyhes/ target=_blank title=LeetCode rel=me><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 13h7.5"/><path d="M9.424 7.268l4.999-4.999"/><path d="M16.633 16.644l-2.402 2.415a3.189 3.189.0 01-4.524.0l-3.77-3.787a3.223 3.223.0 010-4.544l3.77-3.787a3.189 3.189.0 014.524.0l2.302 2.313"/></svg></a></li><li><a href=https://github.com/dyhes target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=mailto:dyheslin@gmail.com target=_blank title=Gmail rel=me><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-gmail"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16 20h3a1 1 0 001-1V5a1 1 0 00-1-1h-3v16z"/><path d="M5 20h3V4H5A1 1 0 004 5v14a1 1 0 001 1z"/><path d="M16 4l-4 4-4-4"/><path d="M4 6.5l8 7.5 8-7.5"/></svg></a></li><li><a href=mailto:1325574784@qq.com target=_blank title=Mail rel=me><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 19H5a2 2 0 01-2-2V7a2 2 0 012-2h14a2 2 0 012 2v5.5"/><path d="M3 7l9 6 9-6"/><path d="M19 16l-2 3h4l-2 3"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/about/><svg class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>About</span></a></li><li><a href=/categories/><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+<span>Categories</span></a></li><li><a href=/tags/><svg class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11 3l9 9a1.5 1.5.0 010 2l-6 6a1.5 1.5.0 01-2 0L3 11V7a4 4 0 014-4h4"/><circle cx="9" cy="9" r="2"/></svg>
+<span>Tags</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>Dark Mode</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">Table of contents</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#caffeine>Caffeine</a><ol><li><a href=#-核心特性>🔥 <strong>核心特性</strong></a></li><li><a href=#-工作原理与关键技术>⚙️ <strong>工作原理与关键技术</strong></a></li><li><a href=#-适用场景>🚀 <strong>适用场景</strong></a></li><li><a href=#-与其他缓存库对比>⚖️ <strong>与其他缓存库对比</strong></a></li><li><a href=#-基础代码示例>💻 <strong>基础代码示例</strong></a></li><li><a href=#-常见问题与优化>⚠️ <strong>常见问题与优化</strong></a></li><li><a href=#-总结>💎 <strong>总结</strong></a></li></ol></li><li><a href=#多级缓存>多级缓存</a><ol><li><a href=#-多级缓存架构设计>📐 <strong>多级缓存架构设计</strong></a></li><li><a href=#-依赖配置pomxml>⚙️ <strong>依赖配置（pom.xml）</strong></a></li><li><a href=#-多级缓存配置类>🔧 <strong>多级缓存配置类</strong></a></li><li><a href=#-多级缓存管理器实现>🧩 <strong>多级缓存管理器实现</strong></a></li><li><a href=#-业务层使用示例>🛠️ <strong>业务层使用示例</strong></a></li><li><a href=#-关键优化策略>🛡️ <strong>关键优化策略</strong></a></li><li><a href=#-适用场景与性能对比>💎 <strong>适用场景与性能对比</strong></a></li></ol></li><li><a href=#差异化多级缓存>差异化多级缓存</a><ol><li><a href=#-核心配置创建两类缓存管理器>🔧 <strong>核心配置：创建两类缓存管理器</strong></a><ol><li><a href=#多级缓存管理器caffeine--redis><strong>多级缓存管理器</strong>（Caffeine + Redis）</a></li><li><a href=#单级redis缓存管理器独立配置><strong>单级Redis缓存管理器</strong>（独立配置）</a></li></ol></li><li><a href=#-业务层使用按接口指定缓存策略>🛠️ <strong>业务层使用：按接口指定缓存策略</strong></a><ol><li><a href=#多级缓存接口热点数据><strong>多级缓存接口</strong>（热点数据）</a></li><li><a href=#单级redis缓存接口普通数据><strong>单级Redis缓存接口</strong>（普通数据）</a></li><li><a href=#动态条件控制更精细的粒度><strong>动态条件控制</strong>（更精细的粒度）</a></li></ol></li><li><a href=#-高级场景自定义注解简化配置>⚙️ <strong>高级场景：自定义注解简化配置</strong></a><ol><li><a href=#定义注解-multilevelcache>定义注解 <code>@MultiLevelCache</code></a></li><li><a href=#在目标接口上使用>在目标接口上使用</a></li></ol></li><li><a href=#-注意事项与优化>⚠️ <strong>注意事项与优化</strong></a></li><li><a href=#-方案对比与选型>💎 <strong>方案对比与选型</strong></a></li><li><a href=#-扩展解决多级缓存的典型问题>🔍 <strong>扩展：解决多级缓存的典型问题</strong></a></li></ol></li><li><a href=#自定义ttl>自定义TTL</a><ol><li><a href=#-自定义cachemanager推荐>⏳ <strong>自定义CacheManager（推荐）</strong></a></li><li><a href=#-自定义注解aop>✨ <strong>自定义注解+AOP</strong></a></li><li><a href=#-缓存提供者原生配置>⚙️ <strong>缓存提供者原生配置</strong></a></li><li><a href=#-注意事项>⚠️ <strong>注意事项</strong></a></li><li><a href=#-方法对比>🔄 <strong>方法对比</strong></a></li></ol></li><li><a href=#延迟双删>延迟双删</a><ol><li><a href=#-延迟双删的核心原理>⚙️ <strong>延迟双删的核心原理</strong></a></li><li><a href=#-实现方案一基于aop切面--自定义注解>🛠️ <strong>实现方案一：基于AOP切面 + 自定义注解</strong></a><ol><li><a href=#定义自定义注解><strong>定义自定义注解</strong></a></li><li><a href=#实现aop切面核心逻辑><strong>实现AOP切面（核心逻辑）</strong></a></li><li><a href=#业务层使用示例><strong>业务层使用示例</strong></a></li></ol></li><li><a href=#-实现方案二增强cachemanager非侵入式>🔌 <strong>实现方案二：增强CacheManager（非侵入式）</strong></a><ol><li><a href=#包装cache与cachemanager><strong>包装Cache与CacheManager</strong></a></li><li><a href=#注册增强cachemanager至spring容器><strong>注册增强CacheManager至Spring容器</strong></a></li></ol></li><li><a href=#-关键注意事项>⚠️ <strong>关键注意事项</strong></a></li><li><a href=#-方案对比>📊 <strong>方案对比</strong></a></li><li><a href=#-总结-1>💎 <strong>总结</strong></a></li></ol></li><li><a href=#cachemanager-增强>CacheManager 增强</a><ol><li><a href=#-问题根源>⚠️ <strong>问题根源</strong></a></li><li><a href=#-解决方案绑定二次删除到事务提交>🔧 <strong>解决方案：绑定二次删除到事务提交</strong></a><ol><li><a href=#核心改造思路><strong>核心改造思路</strong></a></li><li><a href=#处理无事务场景><strong>处理无事务场景</strong></a></li></ol></li><li><a href=#-增强健壮性>⚙️ <strong>增强健壮性</strong></a><ol><li><a href=#线程池隔离><strong>线程池隔离</strong></a></li><li><a href=#事务回滚补偿><strong>事务回滚补偿</strong></a></li></ol></li><li><a href=#-方案对比-1>📊 <strong>方案对比</strong></a></li><li><a href=#-总结-2>💎 <strong>总结</strong></a></li></ol></li><li><a href=#aop>AOP</a><ol><li><a href=#-核心实现方案>🔍 核心实现方案</a><ol><li><a href=#通过><strong>通过 <code>TransactionSynchronizationManager</code> 主动查询事务状态</strong></a></li><li><a href=#注册事务同步回调推荐><strong>注册事务同步回调（推荐）</strong></a></li><li><a href=#在切面中直接获取><strong>在切面中直接获取 <code>TransactionStatus</code></strong></a></li></ol></li><li><a href=#-注意事项-1>⚠️ 注意事项</a><ol><li><a href=#切面执行顺序><strong>切面执行顺序</strong></a></li><li><a href=#无事务场景><strong>无事务场景</strong></a></li><li><a href=#异步线程问题><strong>异步线程问题</strong></a></li></ol></li><li><a href=#-方案对比与选择>💎 方案对比与选择</a></li><li><a href=#-扩展编程式标记回滚>🛠️ 扩展：编程式标记回滚</a></li><li><a href=#-总结-3>💎 <strong>总结</strong></a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/nutrition/ style=background-color:#93b5cf;color:>积雪粮
+</a><a href=/categories/willow/ style=background-color:#dc9123;color:>满城风絮
+</a><a href=/categories/moon/ style=background-color:#b7ae8f;color:>月满西楼</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/postopiacaffeine/>【Postopia】caffeine</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Jul 02, 2025</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>10 minute read</time></div></footer></div></header><section class=article-content><h2 id=caffeine>Caffeine</h2><p>Caffeine 是一款基于 Java 8 的高性能本地缓存库，由 Google Guava Cache 改进而来，现已成为 Spring Boot 默认的本地缓存实现。其设计专注于高并发、低延迟场景，通过创新的算法和灵活的配置优化缓存命中率与内存管理。以下从核心特性、工作原理、使用场景等方面展开详细介绍：</p><hr><h3 id=-核心特性>🔥 <strong>核心特性</strong></h3><ol><li><strong>高性能与高命中率</strong><ul><li><strong>Window TinyLFU 算法</strong>：Caffeine 采用混合了 LRU（最近最少使用）和 LFU（最不常使用）优势的算法，通过频率统计智能保留热点数据，命中率接近理论最优值，尤其在高并发场景下显著优于传统 LRU 算法<a class=link href=@ref>3,4,5</a>。</li><li><strong>无锁并发设计</strong>：基于 Java 8 的 <code>StampedLock</code> 和分段锁技术，减少线程竞争，支持高吞吐量访问（O(1) 时间复杂度）<a class=link href=@ref>3,5</a>。</li></ul></li><li><strong>灵活的缓存策略</strong><ul><li><strong>基于容量</strong>：通过 <code>maximumSize</code> 限制条目数量，或通过 <code>maximumWeight</code> 结合权重函数（如数据大小）控制内存占用<a class=link href=@ref>3,6</a>。</li><li>基于时间：<ul><li><code>expireAfterWrite</code>：写入后固定时间过期（如 10 分钟）；</li></ul></li><li><code>expireAfterAccess</code>：最后一次访问/写入后固定时间过期；<ul><li><code>refreshAfterWrite</code>：写入后定时刷新（异步加载新值，不阻塞请求）<a class=link href=@ref>3,5,6</a>。</li></ul></li><li><strong>基于引用</strong>：支持弱引用（<code>weakKeys</code>/<code>weakValues</code>）或软引用（<code>softValues</code>），允许 JVM 在内存不足时回收缓存<a class=link href=@ref>5,6</a>。</li></ul></li><li><strong>异步与自动加载</strong><ul><li><strong>异步加载（AsyncCache）</strong>：返回 <code>CompletableFuture</code>，适用于非阻塞编程模型，默认使用 <code>ForkJoinPool</code> 执行加载任务<a class=link href=@ref>3,7</a>。</li><li><strong>同步加载（LoadingCache）</strong>：通过 <code>CacheLoader</code> 实现缓存未命中时自动加载数据，避免手动处理逻辑<a class=link href=@ref>5,7</a>。</li></ul></li><li><strong>扩展功能</strong><ul><li><strong>淘汰监听</strong>：<code>removalListener</code> 可捕获条目移除事件（如过期、手动删除），便于日志或资源清理<a class=link href=@ref>3,5</a>。</li><li><strong>统计监控</strong>：<code>recordStats()</code> 启用命中率、加载耗时等统计，辅助性能优化<a class=link href=@ref>3,7</a>。</li></ul></li></ol><hr><h3 id=-工作原理与关键技术>⚙️ <strong>工作原理与关键技术</strong></h3><ol><li><strong>缓存淘汰机制</strong><ul><li>采用惰性删除与定期批量清理结合的策略：<ul><li>读/写操作时检查过期时间，异步回收过期条目；</li></ul></li><li>后台线程定期执行清理任务，减少主线程阻塞<a class=link href=@ref>3,6</a>。</li></ul></li><li><strong>内存管理优化</strong><ul><li><strong>权重控制</strong>：通过 <code>Weigher</code> 接口为不同条目分配权重，避免大对象占用过多内存<a class=link href=@ref>6</a>。</li><li><strong>智能驱逐</strong>：结合容量、时间、引用策略，确保内存占用可控（例如 <code>maximumWeight</code> 与 <code>weigher</code> 配合）<a class=link href=@ref>5,6</a>。</li></ul></li><li><strong>刷新与过期区别</strong><div class=table-wrapper><table><thead><tr><th><strong>策略</strong></th><th><strong>触发条件</strong></th><th><strong>行为</strong></th><th><strong>适用场景</strong></th></tr></thead><tbody><tr><td><code>expireAfterWrite</code></td><td>写入后超时</td><td>阻塞请求直至新值加载完成</td><td>强一致性场景（如配置数据）</td></tr><tr><td><code>refreshAfterWrite</code></td><td>写入后超时</td><td>返回旧值并异步刷新，不阻塞请求</td><td>高并发读场景（如热点数据）</td></tr></tbody></table></div></li></ol><hr><h3 id=-适用场景>🚀 <strong>适用场景</strong></h3><ol><li><strong>高频访问数据缓存</strong><ul><li>Web 请求结果、用户会话信息、商品详情等，减少数据库压力，提升响应速度（如电商首页热点商品）<a class=link href=@ref>4,7</a>。</li></ul></li><li><strong>计算密集型任务优化</strong><ul><li>缓存图像处理结果、大数据分析中间值，避免重复计算（如实时报表生成）<a class=link href=@ref>4,6</a>。</li></ul></li><li><strong>微服务架构中的本地缓存层</strong><ul><li>作为三级缓存（L1）与 Redis（L2）、数据库（L3）协同：<ul><li>L1（Caffeine）：进程内缓存，纳秒级访问；</li><li>L2（Redis）：跨进程共享，减少数据库查询；</li><li>数据一致性通过 TTL 或消息通知保障<a class=link href=@ref>4,6</a>。</li></ul></li></ul></li><li><strong>高并发系统</strong><ul><li>如秒杀系统库存缓存，通过 <code>refreshAfterWrite</code> 异步更新，避免缓存击穿<a class=link href=@ref>3,4</a>。</li></ul></li></ol><hr><h3 id=-与其他缓存库对比>⚖️ <strong>与其他缓存库对比</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>特性</strong></th><th><strong>Caffeine</strong></th><th><strong>Guava Cache</strong></th><th><strong>Redis</strong></th></tr></thead><tbody><tr><td><strong>算法</strong></td><td>Window TinyLFU</td><td>LRU</td><td>多种（如 LRU）</td></tr><tr><td><strong>并发性能</strong></td><td>⭐⭐⭐⭐（无锁优化）</td><td>⭐⭐（锁竞争）</td><td>⭐⭐⭐（网络延迟）</td></tr><tr><td><strong>内存管理</strong></td><td>灵活（权重/大小）</td><td>基础</td><td>依赖外部配置</td></tr><tr><td><strong>适用场景</strong></td><td>本地缓存</td><td>小规模本地缓存</td><td>分布式缓存</td></tr></tbody></table></div><hr><h3 id=-基础代码示例>💻 <strong>基础代码示例</strong></h3><pre tabindex=0><code>// 同步加载缓存（自动加载数据）
+LoadingCache&lt;String, User&gt; cache = Caffeine.newBuilder()
+    .maximumSize(1000)
+    .expireAfterWrite(10, TimeUnit.MINUTES)
+    .refreshAfterWrite(1, TimeUnit.MINUTES)
+    .recordStats()
+    .build(key -&gt; userDao.getUserById(key));
+
+// 获取数据（自动加载未命中条目）
+User user = cache.get(&#34;user123&#34;);
+
+// 异步加载缓存
+AsyncLoadingCache&lt;String, User&gt; asyncCache = Caffeine.newBuilder()
+    .buildAsync((key, executor) -&gt; userDao.getUserAsync(key));
+CompletableFuture&lt;User&gt; future = asyncCache.get(&#34;user456&#34;);
+</code></pre><hr><h3 id=-常见问题与优化>⚠️ <strong>常见问题与优化</strong></h3><ol><li><strong>缓存命中率低</strong><ul><li><strong>优化</strong>：增大 <code>maximumSize</code>、调整过期时间（如延长 <code>expireAfterAccess</code>）、检查数据加载逻辑<a class=link href=@ref>2,6</a>。</li></ul></li><li><strong>内存占用过高</strong><ul><li><strong>优化</strong>：使用 <code>maximumWeight</code> 限制权重、启用 <code>weakValues</code> 或 <code>softValues</code><a class=link href=@ref>2,6</a>。</li></ul></li><li><strong>缓存雪崩</strong><ul><li><strong>预防</strong>：分散过期时间（如随机 TTL）、结合 <code>refreshAfterWrite</code> 异步刷新<a class=link href=@ref>3,4</a>。</li></ul></li></ol><hr><h3 id=-总结>💎 <strong>总结</strong></h3><p>Caffeine 凭借 <strong>Window TinyLFU 算法</strong>、<strong>无锁并发</strong>和<strong>灵活的策略组合</strong>，成为 Java 本地缓存的标杆。其适用于高并发、低延迟场景，如微服务缓存层、热点数据加速等。通过与分布式缓存（如 Redis）组成多级缓存，可进一步优化系统性能。开发者可通过丰富的配置（容量、时间、权重）和监控功能（<code>recordStats</code>）实现精细化调优<a class=link href=@ref>3,4,5</a>。</p><h2 id=多级缓存>多级缓存</h2><p>Spring Boot 结合 Caffeine（本地缓存）和 Redis（分布式缓存）实现多级缓存，能显著提升高并发场景下的系统性能。以下基于实战经验，详细说明实现步骤和完整代码示例：</p><hr><h3 id=-多级缓存架构设计>📐 <strong>多级缓存架构设计</strong></h3><ol><li>请求流程<pre tabindex=0><code>请求 → Caffeine（L1，进程内）→ 命中则返回  
+       ↓ 未命中  
+       Redis（L2，分布式）→ 命中则回填L1并返回  
+       ↓ 未命中  
+       数据库 → 回填Redis和Caffeine
+</code></pre></li><li>核心优势<ul><li><strong>高性能</strong>：Caffeine 提供纳秒级访问，承载 80% 以上热点请求<a class=link href=@ref>4</a></li><li><strong>容量分层</strong>：Redis 存储全量数据，Caffeine 仅存高频热点<a class=link href=@ref>1</a></li><li><strong>一致性保障</strong>：通过异步通知 + TTL 控制数据同步<a class=link href=@ref>5</a></li></ul></li></ol><hr><h3 id=-依赖配置pomxml>⚙️ <strong>依赖配置（pom.xml）</strong></h3><pre tabindex=0><code>&lt;dependencies&gt;
+    &lt;!-- Spring 缓存支持 --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-cache&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;!-- Caffeine 本地缓存 --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.github.ben-manes.caffeine&lt;/groupId&gt;
+        &lt;artifactId&gt;caffeine&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;!-- Redis 分布式缓存 --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre><hr><h3 id=-多级缓存配置类>🔧 <strong>多级缓存配置类</strong></h3><pre tabindex=0><code>@Configuration
+@EnableCaching
+public class CacheConfig {
+
+    // 一级缓存：Caffeine（短周期，防穿透）
+    @Bean
+    public CacheManager caffeineCacheManager() {
+        CaffeineCacheManager manager = new CaffeineCacheManager();
+        manager.setCaffeine(Caffeine.newBuilder()
+            .initialCapacity(100)      // 初始容量
+            .maximumSize(1000)        // 最大条目
+            .expireAfterWrite(5, TimeUnit.SECONDS) // 短TTL避免旧数据
+            .recordStats());           // 启用统计
+        return manager;
+    }
+
+    // 二级缓存：Redis（长周期，全量存储）
+    @Bean
+    public RedisCacheManager redisCacheManager(RedisConnectionFactory factory) {
+        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
+            .entryTtl(Duration.ofMinutes(30)) // 长TTL
+            .serializeValuesWith(RedisSerializationContext.SerializationPair
+                .fromSerializer(new GenericJackson2JsonRedisSerializer()));
+        return RedisCacheManager.builder(factory).cacheDefaults(config).build();
+    }
+
+    // 组合多级缓存管理器（核心）
+    @Bean
+    @Primary
+    public CacheManager multiLevelCacheManager(
+            @Qualifier(&#34;caffeineCacheManager&#34;) CacheManager level1,
+            @Qualifier(&#34;redisCacheManager&#34;) CacheManager level2) {
+        return new MultiLevelCacheManager(level1, level2);
+    }
+}
+</code></pre><hr><h3 id=-多级缓存管理器实现>🧩 <strong>多级缓存管理器实现</strong></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>MultiLevelCacheManager</span><span class=w> </span><span class=kd>implements</span><span class=w> </span><span class=n>CacheManager</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>private</span><span class=w> </span><span class=kd>final</span><span class=w> </span><span class=n>CacheManager</span><span class=w> </span><span class=n>level1</span><span class=p>;</span><span class=w> </span><span class=c1>// Caffeine</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>private</span><span class=w> </span><span class=kd>final</span><span class=w> </span><span class=n>CacheManager</span><span class=w> </span><span class=n>level2</span><span class=p>;</span><span class=w> </span><span class=c1>// Redis</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>private</span><span class=w> </span><span class=kd>final</span><span class=w> </span><span class=n>ConcurrentMap</span><span class=o>&lt;</span><span class=n>String</span><span class=p>,</span><span class=w> </span><span class=n>Cache</span><span class=o>&gt;</span><span class=w> </span><span class=n>caches</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>ConcurrentHashMap</span><span class=o>&lt;&gt;</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=nf>MultiLevelCacheManager</span><span class=p>(</span><span class=n>CacheManager</span><span class=w> </span><span class=n>level1</span><span class=p>,</span><span class=w> </span><span class=n>CacheManager</span><span class=w> </span><span class=n>level2</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>this</span><span class=p>.</span><span class=na>level1</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>level1</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>this</span><span class=p>.</span><span class=na>level2</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>level2</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@Override</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=n>Cache</span><span class=w> </span><span class=nf>getCache</span><span class=p>(</span><span class=n>String</span><span class=w> </span><span class=n>name</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w> </span><span class=n>caches</span><span class=p>.</span><span class=na>computeIfAbsent</span><span class=p>(</span><span class=n>name</span><span class=p>,</span><span class=w> </span><span class=n>cacheName</span><span class=w> </span><span class=o>-&gt;</span><span class=w> 
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>new</span><span class=w> </span><span class=n>MultiLevelCache</span><span class=p>(</span><span class=n>level1</span><span class=p>.</span><span class=na>getCache</span><span class=p>(</span><span class=n>cacheName</span><span class=p>),</span><span class=w> </span><span class=n>level2</span><span class=p>.</span><span class=na>getCache</span><span class=p>(</span><span class=n>cacheName</span><span class=p>))</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>static</span><span class=w> </span><span class=kd>class</span> <span class=nc>MultiLevelCache</span><span class=w> </span><span class=kd>implements</span><span class=w> </span><span class=n>Cache</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=kd>private</span><span class=w> </span><span class=kd>final</span><span class=w> </span><span class=n>Cache</span><span class=w> </span><span class=n>level1</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=kd>private</span><span class=w> </span><span class=kd>final</span><span class=w> </span><span class=n>Cache</span><span class=w> </span><span class=n>level2</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=kd>public</span><span class=w> </span><span class=nf>MultiLevelCache</span><span class=p>(</span><span class=n>Cache</span><span class=w> </span><span class=n>level1</span><span class=p>,</span><span class=w> </span><span class=n>Cache</span><span class=w> </span><span class=n>level2</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>this</span><span class=p>.</span><span class=na>level1</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>level1</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>null</span><span class=w> </span><span class=o>?</span><span class=w> </span><span class=n>level1</span><span class=w> </span><span class=p>:</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>NoOpCache</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>this</span><span class=p>.</span><span class=na>level2</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>level2</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>null</span><span class=w> </span><span class=o>?</span><span class=w> </span><span class=n>level2</span><span class=w> </span><span class=p>:</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>NoOpCache</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nd>@Override</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=kd>public</span><span class=w> </span><span class=n>ValueWrapper</span><span class=w> </span><span class=nf>get</span><span class=p>(</span><span class=n>Object</span><span class=w> </span><span class=n>key</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=c1>// 1. 先查本地缓存</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>ValueWrapper</span><span class=w> </span><span class=n>value</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>level1</span><span class=p>.</span><span class=na>get</span><span class=p>(</span><span class=n>key</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>value</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>null</span><span class=p>)</span><span class=w> </span><span class=k>return</span><span class=w> </span><span class=n>value</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=c1>// 2. 再查Redis</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>value</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>level2</span><span class=p>.</span><span class=na>get</span><span class=p>(</span><span class=n>key</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>value</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>null</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>level1</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=n>key</span><span class=p>,</span><span class=w> </span><span class=n>value</span><span class=p>.</span><span class=na>get</span><span class=p>());</span><span class=w> </span><span class=c1>// 回填本地缓存</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>return</span><span class=w> </span><span class=n>value</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>return</span><span class=w> </span><span class=kc>null</span><span class=p>;</span><span class=w> </span><span class=c1>// 两级均未命中</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nd>@Override</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=kd>public</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>put</span><span class=p>(</span><span class=n>Object</span><span class=w> </span><span class=n>key</span><span class=p>,</span><span class=w> </span><span class=n>Object</span><span class=w> </span><span class=n>value</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=c1>// 双写策略：同时更新两级缓存</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>level1</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=n>key</span><span class=p>,</span><span class=w> </span><span class=n>value</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>level2</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=n>key</span><span class=p>,</span><span class=w> </span><span class=n>value</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nd>@Override</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=kd>public</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>evict</span><span class=p>(</span><span class=n>Object</span><span class=w> </span><span class=n>key</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=c1>// 双删策略：保证一致性</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>level1</span><span class=p>.</span><span class=na>evict</span><span class=p>(</span><span class=n>key</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>level2</span><span class=p>.</span><span class=na>evict</span><span class=p>(</span><span class=n>key</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// 空缓存实现（容错）</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>static</span><span class=w> </span><span class=kd>class</span> <span class=nc>NoOpCache</span><span class=w> </span><span class=kd>implements</span><span class=w> </span><span class=n>Cache</span><span class=w> </span><span class=p>{</span><span class=w> </span><span class=cm>/* 基础方法实现 */</span><span class=w> </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div><hr><h3 id=-业务层使用示例>🛠️ <strong>业务层使用示例</strong></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Service</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>ProductService</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@Autowired</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>private</span><span class=w> </span><span class=n>ProductRepository</span><span class=w> </span><span class=n>repository</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// 读取数据：自动走多级缓存</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@Cacheable</span><span class=p>(</span><span class=n>value</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;products&#34;</span><span class=p>,</span><span class=w> </span><span class=n>key</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;#id&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=n>Product</span><span class=w> </span><span class=nf>getProduct</span><span class=p>(</span><span class=n>Long</span><span class=w> </span><span class=n>id</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w> </span><span class=n>repository</span><span class=p>.</span><span class=na>findById</span><span class=p>(</span><span class=n>id</span><span class=p>).</span><span class=na>orElse</span><span class=p>(</span><span class=kc>null</span><span class=p>);</span><span class=w> </span><span class=c1>// 模拟DB查询</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// 更新数据：清除缓存</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@CacheEvict</span><span class=p>(</span><span class=n>value</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;products&#34;</span><span class=p>,</span><span class=w> </span><span class=n>key</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;#product.id&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>updateProduct</span><span class=p>(</span><span class=n>Product</span><span class=w> </span><span class=n>product</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>repository</span><span class=p>.</span><span class=na>save</span><span class=p>(</span><span class=n>product</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div><hr><h3 id=-关键优化策略>🛡️ <strong>关键优化策略</strong></h3><ol><li><strong>数据一致性保障</strong><ul><li><strong>双删策略</strong>：更新数据后同时清除两级缓存（如上例 <code>@CacheEvict</code>）</li><li><strong>Pub/Sub 同步</strong>：通过 Redis 发布订阅，通知其他节点失效本地缓存<a class=link href=@ref>1</a></li></ul><div class=highlight><pre tabindex=0 class=chroma><code class=language-Java data-lang=Java><span class=line><span class=cl><span class=c1>// Redis 消息监听示例</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nd>@Bean</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=n>MessageListenerAdapter</span><span class=w> </span><span class=nf>listenerAdapter</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>return</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>MessageListenerAdapter</span><span class=p>(</span><span class=k>new</span><span class=w> </span><span class=n>CacheEvictListener</span><span class=p>());</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>CacheEvictListener</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>handleMessage</span><span class=p>(</span><span class=n>String</span><span class=w> </span><span class=n>cacheKey</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>caffeineCacheManager</span><span class=p>.</span><span class=na>getCache</span><span class=p>(</span><span class=s>&#34;products&#34;</span><span class=p>).</span><span class=na>evict</span><span class=p>(</span><span class=n>cacheKey</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div></li><li><strong>防缓存穿透</strong><ul><li>缓存空值（短TTL）：</li></ul><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>product</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=kc>null</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>level2</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=n>key</span><span class=p>,</span><span class=w> </span><span class=n>NULL_OBJECT</span><span class=p>,</span><span class=w> </span><span class=n>30</span><span class=p>,</span><span class=w> </span><span class=n>TimeUnit</span><span class=p>.</span><span class=na>SECONDS</span><span class=p>);</span><span class=w> </span><span class=c1>// 缓存空对象</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div></li><li><strong>防雪崩机制</strong><ul><li>Redis TTL 添加随机扰动：</li></ul><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=n>redisTemplate</span><span class=p>.</span><span class=na>opsForValue</span><span class=p>().</span><span class=na>set</span><span class=p>(</span><span class=n>key</span><span class=p>,</span><span class=w> </span><span class=n>value</span><span class=p>,</span><span class=w> </span><span class=n>30</span><span class=w> </span><span class=o>+</span><span class=w> </span><span class=n>random</span><span class=p>.</span><span class=na>nextInt</span><span class=p>(</span><span class=n>10</span><span class=p>),</span><span class=w> </span><span class=n>TimeUnit</span><span class=p>.</span><span class=na>MINUTES</span><span class=p>);</span><span class=w>
+</span></span></span></code></pre></div></li><li><strong>性能监控</strong><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=c1>// 获取Caffeine统计信息</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=n>CacheStats</span><span class=w> </span><span class=n>stats</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>caffeineCache</span><span class=p>.</span><span class=na>getNativeCache</span><span class=p>().</span><span class=na>stats</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=n>log</span><span class=p>.</span><span class=na>info</span><span class=p>(</span><span class=s>&#34;L1命中率: {}&#34;</span><span class=p>,</span><span class=w> </span><span class=n>stats</span><span class=p>.</span><span class=na>hitRate</span><span class=p>());</span><span class=w>
+</span></span></span></code></pre></div></li></ol><hr><h3 id=-适用场景与性能对比>💎 <strong>适用场景与性能对比</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>场景</strong></th><th><strong>推荐方案</strong></th><th><strong>性能提升</strong></th></tr></thead><tbody><tr><td>高频读（如商品详情）</td><td>多级缓存</td><td>QPS 从 5.8万 → 120万 <a class=link href=@ref>4</a></td></tr><tr><td>低频写高一致性</td><td>纯Redis</td><td>数据一致但延迟较高</td></tr><tr><td>静态数据（如配置）</td><td>纯Caffeine</td><td>零网络延迟</td></tr></tbody></table></div><blockquote><p><strong>注</strong>：完整代码需根据业务调整以下配置：</p><ul><li>Caffeine 的 <code>refreshAfterWrite</code>（搭配 <code>CacheLoader</code> 异步刷新）<a class=link href=@ref>8</a></li><li>Redis 分布式锁控制回源（防缓存击穿）</li><li>动态预热热点数据（<code>@PostConstruct</code> 加载高频数据）<a class=link href=@ref>5</a>
+通过以上设计，系统可显著降低数据库负载（实测下降 90%），TP99 延迟从 120ms 降至 45ms <a class=link href=@ref>4</a>。实际部署时建议配合 <strong>Prometheus 监控缓存命中率</strong>和 <strong>Hystrix 降级策略</strong>，保障高可用性。</li></ul></blockquote><h2 id=差异化多级缓存>差异化多级缓存</h2><p>在 Spring Boot 应用中，可通过<strong>分治策略</strong>实现部分接口使用多级缓存（Caffeine + Redis），其余接口仅用 Redis 缓存。以下是具体实现方案和示例：</p><hr><h3 id=-核心配置创建两类缓存管理器>🔧 <strong>核心配置：创建两类缓存管理器</strong></h3><h4 id=多级缓存管理器caffeine--redis><strong>多级缓存管理器</strong>（Caffeine + Redis）</h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Configuration</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>CacheConfig</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// 一级缓存：Caffeine（短TTL）</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@Bean</span><span class=p>(</span><span class=s>&#34;caffeineCacheManager&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=n>CacheManager</span><span class=w> </span><span class=nf>caffeineCacheManager</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>CaffeineCacheManager</span><span class=w> </span><span class=n>manager</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>CaffeineCacheManager</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>manager</span><span class=p>.</span><span class=na>setCaffeine</span><span class=p>(</span><span class=n>Caffeine</span><span class=p>.</span><span class=na>newBuilder</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=p>.</span><span class=na>maximumSize</span><span class=p>(</span><span class=n>1000</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=p>.</span><span class=na>expireAfterWrite</span><span class=p>(</span><span class=n>10</span><span class=p>,</span><span class=w> </span><span class=n>TimeUnit</span><span class=p>.</span><span class=na>SECONDS</span><span class=p>));</span><span class=w> </span><span class=c1>// 短TTL避免脏数据</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w> </span><span class=n>manager</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// 二级缓存：Redis（长TTL）</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@Bean</span><span class=p>(</span><span class=s>&#34;redisCacheManager&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=n>CacheManager</span><span class=w> </span><span class=nf>redisCacheManager</span><span class=p>(</span><span class=n>RedisConnectionFactory</span><span class=w> </span><span class=n>factory</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>RedisCacheConfiguration</span><span class=w> </span><span class=n>config</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>RedisCacheConfiguration</span><span class=p>.</span><span class=na>defaultCacheConfig</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=p>.</span><span class=na>entryTtl</span><span class=p>(</span><span class=n>Duration</span><span class=p>.</span><span class=na>ofMinutes</span><span class=p>(</span><span class=n>30</span><span class=p>));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w> </span><span class=n>RedisCacheManager</span><span class=p>.</span><span class=na>builder</span><span class=p>(</span><span class=n>factory</span><span class=p>).</span><span class=na>cacheDefaults</span><span class=p>(</span><span class=n>config</span><span class=p>).</span><span class=na>build</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// 多级缓存组合管理器</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@Bean</span><span class=p>(</span><span class=s>&#34;multiLevelCacheManager&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=n>CacheManager</span><span class=w> </span><span class=nf>multiLevelCacheManager</span><span class=p>(</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nd>@Qualifier</span><span class=p>(</span><span class=s>&#34;caffeineCacheManager&#34;</span><span class=p>)</span><span class=w> </span><span class=n>CacheManager</span><span class=w> </span><span class=n>level1</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nd>@Qualifier</span><span class=p>(</span><span class=s>&#34;redisCacheManager&#34;</span><span class=p>)</span><span class=w> </span><span class=n>CacheManager</span><span class=w> </span><span class=n>level2</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>CompositeCacheManager</span><span class=p>(</span><span class=n>level1</span><span class=p>,</span><span class=w> </span><span class=n>level2</span><span class=p>);</span><span class=w> </span><span class=c1>// 组合两级缓存[1,4](@ref)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div><h4 id=单级redis缓存管理器独立配置><strong>单级Redis缓存管理器</strong>（独立配置）</h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Bean</span><span class=p>(</span><span class=s>&#34;pureRedisCacheManager&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=n>CacheManager</span><span class=w> </span><span class=nf>pureRedisCacheManager</span><span class=p>(</span><span class=n>RedisConnectionFactory</span><span class=w> </span><span class=n>factory</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>RedisCacheConfiguration</span><span class=w> </span><span class=n>config</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>RedisCacheConfiguration</span><span class=p>.</span><span class=na>defaultCacheConfig</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>.</span><span class=na>entryTtl</span><span class=p>(</span><span class=n>Duration</span><span class=p>.</span><span class=na>ofHours</span><span class=p>(</span><span class=n>1</span><span class=p>));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>return</span><span class=w> </span><span class=n>RedisCacheManager</span><span class=p>.</span><span class=na>builder</span><span class=p>(</span><span class=n>factory</span><span class=p>).</span><span class=na>cacheDefaults</span><span class=p>(</span><span class=n>config</span><span class=p>).</span><span class=na>build</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div><hr><h3 id=-业务层使用按接口指定缓存策略>🛠️ <strong>业务层使用：按接口指定缓存策略</strong></h3><h4 id=多级缓存接口热点数据><strong>多级缓存接口</strong>（热点数据）</h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Service</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>ProductService</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// 使用多级缓存（优先查Caffeine，未命中查Redis）</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@Cacheable</span><span class=p>(</span><span class=n>cacheManager</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;multiLevelCacheManager&#34;</span><span class=p>,</span><span class=w> </span><span class=n>value</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;hot_products&#34;</span><span class=p>,</span><span class=w> </span><span class=n>key</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;#id&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=n>Product</span><span class=w> </span><span class=nf>getHotProduct</span><span class=p>(</span><span class=n>Long</span><span class=w> </span><span class=n>id</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w> </span><span class=n>productRepository</span><span class=p>.</span><span class=na>findById</span><span class=p>(</span><span class=n>id</span><span class=p>).</span><span class=na>orElse</span><span class=p>(</span><span class=kc>null</span><span class=p>);</span><span class=w> </span><span class=c1>// 数据库查询[4](@ref)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div><h4 id=单级redis缓存接口普通数据><strong>单级Redis缓存接口</strong>（普通数据）</h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Service</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>UserService</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// 仅用Redis缓存</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@Cacheable</span><span class=p>(</span><span class=n>cacheManager</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;pureRedisCacheManager&#34;</span><span class=p>,</span><span class=w> </span><span class=n>value</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;users&#34;</span><span class=p>,</span><span class=w> </span><span class=n>key</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;#id&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=n>User</span><span class=w> </span><span class=nf>getUser</span><span class=p>(</span><span class=n>Long</span><span class=w> </span><span class=n>id</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w> </span><span class=n>userRepository</span><span class=p>.</span><span class=na>findById</span><span class=p>(</span><span class=n>id</span><span class=p>).</span><span class=na>orElse</span><span class=p>(</span><span class=kc>null</span><span class=p>);</span><span class=w> </span><span class=c1>// 数据库查询[5](@ref)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div><h4 id=动态条件控制更精细的粒度><strong>动态条件控制</strong>（更精细的粒度）</h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Cacheable</span><span class=p>(</span><span class=n>cacheManager</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;multiLevelCacheManager&#34;</span><span class=p>,</span><span class=w> </span><span class=n>value</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;products&#34;</span><span class=p>,</span><span class=w> 
+</span></span></span><span class=line><span class=cl><span class=w>           </span><span class=n>condition</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;#isHot == true&#34;</span><span class=p>)</span><span class=w> </span><span class=c1>// 仅当isHot=true时启用多级缓存</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=n>Product</span><span class=w> </span><span class=nf>getProduct</span><span class=p>(</span><span class=n>Long</span><span class=w> </span><span class=n>id</span><span class=p>,</span><span class=w> </span><span class=kt>boolean</span><span class=w> </span><span class=n>isHot</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// ...</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div><hr><h3 id=-高级场景自定义注解简化配置>⚙️ <strong>高级场景：自定义注解简化配置</strong></h3><h4 id=定义注解-multilevelcache>定义注解 <code>@MultiLevelCache</code></h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Target</span><span class=p>(</span><span class=n>ElementType</span><span class=p>.</span><span class=na>METHOD</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nd>@Retention</span><span class=p>(</span><span class=n>RetentionPolicy</span><span class=p>.</span><span class=na>RUNTIME</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nd>@Cacheable</span><span class=p>(</span><span class=n>cacheManager</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;multiLevelCacheManager&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=nd>@interface</span><span class=w> </span><span class=n>MultiLevelCache</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>String</span><span class=w> </span><span class=nf>value</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>String</span><span class=w> </span><span class=nf>key</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div><h4 id=在目标接口上使用>在目标接口上使用</h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@MultiLevelCache</span><span class=p>(</span><span class=n>value</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;orders&#34;</span><span class=p>,</span><span class=w> </span><span class=n>key</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;#orderId&#34;</span><span class=p>)</span><span class=w> </span><span class=c1>// 自动走多级缓存</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=n>Order</span><span class=w> </span><span class=nf>getOrder</span><span class=p>(</span><span class=n>String</span><span class=w> </span><span class=n>orderId</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// ...</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div><hr><h3 id=-注意事项与优化>⚠️ <strong>注意事项与优化</strong></h3><ol><li><strong>缓存一致性</strong><ul><li>更新多级缓存数据时，需同时清除本地和Redis缓存：<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@CacheEvict</span><span class=p>(</span><span class=n>cacheManager</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;multiLevelCacheManager&#34;</span><span class=p>,</span><span class=w> </span><span class=n>value</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;hot_products&#34;</span><span class=p>,</span><span class=w> </span><span class=n>key</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;#id&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>updateProduct</span><span class=p>(</span><span class=n>Long</span><span class=w> </span><span class=n>id</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w> </span><span class=p>...</span><span class=w> </span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div></li><li>集群环境下，使用 <strong>Redis Pub/Sub 通知其他节点失效本地缓存</strong><a class=link href=@ref>2,3</a>。</li></ul></li><li><strong>内存控制</strong><ul><li>本地缓存（Caffeine）限制 <code>maximumSize</code>，避免 OOM。</li><li>非热点数据禁止使用多级缓存，减少内存压力。</li></ul></li><li><strong>监控区分</strong><ul><li>独立监控两类缓存命中率：<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=c1>// 多级缓存监控</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=n>caffeineCacheManager</span><span class=p>.</span><span class=na>getCache</span><span class=p>(</span><span class=s>&#34;hot_products&#34;</span><span class=p>).</span><span class=na>getNativeCache</span><span class=p>().</span><span class=na>stats</span><span class=p>().</span><span class=na>hitRate</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>// Redis缓存监控</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=n>redisTemplate</span><span class=p>.</span><span class=na>opsForValue</span><span class=p>().</span><span class=na>get</span><span class=p>(</span><span class=s>&#34;users::123&#34;</span><span class=p>);</span><span class=w>
+</span></span></span></code></pre></div></li></ul></li></ol><hr><h3 id=-方案对比与选型>💎 <strong>方案对比与选型</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>场景</strong></th><th><strong>策略</strong></th><th><strong>配置方式</strong></th><th><strong>优势</strong></th></tr></thead><tbody><tr><td>高频热点数据（如商品详情）</td><td>多级缓存</td><td><code>@Cacheable(cacheManager="multiLevelCacheManager")</code></td><td>纳秒级响应，降低Redis压力</td></tr><tr><td>低频普通数据（如用户信息）</td><td>单级Redis</td><td><code>@Cacheable(cacheManager="pureRedisCacheManager")</code></td><td>节省内存，保证数据一致性</td></tr><tr><td>条件化缓存（动态决策）</td><td>注解+SpEL条件表达式</td><td><code>condition = "#isHot"</code></td><td>灵活控制缓存层级</td></tr></tbody></table></div><hr><h3 id=-扩展解决多级缓存的典型问题>🔍 <strong>扩展：解决多级缓存的典型问题</strong></h3><ul><li>缓存穿透：在多级缓存的 get 方法中，对空值进行短时间缓存：<pre tabindex=0><code>if (value == null) {
+    redisCache.put(key, NULL_OBJECT, 30, TimeUnit.SECONDS); // 缓存空值[5](@ref)
+}
+</code></pre></li><li>缓存雪崩：为 Redis 的 TTL 添加随机扰动：<pre tabindex=0><code>.entryTtl(Duration.ofMinutes(30 + ThreadLocalRandom.current().nextInt(10)));
+</code></pre></li></ul><hr><p>通过以上设计，<strong>热点接口</strong>（如秒杀商品查询）享受本地缓存的速度优势（&lt;10ms），<strong>普通接口</strong>（如用户信息）保持 Redis 的全局一致性，同时避免内存浪费。实际部署时，建议结合 <strong>Spring Actuator</strong> 监控缓存指标，并根据业务流量动态调整缓存策略。</p><h2 id=自定义ttl>自定义TTL</h2><p>在Spring Boot中，<code>@Cacheable</code>本身不直接支持TTL设置（因其为抽象层，不依赖具体缓存实现），但可通过以下方法实现自定义TTL：</p><hr><h3 id=-自定义cachemanager推荐>⏳ <strong>自定义CacheManager（推荐）</strong></h3><p>通过扩展<code>RedisCacheManager</code>解析<code>cacheNames</code>中的TTL信息：</p><ol><li><strong>自定义CacheManager</strong>：<pre tabindex=0><code>public class CustomRedisCacheManager extends RedisCacheManager {
+    public CustomRedisCacheManager(RedisCacheWriter writer, RedisCacheConfiguration config) {
+        super(writer, config);
+    }
+
+    @Override
+    protected RedisCache createRedisCache(String name, RedisCacheConfiguration config) {
+        String[] parts = name.split(&#34;#&#34;);  // 格式：cacheName#TTL
+        if (parts.length &gt; 1) {
+            long ttl = Long.parseLong(parts[1]);
+            config = config.entryTtl(Duration.ofSeconds(ttl)); // 设置TTL
+        }
+        return super.createRedisCache(parts[0], config);
+    }
+}
+</code></pre></li><li><strong>配置Bean</strong>：<pre tabindex=0><code>@Bean
+public CacheManager cacheManager(RedisConnectionFactory factory) {
+    RedisCacheConfiguration defaultConfig = RedisCacheConfiguration.defaultCacheConfig()
+        .entryTtl(Duration.ofHours(1)); // 默认TTL
+    return new CustomRedisCacheManager(
+        RedisCacheWriter.nonLockingRedisCacheWriter(factory), defaultConfig
+    );
+}
+</code></pre></li><li><strong>使用注解</strong>：<pre tabindex=0><code>@Cacheable(cacheNames = &#34;users#3600&#34;, key = &#34;#id&#34;) // TTL=3600秒
+public User getUser(Long id) { ... }
+</code></pre><strong>优点</strong>：简洁高效，无需修改业务代码<a class=link href=@ref>1,2,6</a>。</li></ol><hr><h3 id=-自定义注解aop>✨ <strong>自定义注解+AOP</strong></h3><p>通过自定义注解（如<code>@CacheTTL</code>）和AOP动态设置TTL：</p><ol><li><strong>定义注解</strong>：<pre tabindex=0><code>@Target({ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface CacheTTL {
+    long value() default 60; // 默认60秒
+}
+</code></pre></li><li><strong>AOP拦截</strong>：<pre tabindex=0><code>@Aspect
+@Component
+public class CacheTTLAspect {
+    @Around(&#34;@annotation(cacheTTL)&#34;)
+    public Object applyTTL(ProceedingJoinPoint pjp, CacheTTL cacheTTL) throws Throwable {
+        long ttl = cacheTTL.value();
+        // 将TTL存入ThreadLocal
+        CacheContext.setTTL(ttl);
+        return pjp.proceed();
+    }
+}
+</code></pre></li><li><strong>扩展RedisCache</strong>：<pre tabindex=0><code>public class CustomRedisCache extends RedisCache {
+    @Override
+    public void put(Object key, Object value) {
+        Long ttl = CacheContext.getTTL(); // 从ThreadLocal获取TTL
+        if (ttl != null) {
+            // 使用自定义TTL写入Redis
+            cacheWriter.put(name, serializeKey(key), serializeValue(value), Duration.ofSeconds(ttl));
+        } else {
+            super.put(key, value);
+        }
+    }
+}
+</code></pre><strong>优点</strong>：语义明确，支持方法级精细控制<a class=link href=@ref>1,6,8</a>。</li></ol><hr><h3 id=-缓存提供者原生配置>⚙️ <strong>缓存提供者原生配置</strong></h3><p>针对具体缓存中间件配置全局或缓存区TTL：</p><ol><li><strong>Redis全局默认TTL</strong>：<pre tabindex=0><code>@Bean
+public CacheManager cacheManager(RedisConnectionFactory factory) {
+    RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
+        .entryTtl(Duration.ofMinutes(30)); // 所有缓存默认30分钟
+    return RedisCacheManager.builder(factory).cacheDefaults(config).build();
+}
+</code></pre></li><li><strong>Ehcache缓存区TTL</strong>：<pre tabindex=0><code>&lt;!-- ehcache.xml --&gt;
+&lt;cache name=&#34;users&#34;
+       maxEntriesLocalHeap=&#34;1000&#34;
+       timeToLiveSeconds=&#34;3600&#34;/&gt; &lt;!-- TTL=1小时 --&gt;
+</code></pre><strong>适用场景</strong>：TTL统一或按缓存区分组设置<a class=link href=@ref>4,7</a>。</li></ol><hr><h3 id=-注意事项>⚠️ <strong>注意事项</strong></h3><ol><li>优先级：<ul><li>方法级注解TTL > 缓存区配置 > 全局默认TTL<a class=link href=@ref>1,6</a>。</li></ul></li><li>时间单位：<ul><li>Redis默认用秒，Ehcache支持秒/毫秒，需注意单位转换。</li></ul></li><li>缓存穿透：<ul><li>短TTL缓存空值（<code>unless = "#result == null"</code>）避免频繁查询DB<a class=link href=@ref>1</a>。</li></ul></li><li>动态刷新：<ul><li>结合<code>@Scheduled</code>+<code>@CacheEvict</code>定时刷新热点数据（如提前10秒续期）<a class=link href=@ref>1,6</a>。</li></ul></li></ol><hr><h3 id=-方法对比>🔄 <strong>方法对比</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>方法</strong></th><th>适用场景</th><th>优点</th><th>缺点</th></tr></thead><tbody><tr><td>自定义CacheManager</td><td>Redis环境，需快速集成</td><td>代码侵入小，配置灵活</td><td>需规范cacheNames格式</td></tr><tr><td>自定义注解+AOP</td><td>需要方法级精细控制</td><td>语义清晰，扩展性强</td><td>AOP增加复杂度</td></tr><tr><td>缓存提供者原生配置</td><td>TTL分组或全局统一</td><td>无需代码改动，依赖中间件能力</td><td>灵活性低</td></tr></tbody></table></div><blockquote><p>💡 <strong>推荐选择</strong>：</p><ul><li>简单场景 → <strong>自定义CacheManager</strong>（快速生效）<a class=link href=@ref>1,2</a>；</li><li>复杂逻辑 → <strong>自定义注解+AOP</strong>（如动态TTL+自动刷新）<a class=link href=@ref>6,8</a>。</li></ul></blockquote><h2 id=延迟双删>延迟双删</h2><p>在Spring应用中实现延迟双删策略，需结合缓存注解（如<code>@CacheEvict</code>）与异步延迟删除机制，解决高并发下缓存与数据库的数据一致性问题。以下是两种主流实现方案及核心实践：</p><hr><h3 id=-延迟双删的核心原理>⚙️ <strong>延迟双删的核心原理</strong></h3><p><strong>问题场景</strong>：
+在并发更新时，若仅删除一次缓存，可能出现：</p><ol><li>线程A删除缓存 → 更新数据库（耗时操作）</li><li>线程B在A更新完成前读取数据库旧数据 → 将旧数据写入缓存</li><li>线程A更新完成，但缓存已被B污染，导致后续请求读取脏数据。
+<strong>延迟双删流程</strong>：</li><li><strong>首次删除缓存</strong>：更新数据库前删除缓存，防止旧数据被读取。</li><li><strong>更新数据库</strong>：执行业务数据更新。</li><li><strong>延迟二次删除</strong>：等待一段时间（如500ms）后再次删除缓存，确保并发读操作已完成，避免脏数据残留。</li></ol><hr><h3 id=-实现方案一基于aop切面--自定义注解>🛠️ <strong>实现方案一：基于AOP切面 + 自定义注解</strong></h3><h4 id=定义自定义注解><strong>定义自定义注解</strong></h4><pre tabindex=0><code>@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface DelayDoubleDelete {
+    String cacheName();  // 缓存名称
+    long delay() default 500; // 延迟时间（毫秒）
+}
+</code></pre><h4 id=实现aop切面核心逻辑><strong>实现AOP切面（核心逻辑）</strong></h4><pre tabindex=0><code>@Aspect
+@Component
+public class DelayDoubleDeleteAspect {
+    @Autowired
+    private RedisTemplate&lt;String, Object&gt; redisTemplate;
+
+    @Around(&#34;@annotation(delayDelete)&#34;)
+    public Object doDelayDelete(ProceedingJoinPoint joinPoint, DelayDoubleDelete delayDelete) throws Throwable {
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        Method method = signature.getMethod();
+        
+        // 1. 首次删除缓存
+        String cacheName = delayDelete.cacheName();
+        Set&lt;String&gt; keys = redisTemplate.keys(cacheName + &#34;:*&#34;); // 模糊匹配Key
+        redisTemplate.delete(keys);
+        
+        // 2. 执行数据库更新
+        Object result = joinPoint.proceed();
+        
+        // 3. 延迟二次删除（异步线程）
+        CompletableFuture.runAsync(() -&gt; {
+            try {
+                Thread.sleep(delayDelete.delay());
+                Set&lt;String&gt; keysAgain = redisTemplate.keys(cacheName + &#34;:*&#34;);
+                redisTemplate.delete(keysAgain);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+        
+        return result;
+    }
+}
+</code></pre><h4 id=业务层使用示例><strong>业务层使用示例</strong></h4><pre tabindex=0><code>@Service
+public class UserService {
+    @DelayDoubleDelete(cacheName = &#34;userCache&#34;, delay = 500)
+    public void updateUser(User user) {
+        userRepository.save(user); // 更新数据库
+    }
+}
+</code></pre><hr><h3 id=-实现方案二增强cachemanager非侵入式>🔌 <strong>实现方案二：增强CacheManager（非侵入式）</strong></h3><p>若希望无侵入式集成，可包装Spring Cache的<code>CacheManager</code>，自动为<code>@CacheEvict</code>添加延迟双删逻辑。</p><h4 id=包装cache与cachemanager><strong>包装Cache与CacheManager</strong></h4><pre tabindex=0><code>public class EnhancedCache implements Cache {
+    private final Cache delegate;
+    private final RedisTemplate&lt;String, Object&gt; redisTemplate;
+    private final long delay;
+
+    @Override
+    public void evict(Object key) {
+        delegate.evict(key); // 首次删除
+        CompletableFuture.runAsync(() -&gt; {
+            try {
+                Thread.sleep(delay);
+                delegate.evict(key); // 延迟二次删除
+            } catch (InterruptedException ignored) {}
+        });
+    }
+}
+
+public class EnhancedCacheManager implements CacheManager {
+    private final CacheManager delegate;
+    private final long delay;
+
+    @Override
+    public Cache getCache(String name) {
+        return new EnhancedCache(delegate.getCache(name), delay);
+    }
+}
+</code></pre><h4 id=注册增强cachemanager至spring容器><strong>注册增强CacheManager至Spring容器</strong></h4><pre tabindex=0><code>@Configuration
+public class CacheConfig {
+    @Bean
+    public CacheManager cacheManager(RedisConnectionFactory factory) {
+        RedisCacheManager defaultManager = RedisCacheManager.create(factory);
+        return new EnhancedCacheManager(defaultManager, 500); // 延迟500ms
+    }
+}
+</code></pre><p><strong>效果</strong>：所有使用<code>@CacheEvict</code>的方法自动触发延迟双删。</p><hr><h3 id=-关键注意事项>⚠️ <strong>关键注意事项</strong></h3><ol><li><strong>延迟时间设置</strong><ul><li>建议<strong>500ms-1000ms</strong>，根据业务SQL平均执行时间调整。</li><li>可通过SpEL动态设置：<code>@DelayDoubleDelete(delay = "#{T(java.lang.Math).min(1000, #user.updateTime)})</code>。</li></ul></li><li><strong>缓存Key的匹配</strong><ul><li>使用<code>redisTemplate.keys(pattern)</code>需谨慎，避免模糊匹配导致误删。</li><li>推荐<strong>精确Key定位</strong>：在注解中指定Key表达式（如<code>key = "#user.id"</code>）。</li></ul></li><li><strong>线程池优化</strong><ul><li>异步删除需使用独立线程池，避免阻塞主线程：<pre tabindex=0><code>private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(4);
+executor.schedule(() -&gt; deleteCache(key), delay, TimeUnit.MILLISECONDS);
+</code></pre></li></ul></li><li><strong>适用场景限制</strong><ul><li><strong>读多写少</strong>：频繁写操作会导致缓存频繁失效，降低性能。</li><li><strong>最终一致性</strong>：延迟双删不保证强一致，适用于容忍毫秒级延迟的业务。</li></ul></li></ol><hr><h3 id=-方案对比>📊 <strong>方案对比</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>方案</strong></th><th>侵入性</th><th>灵活性</th><th>维护性</th><th>适用场景</th></tr></thead><tbody><tr><td>AOP + 自定义注解</td><td>中</td><td>高</td><td>需维护切面逻辑</td><td>需精细控制缓存Key</td></tr><tr><td>增强CacheManager</td><td>低</td><td>中</td><td>全局生效，无需改业务代码</td><td>全项目统一策略</td></tr></tbody></table></div><hr><h3 id=-总结-1>💎 <strong>总结</strong></h3><ul><li><strong>首选AOP方案</strong>：需定制化缓存清理逻辑时（如模糊删除、多级缓存），使用自定义注解更灵活。</li><li><strong>无侵入方案</strong>：若项目广泛使用<code>@CacheEvict</code>，增强<code>CacheManager</code>可快速生效。</li><li><strong>兜底策略</strong>：结合<strong>短TTL</strong>（如30s）确保极端情况下缓存自动失效，双重保障数据一致性。</li></ul><blockquote><p>完整代码参考：<a class=link href=https://github.com/example/delay-double-delete target=_blank rel=noopener>GitHub示例</a></p></blockquote><h2 id=cachemanager-增强>CacheManager 增强</h2><p>在 Spring 环境下，<code>EnhancedCache</code> 的延迟双删机制与事务回滚的冲突核心在于：<strong>事务回滚时数据库操作被撤销，但异步的二次删除仍会执行，导致新写入的缓存被误删</strong>。以下是优化方案与原理说明：</p><hr><h3 id=-问题根源>⚠️ <strong>问题根源</strong></h3><pre tabindex=0><code>CompletableFuture.runAsync(() -&gt; {
+    Thread.sleep(delay);
+    delegate.evict(key); // 事务回滚后仍执行二次删除
+});
+</code></pre><ul><li><strong>风险</strong>：若数据库事务回滚，二次删除会清除其他线程写入的新缓存（如新插入的数据），造成数据不一致。</li></ul><hr><h3 id=-解决方案绑定二次删除到事务提交>🔧 <strong>解决方案：绑定二次删除到事务提交</strong></h3><h4 id=核心改造思路><strong>核心改造思路</strong></h4><p>将二次删除操作延迟到事务提交后执行，若事务回滚则取消删除任务：</p><pre tabindex=0><code>@Override
+public void evict(Object key) {
+    delegate.evict(key); // 首次删除
+
+    // 仅在事务提交后执行二次删除
+    TransactionSynchronizationManager.registerSynchronization(
+        new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                scheduleSecondEvict(key); // 提交后调度二次删除
+            }
+        }
+    );
+}
+
+private void scheduleSecondEvict(Object key) {
+    CompletableFuture.runAsync(() -&gt; {
+        try {
+            Thread.sleep(delay);
+            delegate.evict(key);
+        } catch (InterruptedException ignored) {}
+    });
+}
+</code></pre><p><strong>原理</strong>：</p><ul><li><code>TransactionSynchronization.afterCommit()</code> 确保二次删除仅在事务成功提交后触发。</li><li>若事务回滚，<code>afterCommit()</code> 不会执行，避免误删新缓存。</li></ul><h4 id=处理无事务场景><strong>处理无事务场景</strong></h4><p>若当前无事务，直接执行异步删除：</p><pre tabindex=0><code>@Override
+public void evict(Object key) {
+    delegate.evict(key); 
+    
+    if (TransactionSynchronizationManager.isActualTransactionActive()) {
+        // 绑定到事务提交
+        TransactionSynchronizationManager.registerSynchronization(...);
+    } else {
+        // 无事务时直接异步删除
+        scheduleSecondEvict(key);
+    }
+}
+</code></pre><hr><h3 id=-增强健壮性>⚙️ <strong>增强健壮性</strong></h3><h4 id=线程池隔离><strong>线程池隔离</strong></h4><p>使用独立线程池，避免阻塞事务线程：</p><pre tabindex=0><code>private final ScheduledExecutorService executor = 
+    Executors.newScheduledThreadPool(4);
+
+private void scheduleSecondEvict(Object key) {
+    executor.schedule(() -&gt; delegate.evict(key), delay, TimeUnit.MILLISECONDS);
+}
+</code></pre><h4 id=事务回滚补偿><strong>事务回滚补偿</strong></h4><p>若事务回滚需撤销首次删除（复杂场景）：</p><pre tabindex=0><code>@Override
+public void evict(Object key) {
+    Object cachedValue = delegate.get(key).orElse(null); // 备份旧值
+    delegate.evict(key); // 首次删除
+
+    TransactionSynchronizationManager.registerSynchronization(
+        new TransactionSynchronization() {
+            @Override
+            public void afterCompletion(int status) {
+                if (status == STATUS_ROLLED_BACK) {
+                    delegate.put(key, cachedValue); // 回滚时恢复旧缓存
+                } else if (status == STATUS_COMMITTED) {
+                    scheduleSecondEvict(key); // 提交后二次删除
+                }
+            }
+        }
+    );
+}
+</code></pre><p><strong>注意</strong>：此方案适用于<strong>强一致性要求</strong>的场景，但需考虑缓存恢复的并发安全问题。</p><hr><h3 id=-方案对比-1>📊 <strong>方案对比</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>方案</strong></th><th>一致性保障</th><th>复杂度</th><th>适用场景</th></tr></thead><tbody><tr><td>事务提交后触发二次删除</td><td>避免误删新缓存</td><td>中</td><td>通用场景（推荐）</td></tr><tr><td>回滚时恢复旧缓存</td><td>强一致性</td><td>高</td><td>金融/支付等高敏感业务</td></tr></tbody></table></div><hr><h3 id=-总结-2>💎 <strong>总结</strong></h3><ul><li><strong>优先事务绑定</strong>：通过 <code>TransactionSynchronization.afterCommit()</code> 确保二次删除仅在事务提交后执行。</li><li><strong>备份恢复慎用</strong>：仅在必要时恢复旧缓存，避免并发冲突。</li><li><strong>延迟双删本质</strong>：该机制适用于<strong>最终一致性</strong>场景，若需强一致性，建议结合分布式事务（如 TCC）。</li></ul><blockquote><p>完整代码示例参考：<a class=link href=https://gist.github.com/example target=_blank rel=noopener>GitHub Gist</a>
+扩展阅读：<a class=link href=https://spring.io/guides target=_blank rel=noopener>Spring 事务与缓存协同设计</a></p></blockquote><h2 id=aop>AOP</h2><p>在Spring框架中，通过自定义AOP切面结合自定义注解方案，<strong>可以识别事务是否回滚</strong>，但需依赖Spring的事务管理机制和线程上下文状态。以下是具体实现方案及注意事项：</p><hr><h3 id=-核心实现方案>🔍 核心实现方案</h3><h4 id=通过><strong>通过 <code>TransactionSynchronizationManager</code> 主动查询事务状态</strong></h4><p>在切面中可直接检查当前事务的标记状态：</p><pre tabindex=0><code>@Aspect
+@Component
+public class CustomAspect {
+    @Around(&#34;@annotation(com.example.CustomAnnotation)&#34;)
+    public Object aroundAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
+        try {
+            Object result = joinPoint.proceed(); // 执行业务方法
+            // 检查事务是否被标记为回滚
+            if (TransactionSynchronizationManager.isActualTransactionActive() 
+                &amp;&amp; TransactionAspectSupport.currentTransactionStatus().isRollbackOnly()) {
+                System.out.println(&#34;【事务已标记回滚】&#34;);
+            }
+            return result;
+        } catch (Exception ex) {
+            // 若业务方法抛出异常，事务通常已标记回滚
+            System.out.println(&#34;【事务因异常回滚】&#34;);
+            throw ex;
+        }
+    }
+}
+</code></pre><ul><li>原理：<ul><li><code>TransactionAspectSupport.currentTransactionStatus().isRollbackOnly()</code> 返回 <code>true</code> 表示事务已被标记为回滚（例如调用 <code>setRollbackOnly()</code> 或满足回滚规则的异常）。</li><li><code>TransactionSynchronizationManager.isActualTransactionActive()</code> 检查当前是否存在活动事务。</li></ul></li><li><strong>适用场景</strong>：在方法执行后检测事务状态。</li></ul><hr><h4 id=注册事务同步回调推荐><strong>注册事务同步回调（推荐）</strong></h4><p>通过 <code>TransactionSynchronization</code> 监听事务提交或回滚事件：</p><pre tabindex=0><code>@Around(&#34;@annotation(com.example.CustomAnnotation)&#34;)
+public Object aroundAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
+    // 注册事务同步器
+    TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+        @Override
+        public void afterCompletion(int status) {
+            if (status == STATUS_ROLLED_BACK) {
+                System.out.println(&#34;【事务已回滚】&#34;);
+            } else if (status == STATUS_COMMITTED) {
+                System.out.println(&#34;【事务已提交】&#34;);
+            }
+        }
+    });
+    return joinPoint.proceed();
+}
+</code></pre><ul><li>原理：<ul><li><code>afterCompletion</code> 回调在事务完成时触发，参数 <code>status</code> 标识事务状态（<code>STATUS_ROLLED_BACK</code> 或 <code>STATUS_COMMITTED</code>）。</li></ul></li><li><strong>优势</strong>：无需主动查询，由事务管理器自动通知，准确性高。</li></ul><hr><h4 id=在切面中直接获取><strong>在切面中直接获取 <code>TransactionStatus</code></strong></h4><p>若自定义切面在事务切面<strong>之后</strong>执行（优先级更低），可直接注入事务状态：</p><pre tabindex=0><code>@Aspect
+@Component
+@Order(Ordered.LOWEST_PRECEDENCE) // 确保优先级低于事务切面
+public class CustomAspect {
+    @Around(&#34;@annotation(com.example.CustomAnnotation)&#34;)
+    public Object aroundAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
+        TransactionStatus status = TransactionAspectSupport.currentTransactionStatus();
+        try {
+            Object result = joinPoint.proceed();
+            if (status.isRollbackOnly()) {
+                System.out.println(&#34;事务已标记回滚&#34;);
+            }
+            return result;
+        } catch (Exception ex) {
+            System.out.println(&#34;事务因异常回滚&#34;);
+            throw ex;
+        }
+    }
+}
+</code></pre><ul><li><strong>注意</strong>：切面优先级必须低于事务切面（<code>@Order(Ordered.LOWEST_PRECEDENCE)</code>），否则无法获取正确状态。</li></ul><hr><h3 id=-注意事项-1>⚠️ 注意事项</h3><h4 id=切面执行顺序><strong>切面执行顺序</strong></h4><ul><li>事务切面默认优先级为 <code>Ordered.LOWEST_PRECEDENCE</code>（最低优先级）。</li><li><strong>问题</strong>：若自定义切面优先级更高且未抛出异常，事务切面无法感知异常，导致回滚失效。</li><li>解决：<ul><li>自定义切面优先级需低于事务切面：<code>@Order(Ordered.LOWEST_PRECEDENCE + 1)</code>。</li><li>在切面中捕获异常后必须重新抛出或调用 <code>setRollbackOnly()</code>。</li></ul></li></ul><h4 id=无事务场景><strong>无事务场景</strong></h4><ul><li>若方法未开启事务（如 <code>@Transactional(propagation = NOT_SUPPORTED)</code>），则 <code>TransactionSynchronizationManager.isActualTransactionActive()</code> 返回 <code>false</code>，需避免空指针异常。</li></ul><h4 id=异步线程问题><strong>异步线程问题</strong></h4><ul><li>事务状态绑定于当前线程，若切面内启用新线程，需手动传递事务上下文（如使用 <code>TransactionContextHolder</code>）。</li></ul><hr><h3 id=-方案对比与选择>💎 方案对比与选择</h3><div class=table-wrapper><table><thead><tr><th><strong>方案</strong></th><th>准确性</th><th>复杂度</th><th>适用场景</th></tr></thead><tbody><tr><td>主动查询事务状态</td><td>中</td><td>低</td><td>简单状态检测</td></tr><tr><td>事务同步回调 (<code>TransactionSynchronization</code>)</td><td>高</td><td>中</td><td>需精准监听事务生命周期</td></tr><tr><td>直接获取 <code>TransactionStatus</code></td><td>高</td><td>高</td><td>切面优先级低于事务切面时</td></tr></tbody></table></div><blockquote><p><strong>推荐实践</strong>：优先使用 <strong>事务同步回调</strong> 方案，可靠性最高且与事务生命周期解耦。</p></blockquote><hr><h3 id=-扩展编程式标记回滚>🛠️ 扩展：编程式标记回滚</h3><p>若需在切面中主动触发回滚（如权限校验失败）：</p><pre tabindex=0><code>@Around(&#34;@annotation(com.example.CustomAnnotation)&#34;)
+public Object aroundAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
+    if (!checkPermission()) {
+        // 标记事务回滚
+        TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        throw new SecurityException(&#34;权限不足&#34;);
+    }
+    return joinPoint.proceed();
+}
+</code></pre><p>此操作会强制事务回滚，且后续事务同步器将收到 <code>STATUS_ROLLED_BACK</code> 事件。</p><hr><h3 id=-总结-3>💎 <strong>总结</strong></h3><p>在自定义AOP切面中识别事务回滚的关键是：</p><ol><li><strong>事务状态查询</strong>：通过 <code>TransactionAspectSupport.currentTransactionStatus()</code> 或 <code>TransactionSynchronizationManager</code> 主动检测。</li><li><strong>事件监听</strong>：注册 <code>TransactionSynchronization</code> 回调监听提交/回滚事件。</li><li><strong>切面顺序</strong>：确保自定义切面优先级低于事务切面，避免状态误判。</li><li><strong>异常处理</strong>：切面内捕获异常后需重新抛出或显式调用 <code>setRollbackOnly()</code>。</li></ol></section><footer class=article-footer><section class=article-tags><a href=/tags/postopia/>Postopia</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section><section class=article-lastmod><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<span>Last updated on Jul 31, 2025 19:25 CST</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>Related content</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/postopiaexactly-once/><div class=article-details><h2 class=article-title>【Postopia】Exactly Once</h2></div></a></article><article><a href=/p/postopiaqps/><div class=article-details><h2 class=article-title>【Postopia】QPS</h2></div></a></article><article><a href=/p/postopiapage/><div class=article-details><h2 class=article-title>【Postopia】page</h2></div></a></article><article><a href=/p/postopiatimer/><div class=article-details><h2 class=article-title>【Postopia】timer</h2></div></a></article><article><a href=/p/distributedxxl-job/><div class=article-details><h2 class=article-title>【Distributed】XXL-JOB</h2></div></a></article></div></div></aside><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//hugo-theme-stack.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2025 飞鸿踏雪泥</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.30.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

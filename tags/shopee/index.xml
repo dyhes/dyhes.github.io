@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Shopee on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/shopee/</link><description>Recent content in Shopee on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 05 Aug 2025 16:20:08 +0800</lastBuildDate><atom:link href="https://dyhes.github.io/tags/shopee/index.xml" rel="self" type="application/rss+xml"/><item><title>【Shopee】Insight Hub</title><link>https://dyhes.github.io/p/shopeeinsight-hub/</link><pubDate>Mon, 04 Aug 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/shopeeinsight-hub/</guid><description>&lt;p>&lt;strong>InsightHub&lt;/strong> is an internal tool for automatically extracting knowledge from Java projects and building an AI-assisted project knowledge center.&lt;/p>
+&lt;p>It integrates:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Spring AI + Ollama + LLM&lt;/strong> for understanding and explaining code.&lt;/li>
+&lt;li>&lt;strong>MyBatis + MySQL&lt;/strong> for task tracking and persistent storage.&lt;/li>
+&lt;li>&lt;strong>Milvus&lt;/strong> for storing code embeddings and enabling semantic search.&lt;/li>
+&lt;li>&lt;strong>Redis&lt;/strong> for caching.&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="-features">✨ Features
+&lt;/h2>&lt;ul>
+&lt;li>Automatic structure extraction (classes, methods, relationships)&lt;/li>
+&lt;li>Method-level comment generation via LLM&lt;/li>
+&lt;li>Embedding generation + Milvus vector storage&lt;/li>
+&lt;li>Project-level semantic search and intelligent Q&amp;amp;A&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="-docker-compose">🌍 Docker Compose
+&lt;/h2>&lt;p>This project includes a preconfigured Docker Compose setup for local development.&lt;/p>
+&lt;h3 id="-how-to-start-services">♻ How to start services
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">docker-compose up -d
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>This will start:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>MySQL&lt;/strong> (on port 3306)&lt;/li>
+&lt;li>&lt;strong>Redis&lt;/strong> (on port 6379)&lt;/li>
+&lt;li>&lt;strong>Milvus&lt;/strong> (on port 19530)&lt;/li>
+&lt;li>&lt;strong>Nebula Graph&lt;/strong> (optional)&lt;/li>
+&lt;li>&lt;strong>Ollama&lt;/strong> (on port 11434)&lt;/li>
+&lt;/ul>
+&lt;h3 id="-pull-llm-model-for-ollama-eg-codellama">🎧 Pull LLM model for Ollama (e.g. codellama)
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">curl http://localhost:11434/api/pull -d &lt;span class="s1">&amp;#39;{&amp;#34;name&amp;#34;: &amp;#34;codellama:7b&amp;#34;}&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h2 id="-configuration">⚖️ Configuration
+&lt;/h2>&lt;h3 id="application-localyaml">application-local.yaml
+&lt;/h3>&lt;p>Make sure this file exists in &lt;code>src/main/resources/&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">spring&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">datasource&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">url&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">jdbc:mysql://localhost:3306/insighthub&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">username&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">insighthub_user&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">password&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">insighthub_pass&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">driver-class-name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">com.mysql.cj.jdbc.Driver&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">data&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">redis&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">host&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">localhost&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">port&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">6379&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">ai&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">openai&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">base-url&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">http://localhost:11434&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">api-key&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">dummy&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">chat&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">model&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">codellama:7b&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">embedding&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">model&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">llama-embedding&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">milvus&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">host&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">localhost&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">port&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">19530&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">database&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">default&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">collection&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">insighthub_vectors&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="activating-the-profile">Activating the profile
+&lt;/h3>&lt;p>In &lt;code>application.yaml&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">spring&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">profiles&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">active&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">local&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Or via command line:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">./mvnw spring-boot:run -Dspring-boot.run.profiles&lt;span class="o">=&lt;/span>&lt;span class="nb">local&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h2 id="-local-dev-workflow">⚙️ Local Dev Workflow
+&lt;/h2>&lt;ol>
+&lt;li>Start all services via Docker Compose:&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">docker-compose up -d
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ol start="2">
+&lt;li>Start the Spring Boot app:&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">./mvnw spring-boot:run -Dspring-boot.run.profiles&lt;span class="o">=&lt;/span>&lt;span class="nb">local&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ol start="3">
+&lt;li>Test endpoint:&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">curl -X POST http://localhost:8080/api/test/ask &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> -H &lt;span class="s2">&amp;#34;Content-Type: text/plain&amp;#34;&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> -d &lt;span class="s2">&amp;#34;你是谁&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ol start="4">
+&lt;li>You should get a natural language answer from the local LLM via Ollama.&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h2 id="-notes">💡 Notes
+&lt;/h2>&lt;ul>
+&lt;li>You can configure different LLMs via Ollama (e.g. &lt;code>llama2&lt;/code>, &lt;code>mistral&lt;/code>, &lt;code>llama3&lt;/code>)&lt;/li>
+&lt;li>Milvus is used to store embeddings for later retrieval (e.g. RAG)&lt;/li>
+&lt;li>The project is designed to support agent-based architecture&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="-to-do-next-steps">☑️ To-do (Next Steps)
+&lt;/h2>&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul></description></item></channel></rss>
