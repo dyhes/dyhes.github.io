@@ -114,13 +114,13 @@ bash configure \
   
 make clean
 
-# 构建完整 JDK 镜像（含 JRE 和工具）
+# 构建 JDK
 make images
 
 # 验证构建
 build/macosx-aarch64-server-release/jdk/bin/java --version
 
-# 运行 jreg 测试
+# 运行 jreg:SM2CipherTest 测试
 make test TEST="jtreg:test/jdk/sm/crypto/SM2/SM2CipherTest.java" \
 		JTREG="VM_OPTIONS=-Djdk.openssl.cryptoLibPath=/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib"
 
@@ -141,9 +141,8 @@ make test TEST="micro:org.openjdk.bench.java.security.SM2ComparisonBenchmark" \
 ```bash
 make test TEST="jtreg:test/jdk/sm/crypto/SM2/SM2CipherTest.java" \
 		JTREG="VM_OPTIONS=-Djdk.openssl.cryptoLibPath=/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib"
+
 Building target 'test' in configuration 'macosx-aarch64-server-release'
-Building with OpenSSL support: /opt/homebrew/opt/openssl@3
-Using OpenSSL libraries from: /opt/homebrew/opt/openssl@3/lib/
 
 Running tests using JTREG control variable 'VM_OPTIONS=-Djdk.openssl.cryptoLibPath=/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib'
 Test selection 'jtreg:test/jdk/sm/crypto/SM2/SM2CipherTest.java', will run:
