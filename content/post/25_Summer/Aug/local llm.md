@@ -1,5 +1,8 @@
 ---
-
+title: 【Shopee】Local LLM
+date: 2025-08-04 00:00:00+0000
+categories: [snow]
+tags: [Shopee, LLM]
 ---
 
 ## GGUF
