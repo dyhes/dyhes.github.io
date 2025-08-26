@@ -297,3 +297,166 @@ try {
 - **复杂监控**：需要独立控制每个任务超时时，用 `ScheduledExecutorService` 辅助。
 - **任务设计**：确保任务可响应中断（如循环内检查 `Thread.interrupted()`）。
 
+## Java 只读
+
+在Java中，指定方法返回值为“只读”（即调用方无法修改返回的对象或数据）是确保数据封装性、线程安全性和代码健壮性的关键设计。以下是几种核心实现方案，附代码示例和适用场景分析：
+
+------
+
+### ⚙️ 1. **使用不可变对象（Immutable Objects）**
+
+**核心思路**：通过设计类本身为不可变，确保所有返回值天然只读。
+
+**实现规则**：
+
+- 类声明为 `final`防止继承；
+
+- 所有字段为 `private final`；
+
+- 不提供 setter 方法；
+
+- 若字段为可变对象（如集合），需深度复制或返回其不可变视图。
+
+  **示例**：
+
+```
+public final class ImmutablePerson {
+    private final String name;
+    private final List<String> hobbies; // 可变对象字段
+    public ImmutablePerson(String name, List<String> hobbies) {
+        this.name = name;
+        // 防御性复制：避免外部修改影响内部状态
+        this.hobbies = new ArrayList<>(hobbies); 
+    }
+    // 返回不可变集合
+    public List<String> getHobbies() {
+        return Collections.unmodifiableList(hobbies);
+    }
+}
+```
+
+**优点**：线程安全、无需同步逻辑；
+
+**缺点**：需手动实现深拷贝，可能增加内存开销。
+
+------
+
+### 📦 2. **返回不可变集合（Unmodifiable Collections）**
+
+**适用场景**：方法返回集合类型（如 `List`、`Map`）时，防止调用方修改原始集合。
+
+**实现方法**：使用 `Collections.unmodifiableXXX()`包装原始集合。
+
+**示例**：
+
+```
+public class DataService {
+    private List<String> data = new ArrayList<>();
+    public List<String> getData() {
+        return Collections.unmodifiableList(data); // 只读视图
+    }
+}
+```
+
+**注意**：
+
+- 若原始集合被修改，只读视图会同步变化（浅不可变）；
+- 调用方尝试修改时会抛出 `UnsupportedOperationException`。
+
+------
+
+### 📑 3. **返回副本（Defensive Copying）**
+
+**适用场景**：需完全隔离返回对象与原始数据，避免任何关联性修改。
+
+**实现方法**：通过 `clone()`或复制构造函数创建新对象。
+
+**示例**：
+
+```
+public class DataHolder {
+    private int[] values = {1, 2, 3};
+    public int[] getValues() {
+        return values.clone(); // 返回数组副本
+    }
+}
+```
+
+**优点**：彻底隔离原始数据；
+
+**缺点**：复制大对象时性能较差。
+
+------
+
+### 🧩 4. **使用只读接口（Read-Only Interface）**
+
+**核心思路**：定义仅包含 getter 方法的接口，返回接口类型而非具体类。
+
+**示例**：
+
+```
+public interface ReadOnlyPerson {
+    String getName();
+}
+public class Person implements ReadOnlyPerson {
+    private String name;
+    public String getName() { return name; }
+    public ReadOnlyPerson asReadOnly() {
+        return this; // 返回接口类型
+    }
+}
+// 调用方
+ReadOnlyPerson person = new Person("Alice").asReadOnly();
+```
+
+**优点**：编译时强制只读，无需运行时检查；
+
+**缺点**：需额外定义接口。
+
+------
+
+### ⚡ 5. **代理模式（Proxy Pattern）**
+
+**适用场景**：动态拦截修改操作，适用于复杂对象或需运行时控制的情况。
+
+**实现方法**：通过 `InvocationHandler`拦截 setter 调用并抛出异常。
+
+**示例**：
+
+```
+public ReadOnlyPerson createReadOnlyProxy(Person person) {
+    return (ReadOnlyPerson) Proxy.newProxyInstance(
+        ReadOnlyPerson.class.getClassLoader(),
+        new Class[]{ReadOnlyPerson.class},
+        (proxy, method, args) -> {
+            if (method.getName().startsWith("set")) 
+                throw new UnsupportedOperationException("Read-only object");
+            return method.invoke(person, args);
+        }
+    );
+}
+```
+
+**优点**：灵活控制权限；
+
+**缺点**：反射调用有性能损耗。
+
+------
+
+### 🔍 **方案对比与选型建议**
+
+| **方法**   | **适用场景**               | **性能影响**     | **安全性**       |
+| ---------- | -------------------------- | ---------------- | ---------------- |
+| 不可变对象 | 简单值对象、高频并发场景   | 低（若无深拷贝） | ⭐⭐⭐⭐⭐            |
+| 不可变集合 | 返回集合类数据             | 低               | ⭐⭐⭐⭐（浅不可变） |
+| 返回副本   | 小型对象或数组             | 中（大对象差）   | ⭐⭐⭐⭐⭐            |
+| 只读接口   | 需编译时检查的复杂对象     | 低               | ⭐⭐⭐⭐             |
+| 代理模式   | 动态控制权限的遗留系统适配 | 中               | ⭐⭐⭐              |
+
+> 💡 **最佳实践**：
+>
+> - 优先选择 **不可变对象**（如 `String`、`LocalDateTime`）或 **不可变集合**；
+> - 敏感数据（如数据库连接、配置）使用 **副本** 或 **只读接口**；
+> - 避免直接返回原始引用（如 `getHobbies()`应返回不可变视图而非 `ArrayList`）。
+
+通过合理选择上述方法，可有效确保Java方法返回值的只读性，减少副作用并提升代码稳定性。

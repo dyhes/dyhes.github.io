@@ -474,3 +474,49 @@ Maven/Gradle 子模块和 Java 中的 Module（JPMS）**不是一回事**。它�
 - **`protected`**：支持跨包继承，允许子类扩展父类行为。
 
 > 实际开发中，**优先选择最严格的权限**（如能用 `private`则不用 `default`），再按需放宽。
+
+## @Order
+
+在 Java Spring 框架中，当多个相同类型的 `@Component`中部分指定了 `@Order`值而其他未指定时，其行为主要由以下规则决定：
+
+### ⚙️ 1. **默认值机制**
+
+- **未指定 `@Order`的组件**：会被隐式赋予默认值 `Ordered.LOWEST_PRECEDENCE`（即 `Integer.MAX_VALUE`），表示最低优先级。
+- **指定 `@Order`的组件**：按注解值排序，值越小优先级越高（例如 `@Order(1)`优先于 `@Order(2)`）。
+
+### 🔀 2. **排序规则与位置**
+
+- **整体排序逻辑**：所有组件按优先级分组排序：
+  - 最高优先级：实现 `PriorityOrdered`接口的组件（如框架内部扩展）。
+  - 中等优先级：显式指定 `@Order`或实现 `Ordered`接口的组件。
+  - **最低优先级**：未指定 `@Order`的组件（默认 `Integer.MAX_VALUE`）。
+- **未指定值组件的顺序**：
+  - 在注入集合（如 `List<Service>`）时，它们会**排在所有有序组件之后**。
+  - 多个未指定值的组件之间**顺序不确定**（可能受类加载顺序影响）。
+
+### ⚠️ 3. **典型场景示例**
+
+- **集合注入顺序**：
+
+  ```
+  @Component @Order(1) class ServiceA implements MyService {}
+  @Component @Order(2) class ServiceB implements MyService {}
+  @Component class ServiceC implements MyService {} // 默认 Order=Integer.MAX_VALUE
+  
+  @Autowired
+  private List<MyService> services; // 顺序：ServiceA → ServiceB → ServiceC
+  ```
+
+- **执行顺序**：在切面（AOP）、过滤器（Filter）、事件监听器等场景中，未指定值的组件最后执行。
+
+### 🛠️ 4. **冲突与注意事项**
+
+- **相同 `@Order`值**：若多个组件指定相同值（如均 `@Order(1)`），其相对顺序不确定。
+- **与 `@Primary`的关系**：`@Primary`注解的组件在单独注入时优先，但不影响集合中的排序。
+- **性能影响**：大规模组件排序可能增加启动开销，建议仅对必要组件显式指定顺序。
+
+### 💎 总结
+
+未指定 `@Order`的组件会以最低优先级（`Integer.MAX_VALUE`）参与排序，始终位于有序组件之后，且同类未指定组件间顺序不可控。若需精确控制顺序，应为所有组件显式赋值并预留间隔值（如 `@Order(100)`、`@Order(200)`）。
+
+> 💡 **最佳实践**：使用常量类管理顺序值（如 `OrderConstants.SECURITY_FILTER`），并添加文档说明优先级逻辑。
