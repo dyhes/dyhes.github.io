@@ -233,3 +233,233 @@ A number of linked list problems rely on recursion. If you're having trouble sol
 
 id 作为隐式的时间戳
 
+
+
+## Trees & Graphs
+
+> Given a directed graph, design an algorithm to find out whether there is a route between two nodes.
+
+首选 BFS（保证最短路径），次选 DFS
+
+大规模图优化
+
+- **双向 BFS**：从起点和终点同时搜索，相遇即终止，减少搜索空间
+- **迭代加深 DFS**：限制深度逐步增加，平衡 DFS 空间效率与 BFS 完备性
+
+
+
+> Implement a function to check if a binary tree is balanced.
+
+自底向上（后序）：**先计算左右子树高度**，再判断当前节点平衡性（即“左右中”顺序），提前终止
+
+
+
+> 公共祖先
+
+* 最优：递归后序
+
+  * **终止条件**：
+
+    - 当前节点为空 → 返回 `null`。
+    - 当前节点是 `p`或 `q`→ 直接返回该节点（因其可能是祖先或目标本身）。
+
+    **递归搜索**：
+
+    - 在左子树中搜索 `p`或 `q`。
+    - 在右子树中搜索 `p`或 `q`。
+
+    **结果合并**：
+
+    - 若左右子树均返回非空 → 当前节点是 LCA（因 `p`和 `q`分属两侧）。
+    - 若仅左子树非空 → 返回左子树结果（LCA 在左侧）。
+    - 若仅右子树非空 → 返回右子树结果（LCA 在右侧）。
+    - 若均空 → 返回 `null`。
+
+* 次优：哈希表存储父节点
+
+
+
+> Check Subtree: T1 and T2 are two very large binary trees, with T1 much bigger than T2. Create an algorithm to determine if 12 is a subtree o f T l . AtreeT2 is a subtree of T1 if there exists a node n in T1 such that the subtree of n is identical to 12, That is, if you cut off the tree at node n, the two trees would be identical. （值相等）
+
+基础：递归匹配， 最坏 O(mn)
+
+优化：高度过滤
+
+**超大规模树优化**：字符串序列化 + KMP
+
+
+
+> “Paths with Sum: You are given a binary tree in which each node contains an integer value (which might be positive or negative). Design an algorithm to count the number of paths that sum to a given value. The path does not need to start or end at the root or a leaf, but it must go downwards (traveling only from parent nodes to child nodes).”
+
+暴力递归：时间复杂度 O(n^2)
+
+**前缀和 + 哈希表 + DFS 回溯**
+
+1. **前缀和定义**：
+
+   记录从根节点到当前节点的路径和 `currSum`。若存在节点 A和 B满足 currSumB−currSumA=targetSum，则 A→B的路径和即为目标值。
+
+2. **哈希表作用**：
+
+   存储路径前缀和及其出现次数，键为 `currSum`，值为出现次数。
+
+3. **回溯机制**：
+
+   在 DFS 递归返回时，移除当前节点的前缀和，确保不同分支的路径计算互不干扰
+
+
+
+> Random Node: You are implementing a binary tree class from scratch which has a method getRandomNode() which returns a random node from the tree. All nodes should be equally likely to be chosen.
+
+在二叉树类中实现 `getRandomNode()`方法（确保所有节点被选中的概率严格相等）的最佳算法是 **子树大小统计法**，结合高效的随机数生成和平衡树优化。
+
+```cpp
+struct TreeNode {
+    int val;
+    int size;          // 当前子树节点总数（含自身）
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode(int x) : val(x), size(1), left(nullptr), right(nullptr) {}
+};
+```
+
+**子树大小维护**
+
+- **插入时**：递归更新路径上所有节点的 `size`（`size = 1 + left_size + right_size`）
+- **删除时**：同步更新 `size`，并处理后继节点替换逻辑（避免 size 统计错误）
+- **时间复杂度**：`insert`和 `remove`均为 `O(h)`（`h`为树高）
+
+**随机节点选择**
+
+- **算法**：从根节点开始，根据左子树大小 `leftSize`和随机数 `randIndex`决定搜索方向：
+  - `randIndex < leftSize`→ 进入左子树
+  - `randIndex == leftSize`→ 返回当前节点
+  - `randIndex > leftSize`→ 进入右子树
+
+## **Bit Manipulation**
+
+Bit manipulation is used in a variety of problems. Sometimes, the question explicitly calls for bit manipulation. Other times, it's simply a useful technique to **optimize** your code. 
+
+> ( (n & ( n - 1 ) ) == 0)
+
+n & ( n - 1 ) 去除最后一个 1
+
+* 判断是否只含一个 1 （即 2 的幂）
+
+
+
+> 汉明距离：二进制不同位数量
+
+异或后求 1 数
+
+
+
+> 整数奇偶位交换
+
+**提取奇偶位**
+
+- **奇数位掩码** `0xAAAAAAAA`（32位：`10101010...1010`）→ 提取第1、3、5...位
+- **偶数位掩码** `0x55555555`（32位：`01010101...0101`）→ 提取第0、2、4...位
+
+**位移交换位置**
+
+- 奇数位 **右移1位**（原位置1→位置0）
+- 偶数位 **左移1位**（原位置0→位置1）
+
+**合并结果**
+
+- 移位后的奇偶位通过 **按位或（`|`）** 合并为新整数
+
+
+
+> 给定正整数后寻找二进制表示中“1”的个数相同的最接近较大数和较小数的问题
+
+
+
+## **Math and Logic Puzzles**
+
+The good news is that if you are asked a puzzle or brainteaser, it's likely to be a reasonably fair one. It probably won't rely on a trick of wording, and it can almost always be logically deduced. Many have their foundations in mathematics or computer science, and almost all have solutions that can be logically deduced.
+
+
+
+> The Heavy Pill: You have 20 bottles of pills. 19 bottles have 1.0 gram pills, but one has pills of weight 1.1 grams. Given a scale that provides an exact measurement, how would you find the heavy bottle? You can only use the scale once.
+
+1. 将20瓶药丸编号从1到20。
+2. 从第1瓶取1粒药丸，从第2瓶取2粒药丸，依此类推，从第20瓶取20粒药丸。
+3. 将所有取出的药丸一起放在天平上称重，得到总重量W。
+
+如果所有药丸都是1.0克，理论总重量应为（1+2+3+...+20）×1.0 = 210克。但由于有一瓶药丸是1.1克，实际重量W会大于210克。多出的重量ΔW = W - 210克，是由于重药丸每粒多0.1克造成的。
+
+因此，重药丸的瓶子编号m可以通过计算ΔW / 0.1得到，即m = ΔW / 0.1。例如，如果W = 210.5克，则ΔW = 0.5克，m = 0.5 / 0.1 = 5，表示第5瓶是重的。
+
+通过这种方法，只需一次称重就能准确找出重药丸的瓶子。
+
+> Jugs of Water: You have a five-quart jug, a three-quart jug, and an unlimited supply of water (but no measuring cups). How would you come up with exactly four quarts of water? Note that the jugs are oddly shaped, such that filling up exactly "half" of the jug would be impossible.
+
+要得到恰好四夸脱的水，使用五夸脱壶和三夸脱壶，按照以下步骤操作：
+
+1. 填满五夸脱壶（此时五夸脱壶有5夸脱，三夸脱壶有0夸脱）。
+2. 将五夸脱壶中的水倒入三夸脱壶，直到三夸脱壶满（此时五夸脱壶剩2夸脱，三夸脱壶有3夸脱）。
+3. 倒空三夸脱壶（此时五夸脱壶有2夸脱，三夸脱壶有0夸脱）。
+4. 将五夸脱壶中的水倒入三夸脱壶（此时五夸脱壶有0夸脱，三夸脱壶有2夸脱）。
+5. 填满五夸脱壶（此时五夸脱壶有5夸脱，三夸脱壶有2夸脱）。
+6. 将五夸脱壶中的水倒入三夸脱壶，直到三夸脱壶满（三夸脱壶已有2夸脱，只能接受1夸脱，因此五夸脱壶倒出1夸脱后剩4夸脱）。
+
+现在，五夸脱壶中恰好有4夸脱水。
+
+> Blue-Eyed Island: A bunch of people are living on an island, when a visitor comes with a strange order: all blue-eyed people must leave the island as soon as possible. There will be a flight out at 8:00 pm every evening. Each person can see everyone else's eye color, but they do not know their own (nor is anyone allowed to tell them). Additionally, they do not know how many people have blue eyes, although they do know that at least one person does. How many days will it take the blue-eyed people to leave?
+
+### **推理过程（归纳法）**
+
+#### **情形1：只有1个蓝眼睛的人**
+
+- **第1天**：此人看到岛上无人有蓝眼睛，但访客说“至少有一人是蓝眼睛”，因此立即推断自己是蓝眼睛。
+- **结果**：第1天晚上离开。
+
+#### **情形2：有2个蓝眼睛的人（A和B）**
+
+- **第1天**：
+  - A看到B是蓝眼睛，心想：“如果我不是蓝眼睛，B今晚会离开（因为B会看到岛上只有他自己是蓝眼睛）”。
+  - B同样推理，因此两人均不行动。
+- **第2天**：
+  - A发现B未离开 → 推断“B一定也看到了另一个蓝眼睛的人” → 此人只可能是自己。
+  - B同步推理出相同结论。
+- **结果**：第2天晚上两人同时离开。
+
+#### **情形3：有3个蓝眼睛的人（A、B、C）**
+
+- **第1天**：每人看到两个蓝眼睛的人，均认为“如果我不是蓝眼睛，另外两人会在第2天离开”（参考情形2）。
+- **第2天**：无人离开 → 每人意识到：“如果我不是蓝眼睛，其他两人应已离开。但事实未发生，说明我也一定是蓝眼睛”。
+- **第3天**：所有人同时离开。
+
+------
+
+### **通用规律：若有 n个蓝眼睛的人**
+
+- **离开时间**：所有人会在第 n天晚上同时离开。
+- **推理逻辑**：
+  1. 访客的声明使“至少一人是蓝眼睛”成为公共知识。
+  2. 第 k天无人离开，意味着“蓝眼睛人数 ≥k”。
+  3. 每个蓝眼睛的人通过观察他人未离开的天数，逐步排除“蓝眼睛人数 <k”的可能性。
+  4. 到第 n天，所有人同步推断出自己也是蓝眼睛。
+
+✅ **公共知识的作用**：若访客未公开声明（例如私下告知每个人），则公共知识不成立，无人能离开。
+
+> "100 Lockers: There are 100 closed lockers in a hallway. A man begins by opening all 100 lockers. Next, he doses every second locker. Then, on his third pass, he toggles every third locker (closes it if it is open or opens it if it is closed). This process continues for 100 passes, such that on each pass i, the man toggles every i t h locker. After his 100th pass in the hallway, in which he toggles only locker #100, how many lockers are open?"
+
+关键：因数成对出现，因此只有完全平方数会打开
+
+锁柜最终是否打开取决于它被切换的次数。由于初始状态为关闭，奇数次切换后锁柜打开，偶数次切换后锁柜关闭。
+
+每个锁柜被切换的次数等于其编号的因数个数。例如，锁柜n会被切换当且仅当i是n的因数（i从1到100）。
+
+因此，锁柜打开当且仅当其编号的因数个数为奇数。只有完全平方数有奇数个因数，因为因数成对出现，但平方数的平方根只计算一次。
+
+在1到100之间，完全平方数有10个：1, 4, 9, 16, 25, 36, 49, 64, 81, 100。
+
+因此，经过100次操作后，有10个锁柜是打开的。
+
+## DataBase
+
+去 leetcode 训练
+

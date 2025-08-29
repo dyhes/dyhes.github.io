@@ -1606,172 +1606,128 @@ ReentrantLock 和 ReentrantReadWriteLock 是 Java 并发包中两种不同的锁
 > - **避免滥用读写锁**：若写操作频繁，读写锁的维护开销（如读锁计数）可能抵消并发优势。
 > - **替代方案**：极高并发场景可考虑 `StampedLock`（乐观读锁）或 `ConcurrentHashMap`（内置分段锁）。
 
+## @Value
 
+在 Spring Boot 中，**`@Value`注解不能直接在非 `@Component`类（即未被 Spring 容器管理的类）中生效**。以下是详细分析和替代方案：
 
-```java
+------
 
-MATCH ()-[e:EdgeType]->(v)
-WHERE id(v) IS NULL OR NOT EXISTS v
-RETURN src(e) AS startVID, dst(e) AS endVID, properties(e) AS edgeProps;
-```
+### ⚠️ **为什么 `@Value`注解必须在 Spring 管理的类中使用？**
 
+`@Value`的依赖注入机制依赖于 Spring 容器。当类未被 Spring 管理（即未添加 `@Component`、`@Service`等注解）时：
 
+1. **注入失败**：`@Value`标注的字段会保持默认值（如 `null`）。
+2. **原理限制**：Spring 通过 Bean 后置处理器处理 `@Value`注解，而普通 Java 类不会经过此流程。
 
-```java
-CREATE TAG IF NOT EXISTS project (
-    name STRING,
-    repo STRING,
-    branch STRING,
-    commit STRING
-);
-
-CREATE TAG IF NOT EXISTS class_field_tag (
-    field_name  string  COMMENT "字段名称",
-    annotations string  COMMENT "修饰字段的注解",
-    start_line  int     COMMENT "字段的起始行",
-    end_line    int     COMMENT "字段的结束行",
-    description string  COMMENT "注释"
-);
-
-CREATE TAG IF NOT EXISTS class_tag (
-    relative_path      string  COMMENT "文件相对路径",
-    package_path       string  COMMENT "包路径",
-    class_name         string  COMMENT "类名",
-    class_type         string  COMMENT "类类型",
-    super_class        string  COMMENT "父类",
-    impl_interface     string  COMMENT "实现的接口，List<String> 用逗号分隔存储",
-    annotations        string  COMMENT "类上注解",
-    line_count         int     COMMENT "文件总行数",
-    description        string  COMMENT "方法级注释",
-    modifiers          string  COMMENT "修饰符，如public，abstract，List<String> 用逗号分隔存储",
-    start_line         int     COMMENT "文件中的起始行号",
-    end_line           int     COMMENT "文件中的截止行号",
-    file_sha256        string  COMMENT "sha256",
-    class_desc         string  COMMENT "类描述"
-);
-
-CREATE TAG IF NOT EXISTS config_file_tag (
-    relative_path string  COMMENT "文件相对路径",
-    file_name     string  COMMENT "文件名称",
-    file_type     string  COMMENT "yml/yaml/properties",
-    env           string  COMMENT "prod/staging/test/..."
-);
-
-CREATE TAG IF NOT EXISTS config_item_tag (
-    item_name string  COMMENT "spring.mvc.thread",
-    item_value     string  COMMENT "值"
-);
-
-CREATE TAG IF NOT EXISTS module_tag (
-    name                 string  COMMENT "模块名称",
-    relative_path        string  COMMENT "模块相对路径",
-    module_desc          string  COMMENT "模块注释"
-);
-
-CREATE TAG IF NOT EXISTS package_tag (
-    relative_path string  COMMENT "包的相对路径a/b/c",
-    package_path  string  COMMENT "包路径a.b.c",
-    package_desc  string  COMMENT "包注释"
-);
-
-
-CREATE TAG IF NOT EXISTS method (
-    file_relative_path STRING,
-    package_path STRING,
-    project_id FIXED_STRING(32) NOT NULL,
-    class_name STRING,
-    class_type STRING,
-    method_signature STRING,
-    return_type STRING,
-    method_start_line INT,
-    method_end_line INT,
-    method_desc STRING,
-    call_other_method_count INT NOT NULL,
-    has_generated BOOL NOT NULL DEFAULT false,
-    is_constructor BOOL NOT NULL DEFAULT false
-);
-
-CREATE TAG IF NOT EXISTS endpoint (
-    endpoint STRING,
-    method STRING,
-    endpoint_desc STRING
-);
-
-CREATE TAG IF NOT EXISTS scheduler (
-    name STRING,
-    scheduler_desc STRING
-);
-
-// module_to_class
-CREATE EDGE IF NOT EXISTS define ();
-
-// package_to_class
-CREATE EDGE IF NOT EXISTS include ();
-
-// class_to_class
-CREATE EDGE IF NOT EXISTS extend ();
-
-// class_to_method
-CREATE EDGE IF NOT EXISTS contain ();
-
-// method_to_method
-CREATE EDGE IF NOT EXISTS call (
-    call_location INT
-);
-
-
-// scheduler_to_method
-CREATE EDGE IF NOT EXISTS schedule (
-);
-
-// endpoint_to_method
-CREATE EDGE IF NOT EXISTS enter (
-);
-
-CREATE TAG IF NOT EXISTS table (
-    table_name STRING,
-    schema_name STRING
-);
-
-CREATE TAG IF NOT EXISTS table_field (
-    field_name STRING
-);
-
-// table_to_class
-CREATE EDGE IF NOT EXISTS associate (
-);
-
-CREATE EDGE IF NOT EXISTS class_field_config_item_edge ();
-
-CREATE EDGE IF NOT EXISTS class_field_edge ();
-
-CREATE EDGE IF NOT EXISTS class_method_edge ();
-
-CREATE EDGE IF NOT EXISTS config_item_edge ();
-
-CREATE EDGE IF NOT EXISTS field_data_type_edge ();
-
-CREATE EDGE IF NOT EXISTS module_package_edge ();
-
-CREATE EDGE IF NOT EXISTS package_class_edge ();
-
-CREATE TAG IF NOT EXISTS sql_tag (
-    relative_path STRING,
-    sql_id STRING,
-    sql STRING,
-    define_mode STRING,
-    start_line INT,
-    end_line INT
-);
-
-CREATE EDGE IF NOT EXISTS method_sql_edge (
-);
-
-CREATE EDGE IF NOT EXISTS class_table_edge (
-);
-
-CREATE EDGE IF NOT EXISTS class_field_table_field_edge (
-);
+**错误示例**：
 
 ```
+public class NonSpringClass {
+    @Value("${app.name}") 
+    private String appName; // 值始终为 null
+}
+```
 
+------
+
+### 🔧 **替代方案：在非 Spring 管理类中获取配置**
+
+若需在普通类中读取配置，可通过以下方式实现：
+
+#### 1. **手动从 Spring 环境获取属性值**
+
+- **步骤**：
+
+  1. 创建一个 Spring 管理的工具类（如 `SpringContextHolder`），用于保存 `ApplicationContext`。
+  2. 通过 `ApplicationContext`的 `Environment`获取属性值。
+
+- **代码示例**：
+
+  ```
+  @Component
+  public class SpringContextHolder implements ApplicationContextAware {
+      private static ApplicationContext context;
+  
+      @Override
+      public void setApplicationContext(ApplicationContext ctx) {
+          context = ctx;
+      }
+  
+      public static String getProperty(String key) {
+          return context.getEnvironment().getProperty(key);
+      }
+  }
+  
+  // 在普通类中使用
+  public class NonSpringClass {
+      private String appName = SpringContextHolder.getProperty("app.name");
+  }
+  ```
+
+#### 2. **将类改为 Spring 管理**
+
+- 直接添加 `@Component`等注解，使类由 Spring 容器管理，从而支持 `@Value`注入。
+- **适用场景**：对原有代码改造影响较小的情况。
+
+#### 3. **通过 `@Bean`方法手动注入属性**
+
+- **步骤**：
+
+  1. 在配置类中定义 `@Bean`方法。
+  2. 在 `@Bean`方法中使用 `@Value`获取配置值，再传递给普通类的实例。
+
+- **示例**：
+
+  ```
+  @Configuration
+  public class AppConfig {
+      @Value("${app.name}")
+      private String appName;
+  
+      @Bean
+      public NonSpringClass nonSpringClass() {
+          return new NonSpringClass(appName); // 通过构造器传参
+      }
+  }
+  
+  public class NonSpringClass {
+      private String appName;
+      public NonSpringClass(String appName) {
+          this.appName = appName;
+      }
+  }
+  ```
+
+#### 4. **Java 原生方式读取配置文件**
+
+- 绕过 Spring 机制，直接通过 `Properties`类或 `Yaml`解析工具读取配置文件：
+
+  ```
+  public class ConfigReader {
+      public static String getProperty(String key) {
+          Properties props = new Properties();
+          try (InputStream input = ConfigReader.class.getResourceAsStream("/application.properties")) {
+              props.load(input);
+              return props.getProperty(key);
+          } catch (IOException e) {
+              throw new RuntimeException("Failed to read config", e);
+          }
+      }
+  }
+  ```
+
+------
+
+### 💎 **总结**
+
+| **方案**                  | **适用场景**               | **优势**                    |
+| ------------------------- | -------------------------- | --------------------------- |
+| 手动获取环境属性（方案1） | 需在非托管类中动态获取配置 | 无需改造类结构              |
+| 改为 Spring 管理（方案2） | 允许代码改造               | 原生支持 `@Value`，简单直接 |
+| `@Bean`方法注入（方案3）  | 需解耦配置与业务逻辑       | 集中管理配置，灵活性高      |
+| Java 原生读取（方案4）    | 不依赖 Spring 的独立应用   | 完全脱离框架                |
+
+**推荐实践**：
+
+- 优先考虑**将类纳入 Spring 管理**（方案2），确保代码符合依赖注入规范。
+- 若无法修改类结构，使用 **`SpringContextHolder`工具类**（方案1）是最常见的解决方案。
