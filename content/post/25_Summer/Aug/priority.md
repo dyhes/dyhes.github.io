@@ -520,3 +520,76 @@ Maven/Gradle 子模块和 Java 中的 Module（JPMS）**不是一回事**。它�
 未指定 `@Order`的组件会以最低优先级（`Integer.MAX_VALUE`）参与排序，始终位于有序组件之后，且同类未指定组件间顺序不可控。若需精确控制顺序，应为所有组件显式赋值并预留间隔值（如 `@Order(100)`、`@Order(200)`）。
 
 > 💡 **最佳实践**：使用常量类管理顺序值（如 `OrderConstants.SECURITY_FILTER`），并添加文档说明优先级逻辑。
+
+## Loggig.level.root
+
+在 Spring Boot 中，`logging.level.root`是一个非常重要的日志配置属性，它用于设置**根日志记录器 (Root Logger) 的日志级别**，充当所有其他日志记录器的默认父级和全局控制器。
+
+它的核心作用是**统一控制应用程序中所有未被特定包或类单独设置级别的日志输出**。
+
+### 📊 理解日志级别
+
+日志级别从低到高通常分为：
+
+```
+TRACE`< `DEBUG`< `INFO`< `WARN`< `ERROR`< `FATAL`/`OFF
+```
+
+设置某一级别后，只有该级别及更高级别的日志信息会被输出。例如，若设置 `logging.level.root=INFO`，则 `INFO`、`WARN`、`ERROR`级别的日志会被输出，而 `TRACE`和 `DEBUG`级别的日志则不会被输出。
+
+### 🔧 logging.level.root 的作用与配置
+
+`logging.level.root`为整个应用提供了一个默认的日志级别基准。这意味着任何没有在 `logging.level.<package-or-class>`中明确指定级别的包或类，都会继承这个根日志记录器设置的级别。
+
+**常见配置示例（在 `application.properties`或 `application.yml`中）**：
+
+```
+# 设置根日志级别为 WARN
+logging.level.root = WARN
+
+# 为特定包或类设置不同的日志级别
+logging.level.org.springframework.web = DEBUG
+logging.level.com.yourcompany.service = INFO
+logging.level.com.yourcompany.security = TRACE
+```
+
+在上述配置中：
+
+- 所有未被明确设置的组件（包、类）的日志级别默认为 `WARN`。
+- `org.springframework.web`包下的日志级别被设置为 `DEBUG`（适用于调试Web相关问题时）。
+- `com.yourcompany.service`包下的日志级别被设置为 `INFO`。
+- `com.yourcompany.security`包下的日志级别被设置为 `TRACE`（可能会输出非常详细的流程信息，用于深入追踪安全相关问题）。
+
+### 📝 配置示例与写法
+
+您可以在 `application.properties`或 `application.yml`文件中配置 `logging.level.root`。
+
+**在 application.properties 中的写法：**
+
+```
+logging.level.root=INFO
+```
+
+**在 application.yml 中的写法：**
+
+```
+logging:
+  level:
+    root: INFO
+    org.springframework: WARN
+    com.example.demo: DEBUG
+    com.example.demo.service.MyService: ERROR
+```
+
+### 📌 最佳实践和注意事项
+
+1. **环境区分**：建议根据不同的环境（开发、测试、生产）设置不同的根日志级别。在生产环境，为了性能和安全性，通常设置为 `WARN`或 `ERROR`；在开发环境，为了便于调试，可以设置为 `DEBUG`或 `TRACE`。
+2. **配合特定记录器使用**：利用 `logging.level.root`进行全局控制，同时使用 `logging.level.<name>`为关键模块或需要详细排查问题的包/类设置更低的级别（如 `DEBUG`），实现精细化的日志控制。
+3. **配置优先级**：当存在多个日志配置文件（如 `logback.xml`, `application.properties`, `logback-spring.xml`）时，后加载的配置通常会覆盖先加载的配置。Spring Boot 推荐使用 `logback-spring.xml`进行更复杂和灵活的日志配置。
+4. **留意性能**：过低的日志级别（如 `DEBUG`, `TRACE`）在生产环境会产生大量日志输出，可能消耗I/O资源并影响性能，请谨慎使用。
+
+### 💎 总结
+
+`logging.level.root`是 Spring Boot 日志配置的基石，它提供了**全局默认的日志级别**。通过合理设置它，并结合为特定包或类设置级别，您可以有效地平衡日志信息的详细程度和系统性能，从而更好地监控、调试和维护您的应用程序。
+
+希望以上信息能帮助您更好地理解和使用 `logging.level.root`。
