@@ -1,8 +1,8 @@
 ---
-title: 【NowCoder】SQL
+title: 【NowCoder】DB
 date: 2025-09-08 00:00:00+0000
 categories: [arts]
-tags: [NowCoder]
+tags: [NowCoder,DB]
 ---
 
 ## INSERT OVERWRITE
