@@ -101,6 +101,7 @@ Java反射机制的应用场景广泛，尤其在需要**运行时动态操作�
 1. **Spring的依赖注入（DI）**
    ​**场景**​：Spring容器通过反射扫描注解（如`@Service`、`@Autowired`），动态创建Bean实例并注入依赖。
    ​**代码示例**​：
+   
    ```java
    Class<?> clazz = Class.forName("com.example.UserService");
    Object service = clazz.getDeclaredConstructor().newInstance();
@@ -120,6 +121,7 @@ Java反射机制的应用场景广泛，尤其在需要**运行时动态操作�
 1. Spring AOP
    场景：在方法调用前后添加日志、事务等逻辑。
    代码示例：
+   
    ```java
    InvocationHandler handler = (proxy, method, args) -> {
        System.out.println("Before method");
@@ -164,6 +166,7 @@ Java反射机制的应用场景广泛，尤其在需要**运行时动态操作�
 1. JUnit测试私有方法
    场景：对类的私有方法进行单元测试。
    代码示例：
+   
    ```java
    Method privateMethod = MyClass.class.getDeclaredMethod("internalLogic");
    privateMethod.setAccessible(true);
@@ -178,6 +181,7 @@ Java反射机制的应用场景广泛，尤其在需要**运行时动态操作�
 1. Eclipse/IDEA插件机制
    场景：主程序动态加载第三方插件。
    示例：
+   
    ```java
    Class<?> pluginClass = Class.forName("com.plugins.CustomPlugin");
    Plugin plugin = (Plugin) pluginClass.newInstance();
@@ -191,11 +195,13 @@ Java反射机制的应用场景广泛，尤其在需要**运行时动态操作�
 
 1. 自定义注解解析
    场景：运行时读取类或方法上的注解（如
+   
    ```java
    @Test
    ```
    ）。
    示例：
+   
    ```java
    if (method.isAnnotationPresent(Test.class)) {
        Test testAnnotation = method.getAnnotation(Test.class);
@@ -222,7 +228,7 @@ Java反射机制的应用场景广泛，尤其在需要**运行时动态操作�
 >   - 缓存`Class`、`Method`等对象减少重复解析；
 >   - 避免高频循环中滥用反射；
 >   - 配合安全管理器（`SecurityManager`）限制敏感操作。
-反射是Java动态能力的核心，但其**“双刃剑”特性要求开发者严格把控使用边界**——在灵活性与性能、封装性之间谨慎权衡。
+  反射是Java动态能力的核心，但其**“双刃剑”特性要求开发者严格把控使用边界**——在灵活性与性能、封装性之间谨慎权衡。
 ## <?> 通配符
 
 在 Java 中，使用 `Class<?>` 或 `Constructor<?>` 的写法是为了解决**类型安全与灵活性**的平衡问题，尤其在泛型与反射结合的场景中。以下是其核心原因及典型应用场景：
@@ -232,7 +238,7 @@ Java反射机制的应用场景广泛，尤其在需要**运行时动态操作�
 ### ⚙️ 为什么用 `?` 通配符？——类型安全的妥协
 
 1. **泛型擦除的约束**
-   Java 泛型在编译后会被擦除为原始类型（如 `Class` 变为 `Class`），运行时无法直接获取泛型参数的具体类型（如 `T` 的实际类型）。`Class<?>` 表示“未知类型”，是编译器对泛型擦除的一种安全妥协。
+   Java 泛型在编译后会被擦除为原始类型，运行时无法直接获取泛型参数的具体类型（如 `T` 的实际类型）。`Class<?>` 表示“未知类型”，是编译器对泛型擦除的一种安全妥协。
 2. **避免类型硬编码**
    使用 `Class<String>` 会强制绑定具体类型，而反射场景（如 `Class.forName("java.lang.String")`）在编译时无法确定类型，只能返回 `Class<?>`。
 
@@ -285,12 +291,14 @@ MyGenericClass<String> obj = (MyGenericClass<String>) clazz.newInstance();
 
 1. **强制转换的风险**
    从 `Class<?>` 转换到 `Class<T>` 可能引发 `ClassCastException`，需确保类型匹配：
+   
    ```java
    Class<?> wildcardClass = String.class;
    Class<String> specificClass = (Class<String>) wildcardClass; // 风险操作
    ```
 2. **类型捕获（Type Capture）**
    通过泛型方法捕获通配符的具体类型，避免强制转换：
+   
    ```java
    public <T> T safeCreate(Class<T> clazz) throws Exception {
        return clazz.newInstance(); // 类型安全
@@ -305,6 +313,7 @@ MyGenericClass<String> obj = (MyGenericClass<String>) clazz.newInstance();
 ### 💎 总结
 
 **使用 `Class<?>` 或 `Constructor<?>` 的本质是：在泛型擦除的约束下，通过通配符 `?` 平衡类型安全与动态灵活性。**
+
 - ✅ **优先 `Class<T>`**：当类型明确时（如 API 设计需强类型约束）。
 - ✅ **选择 `Class<?>`**：当类型动态加载或需兼容未知类型时（如反射框架）。
 - ⚠️ **慎用原始类型**：避免绕过泛型检查导致运行时风险。
@@ -339,12 +348,14 @@ Java 提供三种主要方式实现 RTTI：
    **作用**：避免 `ClassCastException`，确保类型转换安全。
 2. **`getClass()` 方法**
    返回对象的运行时类对应的 `Class` 对象：
+   
    ```java
    Class<?> clazz = shape.getClass();
    System.out.println(clazz.getName()); // 输出 "Circle"
    ```
    **特点**：精确获取对象类型，无视继承关系（`Circle` 的 `getClass()` 不会返回 `Shape`）。
 3. **显式类型转换与 `Class` 对象**
+   
    - 向下转型（Downcasting）时，RTTI 自动进行类型检查：
      ```java
      Shape shape = new Circle();

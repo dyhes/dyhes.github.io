@@ -387,8 +387,6 @@ docker run -d --net=container:base-container --name sidecar nginx
     my-macvlan
   ```
 
-
-
 ------
 
 ### ⚡ **网络模式对比与选型指南**
@@ -401,8 +399,6 @@ docker run -d --net=container:base-container --name sidecar nginx
 | **None**      | ★★★        | -        | 高             | 安全敏感型离线任务          |
 | **Overlay**   | 高         | 中       | 高             | 集群跨主机通信（Swarm/K8s） |
 | **Macvlan**   | 高         | ★★★      | 中             | 直接接入物理网络、IoT       |
-
-
 
 ------
 
@@ -433,14 +429,12 @@ docker run -d --net=container:base-container --name sidecar nginx
      ```
      --ipv6
      ```
-
-参数，并配置子网：
      
-     ```
-     docker network create --ipv6 --subnet=2001:db8::/64 ipv6-net
-     ```
-
-
+     参数，并配置子网：
+     
+      ```
+      docker network create --ipv6 --subnet=2001:db8::/64 ipv6-net
+      ```
 
 ------
 
@@ -452,22 +446,16 @@ docker run -d --net=container:base-container --name sidecar nginx
 
 - **集群架构**：**Overlay 模式**是跨主机通信的基石，集成于 Swarm/Kubernetes。
 
-- 
-
-  特殊需求
-
-  ：
+- 特殊需求：
 
   - 物理网络直通 → **Macvlan**
-  - 绝对网络隔离 → **None 模式** + 手动配置。
+- 绝对网络隔离 → **None 模式** + 手动配置。
 
 > 可通过 `docker network inspect [网络名]` 查看详细配置[4,7](@ref)。生产环境建议避免默认网桥，优先使用自定义网络以增强可控性与安全性。
 
 ## Volume
 
 以下是对 **Docker Volume（存储卷）** 的全面解析，结合核心概念、类型对比、操作指南及最佳实践，综合多源信息整理而成：
-
-
 
 ------
 
@@ -480,8 +468,6 @@ docker run -d --net=container:base-container --name sidecar nginx
    - **数据持久化**：解决容器删除导致数据丢失的问题（如 MySQL 数据库文件）[1,4](@ref)。
    - **性能优化**：绕过联合文件系统（Union FS），直接读写宿主机磁盘，I/O 效率提升 30% 以上[2,7](@ref)。
    - **共享与隔离**：多个容器可挂载同一 Volume 共享数据（如日志目录），同时通过 Namespace 隔离操作[5,6](@ref)。
-
-
 
 ------
 
@@ -498,8 +484,6 @@ docker run -d --net=container:base-container --name sidecar nginx
 > - 绑定卷会**覆盖容器内目录原有内容**，而管理卷会**保留镜像初始数据**[5,7](@ref)。
 > - 临时卷仅限 Linux 宿主机使用，不支持共享[7](@ref)。
 
-
-
 ------
 
 ### ⚙️ **Volume 操作全指南**
@@ -515,11 +499,7 @@ docker run -d --net=container:base-container --name sidecar nginx
      docker volume inspect my-vol # 查看卷详情（含宿主机存储路径）[1,3](@ref)
      ```
 
-   - 
-
-     挂载到容器
-
-     ：
+   - 挂载到容器：
 
      ```
      # 方式1：-v 参数
@@ -527,18 +507,14 @@ docker run -d --net=container:base-container --name sidecar nginx
      # 方式2：--mount 参数（更推荐，语法明确）
      docker run -d --mount type=volume,source=my-vol,target=/app/data nginx:latest
      ```
-
-   - 
-
-     删除清理
-
-     ：
-
+     
+   - 删除清理：
+   
      ```
-     docker volume rm my-vol      # 删除指定卷（需无容器使用）
+   docker volume rm my-vol      # 删除指定卷（需无容器使用）
      docker volume prune          # 清理所有未使用卷[1,3](@ref)
-     ```
-
+   ```
+   
 2. **绑定卷操作**
 
    ```
@@ -557,32 +533,26 @@ docker run -d --net=container:base-container --name sidecar nginx
    docker run -d --mount type=tmpfs,destination=/app/cache,tmpfs-size=128m nginx:latest[1,3](@ref)
    ```
 
-
-
 ------
 
 ### 🔄 **高级应用技巧**
 
 1. **多容器共享数据**
 
-   - 
-
-     方案1
-
-     ：多个容器挂载同一 Volume
+   - 方案1：多个容器挂载同一 Volume
 
      ```
      docker run -d -v shared-data:/app/logs container1
      docker run -d -v shared-data:/app/logs container2
      ```
-
+     
    - 方案2：通过 --volumes-from 继承挂载（适合 Sidecar 日志收集）
-
+   
      ```
       docker run -d --name logger -v /logs busybox
       docker run -d --volumes-from logger app-server
      ```
-
+   
 2. **数据备份与恢复**
 
    ```
@@ -606,8 +576,6 @@ docker run -d --net=container:base-container --name sidecar nginx
      nfs-volume[3,4](@ref)
    ```
 
-
-
 ------
 
 ### 💎 **最佳实践总结**
@@ -623,8 +591,6 @@ docker run -d --net=container:base-container --name sidecar nginx
 3. **运维策略**：
    - 监控宿主机磁盘空间（`df -h /var/lib/docker/volumes`）。
    - 定期备份关键 Volume（如数据库卷）[3,6](@ref)。
-
-
 
 ------
 
@@ -645,8 +611,6 @@ docker run -d \
 
 > 即使删除容器，数据仍可通过新容器挂载 `mysql-data` 恢复[3,4](@ref)。
 
-
-
 ------
 
 通过 Volume 机制，Docker 有效平衡了容器轻量化与数据持久化的矛盾，成为有状态服务的核心支撑。合理选型与规范操作，可显著提升系统可靠性（参考：[Docker 官方文档](https://docs.docker.com/storage/volumes/)）。
@@ -654,8 +618,6 @@ docker run -d \
 ## 管理卷 & 绑定卷
 
 以下是 Docker 中**管理卷（Volume）**与**绑定卷（Bind Mount）**的详细对比，结合核心特性、适用场景及操作差异，整理自多源技术文档与实践分析：
-
-
 
 ------
 
@@ -670,8 +632,6 @@ docker run -d \
 | **权限控制**   | 默认容器内用户权限隔离                           | 依赖宿主机文件权限，需手动设置[9](@ref)                |
 | **共享便捷性** | 支持多容器共享同一命名卷                         | 需手动确保多个容器挂载相同宿主机路径                   |
 
-
-
 ------
 
 ### ⚡ **性能与安全对比**
@@ -682,8 +642,6 @@ docker run -d \
 | **元数据操作** | 高效（大量文件创建/删除场景）   | 性能较低（依赖宿主机文件系统）[1](@ref)                     |
 | **安全性**     | ✅ 隔离性强（仅 Docker 可访问）  | ❌ 风险高（容器直接读写宿主机敏感路径）[8](@ref)             |
 | **数据持久性** | 独立于容器生命周期              | 依赖宿主机目录维护                                          |
-
-
 
 ------
 
@@ -707,8 +665,6 @@ docker run -d \
 - **只读控制**
   两者均支持 `:ro` 或 `readonly` 参数（如 `-v db-data:/data:ro`）[6,7](@ref)。
 
-
-
 ------
 
 ### 🎯 **适用场景对比**
@@ -719,8 +675,6 @@ docker run -d \
 | **开发环境代码热更新**       | ✅ 绑定卷       | 直接修改宿主机代码，容器实时生效[1,8](@ref)                  |
 | **多容器共享配置（如日志）** | ⚖️ 管理卷更安全 | 避免暴露宿主机敏感路径[7](@ref)                              |
 | **宿主机文件直接访问**       | ✅ 绑定卷       | 需读取宿主机特定文件（如 `/etc/resolv.conf`）[9](@ref)       |
-
-
 
 ------
 
@@ -734,8 +688,6 @@ docker run -d \
    - **解决**：启动容器时指定用户 `-u` 或调整宿主机目录权限[9](@ref)。
 3. **匿名卷管理混乱**
    - 匿名管理卷（如 `-v /data`）难以追踪，**建议始终使用命名卷**（如 `-v named-vol:/data`）[5,7](@ref)。
-
-
 
 ------
 
@@ -759,8 +711,6 @@ docker run -d \
 ## 重启策略
 
 Docker 的重启策略（Restart Policies）是确保容器在退出后自动恢复运行的核心机制，适用于生产环境中保障服务的高可用性。以下详细解析其原理、策略类型、配置方法及最佳实践：
-
-
 
 ------
 
@@ -800,8 +750,6 @@ Docker 提供四种重启策略，通过 `--restart` 参数指定，由 Docker �
      ​**关键区别**​：若容器手动停止，即使 Docker 守护进程重启，该容器也保持停止状态[3,4,6](@ref)。
    - **场景**：**生产环境首选**，兼顾高可用（异常崩溃时恢复）与运维可控性（如维护时手动停止）[3,6](@ref)。
 
-
-
 ------
 
 ### ⚠️ **关键注意事项**
@@ -810,34 +758,26 @@ Docker 提供四种重启策略，通过 `--restart` 参数指定，由 Docker �
 
    - 若容器因配置错误持续崩溃（如应用启动即失败），`always` 或 `on-failure` 可能导致频繁重启，消耗资源。
 
-   - 
-
-     解决方案
-
-     ：
+   - 解决方案：
 
      - 为 `on-failure` 设置最大重试次数（如 `on-failure:5`）[1,6](@ref)。
-     - 通过日志诊断问题：`docker logs <容器名>`[1](@ref)。
-
+   - 通过日志诊断问题：`docker logs <容器名>`[1](@ref)。
+   
 2. **依赖服务启动顺序**
 
    - 容器重启时若依赖服务（如数据库）未就绪，可能导致启动失败。
 
-   - 
-
-     解决方案
-
-     ：
+   - 解决方案：
 
      - 在启动脚本中添加重试逻辑（如 `wait-for-it.sh`）。
-     - 使用 Docker Compose 的 `depends_on` 控制启动顺序[1](@ref)。
-
+   - 使用 Docker Compose 的 `depends_on` 控制启动顺序[1](@ref)。
+   
 3. **数据持久化**
 
    - 容器重启时，临时文件系统会被重置，关键数据需通过卷（Volume）或绑定挂载（Bind Mount）持久化：
 
      ```
-    docker run -d --restart always -v /host/data:/container/data my-app
+      docker run -d --restart always -v /host/data:/container/data my-app
      ```
 
 4. **策略生效条件**
@@ -850,29 +790,19 @@ Docker 提供四种重启策略，通过 `--restart` 参数指定，由 Docker �
      systemctl enable docker  # 启用开机自启[1](@ref)
      ```
 
-
-
 ------
 
 ### ⚙️ **配置方法**
 
 #### **命令行配置**
 
-- 
-
-  创建容器时指定
-
-  ：
+- 创建容器时指定：
 
   ```
-  docker run -d --name nginx --restart unless-stopped nginx
+docker run -d --name nginx --restart unless-stopped nginx
   ```
 
-- 
-
-  修改已有容器
-
-  ：
+- 修改已有容器：
 
   ```
   docker update --restart unless-stopped nginx  # 更新策略[2,6](@ref)
@@ -913,8 +843,6 @@ vim /var/lib/docker/containers/<容器ID>/hostconfig.json
 {"Name": "unless-stopped", "MaximumRetryCount": 0}  # 原值为 "no"[6](@ref)
 ```
 
-
-
 ------
 
 ### 📊 **策略对比与选型建议**
@@ -931,8 +859,6 @@ vim /var/lib/docker/containers/<容器ID>/hostconfig.json
 > - `0`：正常退出（如 `docker stop`）。
 > - `非0`：异常退出（如应用崩溃）。
 > - `125+`：Docker 自身错误（如命令无法执行）[2,6](@ref)。
-
-
 
 ------
 
@@ -953,12 +879,8 @@ docker inspect nginx --format '{{.RestartCount}}'  # 显示已重启次数[6](@r
 - 分析退出原因：
 
   ```
-docker ps -a  # 查看 Exited 状态码[2,6](@ref)
+  docker ps -a  # 查看 Exited 状态码[2,6](@ref)
   docker logs nginx  # 定位错误日志
-```
-
-
-
 ------
 
 ### 💎 **总结**
@@ -976,8 +898,6 @@ Docker 重启策略是保障服务韧性的关键工具：
 
 Docker 多阶段构建（Multi-stage Build）是 Docker 17.05 版本引入的核心特性，用于**优化镜像体积、提升安全性和简化构建流程**。它允许在单个 Dockerfile 中定义多个构建阶段（Stage），每个阶段使用独立的基础镜像，最终仅将必要的产物复制到最终镜像中。以下是其核心原理、优势及实践指南：
 
-
-
 ------
 
 ### ⚙️ **核心原理**
@@ -994,7 +914,6 @@ Docker 多阶段构建（Multi-stage Build）是 Docker 17.05 版本引入的核
 
    - 示例：
 
-     ```
      FROM golang:1.20 AS builder  # 构建阶段
      WORKDIR /app
      COPY . .
@@ -1003,8 +922,6 @@ Docker 多阶段构建（Multi-stage Build）是 Docker 17.05 版本引入的核
      COPY --from=builder /app/myapp .  # 仅复制二进制文件
      CMD ["./myapp"]
      ```
-
-
 
 ------
 
@@ -1021,8 +938,6 @@ Docker 多阶段构建（Multi-stage Build）是 Docker 17.05 版本引入的核
 >
 > - Node.js React 应用：单阶段镜像 420MB → 多阶段镜像 43.2MB（缩小 90%）[8](@ref)。
 > - Nginx 应用：从 172MB 优化至 24.1MB[1](@ref)。
-
-
 
 ------
 
@@ -1068,8 +983,6 @@ FROM openjdk:17-alpine
 COPY --from=builder /app/target/app.jar .
 CMD ["java", "-jar", "app.jar"]
 ```
-
-
 
 ------
 
@@ -1124,8 +1037,6 @@ CMD ["java", "-jar", "app.jar"]
      COPY . .                # 后复制源码
      ```
 
-
-
 ------
 
 ### ⚠️ **最佳实践**
@@ -1164,8 +1075,6 @@ CMD ["java", "-jar", "app.jar"]
      USER appuser
      ```
 
-
-
 ------
 
 ### 💎 **总结**
@@ -1180,8 +1089,6 @@ Docker 多阶段构建通过**分离构建与运行环境**，解决了传统单
 ## 容器隔离
 
 Docker 容器的隔离性是其核心价值之一，依赖于 **Linux 内核的多项技术**实现资源与环境的隔离，确保容器间互不干扰。以下是其隔离机制的详细解析：
-
-
 
 ------
 
@@ -1229,8 +1136,6 @@ Cgroups 限制容器对物理资源的占用：
   - `host`：共享宿主机网络栈（牺牲隔离性换取性能）。
   - `none`：无网络接口，适用于无需网络的批处理任务。
 
-
-
 ------
 
 ### ⚖️ **与传统虚拟机的对比** [8,9](@ref)
@@ -1247,8 +1152,6 @@ Cgroups 限制容器对物理资源的占用：
 >
 > - **容器**：微服务、CI/CD、开发测试环境（轻量快速）。
 > - **虚拟机**：多租户隔离、强安全需求（如金融系统）。
-
-
 
 ------
 
@@ -1285,8 +1188,6 @@ docker run -d --name web nginx
 docker exec web ip addr  # 显示容器内独立网卡（eth0）
 ```
 
-
-
 ------
 
 ### 💎 **总结**
@@ -1296,8 +1197,6 @@ Docker 通过 **Namespaces（视图隔离）、Cgroups（资源限制）、Union
 ## CGroup
 
 CGroup（Control Groups）是 Linux 内核提供的资源管理机制，用于限制、隔离和监控进程组（process groups）的系统资源（如 CPU、内存、磁盘 I/O、网络等）。它是容器技术（如 Docker、Kubernetes）实现资源隔离的核心基础之一。以下是其核心原理和功能的详细解析：
-
-
 
 ------
 
@@ -1317,19 +1216,14 @@ CGroup（Control Groups）是 Linux 内核提供的资源管理机制，用于�
    - **Cpuset**：绑定进程到指定 CPU 核或内存节点[4,6](@ref)。
    - **Devices**：控制设备访问权限（如禁止读写特定设备）[8](@ref)。
 
-
-
 ------
 
 ### 🛠️ **CGroup 的核心功能**
 
 1. **资源限制（Limiting）**
 
-   - 
+   - CPU：通过
 
-     CPU
-
-     ：通过
 
 ```
      cpu.cfs_quota_us
@@ -1419,8 +1313,6 @@ CGroup（Control Groups）是 Linux 内核提供的资源管理机制，用于�
 
    - **Freezer**：暂停（`FROZEN`）或恢复（`THAWED`）进程组[8](@ref)。
 
-
-
 ------
 
 ### 🌐 **CGroup 与容器技术的结合**
@@ -1430,8 +1322,6 @@ CGroup（Control Groups）是 Linux 内核提供的资源管理机制，用于�
 1. **资源隔离**：限制容器 CPU、内存等资源，避免互相争抢[7,8](@ref)。
 2. **安全隔离**：通过 `devices` 子系统禁止容器访问宿主机设备[8](@ref)。
 3. **动态调整**：运行时修改资源参数（如 `docker update --cpus=2` 实时调整 CPU 配额）[7](@ref)。
-
-
 
 ------
 

@@ -1,12 +1,10 @@
 ---
-title: 【BE】Preparation
+title: 【BE】Java basics
 date: 2025-06-17 00:00:00+0000
 categories: 
 - arts
-- willow
+- temple
 ---
-# Preparation
-
 ## Java Basics
 ### 静态方法
 **间接调用的方式：**若在静态方法中创建实例或传入实例参数，则可通过实例访问非静态成员：

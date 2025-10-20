@@ -809,7 +809,7 @@ typedef struct quicklistNode {
   ```
   zl
   ```
-指针动态类型**：
+  指针动态类型**：
   - **未压缩**：直接指向 Ziplist。
   - **压缩**：指向 `quicklistLZF` 结构（含压缩数据大小 `sz` 和字节数组 `compressed`）[1,6](@ref)。
 
@@ -978,7 +978,7 @@ aof-use-rdb-preamble yes   # 启用混合持久化
 - **⚠️ 局限**：
   - 文件可读性差（头部为二进制RDB）[9](@ref)。
   - 仅Redis 4.0+支持，不向下兼容旧版本[6](@ref)。
-**适用场景**：需兼顾恢复速度与数据安全的场景（如电商实时订单）[3,9](@ref)。
+  **适用场景**：需兼顾恢复速度与数据安全的场景（如电商实时订单）[3,9](@ref)。
 
 
 ------
@@ -1139,7 +1139,7 @@ Redis高可用方案通过多层次技术组合，确保服务在故障时持续
    - **增量同步**（Redis 2.8+）：断线重连后，通过**复制积压缓冲区**（默认1MB）恢复断点后的数据[2,8](@ref)。
 2. 读写分离：
    - 主节点处理写请求，从节点分担读请求（需客户端主动分流）[1,5](@ref)。
-**局限**：
+   **局限**：
 - **手动故障转移**：主节点宕机需人工介入切换从节点[1,4](@ref)。
 - **写性能瓶颈**：写操作集中主节点，无法水平扩展[3,5](@ref)。
 
@@ -1157,7 +1157,7 @@ Redis高可用方案通过多层次技术组合，确保服务在故障时持续
    - **新主节点选举**：基于优先级（`slave-priority`）、复制偏移量（数据完整性）、运行ID最小原则选择从节点[3,8](@ref)。
 3. 客户端重定向：
    - 哨兵通知客户端新主节点地址，支持动态切换连接[7,8](@ref)。
-**配置示例**：
+   **配置示例**：
 ```
 sentinel monitor mymaster 192.168.1.100 6379 2  # 需2个哨兵确认主节点下线
 sentinel down-after-milliseconds mymaster 30000  # 30秒无响应判为主观下线
@@ -1179,7 +1179,7 @@ sentinel down-after-milliseconds mymaster 30000  # 30秒无响应判为主观下
    - **Gossip协议**：节点间交换状态信息，实时感知集群变化[2,8](@ref)。
 3. 故障转移流程：
    - 主节点客观下线 → 从节点发起选举 → 多数节点同意后切换为新主节点[2,8](@ref)。
-**部署命令**：
+   **部署命令**：
 ```
 redis-cli --cluster create 192.168.1.100:6379 192.168.1.101:6379 ... --cluster-replicas 1
 ```
@@ -1511,7 +1511,7 @@ Redis 中的 **`NX`**（\**Not eXists\**）是一个核心参数，用于在操�
 - **基础格式**：`SET key value NX`
 - **扩展格式**：支持结合过期时间参数：
   ```
-SET key value NX EX 10    # 键不存在时设置值，10秒后过期
+  SET key value NX EX 10    # 键不存在时设置值，10秒后过期
   SET key value NX PX 5000  # 毫秒级过期时间[8,9](@ref)
 ```
 #### **返回值**
@@ -1529,7 +1529,7 @@ SET key value NX EX 10    # 键不存在时设置值，10秒后过期
   - 获取锁：`SET lock_key unique_id NX EX 10`
   （`unique_id` 为客户端唯一标识，防止误删）
 - 释放锁：Lua 脚本验证 unique_id 并原子删除：
-    ```
+```
   if redis.call("GET", KEYS[1]) == ARGV[1] then 
         return redis.call("DEL", KEYS[1]) 
   end
@@ -1614,7 +1614,7 @@ Redis 延时消息是一种利用 Redis 实现消息延迟投递的机制，适�
    - 消费者定期执行 `ZRANGEBYSCORE key 0 <当前时间戳> LIMIT 0 1`，获取已到期的消息[1,4](@ref)。
    - 示例：
      ```
-  Set<String> messages = jedis.zrangeByScore("delay_queue", 0, System.currentTimeMillis(), 0, 1);
+    Set<String> messages = jedis.zrangeByScore("delay_queue", 0, System.currentTimeMillis(), 0, 1);
      ```
 2. 原子性移除与处理：
    - 使用 Lua 脚本合并查询与删除操作，避免并发竞争（如多个消费者争抢同一消息）：
@@ -1728,10 +1728,10 @@ Redis 延时消息是一种利用 Redis 实现消息延迟投递的机制，适�
   - 每次仅操作**一个字段**，语法为 `HSET key field value`。
   - 示例：设置用户姓名
     ```
-  HSET user:1 name "Alice"  # 返回 1（新建字段）
+    HSET user:1 name "Alice"  # 返回 1（新建字段）
     HSET user:1 name "Bob"     # 返回 0（覆盖旧值）
   ``` [1,8](@ref)
-    ```
+  ```
 
 - HMSET
 
@@ -1740,7 +1740,7 @@ Redis 延时消息是一种利用 Redis 实现消息延迟投递的机制，适�
   - 示例：同时设置用户姓名和年龄
 
     ```
-  HMSET user:1 name "Alice" age 30  # 返回 "OK"
+    HMSET user:1 name "Alice" age 30  # 返回 "OK"
     ``` [9,11](@ref)
   ```
 #### **返回值差异**
@@ -1956,7 +1956,9 @@ Redis 延时消息是一种利用 Redis 实现消息延迟投递的机制，适�
 3. **集群与架构优化**
    - 启用Lazy-Free（惰性删除）：
      ```
-  # redis.conf
+
+redis.conf
+
      lazyfree-lazy-user-del yes
   lazyfree-lazy-eviction yes
      ```
@@ -2054,9 +2056,9 @@ Zookeeper 是一个由 Apache 开源的 **分布式协调服务框架**，旨在
 - **排他锁**：多个客户端创建同一节点，成功者获锁。
 - **顺序锁**：使用临时顺序节点，最小序号获锁（公平锁）
   ```
-// 创建临时顺序节点
+  // 创建临时顺序节点
   String lockPath = zk.create("/lock_", null, OPEN_ACL_UNSAFE, EPHEMERAL_SEQUENTIAL);
-// 检查是否为最小序号
+  // 检查是否为最小序号
   if (lockPath.equals(minNode)) {
     // 获取锁
   }
@@ -2256,7 +2258,7 @@ jedis.close();
 
 - **操作对象**：`SETNX`操作的是Redis的**字符串（String）类型**。它用于在键（key）不存在时，设置一个字符串类型的键值对[2,3,7](@ref)。
 - 命令语法：
-  ```
+```
   SETNX key value
   ```
   若
@@ -2321,7 +2323,7 @@ jedis.close();
 ### ⚡ **替代方案：`SET`命令的扩展**
 
 Redis 2.6.12+ 提供了更强大的`SET`命令，支持`NX`选项（等效于`SETNX`），并可直接设置过期时间：
-```
+  ```
 SET key value NX EX 10  # 仅当key不存在时设置值，10秒后过期
 ```
 此操作**原子性优于`SETNX` + `EXPIRE`组合**，避免了非原子操作的风险[7,8](@ref)。
@@ -2359,7 +2361,7 @@ SET key value NX EX 10  # 仅当key不存在时设置值，10秒后过期
      便于分类管理，避免键名重复。
 3. **模式匹配（Pattern Matching）**
    结合 `KEYS` 或 `SCAN` 命令，通过通配符批量操作相关键：
-   ```
+```
    KEYS user:*          # 获取所有用户相关键
    KEYS order:2025:*    # 获取 2025 年的订单键[7](@ref)
    ```
@@ -2373,7 +2375,7 @@ SET key value NX EX 10  # 仅当key不存在时设置值，10秒后过期
 
 #### **存储对象属性**
 
-```
+   ```
 HSET user:1001 name "John" age 30    # 存储用户属性
 HGET user:1001 name                 # 获取用户名[7](@ref)
 ```
@@ -2445,23 +2447,23 @@ RPOP queue:email                 # 消费任务[7](@ref)
 ### 🔍 **筛选语法与示例**
 
 - 语法格式：
-  ```
+```
   SCAN cursor [MATCH pattern] [COUNT count]
   ```
   其中
-```
+  ```
   pattern
   ```
 支持包含
-```
+  ```
   :
   ```
 的通配符模式（如
-```
+  ```
   user:*
   ```
 或
-```
+  ```
   order:2025:*
   ```
   ）。
@@ -2469,7 +2471,7 @@ RPOP queue:email                 # 消费任务[7](@ref)
   ```
   # 查找所有以 "user:" 开头的键
   SCAN 0 MATCH "user:*" COUNT 100
-  
+
   # 查找所有包含 "order:2025" 的键
   SCAN 0 MATCH "*order:2025*" COUNT 100
   ```
@@ -2505,7 +2507,7 @@ RPOP queue:email                 # 消费任务[7](@ref)
    - `COUNT` 仅作为每次迭代的参考值（非精确返回数量），实际返回数量可能波动[8,10](@ref)。
 3. 
    编程实现示例（Java + Jedis）：
-   ```
+  ```
    try (Jedis jedis = new Jedis("localhost", 6379)) {
         String cursor = "0";
         ScanParams params = new ScanParams().match("user:*").count(100);

@@ -19,9 +19,11 @@ title: About
 
 ## Who am I?
 
-I am a cs student pursuing a master's degree, and I'm currently working as a full-stack developer.
+I am a cs student pursuing a master's degree, and I'm currently working as a back-end developer.
 
-I worked as a web developer intern for [@baidu](https://github.com/baidu) from Nov 2023 to Oct 2024.
+I worked as a web developer intern for [@Baidu](https://github.com/baidu) from Nov 2023 to Oct 2024.
+
+I worked as a web developer intern for [@Shopee](https://shopee.com/) from Jul 2025 to Now.
 
 ## CATEGORIES 释义
 

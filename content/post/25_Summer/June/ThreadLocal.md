@@ -59,14 +59,16 @@ ThreadLocal 是 Java 多线程编程中的核心类，用于实现**线程级别
    - **线程池场景**：线程复用导致旧 `ThreadLocal` 值残留。
    - **未清理条目**：`ThreadLocalMap` 中 `null` 键的值对象因强引用无法回收。
 2. **规避策略**
+   
    - 强制调用remove()：
      使用
+     
      ```
      try-finally
      ```
-     确保清理，尤其在池化线程中：
+    确保清理，尤其在池化线程中：
      ```
-  try {
+     try {
          threadLocal.set(data); // 设置值
       // ...执行业务逻辑
      } finally {
@@ -111,7 +113,7 @@ ThreadLocal变量与普通变量（包括线程内部定义的普通变量）的
    - **存储位置**：每个线程内部的`ThreadLocalMap`中，Key为ThreadLocal实例（弱引用），Value为线程私有数据。
    - **作用域**：线程级别，跨方法共享（例如在Controller、Service、Dao层均可访问同一线程的ThreadLocal值）。
    - 示例：
-     ```
+  ```
    private static final ThreadLocal<User> userHolder = ThreadLocal.withInitial(() -> new User());
      // 线程A和线程B通过userHolder.get()获取各自独立的User对象
    ```
@@ -121,7 +123,7 @@ ThreadLocal变量与普通变量（包括线程内部定义的普通变量）的
      - 存储位置：线程栈帧的工作内存中，随方法调用结束而销毁。
      - 作用域：方法级别，线程安全（每个线程有独立栈帧）。
      - 示例：
-       ```
+   ```
   public void run() {
            int localVar = 10; // 每个线程的run()方法中有自己的localVar副本
   }
@@ -131,9 +133,9 @@ ThreadLocal变量与普通变量（包括线程内部定义的普通变量）的
      - 作用域：对象实例级别，若多个线程操作同一对象实例，则成员变量被共享（非线程安全）。
      - 示例：
        ```
-  class MyRunnable implements Runnable {
+    class MyRunnable implements Runnable {
            private int sharedVar; // 被所有线程共享
-      public void run() { sharedVar++; } // 需加锁保证安全
+        public void run() { sharedVar++; } // 需加锁保证安全
          }
   ```
 
@@ -158,7 +160,7 @@ ThreadLocal变量与普通变量（包括线程内部定义的普通变量）的
 1. **ThreadLocal的隔离机制**
    - 每个`Thread`持有`ThreadLocalMap`，通过ThreadLocal对象的哈希值定位数据（Key为弱引用，Value为强引用）。
    - 同一ThreadLocal对象在不同线程中通过不同Map存储，实现隔离（见下图）：
-     ```
+  ```
      线程A：ThreadLocalMap → Entry(ThreadLocalA弱引用, ValueA)  
      线程B：ThreadLocalMap → Entry(ThreadLocalA弱引用, ValueB)
      ```
@@ -203,9 +205,7 @@ ThreadLocal变量与普通变量（包括线程内部定义的普通变量）的
 >    ```
 >    private static final ThreadLocal<DateFormat> dateFormatHolder = 
 >        ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
->   ```
->    
->2. Spring的`RequestContextHolder`、事务管理器（跨层传递请求上下文）。
+> 2. Spring的`RequestContextHolder`、事务管理器（跨层传递请求上下文）。
 
 
 ------
