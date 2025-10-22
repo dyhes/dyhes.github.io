@@ -37,7 +37,7 @@ Caffeine 是一款基于 Java 8 的高性能本地缓存库，由 Google Guava C
 1. **缓存淘汰机制**
    - 采用惰性删除与定期批量清理结合的策略：
      - 读/写操作时检查过期时间，异步回收过期条目；
-   - 后台线程定期执行清理任务，减少主线程阻塞[3,6](@ref)。
+     - 后台线程定期执行清理任务，减少主线程阻塞[3,6](@ref)。
 2. **内存管理优化**
    - **权重控制**：通过 `Weigher` 接口为不同条目分配权重，避免大对象占用过多内存[6](@ref)。
    - **智能驱逐**：结合容量、时间、引用策略，确保内存占用可控（例如 `maximumWeight` 与 `weigher` 配合）[5,6](@ref)。
@@ -78,7 +78,7 @@ Caffeine 是一款基于 Java 8 的高性能本地缓存库，由 Google Guava C
 ------
 ### 💻 **基础代码示例**
 
-```
+```java
 // 同步加载缓存（自动加载数据）
 LoadingCache<String, User> cache = Caffeine.newBuilder()
     .maximumSize(1000)
@@ -161,7 +161,7 @@ Spring Boot 结合 Caffeine（本地缓存）和 Redis（分布式缓存）实�
 ------
 ### 🔧 **多级缓存配置类**
 
-```
+```java
 @Configuration
 @EnableCaching
 public class CacheConfig {
@@ -519,7 +519,7 @@ public Order getOrder(String orderId) {
 
 通过扩展`RedisCacheManager`解析`cacheNames`中的TTL信息：
 1. **自定义CacheManager**：
-   ```
+   ```java
    public class CustomRedisCacheManager extends RedisCacheManager {
        public CustomRedisCacheManager(RedisCacheWriter writer, RedisCacheConfiguration config) {
            super(writer, config);
@@ -537,7 +537,8 @@ public Order getOrder(String orderId) {
    }
    ```
 2. **配置Bean**：
-   ```
+   
+   ```java
    @Bean
    public CacheManager cacheManager(RedisConnectionFactory factory) {
        RedisCacheConfiguration defaultConfig = RedisCacheConfiguration.defaultCacheConfig()
@@ -548,7 +549,8 @@ public Order getOrder(String orderId) {
    }
    ```
 3. **使用注解**：
-   ```
+   
+   ```java
    @Cacheable(cacheNames = "users#3600", key = "#id") // TTL=3600秒
    public User getUser(Long id) { ... }
    ```
@@ -560,7 +562,8 @@ public Order getOrder(String orderId) {
 
 通过自定义注解（如`@CacheTTL`）和AOP动态设置TTL：
 1. **定义注解**：
-   ```
+   
+   ```java
    @Target({ElementType.METHOD})
    @Retention(RetentionPolicy.RUNTIME)
    public @interface CacheTTL {
@@ -568,7 +571,7 @@ public Order getOrder(String orderId) {
    }
    ```
 2. **AOP拦截**：
-   ```
+   ```java
    @Aspect
    @Component
    public class CacheTTLAspect {
@@ -582,7 +585,7 @@ public Order getOrder(String orderId) {
    }
    ```
 3. **扩展RedisCache**：
-   ```
+   ```java
    public class CustomRedisCache extends RedisCache {
        @Override
        public void put(Object key, Object value) {
@@ -604,7 +607,7 @@ public Order getOrder(String orderId) {
 
 针对具体缓存中间件配置全局或缓存区TTL：
 1. **Redis全局默认TTL**：
-   ```
+   ```java
    @Bean
    public CacheManager cacheManager(RedisConnectionFactory factory) {
        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
@@ -613,7 +616,7 @@ public Order getOrder(String orderId) {
    }
    ```
 2. **Ehcache缓存区TTL**：
-   ```
+   ```java
    <!-- ehcache.xml -->
    <cache name="users"
           maxEntriesLocalHeap="1000"
@@ -675,7 +678,7 @@ public Order getOrder(String orderId) {
 
 #### **定义自定义注解**
 
-```
+```java
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DelayDoubleDelete {
@@ -685,7 +688,7 @@ public @interface DelayDoubleDelete {
 ```
 #### **实现AOP切面（核心逻辑）**
 
-```
+```java
 @Aspect
 @Component
 public class DelayDoubleDeleteAspect {
@@ -722,7 +725,7 @@ public class DelayDoubleDeleteAspect {
 ```
 #### **业务层使用示例**
 
-```
+```java
 @Service
 public class UserService {
     @DelayDoubleDelete(cacheName = "userCache", delay = 500)
@@ -739,7 +742,7 @@ public class UserService {
 若希望无侵入式集成，可包装Spring Cache的`CacheManager`，自动为`@CacheEvict`添加延迟双删逻辑。
 #### **包装Cache与CacheManager**
 
-```
+```java
 public class EnhancedCache implements Cache {
     private final Cache delegate;
     private final RedisTemplate<String, Object> redisTemplate;
@@ -769,7 +772,7 @@ public class EnhancedCacheManager implements CacheManager {
 ```
 #### **注册增强CacheManager至Spring容器**
 
-```
+```java
 @Configuration
 public class CacheConfig {
     @Bean
@@ -956,7 +959,7 @@ public void evict(Object key) {
 #### **通过 `TransactionSynchronizationManager` 主动查询事务状态**
 
 在切面中可直接检查当前事务的标记状态：
-```
+```java
 @Aspect
 @Component
 public class CustomAspect {
@@ -988,7 +991,7 @@ public class CustomAspect {
 #### **注册事务同步回调（推荐）**
 
 通过 `TransactionSynchronization` 监听事务提交或回滚事件：
-```
+```java
 @Around("@annotation(com.example.CustomAnnotation)")
 public Object aroundAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
     // 注册事务同步器
@@ -1014,7 +1017,7 @@ public Object aroundAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
 #### **在切面中直接获取 `TransactionStatus`**
 
 若自定义切面在事务切面**之后**执行（优先级更低），可直接注入事务状态：
-```
+```java
 @Aspect
 @Component
 @Order(Ordered.LOWEST_PRECEDENCE) // 确保优先级低于事务切面

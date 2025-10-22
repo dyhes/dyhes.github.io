@@ -121,7 +121,7 @@ count.incrementAndGet(); // 原子自增，无需锁
   - 优先用于**单一共享变量**的简单操作。
   - 高竞争场景需监控CPU占用，必要时切换为锁。
   - **ABA问题**需通过版本号解决（`AtomicStampedReference`）。
-合理运用CAS可在特定场景显著提升并发性能，但需严格评估其适用性，避免盲目替代锁机制。
+  合理运用CAS可在特定场景显著提升并发性能，但需严格评估其适用性，避免盲目替代锁机制。
 ## AtomicStampedReference
 
 AtomicStampedReference 是 Java 并发包（`java.util.concurrent.atomic`）中解决 **CAS 操作 ABA 问题**的核心工具。它通过为对象引用附加一个整数版本戳（Stamp），实现对引用变化的版本追踪，确保并发修改的安全性。以下从原理、实现到应用场景展开分析：
@@ -157,6 +157,7 @@ AtomicStampedReference 是 Java 并发包（`java.util.concurrent.atomic`）中�
 - **AtomicReference 封装**：
   `volatile AtomicReference<Pair<V>> pair` 确保内存可见性，底层通过 `Unsafe` 或 `VarHandle` 实现 CAS。
 2. **核心方法 `compareAndSet`**
+   
    - 原子性保证：同时校验预期引用和戳，通过则更新为新引用和新戳：
      ```java
      public boolean compareAndSet(V expectedReference, V newReference,
@@ -249,6 +250,7 @@ AtomicStampedReference 是 Java 并发包（`java.util.concurrent.atomic`）中�
 ### 💎 **总结**
 
 `AtomicStampedReference` 通过**引用+版本戳**的二元校验机制，为无锁并发提供了可靠的 ABA 问题解决方案。其核心价值在于：
+
 1. **状态追踪**：戳的递增唯一标识引用变化历史，避免隐蔽的中间状态；
 2. **无锁并发**：基于 CAS 实现高性能线程安全，适用于栈、队列、状态机等场景；
 3. **责任转移**：将 ABA 风险从业务逻辑剥离至底层框架，提升代码健壮性。
@@ -474,6 +476,7 @@ public void method() {
 ### 💎 **总结**
 
 `synchronized` 是 Java 线程安全的基石，通过 **互斥性、可见性、有序性** 解决并发问题。使用时需注意：
+
 1. **锁粒度**：优先用代码块缩小同步范围。
 2. **锁顺序**：避免死锁，固定多锁获取顺序。
 3. **性能权衡**：高并发场景考虑 `ReentrantLock` 等替代方案。
@@ -1120,13 +1123,13 @@ AbstractQueuedSynchronizer（AQS）是 Java 并发包（`java.util.concurrent.lo
     - `head`/`tail`：队首和队尾指针。
     - Node 结构：
       ```java
-    static final class Node {
+      static final class Node {
           volatile int waitStatus;    // 节点状态（如等待唤醒、已取消）
           volatile Node prev;         // 前驱节点
           volatile Node next;         // 后继节点
         volatile Thread thread;     // 关联线程
           Node nextWaiter;            // 条件队列的下一个节点
-    }
+      }
       ```
   - waitStatus 状态值：
     - `CANCELLED (1)`：线程已取消等待。
@@ -1485,9 +1488,9 @@ Lock 接口通过**显式锁管理**、**可中断性**、**超时控制**及**�
    - 一个 `Lock` 可关联多个 `Condition`（例如生产者-消费者模型中的“非空”和“非满”条件），每个条件独立管理线程等待队列。
    - 示例:
      ```
-  ReentrantLock lock = new ReentrantLock();
+    ReentrantLock lock = new ReentrantLock();
      Condition notEmpty = lock.newCondition(); // 队列非空条件
-  Condition notFull = lock.newCondition();  // 队列非满条件
+    Condition notFull = lock.newCondition();  // 队列非满条件
      ```
 2. 精准唤醒：
    - 支持 `signal()`（唤醒单个等待线程）和 `signalAll()`（唤醒全部线程），避免 `notifyAll()` 导致的无效竞争。
@@ -1538,7 +1541,7 @@ Lock 接口通过**显式锁管理**、**可中断性**、**超时控制**及**�
 
 #### **生产者-消费者模型（多 Condition 版）**
 
-```
+```java
 public class BoundedBuffer<T> {  
     private final Queue<T> buffer;  
     private final int capacity;  
@@ -1578,7 +1581,7 @@ public class BoundedBuffer<T> {
 - 生产者仅唤醒消费者（而非所有线程），减少无效竞争。
 #### **多任务顺序调度（精准唤醒）**
 
-```
+```java
 class TaskScheduler {  
     private final ReentrantLock lock = new ReentrantLock();  
     private final Condition condA = lock.newCondition();  
@@ -1673,7 +1676,7 @@ Semaphore 通过内部类 `Sync`（继承自 `AbstractQueuedSynchronizer`）实�
 - 核心方法：
   - 非公平获取：`nonfairTryAcquireShared()`
     ```java
-  int nonfairTryAcquireShared(int acquires) {
+    int nonfairTryAcquireShared(int acquires) {
         for (;;) {
           int available = getState();
             int remaining = available - acquires;
@@ -1802,7 +1805,7 @@ CountDownLatch 是 Java 并发包（`java.util.concurrent`）中的核心同步�
 
 - 计数器（State）初始化时指定正整数 count，表示需等待完成的线程/任务数量。
   - **`countDown()`**：任务完成后调用，计数器减 1（线程安全，基于 CAS）。
-- **`await()`**：阻塞当前线程，直到计数器归零（支持超时和中断响应）。
+  - **`await()`**：阻塞当前线程，直到计数器归零（支持超时和中断响应）。
 #### **一次性特性**
 
 计数器归零后无法重置，若需重复使用，需换用 `CyclicBarrier`。
@@ -1813,7 +1816,7 @@ CountDownLatch 是 Java 并发包（`java.util.concurrent`）中的核心同步�
 
 #### **基础使用步骤**
 
-```
+```java
 // 1. 初始化计数器（假设需等待3个任务）
 CountDownLatch latch = new CountDownLatch(3);
 
@@ -1992,9 +1995,8 @@ D --> F[所有线程继续执行]
 3. **计数器减1**：`int index = --count`。
 4. 
    触发屏障：若
-```
+
    index == 0
-   ```：
    - 执行 `barrierCommand.run()`（若有）。
    - 调用 `nextGeneration()`：唤醒所有线程、重置计数器、创建新代。
 5. **阻塞等待**：非最后到达的线程进入 `trip.await()` 挂起。
@@ -2002,9 +2004,9 @@ D --> F[所有线程继续执行]
 >
 > ```
 > private void nextGeneration() {
->   trip.signalAll();          // 唤醒所有线程
->   count = parties;           // 重置计数器
->   generation = new Generation(); // 创建新代
+> trip.signalAll();          // 唤醒所有线程
+> count = parties;           // 重置计数器
+> generation = new Generation(); // 创建新代
 > }
 > ```
 
@@ -2015,19 +2017,21 @@ D --> F[所有线程继续执行]
 #### **典型应用场景**
 
 - 多阶段任务同步
-如并行计算中，每阶段结束后线程需同步数据后再进入下一阶段。
+  如并行计算中，每阶段结束后线程需同步数据后再进入下一阶段。
+
+  ```java
+    // 分阶段计算示例
+    CyclicBarrier barrier = new CyclicBarrier(THREAD_NUM);
+    for (int stage = 0; stage < STAGES; stage++) {
+        for (Thread thread : threads) {
+            thread.execute(() -> {
+                computeStage(stage);
+                barrier.await(); // 等待所有线程完成本阶段
+            });
+        }
+    }
   ```
-  // 分阶段计算示例
-  CyclicBarrier barrier = new CyclicBarrier(THREAD_NUM);
-  for (int stage = 0; stage < STAGES; stage++) {
-      for (Thread thread : threads) {
-          thread.execute(() -> {
-              computeStage(stage);
-              barrier.await(); // 等待所有线程完成本阶段
-          });
-      }
-  }
-  ```
+
 - **高并发测试**
   模拟瞬时高流量（如秒杀场景），控制所有线程同时发起请求。
 - **资源初始化**
@@ -2059,18 +2063,19 @@ D --> F[所有线程继续执行]
 > - 赛跑场景：
 >
 >   - `CyclicBarrier` 同步起跑（所有选手就绪后同时开始）。
->- `CountDownLatch` 等待所有选手完赛（主线程统计结果）。
+> - `CountDownLatch` 等待所有选手完赛（主线程统计结果）。
 
 
 ------
 ### 💎 **总结**
 
 - **核心价值**：
-  `CyclicBarrier` 通过 ​**可重用屏障**​ 和 ​**多线程对等同步**​ 机制，解决了分阶段任务协作问题，尤其适合迭代式并行计算。
+  `CyclicBarrier` 通过 **可重用屏障** 和 **多线程对等同步** 机制，解决了分阶段任务协作问题，尤其适合迭代式并行计算。
 - 选型建议：
   - 需循环同步 → `CyclicBarrier`；
 - 单次等待 → `CountDownLatch`；
   - 资源限流 → `Semaphore`。
 - **性能注意**：
   高竞争场景下，基于锁的实现可能成为瓶颈，可考虑无锁方案（如 `Phaser`）。
+
 > 通过合理使用 `CyclicBarrier`，可显著提升多线程协作的简洁性与健壮性，是构建高并发系统的核心同步工具之一。

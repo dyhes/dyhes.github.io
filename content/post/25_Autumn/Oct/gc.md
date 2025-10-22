@@ -1,7 +1,7 @@
 ---
 title: 【Java】GC
 date: 2025-10-18 00:00:00+0000
-categories: [nutrtion, arts]
+categories: [nutrition, arts]
 ---
 
 ## 三色标记

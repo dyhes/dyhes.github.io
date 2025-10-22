@@ -147,6 +147,7 @@ Kubernetes Scheduler 选择节点的过程是一个**分层决策机制**，分�
      - **`podAffinity`**：强制或倾向与指定 Pod 同节点（如 Web 服务与 Redis 同节点）。
      - **`podAntiAffinity`**：避免与指定 Pod 同节点（如避免同一服务的多个副本集中部署）[3,7](@ref)。
 2. **污点与容忍（Taints & Tolerations）**
+   
    - 污点效果：
      - `NoSchedule`：禁止新 Pod 调度。
      - `NoExecute`：驱逐已有 Pod（若不容忍）。
@@ -525,7 +526,7 @@ Secret 是 Kubernetes 中用于**安全存储和管理敏感数据**的核心 AP
   kubectl create secret docker-registry regcred \
     --docker-server=registry.example.com \
     --docker-username=user \
-    --docker-password=pass[1,4](@ref)
+    --docker-password=pass
   ```
 #### **`kubernetes.io/tls`**
 
@@ -549,6 +550,7 @@ Secret 是 Kubernetes 中用于**安全存储和管理敏感数据**的核心 AP
 
 - **特点**：简单但**不支持热更新**（需重启 Pod）。
 - **示例**：
+  
   ```
   env:
     - name: DB_PASSWORD
@@ -665,9 +667,7 @@ Secret 在 Kubernetes 中创建后，由 API Server 负责将其存储到 etcd �
   ```
   123456
   ```
-  ）进行 Base64 编码
-  2,4
-  。
+  ）进行 Base64 编码。
 - 声明式创建（YAML 文件）
   用户需手动对敏感数据 Base64 编码，再写入 YAML：
   ```
@@ -865,7 +865,7 @@ volumes:
 通过精准区分两者特性，可构建**安全、灵活、可维护**的 Kubernetes 配置体系！
 ## Controller Manager
 
-Controller Manager 是 Kubernetes 控制平面的核心组件，负责通过**控制循环（Control Loop）** 持续监控集群状态，并驱动实际状态向用户定义的期望状态收敛。其设计理念基于“声明式 API”，用户只需定义目标状态，Controller Manager 自动执行调谐（Reconcile）操作。以下是其核心原理、功能与实践的全面解析：
+Controller Manager 是 Kubernetes 控制平面的核心组件，负责通过 **控制循环（Control Loop）** 持续监控集群状态，并驱动实际状态向用户定义的期望状态收敛。其设计理念基于“声明式 API”，用户只需定义目标状态，Controller Manager 自动执行调谐（Reconcile）操作。以下是其核心原理、功能与实践的全面解析：
 
 
 ------
@@ -1778,6 +1778,7 @@ triggers:
    - **RBAC 权限控制**：限制节点操作权限[3](@ref)。
    - **TLS 加密通信**：确保 kubelet 与 API Server 启用 HTTPS[3](@ref)。
 2. **自动化脚本示例**
+   
    ```
    # 新节点初始化脚本（部分）
    yum install -y kubelet-1.25.4 kubeadm-1.25.4
@@ -1987,6 +1988,7 @@ Pod 是 Kubernetes 中最小的可调度和管理单元，其设计理念和实�
 2. **静态 Pod（Static Pod）**  
    由 **kubelet 直接管理**，用于部署节点级系统组件（如 kube-apiserver），配置文件位于节点 `/etc/kubernetes/manifests`[citation:1]。
 3. **多容器 Pod 设计模式**  
+   
    | 模式           | 场景案例                                | 优势           |
    | -------------- | --------------------------------------- | -------------- |
    | **Sidecar**    | Nginx + Fluentd（日志收集）             | 扩展主容器功能 |
@@ -3557,6 +3559,7 @@ Ingress 是 Kubernetes 中管理外部访问集群内部服务的核心机制，
                    number: 80
      ```
 2. **Ingress Controller**
+   
    - **功能**：监听 Ingress 规则变化，动态生成代理配置（如 Nginx、Traefik）并重载[1,6](@ref)。
    - 工作流程：
      1. 监控 API Server 的 Ingress 变更；
@@ -3600,23 +3603,22 @@ Ingress 是 Kubernetes 中管理外部访问集群内部服务的核心机制，
 #### 🛠️ **安装与配置实践**
 
 1. **安装 Ingress Controller（以 Nginx 为例）**
+   
    - Helm 部署（推荐）：
      ```
      helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
      helm install ingress-nginx ingress-nginx/ingress-nginx -n ingress-nginx
      ```[3,7](@ref)  
      ```
-
+   
    - **国内镜像加速**：替换镜像为阿里云仓库（如 `registry.cn-hangzhou.aliyuncs.com/google_containers/nginx-ingress-controller`）[2,7](@ref)。
-
+   
 2. **配置路由规则**
 
-   - 域名路由
-
-     ：
+   - 域名路由：
 
      ```
-     spec:
+  spec:
        rules:
        - host: app.example.com
          http:
@@ -3626,7 +3628,7 @@ Ingress 是 Kubernetes 中管理外部访问集群内部服务的核心机制，
                  name: web-service
                  port: 80
      ```
-
+     
    - **路径重写**：通过注解 `nginx.ingress.kubernetes.io/rewrite-target: /` 实现[1,5](@ref)。
 
 3. **HTTPS 配置**
@@ -3887,7 +3889,6 @@ spec:
 ```
   /v1/user
 ```
-  2
   。
 #### **gRPC 长连接支持**
 
@@ -3968,6 +3969,7 @@ Ingress Controller Service 类型设为 `LoadBalancer`，MetalLB 自动分配 IP
   > 云厂商 LB 接流量，Ingress 规则定路由；
   > 证书卸载七层做，服务分流成本优。
 - **进阶方向**：
+  
   - 结合 **WAF 注解**（如 ModSecurity）增强安全防护[3](@ref)。
   - 通过 **Prometheus 监控** Ingress 流量指标，实现动态调优[5](@ref)。
 ## 外部访问
@@ -4714,7 +4716,7 @@ Kubernetes（K8s）集群安全是一个系统性工程，需从网络、认证�
    - 核心概念：
 
      | **组件**             | **作用**                            | **范围**     |
-  | -------------------- | ----------------------------------- | ------------ |
+    | -------------------- | ----------------------------------- | ------------ |
      | `Role`               | 定义命名空间内资源权限（如Pod读写） | 单个命名空间 |
      | `ClusterRole`        | 定义集群级资源权限（如Node管理）    | 全局         |
      | `RoleBinding`        | 将角色绑定到用户/ServiceAccount     | 单个命名空间 |
@@ -4724,21 +4726,19 @@ Kubernetes（K8s）集群安全是一个系统性工程，需从网络、认证�
 
      - 开发人员：仅能查看命名空间内Pod日志。
   - 运维人员：可操作Deployment，但禁止访问Secrets[2,6](@ref)。
-     
+    
 - 审计命令
-   
+  
      ：定期检查权限分配：
 
      ```
   kubectl get rolebindings,clusterrolebindings -A
-     ```
+  ```
 
 3. **ServiceAccount管理**
 
    - 禁止Pod使用默认ServiceAccount（设置`automountServiceAccountToken: false`）[2](@ref)。
    - 为每个微服务创建独立ServiceAccount并绑定最小权限角色[6](@ref)。
-
-
 
 ------
 

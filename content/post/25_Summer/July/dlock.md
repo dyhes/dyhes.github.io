@@ -321,7 +321,7 @@ REDLOCK通过**多节点投票机制**提升了分布式锁的容错性，但时
 - **根本原因**：RedLock依赖各Redis节点的系统时间（`gettimeofday`），而非**单调递增时钟**。当系统时间因NTP同步、人为修改或硬件故障发生跳跃时，会导致锁的实际有效期与预期不符[2,4](@ref)。
 - 典型场景：
   - **时间向前跳跃**：锁提前失效，其他客户端可能获取锁，破坏互斥性。
-- **时间向后跳跃**：锁有效期被延长，导致锁被长时间占用[4](@ref)。
+  - **时间向后跳跃**：锁有效期被延长，导致锁被长时间占用[4](@ref)。
 #### **锁有效期的计算偏差**
 
 客户端计算锁剩余有效期时，若本地时钟与Redis节点时钟不一致：
@@ -667,7 +667,7 @@ Netty 是一个**基于 Java NIO 的异步事件驱动网络框架**，由 JBOSS
 ------
 ### 💻 **实战示例：简易 HTTP 服务器**
 
-```
+```java
 public class HttpServer {
     public static void main(String[] args) {
         EventLoopGroup bossGroup = new NioEventLoopGroup(); // 接收连接
@@ -749,9 +749,9 @@ Redisson 是一个基于 Redis 的高性能 Java 客户端，专注于分布式�
    - **RMap**：支持本地缓存（减少网络开销）、原子操作（如 `putIfAbsent`）[2,5](@ref)。
    - **RDelayedQueue**：实现延时任务，如订单超时处理。
      ```
-RBlockingQueue<String> queue = redisson.getBlockingQueue("orderQueue");
+     RBlockingQueue<String> queue = redisson.getBlockingQueue("orderQueue");
      RDelayedQueue<String> delayedQueue = redisson.getDelayedQueue(queue);
-delayedQueue.offer("order123", 30, TimeUnit.MINUTES); // 30分钟后入队
+     delayedQueue.offer("order123", 30, TimeUnit.MINUTES); // 30分钟后入队
      ```
    - **RList/RSet**：支持分布式环境下的集合操作（交并差集）[8](@ref)。
 3. **限流与同步工具**
@@ -809,7 +809,7 @@ delayedQueue.offer("order123", 30, TimeUnit.MINUTES); // 30分钟后入队
 ------
 ### 🛠️ **Spring Boot 集成示例**
 
-```
+```java
 # application.yml
 redisson:
   singleServerConfig:

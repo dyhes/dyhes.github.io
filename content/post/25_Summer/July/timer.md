@@ -27,6 +27,7 @@ tags:
      }, 2000, 1000); // 延迟2秒，间隔1秒
      ```
 2. **`ScheduledExecutorService`**
+   
    - **特点**：基于线程池（支持多任务并发），异常隔离（单任务失败不影响整体），提供`scheduleAtFixedRate`（固定速率）和`scheduleWithFixedDelay`（固定延迟）[1,7,9](@ref)。
    - **优势**：相比`Timer`更健壮，适合生产环境。
    - 示例：
@@ -46,13 +47,13 @@ tags:
      
    - 线程池优化：
 
+     ```
      @Bean
      public ThreadPoolTaskScheduler taskScheduler() {
          ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
          scheduler.setPoolSize(10); // 避免单线程阻塞
          return scheduler;
      }
-     ```
 2. **`ScheduledExecutorFactoryBean`**
    - **特点**：Spring对`ScheduledThreadPoolExecutor`的封装，支持XML配置线程池参数[1](@ref)。
 
@@ -208,7 +209,7 @@ public class TaskRegistry {
 > 若业务规模扩大，建议迁移至 **XXL-JOB** 或 **Quartz 集群**（原生支持故障转移与持久化）[6,8](@ref)。
 ## ThreadPoolTaskScheduler
 
-ThreadPoolTaskScheduler 和 ScheduledExecutorService 是 Java 中用于任务调度的两种核心工具，分别属于 **Spring 框架**和 **JDK 原生并发包**。以下是两者的详细对比及选型建议：
+ThreadPoolTaskScheduler 和 ScheduledExecutorService 是 Java 中用于任务调度的两种核心工具，分别属于 **Spring 框架** 和 **JDK 原生并发包**。以下是两者的详细对比及选型建议：
 
 
 ------
@@ -221,7 +222,7 @@ ThreadPoolTaskScheduler 和 ScheduledExecutorService 是 Java 中用于任务调
 | **底层实现** | `ScheduledThreadPoolExecutor` + `DelayedWorkQueue` | 封装 `ScheduledExecutorService`，扩展调度功能  |
 - 说明：
   - `ScheduledExecutorService` 是 Java 标准库的一部分，适合非 Spring 项目[4,8,10](@ref)。
-- `ThreadPoolTaskScheduler` 依赖 Spring 容器，提供更便捷的配置和集成能力[3,5,6](@ref)。
+  - `ThreadPoolTaskScheduler` 依赖 Spring 容器，提供更便捷的配置和集成能力[3,5,6](@ref)。
 
 
 ------
@@ -260,7 +261,6 @@ ThreadPoolTaskScheduler 和 ScheduledExecutorService 是 Java 中用于任务调
       scheduler.setThreadNamePrefix("task-");
       return scheduler;
   }
-  ``` [3,6](@ref)
 ### 🛠️ **异常处理与集成能力**
 
 | **特性**        | **ScheduledExecutorService**         | **ThreadPoolTaskScheduler**                    |
@@ -270,7 +270,7 @@ ThreadPoolTaskScheduler 和 ScheduledExecutorService 是 Java 中用于任务调
 | **任务上下文**  | 无                                   | ✅ 可访问 Spring 上下文（如 `@Autowired` 注入） |
 - 说明：
   - `ThreadPoolTaskScheduler` 在任务中可直接调用 Spring Bean，适合需要依赖注入的业务逻辑[3,6](@ref)。
-- `ScheduledExecutorService` 需自行处理线程内 Spring 上下文（如通过 `ThreadLocal`）[4](@ref)。
+  - `ScheduledExecutorService` 需自行处理线程内 Spring 上下文（如通过 `ThreadLocal`）[4](@ref)。
 
 
 ------
@@ -566,6 +566,7 @@ XXL-JOB 采用 **“调度中心 + 执行器” 的分布式架构**，实现调
 
 XXL-JOB 通过 **解耦设计** 与 **全异步流程** 解决了分布式任务的高可用、弹性扩展问题，其 **开箱即用的管理台** 大幅降低运维成本。对于 Java 生态中的定时任务需求，无论是简单调度还是大数据分片场景，XXL-JOB 均是比原生 `ScheduledExecutorService` 或 `Quartz` 更高效的解决方案[1,4,7](@ref)。
 **官方资源**：
+
 - 源码地址：[Gitee](https://gitee.com/xuxueli0323/xxl-job)
 - 文档：https://www.xuxueli.com/xxl-job/
 ## Quartz & XXL-JOB
@@ -602,14 +603,14 @@ XXL-JOB 通过 **解耦设计** 与 **全异步流程** 解决了分布式任务
    - 心跳检测机制（30秒/次），自动剔除宕机节点[8](@ref)。
 3. **运维监控**
 - **Quartz**：无原生管理界面，需自行开发监控系统[1,7](@ref)。
-- XXL-JOB：
+- **XXL-JOB**：
   - 提供**可视化控制台**，实时查看任务日志、执行状态、成功率统计[3,6](@ref)。
    - 支持邮件/钉钉告警，任务失败自动触发[4](@ref)。
 4. **性能与扩展性**
    - **Quartz**：单机调度吞吐量约500任务/秒，集群扩展需手动分库分表[7,8](@ref)。
-   - XXL-JOB：
+   - **XXL-JOB**：
      - 异步调度设计，吞吐量达1200任务/秒[8](@ref)。
-   - 执行器动态注册，支持弹性扩容[4,6](@ref)。
+     - 执行器动态注册，支持弹性扩容[4,6](@ref)。
 
 
 ------
@@ -927,9 +928,9 @@ XXL-JOB 实现任务的分布式调度主要依赖其**中心化调度 + 分布�
 调度中心根据配置的**路由策略**选择执行器节点，确保任务均匀分配：
 - 常用策略：
   - **故障转移（FAILOVER）**：优先选择上次成功的节点，失败自动切换[3,8](@ref)。
-- **忙碌转移（BUSY_OVER）**：选择空闲节点执行，避免节点过载。
+  - **忙碌转移（BUSY_OVER）**：选择空闲节点执行，避免节点过载。
   - **分片广播（SHARDING_BROADCAST）**：所有执行器并行执行同一任务，配合分片参数处理不同数据子集[6,7](@ref)。
-- **一致性HASH**：任务固定分配到特定节点，减少节点变动的影响[8](@ref)。
+  - **一致性HASH**：任务固定分配到特定节点，减少节点变动的影响[8](@ref)。
 #### **分片任务处理**
 
 - 动态数据分片：
@@ -943,7 +944,6 @@ XXL-JOB 实现任务的分布式调度主要依赖其**中心化调度 + 分布�
         List<Data> dataSubset = fetchDataByShard(shard.getIndex(), shard.getTotal());
       process(dataSubset);
     }
-  ```
 #### **高可用与容错**
 
 - **调度中心集群**：多节点共享数据库，通过DB锁避免重复调度；配合Nginx实现负载均衡[3,4](@ref)。
@@ -1009,7 +1009,7 @@ XXL-JOB 实现任务调度与错误重试的核心机制基于其**中心化调�
   - **RingThread**：每秒检测当前时间槽位任务并触发执行，避免任务堆积或遗漏[3](@ref)。
 - 调度线程池隔离：
   - **快线程池**：处理常规任务（如短时任务）。
-- **慢线程池**：处理长耗时任务，避免阻塞调度线程[5](@ref)。
+  - **慢线程池**：处理长耗时任务，避免阻塞调度线程[5](@ref)。
 #### **任务触发流程**
 
 1. **调度触发**：根据任务配置的触发策略（如Cron表达式、固定间隔）生成调度请求[4](@ref)。
@@ -1043,7 +1043,7 @@ XXL-JOB 实现任务调度与错误重试的核心机制基于其**中心化调�
 #### **扩展重试策略（结合第三方库）**
 
 若需复杂重试逻辑（如指数退避），可集成`Spring Retry`或`Guava Retrying`[1](@ref)：
-```
+```java
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 
@@ -1144,7 +1144,7 @@ xxl:
 ### 🧩 注册执行器Spring Bean
 
 创建配置类，将执行器注入Spring容器：
-```
+```java
 @Configuration
 public class XxlJobConfig {
     @Value("${xxl.job.admin.addresses}")

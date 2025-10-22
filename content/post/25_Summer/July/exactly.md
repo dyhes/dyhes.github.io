@@ -244,10 +244,10 @@ for (ConsumerRecord record : records) {
    为每条消息生成全局唯一标识（如 UUID、业务主键），作为 Redis 的 Key，用于标记消息是否已处理[1,3,7](@ref)。
 2. 
    原子性操作
-通过 Redis 的
+   通过 Redis 的
 ```
    SETNX
-   ```
+```
    （Set If Not Exists）命令实现原子性检查：
    - 若 Key 不存在 → 设置成功（返回 1）→ 执行业务逻辑。
    - 若 Key 已存在 → 设置失败（返回 0）→ 跳过处理[5,7](@ref)。
@@ -629,7 +629,7 @@ try {
 手动提交不仅限于“每批一次”，可通过以下策略提升可靠性：
 1. 
    按消息数提交
-累积处理N条消息后提交（如每100条）：
+   累积处理N条消息后提交（如每100条）：
    ```
    int batchCount = 0;
    for (ConsumerRecord record : records) {
@@ -641,7 +641,7 @@ try {
    ```
 2. 
    按时间窗口提交
-定时提交（如每5秒），避免长时间未提交导致重复消费：
+   定时提交（如每5秒），避免长时间未提交导致重复消费：
    ```
    long lastCommitTime = System.currentTimeMillis();
    while (true) {
@@ -655,7 +655,7 @@ try {
    ```
 3. 
    按分区粒度提交
-为每个分区独立提交偏移量，避免全批失败：
+   为每个分区独立提交偏移量，避免全批失败：
    ```
    Map<TopicPartition, OffsetAndMetadata> offsets = new HashMap<>();
    for (TopicPartition partition : records.partitions()) {
@@ -712,14 +712,13 @@ try {
 - 例如，在
 ```
   KafkaProperties.Consumer
-  ```
-的源码中，该属性默认值为
 ```
-  true
-  ```：
-  ```
+的源码中，该属性默认值为 true
+
+```
   spring.kafka.consumer.enable-auto-commit: true
-  ```
+```
+
 ### ⚠️ **为何建议改为 `false`？**
 
 虽然默认开启自动提交，但实际生产环境**强烈建议手动提交偏移量**（即设置 `enable.auto.commit=false`），原因如下：
@@ -729,6 +728,7 @@ try {
 ### 🔧 **手动提交的配置方式**
 
 在 `application.yml` 中显式关闭自动提交，并指定提交模式：
+
 ```
 spring:
   kafka:
@@ -737,6 +737,7 @@ spring:
     listener:
       ack-mode: manual_immediate  # 手动提交模式（每条提交）或 manual（批量提交）
 ```
+
 - 提交模式选择：
   - `manual_immediate`：每条消息处理完后立即提交（低吞吐场景）[6,7](@ref)。
   - `manual`：批量处理完后统一提交（高吞吐场景）[7](@ref)。
@@ -757,12 +758,12 @@ spring:
 ### ⚙️ **核心机制分析**
 
 - **`@Transactional` 的作用范围**
-  `@Transactional` 仅管理**数据库事务**​（如 MySQL 操作），不直接控制 Kafka 位移提交。位移提交仍需通过 `Acknowledgment` 接口显式调用或依赖 Spring 容器的提交策略[1,7](@ref)。
+  `@Transactional` 仅管理**数据库事务**（如 MySQL 操作），不直接控制 Kafka 位移提交。位移提交仍需通过 `Acknowledgment` 接口显式调用或依赖 Spring 容器的提交策略[1,7](@ref)。
 - **位移提交的触发条件**
   - 若未显式调用 `Acknowledgment.acknowledge()`：
-    即使配置了 `@Transactional`，​**位移也不会自动提交**。此时消费进度可能滞后，重启后会导致消息重复消费[2,7](@ref)。
+    即使配置了 `@Transactional`，**位移也不会自动提交**。此时消费进度可能滞后，重启后会导致消息重复消费[2,7](@ref)。
   - 若调用 `acknowledge()`：
-    位移提交会与数据库事务绑定，​**由 Spring 事务管理器协调提交时机**​（例如在数据库事务提交后同步提交位移）[1,8](@ref)。
+    位移提交会与数据库事务绑定，**由 Spring 事务管理器协调提交时机**（例如在数据库事务提交后同步提交位移）[1,8](@ref)。
 
 
 ------
@@ -778,6 +779,7 @@ spring:
     listener:
       ack-mode: manual_immediate  # 手动提交模式
 ```
+
 #### **消费者代码示例**
 
 ```
@@ -795,8 +797,6 @@ public void listen(String message, Acknowledgment ack) {
     }
 }
 ```
-
-
 ------
 ### ⚠️ **关键注意事项**
 
@@ -819,18 +819,20 @@ public void listen(String message, Acknowledgment ack) {
 ### 💎 **最佳实践**
 
 1. **强一致性场景**
-   ```
+
+```
    @KafkaListener(topics = "order-topic")
    @Transactional
    public void handleOrder(OrderEvent event, Acknowledgment ack) {
        orderService.saveOrder(event);  // 数据库操作
        ack.acknowledge();              // 位移提交与数据库事务同步
    }
-   ```
+```
    - 配置 `ack-mode: manual_immediate`[1,8](@ref)。
 2. **高吞吐场景（容忍少量重复）**
+
    ```
-   @KafkaListener(topics = "log-topic", concurrency = "3")
+@KafkaListener(topics = "log-topic", concurrency = "3")
    public void batchListen(List<String> messages, Acknowledgment ack) {
        logService.batchInsert(messages);  // 批量写入数据库
        ack.acknowledge();                 // 批量提交位移
@@ -847,4 +849,3 @@ public void listen(String message, Acknowledgment ack) {
 - 生产建议：
   - 优先使用 `MANUAL_IMMEDIATE` 模式保证事务原子性。
   - 所有消费逻辑必须实现**幂等性**，防御位移提交失败导致的重复消息[5,7](@ref)。
-## 

@@ -289,7 +289,7 @@ Federated 引擎是 MySQL 跨服务器数据访问的轻量级解决方案，**�
 
 - 核心方法：将表引擎从MyISAM改为InnoDB（唯一原生支持事务的引擎）。
   ```
-ALTER TABLE 表名 ENGINE=InnoDB;
+  ALTER TABLE 表名 ENGINE=InnoDB;
   ```
 - 事务操作示例：
   ```
@@ -491,8 +491,9 @@ InnoDB 的存储机制采用多层次结构设计，兼顾性能、事务安全�
    - **启用方式**：`innodb_file_per_table=ON`（MySQL 5.6+ 默认开启）。
    - 优势：
      - 支持单表备份/恢复
-  - 删除表时自动释放磁盘空间
-     - 减少 I/O 竞争。
+     
+       - 删除表时自动释放磁盘空间
+          - 减少 I/O 竞争。
 3. **临时表空间（`ibtmp1`）**
    - 存储临时表数据及排序操作中间结果，重启后重建。
 4. **Undo 表空间（`undo_001`等）**
@@ -595,7 +596,7 @@ InnoDB 的 **Buffer Pool（缓冲池）** 是 MySQL 的核心内存组件，用�
    - 将频繁访问的**数据页**（16KB/页）和**索引页**缓存到内存，后续查询直接读取内存，避免磁盘 I/O。
    - 专用数据库服务器建议分配 **60%~80% 物理内存**给 Buffer Pool。
 2. **支持事务与并发**
-   - 通过缓存 **Undo 页**实现事务回滚和 MVCC（多版本并发控制）。
+   - 通过缓存 **Undo 页** 实现事务回滚和 MVCC（多版本并发控制）。
    - 结合 **Redo Log** 保证数据持久性：事务提交时先写 Redo Log，脏页异步刷盘。
 3. **预读优化**
    - 基于局部性原理，加载目标页时**预读相邻页**，减少未来可能的磁盘 I/O。
@@ -643,13 +644,13 @@ Buffer Pool 通过多链表和哈希表管理内存页：
    - 动态调整：`SET GLOBAL innodb_buffer_pool_size = X_GB;`（无需重启）。
    - 命中率监控：
      ```
--- 计算命中率（需 >90%）  
+     -- 计算命中率（需 >90%）  
      SELECT (1 - Innodb_buffer_pool_reads / Innodb_buffer_pool_read_requests) * 100 AS hit_rate  
-FROM information_schema.GLOBAL_STATUS;  
+     FROM information_schema.GLOBAL_STATUS;  
      ```
      若低于 90%，需增大 
      ```
-innodb_buffer_pool_size
+     innodb_buffer_pool_size
      ```
 2. **多实例与分块（Chunk）机制**
    - 多实例：
@@ -1263,7 +1264,7 @@ InnoDB 重启时，通过 **REDO + UNDO 日志协同恢复数据一致性**：
   graph LR
      A[宕机重启] --> B[Redo Log重做已提交事务]
   B --> C[Undo Log回滚未提交事务]
-     ```
+  ```
 3. **Redo Log的协同恢复**
    - Redo Log重做已提交事务的修改后，再通过Undo Log逆操作清除未提交事务的影响。
 

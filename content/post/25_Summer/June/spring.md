@@ -157,7 +157,7 @@ AOP（Aspect-Oriented Programming，面向切面编程）是一种编程范式�
    - **定义**：通过表达式匹配一组连接点（如`execution(* com.service.*.*(..))`匹配包下所有方法）[1,5](@ref)。
    - 表达式语法：
      ```
-   execution(* com.example.service.UserService.*(..))  // 匹配UserService所有方法
+     execution(* com.example.service.UserService.*(..))  // 匹配UserService所有方法
      @annotation(com.example.Loggable)                  // 匹配带@Loggable注解的方法
    ```
 5. **织入（Weaving）**
@@ -203,7 +203,6 @@ AOP（Aspect-Oriented Programming，面向切面编程）是一种编程范式�
          log.info("方法 {} 耗时 {} ms", pjp.getSignature(), time);
        return result;
      }
-   ```
 5. **缓存优化**
    - 通过AOP拦截查询方法，实现缓存逻辑与业务解耦[10,11](@ref)。
 
@@ -510,11 +509,11 @@ execution([修饰符] 返回类型 [包.类.方法] (参数) [throws 异常])
     - 在参数中：匹配任意个数、任意类型的参数（如 `(..)`）。
 - 示例：
   ```
-execution(public * com.example.service.*.save*(..)) 
+  execution(public * com.example.service.*.save*(..)) 
   ```
   匹配 
   ```
-com.example.service 
+  com.example.service 
   ```
   包下所有类的 save 开头的 public 方法，参数任意
 
@@ -554,7 +553,7 @@ args(参数类型)
 ```
 - 示例：
   - `args(java.lang.String)`：匹配第一个参数为 `String` 的方法。
-- `args(.., int)`：匹配最后一个参数为 `int` 的方法[3,7](@ref)。
+  - `args(.., int)`：匹配最后一个参数为 `int` 的方法[3,7](@ref)。
 
 
 ------
@@ -743,7 +742,7 @@ public void saveOrAuditMethods() {}
 - **👉 必须用
 ```
   @Bean
-  ```
+```
   **：
   1. 集成**无法修改源码的第三方库**；
   2. 需要**动态创建 Bean**（如条件分支、运行时参数）；
@@ -827,7 +826,7 @@ public class ConfigB {
   ```
   @Configuration
   ```
-的类约束**：
+  的类约束**：
   - 类**不能是 `final`**（需支持 CGLIB 子类代理）。
   - 嵌套配置类必须声明为 **`static`**[8,11](@ref)。
 - 避免混用：
@@ -891,6 +890,7 @@ public class ConfigB {
 - **@Autowired**
   默认按类型匹配。若存在多个同类型 Bean，需结合 `@Qualifier` 指定名称，否则抛出 `NoUniqueBeanDefinitionException` [3,6,11](@ref)。
   ​**示例**​：
+  
   ```
   @Autowired
   @Qualifier("mysqlDataSource")
@@ -1156,7 +1156,7 @@ graph TD
 3. 
    避免陷阱：
    - 同类方法调用不触发AOP代理（需通过容器获取Bean）[4,5](@ref)。
-通过理解Bean生命周期的阶段与扩展点，可高效利用Spring的IoC容器能力，实现业务解耦和资源优化。
+   通过理解Bean生命周期的阶段与扩展点，可高效利用Spring的IoC容器能力，实现业务解耦和资源优化。
 ## 构造器注入
 
 在 Spring 框架中，**构造器注入的依赖赋值发生在实例化过程中**，而不是实例化之后。这与设值注入（Setter Injection）和属性注入（Field Injection）的时机有本质区别。以下是详细说明：
@@ -1424,7 +1424,7 @@ Spring Boot 的自动配置（Auto-Configuration）是其核心特性之一，�
   以
 ```
   DataSourceAutoConfiguration
-  ```
+```
 为例，其逻辑如下：
   ```
   @Configuration
@@ -1442,7 +1442,7 @@ Spring Boot 的自动配置（Auto-Configuration）是其核心特性之一，�
   每个 Starter（如
 ```
   spring-boot-starter-data-jpa
-  ```
+```
   ）包含：
   - 依赖库集合（`pom.xml`）。
   - `META-INF/spring.factories` 文件，声明关联的自动配置类。
@@ -1489,7 +1489,7 @@ graph TD
 2. 在
 ```
    src/main/resources/META-INF/spring.factories
-   ```
+```
 中声明配置类：
    ```
    org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.example.MyAutoConfiguration
@@ -1839,6 +1839,7 @@ public class DataSourceConfig {
 3. **明确配置前缀**
    - 使用业务相关前缀（如`payment.api`），避免与Spring内置属性冲突。
 4. **敏感信息加密**
+   
    - 结合`jasypt`对密码等敏感配置加密，避免明文暴露[9](@ref)。
 
 
@@ -1866,13 +1867,13 @@ public class DataSourceConfig {
 ### ⚙️ **传统 Spring 项目中必须显式启用事务**
 
 - 需要手动启用
-在非 Spring Boot 的 Spring 项目中（如 XML 配置的旧项目），必须通过以下方式之一启用事务管理：
+  在非 Spring Boot 的 Spring 项目中（如 XML 配置的旧项目），必须通过以下方式之一启用事务管理：
   - **注解驱动**：在配置类添加 `@EnableTransactionManagement`[4,5](@ref)。
   - **XML 配置**：使用 `<tx:annotation-driven />` 标签[8](@ref)。
 - 作用原理
 ```
   @EnableTransactionManagement
-  ```
+```
 会注册关键组件：
   - `AutoProxyRegistrar`：为符合条件的 Bean 创建 AOP 代理。
   - `ProxyTransactionManagementConfiguration`：注入事务拦截器（`TransactionInterceptor`），在方法执行前后管理事务的开启、提交或回滚[9](@ref)。
@@ -1886,7 +1887,7 @@ public class DataSourceConfig {
    覆盖默认配置时（如多数据源场景），需通过 `@EnableTransactionManagement` 关联自定义的 `PlatformTransactionManager`[9](@ref)。
 2. 
    调整代理模式
-默认使用 JDK 动态代理，若需强制使用 CGLib 代理（代理类而非接口），可配置：
+   默认使用 JDK 动态代理，若需强制使用 CGLib 代理（代理类而非接口），可配置：
    ```
    @EnableTransactionManagement(proxyTargetClass = true)
    ```
@@ -2030,7 +2031,7 @@ public class DataSourceConfig {
    Spring通过`ThreadLocal`将事务资源（如数据库连接）绑定到当前线程。若线程已存在事务管理器创建的活跃事务，则视为“当前有事务”[4,7](@ref)。
 2. 
    事务传播行为的触发条件
-当调用
+   当调用
    ```
    @Transactional
    ```
@@ -2093,7 +2094,7 @@ public class DataSourceConfig {
 #### **无注解时的事务行为**
 
 - 默认加入外层事务
-若被调方法无
+  若被调方法无
   ```
   @Transactional
   ```
@@ -2260,11 +2261,11 @@ public class LogService {
 - Spring默认对未捕获的
 ```
   RuntimeException
-  ```
+```
 或
 ```
   Error
-  ```
+```
 自动回滚
   1,7,8
   。
@@ -2283,13 +2284,13 @@ public class LogService {
 - 若重抛的是检查型异常（如
 ```
   IOException
-  ```
+```
   ），
   默认不会触发回滚
   ，除非显式配置
 ```
   rollbackFor
-  ```
+```
   3,8
   。
   ```
@@ -2360,10 +2361,8 @@ Spring Data JPA 的默认实现类 `SimpleJpaRepository` 已通过 `@Transaction
   ，必须显式标注
 ```
   @Transactional
-  ```
+```
 注解
-  1,4
-  。
   ```
   public interface UserRepository extends JpaRepository<User, Long> {
       // 需手动添加事务注解
@@ -2377,19 +2376,15 @@ Spring Data JPA 的默认实现类 `SimpleJpaRepository` 已通过 `@Transaction
   若通过
 ```
   Impl
-  ```
+```
 后缀类实现自定义逻辑（如
 ```
   UserRepositoryImpl
-  ```
-  ），其中的方法
-  不会自动继承事务
-  ，需显式标注
+```
+  ），其中的方法不会自动继承事务，需显式标注
 ```
   @Transactional
-  ```
-  3,7
-  。
+```
   ```
   public class UserRepositoryImpl implements UserCustomRepository {
       @PersistenceContext
@@ -2489,7 +2484,7 @@ Spring Data JPA 的默认实现类 `SimpleJpaRepository` 已通过 `@Transaction
 ### 🛠️ **ORM 框架的协同优化**
 
 - Hibernate/JPA 性能提升
-在 Spring + Hibernate 组合中，只读事务会触发以下优化：
+  在 Spring + Hibernate 组合中，只读事务会触发以下优化：
   - 设置 Flush 模式为 `NEVER`，禁止 Session 同步脏数据到数据库，减少不必要的 SQL 执行[5,8](@ref)。
   - 禁用一级缓存更新，避免缓存膨胀[5,8](@ref)。
     *代码示例*：
@@ -2505,10 +2500,9 @@ Spring Data JPA 的默认实现类 `SimpleJpaRepository` 已通过 `@Transaction
 ### 🌐 **分布式架构适配**
 
 - 读写分离路由
-在主从数据库架构中，只读事务会被自动路由到只读副本（从库），分担主库压力，提升系统整体并发能力
-  1,7
-  。
+  在主从数据库架构中，只读事务会被自动路由到只读副本（从库），分担主库压力，提升系统整体并发能力。
   示例：
+  
   ```
   @Transactional(readOnly = true)
   public Product getProduct(Long id) {
@@ -2644,6 +2638,7 @@ public class UserService {
    - **穿透**：缓存空值（`spring.cache.redis.cache-null-values=true`）[5,8](@ref)。
    - **击穿**：使用 `@Cacheable(sync=true)` 同步加载（仅单线程查库）[5](@ref)。
 4. **过期策略与淘汰算法**
+   
    - **Caffeine 配置**：支持 LRU（最近最少使用）、LFU（最不经常使用）、TTL（固定过期时间）。
    - **Redis 过期**：通过 `time-to-live` 全局设置[1,4](@ref)。
 
@@ -2711,7 +2706,8 @@ Spring Cache 通过**声明式注解**和**统一抽象层**，大幅简化缓�
   }
   ```
 - **`@Caching`**
-  是**组合注解**，用于在**同一方法上定义多个缓存操作**​（可包含多个 `@Cacheable`、`@CachePut`、`@CacheEvict`）[2,6,8](@ref)。
+  是**组合注解**，用于在 **同一方法上定义多个缓存操作**​（可包含多个 `@Cacheable`、`@CachePut`、`@CacheEvict`）[2,6,8](@ref)。
+  
   - **核心逻辑**：解决单一注解无法覆盖的复杂缓存场景（如同时更新多个缓存、清理关联缓存）。
   - **适用场景**：**多缓存联动操作**（如更新主缓存并清理索引缓存）。
   ```
@@ -2828,7 +2824,7 @@ Spring Cache 通过**声明式注解**和**统一抽象层**，大幅简化缓�
 - Redis 示例：通过
 ```
   RedisCacheManager
-  ```
+```
 为不同分区指定过期时间
   3,4：
   ```
@@ -2851,26 +2847,26 @@ Spring Cache 通过**声明式注解**和**统一抽象层**，大幅简化缓�
   @Cacheable(value = "users#300")  // 300 秒过期
   public User getUser(Long id) { ... }
   ```
-实现原理：重写
+  实现原理：重写
 ```
   RedisCacheManager
-  ```
+```
   ，在
 ```
   createRedisCache()
-  ```
+```
 方法中解析
 ```
   value
-  ```
+```
 中的
 ```
   #
-  ```
+```
 分隔符（如
 ```
   users#300
-  ```
+```
   ）并动态设置 TTL
   3
   。
@@ -3098,7 +3094,7 @@ add_header 'Access-Control-Expose-Headers' 'X-Token, Content-Range' always;
    CURL 命令验证
 ```
    curl -I -X OPTIONS http://api.example.com
-   ```
+```
    检查返回的 HTTP 头部是否符合预期
    2
    。
@@ -3149,14 +3145,10 @@ add_header 'Access-Control-Expose-Headers' 'X-Token, Content-Range' always;
 2. **与前端配置联动**
    - 仅当
      客户端显式启用凭证模式
-     （如
-```
-     withCredentials: true
-     ```
-     ）且**服务端返回
+     （如 withCredentials: true）且**服务端返回
 ```
      true
-     ```
+```
      ** 时，凭证才能成功传递
      3,8
      。例如：
@@ -3265,7 +3257,7 @@ fetch(url, { credentials: 'include' });
    - 当
 ```
      allowCredentials=false
-     ```
+```
 时，
      ```
      Access-Control-Allow-Headers
@@ -3273,11 +3265,11 @@ fetch(url, { credentials: 'include' });
 可安全使用通配符
 ```
      *
-     ```
+```
      （允许所有头），包括
 ```
      Authorization
-     ```
+```
      1,6
      。
      ```

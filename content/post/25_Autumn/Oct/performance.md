@@ -1,7 +1,7 @@
 ---
 title: 【Java】调优
 date: 2025-10-18 00:00:00+0000
-categories:  [nutrtion, arts]
+categories:  [nutrition, arts]
 ---
 
 ## JVM 参数

@@ -114,7 +114,7 @@ public XxlJobSpringExecutor xxlJobExecutor() {
    - 确保
 ```
      @XxlJob
-     ```
+```
 注解的方法满足签名要求：
      ```
      @XxlJob("taskName")
@@ -162,15 +162,15 @@ public XxlJobSpringExecutor xxlJobExecutor() {
   自动读取
 ```
   application.yml
-  ```
+```
 或
 ```
   application.properties
-  ```
+```
 中
 ```
   xxl.job
-  ```
+```
 前缀的配置项，例如：
   ```
   xxl:
@@ -192,7 +192,7 @@ public XxlJobSpringExecutor xxlJobExecutor() {
   扫描所有 Spring Bean 中被
 ```
   @XxlJob
-  ```
+```
 注解的方法，将其注册为任务处理器（JobHandler）。
   示例代码：
   ```
@@ -287,6 +287,7 @@ META-INF/spring.factories 是 Spring Boot 自动配置机制的核心配置文�
    - **关键键名**：`org.springframework.boot.autoconfigure.EnableAutoConfiguration`，其值列出所有自动配置类的全限定名（逗号分隔）。
    - **触发时机**：Spring Boot 启动时，通过 `@SpringBootApplication` → `@EnableAutoConfiguration` 触发加载这些配置类。
 2. **解决包扫描限制**
+   
    - `@ComponentScan` 仅扫描主包路径下的 Bean，而 `spring.factories` 可**加载第三方依赖或子模块中的配置类**（如 MyBatis、Redis 等 Starter 的自动配置）。
      *示例*：
    ```
@@ -318,7 +319,7 @@ Spring Boot 通过 `SpringFactoriesLoader` 类加载 `spring.factories`，流程
 - 调用
 ```
      loadFactories()
-     ```
+```
 方法：
      - 根据接口名获取实现类名列表；
      - 反射实例化类（通过 `Class.forName()` + 构造器）。
@@ -354,7 +355,7 @@ Spring Boot 通过 `SpringFactoriesLoader` 类加载 `spring.factories`，流程
    - 方案：在 Common 模块的
 ```
      META-INF/spring.factories
-     ```
+```
 中声明配置类，主模块依赖后自动加载：
      ```
      # hm-common 模块的配置
@@ -366,7 +367,7 @@ Spring Boot 通过 `SpringFactoriesLoader` 类加载 `spring.factories`，流程
    - 如 MyBatis-Plus 通过
 ```
      spring.factories
-     ```
+```
 注册自动配置类：
      ```
      org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
@@ -688,7 +689,7 @@ public class XxlJobApiUtil {
 ### 🛠 动态创建任务（高级场景）
 
 若需完全通过代码动态注册任务，可调用调度中心的 `/jobinfo/add` 接口，传递 JSON 格式的任务配置：
-```
+```java
 // 示例：动态创建每分钟执行的任务
 public void createDynamicJob() {
     String url = "http://xxl-job-admin-host:port/xxl-job-admin/jobinfo/add";
@@ -943,10 +944,10 @@ XXL-JOB的调度算法通过 **“预读+时间轮”触发**、**多样化路�
 1. **线程池分类**
    XXL-JOB 调度中心内部维护两个独立的线程池：
    - 快线程池（Fast Trigger Pool）
-处理短耗时任务（默认阈值 ≤500ms）。
+     处理短耗时任务（默认阈值 ≤500ms）。
      - **参数**：默认核心线程数10，最大线程数≥200，队列容量1000。
    - 慢线程池（Slow Trigger Pool）
-处理长耗时或频繁超时的任务。
+     处理长耗时或频繁超时的任务。
      - **参数**：默认核心线程数10，最大线程数≥100，队列容量2000（更大队列避免任务丢弃）。
 2. **动态降级规则**
    任务分配策略基于历史执行耗时动态调整：
@@ -1052,7 +1053,7 @@ XXL-JOB 在异步触发任务时，通过**多层次协同机制**确保任务�
    - 分片任务通过参数
 ```
      shardIndex/shardTotal
-     ```
+```
 划分数据范围：
      ```
      int shardIndex = XxlJobHelper.getShardIndex(); // 当前分片序号

@@ -288,6 +288,7 @@ CompletableFuture.supplyAsync(() -> "Hello")
 ### 🔧 **实现 `Runnable` 接口**
 
 `FutureTask` 实现了 `RunnableFuture` 接口，而 `RunnableFuture` 同时继承了 `Runnable` 和 `Future` 接口。因此：
+
 - ✅ **可作为 `Runnable` 使用**：`FutureTask` 可以直接传递给 `Thread` 构造函数或提交给线程池（`ExecutorService`）执行。
 - ✅ **执行逻辑**：其 `run()` 方法会调用内部任务的逻辑（如 `Callable.call()` 或 `Runnable.run()`）并将结果存储到 `outcome` 字段中。
 ```
@@ -342,7 +343,7 @@ thread.start();
 - ✅ **双重身份**：`FutureTask` 既是 `Runnable`（可被线程执行），又是 `Future`（可管理任务状态和结果）。
 - ✅ **统一封装**：通过内部 `Callable` 字段统一处理 `Callable` 和 `Runnable` 任务，确保执行逻辑的一致性。
 - ✅ **典型应用场景**：需异步执行且获取结果的任务（如并行计算、IO 操作），或需取消任务执行的场景。
-## CompleteStage
+## CompletionStage
 
 CompletionStage 是 Java 8 引入的核心异步编程接口（位于 `java.util.concurrent` 包），用于描述异步计算中的一个**阶段性任务**，支持任务之间的链式组合和结果传递。它通过函数式编程模型解决了传统 `Future` 的阻塞调用和任务编排难题，是 `CompletableFuture` 的底层设计基础。以下从核心特性到实践应用展开详解：
 
@@ -363,6 +364,7 @@ CompletionStage 是 Java 8 引入的核心异步编程接口（位于 `java.util
 ### 🧩 **核心任务模型与函数式接口**
 
 `CompletionStage` 子任务的操作类型由函数式接口决定，分为三类：
+
 | **函数式接口**      | **特点**       | **回调方法示例**       | **适用场景**             |
 | ------------------- | -------------- | ---------------------- | ------------------------ |
 | **`Function<T,R>`** | 有输入、有输出 | `thenApply(fn)`        | 数据转换（如字符串处理） |
@@ -437,6 +439,7 @@ stage.exceptionally(ex -> "Fallback")
 
 1. 微服务调用链
    异步串行调用鉴权→查询→结果组装，避免线程阻塞：
+   
    ```
    authStage.thenCompose(token -> userService.query(token))  
             .thenApply(user -> buildResponse(user));
@@ -832,8 +835,9 @@ System.out.println("Result: " + result);  // 输出: 42
 
 1. **关闭线程池**
    必须调用 `shutdown()` 或 `shutdownNow()` 避免资源泄漏，推荐结合 `awaitTermination` 等待任务结束。
-2. 异常处理
+2. **异常处理**
    任务内部需捕获异常，否则线程可能因未处理异常而终止：
+   
    ```
    executor.submit(() -> {
        try { /* 业务代码 */ } 
