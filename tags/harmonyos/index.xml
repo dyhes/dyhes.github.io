@@ -1,0 +1,1016 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>HarmonyOS on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/harmonyos/</link><description>Recent content in HarmonyOS on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 22 Oct 2025 16:27:30 +0800</lastBuildDate><atom:link href="https://dyhes.github.io/tags/harmonyos/index.xml" rel="self" type="application/rss+xml"/><item><title>【OpenHarmony】hilog vs. console</title><link>https://dyhes.github.io/p/openharmonyhilog-vs.-console/</link><pubDate>Fri, 24 Jan 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/openharmonyhilog-vs.-console/</guid><description>&lt;p&gt;在HarmonyOS中，&lt;code&gt;hilog.info&lt;/code&gt; 和 &lt;code&gt;console.info&lt;/code&gt; 是两种不同的日志记录方式，主要用于调试和信息输出，但它们的应用场景和功能有所不同。&lt;/p&gt;
+&lt;h3 id="hiloginfo"&gt;&lt;code&gt;hilog.info&lt;/code&gt;
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;用途&lt;/strong&gt;: &lt;code&gt;hilog.info&lt;/code&gt; 是 HarmonyOS 提供的系统级日志工具，主要用于记录系统运行时的日志信息。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;特点&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;系统集成&lt;/strong&gt;: &lt;code&gt;hilog&lt;/code&gt; 是 HarmonyOS 的日志系统，支持不同级别的日志输出（如 DEBUG、INFO、WARN、ERROR 等）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;日志管理&lt;/strong&gt;: 日志可以通过系统工具（如 &lt;code&gt;hilog&lt;/code&gt; 命令行工具）进行查看和管理。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;性能优化&lt;/strong&gt;: &lt;code&gt;hilog&lt;/code&gt; 针对系统性能进行了优化，适合在系统开发和调试中使用。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;日志级别&lt;/strong&gt;: &lt;code&gt;hilog.info&lt;/code&gt; 用于记录一般信息，适合在需要长期保留的日志中使用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;示例&lt;/strong&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;import&lt;/span&gt; &lt;span class="nx"&gt;hilog&lt;/span&gt; &lt;span class="nx"&gt;from&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;@ohos.hilog&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;hilog&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;info&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mh"&gt;0x0000&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;tag&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;This is an info message&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="consoleinfo"&gt;&lt;code&gt;console.info&lt;/code&gt;
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;用途&lt;/strong&gt;: &lt;code&gt;console.info&lt;/code&gt; 是 JavaScript 标准的日志输出方法，主要用于开发调试阶段的信息输出。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;特点&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;开发调试&lt;/strong&gt;: &lt;code&gt;console.info&lt;/code&gt; 通常用于开发者在调试过程中输出信息，方便快速查看变量状态或程序执行流程。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;临时性&lt;/strong&gt;: &lt;code&gt;console.info&lt;/code&gt; 输出的信息通常是临时的，适合在开发阶段使用，不适合在生产环境中保留。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;灵活性&lt;/strong&gt;: &lt;code&gt;console.info&lt;/code&gt; 是 JavaScript 的标准方法，可以在任何 JavaScript 环境中使用，不依赖于 HarmonyOS。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;示例&lt;/strong&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;info&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;This is an info message&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="主要区别"&gt;主要区别
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;特性&lt;/th&gt;
+&lt;th&gt;&lt;code&gt;hilog.info&lt;/code&gt;&lt;/th&gt;
+&lt;th&gt;&lt;code&gt;console.info&lt;/code&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;用途&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;系统级日志记录&lt;/td&gt;
+&lt;td&gt;开发调试信息输出&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;日志级别&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;支持多种日志级别（DEBUG、INFO 等）&lt;/td&gt;
+&lt;td&gt;仅用于信息输出&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;日志管理&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;可通过系统工具查看和管理&lt;/td&gt;
+&lt;td&gt;通常仅在开发工具中查看&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;适用环境&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;适用于系统开发和调试&lt;/td&gt;
+&lt;td&gt;适用于开发调试阶段&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;性能优化&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;针对系统性能优化&lt;/td&gt;
+&lt;td&gt;无特殊优化&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;跨平台兼容性&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;仅适用于 HarmonyOS&lt;/td&gt;
+&lt;td&gt;适用于所有 JavaScript 环境&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="使用场景建议"&gt;使用场景建议
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;hilog.info&lt;/code&gt;&lt;/strong&gt;: 适合在需要长期保留日志、系统调试或性能分析时使用。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;console.info&lt;/code&gt;&lt;/strong&gt;: 适合在开发阶段快速调试和查看变量状态时使用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;根据具体需求选择合适的日志工具，可以更好地提高开发效率和系统稳定性。&lt;/p&gt;</description></item><item><title>【OpenHarmony】时间</title><link>https://dyhes.github.io/p/openharmony%E6%97%B6%E9%97%B4/</link><pubDate>Thu, 23 Jan 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/openharmony%E6%97%B6%E9%97%B4/</guid><description>&lt;p&gt;在 HarmonyOS 中，可以通过 JavaScript 或 ArkTS 获取当前的时间（小时、分钟）以及周几信息。以下是具体的实现方法：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="使用-javascript-获取时间及周几信息"&gt;使用 JavaScript 获取时间及周几信息
+&lt;/h3&gt;&lt;p&gt;HarmonyOS 支持标准的 JavaScript 日期对象 &lt;code&gt;Date&lt;/code&gt;，可以通过它来获取时间信息。&lt;/p&gt;
+&lt;h4 id="示例代码"&gt;示例代码：
+&lt;/h4&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// 创建一个 Date 对象
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;date&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nb"&gt;Date&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// 获取小时和分钟
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;hours&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;date&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;getHours&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt; &lt;span class="c1"&gt;// 获取当前小时（0-23）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;minutes&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;date&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;getMinutes&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt; &lt;span class="c1"&gt;// 获取当前分钟（0-59）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// 获取周几信息
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;dayOfWeek&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;date&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;getDay&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt; &lt;span class="c1"&gt;// 获取当前周几（0-6，0 表示周日，1 表示周一，依此类推）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// 将周几转换为可读的字符串
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;weekdays&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;周日&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;周一&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;周二&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;周三&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;周四&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;周五&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;周六&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;weekdayString&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;weekdays&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;dayOfWeek&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// 输出结果
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;info&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sb"&gt;`当前时间: &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nx"&gt;hours&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="sb"&gt;:&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nx"&gt;minutes&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="sb"&gt;`&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;info&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sb"&gt;`今天是: &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nx"&gt;weekdayString&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="sb"&gt;`&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h3 id="使用-arkts-获取时间及周几信息"&gt;使用 ArkTS 获取时间及周几信息
+&lt;/h3&gt;&lt;p&gt;在 ArkTS 中，同样可以使用 &lt;code&gt;Date&lt;/code&gt; 对象来获取时间信息。&lt;/p&gt;
+&lt;h4 id="示例代码-1"&gt;示例代码：
+&lt;/h4&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-typescript" data-lang="typescript"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// 导入需要的模块
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kr"&gt;import&lt;/span&gt; &lt;span class="nx"&gt;prompt&lt;/span&gt; &lt;span class="kr"&gt;from&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;@ohos.prompt&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// 创建一个 Date 对象
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;date&lt;/span&gt;: &lt;span class="kt"&gt;Date&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nb"&gt;Date&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// 获取小时和分钟
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;hours&lt;/span&gt;: &lt;span class="kt"&gt;number&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;date&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;getHours&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt; &lt;span class="c1"&gt;// 获取当前小时（0-23）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;minutes&lt;/span&gt;: &lt;span class="kt"&gt;number&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;date&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;getMinutes&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt; &lt;span class="c1"&gt;// 获取当前分钟（0-59）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// 获取周几信息
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;dayOfWeek&lt;/span&gt;: &lt;span class="kt"&gt;number&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;date&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;getDay&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt; &lt;span class="c1"&gt;// 获取当前周几（0-6，0 表示周日，1 表示周一，依此类推）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// 将周几转换为可读的字符串
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;weekdays&lt;/span&gt;: &lt;span class="kt"&gt;string&lt;/span&gt;&lt;span class="p"&gt;[]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;周日&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;周一&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;周二&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;周三&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;周四&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;周五&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;周六&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;weekdayString&lt;/span&gt;: &lt;span class="kt"&gt;string&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;weekdays&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;dayOfWeek&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// 输出结果
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="nx"&gt;prompt&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;showToast&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;message&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="sb"&gt;`当前时间: &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nx"&gt;hours&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="sb"&gt;:&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nx"&gt;minutes&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="sb"&gt;, 今天是: &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nx"&gt;weekdayString&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="sb"&gt;`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h3 id="关键-api-说明"&gt;关键 API 说明
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;Date&lt;/code&gt; 对象&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;getHours()&lt;/code&gt;: 返回当前小时（0-23）。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;getMinutes()&lt;/code&gt;: 返回当前分钟（0-59）。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;getDay()&lt;/code&gt;: 返回当前周几（0-6，0 表示周日，1 表示周一，依此类推）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;prompt.showToast&lt;/code&gt;&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;用于在界面上显示一个提示信息（适用于 ArkTS）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="注意事项"&gt;注意事项
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;时间格式化&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果需要将小时和分钟格式化为两位数（如 &lt;code&gt;09:05&lt;/code&gt;），可以使用 &lt;code&gt;padStart&lt;/code&gt; 方法：
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;formattedHours&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;String&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;hours&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;padStart&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;0&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;formattedMinutes&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;String&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;minutes&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;padStart&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;0&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;info&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sb"&gt;`当前时间: &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nx"&gt;formattedHours&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="sb"&gt;:&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nx"&gt;formattedMinutes&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="sb"&gt;`&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;时区问题&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Date&lt;/code&gt; 对象默认使用&lt;strong&gt;设备的本地时区&lt;/strong&gt;。如果需要处理时区问题，可以使用 &lt;code&gt;getTimezoneOffset()&lt;/code&gt; 方法或第三方库（如 &lt;code&gt;moment-timezone&lt;/code&gt;）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="完整示例"&gt;完整示例
+&lt;/h3&gt;&lt;p&gt;以下是一个完整的 ArkTS 示例，展示如何获取时间并显示在界面上：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-typescript" data-lang="typescript"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;import&lt;/span&gt; &lt;span class="nx"&gt;prompt&lt;/span&gt; &lt;span class="kr"&gt;from&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;@ohos.prompt&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;@Entry&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;@Component&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;struct&lt;/span&gt; &lt;span class="nx"&gt;TimeDisplay&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kd"&gt;@State&lt;/span&gt; &lt;span class="nx"&gt;time&lt;/span&gt;: &lt;span class="kt"&gt;string&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kd"&gt;@State&lt;/span&gt; &lt;span class="nx"&gt;weekday&lt;/span&gt;: &lt;span class="kt"&gt;string&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;build() {&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;Column() {&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;Text&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sb"&gt;`当前时间: &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;time&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="sb"&gt;`&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;fontSize&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;30&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;margin&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;Text&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sb"&gt;`今天是: &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;weekday&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="sb"&gt;`&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;fontSize&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;30&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;margin&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;Button&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;获取时间&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;onClick&lt;/span&gt;&lt;span class="p"&gt;(()&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;date&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nb"&gt;Date&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;hours&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;String&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;date&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;getHours&lt;/span&gt;&lt;span class="p"&gt;()).&lt;/span&gt;&lt;span class="nx"&gt;padStart&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;0&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;minutes&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;String&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;date&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;getMinutes&lt;/span&gt;&lt;span class="p"&gt;()).&lt;/span&gt;&lt;span class="nx"&gt;padStart&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;0&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;dayOfWeek&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;date&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;getDay&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;weekdays&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;周日&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;周一&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;周二&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;周三&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;周四&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;周五&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;周六&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;time&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="sb"&gt;`&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nx"&gt;hours&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="sb"&gt;:&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nx"&gt;minutes&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="sb"&gt;`&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;weekday&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;weekdays&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;dayOfWeek&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;})&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;margin&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;20&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;width&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;100%&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;height&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;100%&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;justifyContent&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;FlexAlign&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;Center&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description></item><item><title>【OpenHarmony】Basics</title><link>https://dyhes.github.io/p/openharmonybasics/</link><pubDate>Mon, 13 Jan 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/openharmonybasics/</guid><description>&lt;h2 id="introduction"&gt;Introduction&lt;!-- {"fold":true} --&gt;
+&lt;/h2&gt;&lt;p&gt;我们对应用框架、应用服务、系统、媒体、图形等领域的重点开放能力提供了开发指导，助力开发者快速完成应用的开发。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;应用框架相关Kit开放能力：Ability Kit（程序框架服务）、ArkUI（方舟UI框架）等。&lt;/li&gt;
+&lt;li&gt;应用服务相关Kit开放能力：Calendar Kit（日历服务）、Location Kit（位置服务）等。&lt;/li&gt;
+&lt;li&gt;系统相关Kit开放能力：Network Kit（网络服务）、Universal Keystore Kit（密钥管理服务）等。&lt;/li&gt;
+&lt;li&gt;媒体相关Kit开放能力：Audio Kit（音频服务）、Media Library Kit（媒体文件管理服务）等。&lt;/li&gt;
+&lt;li&gt;图形相关Kit开放能力：ArkGraphics 2D（方舟2D图形服务）等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="ui-框架"&gt;UI 框架
+&lt;/h3&gt;&lt;p&gt;OpenHarmony提供了一套UI开发框架，即&lt;strong&gt;方舟开发框架（ArkUI框架）&lt;/strong&gt;。方舟开发框架可为开发者提供应用UI开发所必需的能力，比如多种组件、布局计算、动画能力、UI交互、绘制等。
+方舟开发框架针对不同目的和技术背景的开发者提供了两种开发范式，分别是基于ArkTS的声明式开发范式（简称“声明式开发范式”）和兼容JS的类Web开发范式（简称“类Web开发范式”）。以下是两种开发范式的简单对比。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;开发范式名称&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;语言生态&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;UI更新方式&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;适用场景&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;适用人群&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;声明式开发范式&lt;/td&gt;
+&lt;td&gt;ArkTS语言&lt;/td&gt;
+&lt;td&gt;数据驱动更新&lt;/td&gt;
+&lt;td&gt;复杂度较大、团队合作度较高的程序&lt;/td&gt;
+&lt;td&gt;移动系统应用开发人员、系统应用开发人员&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;类Web开发范式&lt;/td&gt;
+&lt;td&gt;JS语言&lt;/td&gt;
+&lt;td&gt;数据驱动更新&lt;/td&gt;
+&lt;td&gt;界面较为简单的程序应用和卡片&lt;/td&gt;
+&lt;td&gt;Web前端开发人员&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="应用模型"&gt;应用模型
+&lt;/h3&gt;&lt;p&gt;应用模型是OpenHarmony为开发者提供的应用程序所需能力的抽象提炼，它提供了应用程序必备的&lt;strong&gt;组件和运行机制&lt;/strong&gt;。有了应用模型，开发者可以基于一套统一的模型进行应用开发，使应用开发更简单、高效。请见&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/application-models/application-models.md#%E5%BA%94%E7%94%A8%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%9E%84%E6%88%90%E8%A6%81%E7%B4%A0" target="_blank" rel="noopener"
+&gt;应用模型的构成要素&lt;/a&gt;。
+随着系统的演进发展，OpenHarmony先后提供了两种应用模型：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Stage模型：&lt;/strong&gt; OpenHarmony API 9开始新增的模型，是目前主推且会长期演进的模型。在该模型中，由于提供了AbilityStage、WindowStage等类作为应用组件和Window窗口的“舞台”，因此称这种应用模型为Stage模型。Stage模型开发可见&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/application-models/stage-model-development-overview.md" target="_blank" rel="noopener"
+&gt;Stage模型开发概述&lt;/a&gt;。&lt;strong&gt;快速入门以此为例提供开发指导。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;FA（Feature Ability）模型：&lt;/strong&gt; OpenHarmony API 7开始支持的模型，已经不再主推。FA模型开发可见&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/application-models/fa-model-development-overview.md" target="_blank" rel="noopener"
+&gt;FA模型开发概述&lt;/a&gt;。&lt;strong&gt;快速入门章节不再对此展开提供开发指导。&lt;/strong&gt;
+⠀FA模型和Stage模型的整体架构和设计思想等更多区别，请见&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/application-models/application-models.md" target="_blank" rel="noopener"
+&gt;应用模型解读&lt;/a&gt;。
+快速入门提供了一个含有两个页面的开发实例，并基于Stage模型构建第一个ArkTS应用，以便开发者理解以上基本概念及应用开发流程。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="arkts工程目录结构stage模型"&gt;ArkTS工程目录结构（Stage模型）
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;AppScope &amp;gt; app.json5&lt;/strong&gt;：应用的全局配置信息，详见&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/quick-start/app-configuration-file.md" target="_blank" rel="noopener"
+&gt;app.json5配置文件&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;entry&lt;/strong&gt;：OpenHarmony工程模块，编译构建生成一个HAP包。
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;src &amp;gt; main &amp;gt; ets&lt;/strong&gt;：用于存放ArkTS源码。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;src &amp;gt; main &amp;gt; ets &amp;gt; entryability&lt;/strong&gt;：应用/服务的入口。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;src &amp;gt; main &amp;gt; ets &amp;gt; pages&lt;/strong&gt;：应用/服务包含的页面。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;src &amp;gt; main &amp;gt; resources&lt;/strong&gt;：用于存放应用/服务所用到的资源文件，如图形、多媒体、字符串、布局文件等。关于资源文件，详见&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/quick-start/resource-categories-and-access.md#%E8%B5%84%E6%BA%90%E5%88%86%E7%B1%BB" target="_blank" rel="noopener"
+&gt;资源文件的分类&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;src &amp;gt; main &amp;gt; module.json5&lt;/strong&gt;：模块配置文件。主要包含HAP包的配置信息、应用/服务在具体设备上的配置信息以及应用/服务的全局配置信息。具体的配置文件说明，详见&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/quick-start/module-configuration-file.md" target="_blank" rel="noopener"
+&gt;module.json5配置文件&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;build-profile.json5&lt;/strong&gt;：当前的模块信息 、编译信息配置项，包括buildOption、targets配置等。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;hvigorfile.ts&lt;/strong&gt;：模块级编译构建任务脚本，开发者可以自定义相关任务和代码实现。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;obfuscation-rules.txt&lt;/strong&gt;：混淆规则文件。混淆开启后，在使用Release模式进行编译时，会对代码进行编译、混淆及压缩处理，保护代码资产。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;oh_modules&lt;/strong&gt;：用于存放三方库依赖信息。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;build-profile.json5&lt;/strong&gt;：应用级配置信息，包括签名signingConfigs、产品配置products等。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;hvigorfile.ts&lt;/strong&gt;：应用级编译构建任务脚本。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="应用程序包"&gt;应用程序包
+&lt;/h2&gt;&lt;p&gt;用户应用程序泛指运行在设备的操作系统之上，为用户提供特定服务的程序，简称“应用”。一个应用所对应的软件包文件，称为“应用程序包”。
+当前系统提供了应用程序包开发、安装、查询、更新、卸载的管理机制，便于开发者开发和管理应用。同时，系统还屏蔽了不同的芯片平台的差异（包括x86/ARM，32位/64位等），应用程序包在不同的芯片平台都能够安装运行，这使得开发者可以聚焦于应用的功能实现。&lt;/p&gt;
+&lt;h3 id="multi-module"&gt;Multi Module
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;支持模块化开发：&lt;/strong&gt; 一个应用通常会包含多种功能，将不同的功能特性按模块来划分和管理是一种良好的设计方式。在开发过程中，我们可以将每个功能模块作为一个独立的Module进行开发，Module中可以包含源代码、资源文件、第三方库、配置文件等，每一个Module可以独立编译，实现特定的功能。这种模块化、松耦合的应用管理方式有助于应用的开发、维护与扩展。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;支持多设备适配：&lt;/strong&gt; 一个应用往往需要适配多种设备类型，在采用多Module设计的应用中，每个Module都会标注所支持的设备类型。有些Module支持全部类型的设备，有些Module只支持某一种或几种类型的设备（比如平板），那么在应用市场分发应用包时，也能够根据设备类型做精准的筛选和匹配，从而将不同的包合理的组合和部署到对应的设备上。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="module-type"&gt;Module Type
+&lt;/h3&gt;&lt;p&gt;Module按照使用场景可以分为两种类型：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Ability类型的Module：&lt;/strong&gt; 用于实现应用的功能和特性。每一个Ability类型的Module编译后，会生成一个以.hap为后缀的文件，我们称其为HAP（Harmony Ability Package）包。HAP包可以独立安装和运行，是应用安装的基本单位，一个应用中可以包含一个或多个HAP包，具体包含如下两种类型。
+&lt;ul&gt;
+&lt;li&gt;entry类型的Module：应用的主模块，包含应用的入口界面、入口图标和主功能特性，编译后生成entry类型的HAP。每一个应用分发到同一类型的设备上的应用程序包，只能包含唯一一个entry类型的HAP。&lt;/li&gt;
+&lt;li&gt;feature类型的Module：应用的动态特性模块，编译后生成feature类型的HAP。一个应用中可以包含一个或多个feature类型的HAP，也可以不包含。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Library类型的Module：&lt;/strong&gt; 用于实现代码和资源的共享。同一个Library类型的Module可以被其他的Module多次引用，合理地使用该类型的Module，能够降低开发和维护成本。Library类型的Module分为Static和Shared两种类型，编译后会生成共享包。
+&lt;ul&gt;
+&lt;li&gt;Static Library：静态共享库。编译后会生成一个以.har为后缀的文件，即静态共享包HAR（Harmony Archive）。&lt;/li&gt;
+&lt;li&gt;Shared Library：动态共享库。编译后会生成一个以.hsp为后缀的文件，即动态共享包HSP（Harmony Shared Package）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;**说明：**实际上，Shared Library编译后除了会生成一个.hsp文件，还会生成一个.har文件。这个.har文件中包含了HSP对外导出的接口，应用中的其他模块需要通过.har文件来引用HSP的功能。为了表述方便，我们通常认为Shared Library编译后生成HSP。
+HAR与HSP两种共享包的主要区别体现在：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;共享包类型&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;编译和运行方式&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;发布和引用方式&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;HAR&lt;/td&gt;
+&lt;td&gt;HAR中的代码和资源跟随使用方编译，如果有多个使用方，它们的编译产物中会存在多份相同拷贝。&lt;br&gt;注意：&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/quick-start/har-package.md#%E7%BC%96%E8%AF%91" target="_blank" rel="noopener"
+&gt;编译HAR&lt;/a&gt;时，建议开启混淆能力，保护代码资产。&lt;/td&gt;
+&lt;td&gt;HAR除了支持应用内引用，还可以独立打包发布，供其他应用引用。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;HSP&lt;/td&gt;
+&lt;td&gt;HSP中的代码和资源可以独立编译，运行时在一个进程中代码也只会存在一份。&lt;/td&gt;
+&lt;td&gt;HSP一般随应用进行打包，当前支持应用内和&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/quick-start/integrated-hsp.md" target="_blank" rel="noopener"
+&gt;集成态HSP&lt;/a&gt;。应用内HSP只支持应用内引用，集成态HSP支持发布到ohpm私仓和跨应用引用。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;img src="https://dyhes.github.io/OpenHarmony/in-app-hsp-har.png"
+loading="lazy"
+&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="stage模型包结构"&gt;⠀Stage模型包结构
+&lt;/h3&gt;&lt;p&gt;分别对开发态、编译态、发布态的应用程序结构展开介绍。&lt;/p&gt;
+&lt;h4 id="开发态"&gt;开发态
+&lt;/h4&gt;&lt;p&gt;工程结构主要包含的文件类型及用途如下：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;说明：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;AppScope目录由DevEco Studio自动生成，不可更改。&lt;/li&gt;
+&lt;li&gt;Module目录名称可以由DevEco Studio自动生成（比如entry、library等），也可以自定义。为了便于说明，下表中统一采用Module_name表示。
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;文件类型&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;说明&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;配置文件&lt;/td&gt;
+&lt;td&gt;包括应用级配置信息、以及Module级配置信息：&lt;br&gt;- &lt;strong&gt;AppScope &amp;gt; app.json5&lt;/strong&gt;：&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/quick-start/app-configuration-file.md" target="_blank" rel="noopener"
+&gt;app.json5配置文件&lt;/a&gt;，用于声明应用的全局配置信息，比如应用Bundle名称、应用名称、应用图标、应用版本号等。&lt;br&gt;- &lt;strong&gt;Module_name &amp;gt; src &amp;gt; main &amp;gt; module.json5&lt;/strong&gt;：&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/quick-start/module-configuration-file.md" target="_blank" rel="noopener"
+&gt;module.json5配置文件&lt;/a&gt;，用于声明Module基本信息、支持的设备类型、所含的组件信息、运行所需申请的权限等。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ArkTS源码文件&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Module_name &amp;gt; src &amp;gt; main &amp;gt; ets&lt;/strong&gt;：用于存放Module的ArkTS源码文件（.ets文件）。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;资源文件&lt;/td&gt;
+&lt;td&gt;包括应用级资源文件、以及Module级资源文件，支持图形、多媒体、字符串、布局文件等，详见&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/quick-start/resource-categories-and-access.md" target="_blank" rel="noopener"
+&gt;资源分类与访问&lt;/a&gt;。&lt;br&gt;- &lt;strong&gt;AppScope &amp;gt; resources&lt;/strong&gt; ：用于存放应用需要用到的资源文件。&lt;br&gt;- &lt;strong&gt;Module_name &amp;gt; src &amp;gt; main &amp;gt; resources&lt;/strong&gt; ：用于存放该Module需要用到的资源文件。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;其他配置文件&lt;/td&gt;
+&lt;td&gt;用于编译构建，包括构建配置文件、编译构建任务脚本、混淆规则文件、依赖的共享包信息等。&lt;br&gt;- &lt;strong&gt;build-profile.json5&lt;/strong&gt;：工程级或Module级的构建配置文件，包括应用签名、产品配置等。&lt;br&gt;- &lt;strong&gt;hvigorfile.ts&lt;/strong&gt;：应用级或Module级的编译构建任务脚本，开发者可以自定义编译构建工具版本、控制构建行为的配置参数。&lt;br&gt;- &lt;strong&gt;obfuscation-rules.txt&lt;/strong&gt;：混淆规则文件。混淆开启后，在使用Release模式进行编译时，会对代码进行编译、混淆及压缩处理，保护代码资产。&lt;br&gt;- &lt;strong&gt;oh-package.json5&lt;/strong&gt;：用于存放依赖库的信息，包括所依赖的三方库和共享包。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;h4 id="编译态"&gt;编译态
+&lt;/h4&gt;&lt;p&gt;&lt;img src="https://dyhes.github.io/OpenHarmony/image.png"
+loading="lazy"
+&gt;
+从开发态到编译态，Module中的文件会发生如下变更：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;ets目录&lt;/strong&gt;：ArkTS源码编译生成.abc文件。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;resources目录&lt;/strong&gt;：AppScope目录下的资源文件会&lt;strong&gt;合入&lt;/strong&gt;到Module下面资源目录中，如果两个目录下存在重名文件，编译打包后只会保留AppScope目录下的资源文件。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;module配置文件&lt;/strong&gt;：AppScope目录下的app.json5文件字段会&lt;strong&gt;合入&lt;/strong&gt;到Module下面的module.json5文件之中，编译后生成HAP或HSP最终的module.json文件。
+⠀&lt;strong&gt;说明：&lt;/strong&gt;
+在编译HAP和HSP时，会把他们所依赖的HAR直接编译到HAP和HSP中。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="发布态"&gt;发布态
+&lt;/h4&gt;&lt;p&gt;每个应用中至少包含一个.hap文件，可能包含若干个.hsp文件、也可能不含，一个应用中的所有.hap与.hsp文件合在一起称为&lt;strong&gt;Bundle&lt;/strong&gt;，其对应的bundleName是应用的唯一标识（详见&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/quick-start/app-configuration-file.md" target="_blank" rel="noopener"
+&gt;app.json5配置文件&lt;/a&gt;中的bundleName标签）。
+当应用发布上架到应用市场时，需要将Bundle打包为一个.app后缀的文件用于上架，这个.app文件称为&lt;strong&gt;App Pack&lt;/strong&gt;（Application Package），与此同时，DevEco Studio工具自动会生成一个&lt;strong&gt;pack.info&lt;/strong&gt;文件。&lt;strong&gt;pack.info&lt;/strong&gt;文件描述了App Pack中每个HAP和HSP的属性，包含APP中的bundleName和versionCode信息、以及Module中的name、type和abilities等信息。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;说明：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;App Pack是发布上架到应用市场的基本单元，但是不能在设备上直接安装和运行。&lt;/li&gt;
+&lt;li&gt;在应用签名、云端分发、端侧安装时，都是以HAP/HSP为单位进行签名、分发和安装的。
+&lt;img src="https://dyhes.github.io/OpenHarmony/image%202.png"
+loading="lazy"
+&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;h4 id="包选择"&gt;包选择
+&lt;/h4&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;Module类型&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;包类型&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;说明&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Ability&lt;/td&gt;
+&lt;td&gt;&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/quick-start/hap-package.md" target="_blank" rel="noopener"
+&gt;HAP&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;应用的功能模块，可以独立安装和运行，必须包含一个entry类型的HAP，可选包含一个或多个feature类型的HAP。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Static Library&lt;/td&gt;
+&lt;td&gt;&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/quick-start/har-package.md" target="_blank" rel="noopener"
+&gt;HAR&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;静态共享包，编译态复用。&lt;br&gt;- 支持应用内共享，也可以发布后供其他应用使用。&lt;br&gt;  - 作为二方库，发布到&lt;a class="link" href="https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-ohpm-repo-V5" target="_blank" rel="noopener"
+&gt;OHPM私仓&lt;/a&gt;，供公司内部其他应用使用。&lt;br&gt;  - 作为三方库，发布到&lt;a class="link" href="https://ohpm.openharmony.cn/" target="_blank" rel="noopener"
+&gt;OHPM中心仓&lt;/a&gt;，供其他应用使用。&lt;br&gt;- 多包（HAP/HSP）引用相同的HAR时，会造成多包间代码和资源的重复拷贝，从而导致应用包膨大。&lt;br&gt;- 注意：&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/quick-start/har-package.md#%E7%BC%96%E8%AF%91" target="_blank" rel="noopener"
+&gt;编译HAR&lt;/a&gt;时，建议开启混淆能力，保护代码资产。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Shared Library&lt;/td&gt;
+&lt;td&gt;&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/quick-start/in-app-hsp.md" target="_blank" rel="noopener"
+&gt;HSP&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;动态共享包，运行时复用。&lt;br&gt;- 当多包（HAP/HSP）同时引用同一个共享包时，采用HSP替代HAR，可以避免HAR造成的多包间代码和资源的重复拷贝，从而减小应用包大小。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;规格&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;HAP&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;HAR&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;HSP&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;支持在配置文件中声明&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/application-models/uiability-overview.md" target="_blank" rel="noopener"
+&gt;UIAbility&lt;/a&gt;组件与&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/application-models/extensionability-overview.md" target="_blank" rel="noopener"
+&gt;ExtensionAbility&lt;/a&gt;组件&lt;/td&gt;
+&lt;td&gt;√&lt;/td&gt;
+&lt;td&gt;×&lt;/td&gt;
+&lt;td&gt;×&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;支持在配置文件中声明&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/quick-start/module-configuration-file.md#pages%E6%A0%87%E7%AD%BE" target="_blank" rel="noopener"
+&gt;pages&lt;/a&gt;页面&lt;/td&gt;
+&lt;td&gt;√&lt;/td&gt;
+&lt;td&gt;×&lt;/td&gt;
+&lt;td&gt;√&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;支持在设备上独立安装运行&lt;/td&gt;
+&lt;td&gt;√&lt;/td&gt;
+&lt;td&gt;×&lt;/td&gt;
+&lt;td&gt;×&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;说明：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;HAR虽然不支持在配置文件中声明pages页面，但是可以包含pages页面，并通过&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/ui/arkts-routing.md#%E5%91%BD%E5%90%8D%E8%B7%AF%E7%94%B1" target="_blank" rel="noopener"
+&gt;命名路由&lt;/a&gt;的方式进行跳转。&lt;/li&gt;
+&lt;li&gt;由于&lt;strong&gt;HSP仅支持应用内共享&lt;/strong&gt;，如果HAR依赖了HSP，则该HAR文件仅支持应用内共享，不支持发布到二方仓或三方仓供其他应用使用，否则会导致编译失败。&lt;/li&gt;
+&lt;li&gt;HAR和HSP均不支持循环依赖，也不支持依赖传递。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="hap"&gt;HAP
+&lt;/h3&gt;&lt;p&gt;HAP（Harmony Ability Package）是应用安装和运行的基本单元。HAP包是由代码、资源、第三方库、配置文件等打包生成的模块包，其主要分为两种类型：entry和feature。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;entry：应用的主模块，作为应用的入口，提供了应用的基础功能。&lt;/li&gt;
+&lt;li&gt;feature：应用的动态特性模块，作为应用能力的扩展，可以根据用户的需求和设备类型进行选择性安装。
+⠀应用程序包可以只包含一个基础的entry包，也可以包含一个基础的entry包和多个功能性的feature包。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="使用场景"&gt;使用场景
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;单HAP场景：如果只包含UIAbility组件，无需使用ExtensionAbility组件，优先采用单HAP（即一个entry包）来实现应用开发。虽然一个HAP中可以包含一个或多个UIAbility组件，为了避免不必要的资源加载，推荐采用“一个UIAbility+多个页面”的方式。&lt;/li&gt;
+&lt;li&gt;多HAP场景：如果应用的功能比较复杂，需要使用ExtensionAbility组件，可以采用多HAP（即一个entry包+多个feature包）来实现应用开发，每个HAP中包含一个UIAbility组件或者一个ExtensionAbility组件。在这种场景下，可能会存在多个HAP引用相同的库文件，导致重复打包的问题。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="约束限制"&gt;⠀约束限制
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;不支持导出接口和ArkUI组件，给其他模块使用。&lt;/li&gt;
+&lt;li&gt;多HAP场景下，App Pack包中同一设备类型的所有HAP中&lt;strong&gt;必须有且只有一个Entry类型的HAP&lt;/strong&gt;，Feature类型的HAP可以有一个或者多个，也可以没有。&lt;/li&gt;
+&lt;li&gt;多HAP场景下，同一应用中的所有HAP的配置文件中的bundleName、versionCode、versionName、minCompatibleVersionCode、debug、minAPIVersion、targetAPIVersion、apiReleaseType相同，同一设备类型的所有HAP对应的moduleName标签必须&lt;strong&gt;唯一&lt;/strong&gt;。HAP打包生成App Pack包时，会对上述参数配置进行校验。&lt;/li&gt;
+&lt;li&gt;多HAP场景下，同一应用的所有HAP、HSP的&lt;strong&gt;签名证书要保持一致&lt;/strong&gt;。上架应用市场是以App Pack形式上架，应用市场分发时会将所有HAP从App Pack中拆分出来，同时对其中的所有HAP进行重签名，这样保证了所有HAP签名证书的一致性。在调试阶段，开发者通过命令行或DevEco Studio将HAP安装到设备上时，要保证所有HAP签名证书一致，否则会出现安装失败的问题。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="应用配置文件"&gt;应用配置文件
+&lt;/h2&gt;&lt;p&gt;每个应用项目的代码目录下必须包含应用配置文件，这些配置文件会向编译工具、操作系统和应用市场提供应用的基本信息。
+在基于Stage模型开发的应用项目代码下，都存在一个app.json5配置文件、以及一个或多个module.json5配置文件。
+&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/quick-start/app-configuration-file.md" target="_blank" rel="noopener"
+&gt;app.json5配置文件&lt;/a&gt;主要包含以下内容：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;应用的全局配置信息，包含应用的Bundle名称、开发厂商、版本号等基本信息。&lt;/li&gt;
+&lt;li&gt;特定设备类型的配置信息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;⠀&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/quick-start/module-configuration-file.md" target="_blank" rel="noopener"
+&gt;module.json5配置文件&lt;/a&gt;主要包含以下内容：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Module的基本配置信息，包含Module名称、类型、描述、支持的设备类型等基本信息。&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/application-models/stage-model-development-overview.md" target="_blank" rel="noopener"
+&gt;应用组件&lt;/a&gt;信息，包含UIAbility组件和ExtensionAbility组件的描述信息。&lt;/li&gt;
+&lt;li&gt;应用运行过程中所需的权限信息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="appjson5"&gt;app.json5
+&lt;/h3&gt;&lt;p&gt;&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/quick-start/app-configuration-file.md" target="_blank" rel="noopener"
+&gt;https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/quick-start/app-configuration-file.md&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id="modulejson5"&gt;module.json5
+&lt;/h3&gt;&lt;p&gt;&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/quick-start/module-configuration-file.md" target="_blank" rel="noopener"
+&gt;https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/quick-start/module-configuration-file.md&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id="arkts"&gt;ArkTs
+&lt;/h2&gt;&lt;p&gt;&lt;a class="link" href="https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/quick-start/arkts-get-started.md" target="_blank" rel="noopener"
+&gt;OpenAtom OpenHarmony&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id="supplement"&gt;Supplement
+&lt;/h2&gt;&lt;h3 id="module"&gt;Module
+&lt;/h3&gt;&lt;p&gt;在 &lt;strong&gt;OpenHarmony&lt;/strong&gt; 中，&lt;strong&gt;Module&lt;/strong&gt;（模块）是应用开发中的一个重要概念，用于组织和划分应用的功能单元。它是 OpenHarmony 应用的基本组成部分，每个模块可以独立开发、编译和部署，最终组合成一个完整的应用。&lt;/p&gt;
+&lt;h4 id="module-的核心概念"&gt;Module 的核心概念
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;模块化设计&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;OpenHarmony 采用模块化设计，允许开发者将应用拆分为多个模块，每个模块负责特定的功能或业务逻辑。&lt;/li&gt;
+&lt;li&gt;这种设计提高了代码的可维护性和复用性，同时也支持动态加载和按需安装。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;模块类型&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Entry Module&lt;/strong&gt;（主模块）：应用的入口模块，包含应用的核心功能和资源，是应用安装和运行的起点。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Feature Module&lt;/strong&gt;（功能模块）：应用的扩展模块，包含特定的功能或业务逻辑，可以按需下载和安装，支持应用的动态扩展。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;模块结构&lt;/strong&gt;&lt;br&gt;
+每个模块通常包含以下内容：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;代码文件&lt;/strong&gt;：包括 ArkTS、JavaScript、C/C++ 等代码，用于实现模块的功能。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;资源文件&lt;/strong&gt;：包括图片、字符串、布局文件等，用于支持模块的 UI 和功能。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;配置文件&lt;/strong&gt;：&lt;code&gt;module.json&lt;/code&gt; 文件，定义了模块的元数据、依赖关系、Ability 信息等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="module-的配置文件"&gt;Module 的配置文件
+&lt;/h4&gt;&lt;p&gt;每个模块都有一个 &lt;code&gt;module.json&lt;/code&gt; 文件，用于描述模块的基本信息和配置。其主要内容包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;模块名称&lt;/strong&gt;：模块的唯一标识符。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;模块类型&lt;/strong&gt;：指明模块是 Entry Module 还是 Feature Module。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Ability 信息&lt;/strong&gt;：定义模块中包含的 Ability（功能单元），如 Page Ability 和 Service Ability。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;依赖关系&lt;/strong&gt;：声明模块依赖的其他模块或库。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;资源路径&lt;/strong&gt;：指定模块的资源文件存放位置。
+示例 &lt;code&gt;module.json&lt;/code&gt; 文件：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-json" data-lang="json"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;module&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;name&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;entry&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;type&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;entry&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;abilities&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;name&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;.MainAbility&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;icon&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;$media:icon&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;label&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;$string:app_name&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;launchType&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;standard&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;],&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;dependencies&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;bundleName&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;com.example.feature&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;moduleName&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;feature&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="module-的开发与构建"&gt;Module 的开发与构建
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;开发工具&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;使用 &lt;strong&gt;DevEco Studio&lt;/strong&gt; 开发工具，开发者可以创建和管理模块，编写代码和配置文件。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;构建与打包&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;每个模块可以独立编译和打包，生成对应的 HAP（HarmonyOS Ability Package）文件。&lt;/li&gt;
+&lt;li&gt;最终，多个模块的 HAP 文件组合成一个完整的应用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;动态加载&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;Feature Module 支持动态加载，可以在应用运行时按需下载和安装，减少初始安装包的大小。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="module-的应用场景"&gt;Module 的应用场景
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;大型应用开发&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;对于功能复杂的大型应用，可以将应用拆分为多个模块，由不同团队并行开发，提高开发效率。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;动态功能扩展&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;通过 Feature Module，可以实现应用的动态功能扩展，用户可以根据需要下载和安装特定功能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;代码复用&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;将通用功能封装为独立的模块，可以在多个应用中复用，减少重复开发。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="总结"&gt;总结
+&lt;/h4&gt;&lt;p&gt;在 OpenHarmony 中，Module 是应用开发的基本单元，支持模块化设计和动态加载。通过将应用拆分为多个模块，开发者可以提高代码的可维护性、复用性和扩展性，同时为用户提供更灵活的应用体验。&lt;/p&gt;
+&lt;h3 id="json5"&gt;.json5
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;JSON5&lt;/strong&gt; 是 JSON（JavaScript Object Notation）的扩展格式，旨在解决 JSON 格式的一些局限性，使其更易于人类阅读和编写。JSON5 在保留 JSON 简单性和兼容性的基础上，增加了一些灵活的语法特性。&lt;/p&gt;
+&lt;h4 id="json5-的主要改进"&gt;JSON5 的主要改进
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;支持注释&lt;/strong&gt; &lt;!-- {"fold":true} --&gt;
+&lt;ul&gt;
+&lt;li&gt;JSON5 允许在数据中添加单行注释（&lt;code&gt;//&lt;/code&gt;）和多行注释（&lt;code&gt;/* ... */&lt;/code&gt;），方便开发者添加说明。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-json5" data-lang="json5"&gt;{
+// 这是一个单行注释
+&amp;#34;name&amp;#34;: &amp;#34;JSON5&amp;#34;,
+/* 这是一个
+多行注释 */
+&amp;#34;version&amp;#34;: &amp;#34;1.0.0&amp;#34;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;键名可以不加引号&lt;/strong&gt; &lt;!-- {"fold":true} --&gt;
+&lt;ul&gt;
+&lt;li&gt;JSON5 允许键名不使用引号（前提是键名是有效的标识符），简化了书写。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-json5" data-lang="json5"&gt;{
+name: &amp;#34;JSON5&amp;#34;, // 键名不加引号
+version: &amp;#34;1.0.0&amp;#34;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;支持尾随逗号&lt;/strong&gt; &lt;!-- {"fold":true} --&gt;
+&lt;ul&gt;
+&lt;li&gt;JSON5 允许在对象和数组的最后一个元素后添加逗号，避免修改数据时频繁调整格式。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-json5" data-lang="json5"&gt;{
+&amp;#34;name&amp;#34;: &amp;#34;JSON5&amp;#34;,
+&amp;#34;version&amp;#34;: &amp;#34;1.0.0&amp;#34;, // 尾随逗号
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;字符串支持多行和单引号&lt;/strong&gt; &lt;!-- {"fold":true} --&gt;
+&lt;ul&gt;
+&lt;li&gt;JSON5 允许字符串使用单引号（&lt;code&gt;'&lt;/code&gt;）和多行形式（用反引号或换行符），方便处理复杂文本。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-json5" data-lang="json5"&gt;{
+description: &amp;#39;这是一个使用单引号的字符串&amp;#39;,
+multiLine: `这是一个
+多行字符串`
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数字支持更多格式&lt;/strong&gt; &lt;!-- {"fold":true} --&gt;
+&lt;ul&gt;
+&lt;li&gt;JSON5 支持十六进制（&lt;code&gt;0x&lt;/code&gt;）、浮点数（&lt;code&gt;.&lt;/code&gt;）、正负号（&lt;code&gt;+&lt;/code&gt;/&lt;code&gt;-&lt;/code&gt;）以及特殊值（如&lt;code&gt;Infinity&lt;/code&gt;和&lt;code&gt;NaN&lt;/code&gt;）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-json5" data-lang="json5"&gt;{
+hex: 0xFF, // 十六进制
+float: 3.14, // 浮点数
+positive: +100, // 正数
+negative: -50, // 负数
+infinity: Infinity, // 无穷大
+notANumber: NaN // 非数字
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="json5-的使用场景"&gt;JSON5 的使用场景&lt;!-- {"fold":true} --&gt;
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;配置文件&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;JSON5 的注释和灵活语法使其非常适合用于配置文件，开发者可以更清晰地描述配置项。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;开发工具&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;许多开发工具和框架支持 JSON5，例如 Babel、ESLint 等，方便开发者编写和维护配置。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据交换&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;虽然 JSON5 的灵活性更适合人类阅读，但在数据交换场景中，仍建议使用标准的 JSON 格式以确保兼容性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="json5-的解析与生成"&gt;JSON5 的解析与生成&lt;!-- {"fold":true} --&gt;
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;JavaScript 解析&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;可以使用 &lt;code&gt;json5&lt;/code&gt; 库来解析 JSON5 数据。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;JSON5&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;json5&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;JSON5&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;parse&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;{name: &amp;#34;JSON5&amp;#34;}&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;data&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; &lt;span class="c1"&gt;// 输出: JSON5
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;生成 JSON5&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;可以使用 &lt;code&gt;json5&lt;/code&gt; 库将 JavaScript 对象转换为 JSON5 字符串。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;JSON5&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;json5&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;obj&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;JSON5&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;version&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;1.0.0&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;json5Str&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;JSON5&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;stringify&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;obj&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;json5Str&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; &lt;span class="c1"&gt;// 输出: {name:&amp;#34;JSON5&amp;#34;,version:&amp;#34;1.0.0&amp;#34;}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="总结-1"&gt;总结&lt;!-- {"fold":true} --&gt;
+&lt;/h4&gt;&lt;p&gt;JSON5 是 JSON 的扩展格式，通过支持注释、无引号键名、尾随逗号、多行字符串等特性，使其更易于人类阅读和编写。它非常适合用于配置文件和开发工具，但在数据交换场景中仍需注意兼容性问题。&lt;/p&gt;
+&lt;h3 id="so"&gt;.so
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;.so&lt;/code&gt;文件是&lt;strong&gt;共享对象文件&lt;/strong&gt;（Shared Object File）的缩写，是一种在Linux和类Unix系统（包括Android和HarmonyOS）中使用的动态链接库文件格式。它类似于Windows系统中的&lt;code&gt;.dll&lt;/code&gt;文件（动态链接库），用于存储可被多个程序共享的代码和资源。&lt;/p&gt;
+&lt;h4 id="so文件的核心特点"&gt;&lt;code&gt;.so&lt;/code&gt;文件的核心特点
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;动态链接&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;.so&lt;/code&gt;文件在程序运行时被加载，而不是在编译时静态链接到程序中。&lt;/li&gt;
+&lt;li&gt;这种机制可以减少程序的内存占用，并支持代码的复用和更新。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;共享性&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;多个程序可以同时使用同一个&lt;code&gt;.so&lt;/code&gt;文件，避免重复加载相同的代码，节省系统资源。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;平台依赖性&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;.so&lt;/code&gt;文件是平台相关的，通常针对特定的CPU架构（如ARM、x86）和操作系统编译，不能跨平台直接使用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="so文件的使用场景"&gt;&lt;code&gt;.so&lt;/code&gt;文件的使用场景
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;跨语言调用&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;在HarmonyOS或Android中，&lt;code&gt;.so&lt;/code&gt;文件通常用于实现C/C++代码与Java/ArkTS等高级语言之间的跨语言调用。&lt;/li&gt;
+&lt;li&gt;例如，通过JNI（Java Native Interface）或Node-API调用&lt;code&gt;.so&lt;/code&gt;文件中的函数。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;性能优化&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;对于计算密集型任务（如图像处理、物理模拟等），使用C/C++编写的&lt;code&gt;.so&lt;/code&gt;文件可以提供更高的性能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;复用已有代码&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;开发者可以将已有的C/C++库编译为&lt;code&gt;.so&lt;/code&gt;文件，在HarmonyOS或Android应用中复用，减少开发成本。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="so文件的生成"&gt;&lt;code&gt;.so&lt;/code&gt;文件的生成
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;编译工具&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;使用GCC、Clang等编译器，将C/C++代码编译为&lt;code&gt;.so&lt;/code&gt;文件。&lt;/li&gt;
+&lt;li&gt;在HarmonyOS中，可以使用NDK（Native Development Kit）提供的工具链进行编译。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;编译命令示例&lt;/strong&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;gcc -shared -o libexample.so example.c
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-shared&lt;/code&gt;选项表示生成共享库文件。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-o&lt;/code&gt;选项指定输出文件名。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="so文件的加载与使用"&gt;&lt;code&gt;.so&lt;/code&gt;文件的加载与使用
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;动态加载&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;在程序运行时，可以通过&lt;code&gt;dlopen&lt;/code&gt;函数动态加载&lt;code&gt;.so&lt;/code&gt;文件，并通过&lt;code&gt;dlsym&lt;/code&gt;函数获取其中的函数指针。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;示例代码&lt;/strong&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-c" data-lang="c"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="cp"&gt;#include&lt;/span&gt; &lt;span class="cpf"&gt;&amp;lt;dlfcn.h&amp;gt;&lt;/span&gt;&lt;span class="cp"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="cp"&gt;#include&lt;/span&gt; &lt;span class="cpf"&gt;&amp;lt;stdio.h&amp;gt;&lt;/span&gt;&lt;span class="cp"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="cp"&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="nf"&gt;main&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;handle&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nf"&gt;dlopen&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;./libexample.so&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;RTLD_LAZY&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt;&lt;span class="n"&gt;handle&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nf"&gt;fprintf&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;stderr&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;#34;%s&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nf"&gt;dlerror&lt;/span&gt;&lt;span class="p"&gt;());&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;func&lt;/span&gt;&lt;span class="p"&gt;)()&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nf"&gt;dlsym&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;handle&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;#34;example_function&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;func&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nf"&gt;func&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nf"&gt;dlclose&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;handle&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="so文件在harmonyos中的应用"&gt;&lt;code&gt;.so&lt;/code&gt;文件在HarmonyOS中的应用
+&lt;/h4&gt;&lt;p&gt;在HarmonyOS中，&lt;code&gt;.so&lt;/code&gt;文件通常用于：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;实现高性能的底层功能（如图形渲染、音频处理）。&lt;/li&gt;
+&lt;li&gt;支持跨语言调用（如ArkTS/JS与C/C++之间的交互）。&lt;/li&gt;
+&lt;li&gt;复用已有的C/C++库，降低开发成本。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="总结-2"&gt;总结
+&lt;/h4&gt;&lt;p&gt;&lt;code&gt;.so&lt;/code&gt;文件是一种动态链接库文件，广泛用于Linux、Android和HarmonyOS等系统中。它支持代码的共享和动态加载，适用于跨语言调用、性能优化和代码复用等场景。在HarmonyOS开发中，&lt;code&gt;.so&lt;/code&gt;文件是实现高性能和跨语言能力的重要工具。&lt;/p&gt;
+&lt;h3 id="hap-1"&gt;HAP
+&lt;/h3&gt;&lt;p&gt;HAP（HarmonyOS Ability Package）是HarmonyOS应用的基本部署单元，类似于Android中的APK（Android Package）。它是HarmonyOS应用的安装包格式，包含了应用的所有资源、代码和配置文件，用于在HarmonyOS设备上安装和运行应用。&lt;/p&gt;
+&lt;h4 id="hap包的核心组成"&gt;HAP包的核心组成
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Ability&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;Ability是HarmonyOS应用的基本组成单元，代表应用的一个功能模块。&lt;/li&gt;
+&lt;li&gt;分为两种类型：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Page Ability&lt;/strong&gt;：用于提供用户界面（UI）的Ability，类似于Android中的Activity。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Service Ability&lt;/strong&gt;：用于在后台执行任务的Ability，类似于Android中的Service。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;资源文件&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;包括图片、字符串、布局文件等，用于支持应用的UI和功能。&lt;/li&gt;
+&lt;li&gt;资源文件通常存放在&lt;code&gt;resources&lt;/code&gt;目录下，支持多语言、多分辨率适配。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;配置文件&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;config.json&lt;/code&gt;：应用的全局配置文件，定义了应用的包名、版本号、Ability信息、权限声明等。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;module.json&lt;/code&gt;：模块级配置文件，定义了模块的依赖关系、资源路径等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;代码文件&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;包括ArkTS（HarmonyOS推荐的前端开发语言）、JavaScript、C/C++等代码文件，用于实现应用的逻辑功能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;库文件&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;包括动态库（&lt;code&gt;.so&lt;/code&gt;文件）和静态库（&lt;code&gt;.a&lt;/code&gt;文件），用于支持应用的底层功能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="hap包的类型"&gt;HAP包的类型
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Entry HAP&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;主模块包，包含应用的核心功能和资源，是应用安装和运行的入口。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Feature HAP&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;功能模块包，包含应用的扩展功能，可以按需下载和安装，支持应用的动态扩展。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="hap包的特点"&gt;HAP包的特点
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;模块化设计&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;HAP包支持模块化开发，开发者可以将应用拆分为多个HAP包，实现功能的动态加载和按需安装。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;分布式能力&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;HAP包支持HarmonyOS的分布式特性，可以在多个设备上无缝协同运行。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;安全性&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;HAP包通过签名机制确保应用的完整性和安全性，防止篡改和恶意攻击。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="hap包的生成与安装"&gt;HAP包的生成与安装
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;生成&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;使用DevEco Studio开发工具，开发者可以编译和打包应用，生成HAP包。&lt;/li&gt;
+&lt;li&gt;打包过程中会自动处理资源压缩、代码混淆等优化操作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;安装&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;HAP包可以通过应用市场、ADB命令行或OTA方式安装到HarmonyOS设备上。&lt;/li&gt;
+&lt;li&gt;安装过程中会进行签名验证和权限检查，确保应用的安全性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="总结-3"&gt;总结
+&lt;/h4&gt;&lt;p&gt;HAP包是HarmonyOS应用的安装包格式，包含了应用的代码、资源和配置文件，支持模块化设计和分布式能力。通过HAP包，开发者可以高效地开发、部署和运行HarmonyOS应用，为用户提供无缝的智能体验。&lt;/p&gt;
+&lt;h2 id="hvigor"&gt;hvigor
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;hvigor&lt;/strong&gt; 是 OpenHarmony 和 HarmonyOS 生态中的一种&lt;strong&gt;构建工具&lt;/strong&gt;，专为 HarmonyOS 应用开发设计。它基于 Gradle 构建系统，但针对 HarmonyOS 的特点进行了优化和扩展，旨在提高开发效率和构建性能。&lt;/p&gt;
+&lt;h4 id="hvigor-的核心功能"&gt;hvigor 的核心功能
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;项目构建&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;hvigor 支持 HarmonyOS 应用的编译、打包和构建，生成 HAP（HarmonyOS Ability Package）文件。&lt;/li&gt;
+&lt;li&gt;它能够处理多模块项目的依赖关系，确保构建过程的正确性和高效性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;任务管理&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;hvigor 提供了丰富的构建任务（如编译、打包、清理等），开发者可以通过命令行或 IDE（如 DevEco Studio）执行这些任务。&lt;/li&gt;
+&lt;li&gt;支持自定义任务，满足特定项目的构建需求。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;依赖管理&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;hvigor 支持对项目依赖的管理，包括本地依赖和远程依赖。&lt;/li&gt;
+&lt;li&gt;通过配置文件（如 &lt;code&gt;build-profile.json5&lt;/code&gt;），开发者可以声明项目的依赖关系。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;插件支持&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;hvigor 支持插件机制，开发者可以通过插件扩展构建功能。&lt;/li&gt;
+&lt;li&gt;HarmonyOS 提供了多种官方插件，如代码混淆插件、资源压缩插件等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;性能优化&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;hvigor 针对 HarmonyOS 应用的构建过程进行了优化，减少了构建时间，提高了构建效率。&lt;/li&gt;
+&lt;li&gt;支持增量编译，只编译发生变化的代码和资源，进一步提升构建速度。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="hvigor-的配置文件"&gt;hvigor 的配置文件
+&lt;/h4&gt;&lt;p&gt;hvigor 使用 JSON5 格式的配置文件来定义项目的构建规则和参数。主要配置文件包括：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;build-profile.json5&lt;/code&gt;&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;定义项目的构建配置，如编译选项、依赖关系、插件配置等。&lt;br&gt;
+示例：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-json5" data-lang="json5"&gt;{
+&amp;#34;app&amp;#34;: {
+&amp;#34;signingConfigs&amp;#34;: {
+&amp;#34;release&amp;#34;: {
+&amp;#34;storeFile&amp;#34;: &amp;#34;release.keystore&amp;#34;,
+&amp;#34;storePassword&amp;#34;: &amp;#34;password&amp;#34;,
+&amp;#34;keyAlias&amp;#34;: &amp;#34;key&amp;#34;,
+&amp;#34;keyPassword&amp;#34;: &amp;#34;password&amp;#34;
+}
+},
+&amp;#34;buildTypes&amp;#34;: {
+&amp;#34;release&amp;#34;: {
+&amp;#34;signingConfig&amp;#34;: &amp;#34;release&amp;#34;
+}
+}
+}
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;module.json5&lt;/code&gt;&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;定义模块的元数据和配置，如模块名称、Ability 信息、资源路径等。&lt;br&gt;
+示例：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-json5" data-lang="json5"&gt;{
+&amp;#34;module&amp;#34;: {
+&amp;#34;name&amp;#34;: &amp;#34;entry&amp;#34;,
+&amp;#34;type&amp;#34;: &amp;#34;entry&amp;#34;,
+&amp;#34;abilities&amp;#34;: [
+{
+&amp;#34;name&amp;#34;: &amp;#34;.MainAbility&amp;#34;,
+&amp;#34;icon&amp;#34;: &amp;#34;$media:icon&amp;#34;,
+&amp;#34;label&amp;#34;: &amp;#34;$string:app_name&amp;#34;,
+&amp;#34;launchType&amp;#34;: &amp;#34;standard&amp;#34;
+}
+]
+}
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="hvigor-的使用"&gt;hvigor 的使用
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;命令行使用&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;开发者可以通过命令行执行 hvigor 任务，例如：
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;hvigor clean &lt;span class="c1"&gt;# 清理构建目录&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;hvigor build &lt;span class="c1"&gt;# 构建项目&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;集成到 DevEco Studio&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;DevEco Studio 内置了 hvigor 支持，开发者可以通过 IDE 的图形界面执行构建任务，查看构建日志和结果。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="hvigor-的优势"&gt;hvigor 的优势
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;专为 HarmonyOS 优化&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;hvigor 针对 HarmonyOS 应用的构建需求进行了深度优化，提供了更好的性能和兼容性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;简化构建流程&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;通过配置文件和插件机制，hvigor 简化了构建流程，降低了开发者的学习成本。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;高效开发体验&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;支持增量编译和任务并行执行，显著提升了开发效率。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="总结-4"&gt;总结
+&lt;/h4&gt;&lt;p&gt;hvigor 是 HarmonyOS 生态中的核心构建工具，基于 Gradle 构建系统并针对 HarmonyOS 进行了优化。它提供了高效的构建能力、灵活的配置选项和丰富的插件支持，帮助开发者快速构建和部署 HarmonyOS 应用。通过 hvigor，开发者可以更专注于应用功能的实现，而无需过多关注构建细节。&lt;/p&gt;</description></item></channel></rss>

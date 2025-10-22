@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>HTML on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/html/</link><description>Recent content in HTML on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 12 Sep 2024 10:34:23 +0800</lastBuildDate><atom:link href="https://dyhes.github.io/tags/html/index.xml" rel="self" type="application/rss+xml"/><item><title>【HTML】 Basics</title><link>https://dyhes.github.io/p/html-basics/</link><pubDate>Fri, 16 Apr 2021 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/html-basics/</guid><description>&lt;h2 id="iframe"&gt;&lt;code&gt;&amp;lt;iframe&amp;gt;&lt;/code&gt;
+&lt;/h2&gt;&lt;p&gt;An iframe can be used as the target frame for a link.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;target&lt;/code&gt; attribute of the link must refer to the &lt;code&gt;name&lt;/code&gt; attribute of the iframe:&lt;/p&gt;
+&lt;h2 id="meta"&gt;&lt;code&gt;&amp;lt;meta&amp;gt;&lt;/code&gt;
+&lt;/h2&gt;&lt;p&gt;The &lt;code&gt;&amp;lt;meta&amp;gt;&lt;/code&gt; element is typically used to specify the character set, page description, keywords, author of the document, and viewport settings. The metadata will &lt;strong&gt;not be displayed&lt;/strong&gt; on the page, but are &lt;strong&gt;used by browsers&lt;/strong&gt; (how to display content or reload page), by &lt;strong&gt;search engines&lt;/strong&gt; (keywords), and other web services.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Define the &lt;strong&gt;character set&lt;/strong&gt; used:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&amp;lt;meta charset=&amp;ldquo;UTF-8&amp;rdquo;&amp;gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Define &lt;strong&gt;keywords&lt;/strong&gt; for &lt;strong&gt;search engines&lt;/strong&gt;:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&amp;lt;meta name=&amp;ldquo;keywords&amp;rdquo; content=&amp;ldquo;HTML, CSS, JavaScript&amp;rdquo;&amp;gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Define a &lt;strong&gt;description&lt;/strong&gt; of your web page:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&amp;lt;meta name=&amp;ldquo;description&amp;rdquo; content=&amp;ldquo;Free Web tutorials&amp;rdquo;&amp;gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Define the &lt;strong&gt;author&lt;/strong&gt; of a page:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&amp;lt;meta name=&amp;ldquo;author&amp;rdquo; content=&amp;ldquo;John Doe&amp;rdquo;&amp;gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Refresh&lt;/strong&gt; document every 30 seconds:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&amp;lt;meta http-equiv=&amp;ldquo;refresh&amp;rdquo; content=&amp;ldquo;30&amp;rdquo;&amp;gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Setting the &lt;strong&gt;viewport&lt;/strong&gt; to make your website look good on all devices:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&amp;lt;meta name=&amp;ldquo;viewport&amp;rdquo; content=&amp;ldquo;width=device-width, initial-scale=1.0&amp;rdquo;&amp;gt;&lt;/p&gt;
+&lt;h2 id="base"&gt;base
+&lt;/h2&gt;&lt;p&gt;he &lt;code&gt;&amp;lt;base&amp;gt;&lt;/code&gt; element specifies the base URL and/or target for all relative URLs in a page.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;&amp;lt;base&amp;gt;&lt;/code&gt; tag must have either an href or a target attribute present, or both.&lt;/p&gt;
+&lt;p&gt;There can only be one single &lt;code&gt;&amp;lt;base&amp;gt;&lt;/code&gt; element in a document!&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-html" data-lang="html"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;head&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;base&lt;/span&gt; &lt;span class="na"&gt;href&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;https://www.w3schools.com/&amp;#34;&lt;/span&gt; &lt;span class="na"&gt;target&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;_blank&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;head&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="layout"&gt;Layout
+&lt;/h2&gt;&lt;p&gt;There are four different techniques to create multicolumn layouts. Each technique has its pros and cons:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;CSS framework&lt;/li&gt;
+&lt;li&gt;CSS float property&lt;/li&gt;
+&lt;li&gt;CSS flexbox&lt;/li&gt;
+&lt;li&gt;CSS grid&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="segmentic"&gt;Segmentic
+&lt;/h2&gt;&lt;p&gt;In HTML there are some semantic elements that can be used to define different parts of a web page:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;article&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;aside&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;details&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;figcaption&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;figure&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;footer&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;header&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;main&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;mark&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;nav&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;section&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;summary&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;time&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src="C:%5cUsers%5cdyhes%5cAppData%5cRoaming%5cTypora%5ctypora-user-images%5cimage-20220128132450001.png"
+loading="lazy"
+alt="image-20220128132450001"
+&gt;&lt;/p&gt;
+&lt;h2 id="form"&gt;Form
+&lt;/h2&gt;&lt;h3 id="attribute"&gt;Attribute
+&lt;/h3&gt;&lt;h4 id="action"&gt;Action
+&lt;/h4&gt;&lt;p&gt;The &lt;code&gt;action&lt;/code&gt; attribute defines the action to be performed when the form is submitted.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tip:&lt;/strong&gt; If the &lt;code&gt;action&lt;/code&gt; attribute is omitted, the action is set to the current page.&lt;/p&gt;
+&lt;h4 id="target"&gt;Target
+&lt;/h4&gt;&lt;p&gt;The &lt;code&gt;target&lt;/code&gt; attribute can have one of the following values:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style="text-align: left"&gt;Value&lt;/th&gt;
+&lt;th style="text-align: left"&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;_blank&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The response is displayed in a new window or tab&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;_self&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The response is displayed in the current window&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;_parent&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The response is displayed in the parent frame&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;_top&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The response is displayed in the full body of the window&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;em&gt;framename&lt;/em&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The response is displayed in a named iframe&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;The default value is &lt;code&gt;_self&lt;/code&gt; which means that the response will open in the current window.&lt;/p&gt;
+&lt;h4 id="method"&gt;Method
+&lt;/h4&gt;&lt;p&gt;The &lt;code&gt;method&lt;/code&gt; attribute specifies the HTTP method to be used when submitting the form data.&lt;/p&gt;
+&lt;p&gt;The form-data can be sent as URL variables (with &lt;code&gt;method=&amp;quot;get&amp;quot;&lt;/code&gt;) or as HTTP post transaction (with &lt;code&gt;method=&amp;quot;post&amp;quot;&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;The default HTTP method when submitting form data is GET.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Notes on GET:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Appends the form data to the URL, in name/value pairs&lt;/li&gt;
+&lt;li&gt;NEVER use GET to send sensitive data! (the submitted form data is visible in the URL!)&lt;/li&gt;
+&lt;li&gt;The length of a URL is limited (2048 characters)&lt;/li&gt;
+&lt;li&gt;Useful for form submissions where a user wants to bookmark the result&lt;/li&gt;
+&lt;li&gt;GET is good for non-secure data, like query strings in Google&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Notes on POST:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Appends the form data inside the body of the HTTP request (the submitted form data is not shown in the URL)&lt;/li&gt;
+&lt;li&gt;POST has no size limitations, and can be used to send large amounts of data.&lt;/li&gt;
+&lt;li&gt;Form submissions with POST cannot be bookmarked&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Tip:&lt;/strong&gt; Always use POST if the form data contains sensitive or personal information!&lt;/p&gt;
+&lt;h4 id="autocomplete"&gt;Autocomplete
+&lt;/h4&gt;&lt;p&gt;The &lt;code&gt;autocomplete&lt;/code&gt; attribute specifies whether a form should have autocomplete on or off.&lt;/p&gt;
+&lt;p&gt;When autocomplete is on, the browser automatically complete values based on values that the user has entered before.&lt;/p&gt;
+&lt;h4 id="novalidate"&gt;Novalidate
+&lt;/h4&gt;&lt;p&gt;The &lt;code&gt;novalidate&lt;/code&gt; attribute is a boolean attribute.&lt;/p&gt;
+&lt;p&gt;When present, it specifies that the form-data (input) should not be validated when submitted.&lt;/p&gt;
+&lt;h4 id="other"&gt;other
+&lt;/h4&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style="text-align: left"&gt;Attribute&lt;/th&gt;
+&lt;th style="text-align: left"&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/tags/att_form_accept_charset.asp" target="_blank" rel="noopener"
+&gt;accept-charset&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Specifies the character encodings used for form submission&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/tags/att_form_action.asp" target="_blank" rel="noopener"
+&gt;action&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Specifies where to send the form-data when a form is submitted&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/tags/att_form_autocomplete.asp" target="_blank" rel="noopener"
+&gt;autocomplete&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Specifies whether a form should have autocomplete on or off&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/tags/att_form_enctype.asp" target="_blank" rel="noopener"
+&gt;enctype&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Specifies how the form-data should be encoded when submitting it to the server (only for method=&amp;ldquo;post&amp;rdquo;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/tags/att_form_method.asp" target="_blank" rel="noopener"
+&gt;method&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Specifies the HTTP method to use when sending form-data&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/tags/att_form_name.asp" target="_blank" rel="noopener"
+&gt;name&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Specifies the name of the form&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/tags/att_form_novalidate.asp" target="_blank" rel="noopener"
+&gt;novalidate&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Specifies that the form should not be validated when submitted&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/tags/att_form_rel.asp" target="_blank" rel="noopener"
+&gt;rel&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Specifies the relationship between a linked resource and the current document&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/tags/att_form_target.asp" target="_blank" rel="noopener"
+&gt;target&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Specifies where to display the response that is received after submitting the form&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="element"&gt;Element
+&lt;/h3&gt;&lt;p&gt;The HTML &lt;code&gt;&amp;lt;form&amp;gt;&lt;/code&gt; element can contain one or more of the following form elements:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;input&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;label&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;select&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;textarea&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;button&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;fieldset&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;legend&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;datalist&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;output&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;option&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;optgroup&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="input"&gt;input
+&lt;/h4&gt;&lt;p&gt;The HTML &lt;code&gt;&amp;lt;input&amp;gt;&lt;/code&gt; element is the most used form element.&lt;/p&gt;
+&lt;p&gt;An &lt;code&gt;&amp;lt;input&amp;gt;&lt;/code&gt; element can be displayed in many ways, depending on the &lt;code&gt;type&lt;/code&gt; attribute.&lt;/p&gt;
+&lt;p&gt;Here are some examples:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style="text-align: left"&gt;Type&lt;/th&gt;
+&lt;th style="text-align: left"&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;input type="text"&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Displays a single-line text input field, If the &lt;code&gt;name&lt;/code&gt; attribute is omitted, the value of the input field will not be sent at all.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;input type="radio"&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Displays a radio button (for selecting one of many choices)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;input type="checkbox"&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Displays a checkbox (for selecting zero or more of many choices)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;input type="submit"&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Displays a submit button (for submitting the form),The form-handler is specified in the form&amp;rsquo;s &lt;code&gt;action&lt;/code&gt; attribute.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;input type="button"&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Displays a clickable button&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h4 id="label"&gt;label
+&lt;/h4&gt;&lt;p&gt;The &lt;code&gt;&amp;lt;label&amp;gt;&lt;/code&gt; element is useful for screen-reader users, because the screen-reader will read out loud the label when the user focus on the input element.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;&amp;lt;label&amp;gt;&lt;/code&gt; element also help users who have difficulty clicking on very small regions (such as radio buttons or checkboxes) - because when the user clicks the text within the &lt;code&gt;&amp;lt;label&amp;gt;&lt;/code&gt; element, it toggles the radio button/checkbox.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;for&lt;/code&gt; attribute of the &lt;code&gt;&amp;lt;label&amp;gt;&lt;/code&gt; tag should be equal to the &lt;code&gt;id&lt;/code&gt; attribute of the &lt;code&gt;&amp;lt;input&amp;gt;&lt;/code&gt; element to bind them together.&lt;/p&gt;
+&lt;h4 id="selectoption"&gt;select,option
+&lt;/h4&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-html" data-lang="html"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;label&lt;/span&gt; &lt;span class="na"&gt;for&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;cars&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;Choose a car:&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;label&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;select&lt;/span&gt; &lt;span class="na"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;cars&amp;#34;&lt;/span&gt; &lt;span class="na"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;cars&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;option&lt;/span&gt; &lt;span class="na"&gt;value&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;volvo&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;Volvo&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;option&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;option&lt;/span&gt; &lt;span class="na"&gt;value&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;saab&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;Saab&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;option&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;option&lt;/span&gt; &lt;span class="na"&gt;value&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;fiat&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;Fiat&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;option&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;option&lt;/span&gt; &lt;span class="na"&gt;value&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;audi&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;Audi&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;option&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;select&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The &lt;code&gt;&amp;lt;option&amp;gt;&lt;/code&gt; elements defines an option that can be selected.&lt;/p&gt;
+&lt;p&gt;By default, the first item in the drop-down list is selected.&lt;/p&gt;
+&lt;p&gt;To define a pre-selected option, add the &lt;code&gt;selected&lt;/code&gt; attribute to the option&lt;/p&gt;
+&lt;p&gt;Use the &lt;code&gt;multiple&lt;/code&gt; attribute to allow the user to select more than one value&lt;/p&gt;
+&lt;h4 id="textarea"&gt;textarea
+&lt;/h4&gt;&lt;p&gt;the &lt;code&gt;&amp;lt;textarea&amp;gt;&lt;/code&gt; element defines a multi-line input field (a text area)&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-html" data-lang="html"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;textarea&lt;/span&gt; &lt;span class="na"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;message&amp;#34;&lt;/span&gt; &lt;span class="na"&gt;rows&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;10&amp;#34;&lt;/span&gt; &lt;span class="na"&gt;cols&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;30&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;The cat was playing in the garden.
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;textarea&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="fieldsetlegend"&gt;fieldset,legend
+&lt;/h4&gt;&lt;p&gt;The &lt;code&gt;&amp;lt;fieldset&amp;gt;&lt;/code&gt; element is used to group related data in a form.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;&amp;lt;legend&amp;gt;&lt;/code&gt; element defines a caption for the &lt;code&gt;&amp;lt;fieldset&amp;gt;&lt;/code&gt; element.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-html" data-lang="html"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;form&lt;/span&gt; &lt;span class="na"&gt;action&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;/action_page.php&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;fieldset&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;legend&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;Personalia:&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;legend&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;label&lt;/span&gt; &lt;span class="na"&gt;for&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;fname&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;First name:&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;label&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;br&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;input&lt;/span&gt; &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;text&amp;#34;&lt;/span&gt; &lt;span class="na"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;fname&amp;#34;&lt;/span&gt; &lt;span class="na"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;fname&amp;#34;&lt;/span&gt; &lt;span class="na"&gt;value&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;John&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;br&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;label&lt;/span&gt; &lt;span class="na"&gt;for&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;lname&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;Last name:&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;label&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;br&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;input&lt;/span&gt; &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;text&amp;#34;&lt;/span&gt; &lt;span class="na"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;lname&amp;#34;&lt;/span&gt; &lt;span class="na"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;lname&amp;#34;&lt;/span&gt; &lt;span class="na"&gt;value&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;Doe&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;br&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;br&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;input&lt;/span&gt; &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;submit&amp;#34;&lt;/span&gt; &lt;span class="na"&gt;value&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;Submit&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;fieldset&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;form&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="datalist"&gt;datalist
+&lt;/h4&gt;&lt;p&gt;The &lt;code&gt;&amp;lt;datalist&amp;gt;&lt;/code&gt; element specifies a list of pre-defined options for an &lt;code&gt;&amp;lt;input&amp;gt;&lt;/code&gt; element.&lt;/p&gt;
+&lt;p&gt;Users will see a drop-down list of the pre-defined options as they input data.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;list&lt;/code&gt; attribute of the &lt;code&gt;&amp;lt;input&amp;gt;&lt;/code&gt; element, must refer to the &lt;code&gt;id&lt;/code&gt; attribute of the &lt;code&gt;&amp;lt;datalist&amp;gt;&lt;/code&gt; element.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-html" data-lang="html"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;form&lt;/span&gt; &lt;span class="na"&gt;action&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;/action_page.php&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;input&lt;/span&gt; &lt;span class="na"&gt;list&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;browsers&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;datalist&lt;/span&gt; &lt;span class="na"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;browsers&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;option&lt;/span&gt; &lt;span class="na"&gt;value&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;Internet Explorer&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;option&lt;/span&gt; &lt;span class="na"&gt;value&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;Firefox&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;option&lt;/span&gt; &lt;span class="na"&gt;value&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;Chrome&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;option&lt;/span&gt; &lt;span class="na"&gt;value&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;Opera&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;option&lt;/span&gt; &lt;span class="na"&gt;value&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;Safari&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;datalist&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;form&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="graphics"&gt;Graphics
+&lt;/h2&gt;&lt;h3 id="canvas"&gt;Canvas
+&lt;/h3&gt;&lt;p&gt;The HTML &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; element is used to draw graphics, on the fly, via JavaScript.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; element is only a container for graphics. You must use JavaScript to actually draw the graphics.&lt;/p&gt;
+&lt;p&gt;Canvas has several methods for drawing paths, boxes, circles, text, and adding images.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; Always specify an &lt;code&gt;id&lt;/code&gt; attribute (to be referred to in a script), and a &lt;code&gt;width&lt;/code&gt; and &lt;code&gt;height&lt;/code&gt; attribute to define the size of the canvas. To add a border, use the &lt;code&gt;style&lt;/code&gt; attribute.&lt;/p&gt;
+&lt;h3 id="svg"&gt;SVG
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;SVG stands for Scalable Vector Graphics&lt;/li&gt;
+&lt;li&gt;SVG is used to define graphics for the Web&lt;/li&gt;
+&lt;li&gt;SVG is a W3C recommendation&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;SVG is a language for describing 2D graphics in XML.&lt;/p&gt;
+&lt;p&gt;Canvas draws 2D graphics, on the fly (with a JavaScript).&lt;/p&gt;
+&lt;p&gt;SVG is XML based, which means that every element is available within the SVG DOM. You can attach JavaScript event handlers for an element.&lt;/p&gt;
+&lt;p&gt;In SVG, each drawn shape is remembered as an object. If attributes of an SVG object are changed, the browser can automatically re-render the shape.&lt;/p&gt;
+&lt;p&gt;Canvas is rendered pixel by pixel. In canvas, once the graphic is drawn, it is forgotten by the browser. If its position should be changed, the entire scene needs to be redrawn, including any objects that might have been covered by the graphic.&lt;/p&gt;</description></item></channel></rss>

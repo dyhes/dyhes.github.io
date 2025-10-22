@@ -1,0 +1,1024 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>JS on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/js/</link><description>Recent content in JS on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 15 Jun 2025 19:46:57 +0800</lastBuildDate><atom:link href="https://dyhes.github.io/tags/js/index.xml" rel="self" type="application/rss+xml"/><item><title>【JS】Interview Preparation</title><link>https://dyhes.github.io/p/jsinterview-preparation/</link><pubDate>Thu, 05 May 2022 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/jsinterview-preparation/</guid><description>&lt;h3 id="原型--构造函数--实例"&gt;原型 / 构造函数 / 实例
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;原型&lt;code&gt;(prototype)&lt;/code&gt;: 一个简单的对象，用于实现对象的 &lt;strong&gt;属性继承&lt;/strong&gt;。在 Firefox 和 Chrome 中，每个&lt;code&gt;JavaScript&lt;/code&gt;对象中都包含一个&lt;code&gt;__proto__&lt;/code&gt; (非标准)的属性指向该对象的原型，可通过&lt;code&gt;obj.__proto__&lt;/code&gt;进行访问。&lt;/li&gt;
+&lt;li&gt;构造函数: 可以通过&lt;code&gt;new&lt;/code&gt;来 &lt;strong&gt;新建一个对象&lt;/strong&gt; 的函数。&lt;/li&gt;
+&lt;li&gt;实例: 通过构造函数和&lt;code&gt;new&lt;/code&gt;创建出来的对象，便是实例。 &lt;strong&gt;实例通过&lt;code&gt;__proto__&lt;/code&gt;指向原型，通过&lt;code&gt;constructor&lt;/code&gt;指向构造函数（借助原型）&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// 实例
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;instance&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nb"&gt;Object&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;则此时， &lt;strong&gt;实例为&lt;code&gt;instance&lt;/code&gt;&lt;/strong&gt;, &lt;strong&gt;构造函数为&lt;code&gt;Object&lt;/code&gt;&lt;/strong&gt;，我们知道，构造函数拥有一个&lt;code&gt;prototype&lt;/code&gt;的属性指向原型，因此原型为:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// 原型
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;prototype&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;Object&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;prototype&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;三者的关系:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;实例.__proto__ === 原型
+原型.constructor === 构造函数
+构造函数.prototype === 原型
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="原型链"&gt;原型链
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;原型链是由原型对象组成&lt;/strong&gt;，每个对象都有 &lt;code&gt;__proto__&lt;/code&gt; 属性，指向了创建该对象的构造函数的原型，&lt;code&gt;__proto__&lt;/code&gt; 将对象连接起来组成了原型链。是一个用来&lt;strong&gt;实现继承和共享属性&lt;/strong&gt;的有限的对象链。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;属性查找机制&lt;/strong&gt;: 当查找对象的属性时，如果实例对象自身不存在该属性，则&lt;strong&gt;沿着原型链&lt;/strong&gt;往上一级查找，找到时则输出，不存在时，则继续沿着原型链往上一级查找，直至最顶级的原型对象&lt;code&gt;Object.prototype&lt;/code&gt;，如还是没找到，则输出 &lt;code&gt;undefined&lt;/code&gt;；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;属性修改机制&lt;/strong&gt;: 只会修改实例对象本身的属性，如果不存在，则进行添加该属性，如果需要修改原型的属性时，则可以用: &lt;code&gt;b.prototype.x = 2&lt;/code&gt;；但是这样会造成&lt;strong&gt;所有&lt;/strong&gt;继承于该对象的实例的属性发生改变。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="对象的拷贝"&gt;对象的拷贝
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;浅拷贝: 以赋值的形式拷贝引用对象，仍指向同一个地址，&lt;strong&gt;修改时原对象也会受到影响&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Object.assign&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;展开运算符(&amp;hellip;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;深拷贝: 完全拷贝一个新对象，&lt;strong&gt;修改时原对象不再受到任何影响&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;JSON&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;parse&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;JSON&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;stringify&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;obj&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;: 性能最快&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;具有循环引用的对象时，报错&lt;/li&gt;
+&lt;li&gt;当值为函数、&lt;code&gt;undefined&lt;/code&gt;、或&lt;code&gt;symbol&lt;/code&gt;时，无法拷贝&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;递归进行逐一赋值&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="new运算符的执行过程"&gt;new运算符的执行过程
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;新生成一个对象&lt;/li&gt;
+&lt;li&gt;链接到原型: &lt;code&gt;obj.__proto__ = Con.prototype&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;绑定this: &lt;code&gt;apply&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;返回新对象(如果构造函数有自己 retrun 时，则返回该值)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="instanceof原理"&gt;instanceof原理
+&lt;/h3&gt;&lt;p&gt;能在实例的 &lt;strong&gt;原型对象链&lt;/strong&gt; 中找到该构造函数的&lt;code&gt;prototype&lt;/code&gt;属性所指向的 &lt;strong&gt;原型对象&lt;/strong&gt;，就返回&lt;code&gt;true&lt;/code&gt;。即:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// __proto__: 代表原型对象链
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="nx"&gt;instance&lt;/span&gt;&lt;span class="p"&gt;.[&lt;/span&gt;&lt;span class="nx"&gt;__proto__&lt;/span&gt;&lt;span class="p"&gt;...]&lt;/span&gt; &lt;span class="o"&gt;===&lt;/span&gt; &lt;span class="nx"&gt;instance&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;constructor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;prototype&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// return true
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="类型转换"&gt;类型转换
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;-、*、/、% ：一律转换成数值后计算&lt;/li&gt;
+&lt;li&gt;+：
+&lt;ul&gt;
+&lt;li&gt;数字 + 字符串 = 字符串， 运算顺序是从左到右&lt;/li&gt;
+&lt;li&gt;数字 + 对象， 优先调用对象的&lt;code&gt;valueOf&lt;/code&gt; -&amp;gt; &lt;code&gt;toString&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;数字 + &lt;code&gt;boolean/null&lt;/code&gt; -&amp;gt; 数字&lt;/li&gt;
+&lt;li&gt;数字 + &lt;code&gt;undefined&lt;/code&gt; -&amp;gt; &lt;code&gt;NaN&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;[1].toString() === '1'&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;{}.toString() === '[object object]'&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;NaN&lt;/code&gt; !== &lt;code&gt;NaN&lt;/code&gt; 、`+undefined 为 NaN&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="防抖与节流"&gt;防抖与节流
+&lt;/h3&gt;&lt;p&gt;防抖与节流函数是一种最常用的 &lt;strong&gt;高频触发优化方式&lt;/strong&gt;，能对性能有较大的帮助。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;防抖 (debounce)&lt;/strong&gt;: 将多次高频操作优化为只在最后一次执行，通常使用的场景是：用户输入，只需再输入完成后做一次输入校验即可。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;function debounce(fn, wait, immediate) {
+let timer = null
+return function() {
+let args = arguments
+let context = this
+if (immediate &amp;amp;&amp;amp; !timer) {
+fn.apply(context, args)
+}
+if (timer) clearTimeout(timer)
+timer = setTimeout(() =&amp;gt; {
+fn.apply(context, args)
+}, wait)
+}
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;节流(throttle)&lt;/strong&gt;: 每隔一段时间后执行一次，也就是降低频率，将高频操作优化成低频操作，通常使用场景: 滚动条事件 或者 resize 事件，通常每隔 100~500 ms执行一次即可。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;function throttle(fn, wait, immediate) {
+let timer = null
+let callNow = immediate
+return function() {
+let context = this,
+args = arguments
+if (callNow) {
+fn.apply(context, args)
+callNow = false
+}
+if (!timer) {
+timer = setTimeout(() =&amp;gt; {
+fn.apply(context, args)
+timer = null
+}, wait)
+}
+}
+}
+&lt;/code&gt;&lt;/pre&gt;</description></item><item><title>【JS】ES6</title><link>https://dyhes.github.io/p/jses6/</link><pubDate>Mon, 19 Apr 2021 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/jses6/</guid><description>&lt;h2 id="parameter"&gt;Parameter
+&lt;/h2&gt;&lt;h3 id="default-parameter"&gt;Default Parameter
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;say&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;message&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Hi&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;message&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;say&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt; &lt;span class="c1"&gt;// &amp;#39;Hi&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="nx"&gt;say&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Hello&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;// &amp;#39;Hello&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If you want to use the default values for the parameters, pass &lt;code&gt;undefined&lt;/code&gt; values to the parameters.&lt;/p&gt;
+&lt;p&gt;The parameter can take a default value which is a result of a function. You can assign a parameter a default value that references to other default parameters as shown in the following example:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;add&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;x&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;y&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;z&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;x&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nx"&gt;y&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;x&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nx"&gt;y&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nx"&gt;z&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;add&lt;/span&gt;&lt;span class="p"&gt;());&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;；‘’、》The value of &lt;strong&gt;the &lt;code&gt;arguments&lt;/code&gt; object&lt;/strong&gt; inside the function is the number of actual arguments that you pass to the function. For example:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;add&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;y&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;z&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt; &lt;span class="nx"&gt;arguments&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;length&lt;/span&gt; &lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;x&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nx"&gt;y&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nx"&gt;z&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;add&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; &lt;span class="c1"&gt;// 1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="nx"&gt;add&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;20&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; &lt;span class="c1"&gt;// 2
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="nx"&gt;add&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;20&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;30&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; &lt;span class="c1"&gt;// 3
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="rest-parameter"&gt;Rest Parameter
+&lt;/h3&gt;&lt;p&gt;ES6 provides a new kind of parameter so-called rest parameter that has a prefix of three dots &lt;code&gt;(...)&lt;/code&gt;. A rest parameter **allows you to &lt;strong&gt;represent an indefinite number of arguments as an array&lt;/strong&gt;. See the following syntax:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;fn&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="nx"&gt;b&lt;/span&gt;&lt;span class="p"&gt;,...&lt;/span&gt;&lt;span class="nx"&gt;args&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;//...
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Notice that the rest parameters must appear &lt;strong&gt;at the end of the argument list&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;See the following example:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;(...&lt;/span&gt;&lt;span class="nx"&gt;args&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;total&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;a&lt;/span&gt; &lt;span class="k"&gt;of&lt;/span&gt; &lt;span class="nx"&gt;args&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;total&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="nx"&gt;a&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;total&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="spread-operator"&gt;Spread Operator
+&lt;/h2&gt;&lt;p&gt;ES6 provides a new operator called spread operator that consists of three dots &lt;code&gt;(...).&lt;/code&gt; The spread operator allows you to spread out elements of an &lt;strong&gt;iterable object&lt;/strong&gt; such as an &lt;a class="link" href="https://www.javascripttutorial.net/javascript-array/" target="_blank" rel="noopener"
+&gt;array&lt;/a&gt;,a &lt;a class="link" href="https://www.javascripttutorial.net/es6/javascript-map/" target="_blank" rel="noopener"
+&gt;map&lt;/a&gt;, or a &lt;a class="link" href="https://www.javascripttutorial.net/es6/javascript-set/" target="_blank" rel="noopener"
+&gt;set&lt;/a&gt;. For example:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;odd&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;combined&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;6&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;...&lt;/span&gt;&lt;span class="nx"&gt;odd&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Output:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;[ 2, 4, 6, 1, 3, 5 ]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;So the three dots ( &lt;code&gt;...&lt;/code&gt;) represent both the spread operator and the rest parameter.&lt;/p&gt;
+&lt;p&gt;Here are the main differences:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The spread operator &lt;strong&gt;unpacks&lt;/strong&gt; elements.&lt;/li&gt;
+&lt;li&gt;The rest parameter &lt;strong&gt;packs&lt;/strong&gt; elements into an array.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The rest parameters must be the last arguments of a function. However, the spread operator can be anywhere:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-JS" data-lang="JS"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;rivers&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Nile&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Ganges&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Yangte&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;moreRivers&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Danube&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Amazon&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;//ES5
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="nb"&gt;Array&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;prototype&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;push&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;apply&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;rivers&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;moreRivers&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;rivers&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;//ES6
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="nx"&gt;rivers&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;push&lt;/span&gt;&lt;span class="p"&gt;(...&lt;/span&gt;&lt;span class="nx"&gt;moreRivers&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Note that ES2018 expands the spread operator to objects. It is known as the &lt;a class="link" href="https://www.javascripttutorial.net/es-next/javascript-object-spread/" target="_blank" rel="noopener"
+&gt;object spread&lt;/a&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;circle&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;radius&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;coloredCircle&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;...&lt;/span&gt;&lt;span class="nx"&gt;circle&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;color&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;black&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="object-literal"&gt;Object literal
+&lt;/h2&gt;&lt;p&gt;ES6 allows you to &lt;strong&gt;eliminate the duplication&lt;/strong&gt; when a property of an object is the same as the local variable name by including the name without a colon and value.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-JS" data-lang="JS"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;createMachine&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;status&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;status&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;You could use the square brackets( &lt;code&gt;[]&lt;/code&gt;) to enable the &lt;strong&gt;computed property names&lt;/strong&gt; for the properties on objects.&lt;/p&gt;
+&lt;p&gt;The square brackets allow you to use the string literals and &lt;strong&gt;variables&lt;/strong&gt; as the property names.&lt;/p&gt;
+&lt;p&gt;When a property name is placed inside the square brackets, the JavaScript engine &lt;strong&gt;evaluates it as a string&lt;/strong&gt;. It means that you can use an expression as a property name.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-JS" data-lang="JS"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;prefix&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;machine&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;machine&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;prefix&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39; name&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;server&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;prefix&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39; hours&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;10000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;machine&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;machine name&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt; &lt;span class="c1"&gt;// server
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;machine&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;machine hours&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt; &lt;span class="c1"&gt;// 10000
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="concise-method-syntax"&gt;Concise Method Syntax
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-JS" data-lang="JS"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;//ES5
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;server&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Server&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;restart&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;The&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34; is restarting...&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;//ES6
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;server&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Server&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;restart&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;The&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34; is restarting...&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This shorthand syntax is also known as the &lt;strong&gt;concise method syntax&lt;/strong&gt;. It’s valid to have spaces in the property name.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-JS" data-lang="JS"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;server&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Server&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;restart&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;The &amp;#34;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34; is restarting...&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s1"&gt;&amp;#39;starting up&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;The &amp;#34;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34; is starting up!&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;server&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;starting up&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]();&lt;/span&gt;&lt;span class="nx"&gt;Code&lt;/span&gt; &lt;span class="nx"&gt;language&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;JavaScript&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;javascript&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In this example, the method &lt;code&gt;'starting up'&lt;/code&gt; has spaces in its name. To call the method, you use the following syntax:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-JS" data-lang="JS"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;object_name&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;property name&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="new-way-to-loop"&gt;New Way to Loop
+&lt;/h2&gt;&lt;p&gt;ES6 introduced a new statement &lt;code&gt;for...of&lt;/code&gt; that iterates over an iterable object such as:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Built-in &lt;a class="link" href="https://www.javascripttutorial.net/javascript-array/" target="_blank" rel="noopener"
+&gt;Array&lt;/a&gt;, &lt;a class="link" href="https://www.javascripttutorial.net/javascript-string/" target="_blank" rel="noopener"
+&gt;String&lt;/a&gt;, &lt;a class="link" href="https://www.javascripttutorial.net/es6/javascript-map/" target="_blank" rel="noopener"
+&gt;Map&lt;/a&gt;, &lt;a class="link" href="https://www.javascripttutorial.net/es6/javascript-set/" target="_blank" rel="noopener"
+&gt;Set&lt;/a&gt;, …&lt;/li&gt;
+&lt;li&gt;Array-like objects such as &lt;code&gt;arguments&lt;/code&gt; or &lt;code&gt;NodeList&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;User-defined objects that implement the &lt;a class="link" href="https://www.javascripttutorial.net/es6/javascript-iterator/" target="_blank" rel="noopener"
+&gt;iterator protocol&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The following illustrates the syntax of the &lt;code&gt;for...of&lt;/code&gt;:&lt;/p&gt;
+&lt;p&gt;You can use &lt;code&gt;var&lt;/code&gt;, &lt;code&gt;let&lt;/code&gt;, or &lt;code&gt;const&lt;/code&gt; to declare the &lt;code&gt;variable&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-JS" data-lang="JS"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;variable&lt;/span&gt; &lt;span class="k"&gt;of&lt;/span&gt; &lt;span class="nx"&gt;iterable&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// statements
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// Array destructing
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;colors&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Red&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Green&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Blue&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;index&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;color&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="k"&gt;of&lt;/span&gt; &lt;span class="nx"&gt;colors&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;entries&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sb"&gt;`&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nx"&gt;color&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="sb"&gt; is at index &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nx"&gt;index&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="sb"&gt;`&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// object destructing
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;ratings&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="nx"&gt;user&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;John&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="nx"&gt;score&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="nx"&gt;user&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Jane&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="nx"&gt;score&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="nx"&gt;user&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;David&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="nx"&gt;score&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="nx"&gt;user&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Peter&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="nx"&gt;score&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;sum&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="nx"&gt;score&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="k"&gt;of&lt;/span&gt; &lt;span class="nx"&gt;ratings&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;sum&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="nx"&gt;score&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="destructure"&gt;Destructure
+&lt;/h2&gt;&lt;h3 id="array-destructuring"&gt;Array Destructuring
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;y&lt;/span&gt; &lt;span class="p"&gt;,...&lt;/span&gt;&lt;span class="nx"&gt;args&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;someFuncReturnArray&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;b&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;b&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;a&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If the value taken from the array is &lt;code&gt;undefined&lt;/code&gt;, you can assign the variable a default value, like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;b&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;//a=10,b=2;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="object-destructuring"&gt;Object Destructuring
+&lt;/h3&gt;&lt;p&gt;ES6 introduces the object destructuring syntax that provides an alternative way to &lt;strong&gt;assign properties of an object to variables&lt;/strong&gt;:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;let { firstName: fname, lastName: lname } = person
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;In this example, the &lt;code&gt;firstName&lt;/code&gt; and &lt;code&gt;lastName&lt;/code&gt; properties are assigned to the &lt;code&gt;fName&lt;/code&gt; and &lt;code&gt;lName&lt;/code&gt; variables respectively.&lt;/p&gt;
+&lt;p&gt;The identifier before the colon (&lt;code&gt;:&lt;/code&gt;) is the property of the object and the identifier &lt;strong&gt;after&lt;/strong&gt; the colon is the &lt;strong&gt;variable&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;If the variables have &lt;strong&gt;the same names&lt;/strong&gt; as the properties of the object, you can make the code more concise as follows:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;firstName&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;lastName&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;person&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;It’s possible to separate the declaration and assignment. However, you must surround the variables in &lt;strong&gt;parentheses&lt;/strong&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;({&lt;/span&gt;&lt;span class="nx"&gt;firstName&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;lastName&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;person&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If you don’t use the parentheses, the JavaScript engine will interpret the left-hand side as a block and throw a syntax error.&lt;/p&gt;
+&lt;p&gt;When you assign a property that does not exist to a variable using the object destructuring, the variable is set to &lt;strong&gt;&lt;code&gt;undefined&lt;/code&gt;&lt;/strong&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;firstName&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;lastName&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;middleName&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;currentAge&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;age&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;18&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;person&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To avoid typeError caused by null returned, you can use &lt;code&gt;||&lt;/code&gt; to fallback the &lt;code&gt;null&lt;/code&gt; object to an empty object:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;let { firstName, lastName } = getPerson() || {};
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="module"&gt;Module
+&lt;/h2&gt;&lt;p&gt;An ES6 module is a JavaScript file that &lt;strong&gt;executes in strict mode only&lt;/strong&gt;. It means that any &lt;a class="link" href="https://www.javascripttutorial.net/es6/javascript-let/" target="_blank" rel="noopener"
+&gt;variables&lt;/a&gt; or &lt;a class="link" href="https://www.javascripttutorial.net/javascript-function/" target="_blank" rel="noopener"
+&gt;functions&lt;/a&gt; declared in the module won’t be added automatically to the global scope.&lt;/p&gt;
+&lt;p&gt;First, create a new file called &lt;code&gt;message.js&lt;/code&gt; and add the following code:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;export let message = &amp;#39;ES6 Modules&amp;#39;;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The &lt;code&gt;message.js&lt;/code&gt; is a module in ES6 that contains the &lt;code&gt;message&lt;/code&gt; variable. The &lt;code&gt;export&lt;/code&gt; statement &lt;strong&gt;exposes&lt;/strong&gt; the &lt;code&gt;message&lt;/code&gt; variable to other modules.&lt;/p&gt;
+&lt;p&gt;Second, create another new file named &lt;code&gt;app.js&lt;/code&gt; that uses the &lt;code&gt;message.js&lt;/code&gt; module. The &lt;code&gt;app.js&lt;/code&gt; module creates a new heading 1 (h1) element and attaches it to an HTML page. The &lt;code&gt;import&lt;/code&gt; statement imports the &lt;code&gt;message&lt;/code&gt; variable from the &lt;code&gt;message.js&lt;/code&gt; module.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-jsx" data-lang="jsx"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;import&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;message&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="nx"&gt;from&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;./message.js&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;h1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;document&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;createElement&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;h1&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;h1&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;textContent&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;message&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;document&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;body&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;appendChild&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;h1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Third, create a new HTML page that uses the &lt;code&gt;app.js&lt;/code&gt; module:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-jsx" data-lang="jsx"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;lt;!&lt;/span&gt;&lt;span class="nx"&gt;DOCTYPE&lt;/span&gt; &lt;span class="nx"&gt;html&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;html&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;head&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;meta&lt;/span&gt; &lt;span class="na"&gt;charset&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;utf-8&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;title&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;&lt;span class="nx"&gt;ES6&lt;/span&gt; &lt;span class="nx"&gt;Modules&lt;/span&gt;&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;title&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;head&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;body&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;script&lt;/span&gt; &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;module&amp;#34;&lt;/span&gt; &lt;span class="na"&gt;src&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;./app.js&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;script&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;body&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;html&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Note that we used the &lt;code&gt;type=&amp;quot;module&amp;quot;&lt;/code&gt; in the script tag to load the &lt;code&gt;app.js&lt;/code&gt; module.&lt;/p&gt;
+&lt;p&gt;To export a &lt;a class="link" href="https://www.javascripttutorial.net/javascript-variables/" target="_blank" rel="noopener"
+&gt;variable&lt;/a&gt;, a &lt;a class="link" href="https://www.javascripttutorial.net/javascript-function/" target="_blank" rel="noopener"
+&gt;function&lt;/a&gt;, or a &lt;a class="link" href="https://www.javascripttutorial.net/es6/javascript-class/" target="_blank" rel="noopener"
+&gt;class&lt;/a&gt;, you place the &lt;code&gt;export&lt;/code&gt; keyword in front of it.&lt;/p&gt;
+&lt;p&gt;Note that the &lt;code&gt;export&lt;/code&gt; keyword requires the function or class to &lt;strong&gt;have a name&lt;/strong&gt; to be exported. You &lt;strong&gt;can’t export an anonymous function or class&lt;/strong&gt; using this syntax.&lt;/p&gt;
+&lt;p&gt;Once you define a module with exports, you can access the exported variables, functions, and classes in another module by using the &lt;code&gt;import&lt;/code&gt; keyword.&lt;/p&gt;
+&lt;p&gt;In this syntax:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;First, specify what to import inside the &lt;strong&gt;curly braces&lt;/strong&gt;, which are called bindings.&lt;/li&gt;
+&lt;li&gt;Then, specify the module from which you import the given bindings.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Note that when you import a binding from a module, the binding behaves like it was defined using &lt;a class="link" href="https://www.javascripttutorial.net/es6/javascript-const/" target="_blank" rel="noopener"
+&gt;const&lt;/a&gt;. It means you can’t have another identifier with the same name or change the value of the binding.&lt;/p&gt;
+&lt;p&gt;Behind the scenes, when you called the &lt;code&gt;setMessage()&lt;/code&gt; function. JavaScript went back to the &lt;code&gt;greeting.js&lt;/code&gt; module and executed code in there and changed the &lt;code&gt;message&lt;/code&gt; variable. The change was then automatically reflected on the imported &lt;code&gt;message&lt;/code&gt; binding.&lt;/p&gt;
+&lt;p&gt;To import everything from a module &lt;strong&gt;as a single object&lt;/strong&gt;, you use the &lt;strong&gt;asterisk (*) pattern&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;all the bindings become properties of the object, so you can access them.&lt;/p&gt;
+&lt;p&gt;JavaScript must &lt;em&gt;statically&lt;/em&gt; determine what will be exported and imported.&lt;/p&gt;
+&lt;p&gt;JavaScript allows you to create &lt;strong&gt;aliases&lt;/strong&gt; for variables, functions, or classes when you export and import.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;export&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;add&lt;/span&gt; &lt;span class="nx"&gt;as&lt;/span&gt; &lt;span class="nx"&gt;sum&lt;/span&gt; &lt;span class="p"&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;import&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="nx"&gt;sum&lt;/span&gt; &lt;span class="nx"&gt;as&lt;/span&gt; &lt;span class="nx"&gt;total&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="nx"&gt;from&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;./math.js&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;import&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;sum&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="nx"&gt;from&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;./math.js&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;export&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;sum&lt;/span&gt; &lt;span class="p"&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;It’s possible to export bindings that you have imported. This is called &lt;strong&gt;re-exporting&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;A module can have &lt;strong&gt;one and only one default export&lt;/strong&gt;. The default export is easier to import. The default for a module can be a variable, a function, or a class.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// sort.js
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kr"&gt;export&lt;/span&gt; &lt;span class="k"&gt;default&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// sorting here
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;import&lt;/span&gt; &lt;span class="nx"&gt;sort&lt;/span&gt; &lt;span class="nx"&gt;from&lt;/span&gt; &lt;span class="nx"&gt;sort&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;js&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Note that you don’t need to specify the name for the function because the module represents the function name.&lt;/p&gt;
+&lt;p&gt;Notice that we &lt;strong&gt;didn’t use the curly brace &lt;code&gt;{}&lt;/code&gt;&lt;/strong&gt; surrounding the &lt;code&gt;sort&lt;/code&gt; identifier.&lt;/p&gt;
+&lt;p&gt;To import both default and non-default bindings, you use the specify a list of bindings after the &lt;code&gt;import&lt;/code&gt; keyword with the following rules:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The default binding must &lt;strong&gt;come first&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;The non-default binding must be surrounded by curly braces.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="arrow-function"&gt;Arrow Function
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Use the &lt;code&gt;(...args) =&amp;gt; expression;&lt;/code&gt; to define an arrow function.&lt;/li&gt;
+&lt;li&gt;Use the &lt;code&gt;(...args) =&amp;gt; { statements }&lt;/code&gt; to define an arrow function that has &lt;strong&gt;multiple statements&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;An arrow function &lt;strong&gt;doesn’t&lt;/strong&gt; have its binding to &lt;code&gt;this&lt;/code&gt; or &lt;code&gt;super&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;An arrow function &lt;strong&gt;doesn’t&lt;/strong&gt; have &lt;code&gt;arguments&lt;/code&gt; object, &lt;code&gt;new.target&lt;/code&gt; keyword, and &lt;code&gt;prototype&lt;/code&gt; property.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;the arrow function doesn’t have its own &lt;code&gt;this&lt;/code&gt; value. It uses the &lt;code&gt;this&lt;/code&gt; value of the &lt;strong&gt;enclosing lexical scope&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Arrow functions don’t have the &lt;code&gt;arguments&lt;/code&gt; object. Therefore, if you have a function that use &lt;code&gt;arguments&lt;/code&gt; object, you cannot use the arrow function.&lt;/p&gt;
+&lt;h2 id="symbol"&gt;Symbol
+&lt;/h2&gt;&lt;p&gt;To create a new symbol, you use the global &lt;code&gt;Symbol()&lt;/code&gt; function as shown in this example:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;s&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;Symbol&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;foo&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The &lt;code&gt;Symbol()&lt;/code&gt; function creates a &lt;strong&gt;new &lt;em&gt;unique&lt;/em&gt; value&lt;/strong&gt; each time you call it&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;Symbol()&lt;/code&gt; function accepts a &lt;code&gt;description&lt;/code&gt; as an optional argument. The &lt;code&gt;description&lt;/code&gt; argument will make your symbol more &lt;strong&gt;descriptive&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;You can access the symbol’s description property using the &lt;code&gt;toString()&lt;/code&gt; method. The &lt;code&gt;console.log()&lt;/code&gt; method calls the &lt;code&gt;toString()&lt;/code&gt; method of the symbol implicitly&lt;/p&gt;
+&lt;p&gt;Since a symbol is a &lt;strong&gt;primitive value&lt;/strong&gt;, if you attempt to create a symbol using the &lt;code&gt;new&lt;/code&gt; operator, you will get an error&lt;/p&gt;
+&lt;p&gt;ES6 provides you with the global symbol registry that allows you to share symbols globally. If you want to create a symbol that will be shared, you use the &lt;code&gt;Symbol.for()&lt;/code&gt; method &lt;strong&gt;instead of&lt;/strong&gt; calling the &lt;code&gt;Symbol()&lt;/code&gt; function.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;To get the key associated with a symbol, you use the &lt;code&gt;Symbol.keyFor()&lt;/code&gt; method&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;To get all the enumerable properties of an object, you use the &lt;code&gt;Object.keys()&lt;/code&gt; method.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;To get all properties of an object whether the properties are enumerable or not, you use the &lt;code&gt;Object.getOwnPropertyNames()&lt;/code&gt; method.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;To get all property symbols of an object, you use the &lt;code&gt;Object.getOwnPropertySymbols()&lt;/code&gt; method, which has been added in ES6.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;Object&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;keys&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;task&lt;/span&gt;&lt;span class="p"&gt;));&lt;/span&gt; &lt;span class="c1"&gt;// [&amp;#34;description&amp;#34;]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;Object&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;getOwnPropertyNames&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;task&lt;/span&gt;&lt;span class="p"&gt;));&lt;/span&gt; &lt;span class="c1"&gt;// [&amp;#34;description&amp;#34;]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;Object&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;getOwnPropertySymbols&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;task&lt;/span&gt;&lt;span class="p"&gt;));&lt;/span&gt; &lt;span class="c1"&gt;//[Symbol(status)]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;ES6 provides predefined symbols which are called well-known symbols. The well-known symbols represent the common behaviors in JavaScript. Each well-known symbol is a static property of the &lt;code&gt;Symbol&lt;/code&gt; object.&lt;/p&gt;
+&lt;h2 id="iterator-and-generator"&gt;Iterator and Generator
+&lt;/h2&gt;&lt;p&gt;There are two iteration protocols: &lt;strong&gt;iterable protocol&lt;/strong&gt; and &lt;strong&gt;iterator protocol&lt;/strong&gt;.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Iterator protocol&lt;/p&gt;
+&lt;p&gt;An object is an iterator when it implements an interface (or API) that answers two questions:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Is there any element left?&lt;/li&gt;
+&lt;li&gt;If there is, what is the element?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Technically speaking, an object is qualified as an iterator when it has a &lt;code&gt;next()&lt;/code&gt; method that returns an object with two properties:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;done&lt;/code&gt;: a boolean value indicating whether or not there are any more elements that could be iterated upon.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;value&lt;/code&gt;: the current element.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Iterable protocol&lt;/p&gt;
+&lt;p&gt;An object is iterable when it contains a method called &lt;code&gt;[Symbol.iterator]&lt;/code&gt; that takes no argument and returns an object which conforms to the iterator protocol.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;[Symbol.iterator]&lt;/code&gt; is one of the built-in well-known &lt;a class="link" href="https://www.javascripttutorial.net/es6/symbol/" target="_blank" rel="noopener"
+&gt;symbols&lt;/a&gt; in ES6.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Since ES6 provides built-in iterators for the &lt;strong&gt;collection types&lt;/strong&gt; &lt;code&gt;Array&lt;/code&gt;, &lt;code&gt;Set&lt;/code&gt;, and &lt;code&gt;Map&lt;/code&gt;, you don’t have to create iterators for these objects.&lt;/p&gt;
+&lt;p&gt;If you have a custom type and want to make it iterable so that you can use the &lt;code&gt;for...of&lt;/code&gt; loop construct, you need to implement the iteration protocols.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The following code creates a &lt;code&gt;Sequence&lt;/code&gt; object that returns a list of numbers in the range of ( &lt;code&gt;start&lt;/code&gt;, &lt;code&gt;end&lt;/code&gt;) with an &lt;code&gt;interval&lt;/code&gt; between subsequent numbers.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;class&lt;/span&gt; &lt;span class="nx"&gt;Sequence&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;constructor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt; &lt;span class="nx"&gt;start&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;end&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kc"&gt;Infinity&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;interval&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;start&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;start&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;end&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;end&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;interval&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;interval&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;Symbol&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;iterator&lt;/span&gt;&lt;span class="p"&gt;]()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;counter&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;nextIndex&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;start&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;next&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt; &lt;span class="nx"&gt;nextIndex&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;=&lt;/span&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;end&lt;/span&gt; &lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;value&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;nextIndex&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;done&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;false&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;nextIndex&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;interval&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;counter&lt;/span&gt;&lt;span class="o"&gt;++&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;result&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;value&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;counter&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;done&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt; &lt;span class="p"&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;cleaning up...&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;value&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;undefined&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;done&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt; &lt;span class="p"&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The following code uses the &lt;code&gt;Sequence&lt;/code&gt; iterator in a &lt;code&gt;for...of&lt;/code&gt; loop:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;evenNumbers&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nx"&gt;Sequence&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;num&lt;/span&gt; &lt;span class="k"&gt;of&lt;/span&gt; &lt;span class="nx"&gt;evenNumbers&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;num&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In addition to the &lt;code&gt;next()&lt;/code&gt; method, the &lt;code&gt;[Symbol.iterator]()&lt;/code&gt; may optionally return a method called &lt;code&gt;return()&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;return()&lt;/code&gt; method &lt;strong&gt;is invoked automatically when the iteration is stopped prematurely&lt;/strong&gt;. It is where you can place the code to &lt;strong&gt;clean up&lt;/strong&gt; the resources.&lt;/p&gt;
+&lt;h3 id="generator"&gt;Generator
+&lt;/h3&gt;&lt;p&gt;ES6 introduces &lt;strong&gt;a new kind of function&lt;/strong&gt; that is different from a regular function: function generator or generator.&lt;/p&gt;
+&lt;p&gt;A generator can &lt;strong&gt;pause midway&lt;/strong&gt; and then &lt;strong&gt;continues&lt;/strong&gt; from where it paused.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="nx"&gt;generate&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;invoked 1st time&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;yield&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;invoked 2nd time&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;yield&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let’s examine the &lt;code&gt;generate()&lt;/code&gt; function in detail.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;First, you see the asterisk (&lt;code&gt;*&lt;/code&gt;) after the &lt;code&gt;function&lt;/code&gt; keyword. The asterisk &lt;strong&gt;denotes&lt;/strong&gt; that the &lt;code&gt;generate()&lt;/code&gt; is a &lt;strong&gt;generator&lt;/strong&gt;, not a normal function.&lt;/li&gt;
+&lt;li&gt;Second, the &lt;code&gt;yield&lt;/code&gt; statement &lt;strong&gt;returns a value and pauses the execution of the function&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;A generator returns a &lt;code&gt;Generator&lt;/code&gt; object without executing its body when it is invoked.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;Generator&lt;/code&gt; object returns another object with two properties: &lt;code&gt;done&lt;/code&gt; and &lt;code&gt;value&lt;/code&gt;. In other words, a &lt;code&gt;Generator&lt;/code&gt; object is &lt;strong&gt;iterable&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Since a generator is iterable, you can use the &lt;code&gt;for...of&lt;/code&gt; loop:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;g&lt;/span&gt; &lt;span class="k"&gt;of&lt;/span&gt; &lt;span class="nx"&gt;gen&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;g&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Here is the output:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;invoked&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="nx"&gt;st&lt;/span&gt; &lt;span class="nx"&gt;time&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="mi"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;invoked&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="nx"&gt;nd&lt;/span&gt; &lt;span class="nx"&gt;time&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="mi"&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And here is the new Sequence iterator that &lt;strong&gt;uses a generator&lt;/strong&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;class&lt;/span&gt; &lt;span class="nx"&gt;Sequence&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;constructor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt; &lt;span class="nx"&gt;start&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;end&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kc"&gt;Infinity&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;interval&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;start&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;start&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;end&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;end&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;interval&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;interval&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;Symbol&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;iterator&lt;/span&gt;&lt;span class="p"&gt;]()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;for&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt; &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;index&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;start&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nx"&gt;index&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;=&lt;/span&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;end&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nx"&gt;index&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;interval&lt;/span&gt; &lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;yield&lt;/span&gt; &lt;span class="nx"&gt;index&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The following shows the syntax of the &lt;code&gt;yield&lt;/code&gt; keyword:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;variable_name&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;yield&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;expression&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In this syntax:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The &lt;code&gt;expression&lt;/code&gt; specifies the value to return from a generator function via the iteration protocol. If you omit the &lt;code&gt;expression&lt;/code&gt;, the &lt;code&gt;yield&lt;/code&gt; returns &lt;code&gt;undefined&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;The &lt;code&gt;variable_name&lt;/code&gt; stores the optional value passed to the &lt;code&gt;next()&lt;/code&gt; method of the iterator object.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="map-and-set"&gt;Map and Set
+&lt;/h2&gt;&lt;h3 id="map"&gt;Map
+&lt;/h3&gt;&lt;p&gt;Prior to ES6, when you need to map keys to values, you often use an &lt;a class="link" href="https://www.javascripttutorial.net/javascript-objects/" target="_blank" rel="noopener"
+&gt;object&lt;/a&gt;, because an object allows you to map a key to a value of any type.&lt;/p&gt;
+&lt;p&gt;However, using an object as a map has some side effects:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;An object always has a default key like the &lt;a class="link" href="https://www.javascripttutorial.net/javascript-prototype/" target="_blank" rel="noopener"
+&gt;prototype&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;A key of an object must be a &lt;a class="link" href="https://www.javascripttutorial.net/javascript-string/" target="_blank" rel="noopener"
+&gt;string&lt;/a&gt; or a &lt;a class="link" href="https://www.javascripttutorial.net/es6/symbol/" target="_blank" rel="noopener"
+&gt;symbol&lt;/a&gt;, you cannot use an object as a key.&lt;/li&gt;
+&lt;li&gt;An object does not have a property that represents the size of the map.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ES6 provides a new collection type called &lt;code&gt;Map&lt;/code&gt; that addresses these deficiencies.&lt;/p&gt;
+&lt;p&gt;By definition, a &lt;code&gt;Map&lt;/code&gt; object holds &lt;strong&gt;key-value pairs&lt;/strong&gt; where values of any type can be used as either keys or values. In addition, a &lt;code&gt;Map&lt;/code&gt; object remembers the original insertion order of the keys.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;map&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nx"&gt;Map&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="nx"&gt;iterable&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The &lt;code&gt;Map()&lt;/code&gt; accepts an optional &lt;a class="link" href="https://www.javascripttutorial.net/es6/javascript-iterator/" target="_blank" rel="noopener"
+&gt;iterable&lt;/a&gt; object whose elements are key-value pairs.&lt;/p&gt;
+&lt;h4 id="useful-methods"&gt;Useful Methods
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;clear()&lt;/code&gt; – removes all elements from the map object.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;delete(key)&lt;/code&gt; – removes an element specified by the key. It returns if the element is in the map, or false if it does not.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;entries()&lt;/code&gt; – returns a new Iterator object that contains &lt;strong&gt;an array of &lt;code&gt;[key, value]&lt;/code&gt;&lt;/strong&gt; for each element in the map object. The order of objects in the map is the same as the insertion order.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;forEach(callback[, thisArg])&lt;/code&gt; – invokes a callback for each key-value pair in the map in the insertion order. The optional thisArg parameter sets the this value for each callback.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;get(key)&lt;/code&gt; – returns the value associated with the key. If the key does not exist, it returns undefined.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;has(key)&lt;/code&gt; – returns true if a value associated with the key exists, otherwise, return false.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;keys()&lt;/code&gt; – returns a new Iterator that contains the &lt;strong&gt;keys&lt;/strong&gt; for elements in insertion order.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;set(key, value)&lt;/code&gt; – sets the value for the key in the map object. It returns the map object itself therefore you can chain this method with other methods.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;values()&lt;/code&gt; returns a new iterator object that contains &lt;strong&gt;values&lt;/strong&gt; for each element in insertion order.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="weakmap"&gt;WeakMap
+&lt;/h4&gt;&lt;p&gt;A &lt;code&gt;WeakMap&lt;/code&gt; is similar to a &lt;code&gt;Map&lt;/code&gt; except the keys of a &lt;code&gt;WeakMap&lt;/code&gt; &lt;strong&gt;must be objects&lt;/strong&gt;. It means that when a reference to a key (an object) is out of scope, the corresponding value is &lt;strong&gt;automatically released&lt;/strong&gt; from the memory.&lt;/p&gt;
+&lt;p&gt;A &lt;code&gt;WeakMap&lt;/code&gt; only has subset methods of a &lt;code&gt;Map&lt;/code&gt; object:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;get(key)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;set(key, value)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;has(key)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;delete(key)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Here are the main difference between a &lt;code&gt;Map&lt;/code&gt; and a &lt;code&gt;WeekMap&lt;/code&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Elements of a WeakMap cannot be iterated.&lt;/li&gt;
+&lt;li&gt;Cannot clear all elements at once.&lt;/li&gt;
+&lt;li&gt;Cannot check the size of a WeakMap.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="set"&gt;Set
+&lt;/h3&gt;&lt;p&gt;The &lt;code&gt;Set&lt;/code&gt; constructor also accepts an optional &lt;a class="link" href="https://www.javascripttutorial.net/es6/javascript-iterator/" target="_blank" rel="noopener"
+&gt;iterable object&lt;/a&gt;. If you pass an iterable object to the &lt;code&gt;Set&lt;/code&gt; constructor, all the elements of the iterable object will be added to the new set:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;setObject&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nx"&gt;Set&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="nx"&gt;iterableObject&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="useful-methods-1"&gt;Useful Methods
+&lt;/h4&gt;&lt;p&gt;The &lt;code&gt;Set&lt;/code&gt; object provides the following useful methods:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;add(value)&lt;/code&gt; – appends a new element with a specified value to the set. It returns the &lt;code&gt;Set&lt;/code&gt; object, therefore, you can chain this method with another &lt;code&gt;Set&lt;/code&gt; method.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;clear()&lt;/code&gt; – removes all elements from the &lt;code&gt;Set&lt;/code&gt; object.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;delete(value)&lt;/code&gt; – deletes an element specified by the value.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;entries()&lt;/code&gt;– returns a new &lt;code&gt;Iterator&lt;/code&gt; that contains &lt;strong&gt;an array of &lt;code&gt;[value, value]&lt;/code&gt; .&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;forEach(callback [, thisArg])&lt;/code&gt; – invokes a &lt;a class="link" href="https://www.javascripttutorial.net/javascript-callback/" target="_blank" rel="noopener"
+&gt;callback&lt;/a&gt; on each element of the &lt;code&gt;Set&lt;/code&gt; with the &lt;code&gt;this&lt;/code&gt; value sets to &lt;code&gt;thisArg&lt;/code&gt; in each call.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;has(value)&lt;/code&gt; – returns &lt;code&gt;true&lt;/code&gt; if an element with a given value is in the set, or &lt;code&gt;false&lt;/code&gt; if it is not.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;keys()&lt;/code&gt; – is the same as &lt;code&gt;values()&lt;/code&gt; function.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;[@@iterator]&lt;/code&gt; – returns a new &lt;code&gt;Iterator&lt;/code&gt; object that contains values of all elements stored &lt;strong&gt;in the insertion order&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;To get the number of elements that the set holds, you use the &lt;code&gt;size&lt;/code&gt; property of the &lt;code&gt;Set&lt;/code&gt; object&lt;/p&gt;
+&lt;h4 id="weakset"&gt;WeakSet
+&lt;/h4&gt;&lt;p&gt;A &lt;code&gt;WeakSet&lt;/code&gt; is similar to a &lt;code&gt;Set&lt;/code&gt; except that it contains &lt;strong&gt;only objects&lt;/strong&gt;. Since objects in a &lt;code&gt;WeakSet&lt;/code&gt; may be automatically garbage-collected, a &lt;code&gt;WeakSet&lt;/code&gt; does not have &lt;code&gt;size&lt;/code&gt; property. Like a &lt;code&gt;WeakMap&lt;/code&gt;, you cannot iterate elements of a &lt;code&gt;WeakSet&lt;/code&gt;, therefore, you will find that WeakSet is rarely used in practice. In fact, you only use a &lt;code&gt;WeakSet&lt;/code&gt; to check if a specified value is in the set.&lt;/p&gt;
+&lt;h2 id="proxy"&gt;Proxy
+&lt;/h2&gt;&lt;p&gt;A JavaScript Proxy is an &lt;strong&gt;object that wraps another object&lt;/strong&gt; (target) and &lt;strong&gt;intercepts&lt;/strong&gt; the fundamental operations of the target object.&lt;/p&gt;
+&lt;p&gt;The fundamental operations can be the property lookup, assignment, enumeration, and function invocations, etc.&lt;/p&gt;
+&lt;p&gt;To create a new proxy object, you use the following syntax:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;proxy&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nb"&gt;Proxy&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;target&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;handler&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In this syntax:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;target&lt;/code&gt; – is an object to wrap.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;handler&lt;/code&gt; – is an object that contains methods to control the behaviors of the &lt;code&gt;target&lt;/code&gt;. The methods inside the &lt;code&gt;handler&lt;/code&gt; object are called traps.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A simple proxy example&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;//First, define an object called user
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;user&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;firstName&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;John&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;lastName&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Doe&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;email&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;john.doe@example.com&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;//Second, define a `handler` object:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;handler&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;target&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;property&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sb"&gt;`Property &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nx"&gt;property&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="sb"&gt; has been read.`&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;target&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;property&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;//Third, create a `proxy` object:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;proxyUser&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nb"&gt;Proxy&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;user&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;handler&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="C:%5cUsers%5cdyhes%5cAppData%5cRoaming%5cTypora%5ctypora-user-images%5cimage-20220125133602732.png"
+loading="lazy"
+alt="image-20220125133602732"
+&gt;&lt;/p&gt;
+&lt;p&gt;The following are more traps:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;construct&lt;/code&gt; – traps usage of the &lt;code&gt;new&lt;/code&gt; operator&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;getPrototypeOf&lt;/code&gt; – traps an internal call to &lt;code&gt;[[GetPrototypeOf]]&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;setPrototypeOf&lt;/code&gt; – traps a call to &lt;code&gt;Object.setPrototypeOf&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;isExtensible&lt;/code&gt; – traps a call to &lt;code&gt;Object.isExtensible&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;preventExtensions&lt;/code&gt; – traps a call to &lt;code&gt;Object.preventExtensions&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;getOwnPropertyDescriptor&lt;/code&gt; – traps a call to &lt;code&gt;Object.getOwnPropertyDescriptor&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="reflection"&gt;Reflection
+&lt;/h2&gt;&lt;p&gt;In computer programming, reflection is the ability of a program to manipulate variables, properties, and methods of objects at &lt;strong&gt;runtime&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;ES6 introduces a new global object called &lt;code&gt;Reflect&lt;/code&gt; that allows you to call methods, construct objects, get and set properties, manipulate and extend properties.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;Reflect&lt;/code&gt; API is important because it allows you to develop programs and frameworks that are able to &lt;strong&gt;handle dynamic code&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Unlike the most global objects, the &lt;code&gt;Reflect&lt;/code&gt; &lt;strong&gt;is not a constructor&lt;/strong&gt;. It means that you cannot use &lt;code&gt;Reflect&lt;/code&gt; with the &lt;code&gt;new&lt;/code&gt; operator or invoke the &lt;code&gt;Reflect&lt;/code&gt; as a function. It is similar to the &lt;code&gt;Math&lt;/code&gt; and &lt;code&gt;JSON&lt;/code&gt; objects. All the methods of the &lt;code&gt;Reflect&lt;/code&gt; object are &lt;strong&gt;static&lt;/strong&gt;.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Reflect.apply()&lt;/code&gt; – call a function with specified arguments.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Reflect.construct()&lt;/code&gt; – act like the &lt;code&gt;new&lt;/code&gt; operator, but as a function. It is equivalent to calling &lt;code&gt;new target(...args)&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Reflect.defineProperty()&lt;/code&gt; – is similar to &lt;code&gt;Object.defineProperty()&lt;/code&gt;, but return a Boolean value indicating whether or not the property was successfully defined on the object.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Reflect.deleteProperty()&lt;/code&gt; – behave like the &lt;code&gt;delete&lt;/code&gt; operator, but as a function. It’s equivalent to calling the &lt;code&gt;delete objectName[propertyName]&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Reflect.get()&lt;/code&gt; – return the value of a property.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Reflect.getOwnPropertyDescriptor()&lt;/code&gt; – is similar to &lt;code&gt;Object.getOwnPropertyDescriptor()&lt;/code&gt;. It returns a &lt;strong&gt;property descriptor of a property&lt;/strong&gt; if the property &lt;strong&gt;exists&lt;/strong&gt; on the object, or &lt;code&gt;undefined&lt;/code&gt; otherwise.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Reflect.getPrototypeOf()&lt;/code&gt; – is the same as &lt;code&gt;Object.getPrototypeOf()&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Reflect.has()&lt;/code&gt; – work like the &lt;code&gt;in&lt;/code&gt; operator, but as a function. It returns a boolean indicating whether an property (either owned or inherited) exists.
+&lt;code&gt;Reflect.isExtensible()&lt;/code&gt; – is the same as &lt;code&gt;Object.isExtensible()&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Reflect.ownKeys()&lt;/code&gt; – return an array of the owned property keys (not inherited) of an object.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Reflect.preventExtensions()&lt;/code&gt; – is similar to &lt;code&gt;Object.preventExtensions()&lt;/code&gt;. It returns a Boolean.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Reflect.set()&lt;/code&gt; – assign a value to a property and return a Boolean value which is true if the property is set successfully.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Reflect.setPrototypeOf()&lt;/code&gt; – set the prototype of an object.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="new-functions"&gt;New Functions
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;Array.of()&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;In ES5, when you pass a number to the Array constructor, JavaScript creates an array whose length equals the number.&lt;/p&gt;
+&lt;p&gt;However, when you pass to the &lt;code&gt;Array&lt;/code&gt; constructor a value that is not a number, JavaScript creates an array that contains one element with that value.&lt;/p&gt;
+&lt;p&gt;ES6 introduces the &lt;code&gt;Array.of()&lt;/code&gt; method to solve this problem.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;Array.of()&lt;/code&gt; method is similar to the &lt;code&gt;Array&lt;/code&gt; constructor except the &lt;code&gt;Array.of()&lt;/code&gt; method does not treat a single numeric value special.&lt;/p&gt;
+&lt;p&gt;In other words, the &lt;code&gt;Array.of()&lt;/code&gt; method always creates an array that contains the values that you pass to it regardless of the types or the number of arguments.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;Array.from()&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;ES6 introduces the &lt;code&gt;Array.from()&lt;/code&gt; method that creates a new instance of the &lt;code&gt;Array&lt;/code&gt; from an array-like or iterable object. The following illustrates the syntax of the &lt;code&gt;Array.from()&lt;/code&gt; method:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;Array&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;from&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;target&lt;/span&gt; &lt;span class="p"&gt;[,&lt;/span&gt; &lt;span class="nx"&gt;mapFn&lt;/span&gt;&lt;span class="p"&gt;[,&lt;/span&gt; &lt;span class="nx"&gt;thisArg&lt;/span&gt;&lt;span class="p"&gt;]])&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In this syntax:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;target&lt;/code&gt; is an array-like or iterable object to convert to an array.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;mapFn&lt;/code&gt; is the &lt;strong&gt;map function&lt;/strong&gt; to call on every element of the array&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;thisArg&lt;/code&gt; is the &lt;code&gt;this&lt;/code&gt; value when executing the &lt;code&gt;mapFn&lt;/code&gt; function.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The &lt;code&gt;Array.from()&lt;/code&gt; returns a new instance of &lt;code&gt;Array&lt;/code&gt; that contains all elements of the &lt;code&gt;target&lt;/code&gt; object.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;find()&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;ES6 introduced a new method called &lt;code&gt;find()&lt;/code&gt;added to the &lt;code&gt;Array.prototype&lt;/code&gt; object.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;find()&lt;/code&gt; method returns the first element in an array that satisfies a provided function.&lt;/p&gt;
+&lt;p&gt;The following shows the syntax of the &lt;code&gt;find()&lt;/code&gt; method:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;find(callback(element[, index[, array]])[, thisArg])
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The &lt;code&gt;find()&lt;/code&gt; accepts two arguments: a callback function and an optional value to use for the &lt;code&gt;this&lt;/code&gt; inside the &lt;code&gt;callback&lt;/code&gt; function&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;callback&lt;/code&gt; is a function that executes on each element of the array. It takes three arguments:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;element&lt;/code&gt; is the current element.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;index&lt;/code&gt; the index of the current element.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;array&lt;/code&gt; the array that the &lt;code&gt;find()&lt;/code&gt; was called upon&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The &lt;code&gt;thisArg&lt;/code&gt; is the object used as &lt;code&gt;this&lt;/code&gt; inside the &lt;code&gt;callback&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;find()&lt;/code&gt; executes the &lt;code&gt;callback&lt;/code&gt; function for each element in the array until the &lt;code&gt;callback&lt;/code&gt; returns a truthy value.&lt;/p&gt;
+&lt;p&gt;If the callback returns a truthy value, the &lt;code&gt;find()&lt;/code&gt; immediately returns the element and stop searching. Otherwise, it returns &lt;code&gt;undefined&lt;/code&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;Object.assign()&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;The following shows the syntax of the &lt;code&gt;Object.assign()&lt;/code&gt; method:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Object.assign(target, ...sources)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The &lt;code&gt;Object.assign()&lt;/code&gt; copies all &lt;strong&gt;enumerable and own propeties&lt;/strong&gt; from the &lt;code&gt;source&lt;/code&gt; objects to the &lt;code&gt;target&lt;/code&gt; object. It &lt;strong&gt;returns the &lt;code&gt;target&lt;/code&gt; object&lt;/strong&gt;. It invokes the getters on the source objects and setters on the target. It &lt;strong&gt;assigns properties only&lt;/strong&gt;, not copying or defining new properties. &lt;code&gt;Object.assign()&lt;/code&gt; can be used to &lt;strong&gt;clone or merge&lt;/strong&gt; objects.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;//clone
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;widget&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;color&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;red&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;clonedWidget&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;Object&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;assign&lt;/span&gt;&lt;span class="p"&gt;({},&lt;/span&gt; &lt;span class="nx"&gt;widget&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;clonedWidget&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;//merge
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;box&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;height&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;width&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;20&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;style&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;color&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Red&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;borderStyle&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;solid&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;styleBox&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;Object&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;assign&lt;/span&gt;&lt;span class="p"&gt;({},&lt;/span&gt; &lt;span class="nx"&gt;box&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;style&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;styleBox&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If the source objects have the same property, the property of the &lt;strong&gt;later&lt;/strong&gt; object &lt;strong&gt;overwrites&lt;/strong&gt; the earlier one&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;Object.is()&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;Object.is()&lt;/code&gt; behaves like the &lt;code&gt;===&lt;/code&gt; operator with two differences:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;-0 and +0&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;===&lt;/code&gt; operator treats &lt;code&gt;-0&lt;/code&gt; and &lt;code&gt;+0&lt;/code&gt; are the same value:&lt;/p&gt;
+&lt;p&gt;However, the &lt;code&gt;Object.is()&lt;/code&gt; treats +0 and -0 as different values.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;NaN&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;===&lt;/code&gt; operator considers &lt;code&gt;NaN&lt;/code&gt; and &lt;code&gt;NaN&lt;/code&gt; are different values. The &lt;code&gt;NaN&lt;/code&gt; is the only number that does not equal itself.&lt;/p&gt;
+&lt;p&gt;However, &lt;code&gt;Object.is()&lt;/code&gt; treats &lt;code&gt;NaN&lt;/code&gt; as the same value&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src="C:%5cUsers%5cdyhes%5cAppData%5cRoaming%5cTypora%5ctypora-user-images%5cimage-20220125135715368.png"
+loading="lazy"
+alt="image-20220125135715368"
+&gt;&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;startsWith()&lt;/code&gt; returns &lt;code&gt;true&lt;/code&gt; if a &lt;a class="link" href="https://www.javascripttutorial.net/javascript-string/" target="_blank" rel="noopener"
+&gt;string&lt;/a&gt; begins with the characters of a specified string; otherwise &lt;code&gt;false&lt;/code&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;startsWith()&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;The following shows the syntax of the &lt;code&gt;startsWith()&lt;/code&gt; method:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;String.startsWith(searchString(pattern) [,position])
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;searchString&lt;/code&gt; is the characters to be searched for at the start of this string.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;position&lt;/code&gt; is an optional parameter that determines the start position to search for the &lt;code&gt;searchString&lt;/code&gt;. It defaults to 0.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;endsWith()&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;String&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;startsWith&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;searchString&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;pattern&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;[,&lt;/span&gt;&lt;span class="nx"&gt;position&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The &lt;code&gt;endsWith()&lt;/code&gt; returns &lt;code&gt;true&lt;/code&gt; if a string ends with the characters of a specified string; otherwise &lt;code&gt;false&lt;/code&gt;.Arguments&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;searchString&lt;/code&gt; is the characters to be searched for at the end of the string.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;length&lt;/code&gt; is an optional parameter that determines the length of the string to search. It defaults to the length of the string.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;includes()&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The &lt;code&gt;includes()&lt;/code&gt; method determines whether a string contains another string:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;string&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;includes&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;searchString&lt;/span&gt; &lt;span class="p"&gt;[,&lt;/span&gt;&lt;span class="nx"&gt;position&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The includes() method returns &lt;code&gt;true&lt;/code&gt; if the &lt;code&gt;searchString&lt;/code&gt; found in the &lt;code&gt;string&lt;/code&gt;; otherwise &lt;code&gt;false&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The optional &lt;code&gt;position&lt;/code&gt; parameter specifies the position within the &lt;code&gt;string&lt;/code&gt; at which to begin searching for the &lt;code&gt;searchString&lt;/code&gt;. The &lt;code&gt;position&lt;/code&gt; defaults to 0.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;includes()&lt;/code&gt; matches string case-sensitively.&lt;/p&gt;
+&lt;h2 id="class"&gt;Class
+&lt;/h2&gt;&lt;p&gt;A JavaScript class is a &lt;strong&gt;blueprint&lt;/strong&gt; for creating objects. A class &lt;strong&gt;encapsulates data and functions&lt;/strong&gt; that manipulate data.&lt;/p&gt;
+&lt;p&gt;Unlike other programming languages such as Java and C#, JavaScript classes are syntactic sugar over the &lt;strong&gt;prototypal inheritance&lt;/strong&gt; . In other words, ES6 classes are just &lt;strong&gt;special functions&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;A &lt;code&gt;class&lt;/code&gt; declaration is syntactic sugar over prototypal inheritance with additional &lt;strong&gt;enhancements&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;ES6 introduced a new syntax for declaring a class as shown in this example:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;class&lt;/span&gt; &lt;span class="nx"&gt;Person&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;constructor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Despite the similarities between a class and a custom type defined via a constructor function, there are some important &lt;strong&gt;differences&lt;/strong&gt;.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;class declarations are &lt;strong&gt;not hoisted&lt;/strong&gt; like function declarations.&lt;/li&gt;
+&lt;li&gt;all the code inside a class &lt;strong&gt;automatically executes in the strict mode&lt;/strong&gt;. And you cannot change this behavior.&lt;/li&gt;
+&lt;li&gt;class methods are &lt;strong&gt;non-emunerable&lt;/strong&gt;.If you use a constructor/prototype pattern, you have to use the &lt;code&gt;Object.defineProperty()&lt;/code&gt; method to make a property non-enumerable.&lt;/li&gt;
+&lt;li&gt;calling the class constructor without the &lt;code&gt;new&lt;/code&gt; operator will result in an &lt;strong&gt;error&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ES6 provides a specific syntax for defining the getter and setter using the get and set keywords. For example:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;class&lt;/span&gt; &lt;span class="nx"&gt;Person&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;constructor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;get&lt;/span&gt; &lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;_name&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;set&lt;/span&gt; &lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;newName&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;newName&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;newName&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;trim&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;newName&lt;/span&gt; &lt;span class="o"&gt;===&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;throw&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;The name cannot be empty&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;_name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;newName&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Getter&lt;/p&gt;
+&lt;p&gt;To call the getter, you use the following syntax:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;person&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;When JavaScript sees the access to &lt;code&gt;name&lt;/code&gt; property of the &lt;code&gt;Person&lt;/code&gt; class, it checks if the &lt;code&gt;Person&lt;/code&gt; class has any &lt;strong&gt;&lt;code&gt;name&lt;/code&gt; property&lt;/strong&gt;. If not, JavaScript checks if the Person class has any &lt;strong&gt;method that binds to the &lt;code&gt;name&lt;/code&gt; property&lt;/strong&gt;. In this example, the &lt;code&gt;name()&lt;/code&gt; method binds to the &lt;code&gt;name&lt;/code&gt; property via the &lt;code&gt;get&lt;/code&gt; keyword. Once JavaScript finds the getter method, it executes the getter method and returns a value.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Setter&lt;/p&gt;
+&lt;p&gt;The setter uses the &lt;code&gt;set&lt;/code&gt; keyword followed by the method name:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;set&lt;/span&gt; &lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;newName&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;newName&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;newName&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;trim&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;newName&lt;/span&gt; &lt;span class="o"&gt;===&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;throw&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;The name cannot be empty&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;_name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;newName&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;JavaScript will call the &lt;code&gt;name()&lt;/code&gt; setter when you assign a value to the &lt;code&gt;name&lt;/code&gt; property like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;person&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Jane Smith&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If a class has only getter but not setter and you attempt to use the setter, the change won’t take any effect.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Static Method&lt;/p&gt;
+&lt;p&gt;By definition, static methods are bound to a class, &lt;strong&gt;not the instances&lt;/strong&gt; of that class. Therefore, static methods are useful for defining helper or utility methods.&lt;/p&gt;
+&lt;p&gt;The following adds a static method called &lt;code&gt;createAnonymous()&lt;/code&gt; to the &lt;code&gt;Person&lt;/code&gt; type:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;Person&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;createAnonymous&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;gender&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;gender&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;male&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;?&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;John Doe&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Jane Doe&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nx"&gt;Person&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The &lt;code&gt;createAnonymous()&lt;/code&gt; method is considered a static method because it doesn’t depend on any instance of the &lt;code&gt;Person&lt;/code&gt; type for its property values.&lt;/p&gt;
+&lt;p&gt;To call the &lt;code&gt;createAnonymous()&lt;/code&gt; method, you use the &lt;code&gt;Person&lt;/code&gt; type instead of its instances:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;var anonymous = Person.createAnonymous();
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;In ES6, you define static methods using the &lt;code&gt;static&lt;/code&gt; keyword.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;class&lt;/span&gt; &lt;span class="nx"&gt;Person&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;constructor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;getName&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kr"&gt;static&lt;/span&gt; &lt;span class="nx"&gt;createAnonymous&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;gender&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;gender&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;male&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;?&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;John Doe&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Jane Doe&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nx"&gt;Person&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If you attempt to call the static method from an instance of the class, you’ll get an error.&lt;/p&gt;
+&lt;p&gt;To call a static method from a class constructor or an instance method, you use the class name, followed by the &lt;code&gt;.&lt;/code&gt; and the static method:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;className.staticMethodName();
+//or
+this.constructor.staticMethodName();
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Static Property&lt;/p&gt;
+&lt;p&gt;Like a static method, a static property is &lt;strong&gt;shared&lt;/strong&gt; by all instances of a class. To define static property, you use the &lt;code&gt;static&lt;/code&gt; keyword followed by the property name like this:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;class Item {
+static count = 0;
+}
+Code language: JavaScript (javascript)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;To access a static property, you use the class name followed by the &lt;code&gt;.&lt;/code&gt; operator and the static property name&lt;/p&gt;
+&lt;p&gt;To access a static property in a class constructor or instance methods, you use the following syntax:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;className&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;staticPropertyName&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;//or
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;constructor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;staticPropertyName&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;class expression&lt;/p&gt;
+&lt;p&gt;A class expression &lt;strong&gt;doesn’t require an identifier&lt;/strong&gt; after the &lt;code&gt;class&lt;/code&gt; keyword. And you can use a class expression in a variable declaration and pass it into a function as an argument.&lt;/p&gt;
+&lt;p&gt;For example, the following defines a class expression:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;Person&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kr"&gt;class&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;constructor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;getName&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Similar to function expressions, class expressions are &lt;strong&gt;not hoisted&lt;/strong&gt;. It means that you cannot create an instance of the class before defining the class expression.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://www.javascripttutorial.net/javascript-functions-are-first-class-citizens/" target="_blank" rel="noopener"
+&gt;JavaScript classes are first-class citizens&lt;/a&gt;. It means that you can pass a class into a function, return it from a function, and assign it to a variable.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;extends&lt;/code&gt; and &lt;code&gt;super&lt;/code&gt; keyword&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Prior to ES6, implementing a proper inheritance required multiple steps. One of the most commonly used strategies is the prototypal inheritance.&lt;/p&gt;
+&lt;p&gt;ES6 simplified these steps by using the &lt;code&gt;extends&lt;/code&gt; and &lt;code&gt;super&lt;/code&gt; keywords.&lt;/p&gt;
+&lt;p&gt;First, use the &lt;code&gt;extends&lt;/code&gt; keyword to make the &lt;code&gt;Bird&lt;/code&gt; class inheriting from the &lt;code&gt;Animal&lt;/code&gt; class:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;class Bird extends Animal {
+// ...
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The &lt;code&gt;Animal&lt;/code&gt; class is called a &lt;strong&gt;base class&lt;/strong&gt; or &lt;strong&gt;parent class&lt;/strong&gt; while the &lt;code&gt;Bird&lt;/code&gt; class is known as a &lt;strong&gt;derived class&lt;/strong&gt; or &lt;strong&gt;child class&lt;/strong&gt;. By doing this, the &lt;code&gt;Bird&lt;/code&gt; class inherits all methods and properties of the &lt;code&gt;Animal&lt;/code&gt; class.&lt;/p&gt;
+&lt;p&gt;Second, in the &lt;code&gt;Bird&lt;/code&gt;‘s constructor, call &lt;code&gt;super()&lt;/code&gt; to invoke the &lt;code&gt;Animal&lt;/code&gt;‘s constructor with the &lt;code&gt;legs&lt;/code&gt; argument.&lt;/p&gt;
+&lt;p&gt;JavaScript &lt;strong&gt;requires&lt;/strong&gt; the child class to call &lt;code&gt;super()&lt;/code&gt; if it has a constructor.&lt;/p&gt;
+&lt;p&gt;Because &lt;strong&gt;the &lt;code&gt;super()&lt;/code&gt; initializes the &lt;code&gt;this&lt;/code&gt; object&lt;/strong&gt;, you need to call the &lt;code&gt;super()&lt;/code&gt; before accessing the &lt;code&gt;this&lt;/code&gt; object. Trying to access &lt;code&gt;this&lt;/code&gt; before calling &lt;code&gt;super()&lt;/code&gt; also results in an error.&lt;/p&gt;
+&lt;p&gt;ES6 allows the child class and parent class to have methods with the same name. In this case, when you call the method of an object of the child class, the method in the child class will &lt;strong&gt;shadow&lt;/strong&gt; the method in the parent class.&lt;/p&gt;
+&lt;p&gt;To call the method of the parent class in the child class, you use &lt;code&gt;super.method(arguments)&lt;/code&gt;,&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;new.target&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;ES6 provides a &lt;strong&gt;metaproperty&lt;/strong&gt; named &lt;code&gt;new.target&lt;/code&gt; that allows you to detect whether a &lt;strong&gt;function&lt;/strong&gt; or &lt;strong&gt;constructor&lt;/strong&gt; was called using the &lt;code&gt;new&lt;/code&gt; operator.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;new.target&lt;/code&gt; consists of the &lt;code&gt;new&lt;/code&gt; keyword, a dot, and &lt;code&gt;target&lt;/code&gt; property. The &lt;code&gt;new.target&lt;/code&gt; is available in all functions.&lt;/p&gt;
+&lt;p&gt;However, in &lt;a class="link" href="https://www.javascripttutorial.net/es6/javascript-arrow-function/" target="_blank" rel="noopener"
+&gt;arrow functions&lt;/a&gt;, the &lt;code&gt;new.targe&lt;/code&gt;t is the one that belongs to &lt;strong&gt;the surrounding function&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;new.target&lt;/code&gt; is very useful to inspect at runtime whether a function is being executed &lt;strong&gt;as a function or as a constructor&lt;/strong&gt;. It is also handy to determine a specific derived class that was called by using the &lt;code&gt;new&lt;/code&gt; operator from within a parent class.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;In a regular function call, the &lt;code&gt;new.target&lt;/code&gt; returns &lt;code&gt;undefined&lt;/code&gt;.&lt;/strong&gt; If the function was called with the &lt;code&gt;new&lt;/code&gt; operator, the &lt;code&gt;new.target&lt;/code&gt; returns &lt;strong&gt;a reference to the function&lt;/strong&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;Person&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt;&lt;span class="k"&gt;new&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;target&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;throw&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;must use new operator with Person&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="promise"&gt;Promise
+&lt;/h2&gt;&lt;p&gt;A &lt;strong&gt;&lt;code&gt;Promise&lt;/code&gt;&lt;/strong&gt; is a proxy for a value not necessarily known when the promise is created. It allows you to associate handlers with an asynchronous action&amp;rsquo;s eventual success value or failure reason. This lets asynchronous methods return values like synchronous methods: instead of immediately returning the final value, the asynchronous method returns a &lt;em&gt;promise&lt;/em&gt; to supply the value at some point in the &lt;strong&gt;future&lt;/strong&gt;.&lt;/p&gt;
+&lt;h3 id="create"&gt;Create
+&lt;/h3&gt;&lt;p&gt;To create a promise in JavaScript, you use the &lt;code&gt;Promise&lt;/code&gt; constructor:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;completed&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;learnJS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nb"&gt;Promise&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;resolve&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;reject&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;completed&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;resolve&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;I have completed learning JS.&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;reject&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;I haven&amp;#39;t completed learning JS yet.&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The &lt;code&gt;Promise&lt;/code&gt; constructor accepts a function as an argument. This function is called the &lt;code&gt;executor&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;executor&lt;/code&gt; function accepts two &lt;a class="link" href="https://www.javascripttutorial.net/javascript-callback/" target="_blank" rel="noopener"
+&gt;callback functions&lt;/a&gt; with the names &lt;code&gt;resolve()&lt;/code&gt; and &lt;code&gt;reject()&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;By convention, the callback functions passed into the executor are &lt;code&gt;resolve&lt;/code&gt; and &lt;code&gt;reject&lt;/code&gt;. &lt;strong&gt;However, you can use any names you want.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;new Promise(executor)&lt;/code&gt; will automatically call the &lt;code&gt;executor&lt;/code&gt; function.&lt;/p&gt;
+&lt;p&gt;Inside the &lt;code&gt;executor&lt;/code&gt; function, you call the &lt;code&gt;resolve()&lt;/code&gt; callback if the executor in the success case and the &lt;code&gt;reject()&lt;/code&gt; callback in the failed case.&lt;/p&gt;
+&lt;h3 id="states"&gt;States
+&lt;/h3&gt;&lt;p&gt;Suppose you promise to complete learning JavaScript by next month.&lt;/p&gt;
+&lt;p&gt;And you don’t know if you will spend your time and effort learning JavaScript until next month. You can either be completing learning JavaScript or not.&lt;/p&gt;
+&lt;p&gt;A promise has three states:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Pending&lt;/strong&gt;: you don’t know if you will complete learning JavaScript by the next month.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Fulfilled&lt;/strong&gt;: you complete learning JavaScript by the next month.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Rejected&lt;/strong&gt;: you don’t learn JavaScript at all.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;A promise starts in the pending state which indicates that the promise &lt;strong&gt;hasn’t&lt;/strong&gt; &lt;strong&gt;been completed&lt;/strong&gt;. It ends with either fulfilled (successful) or rejected (failed) state.&lt;/p&gt;
+&lt;p&gt;Once the promise reaches either fulfilled state or rejected state, it &lt;strong&gt;stays in that state and can’t switch&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;In other words, a promise cannot go from the &lt;code&gt;fulfilled&lt;/code&gt; state to the &lt;code&gt;rejected&lt;/code&gt; state and vice versa. Also, it cannot go back from the &lt;code&gt;fulfilled&lt;/code&gt; state or &lt;code&gt;rejected&lt;/code&gt; state to the &lt;code&gt;pending&lt;/code&gt; state.&lt;/p&gt;
+&lt;p&gt;If the promise reaches &lt;code&gt;fulfilled&lt;/code&gt; or &lt;code&gt;rejected&lt;/code&gt; state, the promise is resolved. Once a new &lt;code&gt;Promise&lt;/code&gt; object is created, it is in the pending state until resolved.&lt;/p&gt;
+&lt;h3 id="consuming-a-promise"&gt;Consuming a promise
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;then()&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;To get the value of a promise when it’s fulfilled, you call the &lt;code&gt;then()&lt;/code&gt; method of the promise object. The following shows the syntax of the &lt;code&gt;then()&lt;/code&gt; method:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;promise&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;then&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;onFulfilled&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="nt"&gt;onRejected&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The &lt;code&gt;then()&lt;/code&gt; method accepts two callback functions: &lt;code&gt;onFulfilled&lt;/code&gt; and &lt;code&gt;onRejected&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;then()&lt;/code&gt; method calls the &lt;code&gt;onFulfilled()&lt;/code&gt; with a value, if the promise is fulfilled or the &lt;code&gt;onRejected()&lt;/code&gt; with an error if the promise is rejected.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;then()&lt;/code&gt; method returns a new &lt;code&gt;Promise&lt;/code&gt; with a value resolved to a value.&lt;/p&gt;
+&lt;p&gt;When you return a value in the &lt;code&gt;then()&lt;/code&gt; method, the &lt;code&gt;then()&lt;/code&gt; method returns a new &lt;code&gt;Promise&lt;/code&gt; that &lt;strong&gt;immediately resolves to the return value&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Also, you can return &lt;strong&gt;a new promise&lt;/strong&gt; in the &lt;code&gt;then()&lt;/code&gt; method.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Note that both &lt;code&gt;onFulfilled&lt;/code&gt; and &lt;code&gt;onRejected&lt;/code&gt; arguments are &lt;strong&gt;optional&lt;/strong&gt;. We usually use &lt;code&gt;then()&lt;/code&gt; method to schedule a callback to be executed when the promise is fulfilled&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;catch()&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;catch()&lt;/code&gt; method schedule a callback to be invoked when the promise is rejected. If the &lt;code&gt;catch()&lt;/code&gt; method to handle the error inside the promise is not provided. It will cause a runtime error and terminate the program.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;finally()&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Place the code that you want to execute in the &lt;code&gt;finally()&lt;/code&gt; method whether the promise is fulfilled or rejected.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="promise-chaining"&gt;Promise Chaining
+&lt;/h3&gt;&lt;p&gt;Sometimes, you have multiple asynchronous tasks that you want to execute in sequence. In addition, you need to pass the result of the previous step to the next one. In this case, you can use the following syntax:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;step1&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;then&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;result&lt;/span&gt; &lt;span class="p"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="nx"&gt;step2&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;result&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;then&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;result&lt;/span&gt; &lt;span class="p"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="nx"&gt;step3&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;result&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If you need to pass the result from the previous task to the next one without passing the result, you use this syntax:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;step1&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;then&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;step2&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;then&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;step3&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="o"&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Processing continues to the next link of the chain even when a &lt;code&gt;.then()&lt;/code&gt; lacks a callback function that returns a Promise object. Therefore, a chain can &lt;strong&gt;safely omit every &lt;em&gt;rejection&lt;/em&gt; callback function&lt;/strong&gt; until the final &lt;code&gt;.catch()&lt;/code&gt;.&lt;/p&gt;
+&lt;h3 id="settled-promise"&gt;Settled Promise
+&lt;/h3&gt;&lt;p&gt;An action can be assigned to an &lt;strong&gt;already &amp;ldquo;settled&amp;rdquo;&lt;/strong&gt; promise. In that case, the action (if appropriate) will be performed &lt;strong&gt;at the first asynchronous opportunity&lt;/strong&gt;. Note that promises are guaranteed to be asynchronous. Therefore, an action for an already &amp;ldquo;settled&amp;rdquo; promise will occur only after the stack has cleared and a clock-tick has passed. The effect is much like that of &lt;code&gt;setTimeout(action,10)&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;promiseA&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nb"&gt;Promise&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;resolutionFunc&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="nx"&gt;rejectionFunc&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;resolutionFunc&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;777&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// At this point, &amp;#34;promiseA&amp;#34; is already settled.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="nx"&gt;promiseA&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;then&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;val&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;asynchronous logging has val:&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="nx"&gt;val&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;immediate logging&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// produces output in this order:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// immediate logging
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// asynchronous logging has val: 777
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="static-methods"&gt;Static methods
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all" target="_blank" rel="noopener"
+&gt;&lt;code&gt;Promise.all(iterable)&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Wait for all&lt;/strong&gt; promises to be &lt;strong&gt;resolved&lt;/strong&gt;, or for &lt;strong&gt;any&lt;/strong&gt; to be &lt;strong&gt;rejected&lt;/strong&gt;.If the returned promise resolves, it is resolved with an aggregating array of the values from the resolved promises, &lt;strong&gt;in the same order&lt;/strong&gt; as defined in the iterable of multiple promises. If it rejects, it is rejected with the reason from the first promise in the iterable that was rejected.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/allSettled" target="_blank" rel="noopener"
+&gt;&lt;code&gt;Promise.allSettled(iterable)&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Wait until &lt;strong&gt;all promises have settled&lt;/strong&gt; (each may resolve or reject).Returns a Promise that resolves after all of the given promises is either fulfilled or rejected, with an array of objects that each describe the outcome of each promise.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/any" target="_blank" rel="noopener"
+&gt;&lt;code&gt;Promise.any(iterable)&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Takes an iterable of Promise objects and, &lt;strong&gt;as soon as one of the promises in the iterable fulfills&lt;/strong&gt;, returns a single promise that resolves with the value from that promise.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/race" target="_blank" rel="noopener"
+&gt;&lt;code&gt;Promise.race(iterable)&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Wait until &lt;strong&gt;any of the promises is fulfilled or rejected&lt;/strong&gt;.If the returned promise resolves, it is resolved with the value of the first promise in the iterable that resolved.If it rejects, it is rejected with the reason from the first promise that was rejected.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/reject" target="_blank" rel="noopener"
+&gt;&lt;code&gt;Promise.reject(reason)&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Returns a new &lt;code&gt;Promise&lt;/code&gt; object that &lt;strong&gt;is rejected&lt;/strong&gt; with the given reason.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/resolve" target="_blank" rel="noopener"
+&gt;&lt;code&gt;Promise.resolve(value)&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Returns a new &lt;code&gt;Promise&lt;/code&gt; object that &lt;strong&gt;is resolved with the given value&lt;/strong&gt;. If the value is a thenable (i.e. has a &lt;code&gt;then&lt;/code&gt; method), the returned promise will &amp;ldquo;follow&amp;rdquo; that thenable, adopting its eventual state; otherwise, the returned promise will be fulfilled with the value. Generally, if you don&amp;rsquo;t know if a value is a promise or not, &lt;a class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/resolve" target="_blank" rel="noopener"
+&gt;&lt;code&gt;Promise.resolve(value)&lt;/code&gt;&lt;/a&gt; it instead and work with the return value as a promise.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="asyncawait"&gt;&lt;code&gt;async/await&lt;/code&gt;
+&lt;/h3&gt;&lt;p&gt;ES2017 introduced the &lt;code&gt;async&lt;/code&gt;/&lt;code&gt;await&lt;/code&gt; keywords that &lt;strong&gt;build on top of promises&lt;/strong&gt;, allowing you to write asynchronous code that looks more like synchronous code and more readable. Technically speaking, the &lt;code&gt;async&lt;/code&gt; / &lt;code&gt;await&lt;/code&gt; is &lt;strong&gt;syntactic sugar for promises&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;If a function &lt;strong&gt;returns a Promise&lt;/strong&gt;, you can place the &lt;code&gt;await&lt;/code&gt; keyword in front of the function call. The &lt;code&gt;await&lt;/code&gt; keyword to wait for a &lt;code&gt;Promise&lt;/code&gt; to settle either in resolved or rejected state.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;await&lt;/code&gt; will wait for the &lt;code&gt;Promise&lt;/code&gt; returned from the &lt;code&gt;f()&lt;/code&gt; to settle.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The &lt;code&gt;await&lt;/code&gt; keyword can be used only inside the &lt;code&gt;async&lt;/code&gt; functions.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The following defines an &lt;code&gt;async&lt;/code&gt; function that calls the three asynchronous operations in sequence:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;async&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;showServiceCost&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;user&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kr"&gt;await&lt;/span&gt; &lt;span class="nx"&gt;getUser&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;services&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kr"&gt;await&lt;/span&gt; &lt;span class="nx"&gt;getServices&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;user&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;cost&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kr"&gt;await&lt;/span&gt; &lt;span class="nx"&gt;getServiceCost&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;services&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sb"&gt;`The service cost is &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nx"&gt;cost&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="sb"&gt;`&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;showServiceCost&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description></item></channel></rss>

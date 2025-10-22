@@ -1,0 +1,2412 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Docker on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/docker/</link><description>Recent content in Docker on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 20 Oct 2025 22:07:04 +0800</lastBuildDate><atom:link href="https://dyhes.github.io/tags/docker/index.xml" rel="self" type="application/rss+xml"/><item><title>【Docker】Concepts</title><link>https://dyhes.github.io/p/dockerconcepts/</link><pubDate>Mon, 30 Jun 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/dockerconcepts/</guid><description>&lt;h2 id="docker"&gt;Docker
+&lt;/h2&gt;&lt;p&gt;以下是对Docker的详细介绍，从核心概念到技术原理、应用场景及生态系统，结合多维度信息综合整理：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-docker的定义与核心概念"&gt;🐳 &lt;strong&gt;Docker的定义与核心概念&lt;/strong&gt;
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;基本定义&lt;/strong&gt;
+Docker是一个开源的&lt;strong&gt;应用容器引擎&lt;/strong&gt;，基于Go语言开发，允许开发者将应用及其依赖打包成轻量级、可移植的容器。容器共享宿主机操作系统内核，但通过隔离技术保证独立性，实现“一次构建，到处运行”&lt;a class="link" href="@ref" &gt;1,4,5&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;核心组件&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;镜像（Image）&lt;/strong&gt;：只读模板，包含应用运行所需的所有文件（代码、库、环境变量等）。采用分层存储结构（Union FS），每一层可复用，节省存储空间&lt;a class="link" href="@ref" &gt;2,4&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;容器（Container）&lt;/strong&gt;：镜像的运行实例，拥有独立的文件系统、网络和进程空间。通过写时复制（Copy-on-Write）技术，修改仅作用于容器层，不改变镜像本身&lt;a class="link" href="@ref" &gt;2,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;仓库（Registry）&lt;/strong&gt;：集中存储和分发镜像的平台。公有仓库如Docker Hub，私有仓库如Harbor&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Dockerfile&lt;/strong&gt;：文本文件定义镜像构建步骤（如&lt;code&gt;FROM&lt;/code&gt;指定基础镜像、&lt;code&gt;RUN&lt;/code&gt;执行命令），实现自动化构建&lt;a class="link" href="@ref" &gt;4,6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-技术原理与架构设计"&gt;⚙️ &lt;strong&gt;技术原理与架构设计&lt;/strong&gt;
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;底层技术&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Namespace&lt;/strong&gt;：提供资源隔离，分为6类：
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;类型&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;功能&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;PID Namespace&lt;/td&gt;
+&lt;td&gt;隔离进程ID&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Net Namespace&lt;/td&gt;
+&lt;td&gt;隔离网络接口与端口&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;MNT Namespace&lt;/td&gt;
+&lt;td&gt;隔离文件系统挂载点&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;IPC Namespace&lt;/td&gt;
+&lt;td&gt;隔离进程间通信&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;UTS Namespace&lt;/td&gt;
+&lt;td&gt;隔离主机名与域名&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;User Namespace&lt;/td&gt;
+&lt;td&gt;隔离用户与用户组 &lt;a class="link" href="@ref" &gt;2,3&lt;/a&gt;。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Cgroups&lt;/strong&gt;：限制资源使用（CPU、内存、磁盘I/O等），防止单个容器耗尽宿主机资源&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Union File System（Union FS）&lt;/strong&gt;：支持分层镜像存储，多个容器共享基础镜像层，减少冗余&lt;a class="link" href="@ref" &gt;2,4&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;架构设计&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;客户端-服务器模型&lt;/strong&gt;：用户通过Docker客户端发送命令，由守护进程（Dockerd）执行操作（构建、运行容器等）&lt;a class="link" href="@ref" &gt;4,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;容器运行时&lt;/strong&gt;：早期使用LXC，后改为自研的&lt;code&gt;runc&lt;/code&gt;（符合OCI标准），实现跨平台兼容&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-工作流程与核心组件"&gt;🔄 &lt;strong&gt;工作流程与核心组件&lt;/strong&gt;
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;典型工作流&lt;/strong&gt;：
+&lt;pre tabindex="0"&gt;&lt;code&gt;graph LR
+A[编写Dockerfile] --&amp;gt; B[构建镜像] --&amp;gt; C[推送至仓库] --&amp;gt; D[拉取镜像并运行容器]
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;构建&lt;/strong&gt;：&lt;code&gt;docker build -t my-image:tag .&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;运行&lt;/strong&gt;：&lt;code&gt;docker run -d --name my-container my-image:tag&lt;/code&gt;&lt;a class="link" href="@ref" &gt;4,6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;容器管理工具&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Docker Compose&lt;/strong&gt;：通过YAML文件定义多容器应用（如Web服务+数据库），一键启动/停止&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Docker Swarm/Kubernetes&lt;/strong&gt;：用于容器编排，支持集群管理、自动扩缩容&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-应用场景与优势分析"&gt;💡 &lt;strong&gt;应用场景与优势分析&lt;/strong&gt;
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;核心应用场景&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;环境一致性&lt;/strong&gt;：解决开发、测试、生产环境差异问题（如依赖库版本冲突）&lt;a class="link" href="@ref" &gt;4,5&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;微服务部署&lt;/strong&gt;：每个微服务独立容器化，便于扩展和维护&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;CI/CD流水线&lt;/strong&gt;：与Jenkins/GitLab集成，实现自动化构建和测试&lt;a class="link" href="@ref" &gt;5&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;相比虚拟机的优势&lt;/strong&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;特性&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Docker容器&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;传统虚拟机&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;启动速度&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;秒级（共享内核）&lt;/td&gt;
+&lt;td&gt;分钟级（需启动完整OS）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;资源占用&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;低（无Guest OS开销）&lt;/td&gt;
+&lt;td&gt;高（每个VM需独立OS资源）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;隔离性&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;进程级（通过Namespace）&lt;/td&gt;
+&lt;td&gt;硬件级（更强隔离）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;可移植性&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;高（镜像跨平台一致）&lt;/td&gt;
+&lt;td&gt;低（依赖Hypervisor兼容） &lt;a class="link" href="@ref" &gt;3,4,6&lt;/a&gt;。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;局限性&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;隔离性较弱&lt;/strong&gt;：共享内核导致安全风险高于虚拟机，不适合强隔离需求场景&lt;a class="link" href="@ref" &gt;3,5&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;仅支持Linux应用&lt;/strong&gt;：Windows/macOS需通过虚拟化层（如Hyper-V）运行&lt;a class="link" href="@ref" &gt;1,4&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-发展历程与生态系统"&gt;📈 &lt;strong&gt;发展历程与生态系统&lt;/strong&gt;
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;关键版本演进&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;2013年&lt;/strong&gt;：DotCloud开源Docker，基于LXC技术&lt;a class="link" href="@ref" &gt;1&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;2014年（1.0版）&lt;/strong&gt;：生产环境可用，引入核心命令（&lt;code&gt;docker run&lt;/code&gt;、&lt;code&gt;docker build&lt;/code&gt;）&lt;a class="link" href="@ref" &gt;1&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;2017年&lt;/strong&gt;：分拆为社区版（CE）和企业版（EE）&lt;a class="link" href="@ref" &gt;5&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;2020年后&lt;/strong&gt;：强化安全（Rootless模式）、优化ARM/M1支持、集成Kubernetes&lt;a class="link" href="@ref" &gt;1,4&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;相关工具与竞品&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;镜像仓库&lt;/strong&gt;：Docker Hub（公有）、Harbor（私有）&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;容器运行时&lt;/strong&gt;：rkt（CoreOS）、CRI-O（Kubernetes专用）&lt;a class="link" href="@ref" &gt;3&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;编排工具&lt;/strong&gt;：Kubernetes（主流替代Swarm）&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-总结"&gt;💎 &lt;strong&gt;总结&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;Docker通过&lt;strong&gt;操作系统级虚拟化&lt;/strong&gt;技术，以容器为载体解决了环境不一致和资源效率问题，成为DevOps和云原生技术的基石。其轻量化、标准化特性在微服务、CI/CD中表现突出，但需结合业务需求权衡隔离性与安全性。未来随着容器生态（如Kubernetes、服务网格）的演进，Docker将继续在应用现代化中扮演核心角色。
+如需进一步了解安装配置（如或教程）或命令详解（如），可参考具体章节。&lt;/p&gt;
+&lt;h2 id="vs-虚拟机"&gt;vs. 虚拟机
+&lt;/h2&gt;&lt;p&gt;以下是 Docker 与虚拟机的详细对比，从架构原理、性能、隔离性、适用场景等维度综合分析，结合多源信息整合：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-架构与工作原理"&gt;⚙️ &lt;strong&gt;架构与工作原理&lt;/strong&gt;
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;特性&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Docker（容器）&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;虚拟机（VM）&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;虚拟化类型&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;操作系统级虚拟化（共享宿主机内核）&lt;a class="link" href="@ref" &gt;1,3,9&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;硬件级虚拟化（通过 Hypervisor 模拟硬件）&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;核心组件&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Docker 引擎、容器运行时（如 runc）、镜像分层存储 &lt;a class="link" href="@ref" &gt;7,8&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Hypervisor（如 VMware ESXi、KVM）、Guest OS、虚拟硬件 &lt;a class="link" href="@ref" &gt;1,10&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;资源占用&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;MB 级&lt;/strong&gt;（仅包含应用及依赖）&lt;a class="link" href="@ref" &gt;3,4&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;GB 级&lt;/strong&gt;（需完整操作系统）&lt;a class="link" href="@ref" &gt;3,9&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;启动速度&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;秒级启动&lt;/strong&gt;（无操作系统加载）&lt;a class="link" href="@ref" &gt;2,6&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;分钟级启动&lt;/strong&gt;（需启动完整 OS）&lt;a class="link" href="@ref" &gt;1,10&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-性能与资源效率"&gt;⚡ &lt;strong&gt;性能与资源效率&lt;/strong&gt;
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;指标&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Docker&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;虚拟机&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;CPU/内存开销&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;极低（直接使用宿主机资源）&lt;a class="link" href="@ref" &gt;3,9&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;较高（Hypervisor 层 + Guest OS 开销）&lt;a class="link" href="@ref" &gt;6,10&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;运行密度&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;单宿主机可运行 &lt;strong&gt;上千容器&lt;/strong&gt;&lt;a class="link" href="@ref" &gt;2,10&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;单宿主机仅支持 &lt;strong&gt;几十个 VM&lt;/strong&gt;&lt;a class="link" href="@ref" &gt;2,9&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;I/O 性能&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;接近宿主机本地进程（无虚拟化层）&lt;a class="link" href="@ref" &gt;5,8&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;因虚拟化层存在 &lt;strong&gt;性能损耗&lt;/strong&gt;（约 5-20%）&lt;a class="link" href="@ref" &gt;9&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-隔离性与安全性"&gt;🔒 &lt;strong&gt;隔离性与安全性&lt;/strong&gt;
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;方面&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Docker&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;虚拟机&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;隔离级别&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;进程级隔离（Linux Namespace/Cgroups）&lt;a class="link" href="@ref" &gt;7,9&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;系统级隔离&lt;/strong&gt;（独立内核+虚拟硬件）&lt;a class="link" href="@ref" &gt;1,10&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;安全性&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;较弱（共享内核，容器逃逸风险）&lt;a class="link" href="@ref" &gt;5,9&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;极强（硬件级隔离，攻击难扩散）&lt;a class="link" href="@ref" &gt;2,10&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;root 权限风险&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;容器内 root 等同宿主机 root（权限未分离）&lt;a class="link" href="@ref" &gt;5&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;虚拟机 root 与宿主机 root 权限分离&lt;a class="link" href="@ref" &gt;9&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-适用场景对比"&gt;🎯 &lt;strong&gt;适用场景对比&lt;/strong&gt;
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;场景&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Docker 优势&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;虚拟机 优势&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;微服务/云原生&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;✅ 快速部署、弹性扩缩容 &lt;a class="link" href="@ref" &gt;1,5&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;❌ 资源开销大，启动慢&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;CI/CD 流水线&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;✅ 环境一致性（开发→测试→生产）&lt;a class="link" href="@ref" &gt;1,4&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;❌ 环境配置复杂&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;多操作系统需求&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;❌ 仅支持与宿主机同内核的系统（如 Linux 容器）&lt;a class="link" href="@ref" &gt;9&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;✅ 可同时运行 Windows/Linux 等异构系统 &lt;a class="link" href="@ref" &gt;1,10&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;高安全隔离场景&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;❌ 不适用（如金融核心系统、多租户环境）&lt;a class="link" href="@ref" &gt;2&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;✅ 强隔离保障（如 VDI、敏感数据处理）&lt;a class="link" href="@ref" &gt;1,9&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;遗留系统兼容性&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;❌ 依赖旧版库/硬件的应用难容器化&lt;a class="link" href="@ref" &gt;1&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;✅ 直接运行未改造的遗留应用&lt;a class="link" href="@ref" &gt;10&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-生态系统与管理工具"&gt;🌐 &lt;strong&gt;生态系统与管理工具&lt;/strong&gt;
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;能力&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Docker&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;虚拟机&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;编排工具&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Kubernetes（主流）、Docker Swarm&lt;a class="link" href="@ref" &gt;5,10&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;VMware vSphere、OpenStack&lt;a class="link" href="@ref" &gt;2,9&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;镜像/模板管理&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Docker Hub（公有仓库）、Harbor（私有）&lt;a class="link" href="@ref" &gt;7&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;OVF 模板、VM 快照&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;高可用机制&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;依赖编排工具（如 K8s 自动重启容器）&lt;a class="link" href="@ref" &gt;5&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;成熟（VMware HA 承诺 99.999% 可用性）&lt;a class="link" href="@ref" &gt;5,9&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-总结如何选择"&gt;💎 &lt;strong&gt;总结：如何选择？&lt;/strong&gt;
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;选 Docker 的场景&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;追求 &lt;strong&gt;极致资源利用&lt;/strong&gt;（云原生、微服务）&lt;a class="link" href="@ref" &gt;1,5&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;需 &lt;strong&gt;快速迭代&lt;/strong&gt;（CI/CD、DevOps）&lt;a class="link" href="@ref" &gt;4,10&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;环境一致性要求高（跨平台开发测试）&lt;a class="link" href="@ref" &gt;1,6&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;选虚拟机的场景&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;强隔离刚性需求&lt;/strong&gt;（安全合规、多租户）&lt;a class="link" href="@ref" &gt;2,9&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;运行异构 OS&lt;/strong&gt;（如 Windows 应用）&lt;a class="link" href="@ref" &gt;3,10&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;传统应用兼容&lt;/strong&gt;（无需改造的遗留系统）&lt;a class="link" href="@ref" &gt;1,6&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;混合架构趋势&lt;/strong&gt;：
+虚拟机中部署 Docker 集群（如 VMware + Kubernetes），兼顾隔离性与容器效率&lt;a class="link" href="@ref" &gt;5,10&lt;/a&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;更深入的技术细节（如 Docker 的 Union FS、虚拟机的 VT-x 硬件加速）或具体场景方案，可进一步探讨！&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="虚拟化技术"&gt;虚拟化技术
+&lt;/h2&gt;&lt;p&gt;以下是除Docker容器外的其他主流虚拟化技术分类详解，涵盖原理、代表技术与应用场景：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-服务器虚拟化"&gt;🖥️ &lt;strong&gt;服务器虚拟化&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;1. 全虚拟化（Full Virtualization）&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;原理&lt;/strong&gt;：通过Hypervisor（如VMware ESXi）在物理硬件上创建完全隔离的虚拟机，每个虚拟机运行独立操作系统。Hypervisor模拟完整硬件环境，无需修改客户机操作系统&lt;a class="link" href="@ref" &gt;3,5&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;代表技术：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;VMware ESXi&lt;/strong&gt;：企业级虚拟化平台，支持动态资源分配、实时迁移（vMotion），广泛用于数据中心整合&lt;a class="link" href="@ref" &gt;5,8&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Microsoft Hyper-V&lt;/strong&gt;：集成于Windows Server，支持嵌套虚拟化，适用于混合云环境&lt;a class="link" href="@ref" &gt;5&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;优势&lt;/strong&gt;：兼容性强，支持异构操作系统（Windows/Linux）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;局限&lt;/strong&gt;：Hypervisor层引入性能开销（约5-20%）&lt;a class="link" href="@ref" &gt;5&lt;/a&gt;。
+&lt;strong&gt;2. 半虚拟化（Paravirtualization）&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;原理&lt;/strong&gt;：需修改客户机操作系统内核，使其感知虚拟化环境，直接与Hypervisor协作（如Xen），减少模拟开销&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;代表技术&lt;/strong&gt;：&lt;strong&gt;Xen&lt;/strong&gt;：开源虚拟化平台，由剑桥大学开发，早期用于公有云（如AWS EC2），需定制化操作系统支持&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;适用场景&lt;/strong&gt;：对I/O性能要求高的场景（如数据库集群）&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;。
+&lt;strong&gt;3. 硬件辅助虚拟化（Hardware-Assisted Virtualization）&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;原理&lt;/strong&gt;：依赖CPU指令集（Intel VT-x / AMD-V）直接处理虚拟化操作，减少软件层开销。关键技术包括内存虚拟化（EPT/NPT）和I/O虚拟化（VT-d/SR-IOV）&lt;a class="link" href="@ref" &gt;6,7&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;代表技术&lt;/strong&gt;：&lt;strong&gt;KVM（Kernel-based Virtual Machine）&lt;/strong&gt;：Linux内核模块，将Linux转化为Hypervisor，结合QEMU模拟硬件，成为OpenStack默认虚拟化方案&lt;a class="link" href="@ref" &gt;3,7&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;性能&lt;/strong&gt;：虚拟机性能达物理机95%以上，适用于高密度云环境&lt;a class="link" href="@ref" &gt;7&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-容器虚拟化操作系统级虚拟化"&gt;📦 &lt;strong&gt;容器虚拟化（操作系统级虚拟化）&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;1. 轻量级容器技术&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;原理&lt;/strong&gt;：共享宿主机内核，通过Namespace和Cgroups实现进程隔离，无需独立操作系统&lt;a class="link" href="@ref" &gt;3,5&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;代表技术：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;LXC（Linux Containers）&lt;/strong&gt;：早期Linux容器引擎，Docker的前身基础&lt;a class="link" href="@ref" &gt;3&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;OpenVZ&lt;/strong&gt;：基于Linux内核的OS级虚拟化，支持资源隔离但需定制内核&lt;a class="link" href="@ref" &gt;3&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;对比Docker&lt;/strong&gt;：更接近系统底层，适合需要直接管理内核资源的场景。
+&lt;strong&gt;2. 容器编排生态&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Kubernetes&lt;/strong&gt;：容器编排标杆，支持自动化部署、扩缩容，与KVM、VMware集成实现混合虚拟化管理&lt;a class="link" href="@ref" &gt;5,8&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-存储虚拟化"&gt;💾 &lt;strong&gt;存储虚拟化&lt;/strong&gt;
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;原理&lt;/strong&gt;：整合物理存储设备（SAN/NAS）为统一“存储池”，实现动态分配与数据迁移&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;技术方案：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;硬件方案&lt;/strong&gt;：存储阵列（如EMC VMAX）提供卷管理。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;软件方案&lt;/strong&gt;：分布式存储（如Ceph）、虚拟SAN（如VMware vSAN）&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;核心功能：
+&lt;ul&gt;
+&lt;li&gt;精简配置（Thin Provisioning）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;快照与克隆
+&lt;ul&gt;
+&lt;li&gt;异地数据复制（容灾）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;应用场景&lt;/strong&gt;：云存储、备份恢复系统&lt;a class="link" href="@ref" &gt;4&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-网络虚拟化"&gt;🌐 &lt;strong&gt;网络虚拟化&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;1. SDN（软件定义网络）&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;原理&lt;/strong&gt;：分离控制平面与数据平面，通过控制器（如OpenDaylight）集中管理网络流量&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;应用&lt;/strong&gt;：动态配置VLAN、负载均衡，支持多租户网络隔离（如云服务商）。
+&lt;strong&gt;2. NFV（网络功能虚拟化）&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;原理&lt;/strong&gt;：将防火墙、路由器等网络功能从专用硬件解耦，以软件形式运行于虚拟机&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;案例&lt;/strong&gt;：5G核心网UPF（用户面功能）虚拟化，降低运营商设备成本&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-应用与桌面虚拟化"&gt;🖱️ &lt;strong&gt;应用与桌面虚拟化&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;1. 应用虚拟化&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;原理&lt;/strong&gt;：应用与操作系统解耦，通过流式传输（如Microsoft App-V）或容器（如Singularity）交付，避免本地安装冲突&lt;a class="link" href="@ref" &gt;3,4&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;场景&lt;/strong&gt;：企业统一发布软件，跨平台兼容（Windows/Linux应用混用）。
+&lt;strong&gt;2. 桌面虚拟化（VDI）&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;原理&lt;/strong&gt;：桌面操作系统运行于数据中心虚拟机，用户通过瘦客户端（如Citrix Receiver）远程访问&lt;a class="link" href="@ref" &gt;4,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;优势&lt;/strong&gt;：数据不落地、支持移动办公，典型方案包括VMware Horizon、Citrix XenDesktop。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-新兴虚拟化技术"&gt;⚙️ &lt;strong&gt;新兴虚拟化技术&lt;/strong&gt;
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;技术方向&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;核心突破&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;应用场景&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;GPU虚拟化&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;vGPU分片（NVIDIA GRID）支持AI训练并行加速&lt;/td&gt;
+&lt;td&gt;深度学习、实时渲染&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;嵌套虚拟化&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;虚拟机内再运行Hypervisor（如KVM on ESXi）&lt;/td&gt;
+&lt;td&gt;开发测试、云服务嵌套部署&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;无服务器虚拟化&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;事件驱动按需分配资源（AWS Lambda）&lt;/td&gt;
+&lt;td&gt;微服务、间歇性任务处理&lt;a class="link" href="@ref" &gt;4&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-总结技术选型建议"&gt;💎 &lt;strong&gt;总结：技术选型建议&lt;/strong&gt;
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;追求轻量快速&lt;/strong&gt;：选容器（Docker/LXC）&lt;a class="link" href="@ref" &gt;3&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;强隔离与多OS&lt;/strong&gt;：选全虚拟化（VMware/KVM）&lt;a class="link" href="@ref" &gt;5,8&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;网络/存储优化&lt;/strong&gt;：SDN/NFV或存储虚拟化&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;桌面交付与安全&lt;/strong&gt;：VDI方案（Citrix/VMware）&lt;a class="link" href="@ref" &gt;4&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;未来趋势&lt;/strong&gt;：硬件辅助虚拟化+容器化融合（如vSphere with Tanzu）&lt;a class="link" href="@ref" &gt;8&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;更深入的技术实现细节（如Intel VT-x指令集工作流程）或行业案例（金融/电信虚拟化架构），可进一步探讨！&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="network"&gt;Network
+&lt;/h2&gt;&lt;p&gt;以下是 Docker 网络模式的全面解析，涵盖核心原理、配置方法、适用场景及优化策略，结合技术细节与实践案例综合整理：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-docker-网络架构核心概念"&gt;🏗️ &lt;strong&gt;Docker 网络架构核心概念&lt;/strong&gt;
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Network Namespace&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;每个容器拥有独立的网络栈（网卡、IP、路由表），实现网络隔离&lt;a class="link" href="@ref" &gt;1,4&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;通过 &lt;code&gt;ip netns&lt;/code&gt; 命令可查看不同容器的命名空间。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;虚拟网桥（docker0）&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;默认创建的虚拟交换机（IP 通常为 &lt;code&gt;172.17.0.1/16&lt;/code&gt;），容器通过 &lt;code&gt;veth pair&lt;/code&gt; 设备连接到网桥&lt;a class="link" href="@ref" &gt;4,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;veth pair&lt;/strong&gt;：一端在容器内（&lt;code&gt;eth0&lt;/code&gt;），一端在宿主机（&lt;code&gt;vethxxx&lt;/code&gt;），实现容器与宿主机通信&lt;a class="link" href="@ref" &gt;4&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;网络驱动（Driver）&lt;/strong&gt;
+Docker 通过不同驱动实现多样化的网络模式：
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;bridge&lt;/code&gt;：默认驱动，适用于单机容器互联。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;overlay&lt;/code&gt;：支持跨主机通信（如 Swarm/Kubernetes）。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;macvlan&lt;/code&gt;：容器直接绑定物理网卡，获得独立 MAC 地址&lt;a class="link" href="@ref" &gt;9&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;none&lt;/code&gt;：无网络功能，需手动配置。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-六大网络模式详解"&gt;🔧 &lt;strong&gt;六大网络模式详解&lt;/strong&gt;
+&lt;/h3&gt;&lt;h4 id="bridge-模式默认"&gt;&lt;strong&gt;Bridge 模式（默认）&lt;/strong&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;原理&lt;/strong&gt;：
+容器通过 &lt;code&gt;docker0&lt;/code&gt; 网桥互联，IP 由 DHCP 分配（如 &lt;code&gt;172.17.0.0/16&lt;/code&gt;）。外部访问需端口映射（&lt;code&gt;-p 80:80&lt;/code&gt;），本质是 iptables DNAT 规则&lt;a class="link" href="@ref" &gt;4,7&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;特点：
+&lt;ul&gt;
+&lt;li&gt;✅ 容器间通过 IP 或容器名通信（需自定义网络）。&lt;/li&gt;
+&lt;li&gt;❌ 外部访问需显式端口映射。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;命令示例：
+&lt;pre tabindex="0"&gt;&lt;code&gt;docker run -d --name web nginx # 默认使用 bridge
+docker network create my-bridge # 创建自定义桥接网络[7](@ref)
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="host-模式"&gt;&lt;strong&gt;Host 模式&lt;/strong&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;原理&lt;/strong&gt;：
+容器共享宿主机 Network Namespace，直接使用主机 IP 和端口，无虚拟网卡&lt;a class="link" href="@ref" &gt;1,3&lt;/a&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;适用场景：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;高性能需求（如网络监控工具），避免 NAT 开销。&lt;/li&gt;
+&lt;li&gt;需直接暴露服务的场景（如 Prometheus 抓取节点数据）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;限制：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;❌ 端口冲突风险（容器与宿主机端口共用）。&lt;/li&gt;
+&lt;li&gt;❌ 无网络隔离，安全性低。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;命令示例：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;docker run -d --net=host --name nginx-host nginx
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="container-模式"&gt;&lt;strong&gt;Container 模式&lt;/strong&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;原理&lt;/strong&gt;：
+新容器共享指定容器的 Network Namespace（同 IP、端口）&lt;a class="link" href="@ref" &gt;1,5&lt;/a&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;典型用例&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Kubernetes Pod 内容器互通（通过 &lt;code&gt;localhost&lt;/code&gt; 直接通信）。&lt;/li&gt;
+&lt;li&gt;Sidecar 模式（日志收集器共享业务容器的网络）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;命令示例&lt;/strong&gt;：&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;docker run -d --name base-container alpine sleep 3600
+docker run -d --net=container:base-container --name sidecar nginx
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="none-模式"&gt;&lt;strong&gt;None 模式&lt;/strong&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;原理&lt;/strong&gt;：
+容器仅有 &lt;code&gt;lo&lt;/code&gt; 回环接口，无外部网络连接&lt;a class="link" href="@ref" &gt;2,6&lt;/a&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用场景：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;离线数据处理（如安全审计）。&lt;/li&gt;
+&lt;li&gt;需完全自定义网络的场景（手动配置 veth 或 VPN）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;命令示例：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;docker run -d --net=none --name isolated-container alpine
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="overlay-模式"&gt;&lt;strong&gt;Overlay 模式&lt;/strong&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;原理&lt;/strong&gt;：
+基于 VXLAN 隧道实现跨主机容器通信，用于 Docker Swarm/Kubernetes 集群&lt;a class="link" href="@ref" &gt;1,8&lt;/a&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;核心优势：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;✅ 自动服务发现（DNS 解析服务名）。&lt;/li&gt;
+&lt;li&gt;✅ 内置负载均衡（VIP 分发流量到多个副本）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;命令示例：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;docker network create -d overlay my-overlay # Swarm 模式下有效
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="macvlan-模式"&gt;&lt;strong&gt;Macvlan 模式&lt;/strong&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;原理&lt;/strong&gt;：
+容器直接绑定物理网卡（如 &lt;code&gt;eth0&lt;/code&gt;），拥有独立 MAC 和 IP，像物理设备一样接入局域网&lt;a class="link" href="@ref" &gt;9&lt;/a&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;适用场景：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;IoT 设备模拟（每个容器代表一个设备）。&lt;/li&gt;
+&lt;li&gt;需固定 IP 的传统应用迁移。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;配置示例：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;docker network create -d macvlan \
+--subnet=192.168.1.0/24 \
+--gateway=192.168.1.1 \
+-o parent=eth0 \
+my-macvlan
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-网络模式对比与选型指南"&gt;⚡ &lt;strong&gt;网络模式对比与选型指南&lt;/strong&gt;
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;模式&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;隔离性&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;性能&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;配置复杂度&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;典型场景&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Bridge&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;中&lt;/td&gt;
+&lt;td&gt;中&lt;/td&gt;
+&lt;td&gt;低&lt;/td&gt;
+&lt;td&gt;开发测试、单机多容器&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Host&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;低&lt;/td&gt;
+&lt;td&gt;★★★&lt;/td&gt;
+&lt;td&gt;低&lt;/td&gt;
+&lt;td&gt;网络监控、高性能服务&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Container&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;低&lt;/td&gt;
+&lt;td&gt;高&lt;/td&gt;
+&lt;td&gt;中&lt;/td&gt;
+&lt;td&gt;Pod 内容器互通、Sidecar&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;None&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;★★★&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;高&lt;/td&gt;
+&lt;td&gt;安全敏感型离线任务&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Overlay&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;高&lt;/td&gt;
+&lt;td&gt;中&lt;/td&gt;
+&lt;td&gt;高&lt;/td&gt;
+&lt;td&gt;集群跨主机通信（Swarm/K8s）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Macvlan&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;高&lt;/td&gt;
+&lt;td&gt;★★★&lt;/td&gt;
+&lt;td&gt;中&lt;/td&gt;
+&lt;td&gt;直接接入物理网络、IoT&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-高级网络配置技巧"&gt;🛠️ &lt;strong&gt;高级网络配置技巧&lt;/strong&gt;
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;自定义 DNS 与服务发现&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;自定义网络中容器可通过&lt;strong&gt;容器名&lt;/strong&gt;自动解析 IP（无需 &lt;code&gt;--link&lt;/code&gt;）&lt;a class="link" href="@ref" &gt;7&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;覆盖网络内置 DNS 轮询，实现负载均衡。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;网络隔离与安全&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使用 &lt;code&gt;--internal&lt;/code&gt; 创建仅内部通信的网络（禁止外部访问）&lt;a class="link" href="@ref" &gt;4&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;通过 &lt;code&gt;iptables&lt;/code&gt; 限制容器间流量（如仅允许特定端口）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;多网卡绑定&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;容器可连接多个网络（如业务网+监控网）：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;docker network connect monitoring-net my-container
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;IPv6 支持&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;创建网络时添加&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;--ipv6
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;参数，并配置子网：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;docker network create --ipv6 --subnet=2001:db8::/64 ipv6-net
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-总结-1"&gt;💎 &lt;strong&gt;总结&lt;/strong&gt;
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;基础场景&lt;/strong&gt;：单机容器互联首选 &lt;strong&gt;Bridge 模式&lt;/strong&gt;（自定义网络提升灵活性与 DNS 解析）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;性能优先&lt;/strong&gt;：&lt;strong&gt;Host 模式&lt;/strong&gt;适合高频 I/O 应用，但牺牲隔离性。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;集群架构&lt;/strong&gt;：&lt;strong&gt;Overlay 模式&lt;/strong&gt;是跨主机通信的基石，集成于 Swarm/Kubernetes。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;特殊需求：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;物理网络直通 → &lt;strong&gt;Macvlan&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;绝对网络隔离 → &lt;strong&gt;None 模式&lt;/strong&gt; + 手动配置。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;可通过 &lt;code&gt;docker network inspect [网络名]&lt;/code&gt; 查看详细配置&lt;a class="link" href="@ref" &gt;4,7&lt;/a&gt;。生产环境建议避免默认网桥，优先使用自定义网络以增强可控性与安全性。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="volume"&gt;Volume
+&lt;/h2&gt;&lt;p&gt;以下是对 &lt;strong&gt;Docker Volume（存储卷）&lt;/strong&gt; 的全面解析，结合核心概念、类型对比、操作指南及最佳实践，综合多源信息整理而成：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-volume-的核心概念"&gt;🗂️ &lt;strong&gt;Volume 的核心概念&lt;/strong&gt;
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;定义&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;Volume 是 Docker 用于&lt;strong&gt;持久化存储容器数据&lt;/strong&gt;的机制，本质是宿主机文件系统中的目录（如 &lt;code&gt;/var/lib/docker/volumes/&lt;/code&gt;），与容器内目录建立绑定关系，实现双向数据同步&lt;a class="link" href="@ref" &gt;1,5&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;独立于容器生命周期，容器删除后数据仍保留，支持多容器共享&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;核心价值&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;数据持久化&lt;/strong&gt;：解决容器删除导致数据丢失的问题（如 MySQL 数据库文件）&lt;a class="link" href="@ref" &gt;1,4&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;性能优化&lt;/strong&gt;：绕过联合文件系统（Union FS），直接读写宿主机磁盘，I/O 效率提升 30% 以上&lt;a class="link" href="@ref" &gt;2,7&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;共享与隔离&lt;/strong&gt;：多个容器可挂载同一 Volume 共享数据（如日志目录），同时通过 Namespace 隔离操作&lt;a class="link" href="@ref" &gt;5,6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-volume-的类型与对比"&gt;🔧 &lt;strong&gt;Volume 的类型与对比&lt;/strong&gt;
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;类型&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;管理方&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;存储位置&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;适用场景&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;特点&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;管理卷 (Volume)&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Docker 引擎&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/var/lib/docker/volumes/卷名&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;生产环境数据库（如 MySQL）&lt;/td&gt;
+&lt;td&gt;自动创建、安全隔离、易备份&lt;a class="link" href="@ref" &gt;1,4&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;绑定卷 (Bind Mount)&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;用户手动指定&lt;/td&gt;
+&lt;td&gt;宿主机任意路径（如 &lt;code&gt;/home/data&lt;/code&gt;）&lt;/td&gt;
+&lt;td&gt;开发调试（挂载代码或配置）&lt;/td&gt;
+&lt;td&gt;需绝对路径，覆盖容器目录内容&lt;a class="link" href="@ref" &gt;5,7&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;临时卷 (tmpfs)&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;宿主机内存&lt;/td&gt;
+&lt;td&gt;内存中&lt;/td&gt;
+&lt;td&gt;敏感临时数据（如 SSL 证书）&lt;/td&gt;
+&lt;td&gt;容器停止即消失，高性能但易失&lt;a class="link" href="@ref" &gt;1,3&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;blockquote&gt;
+&lt;p&gt;⚠️ &lt;strong&gt;关键区别&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;绑定卷会&lt;strong&gt;覆盖容器内目录原有内容&lt;/strong&gt;，而管理卷会&lt;strong&gt;保留镜像初始数据&lt;/strong&gt;&lt;a class="link" href="@ref" &gt;5,7&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;临时卷仅限 Linux 宿主机使用，不支持共享&lt;a class="link" href="@ref" &gt;7&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h3 id="-volume-操作全指南"&gt;⚙️ &lt;strong&gt;Volume 操作全指南&lt;/strong&gt;
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;管理卷操作&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;创建与查看：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;docker volume create my-vol # 创建命名卷
+docker volume ls # 列出所有卷
+docker volume inspect my-vol # 查看卷详情（含宿主机存储路径）[1,3](@ref)
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;挂载到容器：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;# 方式1：-v 参数
+docker run -d -v my-vol:/app/data nginx:latest
+# 方式2：--mount 参数（更推荐，语法明确）
+docker run -d --mount type=volume,source=my-vol,target=/app/data nginx:latest
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;删除清理：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;docker volume rm my-vol # 删除指定卷（需无容器使用）
+docker volume prune # 清理所有未使用卷&lt;a class="link" href="@ref" &gt;1,3&lt;/a&gt;&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;绑定卷操作&lt;/strong&gt;&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;# 将宿主机 /home/user/config 挂载到容器 /app/config（可读写）
+docker run -d -v /home/user/config:/app/config nginx:latest
+# 只读挂载（容器无法修改宿主机文件）
+docker run -d -v /home/user/config:/app/config:ro nginx:latest[5,7](@ref)
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;临时卷操作&lt;/strong&gt;&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;# 内存挂载（限制大小 128MB）
+docker run -d --tmpfs /app/cache:rw,size=128m nginx:latest
+# 或使用 --mount
+docker run -d --mount type=tmpfs,destination=/app/cache,tmpfs-size=128m nginx:latest[1,3](@ref)
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-高级应用技巧"&gt;🔄 &lt;strong&gt;高级应用技巧&lt;/strong&gt;
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;多容器共享数据&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;方案1：多个容器挂载同一 Volume&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;docker run -d -v shared-data:/app/logs container1
+docker run -d -v shared-data:/app/logs container2
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;方案2：通过 &amp;ndash;volumes-from 继承挂载（适合 Sidecar 日志收集）&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; docker run -d --name logger -v /logs busybox
+docker run -d --volumes-from logger app-server
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;数据备份与恢复&lt;/strong&gt;&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;# 备份 Volume 到宿主机
+docker run --rm -v my-vol:/data -v $(pwd):/backup alpine \
+tar -czf /backup/my-vol-backup.tar.gz /data
+# 从备份恢复
+docker run --rm -v my-vol:/data -v $(pwd):/backup alpine \
+sh -c &amp;#34;rm -rf /data/* &amp;amp;&amp;amp; tar -xzf /backup/my-vol-backup.tar.gz -C /data&amp;#34;[3,6](@ref)
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;远程存储驱动&lt;/strong&gt;
+对接 NFS、AWS EBS 等分布式存储：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;docker volume create \
+--driver local \
+--opt type=nfs \
+--opt o=addr=192.168.1.100,rw \
+--opt device=:/nfs/data \
+nfs-volume[3,4](@ref)
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-最佳实践总结"&gt;💎 &lt;strong&gt;最佳实践总结&lt;/strong&gt;
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;选型建议&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;✅ &lt;strong&gt;生产环境&lt;/strong&gt;：优先使用&lt;strong&gt;管理卷&lt;/strong&gt;（安全隔离、易维护）&lt;a class="link" href="@ref" &gt;4,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;✅ &lt;strong&gt;开发调试&lt;/strong&gt;：用&lt;strong&gt;绑定卷&lt;/strong&gt;快速挂载代码或配置&lt;a class="link" href="@ref" &gt;7&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;⚠️ &lt;strong&gt;敏感数据&lt;/strong&gt;：用 &lt;strong&gt;tmpfs&lt;/strong&gt; 避免磁盘残留&lt;a class="link" href="@ref" &gt;3&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;避坑指南&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;避免匿名卷（难以追踪管理），始终命名 Volume（如 &lt;code&gt;mysql-data&lt;/code&gt;）&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;绑定卷时确保宿主机目录存在，否则 &lt;code&gt;--mount&lt;/code&gt; 会报错（&lt;code&gt;-v&lt;/code&gt; 会自动创建但可能导致权限问题）&lt;a class="link" href="@ref" &gt;5,7&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;跨平台场景用 Volume 而非绑定卷（Windows/macOS 路径兼容性问题）&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;运维策略&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;监控宿主机磁盘空间（&lt;code&gt;df -h /var/lib/docker/volumes&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;定期备份关键 Volume（如数据库卷）&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-实战案例"&gt;💡 &lt;strong&gt;实战案例&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;MySQL 数据持久化&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;# 创建专用于数据库的 Volume
+docker volume create mysql-data
+# 运行容器并挂载
+docker run -d \
+--name mysql-server \
+-e MYSQL_ROOT_PASSWORD=123456 \
+-v mysql-data:/var/lib/mysql \ # 数据目录持久化
+mysql:8.0
+&lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;
+&lt;p&gt;即使删除容器，数据仍可通过新容器挂载 &lt;code&gt;mysql-data&lt;/code&gt; 恢复&lt;a class="link" href="@ref" &gt;3,4&lt;/a&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;p&gt;通过 Volume 机制，Docker 有效平衡了容器轻量化与数据持久化的矛盾，成为有状态服务的核心支撑。合理选型与规范操作，可显著提升系统可靠性（参考：&lt;a class="link" href="https://docs.docker.com/storage/volumes/" target="_blank" rel="noopener"
+&gt;Docker 官方文档&lt;/a&gt;）。&lt;/p&gt;
+&lt;h2 id="管理卷--绑定卷"&gt;管理卷 &amp;amp; 绑定卷
+&lt;/h2&gt;&lt;p&gt;以下是 Docker 中**管理卷（Volume）&lt;strong&gt;与&lt;/strong&gt;绑定卷（Bind Mount）**的详细对比，结合核心特性、适用场景及操作差异，整理自多源技术文档与实践分析：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-核心特性对比"&gt;⚙️ &lt;strong&gt;核心特性对比&lt;/strong&gt;
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;特性&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;管理卷 (Volume)&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;绑定卷 (Bind Mount)&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;管理方&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Docker 引擎自动管理&lt;/td&gt;
+&lt;td&gt;用户手动管理宿主机路径&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;存储位置&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/var/lib/docker/volumes/卷名/_data&lt;/code&gt; &lt;a class="link" href="@ref" &gt;2,7&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;用户指定的宿主机任意路径（如 &lt;code&gt;/home/data&lt;/code&gt;）&lt;a class="link" href="@ref" &gt;3,9&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;初始化行为&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;自动创建空目录，&lt;strong&gt;保留容器内原内容&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;直接覆盖容器内目录的原有内容&lt;a class="link" href="@ref" &gt;6,9&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;可移植性&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;✅ 高（路径由 Docker 统一管理）&lt;/td&gt;
+&lt;td&gt;❌ 低（依赖宿主机特定路径）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;权限控制&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;默认容器内用户权限隔离&lt;/td&gt;
+&lt;td&gt;依赖宿主机文件权限，需手动设置&lt;a class="link" href="@ref" &gt;9&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;共享便捷性&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;支持多容器共享同一命名卷&lt;/td&gt;
+&lt;td&gt;需手动确保多个容器挂载相同宿主机路径&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-性能与安全对比"&gt;⚡ &lt;strong&gt;性能与安全对比&lt;/strong&gt;
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;维度&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;管理卷&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;绑定卷&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;I/O 性能&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;更优（尤其小文件读写）&lt;a class="link" href="@ref" &gt;1&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;可能因跨文件系统（如 ext4 → overlay2）产生额外开销&lt;a class="link" href="@ref" &gt;1&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;元数据操作&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;高效（大量文件创建/删除场景）&lt;/td&gt;
+&lt;td&gt;性能较低（依赖宿主机文件系统）&lt;a class="link" href="@ref" &gt;1&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;安全性&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;✅ 隔离性强（仅 Docker 可访问）&lt;/td&gt;
+&lt;td&gt;❌ 风险高（容器直接读写宿主机敏感路径）&lt;a class="link" href="@ref" &gt;8&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;数据持久性&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;独立于容器生命周期&lt;/td&gt;
+&lt;td&gt;依赖宿主机目录维护&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-操作方式对比"&gt;🛠️ &lt;strong&gt;操作方式对比&lt;/strong&gt;
+&lt;/h3&gt;&lt;h4 id="创建与挂载命令"&gt;&lt;strong&gt;创建与挂载命令&lt;/strong&gt;
+&lt;/h4&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;方式&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;管理卷&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;绑定卷&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;命令行创建&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;docker volume create db-data&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;无需创建，直接指定路径&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;运行容器&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;bash docker run -v db-data:/var/lib/mysql &lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;bash docker run -v /host/mysql:/var/lib/mysql &lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;--mount&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;bash --mount type=volume,src=db-data,target=/data &lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;bash --mount type=bind,src=https://dyhes.github.io/host/data,target=/app &lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h4 id="关键差异点"&gt;&lt;strong&gt;关键差异点&lt;/strong&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;路径存在性检查&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;绑定卷&lt;/strong&gt;：宿主机路径不存在时，&lt;code&gt;--mount&lt;/code&gt; 会报错，&lt;code&gt;-v&lt;/code&gt; 会自动创建（可能导致权限问题）&lt;a class="link" href="@ref" &gt;9&lt;/a&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;管理卷：自动创建目录，无需手动干预。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;只读控制&lt;/strong&gt;
+两者均支持 &lt;code&gt;:ro&lt;/code&gt; 或 &lt;code&gt;readonly&lt;/code&gt; 参数（如 &lt;code&gt;-v db-data:/data:ro&lt;/code&gt;）&lt;a class="link" href="@ref" &gt;6,7&lt;/a&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-适用场景对比-1"&gt;🎯 &lt;strong&gt;适用场景对比&lt;/strong&gt;
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;场景&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;推荐方案&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;原因&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;生产环境数据库持久化&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;✅ 管理卷&lt;/td&gt;
+&lt;td&gt;数据安全隔离、易备份迁移（如 MySQL 的 &lt;code&gt;/var/lib/mysql&lt;/code&gt;）&lt;a class="link" href="@ref" &gt;6,9&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;开发环境代码热更新&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;✅ 绑定卷&lt;/td&gt;
+&lt;td&gt;直接修改宿主机代码，容器实时生效&lt;a class="link" href="@ref" &gt;1,8&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;多容器共享配置（如日志）&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;⚖️ 管理卷更安全&lt;/td&gt;
+&lt;td&gt;避免暴露宿主机敏感路径&lt;a class="link" href="@ref" &gt;7&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;宿主机文件直接访问&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;✅ 绑定卷&lt;/td&gt;
+&lt;td&gt;需读取宿主机特定文件（如 &lt;code&gt;/etc/resolv.conf&lt;/code&gt;）&lt;a class="link" href="@ref" &gt;9&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-常见问题与避坑指南"&gt;⚠️ &lt;strong&gt;常见问题与避坑指南&lt;/strong&gt;
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;数据覆盖风险&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;绑定卷会清空容器内目标目录原有文件（如挂载空目录到 Nginx 的 &lt;code&gt;/usr/share/nginx/html&lt;/code&gt; 会导致默认页面消失）&lt;a class="link" href="@ref" &gt;6,9&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;规避方案&lt;/strong&gt;：预填充宿主机目录或使用管理卷保留初始内容。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;权限冲突&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;绑定卷若宿主机目录属主为 root，容器非 root 用户运行时可能无写权限。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;解决&lt;/strong&gt;：启动容器时指定用户 &lt;code&gt;-u&lt;/code&gt; 或调整宿主机目录权限&lt;a class="link" href="@ref" &gt;9&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;匿名卷管理混乱&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;匿名管理卷（如 &lt;code&gt;-v /data&lt;/code&gt;）难以追踪，&lt;strong&gt;建议始终使用命名卷&lt;/strong&gt;（如 &lt;code&gt;-v named-vol:/data&lt;/code&gt;）&lt;a class="link" href="@ref" &gt;5,7&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-总结选型建议"&gt;💎 &lt;strong&gt;总结：选型建议&lt;/strong&gt;
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;优先选择管理卷的场景&lt;/strong&gt;：
+✅ 生产环境数据持久化
+✅ 需跨主机迁移或备份的数据
+✅ 对安全隔离性要求高&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;优先选择绑定卷的场景&lt;/strong&gt;：
+✅ 开发调试需实时同步代码
+✅ 直接集成宿主机现有文件（如配置文件）
+✅ 对宿主机路径有精准控制需求&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;混合架构示例&lt;/strong&gt;：
+开发环境用绑定卷快速迭代，生产环境替换为管理卷：
+&lt;code&gt;bash # 开发命令 docker run -v /path/to/code:/app my-image # 生产命令 docker run -v prod-code:/app my-image &lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;通过合理选型，可平衡开发效率与运维可靠性。更深入的性能调优（如 NFS 远程卷）或权限方案，可参考 &lt;a class="link" href="https://docs.docker.com/storage/volumes/" target="_blank" rel="noopener"
+&gt;Docker 官方文档&lt;/a&gt;&lt;a class="link" href="@ref" &gt;9&lt;/a&gt;。&lt;/p&gt;
+&lt;h2 id="重启策略"&gt;重启策略
+&lt;/h2&gt;&lt;p&gt;Docker 的重启策略（Restart Policies）是确保容器在退出后自动恢复运行的核心机制，适用于生产环境中保障服务的高可用性。以下详细解析其原理、策略类型、配置方法及最佳实践：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-重启策略类型与原理"&gt;🔧 &lt;strong&gt;重启策略类型与原理&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;Docker 提供四种重启策略，通过 &lt;code&gt;--restart&lt;/code&gt; 参数指定，由 Docker 守护进程执行&lt;a class="link" href="@ref" &gt;1,3,6&lt;/a&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;no&lt;/code&gt;（默认策略）&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;行为&lt;/strong&gt;：容器退出后不自动重启。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;场景&lt;/strong&gt;：临时任务、测试环境或由外部编排工具（如 Kubernetes）管理生命周期&lt;a class="link" href="@ref" &gt;1,3&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;always&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;行为&lt;/strong&gt;：无论退出状态（正常或异常），均自动重启容器。
+​&lt;strong&gt;注意&lt;/strong&gt;​：若容器被手动停止（&lt;code&gt;docker stop&lt;/code&gt;），Docker 守护进程重启后该容器仍会自动启动&lt;a class="link" href="@ref" &gt;3,4&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;场景&lt;/strong&gt;：需绝对持续运行的服务（如监控代理），但需警惕无限重启循环&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;on-failure[:max-retries]&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;行为：仅当容器异常退出（退出状态码非&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;0
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;）时重启。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;可指定最大重启次数（如 &lt;code&gt;on-failure:3&lt;/code&gt;），超限后放弃重启。&lt;/li&gt;
+&lt;li&gt;若不设上限（&lt;code&gt;on-failure&lt;/code&gt;），会无限重试&lt;a class="link" href="@ref" &gt;2,3,5&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;场景&lt;/strong&gt;：批处理任务或可能偶发故障的服务，避免正常退出后无意义重启&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;unless-stopped&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;行为&lt;/strong&gt;：容器退出时自动重启，&lt;strong&gt;除非被手动停止&lt;/strong&gt;（&lt;code&gt;docker stop&lt;/code&gt;）。
+​&lt;strong&gt;关键区别&lt;/strong&gt;​：若容器手动停止，即使 Docker 守护进程重启，该容器也保持停止状态&lt;a class="link" href="@ref" &gt;3,4,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;场景&lt;/strong&gt;：&lt;strong&gt;生产环境首选&lt;/strong&gt;，兼顾高可用（异常崩溃时恢复）与运维可控性（如维护时手动停止）&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-关键注意事项"&gt;⚠️ &lt;strong&gt;关键注意事项&lt;/strong&gt;
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;避免无限重启循环&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;若容器因配置错误持续崩溃（如应用启动即失败），&lt;code&gt;always&lt;/code&gt; 或 &lt;code&gt;on-failure&lt;/code&gt; 可能导致频繁重启，消耗资源。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;解决方案：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;为 &lt;code&gt;on-failure&lt;/code&gt; 设置最大重试次数（如 &lt;code&gt;on-failure:5&lt;/code&gt;）&lt;a class="link" href="@ref" &gt;1,6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;通过日志诊断问题：&lt;code&gt;docker logs &amp;lt;容器名&amp;gt;&lt;/code&gt;&lt;a class="link" href="@ref" &gt;1&lt;/a&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;依赖服务启动顺序&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;容器重启时若依赖服务（如数据库）未就绪，可能导致启动失败。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;解决方案：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在启动脚本中添加重试逻辑（如 &lt;code&gt;wait-for-it.sh&lt;/code&gt;）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用 Docker Compose 的 &lt;code&gt;depends_on&lt;/code&gt; 控制启动顺序&lt;a class="link" href="@ref" &gt;1&lt;/a&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;数据持久化&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;容器重启时，临时文件系统会被重置，关键数据需通过卷（Volume）或绑定挂载（Bind Mount）持久化：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; docker run -d --restart always -v /host/data:/container/data my-app
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;策略生效条件&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;仅后台容器&lt;/strong&gt;：&lt;code&gt;--restart&lt;/code&gt; 仅适用于 &lt;code&gt;-d&lt;/code&gt; 模式（后台运行），不可与 &lt;code&gt;--rm&lt;/code&gt;（退出后删除）共用&lt;a class="link" href="@ref" &gt;5,6&lt;/a&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Docker 服务自启：需确保 Docker 守护进程随系统启动：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;systemctl enable docker # 启用开机自启[1](@ref)
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-配置方法"&gt;⚙️ &lt;strong&gt;配置方法&lt;/strong&gt;
+&lt;/h3&gt;&lt;h4 id="命令行配置"&gt;&lt;strong&gt;命令行配置&lt;/strong&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;创建容器时指定：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;docker run -d &amp;ndash;name nginx &amp;ndash;restart unless-stopped nginx&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+- 修改已有容器：
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;docker update &amp;ndash;restart unless-stopped nginx # 更新策略&lt;a class="link" href="@ref" &gt;2,6&lt;/a&gt;&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+#### **Docker Compose 配置**
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;version: &amp;lsquo;3.8&amp;rsquo;
+services:
+web:
+image: nginx
+restart: unless-stopped # 策略类型
+ports:
+- &amp;ldquo;80:80&amp;rdquo;
+db:
+image: mysql
+restart: on-failure:5 # 限制最大重启次数
+environment:
+MYSQL_ROOT_PASSWORD: password
+volumes:
+- db_data:/var/lib/mysql
+volumes:
+db_data:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+#### **手动修改容器配置**
+编辑容器配置文件（需停止容器）：
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;vim /var/lib/docker/containers/&amp;lt;容器ID&amp;gt;/hostconfig.json&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+修改 `RestartPolicy` 字段：
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;{&amp;ldquo;Name&amp;rdquo;: &amp;ldquo;unless-stopped&amp;rdquo;, &amp;ldquo;MaximumRetryCount&amp;rdquo;: 0} # 原值为 &amp;ldquo;no&amp;rdquo;&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+------
+### 📊 **策略对比与选型建议**
+| **策略** | **自动重启触发条件** | **手动停止后是否随 Docker 重启** | **适用场景** |
+| ---------------- | ------------------------- | -------------------------------- | -------------------------------- |
+| `no` | 永不重启 | 否 | 临时任务、测试环境 |
+| `always` | **任何退出** | **是** | 极少使用（可能引发循环重启） |
+| `on-failure[:N]` | **异常退出**（非0状态码） | 否 | 批处理任务、可故障恢复的服务 |
+| `unless-stopped` | **任何退出** | **否** | **生产环境长期服务（推荐首选）** |
+&amp;gt; 💡 **状态码参考**：
+&amp;gt;
+&amp;gt; - `0`：正常退出（如 `docker stop`）。
+&amp;gt; - `非0`：异常退出（如应用崩溃）。
+&amp;gt; - `125+`：Docker 自身错误（如命令无法执行）[2,6](@ref)。
+------
+### 🔍 **调试与监控**
+- 查看重启策略：
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;docker inspect nginx &amp;ndash;format &amp;lsquo;{{.HostConfig.RestartPolicy.Name}}&amp;rsquo;&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+- 检查重启次数：
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;docker inspect nginx &amp;ndash;format &amp;lsquo;{{.RestartCount}}&amp;rsquo; # 显示已重启次数&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+- 分析退出原因：
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="docker-logs-nginx---定位错误日志"&gt;docker ps -a # 查看 Exited 状态码&lt;a class="link" href="@ref" &gt;2,6&lt;/a&gt;
+docker logs nginx # 定位错误日志
+&lt;/h2&gt;&lt;h3 id="-总结-2"&gt;💎 &lt;strong&gt;总结&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;Docker 重启策略是保障服务韧性的关键工具：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;生产首选 &lt;code&gt;unless-stopped&lt;/code&gt;&lt;/strong&gt;：异常崩溃时自愈，同时尊重手动维护操作&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;任务型服务用 &lt;code&gt;on-failure&lt;/code&gt;&lt;/strong&gt;：限制重试次数，避免资源耗尽&lt;a class="link" href="@ref" &gt;1,5&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;务必结合数据卷&lt;/strong&gt;：确保重启后数据不丢失&lt;a class="link" href="@ref" &gt;1&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;监控重启次数&lt;/strong&gt;：频繁重启往往是应用故障的信号，需及时排查&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;通过合理配置策略，可显著提升容器化服务的可用性，减少运维干预成本。&lt;/p&gt;
+&lt;h2 id="多阶段构建"&gt;多阶段构建
+&lt;/h2&gt;&lt;p&gt;Docker 多阶段构建（Multi-stage Build）是 Docker 17.05 版本引入的核心特性，用于&lt;strong&gt;优化镜像体积、提升安全性和简化构建流程&lt;/strong&gt;。它允许在单个 Dockerfile 中定义多个构建阶段（Stage），每个阶段使用独立的基础镜像，最终仅将必要的产物复制到最终镜像中。以下是其核心原理、优势及实践指南：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-核心原理"&gt;⚙️ &lt;strong&gt;核心原理&lt;/strong&gt;
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;阶段分离&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在单个 Dockerfile 中使用多个 &lt;code&gt;FROM&lt;/code&gt; 指令，每个 &lt;code&gt;FROM&lt;/code&gt; 开启一个新阶段，各阶段相互隔离。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;构建阶段（Builder Stage）&lt;/strong&gt;：使用完整 SDK 镜像（如 &lt;code&gt;golang&lt;/code&gt;、&lt;code&gt;maven&lt;/code&gt;），安装编译工具并生成二进制文件。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;运行阶段（Runtime Stage）&lt;/strong&gt;：使用轻量级基础镜像（如 &lt;code&gt;alpine&lt;/code&gt;、&lt;code&gt;slim&lt;/code&gt;），仅复制构建阶段的产物（如二进制文件、静态资源）&lt;a class="link" href="@ref" &gt;1,3,5&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;产物复制机制&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;通过 &lt;code&gt;COPY --from=&amp;lt;stage-name&amp;gt;&lt;/code&gt; 将前一阶段的文件复制到当前阶段，其他中间文件（如编译器、源码）被丢弃。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;示例：&lt;/p&gt;
+&lt;p&gt;FROM golang:1.20 AS builder # 构建阶段
+WORKDIR /app
+COPY . .
+RUN go build -o myapp # 生成二进制文件
+FROM alpine:3.18 # 运行阶段
+COPY &amp;ndash;from=builder /app/myapp . # 仅复制二进制文件
+CMD [&amp;quot;./myapp&amp;quot;]&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-核心优势"&gt;🚀 &lt;strong&gt;核心优势&lt;/strong&gt;
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;维度&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;多阶段构建&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;传统单阶段构建&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;镜像体积&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;✅ &lt;strong&gt;减少 60%-90%&lt;/strong&gt;（仅保留运行时文件）&lt;/td&gt;
+&lt;td&gt;❌ 包含构建工具、源码、临时文件，体积大&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;安全性&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;✅ 无编译工具和源码，攻击面小&lt;/td&gt;
+&lt;td&gt;❌ 构建工具可能含漏洞，源码易泄露&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;构建效率&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;⚡️ 利用缓存优化，仅重建变更阶段&lt;/td&gt;
+&lt;td&gt;⚠️ 全量重建，缓存利用率低&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;维护成本&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;📝 单 Dockerfile 管理，无需额外脚本&lt;/td&gt;
+&lt;td&gt;❌ 需维护构建脚本和多个 Dockerfile&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;blockquote&gt;
+&lt;p&gt;💡 &lt;strong&gt;案例&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Node.js React 应用：单阶段镜像 420MB → 多阶段镜像 43.2MB（缩小 90%）&lt;a class="link" href="@ref" &gt;8&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;Nginx 应用：从 172MB 优化至 24.1MB&lt;a class="link" href="@ref" &gt;1&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h3 id="-典型应用场景"&gt;🛠️ &lt;strong&gt;典型应用场景&lt;/strong&gt;
+&lt;/h3&gt;&lt;h4 id="编译型语言gojava"&gt;&lt;strong&gt;编译型语言（Go、Java）&lt;/strong&gt;
+&lt;/h4&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;# Go 应用
+FROM golang:1.20 AS builder
+WORKDIR /app
+COPY . .
+RUN go build -o app . # 编译
+FROM alpine:latest
+COPY --from=builder /app/app .
+CMD [&amp;#34;./app&amp;#34;]
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="前端应用reactvue"&gt;&lt;strong&gt;前端应用（React、Vue）&lt;/strong&gt;
+&lt;/h4&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;# React + Nginx
+FROM node:18 AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build # 生成静态文件
+FROM nginx:alpine
+COPY --from=build /app/build /usr/share/nginx/html # 仅复制构建结果
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="java-spring-boot"&gt;&lt;strong&gt;Java Spring Boot&lt;/strong&gt;
+&lt;/h4&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;FROM maven:3.8-openjdk-17 AS builder
+WORKDIR /app
+COPY pom.xml .
+RUN mvn dependency:go-offline
+COPY src ./src
+RUN mvn package # 生成 JAR 包
+FROM openjdk:17-alpine
+COPY --from=builder /app/target/app.jar .
+CMD [&amp;#34;java&amp;#34;, &amp;#34;-jar&amp;#34;, &amp;#34;app.jar&amp;#34;]
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id="-高级技巧"&gt;🔧 &lt;strong&gt;高级技巧&lt;/strong&gt;
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;阶段命名与引用&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使用 &lt;code&gt;AS&lt;/code&gt; 命名阶段（如 &lt;code&gt;FROM node:18 AS build&lt;/code&gt;），提升可读性并避免依赖整数索引&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;示例：&lt;code&gt;COPY --from=build /app/dist ./dist&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;部分构建与调试&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;通过&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; --target
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;仅构建特定阶段，用于调试或测试：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt; ```
+docker build --target builder -t app:debug .
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start="3"&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;复用外部镜像文件&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;直接从其他镜像复制文件（如 Nginx 配置）：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;COPY --from=nginx:latest /etc/nginx/nginx.conf /app/nginx.conf
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;依赖缓存优化&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;优先复制依赖声明文件（如&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; package.json
+&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt; 、
+```
+pom.xml
+```
+），再复制源码，最大化利用构建缓存：
+```
+COPY package*.json ./ # 先复制依赖文件
+RUN npm install
+COPY . . # 后复制源码
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id="-最佳实践"&gt;⚠️ &lt;strong&gt;最佳实践&lt;/strong&gt;
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;基础镜像选择&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;构建阶段：使用完整 SDK 镜像（如 &lt;code&gt;golang&lt;/code&gt;、&lt;code&gt;maven&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;运行阶段：使用最小化镜像（如 &lt;code&gt;alpine&lt;/code&gt;、&lt;code&gt;distroless&lt;/code&gt;）&lt;a class="link" href="@ref" &gt;4,7&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;清理无用文件&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;在构建阶段结束时删除缓存和临时文件：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;RUN npm install &amp;amp;&amp;amp; npm run build &amp;amp;&amp;amp; rm -rf /tmp/*
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;多阶段复用&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;多个运行阶段可复用同一构建阶段，避免重复编译：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;FROM builder AS prod
+COPY --from=builder /app/bin .
+FROM builder AS test
+COPY --from=builder /app/bin .
+RUN ./test-suite
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;安全加固&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;运行阶段使用非 root 用户：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;RUN adduser -D appuser &amp;amp;&amp;amp; chown -R appuser /app
+USER appuser
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-总结-3"&gt;💎 &lt;strong&gt;总结&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;Docker 多阶段构建通过&lt;strong&gt;分离构建与运行环境&lt;/strong&gt;，解决了传统单阶段构建的三大痛点：&lt;strong&gt;镜像臃肿、安全风险、流程复杂&lt;/strong&gt;。其核心价值在于：
+✅ ​&lt;strong&gt;极简镜像&lt;/strong&gt;​：仅包含运行时必要文件，提升部署效率。
+✅ ​&lt;strong&gt;生产安全&lt;/strong&gt;​：剔除编译工具和源码，降低攻击面。
+✅ ​&lt;strong&gt;开发友好&lt;/strong&gt;​：单 Dockerfile 管理全流程，无需外部脚本&lt;a class="link" href="@ref" &gt;3,5,8&lt;/a&gt;。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;可通过 &lt;code&gt;docker build --target&lt;/code&gt; 分步调试，结合轻量级基础镜像（如 Alpine）进一步优化。&lt;strong&gt;企业级应用&lt;/strong&gt;（微服务、云原生场景）强烈推荐采用此方案。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="容器隔离"&gt;容器隔离
+&lt;/h2&gt;&lt;p&gt;Docker 容器的隔离性是其核心价值之一，依赖于 &lt;strong&gt;Linux 内核的多项技术&lt;/strong&gt;实现资源与环境的隔离，确保容器间互不干扰。以下是其隔离机制的详细解析：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-隔离机制分类与实现技术"&gt;⚙️ &lt;strong&gt;隔离机制分类与实现技术&lt;/strong&gt;
+&lt;/h3&gt;&lt;h4 id="命名空间namespaces-资源视图隔离-2348"&gt;&lt;strong&gt;命名空间（Namespaces）—— 资源视图隔离&lt;/strong&gt; &lt;a class="link" href="@ref" &gt;2,3,4,8&lt;/a&gt;
+&lt;/h4&gt;&lt;p&gt;命名空间为容器提供独立的系统资源视图，包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;PID 命名空间&lt;/strong&gt;：隔离进程 ID，容器内进程从 PID 1 开始编号，无法看到宿主机或其他容器的进程。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Network 命名空间&lt;/strong&gt;：每个容器拥有独立的网络栈（IP、端口、路由表、防火墙规则）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Mount 命名空间&lt;/strong&gt;：隔离文件系统挂载点，容器内文件操作不影响宿主机（如 &lt;code&gt;/app/data&lt;/code&gt; 仅对当前容器可见）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;UTS 命名空间&lt;/strong&gt;：隔离主机名与域名（如容器可自定义 &lt;code&gt;hostname&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;IPC 命名空间&lt;/strong&gt;：隔离进程间通信（信号量、消息队列）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;User 命名空间&lt;/strong&gt;：映射容器内 root 用户到宿主机非特权用户，提升安全性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="控制组cgroups-资源限制-348"&gt;&lt;strong&gt;控制组（Cgroups）—— 资源限制&lt;/strong&gt; &lt;a class="link" href="@ref" &gt;3,4,8&lt;/a&gt;
+&lt;/h4&gt;&lt;p&gt;Cgroups 限制容器对物理资源的占用：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;CPU&lt;/strong&gt;：通过 &lt;code&gt;--cpus&lt;/code&gt; 限制核心数或时间片份额（如 &lt;code&gt;docker run --cpus=0.5&lt;/code&gt; 限制 50% CPU）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;内存&lt;/strong&gt;：通过 &lt;code&gt;-m&lt;/code&gt; 设置内存上限（如 &lt;code&gt;-m 512m&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;磁盘 I/O&lt;/strong&gt;：限制读写带宽（如 &lt;code&gt;--device-write-bps&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;设备访问&lt;/strong&gt;：控制容器对 &lt;code&gt;/dev&lt;/code&gt; 目录下设备的访问权限。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="联合文件系统unionfs-文件隔离-378"&gt;&lt;strong&gt;联合文件系统（UnionFS）—— 文件隔离&lt;/strong&gt; &lt;a class="link" href="@ref" &gt;3,7,8&lt;/a&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;分层存储&lt;/strong&gt;：镜像由多个只读层叠加，容器运行时添加可写层（OverlayFS/AUFS）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;写时复制（CoW）&lt;/strong&gt;：修改文件时复制到可写层，避免污染基础镜像。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;独立视图&lt;/strong&gt;：每个容器仅看到自己的文件系统，无法直接访问其他容器或宿主机的文件。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="安全机制权限隔离-38"&gt;&lt;strong&gt;安全机制——权限隔离&lt;/strong&gt; &lt;a class="link" href="@ref" &gt;3,8&lt;/a&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Capabilities&lt;/strong&gt;：限制容器内 root 用户的权限（如禁止加载内核模块）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Seccomp&lt;/strong&gt;：过滤危险系统调用（如禁止 &lt;code&gt;mount()&lt;/code&gt; 或 &lt;code&gt;reboot()&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;AppArmor/SELinux&lt;/strong&gt;：强制访问控制（MAC），限制进程行为（如禁止写入敏感目录）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="网络隔离虚拟网络栈-68"&gt;&lt;strong&gt;网络隔离——虚拟网络栈&lt;/strong&gt; &lt;a class="link" href="@ref" &gt;6,8&lt;/a&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;veth pair + 网桥&lt;/strong&gt;：容器通过虚拟网卡（veth）连接到宿主机网桥（如 &lt;code&gt;docker0&lt;/code&gt;），实现独立 IP 和端口分配。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;网络模式：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;bridge&lt;/code&gt;（默认）：容器通过 NAT 与外部通信。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;host&lt;/code&gt;：共享宿主机网络栈（牺牲隔离性换取性能）。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;none&lt;/code&gt;：无网络接口，适用于无需网络的批处理任务。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-与传统虚拟机的对比-89"&gt;⚖️ &lt;strong&gt;与传统虚拟机的对比&lt;/strong&gt; &lt;a class="link" href="@ref" &gt;8,9&lt;/a&gt;
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;特性&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Docker 容器&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;传统虚拟机&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;隔离级别&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;进程级（轻量）&lt;/td&gt;
+&lt;td&gt;硬件级（重量）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;性能开销&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;低（直接调用宿主机内核）&lt;/td&gt;
+&lt;td&gt;高（需 Hypervisor 虚拟化层）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;启动速度&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;秒级&lt;/td&gt;
+&lt;td&gt;分钟级&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;镜像大小&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;MB 级（共享内核）&lt;/td&gt;
+&lt;td&gt;GB 级（含完整 OS）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;安全性&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;依赖内核隔离（需加固）&lt;/td&gt;
+&lt;td&gt;硬件级隔离（更强）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;blockquote&gt;
+&lt;p&gt;💡 &lt;strong&gt;适用场景&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;容器&lt;/strong&gt;：微服务、CI/CD、开发测试环境（轻量快速）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;虚拟机&lt;/strong&gt;：多租户隔离、强安全需求（如金融系统）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h3 id="-安全性与局限性"&gt;🛡️ &lt;strong&gt;安全性与局限性&lt;/strong&gt;
+&lt;/h3&gt;&lt;h4 id="安全加固实践-78"&gt;&lt;strong&gt;安全加固实践&lt;/strong&gt; &lt;a class="link" href="@ref" &gt;7,8&lt;/a&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;非 root 用户运行&lt;/strong&gt;：&lt;code&gt;docker run -u 1000:1000&lt;/code&gt; 避免特权提升。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;只读文件系统&lt;/strong&gt;：&lt;code&gt;--read-only&lt;/code&gt; 禁止容器写入（日志可挂载卷）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;资源限制&lt;/strong&gt;：严格配置 Cgroups 防止资源耗尽（如内存溢出导致 OOM Kill）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="固有局限性-38"&gt;&lt;strong&gt;固有局限性&lt;/strong&gt; &lt;a class="link" href="@ref" &gt;3,8&lt;/a&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;内核共享&lt;/strong&gt;：所有容器共享宿主机内核，内核漏洞可能影响所有容器。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;逃逸风险&lt;/strong&gt;：配置不当可能导致容器突破隔离（如未启用 User Namespace）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;多租户场景&lt;/strong&gt;：生产环境需结合 Kubernetes Namespace 或 Kata Containers（基于虚拟化的容器运行时）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-隔离效果验证示例"&gt;🔍 &lt;strong&gt;隔离效果验证示例&lt;/strong&gt;
+&lt;/h3&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;# 查看容器进程隔离
+docker run -it alpine sh
+ps aux # 仅显示容器内进程（PID 1 为容器初始化进程）
+# 检查资源限制
+docker run -m 100m --cpus=0.5 stress-ng --vm 1 --vm-bytes 150M
+# 容器因内存超限被强制终止（OOM Killer）
+# 网络隔离测试
+docker run -d --name web nginx
+docker exec web ip addr # 显示容器内独立网卡（eth0）
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id="-总结-4"&gt;💎 &lt;strong&gt;总结&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;Docker 通过 &lt;strong&gt;Namespaces（视图隔离）、Cgroups（资源限制）、UnionFS（文件隔离）及安全模块&lt;/strong&gt;的组合，实现了轻量级但高效的容器隔离。其优势在于&lt;strong&gt;低开销、快速启动和易移植性&lt;/strong&gt;，适用于云原生和微服务架构&lt;a class="link" href="@ref" &gt;4,7,9&lt;/a&gt;。然而，在&lt;strong&gt;强安全隔离&lt;/strong&gt;场景下，需结合虚拟化技术（如 gVisor）或硬件辅助方案（如 Intel VT-x）弥补内核共享的固有缺陷&lt;a class="link" href="@ref" &gt;8&lt;/a&gt;。&lt;/p&gt;
+&lt;h2 id="cgroup"&gt;CGroup
+&lt;/h2&gt;&lt;p&gt;CGroup（Control Groups）是 Linux 内核提供的资源管理机制，用于限制、隔离和监控进程组（process groups）的系统资源（如 CPU、内存、磁盘 I/O、网络等）。它是容器技术（如 Docker、Kubernetes）实现资源隔离的核心基础之一。以下是其核心原理和功能的详细解析：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-cgroup-的核心概念"&gt;⚙️ &lt;strong&gt;CGroup 的核心概念&lt;/strong&gt;
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;任务（Task）&lt;/strong&gt;
+即系统中的进程（Process），是资源控制的基本单位&lt;a class="link" href="@ref" &gt;1,4&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;控制组（Control Group）&lt;/strong&gt;
+一组进程的集合，资源限制以控制组为单位生效。进程可动态加入或迁移到不同控制组&lt;a class="link" href="@ref" &gt;1,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;层级（Hierarchy）&lt;/strong&gt;
+控制组以树形结构组织，子组继承父组的资源属性。每个层级可附加多个子系统（Subsystem）&lt;a class="link" href="@ref" &gt;4,8&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;子系统（Subsystem）&lt;/strong&gt;
+资源控制器，每个子系统负责一类资源的限制或监控。常见子系统包括：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;CPU&lt;/strong&gt;：限制 CPU 使用时间&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Memory&lt;/strong&gt;：限制内存用量并统计使用情况&lt;a class="link" href="@ref" &gt;1,4&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Blkio&lt;/strong&gt;：限制块设备 I/O 带宽（如磁盘读写）&lt;a class="link" href="@ref" &gt;3,8&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Cpuset&lt;/strong&gt;：绑定进程到指定 CPU 核或内存节点&lt;a class="link" href="@ref" &gt;4,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Devices&lt;/strong&gt;：控制设备访问权限（如禁止读写特定设备）&lt;a class="link" href="@ref" &gt;8&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-cgroup-的核心功能"&gt;🛠️ &lt;strong&gt;CGroup 的核心功能&lt;/strong&gt;
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;资源限制（Limiting）&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;CPU：通过&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; cpu.cfs_quota_us
+&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt; （周期内可用时间）和
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; cpu.cfs_period_us
+&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt; （周期长度）限制 CPU 时间片
+3,6
+。
+示例
+：设置进程组最多使用 50% CPU：
+```
+echo 50000 &amp;gt; /sys/fs/cgroup/cpu/group1/cpu.cfs_quota_us # 50ms/100ms
+echo 100000 &amp;gt; /sys/fs/cgroup/cpu/group1/cpu.cfs_period_us
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt; 内存
+：通过
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; memory.limit_in_bytes
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;设置内存上限，超限触发 OOM（Out-of-Memory）终止进程&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt; 4,7
+。
+示例
+：限制内存为 100MB：
+```
+echo 100M &amp;gt; /sys/fs/cgroup/memory/group1/memory.limit_in_bytes
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt; I/O
+：通过
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; blkio.throttle.read_bps_device
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;限制磁盘读写速率&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt; 1,8
+。
+示例
+：限制磁盘读速率为 1MB/s：
+```
+echo &amp;quot;8:0 1048576&amp;quot; &amp;gt; /sys/fs/cgroup/blkio/group1/blkio.throttle.read_bps_device
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start="2"&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;优先级控制（Prioritization）&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;CPU 权重&lt;/strong&gt;：通过 &lt;code&gt;cpu.shares&lt;/code&gt; 分配相对权重（如 1000 vs 500 表示 2:1 的 CPU 竞争比例）&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;I/O 权重&lt;/strong&gt;：通过 &lt;code&gt;blkio.weight&lt;/code&gt; 设置块设备 I/O 优先级&lt;a class="link" href="@ref" &gt;8&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;资源审计（Accounting）&lt;/strong&gt;
+子系统自动统计资源使用量：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;CPUacct&lt;/strong&gt;：记录 CPU 时间（&lt;code&gt;cpuacct.usage&lt;/code&gt;）&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Memory&lt;/strong&gt;：统计内存用量（&lt;code&gt;memory.usage_in_bytes&lt;/code&gt;）&lt;a class="link" href="@ref" &gt;4&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;进程控制（Control）&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Freezer&lt;/strong&gt;：暂停（&lt;code&gt;FROZEN&lt;/code&gt;）或恢复（&lt;code&gt;THAWED&lt;/code&gt;）进程组&lt;a class="link" href="@ref" &gt;8&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-cgroup-与容器技术的结合"&gt;🌐 &lt;strong&gt;CGroup 与容器技术的结合&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;在 Docker/Kubernetes 中，CGroup 为每个容器创建独立的控制组，实现：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;资源隔离&lt;/strong&gt;：限制容器 CPU、内存等资源，避免互相争抢&lt;a class="link" href="@ref" &gt;7,8&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;安全隔离&lt;/strong&gt;：通过 &lt;code&gt;devices&lt;/code&gt; 子系统禁止容器访问宿主机设备&lt;a class="link" href="@ref" &gt;8&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;动态调整&lt;/strong&gt;：运行时修改资源参数（如 &lt;code&gt;docker update --cpus=2&lt;/code&gt; 实时调整 CPU 配额）&lt;a class="link" href="@ref" &gt;7&lt;/a&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-配置与实践"&gt;⚠️ &lt;strong&gt;配置与实践&lt;/strong&gt;
+&lt;/h3&gt;&lt;h4 id="通过文件系统操作"&gt;&lt;strong&gt;通过文件系统操作&lt;/strong&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;挂载子系统：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;mount -t cgroup -o cpu,memory cgroup /sys/fs/cgroup&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+- 创建控制组：
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;mkdir /sys/fs/cgroup/cpu/group1
+echo 50000 &amp;gt; /sys/fs/cgroup/cpu/group1/cpu.cfs_quota_us&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+- 添加进程：
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;echo $$ &amp;gt; /sys/fs/cgroup/cpu/group1/tasks # 将当前进程加入 group1&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+#### **通过配置文件（/etc/cgconfig.conf）**
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;group mysql_group {
+cpu {
+cpu.cfs_quota_us = 50000; # 限制 50% CPU
+}
+memory {
+memory.limit_in_bytes = 100M; # 限制 100MB 内存
+}
+}&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+重启服务生效：`service cgconfig restart`[3,4](@ref)。
+------
+### 💡 **常见问题与解决**
+1. **Cgroup 挂载失败**
+检查内核支持：`grep CGROUP /boot/config-$(uname -r)`[1](@ref)。
+2. **资源超限导致 OOM**
+调整 `memory.oom_control` 禁用 OOM Killer，或增加内存上限[4](@ref)。
+3. **多核 CPU 绑定使用**
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;cpuset&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+子系统绑定进程到指定核心：
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;echo &amp;ldquo;0-1&amp;rdquo; &amp;gt; /sys/fs/cgroup/cpuset/group1/cpuset.cpus # 绑定到 CPU0-1&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+------
+### 💎 **总结**
+CGroup 是 Linux 资源管理的基石，通过**层级化的控制组**和**多样化的子系统**实现了对进程组资源的精细控制。其与 Namespace（环境隔离）的结合，构成了现代容器技术的核心架构[7,8](@ref)。在生产环境中，合理配置 CGroup 可显著提升系统稳定性和资源利用率，避免单点故障引发的资源雪崩。
+&amp;gt; 更多实践案例可参考：[CGroup 官方文档](https://www.kernel.org/doc/Documentation/cgroup-v1/)及 Docker 资源限制配置。
+## -it
+`docker exec -it` 中的 **`-it`** 是 Docker 命令中两个常用选项的组合：**`-i`**（`--interactive`）和 **`-t`**（`--tty`）。它们共同作用，使得用户能够以**交互式终端**的方式进入容器内部执行命令。以下是详细解析：
+------
+### 🔧 **`-i` 和 `-t` 的作用**
+| **选项** | **含义** | **使用场景** |
+| -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| **`-i`** | 保持标准输入（`STDIN`）打开，允许用户向容器内发送输入（如键盘输入）[1,3,5](@ref)。 | 需要与容器交互（如输入命令、编辑文件）时必选。 |
+| **`-t`** | 分配一个伪终端（`pseudo-TTY`），模拟真实的终端环境（支持命令行格式、光标控制等）[1,6,8](@ref)。 | 需获得类似本地终端的操作体验（如彩色输出、命令补全）时必选。 |
+&amp;gt; 💡 **组合效果**：`-it` 使容器启动一个**可交互的终端会话**（如 Bash），用户可以直接在容器内执行命令并查看格式化输出。
+------
+### ⚙️ **为何需要 `-it`？**
+1. **避免命令阻塞**
+无 `-i` 时，容器可能因等待输入而阻塞（如 `docker exec` 执行 `bash` 后无法输入命令）[3](@ref)。
+2. **解决终端格式混乱**
+无 `-t` 时，终端无法正确解析换行、颜色等控制字符，输出可能错乱（如 `ls` 命令结果挤在一行）[6,8](@ref)。
+3. **支持交互式工具**
+需在容器内使用 `vi`、`top` 等交互式工具时，必须启用 `-it`[3,7](@ref)。
+------
+### 🛠️ **典型使用场景**
+#### **进入容器的 Bash 终端**
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;docker exec -it nginx /bin/bash # 进入名为 nginx 容器的 Bash 终端&lt;a class="link" href="@ref" &gt;1,6&lt;/a&gt;&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+- 若容器无 Bash（如 Alpine 镜像），改用
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;/bin/sh&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+：
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;docker exec -it alpine_container /bin/sh &lt;a class="link" href="@ref" &gt;7,8&lt;/a&gt;&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+#### **在容器内执行交互命令**
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;docker exec -it mysql mysql -u root -p # 进入 MySQL 交互命令行&lt;a class="link" href="@ref" &gt;3,8&lt;/a&gt;&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+&amp;gt; 输入密码后可直接执行 SQL 语句。
+#### **调试容器（查看日志、进程）**
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;docker exec -it web_server tail -f /var/log/nginx/access.log # 实时查看日志&lt;a class="link" href="@ref" &gt;3&lt;/a&gt;
+docker exec -it web_server ps aux # 查看容器内进程&lt;a class="link" href="@ref" &gt;3&lt;/a&gt;&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+------
+### ⚠️ **注意事项**
+1. **容器必须处于运行状态**
+`docker exec` 仅对运行中的容器生效（需先通过 `docker start` 启动停止的容器）[3,8](@ref)。
+2.
+与 `docker attach` 的区别
+- `docker attach`：直接附加到容器主进程，**退出可能导致容器停止**[7,8](@ref)。
+- `docker exec -it`：启动新进程（如 Bash），**退出不影响主进程**（更安全）[3,7](@ref)。
+3.
+权限问题
+若提示权限不足，可添加
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;-u root&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+以 root 用户执行：
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;docker exec -it -u root my_container /bin/bash &lt;a class="link" href="@ref" &gt;2,3&lt;/a&gt;&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+------
+### 💎 **总结**
+- **`-it` = `-i` + `-t`**：缺一不可，共同实现**交互式终端操作**。
+- **核心价值**：让用户像操作本地终端一样**安全调试容器**（查看、修改、运维）。
+- **替代方案**：非交互命令（如 `docker exec nginx ls /app`）无需 `-it`[6](@ref)。
+&amp;gt; 可通过 `docker exec --help` 查看完整选项说明[3](@ref)。掌握 `-it` 是高效使用 Docker 的必备技能！
+## TTY
+TTY（Teletypewriter，电传打字机）是计算机系统中**终端设备的统称**，起源于早期的物理电传打字设备，用于通过串行通信传输文本。在现代操作系统中（尤其是Linux/Unix），TTY已演变为**管理用户与系统交互的抽象接口**，核心功能是处理输入（键盘）和输出（显示）。以下是其核心要点：
+------
+### 📜 **定义与历史演变**
+1. **起源**
+- TTY最初指物理电传打字机（Teletype），通过串口与计算机通信，用于远程传输文本[1,6](@ref)。
+- 在计算机系统中，TTY成为**终端设备的软件抽象**，负责管理用户命令输入和系统输出（如显示文本或打印内容）[4,6](@ref)。
+2. **核心功能**
+- **输入处理**：将键盘信号转换为系统可读数据，存储到输入缓冲区。
+- **输出处理**：将系统返回的数据发送到显示器或打印机。
+- **回显控制**：用户输入时实时显示字符（如密码输入隐藏）[6](@ref)。
+------
+### ⚙️ **TTY的类型与设备路径**
+现代系统主要分为三类TTY设备：
+| **类型** | **设备路径** | **应用场景** | **特点** |
+| ----------------- | ---------------------------- | -------------------------------------- | ----------------------------------------------------------- |
+| **物理TTY** | `/dev/ttyS0`、`/dev/ttyUSB0` | 串口设备调试（如嵌入式开发板） | 直接连接物理硬件，需配置波特率等参数 [3,4](@ref) |
+| **虚拟TTY** | `/dev/tty1`~`/dev/tty6` | 本地控制台（通过`Ctrl+Alt+F1~F6`切换） | 系统启动时预分配，严格权限控制（如限制root登录）[2,4](@ref) |
+| **伪终端（PTS）** | `/dev/pts/0`、`/dev/pts/1` | SSH远程连接、图形界面终端模拟器 | 动态创建，支持网络传输，用户权限灵活[4,10](@ref) |
+&amp;gt; 💡 **伪终端（PTS）的工作流程**：
+&amp;gt;
+&amp;gt; 1. 终端模拟器（如SSHD）创建一对设备：**主设备（ptmx）** 和 **从设备（PTS）**。
+&amp;gt; 2. 用户输入 → ptmx → PTS → Shell进程 → 处理结果反向输出到终端[4,10](@ref)。
+------
+### 🔧 **TTY在Linux系统中的关键作用**
+1. **多用户支持**
+允许多个用户同时通过不同TTY登录系统，每个会话独立隔离（如用户A在`tty1`操作，用户B在`pts/0`通过SSH连接）[1,9](@ref)。
+2. **会话管理**
+TTY绑定Shell进程（如Bash），用户命令通过Shell解释后由内核执行，结果返回TTY显示[9,10](@ref)。
+3. **系统调试与维护**
+- 系统故障时可通过虚拟TTY（如`tty1`）直接操作，避免图形界面崩溃的影响[2,7](@ref)。
+- 守护进程（如日志服务）通过TTY输出调试信息[6](@ref)。
+------
+### ⚠️ **常见问题与解决**
+1. **TTY权限错误**
+- **问题**：普通用户无法访问`/dev/tty1`。
+- **解决**：修改`/etc/securetty`文件，添加允许登录的设备名[4](@ref)。
+2. **伪终端连接断开**
+- **问题**：SSH会话因网络波动中断。
+- **解决**：客户端设置`ServerAliveInterval`保活参数，或服务端调整超时时间[1](@ref)。
+3. **输入/输出异常**
+- **问题**：TTY中键盘输入无响应或显示乱码。
+- **解决**：检查终端属性配置（如波特率、数据位），使用`stty`命令重置设置[3,7](@ref)。
+------
+### 💎 **总结**
+TTY是贯穿计算机历史的**交互接口基石**，从物理电传打字机到现代伪终端（PTS），始终承担着**用户与系统间文本通信的桥梁作用**。理解其类型差异（物理/Virtual/PTS）和工作原理（如ptmx-PTS数据流），对系统管理、远程运维和调试至关重要[4,6,10](@ref)。
+&lt;/code&gt;&lt;/pre&gt;</description></item><item><title>【Docker Compose】Notes</title><link>https://dyhes.github.io/p/docker-composenotes/</link><pubDate>Wed, 14 May 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/docker-composenotes/</guid><description>&lt;h2 id="version"&gt;Version
+&lt;/h2&gt;&lt;p&gt;在 &lt;code&gt;docker-compose.yaml&lt;/code&gt; 文件中，第一行的 &lt;code&gt;version&lt;/code&gt; 字段用于指定当前文件遵循的 Docker Compose 配置规范版本。它的作用主要体现在以下几个方面：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="定义语法与功能支持"&gt;&lt;strong&gt;定义语法与功能支持&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;version&lt;/code&gt; 决定了 Compose 文件使用的语法规则和可用功能。不同版本的 Compose 规范支持不同的配置项：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;版本 2&lt;/strong&gt;：引入 &lt;code&gt;services&lt;/code&gt; 顶级键，支持资源限制（如 CPU、内存）、容器依赖管理、网络和卷的高级配置。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;版本 3&lt;/strong&gt;：兼容 Docker Swarm 集群模式，支持滚动更新、服务扩展等编排功能，适用于多主机部署场景。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;更高版本（如 3.8）&lt;/strong&gt;：逐步新增特性（如 GPU 资源分配、健康检查增强等），同时保持向后兼容性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;若未显式指定 &lt;code&gt;version&lt;/code&gt;，默认行为因 Docker Compose 版本而异：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;旧版工具（如 Docker Compose v1/v2）可能默认使用版本 2 的语法；&lt;/li&gt;
+&lt;li&gt;新版工具（如 Compose V2+）支持无 &lt;code&gt;version&lt;/code&gt; 声明，直接遵循最新的 &lt;a class="link" href="https://compose-spec.io/" target="_blank" rel="noopener"
+&gt;Compose 规范&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="与-docker-引擎的兼容性"&gt;&lt;strong&gt;与 Docker 引擎的兼容性&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;Docker Compose 文件版本需与 Docker 引擎版本匹配，否则可能因语法不兼容导致报错。例如：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;version: '3.8'&lt;/code&gt; 要求 Docker Engine &lt;strong&gt;19.03.0+&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;version: '3'&lt;/code&gt; 最低要求 Docker Engine &lt;strong&gt;1.13.0+&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;若使用旧版 Docker（如 17.06），需选择 &lt;code&gt;version: '3.3'&lt;/code&gt; 或更低。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="废弃与演进"&gt;&lt;strong&gt;废弃与演进&lt;/strong&gt;
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;旧版本（如 v1）&lt;/strong&gt;：已废弃，仅支持基础配置，不推荐使用。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;新版规范趋势&lt;/strong&gt;：官方逐步弱化对 &lt;code&gt;version&lt;/code&gt; 的强制要求。若文件未声明 &lt;code&gt;version&lt;/code&gt;，默认采用最新规范，同时可能触发警告（如 &lt;code&gt;WARN[0000] version is obsolete&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;推荐做法&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;单机环境&lt;/strong&gt;：可省略 &lt;code&gt;version&lt;/code&gt;，直接使用最新语法；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;集群或需明确版本控制&lt;/strong&gt;：显式声明版本（如 &lt;code&gt;3.8&lt;/code&gt;）以确保兼容性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="示例与选择建议"&gt;示例与选择建议
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;version&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;3.8&amp;#39;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# 声明使用 3.8 版本规范（需 Docker 19.03.0+）&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;&lt;/span&gt;&lt;span class="nt"&gt;services&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;web&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;image&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;nginx&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;deploy&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# 此配置项仅在版本 3+ 中有效&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;replicas&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;3&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;总结&lt;/strong&gt;：&lt;code&gt;version&lt;/code&gt; 主要用于控制语法解析规则和功能范围，需根据 Docker 环境版本和需求选择。新版开发中可逐步过渡到无 &lt;code&gt;version&lt;/code&gt; 声明，以简化配置。&lt;/p&gt;
+&lt;h2 id="volumns-不设置"&gt;Volumns 不设置
+&lt;/h2&gt;&lt;p&gt;在 Docker Compose 中，&lt;strong&gt;不设置 &lt;code&gt;volumes&lt;/code&gt; 字段时，Docker 不会自动创建任何宿主机目录或数据卷&lt;/strong&gt;，此时容器内的数据仅存储在容器的可写层中，且具备以下特性：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="数据存储方式"&gt;&lt;strong&gt;数据存储方式&lt;/strong&gt;
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;默认行为&lt;/strong&gt;：不配置 &lt;code&gt;volumes&lt;/code&gt; 时，容器内的文件系统与宿主机完全隔离，所有数据仅在容器内部临时存储。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据生命周期&lt;/strong&gt;：当容器被删除或重建时，所有未持久化的数据都会丢失。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="自动创建的条件"&gt;&lt;strong&gt;自动创建的条件&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;若需 Docker 自动创建目录或卷，需满足以下条件：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;显式定义 &lt;code&gt;volumes&lt;/code&gt;&lt;/strong&gt;：必须通过 &lt;code&gt;volumes&lt;/code&gt; 字段明确指定宿主机路径（如 &lt;code&gt;- /host/path:/container/path&lt;/code&gt;）或命名卷（如 &lt;code&gt;- my_volume:/container/path&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;宿主机路径不存在时&lt;/strong&gt;：当使用绑定挂载（&lt;code&gt;bind&lt;/code&gt; 模式）且宿主机目录不存在时，Docker 会尝试自动创建该目录，但可能因权限问题导致容器无法写入（自动创建的目录权限默认归属 &lt;code&gt;root&lt;/code&gt;）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="推荐做法"&gt;&lt;strong&gt;推荐做法&lt;/strong&gt;
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;显式定义持久化路径&lt;/strong&gt;：若需数据持久化，应在 &lt;code&gt;volumes&lt;/code&gt; 中明确配置宿主机路径或命名卷。例如：
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;services&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;app&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;volumes&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;./data:/app/data &lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# 自动创建宿主机目录（需注意权限）&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;db_volume:/var/lib/mysql &lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# 使用命名卷自动管理&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;&lt;/span&gt;&lt;span class="nt"&gt;volumes&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;db_volume&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;手动创建宿主机目录&lt;/strong&gt;：对于关键目录（如配置文件、日志路径），建议提前手动创建并设置权限（如 &lt;code&gt;chmod 777 /host/path&lt;/code&gt;），避免自动创建引发的权限问题。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;使用命名卷&lt;/strong&gt;：对于需要跨容器共享或长期存储的数据，优先使用 Docker 管理的命名卷（&lt;code&gt;volumes&lt;/code&gt; 模式），其生命周期独立于容器，且权限更易控制。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="模式对比"&gt;模式对比
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;模式&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;是否需要显式定义 &lt;code&gt;volumes&lt;/code&gt;&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;数据持久化&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;自动创建目录&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;适用场景&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;未配置 &lt;code&gt;volumes&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;临时测试、无需保存数据的场景&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;绑定挂载（&lt;code&gt;bind&lt;/code&gt;）&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;是（有条件）&lt;/td&gt;
+&lt;td&gt;开发环境配置文件映射、日志收集&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;命名卷（&lt;code&gt;volume&lt;/code&gt;）&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;是（自动管理）&lt;/td&gt;
+&lt;td&gt;生产环境数据持久化、多容器共享数据&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;总结&lt;/strong&gt;：Docker Compose 仅在显式配置 &lt;code&gt;volumes&lt;/code&gt; 时才会根据规则自动创建目录或卷。若需数据持久化，务必通过 &lt;code&gt;volumes&lt;/code&gt; 字段定义路径或命名卷，并优先通过手动管理目录权限以避免运行时问题。&lt;/p&gt;
+&lt;h2 id="volumes-语法"&gt;Volumes 语法
+&lt;/h2&gt;&lt;p&gt;在 Docker Compose 中，&lt;code&gt;volumes&lt;/code&gt; 用于定义容器与宿主机之间的数据挂载规则，支持多种语法格式和配置选项。以下是其核心语法规则及使用场景的总结：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="短格式short-syntax"&gt;&lt;strong&gt;短格式（Short Syntax）&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;短格式是日常开发中最常用的简洁写法，适用于快速定义简单的数据挂载需求。&lt;/p&gt;
+&lt;h4 id="基本结构"&gt;&lt;strong&gt;基本结构&lt;/strong&gt;
+&lt;/h4&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;volumes&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="l"&gt;宿主机路径|卷名]:[容器路径]:[权限]&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="常见用法示例"&gt;&lt;strong&gt;常见用法示例&lt;/strong&gt;
+&lt;/h4&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;场景&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;示例&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;说明&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;绑定挂载（Bind Mount）&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;- /host/path:/container/path&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;将宿主机的 &lt;code&gt;/host/path&lt;/code&gt; 映射到容器的 &lt;code&gt;/container/path&lt;/code&gt;，路径需存在或自动创建&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;相对路径绑定&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;- ./data:/app/data&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;以 Compose 文件所在目录为基准的相对路径映射&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;只读权限&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;- /configs:/etc/configs:ro&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;容器内目录 &lt;code&gt;/etc/configs&lt;/code&gt; 以只读模式挂载&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;匿名卷&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;- /var/lib/mysql&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;容器内路径挂载到宿主机随机生成的匿名卷（数据生命周期与容器绑定）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;命名卷&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;- db_volume:/var/lib/mysql&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;使用预定义的命名卷 &lt;code&gt;db_volume&lt;/code&gt;（需在顶级 &lt;code&gt;volumes&lt;/code&gt; 块中声明）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="长格式long-syntax"&gt;&lt;strong&gt;长格式（Long Syntax）&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;长格式（Compose v3.2+ 支持）提供更精细的配置选项，适用于复杂场景。&lt;/p&gt;
+&lt;h4 id="基本结构-1"&gt;&lt;strong&gt;基本结构&lt;/strong&gt;
+&lt;/h4&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;volumes&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;type&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;volume|bind|tmpfs&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;source&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="l"&gt;宿主机路径|卷名]&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;target&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="l"&gt;容器路径]&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;volume&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;nocopy&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="l"&gt;|false &lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# 是否禁止复制容器初始数据到新卷&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;read_only&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="l"&gt;|false&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="示例与配置项"&gt;&lt;strong&gt;示例与配置项&lt;/strong&gt;
+&lt;/h4&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;volumes&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;type&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;bind &lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# 绑定宿主机目录&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;source&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;./static &lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# 宿主机相对路径&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;target&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;/opt/app/static&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;read_only&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# 容器内只读&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;type&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;volume &lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# 使用命名卷&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;source&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;db_data&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;target&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;/var/lib/mysql&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;volume&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;nocopy&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# 禁止从容器复制初始化数据到新卷&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;type&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;tmpfs &lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# 临时内存文件系统&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;target&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;/tmp/cache&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;tmpfs&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;size&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;10000&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# 限制内存大小（单位：字节）&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h3 id="匿名卷与命名卷对比"&gt;&lt;strong&gt;匿名卷与命名卷对比&lt;/strong&gt;
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;类型&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;定义方式&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;生命周期&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;适用场景&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;匿名卷&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;- /container/path&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;随容器删除而丢失&lt;/td&gt;
+&lt;td&gt;临时数据存储（如测试环境）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;命名卷&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;需在顶级 &lt;code&gt;volumes&lt;/code&gt; 块声明&lt;/td&gt;
+&lt;td&gt;独立于容器，需手动删除&lt;/td&gt;
+&lt;td&gt;生产环境数据持久化（如数据库文件）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;命名卷定义示例&lt;/strong&gt;：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;volumes&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;db_data&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# 顶级定义命名卷&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;local&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;driver_opts&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;type&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;nfs &lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# 使用 NFS 驱动&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;o&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;addr=192.168.1.100,rw&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h3 id="数据持久化策略"&gt;&lt;strong&gt;数据持久化策略&lt;/strong&gt;
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;开发环境&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使用绑定挂载（&lt;code&gt;bind&lt;/code&gt;）实时同步代码和配置文件。&lt;/li&gt;
+&lt;li&gt;示例：&lt;code&gt;- ./src:/app/src&lt;/code&gt; 实现代码热更新。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;生产环境&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;优先使用命名卷（&lt;code&gt;volume&lt;/code&gt;）保证数据安全性和可移植性。&lt;/li&gt;
+&lt;li&gt;结合云存储驱动（如 AWS EBS、NFS）实现跨主机共享。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;临时数据&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使用 &lt;code&gt;tmpfs&lt;/code&gt; 类型将数据存储在内存中，避免磁盘 I/O 开销。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="注意事项"&gt;&lt;strong&gt;注意事项&lt;/strong&gt;
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;路径存在性&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;绑定挂载时，若宿主机路径不存在，Docker 会自动创建目录（需注意权限问题）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;权限冲突&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;容器内进程需有权限读写挂载路径，可通过 &lt;code&gt;chmod&lt;/code&gt; 提前设置宿主机目录权限。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;版本兼容性&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;长格式需 Compose 文件版本 ≥ &lt;code&gt;3.2&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;数据备份&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;命名卷可通过 &lt;code&gt;docker volume inspect&lt;/code&gt; 查看物理路径，便于备份。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="完整示例"&gt;&lt;strong&gt;完整示例&lt;/strong&gt;
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;version&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;3.8&amp;#39;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;&lt;/span&gt;&lt;span class="nt"&gt;services&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;db&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;image&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;mysql:8.0&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;volumes&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;db_data:/var/lib/mysql &lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# 命名卷持久化数据&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;./my.cnf:/etc/mysql/my.cnf &lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# 绑定配置文件（只读）&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;environment&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;MYSQL_ROOT_PASSWORD=secret&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;&lt;/span&gt;&lt;span class="nt"&gt;volumes&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;db_data&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# 定义命名卷&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;local&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;通过合理选择 &lt;code&gt;volumes&lt;/code&gt; 语法，可灵活管理容器数据，满足开发、测试、生产多场景需求。&lt;/p&gt;
+&lt;h2 id="build"&gt;build
+&lt;/h2&gt;&lt;p&gt;Docker Compose 的 &lt;code&gt;build&lt;/code&gt; 命令用于根据 &lt;code&gt;docker-compose.yml&lt;/code&gt; 文件中的配置构建服务镜像，是管理多容器应用的核心命令之一。以下是其核心功能和用法详解：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="基本用法"&gt;基本用法
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;构建所有服务镜像&lt;/strong&gt;&lt;br&gt;
+默认情况下，&lt;code&gt;docker-compose build&lt;/code&gt; 会读取 &lt;code&gt;docker-compose.yml&lt;/code&gt; 文件中所有定义了 &lt;code&gt;build&lt;/code&gt; 配置的服务，并依次构建它们的镜像。例如：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;services&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;web&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;build&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;./app &lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# 指定构建上下文目录&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;api&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;build&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;./api&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;执行 &lt;code&gt;docker-compose build&lt;/code&gt; 将同时构建 &lt;code&gt;web&lt;/code&gt; 和 &lt;code&gt;api&lt;/code&gt; 服务的镜像。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;构建指定服务镜像&lt;/strong&gt;&lt;br&gt;
+若只需构建部分服务，可在命令后添加服务名称。例如：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker-compose build web &lt;span class="c1"&gt;# 仅构建 web 服务&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="常用选项与参数"&gt;常用选项与参数
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;强制不使用缓存（&lt;code&gt;--no-cache&lt;/code&gt;）&lt;/strong&gt;&lt;br&gt;
+默认情况下，Docker 会利用缓存层加速构建。使用 &lt;code&gt;--no-cache&lt;/code&gt; 可跳过缓存，从头开始构建：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker-compose build --no-cache
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;拉取最新基础镜像（&lt;code&gt;--pull&lt;/code&gt;）&lt;/strong&gt;&lt;br&gt;
+强制从镜像仓库拉取最新版本的 &lt;code&gt;FROM&lt;/code&gt; 基础镜像，确保构建基于最新依赖：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker-compose build --pull
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;并行构建（&lt;code&gt;--parallel&lt;/code&gt;）&lt;/strong&gt;&lt;br&gt;
+在 Docker Compose 3.4+ 版本中，可通过 &lt;code&gt;--parallel&lt;/code&gt; 并行构建多个服务，缩短构建时间：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker-compose build --parallel
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;传递构建参数（&lt;code&gt;--build-arg&lt;/code&gt;）&lt;/strong&gt;&lt;br&gt;
+向 Dockerfile 传递动态参数，例如环境变量：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker-compose build --build-arg &lt;span class="nv"&gt;APP_ENV&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;production
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;保留中间容器（&lt;code&gt;--no-rm&lt;/code&gt;）&lt;/strong&gt;&lt;br&gt;
+默认构建后会删除中间容器，添加此选项可保留用于调试：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker-compose build --no-rm
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="配置文件中的-build-参数"&gt;配置文件中的 &lt;code&gt;build&lt;/code&gt; 参数
+&lt;/h3&gt;&lt;p&gt;在 &lt;code&gt;docker-compose.yml&lt;/code&gt; 中，&lt;code&gt;build&lt;/code&gt; 部分支持以下配置：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;context&lt;/code&gt;&lt;/strong&gt;：指定构建上下文的目录（包含 Dockerfile 的路径）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;dockerfile&lt;/code&gt;&lt;/strong&gt;：自定义 Dockerfile 文件名（默认为 &lt;code&gt;Dockerfile&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;args&lt;/code&gt;&lt;/strong&gt;：定义构建时传递的变量，需在 Dockerfile 中通过 &lt;code&gt;ARG&lt;/code&gt; 声明。
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;services&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;web&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;build&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;context&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;./app&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;dockerfile&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;Dockerfile.prod&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;args&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;APP_VERSION=1.0&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="使用场景与注意事项"&gt;使用场景与注意事项
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;适用场景&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;修改了 Dockerfile 或构建上下文中的文件（如代码、依赖配置）。&lt;/li&gt;
+&lt;li&gt;需要手动更新镜像版本或传递特定构建参数。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;与 &lt;code&gt;docker-compose up&lt;/code&gt; 的区别&lt;/strong&gt;&lt;br&gt;
+&lt;code&gt;docker-compose up&lt;/code&gt; 会自动检测镜像是否需要重新构建，但直接使用 &lt;code&gt;build&lt;/code&gt; 命令可更精细控制构建过程（例如跳过缓存）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;注意事项&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;并行构建需确保服务间无依赖，否则可能引发构建顺序问题。&lt;/li&gt;
+&lt;li&gt;构建完成后需通过 &lt;code&gt;docker-compose up&lt;/code&gt; 启动服务容器。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="完整示例-1"&gt;完整示例
+&lt;/h3&gt;&lt;p&gt;假设项目结构如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;version&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;3.8&amp;#39;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;&lt;/span&gt;&lt;span class="nt"&gt;services&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;app&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;build&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;context&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;./backend&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;dockerfile&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;Dockerfile.prod&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;args&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;NODE_ENV=production&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;ports&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="s2"&gt;&amp;#34;3000:3000&amp;#34;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;db&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;image&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;postgres:14&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;执行以下命令将构建 &lt;code&gt;app&lt;/code&gt; 服务镜像：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker-compose build --no-cache --pull app
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;p&gt;通过灵活组合这些选项和配置，可以高效管理 Docker 镜像的构建流程，确保开发与生产环境的一致性。&lt;/p&gt;
+&lt;h2 id="rebuild"&gt;rebuild
+&lt;/h2&gt;&lt;p&gt;在 Docker Compose 中执行镜像的重新构建（Rebuild）可通过以下方法实现，适用于开发过程中代码或配置变更后的更新需求：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="核心命令及用法"&gt;核心命令及用法
+&lt;/h3&gt;&lt;h4 id="单独执行"&gt;&lt;strong&gt;单独执行 &lt;code&gt;build&lt;/code&gt; 命令&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;通过 &lt;code&gt;docker-compose build&lt;/code&gt; 重新构建所有服务的镜像，默认使用缓存加速构建。若需强制完全重建，需添加参数：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 重建全部服务镜像（跳过缓存）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker-compose build --no-cache
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 仅重建指定服务（如 web 服务）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker-compose build --no-cache web
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;通过 &lt;code&gt;--no-cache&lt;/code&gt; 参数禁用缓存，确保从头开始构建镜像。&lt;/p&gt;
+&lt;h4 id="结合"&gt;&lt;strong&gt;结合 &lt;code&gt;up&lt;/code&gt; 命令触发重建&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;通过 &lt;code&gt;docker-compose up&lt;/code&gt; 的 &lt;code&gt;--build&lt;/code&gt; 参数，可在启动服务时自动执行镜像重建：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 重建并启动所有服务（推荐开发调试使用）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker-compose up --build
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 后台运行并强制重建指定服务&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker-compose up -d --build web
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;此方式会先执行构建流程再启动容器，适合需要快速验证变更的场景。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="高级配置与参数"&gt;高级配置与参数
+&lt;/h3&gt;&lt;h4 id="拉取最新基础镜像"&gt;&lt;strong&gt;拉取最新基础镜像&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;使用 &lt;code&gt;--pull&lt;/code&gt; 参数强制从镜像仓库更新 &lt;code&gt;FROM&lt;/code&gt; 指令中的基础镜像：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker-compose build --pull
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;确保构建基于最新依赖环境，避免基础镜像过期问题。&lt;/p&gt;
+&lt;h4 id="传递构建参数"&gt;&lt;strong&gt;传递构建参数&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;在 &lt;code&gt;docker-compose.yml&lt;/code&gt; 中定义 &lt;code&gt;args&lt;/code&gt; 或通过命令行动态注入变量：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;# docker-compose.yml 配置示例&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;&lt;/span&gt;&lt;span class="nt"&gt;services&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;app&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;build&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;context&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;.&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;args&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;APP_ENV&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;production&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;命令行覆盖参数：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker-compose build --build-arg &lt;span class="nv"&gt;APP_ENV&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;staging
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;适用于环境差异配置（如开发/生产环境切换）。&lt;/p&gt;
+&lt;h4 id="并行构建加速"&gt;&lt;strong&gt;并行构建加速&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;在 Docker Compose 3.4+ 版本中，启用并行构建缩短多服务重建时间：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker-compose build --parallel
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;需确保服务间无构建顺序依赖。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="清理与调试技巧"&gt;清理与调试技巧
+&lt;/h3&gt;&lt;h4 id="删除旧容器与中间层"&gt;&lt;strong&gt;删除旧容器与中间层&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;重建前可通过以下命令清理环境：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 停止并删除所有关联容器（保留数据卷）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker-compose down
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 删除构建过程中的临时容器（避免残留干扰）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker-compose build --force-rm
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;--force-rm&lt;/code&gt; 参数强制删除中间容器。&lt;/p&gt;
+&lt;h4 id="查看构建日志"&gt;&lt;strong&gt;查看构建日志&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;通过日志排查构建失败原因：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker-compose logs --tail&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;100&lt;/span&gt; web
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;结合 &lt;code&gt;docker-compose config&lt;/code&gt; 验证配置文件语法正确性。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="典型场景示例"&gt;典型场景示例
+&lt;/h3&gt;&lt;h4 id="全量重建并启动服务"&gt;&lt;strong&gt;全量重建并启动服务&lt;/strong&gt;
+&lt;/h4&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker-compose down &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; docker-compose build --no-cache &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; docker-compose up -d
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;适用于代码或依赖项大规模变更后的环境刷新。&lt;/p&gt;
+&lt;h4 id="增量更新指定服务"&gt;&lt;strong&gt;增量更新指定服务&lt;/strong&gt;
+&lt;/h4&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker-compose build --pull web &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; docker-compose up -d web
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;仅更新 &lt;code&gt;web&lt;/code&gt; 服务，减少对其他服务的影响。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;通过灵活组合上述命令，可高效管理镜像重建流程，兼顾开发效率与部署稳定性。建议根据具体需求选择参数组合，并通过 &lt;code&gt;docker-compose help build&lt;/code&gt; 查看完整选项说明。&lt;/p&gt;</description></item><item><title>【Redis】In Spring Boot</title><link>https://dyhes.github.io/p/redisin-spring-boot/</link><pubDate>Mon, 23 Sep 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/redisin-spring-boot/</guid><description>&lt;h2 id="dependency"&gt;dependency
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-java" data-lang="java"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;dependency&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;groupId&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="n"&gt;org&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;springframework&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;boot&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="n"&gt;groupId&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;artifactId&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="n"&gt;spring&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;boot&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;starter&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;redis&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="n"&gt;artifactId&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="n"&gt;dependency&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="applicationproperties"&gt;application.properties
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-java" data-lang="java"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;spring&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;data&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;redis&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;host&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;localhost&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;&lt;/span&gt;&lt;span class="n"&gt;spring&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;data&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;redis&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;port&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;6379&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="composeyaml"&gt;compose.yaml
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-dockerfile" data-lang="dockerfile"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;redis:&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="err"&gt;&lt;/span&gt; &lt;span class="c1"&gt;# 与 ’redis:latest&amp;#39; subtle differences&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="err"&gt;&lt;/span&gt; image: redis:latest&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="err"&gt;&lt;/span&gt; container_name: postopia-redis&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="err"&gt;&lt;/span&gt; ports:&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="err"&gt;&lt;/span&gt; - &lt;span class="s2"&gt;&amp;#34;6379:6379&amp;#34;&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="config"&gt;Config
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-java" data-lang="java"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nd"&gt;@Configuration&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;&lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;RedisConfig&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nd"&gt;@Bean&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;RedisConnectionFactory&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nf"&gt;redisConnectionFactory&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;return&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;new&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;LettuceConnectionFactory&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nd"&gt;@Bean&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;RedisTemplate&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Object&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nf"&gt;redisTemplate&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;RedisConnectionFactory&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;connectionFactory&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;RedisTemplate&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Object&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;template&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;new&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;RedisTemplate&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;template&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setConnectionFactory&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;connectionFactory&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c1"&gt;// Use String serializers for keys&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;template&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setKeySerializer&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;new&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;StringRedisSerializer&lt;/span&gt;&lt;span class="p"&gt;());&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;template&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setValueSerializer&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;new&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;StringRedisSerializer&lt;/span&gt;&lt;span class="p"&gt;());&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;return&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;template&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="service"&gt;Service
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-java" data-lang="java"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nd"&gt;@Service&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;&lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;RedisService&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nd"&gt;@Autowired&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;private&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;RedisTemplate&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Object&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;redisTemplate&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nf"&gt;setByMinute&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;key&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Object&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;minute&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;redisTemplate&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;opsForValue&lt;/span&gt;&lt;span class="p"&gt;().&lt;/span&gt;&lt;span class="na"&gt;set&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;key&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;minute&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;TimeUnit&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;MINUTES&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nf"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;key&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;return&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;redisTemplate&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;opsForValue&lt;/span&gt;&lt;span class="p"&gt;().&lt;/span&gt;&lt;span class="na"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;key&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nf"&gt;delete&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;key&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;redisTemplate&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;delete&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;key&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description></item><item><title>【Docker】Postgres</title><link>https://dyhes.github.io/p/dockerpostgres/</link><pubDate>Thu, 19 Sep 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/dockerpostgres/</guid><description>&lt;p&gt;Postgres Docker Image&lt;/p&gt;
+&lt;p&gt;Container &amp;gt; Image&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;psql -U &lt;span class="o"&gt;{&lt;/span&gt;username&lt;span class="o"&gt;}&lt;/span&gt; -d &lt;span class="o"&gt;{&lt;/span&gt;database&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description></item><item><title>【Docker】Introduction</title><link>https://dyhes.github.io/p/dockerintroduction/</link><pubDate>Tue, 21 Mar 2023 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/dockerintroduction/</guid><description>&lt;h2 id="what-is-docker"&gt;What is Docker
+&lt;/h2&gt;&lt;p&gt;Docker is an open source platform for building, deploying, and managing containerized applications.&lt;/p&gt;
+&lt;p&gt;It enables developers to package applications into containers—standardized &lt;strong&gt;executable components&lt;/strong&gt; combining &lt;strong&gt;application source code&lt;/strong&gt; with the o&lt;strong&gt;perating system (OS) libraries and dependencies&lt;/strong&gt; required to run that code in any environment.&lt;/p&gt;
+&lt;p&gt;Developers can create containers &lt;strong&gt;without&lt;/strong&gt; Docker, but the platform makes it &lt;strong&gt;easier, simpler, and safer&lt;/strong&gt; to build, deploy and manage containers.&lt;/p&gt;
+&lt;p&gt;Docker is essentially a &lt;strong&gt;toolkit&lt;/strong&gt; that enables developers to build, deploy, run, update, and stop containers using simple commands and work-saving automation through a single API.&lt;/p&gt;
+&lt;p&gt;Containers are made possible by &lt;strong&gt;process isolation&lt;/strong&gt; and &lt;strong&gt;virtualization capabilities&lt;/strong&gt; built into the &lt;strong&gt;Linux kernel&lt;/strong&gt;.&lt;/p&gt;
+&lt;h2 id="docker-tools"&gt;Docker tools
+&lt;/h2&gt;&lt;h3 id="dockerfile"&gt;DockerFile
+&lt;/h3&gt;&lt;p&gt;Every Docker container &lt;em&gt;&lt;strong&gt;starts with&lt;/strong&gt;&lt;/em&gt; &lt;strong&gt;a simple text file&lt;/strong&gt; containing &lt;strong&gt;instructions&lt;/strong&gt; for how to build the Docker container image. &lt;em&gt;DockerFile&lt;/em&gt; &lt;strong&gt;automates&lt;/strong&gt; the process of Docker image creation. It’s essentially a list of command-line interface (CLI) instructions that Docker Engine will run in order to assemble the image.&lt;/p&gt;
+&lt;h3 id="docker-images"&gt;Docker images
+&lt;/h3&gt;&lt;p&gt;&lt;em&gt;Docker images&lt;/em&gt; contain &lt;strong&gt;executable application source code&lt;/strong&gt; as well as all the &lt;strong&gt;tools, libraries, and dependencies&lt;/strong&gt; that the application code needs to run as a container.&lt;/p&gt;
+&lt;p&gt;When you run the Docker image, it &lt;strong&gt;becomes one instance&lt;/strong&gt; (or multiple instances) of the container.&lt;/p&gt;
+&lt;p&gt;Multiple Docker images can be created from a single base image, and they’ll share the commonalities of their stack.&lt;/p&gt;
+&lt;p&gt;Docker images are made up of &lt;em&gt;&lt;strong&gt;layers&lt;/strong&gt;&lt;/em&gt;, and each layer corresponds to &lt;strong&gt;a version&lt;/strong&gt; of the image. Whenever a developer makes changes to the image, a new top layer is created, and this top layer replaces the previous &lt;strong&gt;top layer&lt;/strong&gt; as the &lt;strong&gt;current version&lt;/strong&gt; of the image. Previous layers are saved for &lt;strong&gt;rollbacks&lt;/strong&gt; or to be &lt;strong&gt;re-used&lt;/strong&gt; in other projects.&lt;/p&gt;
+&lt;p&gt;Each time a container is created from a Docker image, yet another new layer called the &lt;strong&gt;container layer&lt;/strong&gt; is created. Changes made to the container—such as the addition or deletion of files—are saved to the container layer only and exist only while the container is running.&lt;/p&gt;
+&lt;p&gt;This iterative image-creation process enables increased &lt;strong&gt;overall efficiency&lt;/strong&gt; since multiple live container instances can run from just a single base image, and when they do so, they leverage a common stack.&lt;/p&gt;
+&lt;h3 id="docker-containers"&gt;&lt;strong&gt;Docker containers&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;Docker containers are the &lt;strong&gt;live, running instances&lt;/strong&gt; of Docker images. While Docker images are &lt;strong&gt;read-only&lt;/strong&gt; files, containers are live, ephemeral, executable content. Users can interact with them, and administrators can adjust their settings and conditions using docker commands.&lt;/p&gt;
+&lt;h3 id="docker-hub"&gt;&lt;strong&gt;Docker Hub&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;Docker Hub is the &lt;strong&gt;public repository of Docker images&lt;/strong&gt; It includes images that have been produced by Docker, Inc., certified images belonging to the Docker Trusted Registry, and many thousands of other images.&lt;/p&gt;
+&lt;p&gt;All Docker Hub users can share their images at will. They can also download predefined base images from the Docker filesystem to use as a starting point for any containerization project.&lt;/p&gt;
+&lt;h3 id="docker-daemon"&gt;&lt;strong&gt;Docker daemon&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;Docker daemon is a &lt;strong&gt;service&lt;/strong&gt; running on your operating system This service creates and manages your Docker images for you using the commands from the client, acting as the &lt;strong&gt;control center&lt;/strong&gt; of your Docker implementation.&lt;/p&gt;
+&lt;h3 id="docker-registry"&gt;&lt;strong&gt;Docker registry&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;A Docker registry is a scalable open-source &lt;strong&gt;storage and distribution system&lt;/strong&gt; for docker images. The registry enables you to track image versions in repositories, using tagging for identification. This is accomplished using git, a version control tool.&lt;/p&gt;
+&lt;h3 id="docker-compose"&gt;&lt;strong&gt;Docker Compose&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;If you’re &lt;strong&gt;building an application out of processes in multiple containers&lt;/strong&gt; that all reside on the same host, you can use &lt;em&gt;Docker Compose&lt;/em&gt; to manage the application’s architecture. Docker Compose creates a YAML file that specifies which services are included in the application and can deploy and run containers with a single command. Using Docker Compose, you can also define persistent volumes for storage, specify base nodes, and document and configure service dependencies.&lt;/p&gt;
+&lt;h3 id="kubernetes"&gt;&lt;strong&gt;Kubernetes&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;To monitor and manage container lifecycles in more complex environments, you’ll need to turn to a &lt;strong&gt;container orchestration tool.&lt;/strong&gt; While Docker includes its own orchestration tool (called Docker Swarm), most developers choose Kubernetes instead.&lt;/p&gt;
+&lt;p&gt;Kubernetes is an open-source container orchestration platform descended from a project developed for internal use at Google. Kubernetes schedules and automates tasks integral to the management of container-based architectures, including container deployment, updates, service discovery, storage provisioning, load balancing, health monitoring, and more. In addition, the open source ecosystem of tools for Kubernetes—including Istio and Knative—enables organizations to deploy a high-productivity Platform-as-a-Service (PaaS) for containerized applications and a faster on-ramp to serverless computing.&lt;/p&gt;</description></item></channel></rss>

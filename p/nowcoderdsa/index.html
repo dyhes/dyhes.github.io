@@ -1,0 +1,476 @@
+<!doctype html><html lang=en-us dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="KMP：主串从不后退，调整子串位置 KMP算法（Knuth-Morris-Pratt算法）是一种高效的字符串匹配算法，由 Donald Knuth、Vaughan Pratt 和 James H. Morris 于 1977 年联合发表，它能在主文本字符串中快速查找模式字符串的所有出现位置，其核心优势在于通过预处理模式串来避免主串指针的回溯，将时间复杂度优化至线性级别 💡。\n📊 1. 核心思想 KMP 算法的核心在于利用匹配失败时已经获得的信息，通过一个称为 next 数组（也称为部分匹配表或失败函数）的辅助数据结构，记录模式串自身的部分匹配信息。当发生不匹配时，算法能根据 next 数组知道模式串可以向右滑动多远，从而避免重复比较主串中已匹配的字符。\nnext 数组的含义：对于模式串 P的每个位置 i，next[i]表示子串 P[0:i]中 最长相等真前缀和真后缀的长度（即不包括字符串本身的最长相同前后缀）。\n🔧 2. Next 数组的构建 构建 next 数组是 KMP 算法的预处理步骤，其过程本身也运用了类似 KMP 的思想。\n算法步骤（以模式串 P 下标从 0 开始为例）：\n初始化：next[0] = 0（或 -1，实现有差异，但思想相通）。设两个指针 i（后缀末尾）和 j（前缀末尾，也代表当前最长相等前后缀的长度）。 遍历 i从 1 到 len(P)-1： 若 P[i] == P[j]，则 j++，next[i] = j，i++。 若 P[i] != P[j]，则令 j = next[j-1]（或 j = next[j]，取决于实现）进行回溯，直到 j回溯到 0 或匹配成功。 若 j已回溯到 0 且仍不匹配，则 next[i] = 0，i++。 示例：模式串 P = &ldquo;ABABCABAB&rdquo; 的 next 数组\n"><title>【NowCoder】DSA</title><link rel=canonical href=https://dyhes.github.io/p/nowcoderdsa/><link rel=stylesheet href=/scss/style.min.f7091bff8043bd3e53b22be6c05dd86b506e8dec4d0d75d249d2dfb0fe074a46.css><meta property='og:title' content="【NowCoder】DSA"><meta property='og:description' content="KMP：主串从不后退，调整子串位置 KMP算法（Knuth-Morris-Pratt算法）是一种高效的字符串匹配算法，由 Donald Knuth、Vaughan Pratt 和 James H. Morris 于 1977 年联合发表，它能在主文本字符串中快速查找模式字符串的所有出现位置，其核心优势在于通过预处理模式串来避免主串指针的回溯，将时间复杂度优化至线性级别 💡。\n📊 1. 核心思想 KMP 算法的核心在于利用匹配失败时已经获得的信息，通过一个称为 next 数组（也称为部分匹配表或失败函数）的辅助数据结构，记录模式串自身的部分匹配信息。当发生不匹配时，算法能根据 next 数组知道模式串可以向右滑动多远，从而避免重复比较主串中已匹配的字符。\nnext 数组的含义：对于模式串 P的每个位置 i，next[i]表示子串 P[0:i]中 最长相等真前缀和真后缀的长度（即不包括字符串本身的最长相同前后缀）。\n🔧 2. Next 数组的构建 构建 next 数组是 KMP 算法的预处理步骤，其过程本身也运用了类似 KMP 的思想。\n算法步骤（以模式串 P 下标从 0 开始为例）：\n初始化：next[0] = 0（或 -1，实现有差异，但思想相通）。设两个指针 i（后缀末尾）和 j（前缀末尾，也代表当前最长相等前后缀的长度）。 遍历 i从 1 到 len(P)-1： 若 P[i] == P[j]，则 j++，next[i] = j，i++。 若 P[i] != P[j]，则令 j = next[j-1]（或 j = next[j]，取决于实现）进行回溯，直到 j回溯到 0 或匹配成功。 若 j已回溯到 0 且仍不匹配，则 next[i] = 0，i++。 示例：模式串 P = &ldquo;ABABCABAB&rdquo; 的 next 数组\n"><meta property='og:url' content='https://dyhes.github.io/p/nowcoderdsa/'><meta property='og:site_name' content='飞鸿踏雪泥'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='NowCoder'><meta property='article:tag' content='DSA'><meta property='article:published_time' content='2025-09-08T00:00:00+00:00'><meta property='article:modified_time' content='2025-09-30T19:46:00+08:00'><meta name=twitter:title content="【NowCoder】DSA"><meta name=twitter:description content="KMP：主串从不后退，调整子串位置 KMP算法（Knuth-Morris-Pratt算法）是一种高效的字符串匹配算法，由 Donald Knuth、Vaughan Pratt 和 James H. Morris 于 1977 年联合发表，它能在主文本字符串中快速查找模式字符串的所有出现位置，其核心优势在于通过预处理模式串来避免主串指针的回溯，将时间复杂度优化至线性级别 💡。\n📊 1. 核心思想 KMP 算法的核心在于利用匹配失败时已经获得的信息，通过一个称为 next 数组（也称为部分匹配表或失败函数）的辅助数据结构，记录模式串自身的部分匹配信息。当发生不匹配时，算法能根据 next 数组知道模式串可以向右滑动多远，从而避免重复比较主串中已匹配的字符。\nnext 数组的含义：对于模式串 P的每个位置 i，next[i]表示子串 P[0:i]中 最长相等真前缀和真后缀的长度（即不包括字符串本身的最长相同前后缀）。\n🔧 2. Next 数组的构建 构建 next 数组是 KMP 算法的预处理步骤，其过程本身也运用了类似 KMP 的思想。\n算法步骤（以模式串 P 下标从 0 开始为例）：\n初始化：next[0] = 0（或 -1，实现有差异，但思想相通）。设两个指针 i（后缀末尾）和 j（前缀末尾，也代表当前最长相等前后缀的长度）。 遍历 i从 1 到 len(P)-1： 若 P[i] == P[j]，则 j++，next[i] = j，i++。 若 P[i] != P[j]，则令 j = next[j-1]（或 j = next[j]，取决于实现）进行回溯，直到 j回溯到 0 或匹配成功。 若 j已回溯到 0 且仍不匹配，则 next[i] = 0，i++。 示例：模式串 P = &ldquo;ABABCABAB&rdquo; 的 next 数组\n"><link rel="shortcut icon" href=/github.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label="Toggle Menu">
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu_b567f26f71c49c33.png width=300 height=300 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>飞鸿踏雪泥</a></h1><h2 class=site-description>没有记录，就没有发生</h2></div></header><ol class=menu-social><li><a href=https://leetcode.cn/u/dyhes/ target=_blank title=LeetCode rel=me><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 13h7.5"/><path d="M9.424 7.268l4.999-4.999"/><path d="M16.633 16.644l-2.402 2.415a3.189 3.189.0 01-4.524.0l-3.77-3.787a3.223 3.223.0 010-4.544l3.77-3.787a3.189 3.189.0 014.524.0l2.302 2.313"/></svg></a></li><li><a href=https://github.com/dyhes target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=mailto:dyheslin@gmail.com target=_blank title=Gmail rel=me><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-gmail"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16 20h3a1 1 0 001-1V5a1 1 0 00-1-1h-3v16z"/><path d="M5 20h3V4H5A1 1 0 004 5v14a1 1 0 001 1z"/><path d="M16 4l-4 4-4-4"/><path d="M4 6.5l8 7.5 8-7.5"/></svg></a></li><li><a href=mailto:1325574784@qq.com target=_blank title=Mail rel=me><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 19H5a2 2 0 01-2-2V7a2 2 0 012-2h14a2 2 0 012 2v5.5"/><path d="M3 7l9 6 9-6"/><path d="M19 16l-2 3h4l-2 3"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/about/><svg class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>About</span></a></li><li><a href=/categories/><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+<span>Categories</span></a></li><li><a href=/tags/><svg class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11 3l9 9a1.5 1.5.0 010 2l-6 6a1.5 1.5.0 01-2 0L3 11V7a4 4 0 014-4h4"/><circle cx="9" cy="9" r="2"/></svg>
+<span>Tags</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>Dark Mode</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">Table of contents</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#kmp主串从不后退调整子串位置>KMP：主串从不后退，调整子串位置</a><ol><li><a href=#-1-核心思想>📊 1. 核心思想</a></li><li><a href=#-2-next-数组的构建>🔧 2. Next 数组的构建</a></li><li><a href=#-3-kmp-匹配过程>🔍 3. KMP 匹配过程</a></li><li><a href=#-4-时间复杂度与优势>⚙️ 4. 时间复杂度与优势</a></li><li><a href=#-5-应用场景>🚀 5. 应用场景</a></li><li><a href=#-6-与其他算法的简要对比>📝 6. 与其他算法的简要对比</a></li><li><a href=#-总结>💎 总结</a></li></ol></li><li><a href=#bm-坏字符和好后缀模式串从右向左匹配>BM: 坏字符和好后缀，模式串从右向左匹配</a><ol><li><a href=#bm算法的核心思想><strong>BM算法的核心思想</strong></a></li><li><a href=#1-坏字符规则-bad-character-rule><strong>1. 坏字符规则 (Bad Character Rule)</strong></a></li><li><a href=#2-好后缀规则-good-suffix-rule><strong>2. 好后缀规则 (Good Suffix Rule)</strong></a></li><li><a href=#bm算法的工作流程><strong>BM算法的工作流程</strong></a></li><li><a href=#bm算法示例><strong>BM算法示例</strong></a></li><li><a href=#bm算法的性能分析><strong>BM算法的性能分析</strong></a></li><li><a href=#bm算法的优缺点><strong>BM算法的优缺点</strong></a></li><li><a href=#bm算法的应用><strong>BM算法的应用</strong></a></li><li><a href=#总结><strong>总结</strong></a></li></ol></li><li><a href=#rp-算法>RP 算法</a></li><li><a href=#广义表>广义表</a></li><li><a href=#1-核心概念与定义>1 核心概念与定义</a><ol><li><a href=#11-表头与表尾>1.1 表头与表尾</a></li><li><a href=#12-重要示例与概念辨析>1.2 重要示例与概念辨析</a></li><li><a href=#13-长度与深度>1.3 长度与深度</a></li></ol></li><li><a href=#2-广义表的性质>2 广义表的性质</a></li><li><a href=#3-存储表示>3 存储表示</a><ol><li><a href=#31-头尾链表存储结构>3.1 头尾链表存储结构</a></li><li><a href=#32-扩展线性链表存储结构>3.2 扩展线性链表存储结构</a></li></ol></li><li><a href=#4-基本操作>4 基本操作</a></li><li><a href=#5-广义表与线性表的对比>5 广义表与线性表的对比</a></li><li><a href=#6-应用场景>6 应用场景</a></li><li><a href=#线性表存储>线性表存储</a></li><li><a href=#1-线性表的基本概念>1️⃣ 线性表的基本概念</a></li><li><a href=#2-顺序存储结构顺序表>2️⃣ 顺序存储结构（顺序表）</a><ol><li><a href=#存储特点>存储特点</a></li><li><a href=#基本操作效率>基本操作效率</a></li><li><a href=#顺序存储的优缺点>顺序存储的优缺点</a></li></ol></li><li><a href=#3-链式存储结构链表>3️⃣ 链式存储结构（链表）</a><ol><li><a href=#单链表singly-linked-list>单链表（Singly Linked List）</a></li><li><a href=#双向链表doubly-linked-list>双向链表（Doubly Linked List）</a></li><li><a href=#循环链表circular-linked-list>循环链表（Circular Linked List）</a></li><li><a href=#静态链表static-linked-list>静态链表（Static Linked List）</a></li><li><a href=#链式存储的操作特点>链式存储的操作特点</a></li><li><a href=#链式存储的优缺点>链式存储的优缺点</a></li></ol></li><li><a href=#4-两种主要存储方式的对比>4️⃣ 两种主要存储方式的对比</a></li><li><a href=#5-存取方式的选择策略>5️⃣ 存取方式的选择策略</a><ol><li><a href=#适合顺序存储的场景>适合顺序存储的场景</a></li><li><a href=#适合链式存储的场景>适合链式存储的场景</a></li></ol></li><li><a href=#6-其他存储方式>6️⃣ 其他存储方式</a><ol><li><a href=#索引存储>索引存储</a></li><li><a href=#散列存储>散列存储</a></li></ol></li><li><a href=#-总结-1>💎 总结</a></li><li><a href=#多叉树转-2-叉树>多叉树转 2 叉树</a><ol><li><a href=#-转换步骤>🔄 转换步骤</a></li><li><a href=#-代码示例-c>📝 代码示例 (C++)</a></li><li><a href=#-注意事项>⚠️ 注意事项</a></li><li><a href=#-深入理解>🧠 深入理解</a></li></ol></li><li><a href=#堆排序>堆排序</a></li><li><a href=#-堆排序的工作原理>🔧 堆排序的工作原理</a><ol><li><a href=#1-构建大顶堆-build-max-heap>1. 构建大顶堆 (Build Max Heap)</a></li><li><a href=#2-排序-extract-and-heapify>2. 排序 (Extract and Heapify)</a></li></ol></li><li><a href=#-堆排序的步骤摘要>📊 堆排序的步骤摘要</a></li><li><a href=#-复杂度分析>⚙️ 复杂度分析</a></li><li><a href=#-优点和缺点>👍 优点和缺点</a><ol><li><a href=#优点>优点：</a></li><li><a href=#缺点>缺点：</a></li></ol></li><li><a href=#-应用场景>🚀 应用场景</a></li><li><a href=#-代码实现>🖥️ 代码实现</a><ol><li><a href=#python-实现>Python 实现</a></li><li><a href=#java-实现>Java 实现</a></li><li><a href=#c-实现>C++ 实现</a></li></ol></li><li><a href=#建堆>建堆</a></li></ol><ol><li><a href=#-堆的基本概念>✨ 堆的基本概念</a></li><li><a href=#-堆排序的工作原理-1>🔧 堆排序的工作原理</a><ol><li><a href=#1-构建大顶堆-build-max-heap-1>1. 构建大顶堆 (Build Max Heap)</a></li><li><a href=#2-排序-extract-and-heapify-1>2. 排序 (Extract and Heapify)</a></li></ol></li><li><a href=#-堆排序的步骤摘要-1>📊 堆排序的步骤摘要</a></li><li><a href=#-复杂度分析-1>⚙️ 复杂度分析</a></li><li><a href=#-优点和缺点-1>👍 优点和缺点</a><ol><li><a href=#优点-1>优点：</a></li><li><a href=#缺点-1>缺点：</a></li></ol></li><li><a href=#-应用场景-1>🚀 应用场景</a></li><li><a href=#-代码实现-1>🖥️ 代码实现</a><ol><li><a href=#python-实现-1>Python 实现</a></li><li><a href=#java-实现-1>Java 实现</a></li><li><a href=#c-实现-1>C++ 实现</a></li></ol></li><li><a href=#自下而上复杂度>自下而上复杂度</a></li><li><a href=#交换数字>交换数字</a></li><li><a href=#交换数字-1>交换数字</a><ol><li><a href=#-详细方法说明与代码示例>📝 详细方法说明与代码示例</a><ol><li><a href=#1-使用临时变量>1. 使用临时变量</a></li><li><a href=#2-使用算术运算>2. 使用算术运算</a></li><li><a href=#3-使用位异或运算>3. 使用位异或运算</a></li><li><a href=#4-函数封装>4. 函数封装</a></li><li><a href=#5-宏定义>5. 宏定义</a></li></ol></li><li><a href=#-在其他编程语言中>🔄 在其他编程语言中</a></li><li><a href=#-如何选择方法>💡 如何选择方法？</a></li></ol></li><li><a href=#堆>堆</a><ol><li><a href=#-堆序性质的深入理解>📌 堆序性质的深入理解</a></li><li><a href=#-维护堆性质的操作>🛠️ 维护堆性质的操作</a></li><li><a href=#-构建堆heapify>🧩 构建堆（Heapify）</a></li><li><a href=#-堆的典型应用>💡 堆的典型应用</a></li><li><a href=#-重要注意事项>⚠️ 重要注意事项</a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/arts/ style=background-color:#a7535a;color:>文武艺</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/nowcoderdsa/>【NowCoder】DSA</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Sep 08, 2025</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>17 minute read</time></div></footer></div></header><section class=article-content><h2 id=kmp主串从不后退调整子串位置>KMP：主串从不后退，调整子串位置</h2><p>KMP算法（Knuth-Morris-Pratt算法）是一种高效的字符串匹配算法，由 Donald Knuth、Vaughan Pratt 和 James H. Morris 于 1977 年联合发表，它能在主文本字符串中快速查找模式字符串的所有出现位置，其核心优势在于通过预处理模式串来避免主串指针的回溯，将时间复杂度优化至线性级别 💡。</p><h3 id=-1-核心思想>📊 1. 核心思想</h3><p>KMP 算法的核心在于利用匹配失败时已经获得的信息，通过一个称为 <strong>next 数组</strong>（也称为部分匹配表或失败函数）的辅助数据结构，记录模式串自身的部分匹配信息。当发生不匹配时，算法能根据 next 数组知道模式串可以向右滑动多远，从而避免重复比较主串中已匹配的字符。</p><p><strong>next 数组的含义</strong>：对于模式串 <code>P</code>的每个位置 <code>i</code>，<code>next[i]</code>表示子串 <code>P[0:i]</code>中 <strong>最长相等真前缀和真后缀的长度</strong>（即不包括字符串本身的最长相同前后缀）。</p><h3 id=-2-next-数组的构建>🔧 2. Next 数组的构建</h3><p>构建 next 数组是 KMP 算法的预处理步骤，其过程本身也运用了类似 KMP 的思想。</p><p><strong>算法步骤（以模式串 P 下标从 0 开始为例）</strong>：</p><ol><li><strong>初始化</strong>：<code>next[0] = 0</code>（或 <code>-1</code>，实现有差异，但思想相通）。设两个指针 <code>i</code>（后缀末尾）和 <code>j</code>（前缀末尾，也代表当前最长相等前后缀的长度）。</li><li>遍历 <code>i</code>从 1 到 <code>len(P)-1</code>：<ul><li>若 <code>P[i] == P[j]</code>，则 <code>j++</code>，<code>next[i] = j</code>，<code>i++</code>。</li><li>若 <code>P[i] != P[j]</code>，则令 <code>j = next[j-1]</code>（或 <code>j = next[j]</code>，取决于实现）进行回溯，直到 <code>j</code>回溯到 0 或匹配成功。</li><li>若 <code>j</code>已回溯到 0 且仍不匹配，则 <code>next[i] = 0</code>，<code>i++</code>。</li></ul></li></ol><p><strong>示例：模式串 P = &ldquo;ABABCABAB&rdquo; 的 next 数组</strong></p><div class=table-wrapper><table><thead><tr><th>索引 i</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr></thead><tbody><tr><td>字符 P[i]</td><td>A</td><td>B</td><td>A</td><td>B</td><td>C</td><td>A</td><td>B</td><td>A</td><td>B</td></tr><tr><td>next[i]</td><td>0</td><td>0</td><td>1</td><td>2</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr></tbody></table></div><p><strong>next 数组的构建代码（Python）</strong>：</p><pre tabindex=0><code>def build_next(pattern):
+    next_arr = [0] * len(pattern)
+    j = 0
+    for i in range(1, len(pattern)):
+        while j &gt; 0 and pattern[i] != pattern[j]:
+            j = next_arr[j-1]
+        if pattern[i] == pattern[j]:
+            j += 1
+        next_arr[i] = j
+    return next_arr
+
+print(build_next(&#34;ABABCABAB&#34;))  # 输出: [0, 0, 1, 2, 0, 1, 2, 3, 4]
+</code></pre><h3 id=-3-kmp-匹配过程>🔍 3. KMP 匹配过程</h3><p>有了 next 数组后，就可以进行主串 <code>S</code>和模式串 <code>P</code>的匹配。</p><p><strong>算法步骤</strong>：</p><ol><li><strong>初始化</strong>：主串指针 <code>i=0</code>，模式串指针 <code>j=0</code>。</li><li>遍历主串 <code>S</code>：<ul><li>若 <code>S[i] == P[j]</code>，则 <code>i++</code>, <code>j++</code>。</li><li>若 <code>j == len(P)</code>，表示匹配成功，记录起始位置 <code>i - j</code>。然后根据 next 数组调整 <code>j = next[j-1]</code>以继续寻找下一个匹配。</li><li>若 <code>S[i] != P[j]</code>：<ul><li>若 <code>j > 0</code>，则利用 next 数组回溯模式串指针 <code>j = next[j-1]</code>。</li><li>若 <code>j == 0</code>，则无法回溯，主串指针 <code>i++</code>。</li></ul></li></ul></li></ol><p><strong>KMP 搜索代码（Python）</strong>：</p><pre tabindex=0><code>def kmp_search(text, pattern):
+    next_arr = build_next(pattern)
+    j = 0
+    for i in range(len(text)):
+        while j &gt; 0 and text[i] != pattern[j]:
+            j = next_arr[j-1]
+        if text[i] == pattern[j]:
+            j += 1
+        if j == len(pattern):
+            return i - j + 1  # 返回首次匹配的起始位置
+    return -1
+
+text = &#34;ABABABCABABABD&#34;
+pattern = &#34;ABABCABAB&#34;
+print(kmp_search(text, pattern))  # 输出: 2
+</code></pre><h3 id=-4-时间复杂度与优势>⚙️ 4. 时间复杂度与优势</h3><ul><li><strong>时间复杂度</strong>：<ul><li>构建 next 数组：<code>O(m)</code>，其中 <code>m</code>为模式串长度。</li><li>匹配过程：<code>O(n)</code>，其中 <code>n</code>为主串长度。</li><li><strong>总时间复杂度为 <code>O(n + m)</code></strong>，是线性的。</li></ul></li><li><strong>优势</strong>：<ul><li><strong>避免了主串指针的回溯</strong>：这是与暴力匹配（时间复杂度 <code>O(n*m)</code>）最根本的区别，KMP 算法的主串指针 <code>i</code>只会前进或不变（当 <code>j>0</code>且不匹配时 <code>i</code>不变，<code>j</code>回溯），不会后退。</li><li>特别适合处理<strong>大文本流</strong>或<strong>实时数据</strong>，因为不需要回溯主串，可以边读入边匹配。</li></ul></li></ul><h3 id=-5-应用场景>🚀 5. 应用场景</h3><p>KMP 算法的高效性使其在许多领域有广泛应用：</p><ul><li><strong>文本编辑器中的查找功能</strong>（如 Ctrl+F）</li><li><strong>搜索引擎</strong>中的关键词定位和网页索引</li><li><strong>生物信息学</strong>中的 DNA/RNA 序列匹配（基因序列通常很长）</li><li><strong>数据压缩</strong>、<strong>网络入侵检测</strong>、<strong>拼写检查</strong>等</li></ul><h3 id=-6-与其他算法的简要对比>📝 6. 与其他算法的简要对比</h3><div class=table-wrapper><table><thead><tr><th>算法</th><th>时间复杂度 (最坏)</th><th>特点</th><th>适用场景</th></tr></thead><tbody><tr><td><strong>暴力匹配</strong></td><td>O(n*m)</td><td>实现简单，但效率低</td><td>小规模数据</td></tr><tr><td><strong>KMP</strong></td><td><strong>O(n+m)</strong></td><td><strong>避免主串回溯</strong>，稳定高效</td><td>通用，尤其是大规模文本</td></tr><tr><td><strong>Boyer-Moore</strong></td><td>O(n/m) (平均)</td><td>坏字符规则，跳跃式匹配</td><td>模式串较长，字符集较大</td></tr><tr><td><strong>Rabin-Karp</strong></td><td>O(n+m)</td><td>基于哈希，可同时检测多个模式</td><td>多模式匹配， plagiarism检测</td></tr></tbody></table></div><h3 id=-总结>💎 总结</h3><p>KMP 算法通过巧妙地构建 next 数组，记录了模式串自身的“记忆”，在匹配失败时能智能地滑动模式串，避免了主串指针的回溯，从而实现了高效的字符串匹配。虽然理解和实现起来比暴力匹配稍复杂，但其线性时间复杂度的优势在处理大规模字符串时非常显著。</p><p>希望以上介绍能帮助你透彻理解 KMP 算法。</p><h2 id=bm-坏字符和好后缀模式串从右向左匹配>BM: 坏字符和好后缀，模式串从右向左匹配</h2><p>BM算法（Boyer-Moore算法）是一种非常高效的单模式字符串匹配算法，由Robert S. Boyer和J Strother Moore于1977年提出。它采用从右向左的比较方式和独特的启发式规则，能在许多情况下实现亚线性的匹配速度，平均性能优异，通常比KMP算法快3-5倍。</p><h3 id=bm算法的核心思想><strong>BM算法的核心思想</strong></h3><p>BM算法的核心在于<strong>利用预处理信息在匹配失败时跳过尽可能多的无效位置</strong>。它通过 <strong>“坏字符规则”</strong> (Bad Character Rule) 和 <strong>“好后缀规则”</strong> (Good Suffix Rule) 来计算模式串的安全移动距离，并且<strong>匹配时从模式串的末尾开始向前比较</strong>。</p><h3 id=1-坏字符规则-bad-character-rule><strong>1. 坏字符规则 (Bad Character Rule)</strong></h3><p>当发现文本串 <code>T</code>中的某个字符与模式串 <code>P</code>不匹配时，该文本串中的字符被称为 <strong>“坏字符”</strong>。</p><ul><li><strong>情况1：坏字符在模式串中存在</strong><ul><li>将模式串<strong>向右移动</strong>，使其<strong>最右边出现</strong>的这个坏字符与文本串中的坏字符对齐。</li><li>移动位数 = <strong>坏字符在模式串中的失配位置索引</strong> - <strong>该坏字符在模式串中最后一次出现的位置索引</strong>。</li><li>若计算值为负，则可能产生回退，因此实际中会取该规则与好后缀规则计算值的最大值。</li></ul></li><li><strong>情况2：坏字符在模式串中不存在</strong><ul><li>直接将整个模式串<strong>向右移动</strong>到<strong>坏字符的下一位</strong>。</li><li>移动位数 = 坏字符在模式串中的失配位置索引 + 1 (通常可理解为模式串长度，但需根据具体位置计算)。</li></ul></li></ul><p><strong>坏字符表预处理</strong>：创建一个数组 <code>bc_table</code>（大小依字符集而定，如256 for ASCII），记录<strong>每个字符在模式串中最后一次出现的位置（索引）</strong>。如果字符不在模式串中，则记为 <code>-1</code>。</p><h3 id=2-好后缀规则-good-suffix-rule><strong>2. 好后缀规则 (Good Suffix Rule)</strong></h3><p>当发生失配时，模式串末尾已经匹配成功的部分子串称为 <strong>“好后缀”</strong> 。</p><ul><li><strong>情况1：模式串的前面部分存在与好后缀完全匹配的子串</strong><ul><li>将模式串<strong>向右移动</strong>，使<strong>前面最靠右</strong>的那个匹配子串与文本串中的好后缀对齐。</li></ul></li><li><strong>情况2：模式串中不存在与好后缀完全匹配的子串，但存在一个最长前缀与好后缀的某个后缀相匹配</strong><ul><li>将模式串<strong>向右移动</strong>，使这个<strong>最长前缀</strong>与文本串中好后缀的相应后缀对齐。</li></ul></li><li><strong>情况3：模式串中既不存在与好后缀匹配的子串，也不存在与其后缀匹配的前缀</strong><ul><li>将整个模式串<strong>向右移动</strong>模式串的长度。</li></ul></li></ul><p><strong>好后缀表预处理</strong>：构建一个数组 <code>gs_table</code>，其计算通常借助一个后缀数组 <code>suffix</code>，<code>suffix[i]</code>表示模式串中以 <code>i</code>位置结尾的子串与模式串后缀的最大匹配长度。根据 <code>suffix</code>数组的信息来填充 <code>gs_table</code>，以确定在各种失配位置下根据好后缀规则应移动的距离。</p><h3 id=bm算法的工作流程><strong>BM算法的工作流程</strong></h3><ol><li><strong>预处理阶段</strong>：<ul><li>根据模式串 <code>P</code>构建<strong>坏字符表</strong> <code>bc_table</code>。</li><li>根据模式串 <code>P</code>构建<strong>好后缀表</strong> <code>gs_table</code>。</li></ul></li><li><strong>匹配阶段</strong>：<ul><li>将模式串 <code>P</code>与文本串 <code>T</code>对齐，初始时 <code>i = 0</code>（<code>i</code>表示文本串中与模式串首字符对齐的位置）。</li><li>从模式串的<strong>末尾开始</strong>（即从右向左）比较字符。</li><li>若所有字符都匹配，则找到一个有效匹配，输出位置 <code>i</code>。随后，通常根据好后缀规则移动模式串以继续寻找下一个匹配。</li><li>若遇到坏字符，设其在模式串中的位置为 <code>j</code>：<ul><li>根据坏字符规则计算移动距离 <code>bad_shift = j - bc_table[T[i+j]]</code>(需注意边界和不存在的情况)。</li><li>根据好后缀规则计算移动距离 <code>good_shift = gs_table[j]</code>。</li><li>模式串的<strong>实际移动距离</strong>为 <code>max(bad_shift, good_shift)</code>。取最大值是为了保证不漏过可能的匹配，同时实现最大的跳跃。</li><li>令 <code>i = i + max(bad_shift, good_shift)</code>，重新开始下一轮从右向左的比较。</li></ul></li><li>重复直到模式串移出文本串的末尾。</li></ul></li></ol><h3 id=bm算法示例><strong>BM算法示例</strong></h3><p><strong>文本串 T</strong>: &ldquo;ABABABCABABABD&rdquo;</p><p><strong>模式串 P</strong>: &ldquo;ABABCABAB&rdquo;</p><p>（此示例可结合前述规则逐步推演，由于篇幅限制，此处不展开逐步过程，但概念上遵循上述流程。）一个常见的匹配结果是模式串在文本串的索引位置 2 处找到（0-based索引）。</p><h3 id=bm算法的性能分析><strong>BM算法的性能分析</strong></h3><ul><li><strong>时间复杂度</strong>：<ul><li>预处理阶段：构建坏字符表 <code>O(m + |Σ|)</code>(|Σ| 为字符集大小)，构建好后缀表最高可达 <code>O(m)</code>。</li><li>匹配阶段：<ul><li><strong>最坏情况</strong>为 <code>O(n * m)</code>，例如文本串和模式串都是相同字符时。</li><li><strong>最佳情况</strong>可达到 <code>O(n / m)</code>，当模式串始终不在文本中出现时，每次都能跳跃整个模式串长度。</li><li><strong>平均性能</strong>非常优异，尤其在实际应用和字符集较大时，远超朴素算法，也通常优于KMP算法。</li></ul></li></ul></li><li><strong>空间复杂度</strong>：主要来自存储 <code>bc_table</code>(O(|Σ|)) 和 <code>gs_table</code>(O(m))。</li></ul><h3 id=bm算法的优缺点><strong>BM算法的优缺点</strong></h3><ul><li><strong>优点</strong>：<ul><li>实际应用中<strong>效率高</strong>，尤其适合模式串较长、字符集较大的场景。</li><li>采用了从右向左比较和启发式跳跃，<strong>跳过大量不可能匹配的位置</strong>，减少了比较次数。</li></ul></li><li><strong>缺点</strong>：<ul><li>预处理好后缀表相对<strong>复杂</strong>，实现起来比KMP等算法稍麻烦。</li><li>最坏时间复杂度不如KMP算法稳定（KMP最坏为 <code>O(n+m)</code>）。</li></ul></li></ul><h3 id=bm算法的应用><strong>BM算法的应用</strong></h3><p>BM算法因其高效性被广泛应用于：</p><ul><li><strong>文本编辑器</strong>中的查找功能（Ctrl+F）。</li><li><strong>搜索引擎</strong>和<strong>数据过滤</strong>中的关键词匹配。</li><li><strong>网络安全</strong>领域，如入侵检测系统（IDS）中的特征码匹配。</li><li><strong>生物信息学</strong>中DNA序列匹配等。</li></ul><h3 id=总结><strong>总结</strong></h3><p>BM算法通过巧妙的<strong>坏字符规则</strong>和<strong>好后缀规则</strong>，以及<strong>从右向左</strong>的比较顺序，实现了在大多数情况下的高效字符串匹配。它虽然预处理阶段稍显复杂，且最坏时间复杂度理论不佳，但其<strong>优异的平均性能</strong>使其成为实践中非常受欢迎的字符串匹配算法之一。理解并掌握BM算法，对于深入理解字符串匹配问题的优化思路具有重要意义。</p><h2 id=rp-算法>RP 算法</h2><p>RK 算法通常指 <strong>Rabin-Karp 字符串匹配算法</strong>。它是一种使用哈希技术来高效查找主串中模式串出现位置的算法。以下是其核心原理、步骤和特点的总结：</p><div class=table-wrapper><table><thead><tr><th>特性维度</th><th>Rabin-Karp 算法 (RK算法)</th><th>暴力匹配算法 (BF算法)</th></tr></thead><tbody><tr><td><strong>核心思想</strong></td><td>利用<strong>哈希值</strong>快速比较主串子串和模式串，避免逐个字符对比</td><td>逐个字符比较主串和模式串</td></tr><tr><td><strong>关键操作</strong></td><td>滚动哈希 (Rolling Hash)</td><td>无特殊操作，简单遍历</td></tr><tr><td><strong>平均时间复杂度</strong></td><td><strong>O(n + m)</strong> (n为主串长度, m为模式串长度)</td><td>O(n * m)</td></tr><tr><td><strong>最坏时间复杂度</strong></td><td>O(n * m) (当哈希冲突频繁时退化)</td><td>O(n * m)</td></tr><tr><td><strong>空间复杂度</strong></td><td>O(1) (通常只需存储哈希值等少量变量)</td><td>O(1)</td></tr><tr><td><strong>优势</strong></td><td>平均情况下比BF算法快得多，尤其适用于多模式匹配</td><td>实现简单，无需额外预处理，小规模字符串或模式串短时可能更快</td></tr><tr><td><strong>劣势</strong></td><td>需要处理哈希冲突（可能需二次验证），最坏情况下效率不如优化算法</td><td>效率低下，尤其当主串和模式串很长时</td></tr></tbody></table></div><p>🧠 <strong>RK 算法核心思想</strong></p><p>RK 算法通过比较<strong>哈希值</strong>来快速判断主串中的子串是否与模式串匹配，从而避免每次都进行昂贵的逐个字符比较。其核心在于“<strong>滚动哈希</strong>”（Rolling Hash）技术，它允许在常数时间内计算下一个子串的哈希值，而不是每次都重新计算整个子串的哈希值。</p><p>🔄 <strong>RK 算法的工作步骤</strong></p><ol><li><strong>计算模式串哈希值</strong>：首先计算模式串的哈希值，例如 <code>hash_pat</code>。</li><li><strong>计算主串前 m 个字符的哈希值</strong>：计算主串前 <code>m</code>（模式串长度）个字符的子串哈希值，例如 <code>hash_sub</code>。</li><li><strong>比较哈希值并滑动窗口</strong>：<ul><li>如果 <code>hash_sub == hash_pat</code>，则<strong>逐个字符比较</strong>该子串与模式串（以防止哈希冲突）。</li><li>如果匹配，返回当前起始位置。</li><li>无论是否匹配，算法都会使用滚动哈希技巧，根据当前子串的哈希值 <code>hash_sub</code>快速计算下一个子串（窗口向右滑动一位）的哈希值。</li></ul></li><li><strong>重复直到遍历完成</strong>：重复步骤 3，直到主串中所有可能的子串都被检查过。</li></ol><p>🔢 <strong>哈希函数设计</strong></p><p>RK 算法通常将字符串视为一个 <strong><code>d</code>进制数</strong>（<code>d</code>是字符集的大小，例如 ASCII 256 或小写字母 26）。一个常见的滚动哈希函数是：</p><pre tabindex=0><code>hash(s[i+1:i+m+1]) = d * (hash(s[i:i+m]) - d^(m-1) * s[i]) + s[i+m]
+</code></pre><p>然后，为了防止数值过大，常对一个大素数 <code>q</code>取模：<code>hash_value = hash_value % q</code>。</p><p>📊 <strong>复杂度分析</strong></p><ul><li><strong>时间复杂度</strong>：<ul><li><strong>平均情况</strong>：<strong>O(n + m)</strong>。预处理模式串哈希和主串前 m 个字符的哈希需要 O(m)，主串滑动窗口处理需要 O(n)。</li><li><strong>最坏情况</strong>：O(n * m)。当哈希冲突频繁发生时，每次哈希值相等都需要进行逐个字符比较。</li></ul></li><li><strong>空间复杂度</strong>：<strong>O(1)</strong>。仅需存储几个变量（如哈希值、进制数、模数等）。</li></ul><p>⚠️ <strong>注意事项</strong></p><ol><li><strong>哈希冲突</strong>：不同的字符串可能产生相同的哈希值。因此，当哈希值匹配时，<strong>必须进行逐个字符的验证</strong>以确保不是误报。选择一个好的哈希函数（大进制数 <code>d</code>和大素数 <code>q</code>）对于减少冲突至关重要。</li><li><strong>模数选择</strong>：模数 <code>q</code>应足够大，以尽量减少冲突，但也要考虑计算效率，避免溢出。</li></ol><p>🌐 <strong>主要应用</strong></p><p>RK 算法适用于需要快速进行<strong>多模式匹配</strong>（稍加修改）或<strong>在多个输入中查找重复子串</strong>的场景，例如：</p><ul><li>文本编辑器中的查找功能（虽不常见，因有更优算法如KMP）</li><li>检测文档中的抄袭（查找长字符串中的重复片段）</li><li>DNA序列匹配（生物信息学）</li></ul><p>🔍 <strong>简单例子</strong></p><p>假设主串 <code>txt = "123456"</code>，模式串 <code>pat = "34"</code>，字符集为数字 0-9（<code>d=10</code>）。</p><ol><li>计算 <code>pat</code>的哈希值：<code>hash_pat = '3'*10 + '4' = 30+4=34</code>。</li><li>计算 <code>txt</code>前 2 个字符 &ldquo;12&rdquo; 的哈希值：<code>hash_sub = '1'*10 + '2' = 10+2=12</code>。</li><li><code>12 != 34</code>，不匹配。</li><li>使用滚动哈希计算下一个子串 &ldquo;23&rdquo;：<code>hash_sub_new = 10 * (12 - 10^(2-1)*'1') + '3' = 10*(12-10 * 1) + 3 = 10*(2) + 3 = 23</code>。</li><li><code>23 != 34</code>，不匹配。</li><li>计算下一个子串 &ldquo;34&rdquo;：<code>hash_sub_new = 10 * (23 - 10^(2-1)*'2') + '4' = 10*(23-10 * 2) + 4 = 10*(3) + 4 = 34</code>。</li><li><code>34 == 34</code>，哈希匹配，再逐个字符验证，&ldquo;34&rdquo; 确实等于 &ldquo;34&rdquo;，匹配成功。</li></ol><p>💡 <strong>总结</strong></p><p>Rabin-Karp 算法通过巧妙的滚动哈希技术，将字符串匹配的平均时间复杂度优化到了线性级别。虽然最坏情况下的性能并不理想，但其思路清晰，实现相对简单，并且在处理多模式匹配等特定问题时非常有用。理解其原理和哈希函数的设计是掌握该算法的关键。</p><h2 id=广义表>广义表</h2><p>广义表（Generalized List），也称为列表（Lists），是一种非常灵活的数据结构，它可以很好地表示层次性和递归性的数据。下面我将为你详细介绍广义表的核心概念、特性、存储表示、基本操作以及应用场景。</p><p>📚 广义表详解</p><h2 id=1-核心概念与定义>1 核心概念与定义</h2><p>广义表是线性表的一种推广，是一种<strong>非线性的数据结构</strong>。它可以存储多种类型的数据，并且支持嵌套结构。广义表是 <code>n(n≥0)</code>个元素 <code>a₁, a₂, ..., aᵢ, ..., aₙ</code>的有限序列。广义表通常记作 <code>Ls = (a₁, a₂, ..., aᵢ, ..., aₙ)</code>。其中：</p><ul><li><strong>Ls</strong> 是广义表的名字。</li><li><strong>n</strong> 是它的长度。</li><li>每个元素 <code>aᵢ</code><strong>可以是原子</strong>（一个不可再分的单个数据项，用小写字母表示），<strong>也可以是另一个广义表</strong>（称为子表，用大写字母表示）。</li></ul><p>广义表通过<strong>递归</strong>进行定义，这使得它可以表示非常复杂的数据结构。</p><h3 id=11-表头与表尾>1.1 表头与表尾</h3><p>任何<strong>非空广义表</strong>（n ≥ 1）都可以分解为<strong>表头（Head）</strong> 和<strong>表尾（Tail）</strong> 两部分：</p><ul><li><strong>表头 Head(Ls)</strong>：非空广义表的<strong>第一个元素</strong> <code>a₁</code>。它可以是原子，也可以是子表。</li><li><strong>表尾 Tail(Ls)</strong>：非空广义表<strong>除去表头后</strong>，由<strong>其余所有元素</strong>构成的<strong>子表</strong> <code>(a₂, a₃, ..., aₙ)</code>。<strong>关键的是，表尾本身必然是一个广义表</strong>（即使只剩一个元素）。</li></ul><p>例如，对于广义表 <code>L = (a, b, c)</code>：</p><ul><li><code>Head(L) = a</code>（原子）</li><li><code>Tail(L) = (b, c)</code>（子表）</li></ul><h3 id=12-重要示例与概念辨析>1.2 重要示例与概念辨析</h3><p>以下是一些帮助理解广义表的例子：</p><div class=table-wrapper><table><thead><tr><th>广义表表示</th><th>表名</th><th>长度</th><th>深度</th><th>表头</th><th>表尾</th><th>说明</th></tr></thead><tbody><tr><td><code>E = ()</code></td><td>E</td><td>0</td><td>1</td><td>-</td><td>-</td><td><strong>空表</strong></td></tr><tr><td><code>L = (a, b)</code></td><td>L</td><td>2</td><td>1</td><td><code>a</code></td><td><code>(b)</code></td><td>元素均为原子，等价于线性表</td></tr><tr><td><code>A = (x, L) = (x, (a, b))</code></td><td>A</td><td>2</td><td>2</td><td><code>x</code></td><td><code>((a, b))</code></td><td>第二个元素是子表L</td></tr><tr><td><code>B = (A, y) = ((x, (a, b)), y)</code></td><td>B</td><td>2</td><td>3</td><td><code>A</code></td><td><code>(y)</code></td><td>第一个元素是子表A</td></tr><tr><td><code>C = (A, B)</code></td><td>C</td><td>2</td><td>4</td><td><code>A</code></td><td><code>(B)</code></td><td>两个元素都是子表</td></tr><tr><td><code>D = (a, D) = (a, (a, (a, ...)))</code></td><td>D</td><td>2</td><td>∞</td><td><code>a</code></td><td><code>(D)</code></td><td><strong>递归表</strong>，深度无穷</td></tr></tbody></table></div><p><strong>特别注意</strong>：</p><ul><li><strong><code>(())</code>不是空表</strong>：它是一个长度为1的非空广义表，其唯一的元素是空表 <code>()</code>。对其取表头和表尾都会得到空表 <code>()</code>。</li><li><strong>表尾永远是子表</strong>：<code>Tail(L) = (b, c)</code>是一个子表，而不是单个元素 <code>b</code>或 <code>c</code>。</li></ul><h3 id=13-长度与深度>1.3 长度与深度</h3><ul><li><p><strong>长度</strong>：指广义表<strong>最外层</strong>的元素个数。例如，<code>A = (x, (a, b))</code>的长度是2。</p></li><li><p><strong>深度</strong>：指广义表<strong>展开后所含括号的最大层数</strong>（递归定义的最大嵌套次数）。</p><ul><li><p><strong>原子</strong>的深度为 <strong>0</strong>。</p></li><li><p><strong>空表 <code>()</code></strong> 的深度为 <strong>1</strong>。</p></li><li><p>非空广义表的深度是其所有<strong>元素深度的最大值加 1</strong>。</p><p>例如：<code>B = ((x, (a, b)), y)</code>的深度计算过程如下：</p></li><li><p>元素1是子表 <code>(x, (a, b))</code>：</p><ul><li>元素1.1是原子 <code>x</code>（深度0）</li><li>元素1.2是子表 <code>(a, b)</code>（深度1）</li><li>所以子表 <code>(x, (a, b))</code>的深度为 <code>max(0, 1) + 1 = 2</code></li></ul></li><li><p>元素2是原子 <code>y</code>（深度0）</p></li><li><p>因此，B的深度为 <code>max(2, 0) + 1 = 3</code></p></li></ul></li></ul><h2 id=2-广义表的性质>2 广义表的性质</h2><p>广义表具有以下几个重要性质：</p><ol><li><strong>有序性</strong>：广义表中的数据元素有相对次序。</li><li><strong>层次性与多层次结构</strong>：广义表中的元素可以是子表，子表的元素还可以是子表，形成一种多层次的结构。</li><li><strong>共享性</strong>：一个广义表可以被其他多个广义表共享。例如，表 <code>A</code>可以同时是表 <code>B</code>和表 <code>C</code>的元素。</li><li><strong>递归性</strong>：广义表可以是<strong>递归表</strong>，即广义表本身可以作为自己的一个子表（如上面的例子 <code>D = (a, D)</code>）。递归表的<strong>深度是无穷的</strong>，但其<strong>长度是有限的</strong>（如 <code>D</code>的长度为2）。</li><li><strong>通用性</strong>：广义表可以兼容和表示其他多种数据结构。<ul><li>当所有元素都是原子时，它就是<strong>线性表</strong>。</li><li>可以表示<strong>树形结构</strong>（如 <code>(A, B, C)</code>可表示一棵树，其中 <code>A</code>, <code>B</code>, <code>C</code>是子树）。</li><li>可以表示<strong>图形结构</strong>（尤其是递归表可以表示有环图）。</li></ul></li></ol><h2 id=3-存储表示>3 存储表示</h2><p>由于广义表的元素可以是原子或子表，类型不统一，并且长度和深度经常变化，因此<strong>顺序存储结构难以实现</strong>，通常采用<strong>链式存储结构</strong>。主要有两种存储方式：</p><h3 id=31-头尾链表存储结构>3.1 头尾链表存储结构</h3><p>这种结构中，每个结点使用一个<strong>标志位（tag）</strong> 来区分原子结点和表结点。</p><pre tabindex=0><code>typedef enum { ATOM, LIST } ElemTag; // ATOM=0:原子, LIST=1:子表
+
+typedef struct GLNode {
+    ElemTag tag; // 标志域，用于区分原子结点和表结点
+    union {
+        AtomType atom; // 原子结点的值域
+        struct { 
+            struct GLNode* hp; // 指向表头的指针
+            struct GLNode* tp; // 指向表尾的指针
+        } ptr;
+    };
+} *GList;
+</code></pre><p>这种存储方式能清晰地反映广义表的<strong>层次结构</strong>，表头指针 <code>hp</code>和表尾指针 <code>tp</code>构成了一个递归的结构。</p><h3 id=32-扩展线性链表存储结构>3.2 扩展线性链表存储结构</h3><p>这种结构也更常用，每个结点也包含一个标志位 <code>tag</code>，但用不同的指针域来组织：</p><pre tabindex=0><code>typedef enum { ATOM, LIST } ElemTag;
+
+typedef struct GLNode {
+    ElemTag tag; // 标志域
+    union {
+        AtomType atom; // 原子结点的值域
+        struct GLNode* hp; // 指向子表的指针
+    };
+    struct GLNode* next; // 指向下一个元素的指针
+} *GList;
+</code></pre><p>这种结构更像一个普通的链表，<code>hp</code>指向该元素代表的子表（如果该元素是子表），<code>next</code>指向同级的下一个元素。这种表示法在遍历时可能更直观。</p><h2 id=4-基本操作>4 基本操作</h2><p>广义表的基本操作大多需要<strong>递归</strong>实现。</p><div class=table-wrapper><table><thead><tr><th>操作名</th><th>功能描述</th></tr></thead><tbody><tr><td><code>InitGList(&amp;L)</code></td><td>初始化一个空的广义表L。</td></tr><tr><td><code>CreateGList(&amp;L, S)</code></td><td>根据字符串S所描述的广义表结构（如 <code>“(a, (b, c))”</code>）创建广义表L。</td></tr><tr><td><code>DestroyGList(&amp;L)</code></td><td>销毁广义表L，释放其占用的存储空间。</td></tr><tr><td><code>CopyGList(&amp;T, L)</code></td><td>复制广义表L，得到广义表T。</td></tr><tr><td><code>GListLength(L)</code></td><td>返回广义表L的长度（最外层元素个数）。</td></tr><tr><td><code>GListDepth(L)</code></td><td>返回广义表L的深度。</td></tr><tr><td><code>GListEmpty(L)</code></td><td>判断广义表L是否为空表（长度是否为0）。</td></tr><tr><td><code>GetHead(L)</code></td><td>返回广义表L的表头。</td></tr><tr><td><code>GetTail(L)</code></td><td>返回广义表L的表尾。</td></tr><tr><td><code>TraverseGList(L, Visit())</code></td><td>遍历广义表L，对每个元素调用函数<code>Visit</code>进行操作。</td></tr></tbody></table></div><p><strong>操作示例</strong>：</p><p>对于广义表 <code>L = ((a, b), c, d)</code>：</p><ul><li><code>GetHead(L) = (a, b)</code>（子表）</li><li><code>GetTail(L) = (c, d)</code>（子表）</li><li><code>GetHead(GetTail(L)) = c</code>（原子）</li><li><code>GetTail(GetTail(L)) = (d)</code>（子表）</li></ul><h2 id=5-广义表与线性表的对比>5 广义表与线性表的对比</h2><p>广义表是线性表的推广，两者有显著区别：</p><div class=table-wrapper><table><thead><tr><th>特性</th><th>线性表</th><th>广义表</th></tr></thead><tbody><tr><td><strong>元素类型</strong></td><td>必须是同一类型的<strong>原子</strong></td><td>可以是<strong>原子</strong>，也可以是<strong>子表</strong></td></tr><tr><td><strong>结构</strong></td><td>严格的<strong>线性顺序</strong>结构</td><td><strong>递归、嵌套</strong>的非线性结构</td></tr><tr><td><strong>操作复杂度</strong></td><td>插入、删除等操作复杂度通常为O(n)</td><td>操作多需<strong>递归</strong>实现，复杂度通常更高</td></tr><tr><td><strong>灵活性</strong></td><td>相对固定，难以直接表示复杂层次关系</td><td><strong>高度灵活</strong>，能表示树、图等复杂结构</td></tr><tr><td><strong>表头/表尾</strong></td><td>无此特定概念或概念不同</td><td><strong>核心概念</strong>，且<strong>表尾必定是一个子表</strong></td></tr></tbody></table></div><h2 id=6-应用场景>6 应用场景</h2><p>广义表的递归和层次特性使其在多个领域有广泛应用：</p><ul><li><strong>表示多层次、递归的数据结构</strong>：如文件目录结构（目录中包含文件和子目录）、HTML/XML文档的嵌套标签、组织结构图等。</li><li><strong>表示数学表达式</strong>：例如，多项式 <code>P(x, y) = x² + 2xy + y²</code>可以用广义表表示为 <code>( +, (^, x, 2), ( *, ( *, 2, x), y), (^, y, 2) )</code>，这种表示便于递归求值。</li><li><strong>人工智能与符号处理</strong>：LISP等函数式编程语言将程序和数据都表示为广义表（称为S-表达式），极大地简化了符号处理和元编程。</li><li><strong>数据库系统</strong>：用于表示复杂的关系模式或对象关系映射。</li><li><strong>作为其他数据结构的基础</strong>：由于其通用性，可用于实现树、图等更复杂的数据结构。</li></ul><p>希望以上详细的介绍能帮助你全面理解广义表这一重要的数据结构。</p><h2 id=线性表存储>线性表存储</h2><p>线性表是最常用且最基本的数据结构之一，其存取方式直接影响了操作的效率。下面我将为你详细介绍线性表的几种主要存取方式，包括顺序存储和链式存储，以及它们的各种变体和特点。</p><p>📊 线性表存取方式详解</p><h2 id=1-线性表的基本概念>1️⃣ 线性表的基本概念</h2><p>线性表（Linear List）是由 n（n≥0）个具有相同类型的数据元素组成的有限序列。若线性表非空，则：</p><ul><li>存在唯一的一个被称为"第一个"的元素（表头元素）</li><li>存在唯一的一个被称为"最后一个"的元素（表尾元素）</li><li>除第一个元素外，每个元素都有且仅有一个<strong>直接前驱</strong></li><li>除最后一个元素外，每个元素都有且仅有一个<strong>直接后继</strong></li></ul><p>数据元素之间的关系是线性的，逻辑结构可以表示为：(a₁, a₂, a₃, &mldr;, aₙ)</p><h2 id=2-顺序存储结构顺序表>2️⃣ 顺序存储结构（顺序表）</h2><p>顺序存储结构使用一段<strong>地址连续的存储单元</strong>依次存储线性表中的数据元素，通常使用数组来实现。</p><h3 id=存储特点>存储特点</h3><ul><li><strong>逻辑相邻，物理也相邻</strong>：逻辑上相邻的元素在物理存储位置上也相邻</li><li><strong>随机存取</strong>：可以通过首地址和元素序号直接计算出任一元素的存储位置，存取时间为O(1)</li><li>存储位置计算公式：<code>LOC(aᵢ) = LOC(a₁) + (i-1)×L</code>，其中L是每个元素占用的存储单元数</li></ul><h3 id=基本操作效率>基本操作效率</h3><ul><li><strong>按索引查找/取值</strong>：O(1) - 直接通过数组下标访问</li><li><strong>插入操作</strong>：平均需要移动n/2个元素，时间复杂度O(n)</li><li><strong>删除操作</strong>：平均需要移动(n-1)/2个元素，时间复杂度O(n)</li></ul><h3 id=顺序存储的优缺点>顺序存储的优缺点</h3><p><strong>优点</strong>：</p><ul><li>存储密度高（100%），无需为表示逻辑关系增加额外空间</li><li>随机存取速度快，通过索引可直接访问任一元素</li></ul><p><strong>缺点</strong>：</p><ul><li>需要预先分配固定大小的存储空间，可能造成空间浪费或溢出</li><li>插入和删除操作需要移动大量元素，效率较低</li></ul><h2 id=3-链式存储结构链表>3️⃣ 链式存储结构（链表）</h2><p>链式存储结构使用一组<strong>任意的存储单元</strong>存储线性表的数据元素，这些存储单元可以是连续的，也可以是不连续的。每个节点不仅包含数据本身，还包含表示逻辑关系的指针域。</p><h3 id=单链表singly-linked-list>单链表（Singly Linked List）</h3><p>最基本的链表形式，每个节点包含：</p><ul><li><strong>数据域</strong>：存储数据元素</li><li><strong>指针域</strong>：存储指向下一个节点的指针</li></ul><p>单链表又分为：</p><ul><li><strong>带头节点的单链表</strong>：头节点不存储数据，其指针域指向第一个实际数据节点</li><li><strong>不带头节点的单链表</strong>：头指针直接指向第一个数据节点</li></ul><h3 id=双向链表doubly-linked-list>双向链表（Doubly Linked List）</h3><p>每个节点包含两个指针域：</p><ul><li>指向直接前驱节点的指针（prior）</li><li>指向直接后继节点的指针（next）</li></ul><p>这使得链表可以在两个方向上遍历，但每个节点需要更多的存储空间。</p><h3 id=循环链表circular-linked-list>循环链表（Circular Linked List）</h3><ul><li><strong>循环单链表</strong>：表尾节点的指针指向头节点（或第一个数据节点），形成环状</li><li><strong>循环双链表</strong>：表尾节点的next指针指向头节点，头节点的prior指针指向表尾节点</li></ul><p>循环链表可以从任意节点开始遍历整个链表。</p><h3 id=静态链表static-linked-list>静态链表（Static Linked List）</h3><p>使用数组来描述链式存储结构，数组元素为结构体，包含：</p><ul><li>数据域</li><li>游标（cur） - 指示后继元素在数组中的下标</li></ul><p>静态链表在不支持指针的程序设计语言中特别有用。</p><h3 id=链式存储的操作特点>链式存储的操作特点</h3><ul><li><strong>查找操作</strong>：需要从头节点开始顺序查找，平均时间复杂度O(n)</li><li><strong>插入操作</strong>：只需修改相关指针，时间复杂度O(1)（不考虑查找插入位置的时间）</li><li><strong>删除操作</strong>：只需修改相关指针，时间复杂度O(1)（不考虑查找删除位置的时间）</li></ul><h3 id=链式存储的优缺点>链式存储的优缺点</h3><p><strong>优点</strong>：</p><ul><li>不需要预先分配固定存储空间，可以动态扩展</li><li>插入和删除操作效率高，只需修改指针</li></ul><p><strong>缺点</strong>：</p><ul><li>存储密度较低，需要额外空间存储指针</li><li>不支持随机存取，必须顺序访问</li></ul><h2 id=4-两种主要存储方式的对比>4️⃣ 两种主要存储方式的对比</h2><p>下表总结了顺序存储和链式存储的主要特点对比：</p><div class=table-wrapper><table><thead><tr><th>特性</th><th>顺序存储结构</th><th>链式存储结构</th></tr></thead><tbody><tr><td><strong>存储空间</strong></td><td>预先分配，地址连续</td><td>动态分配，地址可不连续</td></tr><tr><td><strong>存储密度</strong></td><td>高（100%）</td><td>较低（需存储指针）</td></tr><tr><td><strong>存取方式</strong></td><td>随机存取，O(1)时间</td><td>顺序存取，O(n)时间</td></tr><tr><td><strong>查找操作</strong></td><td>按索引快速，O(1)时间</td><td>需要遍历，平均O(n)时间</td></tr><tr><td><strong>插入操作</strong></td><td>平均需要移动n/2个元素，O(n)时间</td><td>只需修改指针，O(1)时间</td></tr><tr><td><strong>删除操作</strong></td><td>平均需要移动(n-1)/2个元素，O(n)时间</td><td>只需修改指针，O(1)时间</td></tr><tr><td><strong>空间分配</strong></td><td>固定大小，难以扩展</td><td>动态分配，灵活扩展</td></tr></tbody></table></div><h2 id=5-存取方式的选择策略>5️⃣ 存取方式的选择策略</h2><p>选择线性表的存取方式时，需要考虑以下因素：</p><h3 id=适合顺序存储的场景>适合顺序存储的场景</h3><ul><li>数据量相对稳定，变化不大</li><li>需要频繁按索引访问元素</li><li>插入和删除操作较少</li><li>对存储密度要求较高</li></ul><h3 id=适合链式存储的场景>适合链式存储的场景</h3><ul><li>数据量变化较大，难以预估规模</li><li>需要频繁进行插入和删除操作</li><li>不需要频繁按索引随机访问元素</li></ul><h2 id=6-其他存储方式>6️⃣ 其他存储方式</h2><p>除了上述两种主要存储方式外，还有：</p><h3 id=索引存储>索引存储</h3><p>在存储元素信息的同时，建立附加的索引表。索引项的一般形式是：（关键字，地址），通过索引可以快速定位元素。</p><h3 id=散列存储>散列存储</h3><p>根据数据元素的关键字直接计算出该元素的存储地址，也称为哈希存储。</p><h2 id=-总结-1>💎 总结</h2><p>线性表的存取方式主要分为顺序存储和链式存储两大类，它们各有优缺点和适用场景：</p><ul><li><strong>顺序存储</strong>（数组实现）适合数据量固定、需要频繁随机访问的场景</li><li><strong>链式存储</strong>（指针实现）适合数据量变化大、需要频繁插入删除的场景</li></ul><p>在实际应用中，需要根据具体需求、操作特点和性能要求选择合适的存储方式。有时还可以结合多种存储方式的优点，设计更复杂的数据结构以满足特定需求。</p><h2 id=多叉树转-2-叉树>多叉树转 2 叉树</h2><p>。将多叉树转换为二叉树主要采用 <strong>“孩子兄弟表示法”</strong>（Left-Child Right-Sibling Representation）。这种方法能保持树原有的层次结构，便于利用二叉树的算法进行处理。</p><p>下面的表格总结了多叉树节点与转换后二叉树节点间的核心关系，帮助你直观理解转换规则：</p><div class=table-wrapper><table><thead><tr><th>多叉树中的关系</th><th>转换后二叉树中的关系</th></tr></thead><tbody><tr><td>节点的第一个子节点</td><td>变为该节点对应的二叉树节点的<strong>左子节点</strong> (left child)</td></tr><tr><td>节点的下一个兄弟节点</td><td>变为该节点对应的二叉树节点的<strong>右子节点</strong> (right child)</td></tr></tbody></table></div><h3 id=-转换步骤>🔄 转换步骤</h3><p>转换过程遵循以下步骤，通常通过递归算法实现：</p><ol><li><strong>处理根节点</strong>：创建二叉树的根节点，其值与多叉树根节点相同。</li><li><strong>处理子节点</strong>：<ul><li>将多叉树节点的<strong>第一个子节点</strong>递归转换为二叉树节点，并设为当前二叉树节点的<strong>左子节点</strong>。</li><li>将多叉树节点的<strong>其他子节点</strong>（兄弟节点）递归转换为二叉树节点，并依次设置为前一个兄弟节点对应的二叉树节点的<strong>右子节点</strong>，从而形成一条右链。</li></ul></li><li><strong>递归进行</strong>：对每个子节点重复上述过程。</li></ol><h3 id=-代码示例-c>📝 代码示例 (C++)</h3><p>以下是 C++ 的实现示例，参考了 C 语言的实现思路：</p><pre tabindex=0><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+// 多叉树节点定义
+struct MultiTreeNode {
+    int data;
+    MultiTreeNode* firstChild; // 指向第一个子节点
+    MultiTreeNode* nextSibling; // 指向下一个兄弟节点
+
+    MultiTreeNode(int val) : data(val), firstChild(nullptr), nextSibling(nullptr) {}
+};
+
+// 二叉树节点定义
+struct BinaryTreeNode {
+    int data;
+    BinaryTreeNode* left;   // 左孩子
+    BinaryTreeNode* right;  // 右孩子
+
+    BinaryTreeNode(int val) : data(val), left(nullptr), right(nullptr) {}
+};
+
+// 转换函数
+BinaryTreeNode* convertToBinaryTree(MultiTreeNode* multiRoot) {
+    if (multiRoot == nullptr) {
+        return nullptr;
+    }
+    
+    // 创建对应的二叉树根节点
+    BinaryTreeNode* binaryRoot = new BinaryTreeNode(multiRoot-&gt;data);
+    
+    // 递归转换第一个子节点作为左孩子
+    if (multiRoot-&gt;firstChild != nullptr) {
+        binaryRoot-&gt;left = convertToBinaryTree(multiRoot-&gt;firstChild);
+    }
+    
+    // 递归转换下一个兄弟节点作为右孩子
+    if (multiRoot-&gt;nextSibling != nullptr) {
+        binaryRoot-&gt;right = convertToBinaryTree(multiRoot-&gt;nextSibling);
+    }
+    
+    return binaryRoot;
+}
+
+// 示例：打印二叉树（先序遍历）
+void printBinaryTreePreOrder(BinaryTreeNode* root) {
+    if (root == nullptr) return;
+    cout &lt;&lt; root-&gt;data &lt;&lt; &#34; &#34;;
+    printBinaryTreePreOrder(root-&gt;left);
+    printBinaryTreePreOrder(root-&gt;right);
+}
+
+// 示例：创建多叉树并进行转换
+int main() {
+    /* 假设有多叉树结构：
+        1
+       /|\
+      2 3 4
+      | 
+      5
+    */
+    
+    MultiTreeNode* root = new MultiTreeNode(1);
+    root-&gt;firstChild = new MultiTreeNode(2);
+    root-&gt;firstChild-&gt;nextSibling = new MultiTreeNode(3);
+    root-&gt;firstChild-&gt;nextSibling-&gt;nextSibling = new MultiTreeNode(4);
+    root-&gt;firstChild-&gt;firstChild = new MultiTreeNode(5);
+    
+    BinaryTreeNode* binaryRoot = convertToBinaryTree(root);
+    
+    cout &lt;&lt; &#34;转换后的二叉树先序遍历结果: &#34;;
+    printBinaryTreePreOrder(binaryRoot); // 输出：1 2 5 3 4
+    cout &lt;&lt; endl;
+    
+    // ... (实际应用中需记得释放内存)
+    
+    return 0;
+}
+</code></pre><h3 id=-注意事项>⚠️ 注意事项</h3><ul><li><strong>节点结构定义</strong>：多叉树节点需包含指向其<strong>第一个子节点</strong> (<code>firstChild</code>) 和<strong>下一个兄弟节点</strong> (<code>nextSibling</code>) 的指针。</li><li><strong>递归思想</strong>：理解递归在转换过程中的作用，它负责深入到每个子树进行转换。</li><li><strong>内存管理</strong>：在实际项目中，如果树节点是动态创建的，需要注意内存的释放，避免泄漏。示例代码省略了这部分。</li><li><strong>遍历顺序</strong>：转换后对二叉树进行<strong>先序遍历</strong>，可以访问到与原多叉树结构相对应的节点顺序。</li><li><strong>森林转换</strong>：此方法也适用于将多棵树组成的<strong>森林</strong>转换为二叉树，通常可将森林中各树的根节点视为兄弟节点进行转换。</li></ul><h3 id=-深入理解>🧠 深入理解</h3><ul><li><strong>优点</strong>：孩子兄弟表示法保持了树的原始结构，并能利用二叉树的性质进行遍历和操作，在许多应用场景中非常有用，例如文件系统的目录结构表示。</li><li><strong>逆向转换</strong>：从转换后的二叉树恢复多叉树也是可能的，过程基本上是上述转换的逆过程。</li></ul><p>希望这些信息能帮助你理解多叉树到二叉树的转换。</p><h2 id=堆排序>堆排序</h2><p>堆排序是一种非常高效且值得掌握的排序算法。它利用“堆”这种数据结构来实现排序，兼具了时间效率和高空间效率。下面我会为你详细解析堆排序的原理、步骤、性能，并提供代码实现。</p><p>✨ 堆的基本概念</p><p><strong>堆</strong>（Heap）是一种特殊的<strong>完全二叉树</strong>，它满足以下性质之一：</p><ul><li><strong>大顶堆</strong>：每个节点的值都<strong>大于或等于</strong>其子节点的值。因此，堆顶（根节点）是整个堆中的<strong>最大值</strong>。</li><li><strong>小顶堆</strong>：每个节点的值都<strong>小于或等于</strong>其子节点的值。因此，堆顶是整个堆中的<strong>最小值</strong>。</li></ul><p>堆通常使用<strong>数组</strong>来存储。对于数组中索引为 <code>i</code>（从0开始计数）的元素：</p><ul><li>其<strong>左子节点</strong>的索引为 <code>2*i + 1</code></li><li>其<strong>右子节点</strong>的索引为 <code>2*i + 2</code></li><li>其<strong>父节点</strong>的索引为 <code>floor((i-1)/2)</code></li></ul><h2 id=-堆排序的工作原理>🔧 堆排序的工作原理</h2><p>堆排序（以升序排序为例）主要分为两个大的阶段：<strong>构建大顶堆</strong>和<strong>反复提取最大值并调整</strong>。</p><h3 id=1-构建大顶堆-build-max-heap>1. 构建大顶堆 (Build Max Heap)</h3><p>从一个无序的数组开始，我们需要将其调整为一个大顶堆。策略是从<strong>最后一个非叶子节点</strong>开始，依次向前，对每个节点执行“下沉”操作（Heapify），确保以该节点为根的子树满足大顶堆的性质。最后一个非叶子节点的索引通常是 <code>n/2 - 1</code>（n为数组长度）。</p><p><strong>“下沉”操作 (Heapify / Sift Down) 的核心步骤</strong>：</p><ol><li>针对当前节点、其左子节点和右子节点，找出值最大的那个节点。</li><li>如果最大值不是当前节点，就将当前节点与这个最大值的子节点交换位置。</li><li>由于交换可能会破坏下一级子树的堆性质，因此需要<strong>递归地</strong>或<strong>迭代地</strong>对交换后的子树继续进行下沉操作，直到当前节点大于等于其所有子节点，或者到达了叶子节点。</li></ol><h3 id=2-排序-extract-and-heapify>2. 排序 (Extract and Heapify)</h3><p>在将整个数组构造成大顶堆后，堆顶元素（数组的第一个元素）就是当前最大值。</p><ol><li><strong>交换</strong>：将堆顶元素与当前堆的<strong>最后一个元素</strong>交换。此时，最大值就被放置到了数组的最终正确位置上。</li><li><strong>缩小堆</strong>：将堆的大小减一（排除刚刚交换到末尾的最大值），最后一个元素不再视为堆的一部分。</li><li><strong>调整</strong>：由于新的堆顶元素可能破坏堆的性质，因此需要对<strong>新的堆顶</strong>执行下沉操作，使剩余元素重新构成一个大顶堆。</li><li><strong>重复</strong>：重复上述步骤，直到堆中只剩一个元素。此时，数组就已经排好序了。</li></ol><h2 id=-堆排序的步骤摘要>📊 堆排序的步骤摘要</h2><p>下表总结了堆排序算法的关键步骤，以升序排序为例：</p><div class=table-wrapper><table><thead><tr><th>步骤</th><th>操作描述</th><th>说明</th></tr></thead><tbody><tr><td>1</td><td><strong>构建大顶堆</strong>：从最后一个非叶子节点开始，自底向上、自右向左地对每个节点执行下沉操作。</td><td>确保每个节点的值都大于或等于其子节点的值，堆顶元素为最大值。</td></tr><tr><td>2</td><td><strong>交换堆顶与堆尾</strong>：将堆顶元素（当前最大值）与当前堆的最后一个元素交换。</td><td>将最大值放置到数组的末尾，这是其最终有序位置。</td></tr><tr><td>3</td><td><strong>缩小堆范围</strong>：将堆的大小减一，排除已排序的最大值。</td><td>接下来只需对剩余未排序部分进行操作。</td></tr><tr><td>4</td><td><strong>调整堆</strong>：对新的堆顶元素执行下沉操作，使剩余部分重新满足大顶堆性质。</td><td>为下一次提取最大值做准备。</td></tr><tr><td>5</td><td><strong>重复步骤2-4</strong>：直到堆的大小变为1。</td><td>此时所有元素都已排好序。</td></tr></tbody></table></div><h2 id=-复杂度分析>⚙️ 复杂度分析</h2><div class=table-wrapper><table><thead><tr><th>指标</th><th>复杂度</th><th>解释</th></tr></thead><tbody><tr><td><strong>时间复杂度</strong></td><td><strong>O(n log n)</strong></td><td>• <strong>建堆阶段</strong>：直观上感觉需要O(n log n)，但通过更精细的分析可以得出其时间复杂度为<strong>O(n)</strong>。 • <strong>排序阶段</strong>：需要进行n-1次下沉操作，每次下沉的时间复杂度为O(log n)，因此为<strong>O(n log n)</strong>。</td></tr><tr><td><strong>空间复杂度</strong></td><td><strong>O(1)</strong></td><td>堆排序是<strong>原地排序</strong>算法，只需要常数级别的额外空间用于交换元素等临时操作。</td></tr><tr><td><strong>稳定性</strong></td><td><strong>不稳定</strong></td><td>在交换堆顶和堆尾元素的过程中，可能会改变相同值元素的相对顺序。</td></tr></tbody></table></div><h2 id=-优点和缺点>👍 优点和缺点</h2><h3 id=优点>优点：</h3><ul><li><strong>高效的时间复杂度</strong>：最坏、平均、最好情况下的时间复杂度均为 O(n log n)，性能稳定。</li><li><strong>空间效率高</strong>：是原地排序算法，不需要额外的存储空间，空间复杂度为 O(1)。</li></ul><h3 id=缺点>缺点：</h3><ul><li><strong>不稳定</strong>：对于相等键值的元素，排序后它们的相对位置可能会改变。</li><li><strong>缓存不友好</strong>：堆排序的访问模式是跳跃式的（例如访问 <code>2*i+1</code>, <code>2*i+2</code>），而不是顺序访问，这对CPU缓存不友好，在某些实际应用中可能比同样时间复杂度但缓存友好的算法（如快速排序）稍慢。</li></ul><h2 id=-应用场景>🚀 应用场景</h2><ul><li><strong>需要保证最坏情况性能</strong>：快速排序在最坏情况下会退化为O(n²)，而堆排序的O(n log n)最坏情况复杂度更有优势。</li><li><strong>内存空间受限</strong>：当可用内存空间非常宝贵时，堆排序的原地排序特性使其成为一个很好的选择。</li><li><strong>获取前k个最大/最小元素</strong>：例如，要从1亿个数字中找出前10个最大的数，可以维护一个大小为10的小顶堆，扫描完所有数据后，堆中的元素就是前10个最大的数。这种方法的时间复杂度是O(n log k)，非常高效。</li></ul><h2 id=-代码实现>🖥️ 代码实现</h2><p>以下是使用不同编程语言实现堆排序（升序）的示例代码：</p><h3 id=python-实现>Python 实现</h3><pre tabindex=0><code>def heap_sort(arr):
+    def heapify(n, i):
+        largest = i
+        left = 2 * i + 1
+        right = 2 * i + 2
+
+        if left &lt; n and arr[left] &gt; arr[largest]:
+            largest = left
+        if right &lt; n and arr[right] &gt; arr[largest]:
+            largest = right
+        if largest != i:
+            arr[i], arr[largest] = arr[largest], arr[i]
+            heapify(n, largest)
+
+    n = len(arr)
+    # 构建最大堆
+    for i in range(n // 2 - 1, -1, -1):
+        heapify(n, i)
+    # 逐个提取元素
+    for i in range(n - 1, 0, -1):
+        arr[0], arr[i] = arr[i], arr[0]  # 交换
+        heapify(i, 0)  # 调整剩余堆
+
+# 调用示例
+arr = [12, 11, 13, 5, 6, 7]
+heap_sort(arr)
+print(&#34;Sorted array:&#34;, arr)  # 输出: [5, 6, 7, 11, 12, 13]
+</code></pre><p><em>代码来源于，并进行了适当修改和注释。</em></p><h3 id=java-实现>Java 实现</h3><pre tabindex=0><code>public class HeapSort {
+    public static void heapSort(int[] arr) {
+        int n = arr.length;
+        // 构建最大堆
+        for (int i = n / 2 - 1; i &gt;= 0; i--) {
+            heapify(arr, n, i);
+        }
+        // 逐个从堆中提取元素
+        for (int i = n - 1; i &gt; 0; i--) {
+            // 将当前堆顶（最大值）移动到数组末尾
+            int temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+            // 对减小后的堆调用heapify
+            heapify(arr, i, 0);
+        }
+    }
+
+    private static void heapify(int[] arr, int n, int i) {
+        int largest = i; // 初始化最大值为根
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+
+        if (left &lt; n &amp;&amp; arr[left] &gt; arr[largest]) {
+            largest = left;
+        }
+        if (right &lt; n &amp;&amp; arr[right] &gt; arr[largest]) {
+            largest = right;
+        }
+        if (largest != i) {
+            int swap = arr[i];
+            arr[i] = arr[largest];
+            arr[largest] = swap;
+            // 递归地堆化受影响的子树
+            heapify(arr, n, largest);
+        }
+    }
+
+    // 测试
+    public static void main(String[] args) {
+        int[] arr = {12, 11, 13, 5, 6, 7};
+        heapSort(arr);
+        System.out.print(&#34;Sorted array: &#34;);
+        for (int num : arr) {
+            System.out.print(num + &#34; &#34;); // 输出: 5 6 7 11 12 13
+        }
+    }
+}
+</code></pre><p><em>代码来源于，并进行了适当修改和注释。</em></p><h3 id=c-实现>C++ 实现</h3><pre tabindex=0><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+void heapify(vector&lt;int&gt;&amp; arr, int n, int i) {
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if (left &lt; n &amp;&amp; arr[left] &gt; arr[largest])
+        largest = left;
+    if (right &lt; n &amp;&amp; arr[right] &gt; arr[largest])
+        largest = right;
+    if (largest != i) {
+        swap(arr[i], arr[largest]);
+        heapify(arr, n, largest);
+    }
+}
+
+void heapSort(vector&lt;int&gt;&amp; arr) {
+    int n = arr.size();
+    // 构建最大堆
+    for (int i = n / 2 - 1; i &gt;= 0; i--)
+        heapify(arr, n, i);
+    // 从堆中逐个提取元素
+    for (int i = n - 1; i &gt; 0; i--) {
+        swap(arr[0], arr[i]);
+        heapify(arr, i, 0);
+    }
+}
+
+int main() {
+    vector&lt;int&gt; arr = {12, 11, 13, 5, 6, 7};
+    heapSort(arr);
+    cout &lt;&lt; &#34;Sorted array: &#34;;
+    for (int num : arr) {
+        cout &lt;&lt; num &lt;&lt; &#34; &#34;; // 输出: 5 6 7 11 12 13
+    }
+    return 0;
+}
+</code></pre><p><em>代码来源于，并进行了适当修改和注释。</em></p><p>希望这份详细的介绍能帮助你彻底理解堆排序！如果你有任何疑问，欢迎随时提出。</p><h2 id=建堆>建堆</h2><p>堆排序是一种非常高效且值得掌握的排序算法。它利用“堆”这种数据结构来实现排序，兼具了时间效率和高空间效率。下面我会为你详细解析堆排序的原理、步骤、性能，并提供代码实现。</p><h1 id=-堆排序算法详解>🧠 堆排序算法详解</h1><h2 id=-堆的基本概念>✨ 堆的基本概念</h2><p><strong>堆</strong>（Heap）是一种特殊的<strong>完全二叉树</strong>，它满足以下性质之一：</p><ul><li><strong>大顶堆</strong>：每个节点的值都<strong>大于或等于</strong>其子节点的值。因此，堆顶（根节点）是整个堆中的<strong>最大值</strong>。</li><li><strong>小顶堆</strong>：每个节点的值都<strong>小于或等于</strong>其子节点的值。因此，堆顶是整个堆中的<strong>最小值</strong>。</li></ul><p>堆通常使用<strong>数组</strong>来存储。对于数组中索引为 <code>i</code>（从0开始计数）的元素：</p><ul><li>其<strong>左子节点</strong>的索引为 <code>2*i + 1</code></li><li>其<strong>右子节点</strong>的索引为 <code>2*i + 2</code></li><li>其<strong>父节点</strong>的索引为 <code>floor((i-1)/2)</code></li></ul><h2 id=-堆排序的工作原理-1>🔧 堆排序的工作原理</h2><p>堆排序（以升序排序为例）主要分为两个大的阶段：<strong>构建大顶堆</strong>和<strong>反复提取最大值并调整</strong>。</p><h3 id=1-构建大顶堆-build-max-heap-1>1. 构建大顶堆 (Build Max Heap)</h3><p>从一个无序的数组开始，我们需要将其调整为一个大顶堆。策略是从<strong>最后一个非叶子节点</strong>开始，依次向前，对每个节点执行“下沉”操作（Heapify），确保以该节点为根的子树满足大顶堆的性质。最后一个非叶子节点的索引通常是 <code>n/2 - 1</code>（n为数组长度）。</p><p><strong>“下沉”操作 (Heapify / Sift Down) 的核心步骤</strong>：</p><ol><li>针对当前节点、其左子节点和右子节点，找出值最大的那个节点。</li><li>如果最大值不是当前节点，就将当前节点与这个最大值的子节点交换位置。</li><li>由于交换可能会破坏下一级子树的堆性质，因此需要<strong>递归地</strong>或<strong>迭代地</strong>对交换后的子树继续进行下沉操作，直到当前节点大于等于其所有子节点，或者到达了叶子节点。</li></ol><h3 id=2-排序-extract-and-heapify-1>2. 排序 (Extract and Heapify)</h3><p>在将整个数组构造成大顶堆后，堆顶元素（数组的第一个元素）就是当前最大值。</p><ol><li><strong>交换</strong>：将堆顶元素与当前堆的<strong>最后一个元素</strong>交换。此时，最大值就被放置到了数组的最终正确位置上。</li><li><strong>缩小堆</strong>：将堆的大小减一（排除刚刚交换到末尾的最大值），最后一个元素不再视为堆的一部分。</li><li><strong>调整</strong>：由于新的堆顶元素可能破坏堆的性质，因此需要对<strong>新的堆顶</strong>执行下沉操作，使剩余元素重新构成一个大顶堆。</li><li><strong>重复</strong>：重复上述步骤，直到堆中只剩一个元素。此时，数组就已经排好序了。</li></ol><h2 id=-堆排序的步骤摘要-1>📊 堆排序的步骤摘要</h2><p>下表总结了堆排序算法的关键步骤，以升序排序为例：</p><div class=table-wrapper><table><thead><tr><th>步骤</th><th>操作描述</th><th>说明</th></tr></thead><tbody><tr><td>1</td><td><strong>构建大顶堆</strong>：从最后一个非叶子节点开始，自底向上、自右向左地对每个节点执行下沉操作。</td><td>确保每个节点的值都大于或等于其子节点的值，堆顶元素为最大值。</td></tr><tr><td>2</td><td><strong>交换堆顶与堆尾</strong>：将堆顶元素（当前最大值）与当前堆的最后一个元素交换。</td><td>将最大值放置到数组的末尾，这是其最终有序位置。</td></tr><tr><td>3</td><td><strong>缩小堆范围</strong>：将堆的大小减一，排除已排序的最大值。</td><td>接下来只需对剩余未排序部分进行操作。</td></tr><tr><td>4</td><td><strong>调整堆</strong>：对新的堆顶元素执行下沉操作，使剩余部分重新满足大顶堆性质。</td><td>为下一次提取最大值做准备。</td></tr><tr><td>5</td><td><strong>重复步骤2-4</strong>：直到堆的大小变为1。</td><td>此时所有元素都已排好序。</td></tr></tbody></table></div><h2 id=-复杂度分析-1>⚙️ 复杂度分析</h2><div class=table-wrapper><table><thead><tr><th>指标</th><th>复杂度</th><th>解释</th></tr></thead><tbody><tr><td><strong>时间复杂度</strong></td><td><strong>O(n log n)</strong></td><td>• <strong>建堆阶段</strong>：直观上感觉需要O(n log n)，但通过更精细的分析可以得出其时间复杂度为<strong>O(n)</strong>。 • <strong>排序阶段</strong>：需要进行n-1次下沉操作，每次下沉的时间复杂度为O(log n)，因此为<strong>O(n log n)</strong>。</td></tr><tr><td><strong>空间复杂度</strong></td><td><strong>O(1)</strong></td><td>堆排序是<strong>原地排序</strong>算法，只需要常数级别的额外空间用于交换元素等临时操作。</td></tr><tr><td><strong>稳定性</strong></td><td><strong>不稳定</strong></td><td>在交换堆顶和堆尾元素的过程中，可能会改变相同值元素的相对顺序。</td></tr></tbody></table></div><h2 id=-优点和缺点-1>👍 优点和缺点</h2><h3 id=优点-1>优点：</h3><ul><li><strong>高效的时间复杂度</strong>：最坏、平均、最好情况下的时间复杂度均为 O(n log n)，性能稳定。</li><li><strong>空间效率高</strong>：是原地排序算法，不需要额外的存储空间，空间复杂度为 O(1)。</li></ul><h3 id=缺点-1>缺点：</h3><ul><li><strong>不稳定</strong>：对于相等键值的元素，排序后它们的相对位置可能会改变。</li><li><strong>缓存不友好</strong>：堆排序的访问模式是跳跃式的（例如访问 <code>2*i+1</code>, <code>2*i+2</code>），而不是顺序访问，这对CPU缓存不友好，在某些实际应用中可能比同样时间复杂度但缓存友好的算法（如快速排序）稍慢。</li></ul><h2 id=-应用场景-1>🚀 应用场景</h2><ul><li><strong>需要保证最坏情况性能</strong>：快速排序在最坏情况下会退化为O(n²)，而堆排序的O(n log n)最坏情况复杂度更有优势。</li><li><strong>内存空间受限</strong>：当可用内存空间非常宝贵时，堆排序的原地排序特性使其成为一个很好的选择。</li><li><strong>获取前k个最大/最小元素</strong>：例如，要从1亿个数字中找出前10个最大的数，可以维护一个大小为10的小顶堆，扫描完所有数据后，堆中的元素就是前10个最大的数。这种方法的时间复杂度是O(n log k)，非常高效。</li></ul><h2 id=-代码实现-1>🖥️ 代码实现</h2><p>以下是使用不同编程语言实现堆排序（升序）的示例代码：</p><h3 id=python-实现-1>Python 实现</h3><pre tabindex=0><code>def heap_sort(arr):
+    def heapify(n, i):
+        largest = i
+        left = 2 * i + 1
+        right = 2 * i + 2
+
+        if left &lt; n and arr[left] &gt; arr[largest]:
+            largest = left
+        if right &lt; n and arr[right] &gt; arr[largest]:
+            largest = right
+        if largest != i:
+            arr[i], arr[largest] = arr[largest], arr[i]
+            heapify(n, largest)
+
+    n = len(arr)
+    # 构建最大堆
+    for i in range(n // 2 - 1, -1, -1):
+        heapify(n, i)
+    # 逐个提取元素
+    for i in range(n - 1, 0, -1):
+        arr[0], arr[i] = arr[i], arr[0]  # 交换
+        heapify(i, 0)  # 调整剩余堆
+
+# 调用示例
+arr = [12, 11, 13, 5, 6, 7]
+heap_sort(arr)
+print(&#34;Sorted array:&#34;, arr)  # 输出: [5, 6, 7, 11, 12, 13]
+</code></pre><p><em>代码来源于，并进行了适当修改和注释。</em></p><h3 id=java-实现-1>Java 实现</h3><pre tabindex=0><code>public class HeapSort {
+    public static void heapSort(int[] arr) {
+        int n = arr.length;
+        // 构建最大堆
+        for (int i = n / 2 - 1; i &gt;= 0; i--) {
+            heapify(arr, n, i);
+        }
+        // 逐个从堆中提取元素
+        for (int i = n - 1; i &gt; 0; i--) {
+            // 将当前堆顶（最大值）移动到数组末尾
+            int temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+            // 对减小后的堆调用heapify
+            heapify(arr, i, 0);
+        }
+    }
+
+    private static void heapify(int[] arr, int n, int i) {
+        int largest = i; // 初始化最大值为根
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+
+        if (left &lt; n &amp;&amp; arr[left] &gt; arr[largest]) {
+            largest = left;
+        }
+        if (right &lt; n &amp;&amp; arr[right] &gt; arr[largest]) {
+            largest = right;
+        }
+        if (largest != i) {
+            int swap = arr[i];
+            arr[i] = arr[largest];
+            arr[largest] = swap;
+            // 递归地堆化受影响的子树
+            heapify(arr, n, largest);
+        }
+    }
+
+    // 测试
+    public static void main(String[] args) {
+        int[] arr = {12, 11, 13, 5, 6, 7};
+        heapSort(arr);
+        System.out.print(&#34;Sorted array: &#34;);
+        for (int num : arr) {
+            System.out.print(num + &#34; &#34;); // 输出: 5 6 7 11 12 13
+        }
+    }
+}
+</code></pre><p><em>代码来源于，并进行了适当修改和注释。</em></p><h3 id=c-实现-1>C++ 实现</h3><pre tabindex=0><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+void heapify(vector&lt;int&gt;&amp; arr, int n, int i) {
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if (left &lt; n &amp;&amp; arr[left] &gt; arr[largest])
+        largest = left;
+    if (right &lt; n &amp;&amp; arr[right] &gt; arr[largest])
+        largest = right;
+    if (largest != i) {
+        swap(arr[i], arr[largest]);
+        heapify(arr, n, largest);
+    }
+}
+
+void heapSort(vector&lt;int&gt;&amp; arr) {
+    int n = arr.size();
+    // 构建最大堆
+    for (int i = n / 2 - 1; i &gt;= 0; i--)
+        heapify(arr, n, i);
+    // 从堆中逐个提取元素
+    for (int i = n - 1; i &gt; 0; i--) {
+        swap(arr[0], arr[i]);
+        heapify(arr, i, 0);
+    }
+}
+
+int main() {
+    vector&lt;int&gt; arr = {12, 11, 13, 5, 6, 7};
+    heapSort(arr);
+    cout &lt;&lt; &#34;Sorted array: &#34;;
+    for (int num : arr) {
+        cout &lt;&lt; num &lt;&lt; &#34; &#34;; // 输出: 5 6 7 11 12 13
+    }
+    return 0;
+}
+</code></pre><p><em>代码来源于，并进行了适当修改和注释。</em></p><p>希望这份详细的介绍能帮助你彻底理解堆排序！如果你有任何疑问，欢迎随时提出。</p><h2 id=自下而上复杂度>自下而上复杂度</h2><p>自下而上建堆（Heapify）的时间复杂度确实是 <strong>O(n)</strong>。这是一个非常重要且可能有些反直觉的结论，因为单个元素的调整操作（下沉，Sift-Down）在最坏情况下是 O(log n)，但整体建堆过程却能达到线性复杂度。</p><p>为了帮助你快速理解这两种建堆方式的本质区别，我先用一个表格来总结它们的核心特性：</p><div class=table-wrapper><table><thead><tr><th>特性</th><th>自下而上建堆 (Heapify)</th><th>自上而下建堆 (逐个插入)</th></tr></thead><tbody><tr><td><strong>核心过程</strong></td><td>从<strong>最后一个非叶节点</strong>开始，<strong>向前</strong>遍历并对每个节点执行<strong>下沉</strong>操作</td><td>从<strong>空堆</strong>开始，<strong>逐个</strong>将元素插入堆尾并执行<strong>上浮</strong>操作</td></tr><tr><td><strong>起始点</strong></td><td>最后一个非叶节点 (索引 ≈ n/2)</td><td>第一个元素</td></tr><tr><td><strong>核心操作</strong></td><td><strong>下沉 (Sift-Down)</strong></td><td><strong>上浮 (Sift-Up)</strong></td></tr><tr><td><strong>时间复杂度</strong></td><td><strong>O(n)</strong> (线性)</td><td>O(n log n) (线性对数)</td></tr><tr><td><strong>适用场景</strong></td><td><strong>批量建堆</strong>，所有元素已知且一次性给定时，<strong>效率更高</strong></td><td><strong>动态插入</strong>，元素逐个到达时需要维持堆结构时使用</td></tr></tbody></table></div><p>🧠 <strong>为什么自下而上建堆是 O(n)？</strong></p><p>关键在于<strong>大部分需要调整的节点都位于树的底层</strong>，它们需要下沉的步骤（代价）非常少；而需要较多调整步骤的节点数量非常少。</p><ol><li><p><strong>数学推导（求和公式）</strong>：</p><p>假设一个包含 n 个节点的完全二叉树，高度为 h (h ≈ log₂n)。</p><ul><li>叶子节点（最底层）大约有 n/2 个，它们的高度为 0，不需要下沉操作。</li><li>高度为 1 的节点大约有 n/4 个，它们最多只需要下沉 1 步。</li><li>高度为 2 的节点大约有 n/8 个，它们最多只需要下沉 2 步。</li><li>&mldr;</li><li>根节点（高度为 h）只有 1 个，它最多需要下沉 h 步。</li></ul><p>总时间代价 T(n) 可以表示为：</p><p>T(n) = n/4 * 1 + n/8 * 2 + n/16 * 3 + &mldr; + 1 * h</p><p>这是一个<strong>等差数列和等比数列的乘积</strong>，通过<strong>错位相减法</strong>等数学方法求解后，可以证明 T(n) &lt; 2n。因此，时间复杂度是 <strong>O(n)</strong>。</p></li><li><p><strong>直观理解</strong>：</p><ul><li><strong>工作量分布</strong>：树中需要调整的节点数量大约是 n/2（非叶节点），但<strong>大部分工作量是由很少量的高层节点贡献的</strong>。大量的底层节点几乎不贡献工作量（因为调整的步数少）。</li><li><strong>与自上而下对比</strong>：自上而下建堆时，每个新插入的元素都可能从最底层一路上浮到根节点，路径很长。而自下而上建堆时，一个节点的下沉操作只会发生在它的子树中，<strong>不会波及到整个树</strong>，且越底层的节点涉及的子树越小，调整得越快。</li></ul></li></ol><p>⚡ <strong>重要提示</strong></p><p>虽然自下而上建堆的<strong>整体</strong>时间复杂度是 O(n)，但这并不意味着每个节点的调整操作都是 O(1)。根节点的调整仍然需要 O(log n) 的时间，只是由于这种节点数量极少，在求和时被“均摊”掉了。</p><p>💡 <strong>如何选择</strong></p><ul><li>当你<strong>已经拥有一个完整的无序数组</strong>，并希望将其构建成一个堆时（例如堆排序的第一步），<strong>应优先选择自下而上建堆</strong>，因为其效率更高 (O(n))。</li><li>当你需要<strong>动态维护一个堆</strong>，即元素是一个一个到来并需要随时保证堆结构时，则使用自上而下（插入）的方法，尽管其建堆复杂度是 O(n log n)，但这是唯一的选择。</li></ul><p>希望以上的解释能帮助你理解自下而上建堆的时间复杂度。这是一个非常精妙的算法设计案例，展示了如何通过优化整体流程来降低复杂度。</p><h2 id=交换数字>交换数字</h2><h2 id=交换数字-1>交换数字</h2><p>交换数字是编程中的常见操作，有多种实现方法，各有其适用场景和特点。下面我用一个表格为你汇总主要方法，然后详细解释，最后给你一些选择建议。</p><div class=table-wrapper><table><thead><tr><th>方法</th><th>核心思路</th><th>优点</th><th>缺点</th><th>典型应用场景</th></tr></thead><tbody><tr><td><strong>临时变量法</strong></td><td>引入第三个变量暂存值</td><td>直观易懂，可读性强，稳定可靠</td><td>需要额外的内存空间</td><td>通用场景，教学示例，可读性要求高的代码</td></tr><tr><td><strong>算术运算法</strong></td><td>通过加法减法或乘法除法操作交换值</td><td>无需额外变量</td><td>有溢出风险（加减），除数不能为零（乘除）</td><td>内存受限环境，<strong>不推荐常规使用</strong></td></tr><tr><td><strong>位异或运算法</strong></td><td>利用异或运算的性质交换值</td><td>无需额外变量，效率通常比算术法高</td><td>代码可读性稍差</td><td>嵌入式开发，内存极度受限或追求极致性能</td></tr><tr><td><strong>函数封装法</strong></td><td>将交换操作封装成函数</td><td>代码复用，模块化，减少重复代码</td><td>引入函数调用开销（通常可忽略）</td><td>需要多次交换操作的项目</td></tr><tr><td><strong>宏定义法</strong></td><td>使用预处理器宏进行文本替换</td><td>免去函数调用开销，灵活</td><td>可能产生副作用（如对重复求值），调试稍复杂</td><td>C语言中追求性能的频繁交换操作</td></tr></tbody></table></div><p>下面是这些方法的详细说明和代码示例（以C语言为例）。</p><h3 id=-详细方法说明与代码示例>📝 详细方法说明与代码示例</h3><h4 id=1-使用临时变量>1. 使用临时变量</h4><p>这是<strong>最直接、最常用</strong>的方法。思路是引入一个临时变量 (<code>temp</code>) 来暂时保存其中一个变量的值。</p><pre tabindex=0><code>#include &lt;stdio.h&gt;
+
+int main() {
+    int a = 5, b = 10, temp;
+
+    printf(&#34;交换前: a = %d, b = %d\n&#34;, a, b);
+
+    temp = a; // 将 a 的值暂存到 temp
+    a = b;    // 将 b 的值赋给 a
+    b = temp; // 将 temp (原a的值) 赋给 b
+
+    printf(&#34;交换后: a = %d, b = %d\n&#34;, a, b);
+
+    return 0;
+}
+</code></pre><p><strong>优点</strong>：逻辑清晰，易于理解和维护，适用于所有数据类型。</p><p><strong>缺点</strong>：需要消耗一个额外变量的内存空间（通常这微不足道）。</p><h4 id=2-使用算术运算>2. 使用算术运算</h4><p>这种方法通过加法和减法来实现交换，<strong>不需要临时变量</strong>。</p><pre tabindex=0><code>#include &lt;stdio.h&gt;
+
+int main() {
+    int a = 5, b = 10;
+
+    printf(&#34;交换前: a = %d, b = %d\n&#34;, a, b);
+
+    a = a + b; // a 变为 a 与 b 的和
+    b = a - b; // b 的值变为原来的 a (因为 (a+b)-b = a)
+    a = a - b; // a 的值变为原来的 b (因为 (a+b)-a = b)
+
+    printf(&#34;交换后: a = %d, b = %d\n&#34;, a, b);
+
+    return 0;
+}
+</code></pre><p>你也可以使用乘除法，但<strong>务必注意除数不能为零</strong>：</p><pre tabindex=0><code>a = a * b;
+b = a / b;
+a = a / b;
+</code></pre><p><strong>优点</strong>：节省了一个临时变量。</p><p><strong>缺点</strong>：</p><ul><li><p><strong>加减法</strong>：当 <code>a</code>和 <code>b</code>的值非常大时，<code>a + b</code>可能会超出整型数据的表示范围，导致<strong>溢出</strong>，这是潜在的风险。</p></li><li><p><strong>乘除法</strong>：同样有溢出风险，并且如果 <code>b</code>为0，除法会导致运行时错误。</p><p><strong>不推荐在重要项目或通用场景中使用</strong>，除非你能确保不会溢出且除数非零。</p></li></ul><h4 id=3-使用位异或运算>3. 使用位异或运算</h4><p>利用<strong>异或操作符 <code>^</code></strong> 的性质（相同为0，不同为1；一个数与自己异或结果为0；一个数与0异或结果为自己）来交换值，也无需临时变量。</p><pre tabindex=0><code>#include &lt;stdio.h&gt;
+
+int main() {
+    int a = 5, b = 10; // 5: 0101, 10: 1010
+
+    printf(&#34;交换前: a = %d, b = %d\n&#34;, a, b);
+
+    a = a ^ b; // a 现在是一个&#34;中间值&#34;，不同位为1
+    b = a ^ b; // 相当于 (a^b)^b = a，b 得到了原 a 的值
+    a = a ^ b; // 相当于 (a^b)^a = b，a 得到了原 b 的值
+
+    printf(&#34;交换后: a = %d, b = %d\n&#34;, a, b);
+
+    return 0;
+}
+</code></pre><p><strong>优点</strong>：避免了算术运算的溢出问题，在某些底层系统或对性能有极致要求的场合效率较高。</p><p><strong>缺点</strong>：代码可读性较差，不了解位操作的人可能难以理解。</p><p><strong>注意</strong>：操作数必须是整数类型。</p><h4 id=4-函数封装>4. 函数封装</h4><p>当程序中需要多次进行交换操作时，将其封装成函数是<strong>非常好的实践</strong>，能提高代码的复用性和整洁度。</p><pre tabindex=0><code>#include &lt;stdio.h&gt;
+
+// 通过指针来修改主函数中变量的值
+void swap(int *x, int *y) {
+    int temp = *x;
+    *x = *y;
+    *y = temp;
+}
+
+int main() {
+    int a = 5, b = 10;
+
+    printf(&#34;交换前: a = %d, b = %d\n&#34;, a, b);
+
+    swap(&amp;a, &amp;b); // 传递变量的地址
+
+    printf(&#34;交换后: a = %d, b = %d\n&#34;, a, b);
+
+    return 0;
+}
+</code></pre><p><strong>优点</strong>：<strong>模块化</strong>，一次编写多处使用，使主逻辑更清晰。</p><p><strong>缺点</strong>：有极小的函数调用开销（现代编译器优化下通常可忽略）。</p><h4 id=5-宏定义>5. 宏定义</h4><p>使用预处理器宏来“定义”一个交换操作，它在编译前进行文本替换。</p><pre tabindex=0><code>#include &lt;stdio.h&gt;
+
+// 定义交换宏
+#define SWAP(x, y) { int temp = (x); (x) = (y); (y) = temp; }
+
+int main() {
+    int a = 5, b = 10;
+
+    printf(&#34;交换前: a = %d, b = %d\n&#34;, a, b);
+
+    SWAP(a, b); // 编译器预处理时会替换为 { int temp = a; a = b; b = temp; }
+
+    printf(&#34;交换后: a = %d, b = %d\n&#34;, a, b);
+
+    return 0;
+}
+</code></pre><p><strong>优点</strong>：<strong>免去了函数调用的开销</strong>（虽然通常很小），更灵活（不限于int类型，但需小心）。</p><p><strong>缺点</strong>：宏只是简单替换，如果参数是复杂表达式（如 <code>SWAP(i++, j--)</code>），可能会产生<strong>不可预期的副作用</strong>（多次求值）。调试时也可能更复杂。</p><h3 id=-在其他编程语言中>🔄 在其他编程语言中</h3><p>许多现代高级语言提供了更简便的交换方式，通常基于元组（Tuple）解包或包装类：</p><ul><li><p><strong>Python</strong>:</p><pre tabindex=0><code>a, b = 5, 10
+a, b = b, a  # 直接交换，最简洁
+print(a, b)  # 输出: 10 5
+</code></pre></li><li><p><strong>Java</strong> (使用临时变量或封装方法，因为基本类型是值传递):</p><pre tabindex=0><code>// 常用方式还是临时变量
+int temp = a;
+a = b;
+b = temp;
+
+// 如果是包装类(Integer等)或对象，可通过方法封装
+</code></pre></li><li><p><strong>JavaScript</strong>:</p><pre tabindex=0><code>let a = 5, b = 10;
+[a, b] = [b, a]; // 使用解构赋值
+console.log(a, b); // 输出: 10, 5
+</code></pre></li></ul><h3 id=-如何选择方法>💡 如何选择方法？</h3><ol><li><strong>通用首选</strong>：对于绝大多数情况，尤其是初学者和注重代码可读性、可维护性的场景，<strong>使用临时变量</strong>是最安全、最清晰的选择。那一点额外的内存开销几乎总是值得的。</li><li><strong>面试与炫技</strong>：位异或运算常被用作面试题考察对位运算的理解，但在实际项目中使用时需加上注释说明意图。</li><li><strong>极端限制</strong>：只有在内存极度受限的嵌入式环境或确知数据范围不可能溢出时，才考虑算术法或位运算法。</li><li><strong>模块化与复用</strong>：如果代码中需要多次交换，<strong>封装成函数</strong>是专业的表现。</li><li><strong>性能临界</strong>：在C/C++中，如果处在性能关键的循环内部，且编译器优化后仍希望避免函数调用开销，可以考虑使用<strong>宏</strong>，但必须确保传入的宏参数没有副作用。</li></ol><p>希望这些详细解释能帮助你全面理解交换数字的各种方法！</p><h2 id=堆>堆</h2><p>堆是计算机科学中一种非常重要且高效的数据结构，它巧妙地通过数组来模拟一棵<strong>完全二叉树</strong>，并满足特定的<strong>堆序性质</strong>。下面我们通过一个核心性质表格和详细解释来帮助你全面理解它。</p><div class=table-wrapper><table><thead><tr><th>性质类别</th><th>核心要点</th><th>详细说明</th></tr></thead><tbody><tr><td><strong>🧱 结构性质</strong></td><td><strong>完全二叉树</strong></td><td>堆总是一棵<strong>完全二叉树</strong>。这意味着除了最后一层外，其他层都是满的，并且最后一层的节点都<strong>靠左排列</strong>。这个特性决定了它可以用<strong>数组</strong>来紧凑、高效地存储，无需指针。</td></tr><tr><td><strong>📊 堆序性质</strong></td><td><strong>父节点主导</strong></td><td>在<strong>大顶堆</strong>中，每个节点的值都<strong>大于或等于</strong>其子节点的值，根节点（堆顶）是最大值。在<strong>小顶堆</strong>中，每个节点的值都<strong>小于或等于</strong>其子节点的值，根节点（堆顶）是最小值。</td></tr><tr><td><strong>🧮 数组表示</strong></td><td><strong>索引关系</strong></td><td>若数组下标从 <code>0</code>开始，对于下标为 <code>i</code>的节点： - 其<strong>父节点</strong>下标为 <code>(i-1)/2</code>(向下取整)。 - 其<strong>左孩子</strong>下标为 <code>2*i+1</code>。 - 其<strong>右孩子</strong>下标为 <code>2*i+2</code>。</td></tr><tr><td><strong>⚡ 操作复杂度</strong></td><td><strong>高效</strong></td><td>- <strong>插入元素</strong> (<code>heappush</code>): <code>O(log n)</code> - <strong>删除堆顶</strong> (<code>heappop</code>): <code>O(log n)</code> - <strong>构建堆</strong> (<code>heapify</code>): <code>O(n)</code> - <strong>获取极值</strong> (<code>peek</code>): <code>O(1)</code></td></tr><tr><td><strong>🎯 核心应用</strong></td><td><strong>依赖极值</strong></td><td>- <strong>优先队列</strong> - <strong>堆排序</strong> (升序用大顶堆，降序用小顶堆) - <strong>求 Top K</strong> 问题 - <strong>图算法</strong> (如Dijkstra算法、Prim算法)</td></tr></tbody></table></div><hr><h3 id=-堆序性质的深入理解>📌 堆序性质的深入理解</h3><p>堆序性质是堆的灵魂，但它只规定了<strong>父子节点之间</strong>的大小关系，而<strong>并不要求兄弟节点之间或不同分支的节点之间</strong>有任何大小关系。</p><ul><li><strong>大顶堆示例</strong>：在一个包含 <code>[16, 14, 10, 8, 7, 9, 3, 2, 4, 1]</code>的大顶堆中，根节点16是最大的。节点14和10是兄弟，14>10；但节点8（14的左孩子）和节点9（10的左孩子）之间没有大小要求，此处8&lt;9。</li><li><strong>小顶堆示例</strong>：小顶堆则相反，根节点最小，且每个节点都比它的子节点小。</li></ul><h3 id=-维护堆性质的操作>🛠️ 维护堆性质的操作</h3><p>当插入或删除元素后，堆的性质可能被破坏，需要通过<strong>上浮（Sift Up）</strong> 或<strong>下沉（Sift Down/Heapify）</strong> 操作来修复。</p><ul><li><strong>插入与上浮（Sift Up）</strong>：新元素被添加到数组末尾，然后与其父节点比较。如果违反堆序（在大顶堆中比父大，在小顶堆中比父小），就与父节点交换，并重复此过程直至满足条件。</li><li><strong>删除与下沉（Sift Down）</strong>：通常指删除堆顶元素。方法是将其与数组末尾元素交换并移除，然后新的堆顶元素与其<strong>最大的孩子（大顶堆）</strong> 或<strong>最小的孩子（小顶堆）</strong> 比较，如果违反堆序就交换，并重复此过程直至满足条件。</li></ul><h3 id=-构建堆heapify>🧩 构建堆（Heapify）</h3><p>将一个无序数组构建成堆，有两种方式：</p><ol><li><strong>自底向上（Down-top）</strong>：从<strong>最后一个非叶子节点</strong>（下标为 <code>n/2 - 1</code>）开始，<strong>向前遍历</strong>并对每个节点执行<strong>下沉（Sift Down）</strong> 操作。这是一种高效的方法，<strong>时间复杂度为O(n)</strong>。</li><li><strong>自顶向下（Top-down）</strong>：将数组视为空堆，然后逐个<strong>插入（Push）</strong> 元素。每次插入都伴随一次上浮，<strong>时间复杂度为O(n log n)</strong>，效率较低，通常不推荐。</li></ol><h3 id=-堆的典型应用>💡 堆的典型应用</h3><ol><li><p><strong>优先队列（Priority Queue）</strong>：这是堆最直接的应用。无论是操作系统中的进程调度，还是网络中的数据包管理，都需要快速处理优先级最高的元素，堆的O(1)取极值和O(log n)插入删除特性完美契合此需求。</p></li><li><p><strong>堆排序（Heap Sort）</strong>：算法分为两步：</p><ul><li><strong>建堆</strong>：将无序数组构建成大顶堆（升序）或小顶堆（降序）。</li><li><strong>排序</strong>：反复将堆顶元素（当前极值）与当前无序区末尾元素交换，然后对新的堆顶执行下沉操作以重新使无序区满足堆性质。堆排序的<strong>时间复杂度为O(n log n)</strong>。</li></ul></li><li><p><strong>Top-K 问题</strong>：在海量数据中找出最大（或最小）的K个元素。</p><ul><li><p><strong>求前K个最大元素</strong>：维护一个大小为K的<strong>小顶堆</strong>。新元素若比堆顶大，则替换堆顶并下沉。</p></li><li><p><strong>求前K个最小元素</strong>：维护一个大小为K的<strong>大顶堆</strong>。新元素若比堆顶小，则替换堆顶并下沉。</p><p>此方法的时间复杂度约为O(n log K)，非常高效。</p></li></ul></li></ol><h3 id=-重要注意事项>⚠️ 重要注意事项</h3><ul><li><strong>内存管理中的“堆”</strong>：请注意，数据结构中的“堆”与<strong>内存管理中的“堆”是两个完全不同的概念</strong>，切勿混淆。</li><li><strong>相同值的处理</strong>：堆<strong>不保证</strong>具有相同值的元素之间的任何顺序（稳定性）。</li><li><strong>多线程环境</strong>：标准的堆操作<strong>不是线程安全的</strong>，在多线程环境下使用需要额外的同步机制。</li></ul><p>希望以上解释能帮助你建立起对堆的全面认识。</p></section><footer class=article-footer><section class=article-tags><a href=/tags/nowcoder/>NowCoder</a>
+<a href=/tags/dsa/>DSA</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section><section class=article-lastmod><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<span>Last updated on Sep 30, 2025 19:46 CST</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>Related content</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/nowcoderreference/><div class=article-details><h2 class=article-title>【NowCoder】Reference</h2></div></a></article><article><a href=/p/nowcoder25-oct/><div class=article-details><h2 class=article-title>【NowCoder】25 Oct</h2></div></a></article><article><a href=/p/nowcoderkafka-2/><div class=article-details><h2 class=article-title>【NowCoder】Kafka 2</h2></div></a></article><article><a href=/p/nowcodermybatis-2/><div class=article-details><h2 class=article-title>【NowCoder】Mybatis 2</h2></div></a></article><article><a href=/p/nowcoderredis-2/><div class=article-details><h2 class=article-title>【NowCoder】Redis 2</h2></div></a></article></div></div></aside><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//hugo-theme-stack.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2025 飞鸿踏雪泥</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.30.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

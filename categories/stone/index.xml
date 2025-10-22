@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>他山石 on 飞鸿踏雪泥</title><link>https://dyhes.github.io/categories/stone/</link><description>Recent content in 他山石 on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://dyhes.github.io/categories/stone/index.xml" rel="self" type="application/rss+xml"/><item><title>【知识图谱】概述</title><link>https://dyhes.github.io/p/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E6%A6%82%E8%BF%B0/</link><pubDate>Fri, 11 Nov 2022 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E6%A6%82%E8%BF%B0/</guid><description>&lt;p&gt;Please Check:&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://www.cnblogs.com/heslin/p/16880765.html" target="_blank" rel="noopener"
+&gt;https://www.cnblogs.com/heslin/p/16880765.html&lt;/a&gt;&lt;/p&gt;</description></item><item><title>【鉴权】Authentication概览</title><link>https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/</link><pubDate>Wed, 09 Nov 2022 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/</guid><description>&lt;img src="https://dyhes.github.io/covers/cover3.png" alt="Featured image of post 【鉴权】Authentication概览" /&gt;&lt;p&gt;RePost from :&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://juejin.cn/post/7129298214959710244#heading-25" target="_blank" rel="noopener"
+&gt;一文教你搞定所有前端鉴权与后端鉴权方案，让你不再迷惘 - 掘金 (juejin.cn)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image.png"
+width="1069"
+height="863"
+srcset="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image_hu_c9a5e5d45986bc32.png 480w, https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image_hu_d94a626c05fec822.png 1024w"
+loading="lazy"
+alt="前端鉴权"
+class="gallery-image"
+data-flex-grow="123"
+data-flex-basis="297px"
+&gt;&lt;/p&gt;
+&lt;h2 id="terminology"&gt;Terminology
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;认证(Identification)&lt;/strong&gt; ：根据声明者所特有的识别信息，确认声明者的身份。
+身份证，用户名和密码等&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;授权(Authorization)&lt;/strong&gt;： 在信息安全领域是指资源所有者委派执行者，赋予执行者指定范围的资源操作权限，以便对资源的相关操作。&lt;/p&gt;
+&lt;p&gt;现实生活领域： 银行卡（由银行派发）、门禁卡（由物业管理处派发）、钥匙（由房东派发）&lt;/p&gt;
+&lt;p&gt;互联网领域： web 服务器的 session 机制、web 浏览器的 cookie 机制、颁发授权令牌（token）等&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;鉴权(Authentication)&lt;/strong&gt;： 在信息安全领域是指对于一个声明者所声明的身份权利，对其所声明的真实性进行&lt;strong&gt;鉴别确认&lt;/strong&gt;的过程。授权和鉴权是两个上下游相匹配的关系，先授权，后鉴权。&lt;/p&gt;
+&lt;p&gt;现实生活领域： 门禁卡需要通过门禁卡识别器，银行卡需要通过银行卡识别器；&lt;/p&gt;
+&lt;p&gt;互联网领域： 校验 session/cookie/token 的合法性和有效性&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;权限控制(Access/Permission Control)&lt;/strong&gt;： 将可执行的操作定义为权限列表，然后判断操作是否允许/禁止
+对于权限控制，可以分为两部分进行理解：一个是权限，另一个是控制。权限是抽象的逻辑概念，而控制是具体的实现方式。&lt;/p&gt;
+&lt;p&gt;现实生活领域： 门禁卡的权限&lt;/p&gt;
+&lt;p&gt;互联网领域： 通过 web 后端服务，控制接口访问，允许或拒绝访问请求&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="关系"&gt;关系
+&lt;/h2&gt;&lt;p&gt;前后依次发生&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image1.png"
+width="710"
+height="110"
+srcset="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image1_hu_96fdf08062696a6.png 480w, https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image1_hu_9103d8ed1930364f.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="645"
+data-flex-basis="1549px"
+&gt;&lt;/p&gt;
+&lt;p&gt;使用门禁卡开门： 认证、授权、鉴权、权限控制四个环节一气呵成，在瞬间同时发生&lt;/p&gt;
+&lt;p&gt;用户的网站登录： 用户在使用用户名和密码进行登录时，认证和授权两个环节一同完成，而鉴权和权限控制则发生在后续的请求访问中，比如在选购物品或支付时。&lt;/p&gt;
+&lt;h2 id="http基本鉴权"&gt;HTTP基本鉴权
+&lt;/h2&gt;&lt;p&gt;在 HTTP 中，&lt;code&gt;基本认证方案（Basic Access Authentication)&lt;/code&gt; 是允许客户端（通常指的就是网页浏览器）在请求时，通过用户提供用户名和密码的方式，实现对用户身份的验证。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;几乎所有网站都不会使用此认证方案&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image2.png"
+width="823"
+height="784"
+srcset="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image2_hu_370728a4b200f6f9.png 480w, https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image2_hu_986beba1c901467d.png 1024w"
+loading="lazy"
+alt="HTTP基本鉴权"
+class="gallery-image"
+data-flex-grow="104"
+data-flex-basis="251px"
+&gt;&lt;/p&gt;
+&lt;h3 id="缺点"&gt;缺点
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;不安全&lt;/li&gt;
+&lt;li&gt;无法主动注销&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="session-cookie-鉴权"&gt;Session-Cookie 鉴权
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;Session-Cookie&lt;/code&gt; 认证是利用&lt;strong&gt;服务端&lt;/strong&gt;的 Session和 &lt;strong&gt;客户端&lt;/strong&gt; 的 Cookie 来实现的前后端通信认证模式。&lt;/p&gt;
+&lt;h3 id="cookie"&gt;Cookie
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;HTTP&lt;/code&gt; 无状态（对于事务处理没有记忆能力，每次客户端和服务端会话完成时，服务端不会保存任何会话信息）&lt;/p&gt;
+&lt;p&gt;为了&lt;strong&gt;让服务器区分不同的客户端&lt;/strong&gt;，服务端就必须主动的去维护一个状态，这个状态用于告知服务端前后两个请求是否来自同一浏览器。而这个状态可以通过 &lt;code&gt;Cookie&lt;/code&gt; 去实现。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;特点：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;存储在客户端，可随意篡改，不安全&lt;/li&gt;
+&lt;li&gt;有大小限制，最大为 4kb&lt;/li&gt;
+&lt;li&gt;有数量限制，一般一个浏览器对于一个网站只能存不超过 20 个 Cookie，浏览器一般只允许存放 300个 Cookie&lt;/li&gt;
+&lt;li&gt;Android 和 IOS 对 Cookie 支持性不好&lt;/li&gt;
+&lt;li&gt;不可跨域&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="session"&gt;Session
+&lt;/h3&gt;&lt;p&gt;无状态协议通信过程中，为了实现中断/继续操作，将用户和服务器之间的交互进行的一种抽象；&lt;/p&gt;
+&lt;p&gt;具体来说，是服务器生成的一种具有特定结构的数据，可以通过多种方式保存，如内存、数据库、文件等，大型网站一般有专门的 Session 服务器集群来保存用户会话&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;原理流程：&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;客户端：&lt;/strong&gt; 用户向服务器首次发送请求；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;服务器：&lt;/strong&gt; 接收到数据并自动为该用户创建特定的 Session / Session ID，来标识用户并跟踪用户当前的会话过程；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;客户端：&lt;/strong&gt; 浏览器收到响应获取会话信息，并且会在下一次请求时带上 Session / Session ID；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;服务器：&lt;/strong&gt; 服务器提取后会与本地保存的 Session ID进行对比找到该特定用户的会话，进而获取会话状态；&lt;/li&gt;
+&lt;li&gt;至此客户端与服务器的通信变成有状态的通信；&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;特点：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Session 保存在服务器上；&lt;/li&gt;
+&lt;li&gt;通过服务器自带的加密协议进行；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;与 Cookie 的差异：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;安全性：&lt;/strong&gt; Cookie 由于保存在客户端，可随意篡改，Session 则不同存储在服务器端，无法伪造，所以 Session 的安全性更高；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;存取值的类型不同：&lt;/strong&gt; Cookie 只支持字符串数据，Session 可以存任意数据类型；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;有效期不同：&lt;/strong&gt; Cookie 可设置为长时间保持，Session 一般失效时间较短；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;存储大小不同：&lt;/strong&gt; Cookie 保存的数据不能超过 4K；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;Session-Cookie&lt;/code&gt; ：将 &lt;code&gt;Session&lt;/code&gt; 存储在客户端的 &lt;code&gt;Cookie&lt;/code&gt; 中&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image3.png"
+width="740"
+height="748"
+srcset="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image3_hu_4e615ff971ca32b0.png 480w, https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image3_hu_ddd32bf17b9e1d98.png 1024w"
+loading="lazy"
+alt="Session-Cookie的认证流程图"
+class="gallery-image"
+data-flex-grow="98"
+data-flex-basis="237px"
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Pros&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Cookie 简单易用&lt;/li&gt;
+&lt;li&gt;Session 数据存储在服务端，相较于 JWT 方便进行管理，也就是当用户登录和主动注销，只需要添加删除对应的 Session 就可以了，方便管理&lt;/li&gt;
+&lt;li&gt;只需要后端操作即可，前端可以无感等进行操作&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Cons&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;依赖 Cookie(用户可能在浏览器端禁用 Cookie）&lt;/li&gt;
+&lt;li&gt;非常不安全，Cookie 将数据暴露在浏览器中，增加了数据被盗的风险（容易被 CSRF 等攻击）&lt;/li&gt;
+&lt;li&gt;Session 存储在服务端（Redis），增大了服务端的开销，用户量大的时候会大大降低服务器性能&lt;/li&gt;
+&lt;li&gt;对移动端的支持性不友好&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;前端常用库&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使用 express：&lt;a class="link" href="https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fexpressjs%2Fsession" target="_blank" rel="noopener"
+&gt;express-session&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;使用 koa：&lt;a class="link" href="https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fkoajs%2Fsession" target="_blank" rel="noopener"
+&gt;koa-session&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="token-鉴权"&gt;Token 鉴权
+&lt;/h2&gt;&lt;p&gt;避免&lt;code&gt;Session-Cookie&lt;/code&gt; 缺点&lt;/p&gt;
+&lt;h3 id="token"&gt;Token
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;Token&lt;/code&gt; 是一个令牌，客户端访问服务器时，验证通过后服务端会为其签发一张令牌，之后，客户端就可以携带令牌访问服务器，服务端只需要验证令牌的有效性即可。&lt;/p&gt;
+&lt;p&gt;即：&lt;strong&gt;访问资源接口（API）时所需要的资源凭证&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;一般 Token 的组成：&lt;strong&gt;uid&lt;/strong&gt; (用户唯一的身份标识) + &lt;strong&gt;time&lt;/strong&gt; (当前时间的时间戳) + &lt;strong&gt;sign&lt;/strong&gt; (签名，Token 的前几位以哈希算法压缩成的一定长度的十六进制字符串)&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image4.png"
+width="952"
+height="784"
+srcset="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image4_hu_d7d4c755cb129777.png 480w, https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image4_hu_7552bf0c1013dfe0.png 1024w"
+loading="lazy"
+alt="Token的认证流程图"
+class="gallery-image"
+data-flex-grow="121"
+data-flex-basis="291px"
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Pros&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;服务端无状态化、可扩展性好：&lt;/strong&gt; Token 机制在服务端不需要存储会话（Session）信息，因为 Token 自身包含了其所标识用户的相关信息，这有利于在多个服务间共享用户状态&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;支持 APP 移动端设备；&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;安全性好：&lt;/strong&gt; 有效避免 CSRF 攻击（因为不需要 Cookie）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;支持跨程序调用：&lt;/strong&gt; 因为 Cookie 是不允许跨域访问的，而 Token 则不存在这个问题&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Cons&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;配合：&lt;/strong&gt; 需要前后端配合处理；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;占带宽：&lt;/strong&gt; 正常情况下比 &lt;code&gt;sid&lt;/code&gt; 更大，消耗更多流量，挤占更多宽带&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;性能问题：&lt;/strong&gt; 虽说验证 Token 时不用再去访问数据库或远程服务进行权限校验，但是需要对 Token 加解密等操作，所以会更耗性能；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;有效期短：&lt;/strong&gt; 为了避免 Token 被盗用，一般 Token 的有效期会设置的较短，需要 &lt;code&gt;Refresh Token&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="refresh-token"&gt;Refresh Token
+&lt;/h3&gt;&lt;p&gt;业务接口用来鉴权的 Token，称为 &lt;code&gt;Access Token&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;为了安全， &lt;code&gt;Access Token&lt;/code&gt; 有效期一般设置较短，以避免被盗用。但过短的有效期会造成 &lt;code&gt;Access Token&lt;/code&gt; 经常过期&lt;/p&gt;
+&lt;p&gt;解决办法：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;刷新 &lt;code&gt;Access Token&lt;/code&gt;，让用户重新登录获取新 Token，会很麻烦；&lt;/li&gt;
+&lt;li&gt;引入一个专门生成 Access Token 的 Token，称为 &lt;code&gt;Refresh Token&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;区别&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Access Token：&lt;/strong&gt; 用来访问业务接口，由于有效期足够短，盗用风险小，也可以使请求方式更宽松灵活；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Refresh Token：&lt;/strong&gt; 用来获取 Access Token，有效期可以长一些，通过独立服务和严格的请求方式增加安全性；由于不常验证，也可以如前面的 Session 一样处理；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image5.png"
+width="1410"
+height="1084"
+srcset="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image5_hu_21e080336dde512c.png 480w, https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image5_hu_aaa0f1347fd96236.png 1024w"
+loading="lazy"
+alt="RefreshToken的认证流程图"
+class="gallery-image"
+data-flex-grow="130"
+data-flex-basis="312px"
+&gt;&lt;/p&gt;
+&lt;h3 id="与-session-cookie-的区别"&gt;与 Session-Cookie 的区别
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;Session-Cookie&lt;/code&gt; 和 &lt;code&gt;Token&lt;/code&gt; 有很多类似的地方， &lt;code&gt;Token&lt;/code&gt; 像是 &lt;code&gt;Session-Cookie&lt;/code&gt; 的升级改良版，存在以下区别&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;存储地不同：&lt;/strong&gt; Session 一般是存储在服务端；Token 是无状态的，一般由前端存储；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;安全性不同：&lt;/strong&gt; Session 和 Token 并不矛盾，作为身份认证 Token 安全性比 Session 好，因为每一个请求都有签名还能防止监听以及重放攻击；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;支持性不同：&lt;/strong&gt; Session-Cookie 认证需要靠浏览器的 Cookie 机制实现，如果遇到原生 NativeAPP 时这种机制就不起作用了，或是浏览器的 Cookie 存储功能被禁用，也是无法使用该认证机制实现鉴权的；而 Token 验证机制丰富了客户端类型。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;如果用户数据可能需要和第三方共享，或者允许第三方调用 API 接口，则应使用 Token&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="jwtjson-web-token鉴权"&gt;JWT（JSON Web Token）鉴权
+&lt;/h2&gt;&lt;p&gt;服务端验证客户端发送过来的 Token 时，还需要查询数据库获取用户基本信息，然后验证 Token 是否有效&lt;/p&gt;
+&lt;p&gt;每次请求验证都要查询数据库，增加了查库带来的延迟等性能消耗；&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;业界常用解决方案： &lt;code&gt;JWT&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id="jwt"&gt;JWT
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;JWT&lt;/code&gt; 是 &lt;code&gt;Auth0&lt;/code&gt; 提出的通过 &lt;code&gt;对 JSON 进行加密签名&lt;/code&gt;来实现授权验证的方案&lt;/p&gt;
+&lt;p&gt;就是登录成功后将相关用户信息组成 JSON 对象，然后对这个对象进行某种方式的&lt;code&gt;加密&lt;/code&gt;，返回给客户端； 客户端在下次请求时带上这个 Token； 服务端再收到请求时&lt;code&gt;校验 token 合法性&lt;/code&gt;，其实也就是在校验请求的合法性。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;组成&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;它是一个很长的字符串，中间用点（&lt;code&gt;.&lt;/code&gt;）分隔成三个部分&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;Header&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;通常包括两部分&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;typ：代表 Token 的类型，这里使用的是 JWT 类型；&lt;/li&gt;
+&lt;li&gt;alg：使用的 Hash 算法，例如 HMAC SHA256 或 RSA.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;Payload&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;包含一些声明 Claim (实体的描述，通常是一个 User 信息，还包括一些其他的元数据) ，用来存放实际需要传递的数据&lt;/p&gt;
+&lt;p&gt;JWT 规定了7个官方字段：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;iss (issuer)：签发人&lt;/li&gt;
+&lt;li&gt;exp (expiration time)：过期时间&lt;/li&gt;
+&lt;li&gt;sub (subject)：主题&lt;/li&gt;
+&lt;li&gt;aud (audience)：受众&lt;/li&gt;
+&lt;li&gt;nbf (Not Before)：生效时间&lt;/li&gt;
+&lt;li&gt;iat (Issued At)：签发时间&lt;/li&gt;
+&lt;li&gt;jti (JWT ID)：编号&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;除了官方字段，还可以在这个部分定义私有字段&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;Signature&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Signature 部分是对前两部分的签名，&lt;strong&gt;防止数据篡改&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;首先，需要指定一个密钥（secret）。这个密钥只有服务器才知道，不能泄露给用户。然后，使用 Header 里面指定的签名算法（默认是 HMAC SHA256）产生签名。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;使用方式&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;客户端收到服务器返回的 JWT，可以储存在 Cookie 里面，也可以储存在 localStorage。&lt;/p&gt;
+&lt;p&gt;此后，客户端每次与服务器通信，都要带上这个 JWT。&lt;/p&gt;
+&lt;p&gt;可以把它放在 Cookie 里面自动发送，但是这样不能跨域，所以更好的做法是放在 HTTP 请求的头信息&lt;code&gt;Authorization&lt;/code&gt;字段里面。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sql" data-lang="sql"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;Authorization&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Bearer&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;token&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image6.png"
+width="1059"
+height="784"
+srcset="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image6_hu_9edb09fc2c74068e.png 480w, https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image6_hu_56c592d3524ebfb4.png 1024w"
+loading="lazy"
+alt="JWT的认证流程图"
+class="gallery-image"
+data-flex-grow="135"
+data-flex-basis="324px"
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Pros&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;不需要在服务端保存会话信息（RESTful API 的原则之一就是无状态），所以易于应用的扩展，即信息不保存在服务端，不会存在 Session 扩展不方便的情况&lt;/li&gt;
+&lt;li&gt;JWT 中的 Payload 负载可以存储常用信息，用于信息交换，有效地使用 JWT，可以降低服务端查询数据库的次数&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Cons&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;加密问题：&lt;/strong&gt; JWT 默认是不加密，但也是可以加密的。生成原始 Token 以后，可以用密钥再加密一次。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;到期问题：&lt;/strong&gt; 由于服务器不保存 Session 状态，因此无法在使用过程中废止某个 Token，或者更改 Token 的权限。也就是说，一旦 JWT 签发了，在到期之前就会始终有效，除非服务器部署额外的逻辑。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;前端常用库&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使用 express：&lt;a class="link" href="https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fauth0%2Fexpress-jwt" target="_blank" rel="noopener"
+&gt;express-jwt&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;使用 koa：&lt;a class="link" href="https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fkoajs%2Fjwt" target="_blank" rel="noopener"
+&gt;koa-jwt&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="单点登录single-sign-on"&gt;单点登录（Single Sign On）
+&lt;/h2&gt;&lt;p&gt;避免大型系统内子系统的重复登录，只需要登录一次，就可以访问其他相互信任的应用系统&lt;/p&gt;
+&lt;p&gt;例如&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;登录天猫，淘宝也会自动登录；&lt;/li&gt;
+&lt;li&gt;登录百度贴吧，百度网盘也会自动登录；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="同域sso"&gt;同域SSO
+&lt;/h3&gt;&lt;p&gt;当百度网站存在两个相同主域名下的贴吧子系统 &lt;code&gt;tieba.baidu.com&lt;/code&gt; 和网盘子系统 &lt;code&gt;pan.baidu.com&lt;/code&gt; 时，以下为他们实现 SSO 的步骤：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;客户端：&lt;/strong&gt; 用户访问某个子系统时（例如 &lt;code&gt;tieba.baidu.com&lt;/code&gt;），如果没有登录，则跳转至 SSO 认证中心提供的登录页面进行登录；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;服务端：&lt;/strong&gt; 登录认证后，服务端把登录用户的信息存储于 Session 中，并且附加在响应头的 &lt;code&gt;Set-Cookie&lt;/code&gt; 字段中，设置 Cookie 的 Domain 为 &lt;code&gt;.baidu.com&lt;/code&gt; ；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;客户端&lt;/strong&gt;：再次发送请求时，携带主域名 Domain 下的 Cookie 给服务器，此时服务端就可以通过该 Cookie 来验证登录状态了；&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;亦即 &lt;code&gt;Session-Cookie 认证&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id="异域sso"&gt;异域SSO
+&lt;/h3&gt;&lt;p&gt;如天猫 (tmall.com) 和 淘宝 (taobao.com)&lt;/p&gt;
+&lt;p&gt;利用 &lt;code&gt;CAS(Central Authentication Service)&lt;/code&gt;中央授权服务&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image7.png"
+width="2105"
+height="1552"
+srcset="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image7_hu_bd58a7b8a9758d38.png 480w, https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image7_hu_36e02051bcacbcb8.png 1024w"
+loading="lazy"
+alt="CAS认证流程图"
+class="gallery-image"
+data-flex-grow="135"
+data-flex-basis="325px"
+&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;客户端：&lt;/strong&gt; 开始访问系统 A；&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;系统 A：&lt;/strong&gt; 发现用户未登录，重定向至 CAS 认证服务（sso.com），同时 URL 地址参数携带登录成功后回跳到系统 A 的页面链接&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;CAS 认证服务：&lt;/strong&gt; 发现请求 Cookie 中没有携带登录的票据凭证（TGC），所以 CAS 认证服务判定用户处于 &lt;code&gt;未登录&lt;/code&gt; 状态，重定向用户页面至 CAS 的登录界面，用户在 CAS 的登录页面上进行登录操作。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;客户端：&lt;/strong&gt; 输入用户名密码进行 CAS 系统认证；&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;CAS 认证服务：&lt;/strong&gt; 校验用户信息，并且 &lt;code&gt;生成 TGC&lt;/code&gt; 放入自己的 Session 中，同时以 Set-Cookie 形式写入 Domain 为 &lt;code&gt;sso.com&lt;/code&gt; 的域下 ；同时生成一个 &lt;code&gt;授权令牌 ST (Service Ticket)&lt;/code&gt; ，然后重定向至系统 A 的地址，重定向的地址中包含生成的 ST&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;系统 A：&lt;/strong&gt; 拿着 ST 向 CAS 认证服务发送请求，CAS 认证服务验证票据 (ST) 的有效性。验证成功后，系统 A 知道用户已经在 CAS 登录了（其中的 ST 可以保存到 Cookie 或者本地中），系统 A 服务器使用该票据 (ST) 创建与用户的会话，称为局部会话，返回受保护资源；&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;客户端：&lt;/strong&gt; 开始访问系统 B；&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;系统 B：&lt;/strong&gt; 发现用户未登录，重定向至 SSO 认证服务，并将自己的地址作为参数传递，并附上在 sso.com 域下的 cookie 值是第五步生成的 TGC；&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;CAS 认证服务：&lt;/strong&gt; CAS 认证服务中心发现用户已登录，跳转回系统 B 的地址，并附上票据 (ST) ;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;系统 B：&lt;/strong&gt; 拿到票据 (ST)，去 CAS 认证服务验证票据 (ST) 的有效性。验证成功后，客户端也可以跟系统 B 交往了 ~&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如图中流程所示，我们发现 &lt;code&gt;CAS 认证服务&lt;/code&gt; 在签发的 &lt;code&gt;授权令牌 ST&lt;/code&gt; 后，直接重定向，这样其实是比较容易容易被窃取，那么我们需要在系统 A 或者系统 B 在向 CAS 验证成功 (如图中的第 14 步和第 11 步) 后，再生成另一个新的验证 Token 返回给客户端保存；&lt;/li&gt;
+&lt;li&gt;CAS 一般提供四个接口：
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;/login&lt;/code&gt;：登录接口，用于登录到中央授权服务&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/logout&lt;/code&gt;：登出接口，用于从中央授权服务中登出&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/validate&lt;/code&gt;：用于验证用户是否登录中央授权服务&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/serviceValidate&lt;/code&gt;：用于让各个 Service 验证用户是否登录中央授权服务&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;CAS 生成的票据：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;TGT（Ticket Grangting Ticket）&lt;/strong&gt; ：TGT 是 CAS 为用户签发的 &lt;code&gt;登录票据&lt;/code&gt;，拥有了 TGT，用户就可以证明自己在 CAS 成功登录过。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;TGC：Ticket Granting Cookie：&lt;/strong&gt; CAS Server 生成TGT放入自己的 Session 中，而 TGC 就是这个 Session 的唯一标识（SessionId），以 Cookie 形式放到浏览器端，是 CAS Server 用来明确用户身份的凭证。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ST（Service Ticket）&lt;/strong&gt; ：ST 是 CAS 为用户签发的访问某个 Service 的票据。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="oauth-20"&gt;OAuth 2.0
+&lt;/h2&gt;&lt;p&gt;是一种授权机制。数据的所有者告诉系统，同意授权第三方应用进入系统，获取这些数据。系统从而产生一个短期的进入令牌（Token），用来&lt;strong&gt;代替密码&lt;/strong&gt;，供第三方应用使用。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;令牌与密码的差异：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;令牌（Token）&lt;/code&gt; 与 &lt;code&gt;密码（Password）&lt;/code&gt; 的作用是一样的，都可以进入系统，但是有三点差异。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;令牌是短期的，到期会自动失效：&lt;/strong&gt; 用户自己无法修改。密码一般长期有效，用户不修改，就不会发生变化。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;令牌可以被数据所有者撤销，会立即失效。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;令牌有权限范围（scope）：&lt;/strong&gt; 对于网络服务来说，只读令牌就比读写令牌更安全。密码一般是完整权限。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;OAuth 2.0 对于如何颁发令牌的细节，规定得非常详细。具体来说，一共分成&lt;strong&gt;四种授权&lt;/strong&gt;模式 &lt;strong&gt;（Authorization Grant）&lt;/strong&gt; ，适用于不同的互联网场景。&lt;/p&gt;
+&lt;p&gt;无论哪个模式都拥有三个必要角色：&lt;code&gt;客户端&lt;/code&gt;、&lt;code&gt;授权服务器&lt;/code&gt;、&lt;code&gt;资源服务器&lt;/code&gt;，有的还有&lt;code&gt;用户（资源拥有者）&lt;/code&gt;。&lt;/p&gt;
+&lt;h3 id="授权码模式authorization-code-grant"&gt;授权码模式（Authorization Code Grant)
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;授权码（Authorization Code Grant)&lt;/code&gt; 方式，指的是第三方应用先申请一个授权码，然后再用该码获取令牌。&lt;/p&gt;
+&lt;p&gt;这种方式是最常用的流程，安全性也最高，它适用于那些&lt;strong&gt;有后端服务&lt;/strong&gt;的 Web 应用。授权码通过前端传送，令牌则是储存在后端，而且所有与资源服务器的通信都在后端完成。这样的前后端分离，可以避免令牌泄漏。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image8.png"
+width="1163"
+height="544"
+srcset="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image8_hu_48ad077f67733104.png 480w, https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image8_hu_ed090be0ed1a3db0.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="213"
+data-flex-basis="513px"
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image9.png"
+width="1014"
+height="436"
+srcset="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image9_hu_4db5b386a1ec88df.png 480w, https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image9_hu_5d719382a295af3d.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="232"
+data-flex-basis="558px"
+&gt;&lt;/p&gt;
+&lt;h3 id="隐藏式模式implicit-grant"&gt;隐藏式模式（Implicit Grant）
+&lt;/h3&gt;&lt;p&gt;有些 Web 应用是纯前端应用，没有后端。这时就不能用上面的方式了，必须将令牌储存在前端。&lt;strong&gt;OAuth2.0 就规定了第二种方式，允许直接向前端颁发令牌。这种方式没有授权码这个中间步骤，所以称为（授权码）&amp;ldquo;隐藏式&amp;rdquo;（implicit）。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image10.png"
+width="1032"
+height="436"
+srcset="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image10_hu_2f171ce8fd1e1b4c.png 480w, https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image10_hu_92e915365effa544.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="236"
+data-flex-basis="568px"
+&gt;&lt;/p&gt;
+&lt;h3 id="用户名密码式模式password-credentials-grant"&gt;用户名密码式模式（Password Credentials Grant）
+&lt;/h3&gt;&lt;p&gt;如果你高度信任某个应用，OAuth 2.0 也允许用户把用户名和密码，直接告诉该应用。该应用就使用你的密码，申请令牌，这种方式称为&amp;quot;密码式&amp;quot;（password）&lt;/p&gt;
+&lt;h3 id="客户端模式client-credentials-grant"&gt;客户端模式（Client Credentials Grant）
+&lt;/h3&gt;&lt;p&gt;客户端模式指客户端以自己的名义，而不是以用户的名义，向&lt;code&gt;授权服务器&lt;/code&gt; 进行认证。&lt;/p&gt;
+&lt;p&gt;主要适用于没有前端的命令行应用。&lt;/p&gt;
+&lt;h3 id="选型"&gt;选型
+&lt;/h3&gt;&lt;p&gt;&lt;img src="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image11.png"
+width="899"
+height="450"
+srcset="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image11_hu_c4d112a7ed3b1417.png 480w, https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image11_hu_25923f19a70e4b1c.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="199"
+data-flex-basis="479px"
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image12.png"
+width="1319"
+height="404"
+srcset="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image12_hu_16f28f54ca260ce3.png 480w, https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image12_hu_36fb6d05e078a91.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="326"
+data-flex-basis="783px"
+&gt;&lt;/p&gt;
+&lt;h2 id="联合登录和信任登录"&gt;联合登录和信任登录
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;联合登录&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;指同时包含多种凭证校验的登录服务，同时，也可以理解为使用第三方凭证进行校验的登录服务。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;example：&lt;/strong&gt; 对于两个网站 A 和 B，在登录 A 网站的时候用 B 网站的帐号密码，或者登录 B 网站的时候使用 A 网站的帐号密码&lt;/p&gt;
+&lt;p&gt;这样的概念其实与上面所讲的 OAuth2.0 的 &lt;code&gt;用户名密码式模式&lt;/code&gt; 认证方式类似。&lt;/p&gt;
+&lt;p&gt;最经典的莫过于 APP 内嵌 H5 的使用场景，当用户从 APP 进入内嵌的 H5 时，我们希望 APP 内已登录的用户能够访问到 H5 内受限的资源，而未登录的用户则需要登录后访问。&lt;/p&gt;
+&lt;p&gt;这里思路主要有两种，一种是原生跳转内嵌 H5 页面时，将登录态 Token 附加在 URL 参数上，另一种则是内嵌 H5 主动通过与原生客户端制定的协议获取应用内的登录状态。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;信任登录&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;指所有不需要用户主动参与的登录，例如建立在私有设备与用户之间的绑定关系，凭证就是私有设备的信息，此时不需要用户再提供额外的凭证。信任登录又指用第三方比较成熟的用户库来校验凭证，并登录当前访问的网站。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;example：&lt;/strong&gt; 在 A 网站有登录状态的时候，可以直接跳转到 B 网站而不用登录，就是 &lt;code&gt;信任登录&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;目前比较常见的第三方信任登录帐号如：QQ 号淘宝帐号、支付宝帐号、微博帐号等。&lt;/p&gt;
+&lt;p&gt;不难发现 OAtuth 2.0 其实就是信任登录的缩影，因为正是有了OAuth，我们的信任登录才得以实现。&lt;/p&gt;
+&lt;h2 id="唯一登录"&gt;唯一登录
+&lt;/h2&gt;&lt;p&gt;实现用户只能在一个设备上登录，禁止用户重复登录&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image13.png"
+width="2088"
+height="1444"
+srcset="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image13_hu_643dc2e29bbd361f.png 480w, https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image13_hu_b8e3309c245015da.png 1024w"
+loading="lazy"
+alt="唯一登录流程图"
+class="gallery-image"
+data-flex-grow="144"
+data-flex-basis="347px"
+&gt;&lt;/p&gt;
+&lt;h2 id="扫码登录"&gt;扫码登录
+&lt;/h2&gt;&lt;p&gt;无需在网页上输入任何账号和密码，只需要让移动端 APP (如微信、淘宝、QQ等等) 中已登录用户主动扫描 &lt;code&gt;二维码&lt;/code&gt; ，再确认登录，以使 PC 端的同款应用得以快速登录，需要三端 (&lt;code&gt;PC端&lt;/code&gt;、&lt;code&gt;手机端&lt;/code&gt;、&lt;code&gt;服务端&lt;/code&gt;) 来进行配合才能达到登录成功的效果&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;二维码&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;二维码&lt;/code&gt; 又称二维条码，常见的二维码为 QR Code，QR 全称 Quick Response，是一个近几年来移动设备上超流行的一种编码方式，它比传统的Bar Code条形码能存更多的信息，也能表示更多的数据类型。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image14.png"
+width="1692"
+height="1252"
+srcset="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image14_hu_2045c49371b52ea4.png 480w, https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image14_hu_e3915755e647f7e8.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="135"
+data-flex-basis="324px"
+&gt;&lt;/p&gt;
+&lt;h2 id="一键登录适用于原生app"&gt;一键登录（适用于原生APP）
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;传统账号密码登录缺点&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;要求用户要记住自己的账号和密码，存在记忆成本。用户为了降低记忆成本，很可能会在不同平台使用同一套账号密码。从安全角度考虑，一旦某个平台的账号密码泄露了，会连累到该用户使用的其他平台。&lt;/li&gt;
+&lt;li&gt;账号和个人身份无关，意味着同一个用户可以注册多个不同的账号，可能出现恶意注册情况。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;随着无线互联的发展以及手机卡实名制的推广，手机号俨然已成为特别的身份证明，与账号密码相比，手机号可以更好地验证用户的身份，防止恶意注册。&lt;/p&gt;
+&lt;p&gt;但是手机号注册还是需要一系列繁琐的操作：输入手机号、等待短信验证码、输入验证码、点击登录。整个流程少说二十秒，而且如果收不到短信，也就登录补了，这类问题有可能导致潜在的用户流失。&lt;/p&gt;
+&lt;p&gt;从安全角度考虑，还存在验证码泄漏的风险。如果有人知道了你的手机号，并且窃取到了验证码，那他也能登录你的账号了。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;一键登录。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;直接获取到当前手机使用的手机卡号进行登录&lt;/p&gt;
+&lt;p&gt;取决于运营商是否开放相关服务；随着运营商开放了相关的服务，我们现在已经能够接入运营商提供的 SDK 并付费使用相关的服务&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image15.png"
+width="939"
+height="974"
+srcset="https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image15_hu_91b71afc2a67f90e.png 480w, https://dyhes.github.io/p/%E9%89%B4%E6%9D%83authentication%E6%A6%82%E8%A7%88/image15_hu_bf66e2e6893522b0.png 1024w"
+loading="lazy"
+alt="authentication-one-click-login-workflow"
+class="gallery-image"
+data-flex-grow="96"
+data-flex-basis="231px"
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;三大运营商开放平台：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://dev.10086.cn/" target="_blank" rel="noopener"
+&gt;移动 - 互联网能力开放平台&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://id.dlife.cn/portal/index.html#/" target="_blank" rel="noopener"
+&gt;电信 - 天翼账号开放平台&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://open.wo.com.cn/" target="_blank" rel="noopener"
+&gt;联通 - WO+ 开放平台&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;由于国内三大运营商各自有独立的 SDK，所以会导致兼容方面的工作会特别繁琐。如果要采用一键登录的方案，不妨采用第三方提供了号码认证服务，下列几家供应商都拥有手机号码认证能力：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://help.aliyun.com/zh/pnvs/" target="_blank" rel="noopener"
+&gt;阿里 - 号码认证服务&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="http://shanyan.253.com/" target="_blank" rel="noopener"
+&gt;创蓝 - 闪验&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.jiguang.cn/identify" target="_blank" rel="noopener"
+&gt;极光 - 极光认证&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.mob.com/mobService/secverify" target="_blank" rel="noopener"
+&gt;mob - 秒验&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;注意：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在认证过程中，需要用户打开蜂窝网络，如果手机设备没有插入 SIM 卡、或者关闭蜂窝网络的情况下，是无法完成认证的。所以就算接入一键登录，还是要兼容传统的登录方式，允许用户在失败的情况下，仍能正常完成登录流程。&lt;/p&gt;
+&lt;h2 id="总结"&gt;总结
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;HTTP 基本认证&lt;/code&gt;适用于内部网络，或者对安全要求不是很高的网络；&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Session-Cookie&lt;/code&gt; 适用于一般中大型的网站（移动端 APP 除外）；&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Token&lt;/code&gt; 和 &lt;code&gt;JWT&lt;/code&gt; 都适用于市面上大部分的企业型网站，JWT 效能会优于 Token；&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;单点登录&lt;/code&gt; 适用于子系统较多的大型企业网站；&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;OAuth 2.0&lt;/code&gt;适用于需要快速注册用户型的网站；&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;扫码登录&lt;/code&gt; 适用于已完成部署了三端的企业；&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;一键登录&lt;/code&gt; 适用于原生 APP；&lt;/p&gt;</description></item></channel></rss>

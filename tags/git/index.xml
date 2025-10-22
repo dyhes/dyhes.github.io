@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Git on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/git/</link><description>Recent content in Git on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 26 Feb 2025 16:37:27 +0800</lastBuildDate><atom:link href="https://dyhes.github.io/tags/git/index.xml" rel="self" type="application/rss+xml"/><item><title>【Git】Update Author Information</title><link>https://dyhes.github.io/p/gitupdate-author-information/</link><pubDate>Sat, 13 Jul 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/gitupdate-author-information/</guid><description>&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git filter-branch --env-filter &lt;span class="s1"&gt;&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s1"&gt;CORRECT_NAME=&amp;#34;dyes&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s1"&gt;CORRECT_EMAIL=&amp;#34;1325574784@qq.com&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s1"&gt;if [ &amp;#34;$GIT_COMMITTER_EMAIL&amp;#34; != &amp;#34;$CORRECT_EMAIL&amp;#34; ]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s1"&gt;then
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s1"&gt; export GIT_COMMITTER_NAME=&amp;#34;$CORRECT_NAME&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s1"&gt; export GIT_COMMITTER_EMAIL=&amp;#34;$CORRECT_EMAIL&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s1"&gt;fi
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s1"&gt;if [ &amp;#34;$GIT_AUTHOR_EMAIL&amp;#34; != &amp;#34;$CORRECT_EMAIL&amp;#34; ]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s1"&gt;then
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s1"&gt; export GIT_AUTHOR_NAME=&amp;#34;$CORRECT_NAME&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s1"&gt; export GIT_AUTHOR_EMAIL=&amp;#34;$CORRECT_EMAIL&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s1"&gt;fi
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt; --tag-name-filter cat -- --branches --tags
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后执行&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git push --force --tags origin &lt;span class="s1"&gt;&amp;#39;refs/heads/*&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description></item><item><title>【Git】Concepts</title><link>https://dyhes.github.io/p/gitconcepts/</link><pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/gitconcepts/</guid><description>&lt;h2 id="introduction"&gt;Introduction
+&lt;/h2&gt;&lt;p&gt;Git is a &lt;strong&gt;version control system&lt;/strong&gt;. Git helps you &lt;strong&gt;keep track of code changes.&lt;/strong&gt; Git is used to &lt;strong&gt;collaborate&lt;/strong&gt; on code.&lt;/p&gt;
+&lt;p&gt;Git and GitHub are different things. In this tutorial you will understand what Git is and how to use it on the remote repository platforms, like GitHub.&lt;/p&gt;
+&lt;p&gt;Git allow you to:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Manage projects with &lt;strong&gt;Repositories&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Clone&lt;/strong&gt; a project to work on a local copy&lt;/li&gt;
+&lt;li&gt;Control and track changes with &lt;strong&gt;Staging&lt;/strong&gt; and &lt;strong&gt;Committing&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Branch&lt;/strong&gt; and &lt;strong&gt;Merge&lt;/strong&gt; to allow for work on different parts and versions of a project&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Pull&lt;/strong&gt; the latest version of the project to a local copy&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Push&lt;/strong&gt; local updates to the main project&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="work-flow"&gt;work flow
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Initialize Git on a folder, making it a &lt;strong&gt;Repository&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Git now creates a hidden folder to keep track of changes in that folder&lt;/li&gt;
+&lt;li&gt;When a file is changed, added or deleted, it is considered &lt;strong&gt;modified&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;You select the modified files you want to &lt;strong&gt;Stage&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;The &lt;strong&gt;Staged&lt;/strong&gt; files are &lt;strong&gt;Committed&lt;/strong&gt;, which prompts Git to store a &lt;strong&gt;permanent&lt;/strong&gt; snapshot of the files&lt;/li&gt;
+&lt;li&gt;Git allows you to see the full history of every commit.&lt;/li&gt;
+&lt;li&gt;You can revert back to any previous commit.&lt;/li&gt;
+&lt;li&gt;Git does not store a separate copy of every file in every commit, but keeps track of changes made in each commit!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="file-states"&gt;File States
+&lt;/h2&gt;&lt;p&gt;Files in your Git repository folder can be in one of 2 states:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Tracked - files that Git knows about and are added to the repository&lt;/li&gt;
+&lt;li&gt;Untracked - files that are in your working directory, but not added to the repository&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;When you first add files to an empty repository, they are all untracked. To get Git to track them, you need to stage them, or add them to the staging environment.&lt;/p&gt;
+&lt;h2 id="staging-environment"&gt;Staging Environment
+&lt;/h2&gt;&lt;p&gt;One of the core functions of Git is the concepts of the Staging Environment, and the Commit.&lt;/p&gt;
+&lt;p&gt;As you are working, you may be &lt;strong&gt;adding, editing and removing&lt;/strong&gt; files. But whenever you hit a &lt;strong&gt;milestone&lt;/strong&gt; or finish a part of the work, you should add the files to a Staging Environment.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Staged&lt;/strong&gt; files are files that are &lt;strong&gt;ready&lt;/strong&gt; to be &lt;strong&gt;committed&lt;/strong&gt; to the repository you are working on.&lt;/p&gt;
+&lt;h2 id="commit"&gt;Commit
+&lt;/h2&gt;&lt;p&gt;Since we have finished our work, we are ready move from &lt;code&gt;stage&lt;/code&gt; to &lt;code&gt;commit&lt;/code&gt; for our repo.&lt;/p&gt;
+&lt;p&gt;Adding commits keep track of our progress and changes as we work. Git considers each &lt;code&gt;commit&lt;/code&gt; change point or &amp;ldquo;save point&amp;rdquo;. It is a point in the project you can go back to if you find a bug, or want to make a change.&lt;/p&gt;
+&lt;p&gt;When we &lt;code&gt;commit&lt;/code&gt;, we should &lt;strong&gt;always&lt;/strong&gt; include a &lt;strong&gt;message&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Sometimes, when you make small changes, using the staging environment seems like a waste of time. It is possible to commit changes directly, skipping the staging environment. The &lt;code&gt;-a&lt;/code&gt; option will automatically stage every changed, already tracked file.&lt;/p&gt;
+&lt;p&gt;Skipping the Staging Environment is not generally recommended.&lt;/p&gt;
+&lt;p&gt;Skipping the stage step can sometimes make you include unwanted changes.&lt;/p&gt;
+&lt;h2 id="help"&gt;Help
+&lt;/h2&gt;&lt;p&gt;If you are having trouble remembering commands or options for commands, you can use Git &lt;code&gt;help&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;There are a couple of different ways you can use the &lt;code&gt;help&lt;/code&gt; command in command line:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;git command -help&lt;/code&gt; - See all the &lt;strong&gt;available options&lt;/strong&gt; for the specific command&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git help --all&lt;/code&gt; - See all possible commands&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="branch"&gt;Branch
+&lt;/h2&gt;&lt;p&gt;In Git, a &lt;code&gt;branch&lt;/code&gt; is a new/&lt;strong&gt;separate&lt;/strong&gt; version of the main repository.&lt;/p&gt;
+&lt;p&gt;Branches allow you to work on different parts of a project without impacting the main branch.&lt;/p&gt;
+&lt;p&gt;When the work is complete, a branch can be merged with the main project.&lt;/p&gt;
+&lt;p&gt;You can even switch between branches and work on different projects without them interfering with each other.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;new branch&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git branch branch-name
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;list branch&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git branch
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git branch -a &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;local&lt;/span&gt; and fetched remote&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git branch -r &lt;span class="o"&gt;(&lt;/span&gt;only remote&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;delete branch&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git branch -d branch-name
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;switch to branch&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git checkout branch-name
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; Using the &lt;code&gt;-b&lt;/code&gt; option on &lt;code&gt;checkout&lt;/code&gt; will create a new branch, and move to it, if it does not exist.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;merge branch&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;git merge another-branch&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;merge&lt;code&gt;another-branch&lt;/code&gt;to current branch.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="undo"&gt;Undo
+&lt;/h2&gt;&lt;h3 id="revert"&gt;Revert
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;revert&lt;/code&gt; is the command we use when we want to take a previous &lt;code&gt;commit&lt;/code&gt; and add it as a new &lt;code&gt;commit&lt;/code&gt;, keeping the &lt;code&gt;log&lt;/code&gt; intact.&lt;/p&gt;
+&lt;p&gt;Step 1: Find the previous &lt;code&gt;commit&lt;/code&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://www.w3schools.com/git/img_revert_part1.gif"
+loading="lazy"
+alt="Git Revert Step 1"
+&gt;&lt;/p&gt;
+&lt;p&gt;Step 2: Use it to make a new &lt;code&gt;commit&lt;/code&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://www.w3schools.com/git/img_revert_part2.gif"
+loading="lazy"
+alt="Git Revert Step 2"
+&gt;&lt;/p&gt;
+&lt;p&gt;First thing, we need to find the point we want to return to. To do that, we need to go through the &lt;code&gt;log&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;To avoid the very long log list, we are going to use the &lt;code&gt;--oneline&lt;/code&gt; option, which gives just one line per commit showing:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The first seven characters of the &lt;code&gt;commit hash&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;the &lt;code&gt;commit message&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;We revert the latest &lt;code&gt;commit&lt;/code&gt; using git &lt;code&gt;revert HEAD&lt;/code&gt; (&lt;code&gt;revert&lt;/code&gt; the latest change, and then &lt;code&gt;commit&lt;/code&gt;), adding the option &lt;code&gt;--no-edit&lt;/code&gt; to skip the commit message editor (getting the default &lt;code&gt;revert&lt;/code&gt; message)&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git revert HEAD --no-edit
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="reset"&gt;Reset
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;reset&lt;/code&gt; is the command we use when we want to move the repository back to a previous &lt;code&gt;commit&lt;/code&gt;, &lt;strong&gt;discarding&lt;/strong&gt; any changes made after that &lt;code&gt;commit&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Step 1: Find the previous &lt;code&gt;commit&lt;/code&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://www.w3schools.com/git/img_reset_part1.gif"
+loading="lazy"
+alt="Git Reset Step 1"
+&gt;&lt;/p&gt;
+&lt;p&gt;Step 2: Move the repository back to that step:&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://www.w3schools.com/git/img_reset_part2.gif"
+loading="lazy"
+alt="Git Reset Step 2"
+&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git reset 9a9add8
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="amend"&gt;Amend
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;commit --amend&lt;/code&gt; is used to modify the most recent &lt;code&gt;commit&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;It combines changes in the &lt;code&gt;staging environment&lt;/code&gt; with the latest &lt;code&gt;commit&lt;/code&gt;, and creates a new &lt;code&gt;commit&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;This new &lt;code&gt;commit&lt;/code&gt; &lt;strong&gt;replaces&lt;/strong&gt; the latest &lt;code&gt;commit&lt;/code&gt; entirely.&lt;/p&gt;
+&lt;p&gt;One of the simplest things you can do with &lt;code&gt;--amend&lt;/code&gt; is to change a &lt;code&gt;commit&lt;/code&gt; message.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git commit --amend -m &lt;span class="s2"&gt;&amp;#34;Added lines to README.md&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="ignore"&gt;Ignore
+&lt;/h2&gt;&lt;p&gt;When sharing your code with others, there are often files or parts of your project, you do not want to share.&lt;/p&gt;
+&lt;p&gt;Examples&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;log files&lt;/li&gt;
+&lt;li&gt;temporary files&lt;/li&gt;
+&lt;li&gt;hidden files&lt;/li&gt;
+&lt;li&gt;personal files&lt;/li&gt;
+&lt;li&gt;etc.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Git can specify which files or parts of your project should be ignored by Git using a &lt;code&gt;.gitignore&lt;/code&gt; file.&lt;/p&gt;
+&lt;p&gt;Git will not track files and folders specified in &lt;code&gt;.gitignore&lt;/code&gt;. However, the &lt;code&gt;.gitignore&lt;/code&gt; file itself &lt;strong&gt;IS&lt;/strong&gt; tracked by Git.&lt;/p&gt;
+&lt;h2 id="github"&gt;Github
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;add origin&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git remote add ori&lt;span class="o"&gt;(&lt;/span&gt;or anything you like&lt;span class="o"&gt;)&lt;/span&gt; URL
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;update local&lt;/p&gt;
+&lt;p&gt;When working as a team on a project, it is important that everyone stays up to date.&lt;/p&gt;
+&lt;p&gt;Any time you start working on a project, you should get the most recent changes to your local copy.&lt;/p&gt;
+&lt;p&gt;With Git, you can do that with &lt;code&gt;pull&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;pull&lt;/code&gt; is a combination of 2 different commands:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;fetch&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;merge&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Let&amp;rsquo;s take a closer look into how &lt;code&gt;fetch&lt;/code&gt;, &lt;code&gt;merge&lt;/code&gt;, and &lt;code&gt;pull&lt;/code&gt; works.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;fetch&lt;/code&gt; gets all the change history of a tracked branch/repo.&lt;/p&gt;
+&lt;p&gt;So, on your local Git, &lt;code&gt;fetch&lt;/code&gt; updates to see what has changed on GitHub:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git pull ori remote-b
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;//create new branch in &lt;span class="nb"&gt;local&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git pull ori remote-b:local-b
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;update remote&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git push ori
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;//create new branch in remote
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git push ori local-b:remote-b
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="commands"&gt;Commands
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;init&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git init
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;status&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git status
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;On branch master
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;No commits yet
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Untracked files:
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="o"&gt;(&lt;/span&gt;use &lt;span class="s2"&gt;&amp;#34;git add ...&amp;#34;&lt;/span&gt; to include in what will be committed&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; index.html
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;nothing added to commit but untracked files present &lt;span class="o"&gt;(&lt;/span&gt;use &lt;span class="s2"&gt;&amp;#34;git add&amp;#34;&lt;/span&gt; to track&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git status --short
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; M index.html
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; Short status flags are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;?? - Untracked files&lt;/li&gt;
+&lt;li&gt;A - Files added to stage&lt;/li&gt;
+&lt;li&gt;M - Modified files&lt;/li&gt;
+&lt;li&gt;D - Deleted files&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;add&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git add filename/--all
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Using &lt;code&gt;--all&lt;/code&gt; instead of individual filenames will &lt;code&gt;stage&lt;/code&gt; all changes (new, modified, and deleted) files. The shorthand command for &lt;code&gt;git add --all&lt;/code&gt; is &lt;code&gt;git add -A&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;commit&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git commit -m &lt;span class="s2"&gt;&amp;#34;First release of Hello World!&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git commit -a -m &lt;span class="s2"&gt;&amp;#34;Updated index.html with a new line&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;log&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git log
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;commit 09f4acd3f8836b7f6fc44ad9e012f82faf861803 &lt;span class="o"&gt;(&lt;/span&gt;HEAD -&amp;gt; master&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Author: w3schools-test
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Date: Fri Mar &lt;span class="m"&gt;26&lt;/span&gt; 09:35:54 &lt;span class="m"&gt;2021&lt;/span&gt; +0100
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Updated index.html with a new line
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;commit 221ec6e10aeedbfd02b85264087cd9adc18e4b26
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Author: w3schools-test
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Date: Fri Mar &lt;span class="m"&gt;26&lt;/span&gt; 09:13:07 &lt;span class="m"&gt;2021&lt;/span&gt; +0100
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; First release of Hello World!
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To view the history of commits for a repository, you can use the &lt;code&gt;log&lt;/code&gt; command&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Mobile on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/mobile/</link><description>Recent content in Mobile on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 12 Sep 2024 10:34:23 +0800</lastBuildDate><atom:link href="https://dyhes.github.io/tags/mobile/index.xml" rel="self" type="application/rss+xml"/><item><title>【React Native】Concepts</title><link>https://dyhes.github.io/p/react-nativeconcepts/</link><pubDate>Mon, 11 Oct 2021 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/react-nativeconcepts/</guid><description>&lt;p&gt;In Android and iOS development, a &lt;strong&gt;view&lt;/strong&gt; is the &lt;strong&gt;basic building block&lt;/strong&gt; of UI: &lt;strong&gt;a small rectangular element&lt;/strong&gt; on the screen which can be used to display text, images, or respond to user input. Even the smallest visual elements of an app, like a line of text or a button, are kinds of views. Some kinds of views can &lt;strong&gt;contain other views&lt;/strong&gt;.&lt;/p&gt;
+&lt;h2 id="native-components"&gt;Native Components
+&lt;/h2&gt;&lt;p&gt;In Android development, you write views in &lt;strong&gt;Kotlin or Java&lt;/strong&gt;;&lt;/p&gt;
+&lt;p&gt;in iOS development, you use &lt;strong&gt;Swift or Objective-C&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;With React Native, you can invoke these views with &lt;strong&gt;JavaScript&lt;/strong&gt; using React components.&lt;/p&gt;
+&lt;p&gt;At runtime, React Native creates the corresponding Android and iOS views for those components. Because React Native components are backed by the same views as Android and iOS, React Native apps look, feel, and perform like any other apps.&lt;/p&gt;
+&lt;p&gt;We call these platform-backed components &lt;strong&gt;Native Components.&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id="core-components"&gt;Core Components
+&lt;/h3&gt;&lt;p&gt;React Native comes with a set of essential, ready-to-use Native Components you can use to start building your app today. These are React Native&amp;rsquo;s &lt;strong&gt;Core Components&lt;/strong&gt;.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style="text-align: left"&gt;REACT NATIVE UI COMPONENT&lt;/th&gt;
+&lt;th style="text-align: left"&gt;ANDROID VIEW&lt;/th&gt;
+&lt;th style="text-align: left"&gt;IOS VIEW&lt;/th&gt;
+&lt;th style="text-align: left"&gt;WEB ANALOG&lt;/th&gt;
+&lt;th style="text-align: left"&gt;DESCRIPTION&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;code&gt;&amp;lt;View&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;code&gt;&amp;lt;ViewGroup&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;code&gt;&amp;lt;UIView&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;A non-scrollling &lt;code&gt;&amp;lt;div&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;A container that supports layout with flexbox, style, some touch handling, and accessibility controls&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;code&gt;&amp;lt;Text&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;code&gt;&amp;lt;TextView&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;code&gt;&amp;lt;UITextView&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;code&gt;&amp;lt;p&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Displays, styles, and nests strings of text and even handles touch events&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;code&gt;&amp;lt;Image&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;code&gt;&amp;lt;ImageView&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;code&gt;&amp;lt;UIImageView&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;code&gt;&amp;lt;img&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Displays different types of images&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;code&gt;&amp;lt;ScrollView&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;code&gt;&amp;lt;ScrollView&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;code&gt;&amp;lt;UIScrollView&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;code&gt;&amp;lt;div&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;A generic scrolling container that can contain multiple components and views&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;code&gt;&amp;lt;TextInput&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;code&gt;&amp;lt;EditText&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;code&gt;&amp;lt;UITextField&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;code&gt;&amp;lt;input type=&amp;quot;text&amp;quot;&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Allows the user to enter text&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;img src="https://reactnative.dev/docs/assets/diagram_react-native-components.svg"
+loading="lazy"
+alt="A diagram showing React Native’s Core Components are a subset of React Components that ship with React Native."
+&gt;&lt;/p&gt;
+&lt;h2 id="platform-specific--code"&gt;Platform Specific Code
+&lt;/h2&gt;&lt;p&gt;When building a cross-platform app, you&amp;rsquo;ll want to re-use as much code as possible. Scenarios may arise where it makes sense for the code to be different, for example you may want to implement separate visual components for Android and iOS.&lt;/p&gt;
+&lt;p&gt;React Native provides two ways to organize your code and separate it by platform:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Using the &lt;a class="link" href="https://reactnative.dev/docs/platform-specific-code#platform-module" target="_blank" rel="noopener"
+&gt;&lt;code&gt;Platform&lt;/code&gt; module&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;Using &lt;a class="link" href="https://reactnative.dev/docs/platform-specific-code#platform-specific-extensions" target="_blank" rel="noopener"
+&gt;platform-specific file extensions&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Certain components may have properties that work on one platform only. All of these props are annotated with &lt;code&gt;@platform&lt;/code&gt; and have a small badge next to them on the website.&lt;/p&gt;
+&lt;h3 id="using-platform-specific-file-extensions"&gt;Using &lt;a class="link" href="https://reactnative.dev/docs/platform-specific-code#platform-specific-extensions" target="_blank" rel="noopener"
+&gt;platform-specific file extensions&lt;/a&gt;.
+&lt;/h3&gt;&lt;p&gt;For example, say you have the following files in your project:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;BigButton.ios.js
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;BigButton.android.js
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;You can then require the component as follows:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-jsx" data-lang="jsx"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;import&lt;/span&gt; &lt;span class="nx"&gt;BigButton&lt;/span&gt; &lt;span class="nx"&gt;from&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;./BigButton&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;React Native will automatically pick up the right file based on the running platform.&lt;/p&gt;
+&lt;p&gt;You can also use the &lt;code&gt;.native.js&lt;/code&gt; extension when a module needs to be shared between NodeJS/Web and React Native but it has no Android/iOS differences. This is especially useful for projects that have common code shared among React Native and ReactJS.&lt;/p&gt;
+&lt;p&gt;For example, say you have the following files in your project:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Container.js &lt;span class="c1"&gt;## picked up by Webpack, Rollup or any other Web bundler&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Container.native.js &lt;span class="c1"&gt;## picked up by the React Native bundler for both Android and iOS (Metro)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;You can still require it without the &lt;code&gt;.native&lt;/code&gt; extension, as follows:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-jsx" data-lang="jsx"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;import&lt;/span&gt; &lt;span class="nx"&gt;Container&lt;/span&gt; &lt;span class="nx"&gt;from&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;./Container&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Pro tip:&lt;/strong&gt; Configure your Web bundler to ignore &lt;code&gt;.native.js&lt;/code&gt; extensions in order to avoid having unused code in your production bundle, thus reducing the final bundle size.&lt;/p&gt;
+&lt;h2 id="style"&gt;Style
+&lt;/h2&gt;&lt;p&gt;With React Native, you style your application using JavaScript. All of the core components accept a prop named &lt;code&gt;style&lt;/code&gt;. The style names and &lt;a class="link" href="https://reactnative.dev/docs/colors" target="_blank" rel="noopener"
+&gt;values&lt;/a&gt; usually match how CSS works on the web, except names are written using camel casing&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-js" data-lang="js"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;styles&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;StyleSheet&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;create&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;container&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;marginTop&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;50&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;bigBlue&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;color&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;blue&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;fontWeight&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;bold&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;fontSize&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;30&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;red&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;color&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;red&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="dimensions"&gt;Dimensions
+&lt;/h3&gt;&lt;h4 id="fixed-dimensions"&gt;Fixed Dimensions
+&lt;/h4&gt;&lt;p&gt;The general way to set the dimensions of a component is by adding a fixed &lt;code&gt;width&lt;/code&gt; and &lt;code&gt;height&lt;/code&gt; to style. All dimensions in React Native are unitless, and represent density-independent pixels.&lt;/p&gt;
+&lt;h4 id="flex-dimensions"&gt;Flex Dimensions
+&lt;/h4&gt;&lt;p&gt;Use &lt;code&gt;flex&lt;/code&gt; in a component&amp;rsquo;s style to have the component expand and shrink dynamically based on available space. Normally you will use &lt;code&gt;flex: 1&lt;/code&gt;, which tells a component to fill all available space, shared evenly amongst other components with the same parent. The larger the &lt;code&gt;flex&lt;/code&gt; given, the higher the ratio of space a component will take compared to its siblings.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A component can only expand to fill available space if its parent has dimensions greater than &lt;code&gt;0&lt;/code&gt;. If a parent does not have either a fixed &lt;code&gt;width&lt;/code&gt; and &lt;code&gt;height&lt;/code&gt; or &lt;code&gt;flex&lt;/code&gt;, the parent will have dimensions of &lt;code&gt;0&lt;/code&gt; and the &lt;code&gt;flex&lt;/code&gt; children will not be visible.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id="percentage-dimensions"&gt;Percentage Dimensions
+&lt;/h4&gt;&lt;p&gt;If you want to fill a certain portion of the screen, but you &lt;em&gt;don&amp;rsquo;t&lt;/em&gt; want to use the &lt;code&gt;flex&lt;/code&gt; layout, you &lt;em&gt;can&lt;/em&gt; use &lt;strong&gt;percentage values&lt;/strong&gt; in the component&amp;rsquo;s style. Similar to flex dimensions, percentage dimensions require parent with a defined size.&lt;/p&gt;
+&lt;h3 id="layout"&gt;Layout
+&lt;/h3&gt;&lt;p&gt;You will normally use a combination of &lt;code&gt;flexDirection&lt;/code&gt;, &lt;code&gt;alignItems&lt;/code&gt;, and &lt;code&gt;justifyContent&lt;/code&gt; to achieve the right layout.&lt;/p&gt;
+&lt;h4 id="flexdirection"&gt;flexDirection
+&lt;/h4&gt;&lt;p&gt;controls the direction in which the children of a node are laid out. This is also referred to as the main axis. The cross axis is the axis perpendicular to the main axis, or the axis which the wrapping lines are laid out in.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;column(default)&lt;/li&gt;
+&lt;li&gt;row&lt;/li&gt;
+&lt;li&gt;column-reverse&lt;/li&gt;
+&lt;li&gt;row-reverse&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="justifycontent"&gt;justifyContent
+&lt;/h4&gt;&lt;p&gt;describes how to align children within the main axis of their container.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;flex-start(default)&lt;/li&gt;
+&lt;li&gt;flex-end&lt;/li&gt;
+&lt;li&gt;center&lt;/li&gt;
+&lt;li&gt;space-between&lt;/li&gt;
+&lt;li&gt;space-around&lt;/li&gt;
+&lt;li&gt;space=evenly&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="alignitems"&gt;alignItems
+&lt;/h4&gt;&lt;p&gt;describes how to align children along the cross axis of their container. It is very similar to &lt;code&gt;justifyContent&lt;/code&gt; but instead of applying to the main axis, &lt;code&gt;alignItems&lt;/code&gt; applies to the cross axis.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;stretch (default):Stretch children of a container to match the &lt;code&gt;height&lt;/code&gt; of the container&amp;rsquo;s cross axis.&lt;/li&gt;
+&lt;li&gt;flex-start&lt;/li&gt;
+&lt;li&gt;flex-end&lt;/li&gt;
+&lt;li&gt;center&lt;/li&gt;
+&lt;li&gt;baseline:Align children of a container along a common baseline. Individual children can be set to be the reference baseline for their parents.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="alignself"&gt;alignSelf
+&lt;/h4&gt;&lt;p&gt;has the same options and effect as &lt;code&gt;alignItems&lt;/code&gt; but instead of affecting the children within a container, you can apply this property to a single child to change its alignment within its parent. &lt;code&gt;alignSelf&lt;/code&gt; overrides any option set by the parent with &lt;code&gt;alignItems&lt;/code&gt;.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The &lt;a class="link" href="https://reactnative.dev/docs/layout-props#flexwrap" target="_blank" rel="noopener"
+&gt;&lt;code&gt;flexWrap&lt;/code&gt;&lt;/a&gt; property is set on containers and it controls what happens when children overflow the size of the container along the main axis. By default, children are forced into a single line (which can shrink elements). If wrapping is allowed, items are wrapped into multiple lines along the main axis if needed. When wrapping lines, &lt;code&gt;alignContent&lt;/code&gt; can be used to specify how the lines are placed in the container&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id="flex-basis-grow-and-shrink"&gt;Flex Basis, Grow, and Shrink
+&lt;/h4&gt;&lt;p&gt;&lt;a class="link" href="https://reactnative.dev/docs/layout-props#flexbasis" target="_blank" rel="noopener"
+&gt;&lt;code&gt;flexBasis&lt;/code&gt;&lt;/a&gt; is an axis-independent way of providing the default size of an item along the main axis.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://reactnative.dev/docs/layout-props#flexgrow" target="_blank" rel="noopener"
+&gt;&lt;code&gt;flexGrow&lt;/code&gt;&lt;/a&gt; describes how any space within a container should be distributed among its children along the main axis.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://reactnative.dev/docs/layout-props#flexshrink" target="_blank" rel="noopener"
+&gt;&lt;code&gt;flexShrink&lt;/code&gt;&lt;/a&gt; describes how to shrink children along the main axis in the case in which the total size of the children overflows the size of the container on the main axis.&lt;/p&gt;
+&lt;h3 id="image"&gt;Image
+&lt;/h3&gt;&lt;h4 id="static-image-resources"&gt;Static Image Resources
+&lt;/h4&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-jsx" data-lang="jsx"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;Image&lt;/span&gt; &lt;span class="na"&gt;source&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;./img/check.png&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)}&lt;/span&gt; &lt;span class="p"&gt;/&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Note that image sources required this way include size (width, height) info for the Image. If you need to scale the image dynamically (i.e. via flex), you may need to manually set &lt;code&gt;{ width: undefined, height: undefined }&lt;/code&gt; on the style attribute.&lt;/p&gt;
+&lt;h4 id="network-images"&gt;Network Images
+&lt;/h4&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-jsx" data-lang="jsx"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;Image&lt;/span&gt; &lt;span class="na"&gt;source&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;{{&lt;/span&gt;&lt;span class="nx"&gt;uri&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;https://reactjs.org/logo-og.png&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;}}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="na"&gt;style&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;{{&lt;/span&gt;&lt;span class="nx"&gt;width&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;400&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;height&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;400&lt;/span&gt;&lt;span class="p"&gt;}}&lt;/span&gt; &lt;span class="p"&gt;/&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="background-image"&gt;Background Image
+&lt;/h4&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-jsx" data-lang="jsx"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;ImageBackground&lt;/span&gt; &lt;span class="na"&gt;source&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;{...}&lt;/span&gt; &lt;span class="na"&gt;style&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;{{&lt;/span&gt;&lt;span class="nx"&gt;width&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;100%&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;height&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;100%&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;}}&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;Text&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;&lt;span class="nx"&gt;Inside&lt;/span&gt;&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;Text&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;ImageBackground&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="handling-touches"&gt;Handling Touches
+&lt;/h2&gt;&lt;p&gt;Users interact with mobile apps mainly through touch.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://reactnative.dev/docs/button" target="_blank" rel="noopener"
+&gt;Button&lt;/a&gt; provides a basic button component that is rendered nicely on all platforms.&lt;/p&gt;
+&lt;p&gt;If the basic button doesn&amp;rsquo;t look right for your app, you can build your own button using any of the &amp;ldquo;Touchable&amp;rdquo; components provided by React Native.&lt;/p&gt;
+&lt;h2 id="navigation"&gt;Navigation
+&lt;/h2&gt;&lt;p&gt;Mobile apps are rarely made up of a single screen. Managing the presentation of, and transition between, multiple screens is typically handled by what is known as a navigator.&lt;/p&gt;
+&lt;p&gt;If you are getting started with navigation, you will probably want to use &lt;a class="link" href="https://reactnative.dev/docs/navigation#react-navigation" target="_blank" rel="noopener"
+&gt;React Navigation&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;If you&amp;rsquo;re integrating React Native into an app that already manages navigation natively, or looking for an alternative to React Navigation, the following library provides native navigation on both platforms: &lt;a class="link" href="https://github.com/wix/react-native-navigation" target="_blank" rel="noopener"
+&gt;react-native-navigation&lt;/a&gt;.&lt;/p&gt;
+&lt;h3 id="react-navigation"&gt;React Navigation
+&lt;/h3&gt;&lt;p&gt;Now, you need to wrap the whole app in &lt;code&gt;NavigationContainer&lt;/code&gt;. Usually you&amp;rsquo;d do this in your entry file, such as &lt;code&gt;index.js&lt;/code&gt; or &lt;code&gt;App.js&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-jsx" data-lang="jsx"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;App&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;NavigationContainer&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="cm"&gt;/* Rest of your app code */&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;NavigationContainer&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="animation"&gt;Animation
+&lt;/h2&gt;&lt;p&gt;React Native provides two complementary animation systems: &lt;a class="link" href="https://reactnative.dev/docs/animations#animated-api" target="_blank" rel="noopener"
+&gt;&lt;code&gt;Animated&lt;/code&gt;&lt;/a&gt; for granular and interactive control of specific values, and &lt;a class="link" href="https://reactnative.dev/docs/animations#layoutanimation-api" target="_blank" rel="noopener"
+&gt;&lt;code&gt;LayoutAnimation&lt;/code&gt;&lt;/a&gt; for animated global layout transactions.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Animated&lt;/code&gt; exports six animatable component types: &lt;code&gt;View&lt;/code&gt;, &lt;code&gt;Text&lt;/code&gt;, &lt;code&gt;Image&lt;/code&gt;, &lt;code&gt;ScrollView&lt;/code&gt;, &lt;code&gt;FlatList&lt;/code&gt; and &lt;code&gt;SectionList&lt;/code&gt;, but you can also create your own using &lt;code&gt;Animated.createAnimatedComponent()&lt;/code&gt;.&lt;/p&gt;</description></item></channel></rss>

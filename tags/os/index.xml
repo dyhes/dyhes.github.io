@@ -1,0 +1,785 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>OS on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/os/</link><description>Recent content in OS on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 15 Jul 2025 01:02:04 +0800</lastBuildDate><atom:link href="https://dyhes.github.io/tags/os/index.xml" rel="self" type="application/rss+xml"/><item><title>【OS】IO</title><link>https://dyhes.github.io/p/osio/</link><pubDate>Sat, 28 Jun 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/osio/</guid><description>&lt;h2 id="select"&gt;select
+&lt;/h2&gt;&lt;p&gt;I/O多路复用中的&lt;code&gt;select&lt;/code&gt;是一种&lt;strong&gt;同步I/O事件管理机制&lt;/strong&gt;，允许单个线程同时监控多个文件描述符（如套接字）的读写或异常状态，从而实现对高并发连接的轻量化处理。以下从核心原理、实现方式、优缺点及对比展开详细分析：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-核心原理与工作流程"&gt;🔍 核心原理与工作流程
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;阻塞式事件监听&lt;/strong&gt;
+&lt;code&gt;select&lt;/code&gt;通过&lt;strong&gt;轮询机制&lt;/strong&gt;检查多个文件描述符的状态。调用&lt;code&gt;select&lt;/code&gt;时，内核会阻塞线程，直到以下任一情况发生：
+&lt;ul&gt;
+&lt;li&gt;至少一个被监控的文件描述符就绪（可读/可写/异常）；&lt;/li&gt;
+&lt;li&gt;超时时间到达（由&lt;code&gt;timeval&lt;/code&gt;参数指定）；&lt;/li&gt;
+&lt;li&gt;被信号中断&lt;a class="link" href="@ref" &gt;1,6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;文件描述符集合管理&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;fd_set&lt;/code&gt;结构&lt;/strong&gt;：使用位图（bitmap）表示文件描述符集合，每个比特位对应一个文件描述符。例如，&lt;code&gt;fd=3&lt;/code&gt;对应第3个比特位&lt;a class="link" href="@ref" &gt;4,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;操作宏：
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;FD_ZERO(&amp;amp;set)&lt;/code&gt;：清空集合；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;FD_SET(fd, &amp;amp;set)&lt;/code&gt;：添加文件描述符；
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;FD_CLR(fd, &amp;amp;set)&lt;/code&gt;：移除文件描述符；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;FD_ISSET(fd, &amp;amp;set)&lt;/code&gt;：检查是否就绪&lt;a class="link" href="@ref" &gt;1,6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;函数原型与参数&lt;/strong&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout);
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;nfds&lt;/code&gt;&lt;/strong&gt;：需监控的最大文件描述符值+1（如最大&lt;code&gt;fd=5&lt;/code&gt;，则&lt;code&gt;nfds=6&lt;/code&gt;），限定内核检查范围；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;readfds/writefds/exceptfds&lt;/code&gt;&lt;/strong&gt;：分别监控可读、可写、异常事件的描述符集合；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;timeout&lt;/code&gt;&lt;/strong&gt;：超时时间（&lt;code&gt;NULL&lt;/code&gt;表示无限阻塞）&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-实现步骤以tcp服务器为例"&gt;⚙️ 实现步骤（以TCP服务器为例）
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;初始化监听&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;创建监听套接字，绑定端口并监听；&lt;/li&gt;
+&lt;li&gt;初始化&lt;code&gt;fd_set&lt;/code&gt;集合，将监听套接字加入&lt;code&gt;readfds&lt;/code&gt;&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;循环监控与事件处理&lt;/strong&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;while (1) {
+fd_set tmp_set = active_set; // 备份监控集合
+int ready = select(max_fd+1, &amp;amp;tmp_set, NULL, NULL, NULL);
+// 检查新连接
+if (FD_ISSET(server_fd, &amp;amp;tmp_set)) {
+int client_fd = accept(server_fd, ...);
+FD_SET(client_fd, &amp;amp;active_set); // 加入监控集合
+max_fd = (client_fd &amp;gt; max_fd) ? client_fd : max_fd;
+}
+// 检查客户端数据
+for (int fd = server_fd+1; fd &amp;lt;= max_fd; fd++) {
+if (FD_ISSET(fd, &amp;amp;tmp_set)) {
+recv(fd, ...); // 处理数据
+// 若连接关闭，则FD_CLR移除
+}
+}
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;strong&gt;关键点&lt;/strong&gt;：每次调用&lt;code&gt;select&lt;/code&gt;前需重置监控集合，因其返回后会&lt;strong&gt;修改集合内容&lt;/strong&gt;，仅保留就绪的描述符&lt;a class="link" href="@ref" &gt;1,4,6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-优缺点分析"&gt;⚖️ 优缺点分析
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;优点&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;缺点&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;跨平台支持&lt;/strong&gt;：几乎所有Unix/Linux系统均兼容&lt;a class="link" href="@ref" &gt;1&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;文件描述符数量限制&lt;/strong&gt;：默认最大1024（可调整但效率低）&lt;a class="link" href="@ref" &gt;4,6&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;编程模型简单&lt;/strong&gt;：适合低并发场景&lt;a class="link" href="@ref" &gt;3&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;性能瓶颈&lt;/strong&gt;：&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;每次调用需复制整个&lt;code&gt;fd_set&lt;/code&gt;（用户态↔内核态）；&lt;/li&gt;
+&lt;li&gt;轮询复杂度O(n)，万级连接时效率骤降&lt;a class="link" href="@ref" &gt;4,5&lt;/a&gt; |
+| ​&lt;strong&gt;单线程处理多连接&lt;/strong&gt;​：减少线程切换开销&lt;a class="link" href="@ref" &gt;1&lt;/a&gt; | ​&lt;strong&gt;重复初始化&lt;/strong&gt;​：每次循环需重新设置监控集合&lt;a class="link" href="@ref" &gt;6&lt;/a&gt; |&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-与pollepoll的对比"&gt;🔄 与poll/epoll的对比
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;特性&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;select&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;poll&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;epoll&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;数据结构&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;位图（&lt;code&gt;fd_set&lt;/code&gt;）&lt;/td&gt;
+&lt;td&gt;链表（&lt;code&gt;pollfd&lt;/code&gt;数组）&lt;/td&gt;
+&lt;td&gt;红黑树+就绪链表&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;最大连接数&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;1024（默认）&lt;/td&gt;
+&lt;td&gt;无限制&lt;/td&gt;
+&lt;td&gt;10万+（1GB内存）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;效率&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;O(n)轮询&lt;/td&gt;
+&lt;td&gt;O(n)轮询&lt;/td&gt;
+&lt;td&gt;O(1)事件回调&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;内存拷贝&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;每次调用全量复制&lt;/td&gt;
+&lt;td&gt;每次调用全量复制&lt;/td&gt;
+&lt;td&gt;首次注册后仅同步就绪事件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;触发模式&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;水平触发（LT）&lt;/td&gt;
+&lt;td&gt;水平触发（LT）&lt;/td&gt;
+&lt;td&gt;支持LT/边缘触发（ET）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;水平触发（LT）&lt;/strong&gt;：只要缓冲区有数据，持续通知；
+​&lt;strong&gt;边缘触发（ET）​&lt;/strong&gt;​：仅状态变化时通知一次，需一次读完数据&lt;a class="link" href="@ref" &gt;2,5&lt;/a&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h3 id="-适用场景"&gt;💎 适用场景
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;低并发场景&lt;/strong&gt;：客户端连接数&amp;lt;1000，且需跨平台兼容时；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;嵌入式系统&lt;/strong&gt;：资源受限环境，无需高并发支持；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;教学原型&lt;/strong&gt;：因其接口简单，适合理解多路复用基础原理&lt;a class="link" href="@ref" &gt;1,6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;高并发替代方案&lt;/strong&gt;：Linux首选&lt;code&gt;epoll&lt;/code&gt;（如Nginx、Redis），FreeBSD用&lt;code&gt;kqueue&lt;/code&gt;，可突破性能瓶颈&lt;a class="link" href="@ref" &gt;2,5&lt;/a&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="-总结"&gt;💎 总结
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;select&lt;/code&gt;作为最早的I/O多路复用实现，其核心价值在于&lt;strong&gt;简化单线程多连接模型&lt;/strong&gt;，但性能限制使其难以应对万级并发。理解其轮询机制与&lt;code&gt;fd_set&lt;/code&gt;操作是掌握高阶模型（如&lt;code&gt;epoll&lt;/code&gt;）的基础，实际开发中需根据场景权衡选择&lt;a class="link" href="@ref" &gt;1,6&lt;/a&gt;。&lt;/p&gt;
+&lt;h2 id="poll"&gt;poll
+&lt;/h2&gt;&lt;p&gt;Poll 是 Linux 系统中用于 &lt;strong&gt;I/O 多路复用&lt;/strong&gt;的核心系统调用，通过单线程同时监控多个文件描述符（如套接字）的可读、可写或异常事件，适用于网络服务器等并发场景。以下是其详细解析：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-核心原理与工作流程-1"&gt;🔍 核心原理与工作流程
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;事件驱动模型&lt;/strong&gt;
+Poll 采用&lt;strong&gt;轮询机制&lt;/strong&gt;，用户程序通过 &lt;code&gt;poll()&lt;/code&gt; 系统调用向内核注册一组待监控的文件描述符及其关注的事件（如 &lt;code&gt;POLLIN&lt;/code&gt; 可读）。内核会阻塞进程，直到以下任一情况发生：
+&lt;ul&gt;
+&lt;li&gt;至少一个文件描述符的事件就绪；&lt;/li&gt;
+&lt;li&gt;超时时间到达（由 &lt;code&gt;timeout&lt;/code&gt; 参数指定）；&lt;/li&gt;
+&lt;li&gt;被信号中断&lt;a class="link" href="@ref" &gt;1,6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据结构&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;**
+&lt;pre tabindex="0"&gt;&lt;code&gt;struct pollfd
+&lt;/code&gt;&lt;/pre&gt;**：核心结构体，包含三个字段：
+&lt;pre tabindex="0"&gt;&lt;code&gt;struct pollfd {
+int fd; // 监控的文件描述符
+short events; // 关注的事件（用户设置）
+short revents; // 实际发生的事件（内核填充）
+};
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;events&lt;/code&gt; 由用户设置（如 &lt;code&gt;POLLIN | POLLOUT&lt;/code&gt;），&lt;code&gt;revents&lt;/code&gt; 由内核返回，标识实际触发的事件&lt;a class="link" href="@ref" &gt;1,5&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;事件类型：
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;POLLIN&lt;/code&gt;：数据可读（等效于 &lt;code&gt;select&lt;/code&gt; 的读事件）。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;POLLOUT&lt;/code&gt;：数据可写（不阻塞）。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;POLLERR&lt;/code&gt;：错误发生（如连接重置）。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;POLLHUP&lt;/code&gt;：连接挂起（对端关闭）&lt;a class="link" href="@ref" &gt;6,7&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;函数原型&lt;/strong&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;#include &amp;lt;poll.h&amp;gt;
+int poll(struct pollfd *fds, nfds_t nfds, int timeout);
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;fds&lt;/code&gt;&lt;/strong&gt;：指向 &lt;code&gt;pollfd&lt;/code&gt; 结构体数组的指针。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;nfds&lt;/code&gt;&lt;/strong&gt;：数组长度（需监控的文件描述符数量）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;timeout&lt;/code&gt;&lt;/strong&gt;：超时时间（毫秒），&lt;code&gt;-1&lt;/code&gt; 表示永久阻塞，&lt;code&gt;0&lt;/code&gt; 表示非阻塞立即返回&lt;a class="link" href="@ref" &gt;1,3&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-使用步骤以-tcp-服务器为例"&gt;⚙️ 使用步骤（以 TCP 服务器为例）
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;初始化监听&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;创建监听套接字，绑定端口并监听。&lt;/li&gt;
+&lt;li&gt;初始化 &lt;code&gt;pollfd&lt;/code&gt; 数组，将监听套接字加入数组，并设置 &lt;code&gt;events = POLLIN&lt;/code&gt;&lt;a class="link" href="@ref" &gt;5,8&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;事件循环与处理&lt;/strong&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;struct pollfd fds[MAX_FD];
+fds[0].fd = listen_fd; // 监听套接字
+fds[0].events = POLLIN;
+while (1) {
+int ready = poll(fds, nfds, -1); // 阻塞等待事件
+if (ready &amp;lt; 0) { /* 错误处理 */ }
+for (int i = 0; i &amp;lt; nfds; i++) {
+if (fds[i].revents &amp;amp; POLLIN) {
+if (fds[i].fd == listen_fd) {
+// 接受新连接
+int conn_fd = accept(listen_fd, ...);
+fds[nfds].fd = conn_fd; // 加入监控数组
+fds[nfds].events = POLLIN;
+nfds++;
+} else {
+// 处理客户端数据
+recv(fds[i].fd, ...);
+if (连接关闭) {
+close(fds[i].fd);
+fds[i].fd = -1; // 标记为无效
+}
+}
+}
+}
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;strong&gt;关键点&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;每次调用 &lt;code&gt;poll()&lt;/code&gt; 后需遍历数组，通过 &lt;code&gt;revents&lt;/code&gt; 判断就绪事件。&lt;/li&gt;
+&lt;li&gt;无效描述符需将 &lt;code&gt;fd&lt;/code&gt; 设为 &lt;code&gt;-1&lt;/code&gt;，内核会自动跳过&lt;a class="link" href="@ref" &gt;5,8&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-优缺点分析-1"&gt;⚖️ 优缺点分析
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;优点&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;缺点&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;无文件描述符数量限制&lt;/strong&gt;：使用动态数组，突破 &lt;code&gt;select&lt;/code&gt; 的 1024 限制（仅受系统资源约束）&lt;a class="link" href="@ref" &gt;2,7&lt;/a&gt;。&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;轮询效率低&lt;/strong&gt;：每次调用需遍历整个数组，时间复杂度 O(n)，万级连接时性能骤降&lt;a class="link" href="@ref" &gt;4,7&lt;/a&gt;。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;事件分离设计&lt;/strong&gt;：&lt;code&gt;events&lt;/code&gt;（输入）与 &lt;code&gt;revents&lt;/code&gt;（输出）分离，无需每次重置监控集合&lt;a class="link" href="@ref" &gt;5,8&lt;/a&gt;。&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;内存拷贝开销大&lt;/strong&gt;：每次调用需将整个 &lt;code&gt;fds&lt;/code&gt; 数组复制到内核空间，高并发时占用带宽&lt;a class="link" href="@ref" &gt;4,7&lt;/a&gt;。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;跨平台支持&lt;/strong&gt;：多数 Unix-like 系统兼容（如 Linux/FreeBSD）&lt;a class="link" href="@ref" &gt;1,3&lt;/a&gt;。&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;不支持动态事件更新&lt;/strong&gt;：无法单独修改某个描述符的事件，需遍历数组&lt;a class="link" href="@ref" &gt;7&lt;/a&gt;。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-与-selectepoll-的对比"&gt;🔄 与 select/epoll 的对比
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;特性&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;select&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;poll&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;epoll&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;数据结构&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;固定位图（&lt;code&gt;fd_set&lt;/code&gt;）&lt;/td&gt;
+&lt;td&gt;动态数组（&lt;code&gt;pollfd&lt;/code&gt;）&lt;/td&gt;
+&lt;td&gt;红黑树 + 就绪链表&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;最大连接数&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;1024（硬编码）&lt;/td&gt;
+&lt;td&gt;无限制（受内存限制）&lt;/td&gt;
+&lt;td&gt;10万+（高效内存管理）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;事件通知&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;每次需重置位图&lt;/td&gt;
+&lt;td&gt;无需重置数组&lt;/td&gt;
+&lt;td&gt;仅注册一次，事件回调触发&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;时间复杂度&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;O(n) 轮询&lt;/td&gt;
+&lt;td&gt;O(n) 轮询&lt;/td&gt;
+&lt;td&gt;O(1) 事件回调（仅活跃连接）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;适用场景&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;低并发、跨平台需求&lt;/td&gt;
+&lt;td&gt;中等并发（数千连接）&lt;/td&gt;
+&lt;td&gt;高并发（如 Nginx、Redis）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;水平触发（LT）&lt;/strong&gt;：Poll 和 select 均采用 LT 模式——只要缓冲区有数据，持续通知；epoll 支持 ET 模式（仅状态变化时通知一次）&lt;a class="link" href="@ref" &gt;7&lt;/a&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h3 id="-适用场景-1"&gt;💎 适用场景
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;中等并发网络服务&lt;/strong&gt;：连接数在数千级别，且需跨平台兼容的场景&lt;a class="link" href="@ref" &gt;3,8&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;嵌入式系统&lt;/strong&gt;：资源有限但需同时处理多个 I/O 设备（如串口、传感器）&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;替代 select 的过渡方案&lt;/strong&gt;：解决 select 的 1024 限制，但尚未需 epoll 的极致性能时&lt;a class="link" href="@ref" &gt;2,7&lt;/a&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;性能瓶颈提示&lt;/strong&gt;：若连接数超 5000，建议改用 &lt;code&gt;epoll&lt;/code&gt;（Linux）或 &lt;code&gt;kqueue&lt;/code&gt;（FreeBSD）以规避轮询开销&lt;a class="link" href="@ref" &gt;7&lt;/a&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h3 id="-总结-1"&gt;📝 总结
+&lt;/h3&gt;&lt;p&gt;Poll 作为 I/O 多路复用的“中坚力量”，&lt;strong&gt;平衡了灵活性与复杂度&lt;/strong&gt;：突破了 select 的硬性限制，简化了编程模型，但未解决轮询效率与内存拷贝的本质问题。理解其基于数组的事件注册/回调机制（&lt;code&gt;pollfd&lt;/code&gt; 结构体）是掌握高阶模型（如 epoll）的基础，实际选型需根据并发规模与平台特性权衡&lt;a class="link" href="@ref" &gt;1,7&lt;/a&gt;。&lt;/p&gt;
+&lt;h2 id="selectpoll"&gt;select/poll
+&lt;/h2&gt;&lt;p&gt;Select和Poll是Linux系统中传统的I/O多路复用技术，用于实现单线程/进程高效监控多个文件描述符（如套接字）。它们通过&lt;strong&gt;统一监听多个I/O事件&lt;/strong&gt;，避免为每个连接创建独立线程/进程的资源消耗，是高并发网络编程的基础组件。以下是详细解析：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-select基于位掩码的轮询模型"&gt;⚙️ &lt;strong&gt;Select：基于位掩码的轮询模型&lt;/strong&gt;
+&lt;/h3&gt;&lt;h4 id="核心原理"&gt;&lt;strong&gt;核心原理&lt;/strong&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;数据结构&lt;/strong&gt;：使用固定大小的位掩码&lt;code&gt;fd_set&lt;/code&gt;（位图），比特位位置代表文件描述符（fd），值表示是否监控&lt;a class="link" href="@ref" &gt;1,3,7&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;事件类型：监控三类事件集合：
+&lt;ul&gt;
+&lt;li&gt;读就绪（&lt;code&gt;readfds&lt;/code&gt;）&lt;/li&gt;
+&lt;li&gt;写就绪（&lt;code&gt;writefds&lt;/code&gt;）&lt;/li&gt;
+&lt;li&gt;异常（&lt;code&gt;exceptfds&lt;/code&gt;）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;工作流程：
+&lt;ol&gt;
+&lt;li&gt;初始化&lt;code&gt;fd_set&lt;/code&gt;，通过&lt;code&gt;FD_SET()&lt;/code&gt;添加待监控的fd。&lt;/li&gt;
+&lt;li&gt;调用&lt;code&gt;select&lt;/code&gt;阻塞等待，内核轮询所有fd，检查就绪状态。&lt;/li&gt;
+&lt;li&gt;返回后，用户遍历所有fd，用&lt;code&gt;FD_ISSET()&lt;/code&gt;判断哪些fd就绪&lt;a class="link" href="@ref" &gt;1,9&lt;/a&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="优缺点"&gt;&lt;strong&gt;优缺点&lt;/strong&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;优点：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;跨平台支持&lt;/strong&gt;：几乎所有Unix-like系统均支持&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;简单易用&lt;/strong&gt;：适合fd数量少（&amp;lt;1000）的场景。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;缺点：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;fd数量限制&lt;/strong&gt;：默认最大1024（由&lt;code&gt;FD_SETSIZE&lt;/code&gt;决定），需修改内核才能扩展&lt;a class="link" href="@ref" &gt;1,7&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;性能瓶颈：
+&lt;ul&gt;
+&lt;li&gt;每次调用需将整个&lt;code&gt;fd_set&lt;/code&gt;从用户态拷贝到内核态。&lt;/li&gt;
+&lt;li&gt;内核需遍历所有fd（时间复杂度O(n)），高并发时效率骤降&lt;a class="link" href="@ref" &gt;3,8&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;返回后用户仍需遍历所有fd确认就绪状态&lt;a class="link" href="@ref" &gt;9&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="适用场景"&gt;&lt;strong&gt;适用场景&lt;/strong&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;小规模连接（如嵌入式设备、低并发本地服务）&lt;a class="link" href="@ref" &gt;6,9&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-poll动态数组的改进模型"&gt;🔄 &lt;strong&gt;Poll：动态数组的改进模型&lt;/strong&gt;
+&lt;/h3&gt;&lt;h4 id="核心原理-1"&gt;&lt;strong&gt;核心原理&lt;/strong&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;数据结构：使用动态数组
+&lt;pre tabindex="0"&gt;&lt;code&gt;struct pollfd[]
+&lt;/code&gt;&lt;/pre&gt;，每个元素包含：
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;fd&lt;/code&gt;：监控的文件描述符&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;events&lt;/code&gt;：监控的事件（如&lt;code&gt;POLLIN&lt;/code&gt;/&lt;code&gt;POLLOUT&lt;/code&gt;）&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;revents&lt;/code&gt;：返回的实际发生事件&lt;a class="link" href="@ref" &gt;2,7,9&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;事件类型&lt;/strong&gt;：支持更丰富的事件（如&lt;code&gt;POLLPRI&lt;/code&gt;紧急数据、&lt;code&gt;POLLHUP&lt;/code&gt;挂断）&lt;a class="link" href="@ref" &gt;7&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;工作流程：
+&lt;ol&gt;
+&lt;li&gt;初始化&lt;code&gt;pollfd&lt;/code&gt;数组，设置需监控的fd及事件。&lt;/li&gt;
+&lt;li&gt;调用&lt;code&gt;poll&lt;/code&gt;阻塞等待，内核轮询fd数组。&lt;/li&gt;
+&lt;li&gt;返回后，用户遍历数组，检查&lt;code&gt;revents&lt;/code&gt;判断就绪fd&lt;a class="link" href="@ref" &gt;1,9&lt;/a&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="优缺点-1"&gt;&lt;strong&gt;优缺点&lt;/strong&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;优点：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;无fd数量限制&lt;/strong&gt;：动态数组理论上支持无限fd（受系统全局限制）&lt;a class="link" href="@ref" &gt;3,7&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;事件分离&lt;/strong&gt;：&lt;code&gt;events&lt;/code&gt;（用户设置）与&lt;code&gt;revents&lt;/code&gt;（内核返回）分离，无需每次重置数组&lt;a class="link" href="@ref" &gt;7&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;缺点：
+&lt;ul&gt;
+&lt;li&gt;性能问题：
+&lt;ul&gt;
+&lt;li&gt;每次调用仍需复制整个&lt;code&gt;pollfd&lt;/code&gt;数组到内核。&lt;/li&gt;
+&lt;li&gt;内核仍需遍历所有fd（O(n)复杂度）&lt;a class="link" href="@ref" &gt;3,8&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;水平触发（LT）&lt;/strong&gt;：未处理的就绪事件会持续通知，可能造成无效唤醒&lt;a class="link" href="@ref" &gt;2,8&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="适用场景-1"&gt;&lt;strong&gt;适用场景&lt;/strong&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;中等规模连接（如企业内部服务、中并发代理）&lt;a class="link" href="@ref" &gt;6,9&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-select-vs-poll关键差异详解"&gt;⚖️ &lt;strong&gt;Select vs Poll：关键差异详解&lt;/strong&gt;
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;特性&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Select&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Poll&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;数据结构&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;固定大小位图（&lt;code&gt;fd_set&lt;/code&gt;）&lt;/td&gt;
+&lt;td&gt;动态结构体数组（&lt;code&gt;pollfd[]&lt;/code&gt;）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;最大fd数量&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;1024（硬限制）&lt;/td&gt;
+&lt;td&gt;无限制（受系统全局限制）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;事件分离&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;混合读写异常事件&lt;/td&gt;
+&lt;td&gt;分离&lt;code&gt;events&lt;/code&gt;（输入）和&lt;code&gt;revents&lt;/code&gt;（输出）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;时间精度&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;微秒（&lt;code&gt;struct timeval&lt;/code&gt;）&lt;/td&gt;
+&lt;td&gt;毫秒（&lt;code&gt;int timeout&lt;/code&gt;）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;事件类型支持&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;仅基础读写异常&lt;/td&gt;
+&lt;td&gt;更丰富（如&lt;code&gt;POLLRDHUP&lt;/code&gt;半关闭）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;高并发性能&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;差（O(n)遍历+拷贝开销）&lt;/td&gt;
+&lt;td&gt;中等（O(n)遍历，无硬限制）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-典型应用场景"&gt;🖥️ &lt;strong&gt;典型应用场景&lt;/strong&gt;
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;Select：
+&lt;ul&gt;
+&lt;li&gt;监控少量fd（如串口通信、嵌入式设备）&lt;a class="link" href="@ref" &gt;6,9&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;跨平台兼容性要求高的场景（如Windows/Linux双平台服务）&lt;a class="link" href="@ref" &gt;3&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Poll：
+&lt;ul&gt;
+&lt;li&gt;中等规模服务器（如游戏后端、API网关），连接数在数千级别&lt;a class="link" href="@ref" &gt;6,9&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;需要精细事件控制的场景（如处理带外数据&lt;code&gt;POLLPRI&lt;/code&gt;）&lt;a class="link" href="@ref" &gt;7&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-总结技术选型建议"&gt;💎 &lt;strong&gt;总结：技术选型建议&lt;/strong&gt;
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;选择Select当&lt;/strong&gt;：
+✅ 连接数少（&amp;lt;500）且需跨平台兼容&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;选择Poll当&lt;/strong&gt;：
+✅ 连接数中等（&amp;lt;1万），需事件分离或无fd限制&lt;a class="link" href="@ref" &gt;7,9&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;避免两者当&lt;/strong&gt;：
+❌ 高并发（&amp;gt;1万连接）场景——改用&lt;strong&gt;Epoll&lt;/strong&gt;​（事件驱动+O(1)复杂度）&lt;a class="link" href="@ref" &gt;3,8&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;注：现代高并发系统（如Nginx、Redis）已全面转向Epoll。但在资源受限或兼容性优先的场景，Select/Poll仍是可靠选择&lt;a class="link" href="@ref" &gt;4,6&lt;/a&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="epoll"&gt;epoll
+&lt;/h2&gt;&lt;p&gt;epoll（event poll）是Linux内核提供的高性能I/O多路复用机制，专为处理大规模并发连接（尤其活跃连接占比低的场景）而设计，显著优于传统的&lt;code&gt;select&lt;/code&gt;和&lt;code&gt;poll&lt;/code&gt;。其核心在于&lt;strong&gt;事件驱动架构&lt;/strong&gt;和&lt;strong&gt;高效数据结构&lt;/strong&gt;的结合，以下是详细解析：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-核心原理与数据结构"&gt;🔍 核心原理与数据结构
+&lt;/h3&gt;&lt;h4 id="事件驱动模型"&gt;&lt;strong&gt;事件驱动模型&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;epoll通过回调机制实现事件驱动：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;当监控的文件描述符（fd）发生I/O事件（如数据到达）时，内核自动触发回调函数&lt;code&gt;ep_poll_callback&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;该回调将事件对应的&lt;code&gt;epitem&lt;/code&gt;结构体加入&lt;strong&gt;就绪链表&lt;/strong&gt;（&lt;code&gt;rdllist&lt;/code&gt;），无需遍历所有fd&lt;a class="link" href="@ref" &gt;2,5,6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="核心数据结构"&gt;&lt;strong&gt;核心数据结构&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;epoll依赖两个关键结构：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;红黑树（rbr）&lt;/strong&gt;
+存储所有注册的fd及其关注的事件（&lt;code&gt;epitem&lt;/code&gt;），插入、删除、查找时间复杂度为&lt;code&gt;O(log n)&lt;/code&gt;，避免重复添加&lt;a class="link" href="@ref" &gt;5,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;双向就绪链表（rdllist）&lt;/strong&gt;
+存放已就绪的事件，&lt;code&gt;epoll_wait&lt;/code&gt;直接从此链表获取就绪事件，时间复杂度&lt;code&gt;O(1)&lt;/code&gt;&lt;a class="link" href="@ref" &gt;2,6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;struct eventpoll {
+struct rb_root rbr; // 红黑树根节点
+struct list_head rdllist; // 就绪事件链表
+};
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="工作流程"&gt;&lt;strong&gt;工作流程&lt;/strong&gt;
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;初始化&lt;/strong&gt;
+&lt;code&gt;epoll_create()&lt;/code&gt;创建&lt;code&gt;eventpoll&lt;/code&gt;对象，初始化红黑树和就绪链表。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;事件注册&lt;/strong&gt;
+&lt;code&gt;epoll_ctl(EPOLL_CTL_ADD)&lt;/code&gt;将fd加入红黑树，并注册回调函数。&lt;/li&gt;
+&lt;li&gt;事件等待
+&lt;pre tabindex="0"&gt;&lt;code&gt;epoll_wait()
+&lt;/code&gt;&lt;/pre&gt;检查就绪链表：
+&lt;ul&gt;
+&lt;li&gt;链表非空：复制就绪事件到用户空间并返回数量；&lt;/li&gt;
+&lt;li&gt;链表为空：线程阻塞直到超时或新事件加入&lt;a class="link" href="@ref" &gt;5,6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-关键系统调用"&gt;⚙️ 关键系统调用
+&lt;/h3&gt;&lt;h4 id="epoll_createint-size"&gt;&lt;strong&gt;&lt;code&gt;epoll_create(int size)&lt;/code&gt;&lt;/strong&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;创建epoll实例，返回epoll文件描述符（epfd）。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;size&lt;/code&gt;参数仅作历史兼容，现代内核自动动态调整&lt;a class="link" href="@ref" &gt;2,7&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="epoll_ctlint-epfd-int-op-int-fd-struct-epoll_event-event"&gt;&lt;strong&gt;&lt;code&gt;epoll_ctl(int epfd, int op, int fd, struct epoll_event *event)&lt;/code&gt;&lt;/strong&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;操作epoll实例：
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;op&lt;/code&gt;：操作类型（&lt;code&gt;EPOLL_CTL_ADD/MOD/DEL&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;event&lt;/code&gt;：指定监听的事件类型（如&lt;code&gt;EPOLLIN&lt;/code&gt;可读、&lt;code&gt;EPOLLOUT&lt;/code&gt;可写）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;示例：注册fd的可读事件：
+&lt;pre tabindex="0"&gt;&lt;code&gt;struct epoll_event ev;
+ev.events = EPOLLIN;
+ev.data.fd = sockfd;
+epoll_ctl(epfd, EPOLL_CTL_ADD, sockfd, &amp;amp;ev);
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="epoll_waitint-epfd-struct-epoll_event-events-int-maxevents-int-timeout"&gt;&lt;strong&gt;&lt;code&gt;epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout)&lt;/code&gt;&lt;/strong&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;阻塞等待就绪事件，返回就绪事件数量。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;events&lt;/code&gt;：用户空间数组，用于接收就绪事件。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;maxevents&lt;/code&gt;：数组大小，防止溢出&lt;a class="link" href="@ref" &gt;2,7&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-工作模式lt-vs-et"&gt;🔄 工作模式：LT vs ET
+&lt;/h3&gt;&lt;h4 id="水平触发lt默认模式"&gt;&lt;strong&gt;水平触发（LT，默认模式）&lt;/strong&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;行为&lt;/strong&gt;：只要fd缓冲区有未读数据，持续通知。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;优点&lt;/strong&gt;：编程简单，兼容阻塞/非阻塞I/O。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;缺点&lt;/strong&gt;：可能频繁唤醒，处理效率较低。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;适用场景&lt;/strong&gt;：监听套接字（如Nginx的&lt;code&gt;listen_fd&lt;/code&gt;）&lt;a class="link" href="@ref" &gt;2,5&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="边缘触发et"&gt;&lt;strong&gt;边缘触发（ET）&lt;/strong&gt;
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;行为&lt;/strong&gt;：仅在fd状态变化时通知一次（如数据首次到达）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;要求&lt;/strong&gt;：必须使用&lt;strong&gt;非阻塞I/O&lt;/strong&gt;，且需一次性读完数据（循环读至&lt;code&gt;EAGAIN&lt;/code&gt;错误）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;优点&lt;/strong&gt;：减少无效唤醒，提升性能（Nginx默认模式）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;风险&lt;/strong&gt;：数据未读完可能导致事件丢失&lt;a class="link" href="@ref" &gt;2,5,7&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="模式对比"&gt;模式对比
+&lt;/h4&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;特性&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;LT模式&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;ET模式&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;触发条件&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;缓冲区有数据即触发&lt;/td&gt;
+&lt;td&gt;仅状态变化时触发一次&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;I/O要求&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;阻塞/非阻塞均可&lt;/td&gt;
+&lt;td&gt;必须非阻塞&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;数据读取&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;可分批读取&lt;/td&gt;
+&lt;td&gt;需一次性读完（避免事件丢失）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;性能&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;较低（频繁通知）&lt;/td&gt;
+&lt;td&gt;较高（通知次数少）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;典型应用&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;监听套接字&lt;/td&gt;
+&lt;td&gt;高并发数据连接（如Nginx）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-性能优势详解"&gt;🚀 性能优势详解
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;无FD数量限制&lt;/strong&gt;
+仅受系统最大打开文件数限制（通过&lt;code&gt;ulimit -n&lt;/code&gt;调整），可支持10万+连接&lt;a class="link" href="@ref" &gt;1,4&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;O(1)事件检测&lt;/strong&gt;
+通过就绪链表直接获取活跃事件，避免&lt;code&gt;select/poll&lt;/code&gt;的&lt;code&gt;O(n)&lt;/code&gt;轮询&lt;a class="link" href="@ref" &gt;5,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;零拷贝优化&lt;/strong&gt;
+内核与用户空间通过&lt;strong&gt;共享内存&lt;/strong&gt;传递就绪事件（&lt;code&gt;mmap&lt;/code&gt;技术），减少数据拷贝&lt;a class="link" href="@ref" &gt;1,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;高效回调机制&lt;/strong&gt;
+仅活跃fd触发回调，空闲连接不占用CPU资源&lt;a class="link" href="@ref" &gt;2,5&lt;/a&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-使用注意事项"&gt;⚠️ 使用注意事项
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;ET模式必须搭配非阻塞I/O&lt;/strong&gt;
+避免因未读完数据导致线程阻塞：
+&lt;pre tabindex="0"&gt;&lt;code&gt;fcntl(fd, F_SETFL, O_NONBLOCK); // 设置非阻塞
+while (read(fd, buf, size) != -1 || errno != EAGAIN); // 循环读至空
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;避免事件丢失（ET模式）&lt;/strong&gt;
+需在单次回调中处理完所有数据，否则需重新注册事件&lt;a class="link" href="@ref" &gt;5,7&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;多线程安全&lt;/strong&gt;
+epoll实例本身线程安全，但同一fd的并发操作需加锁&lt;a class="link" href="@ref" &gt;4&lt;/a&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-适用场景-2"&gt;💎 适用场景
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;高并发网络服务&lt;/strong&gt;
+如Web服务器（Nginx）、即时通讯（QQ）、游戏服务器，连接数&amp;gt;1万&lt;a class="link" href="@ref" &gt;3,4&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;实时数据处理&lt;/strong&gt;
+低延迟要求的场景（股票交易、实时监控）&lt;a class="link" href="@ref" &gt;3&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;替代select/poll&lt;/strong&gt;
+连接数超1024或需极致性能时&lt;a class="link" href="@ref" &gt;1,2&lt;/a&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-与selectpoll的对比"&gt;📊 与select/poll的对比
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;特性&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;select/poll&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;epoll&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;时间复杂度&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;O(n) 轮询所有fd&lt;/td&gt;
+&lt;td&gt;O(1) 检测就绪事件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;FD数量限制&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;1024（select） / 无硬限制（poll）&lt;/td&gt;
+&lt;td&gt;10万+（与内存相关）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;内存拷贝&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;每次调用全量复制fd集合&lt;/td&gt;
+&lt;td&gt;首次注册后仅同步就绪事件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;触发模式&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;仅LT&lt;/td&gt;
+&lt;td&gt;支持LT/ET&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;适用规模&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&amp;lt;1000连接&lt;/td&gt;
+&lt;td&gt;&amp;gt;10000连接&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-总结-2"&gt;💎 总结
+&lt;/h3&gt;&lt;p&gt;epoll通过&lt;strong&gt;红黑树管理连接&lt;/strong&gt;+&lt;strong&gt;就绪链表获取事件&lt;/strong&gt;+&lt;strong&gt;回调机制&lt;/strong&gt;，实现了百万级连接的高效处理，尤其适合&lt;strong&gt;高并发低活跃&lt;/strong&gt;场景。其核心价值在于：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;资源高效&lt;/strong&gt;：仅关注活跃连接，减少CPU空转；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;扩展性强&lt;/strong&gt;：突破FD数量限制，支持C10M（千万并发）&lt;a class="link" href="@ref" &gt;5&lt;/a&gt;；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;灵活性高&lt;/strong&gt;：ET模式最大化提升性能，LT模式降低开发门槛。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;实际开发中，Nginx、Redis等知名项目均默认采用epoll的ET模式&lt;a class="link" href="@ref" &gt;2,5&lt;/a&gt;。掌握其原理及ET模式下的非阻塞I/O编程，是构建高性能服务的基石。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="红黑树节点"&gt;红黑树节点
+&lt;/h2&gt;&lt;p&gt;在epoll机制中，&lt;strong&gt;回调事件触发（如数据到达）后，节点（epitem）通常不会从红黑树中自动删除&lt;/strong&gt;，除非满足特定条件。以下是详细分析：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-正常情况节点保留在红黑树中"&gt;🔍 正常情况：节点保留在红黑树中
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;事件触发后的默认行为&lt;/strong&gt;
+当文件描述符（fd）上的事件（如&lt;code&gt;EPOLLIN&lt;/code&gt;）就绪时，内核通过回调函数&lt;code&gt;ep_poll_callback&lt;/code&gt;将该事件对应的&lt;code&gt;epitem&lt;/code&gt;节点&lt;strong&gt;加入就绪队列（rdllist）​&lt;/strong&gt;，但&lt;strong&gt;不会将其从红黑树中移除&lt;/strong&gt;。
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;原因&lt;/strong&gt;：红黑树的作用是长期记录需要监控的fd及其事件。事件触发仅表示当前有数据可读/写，后续可能仍有新事件发生（如持续接收数据），因此需保留节点以继续监听&lt;a class="link" href="@ref" &gt;1,2,5&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;用户态处理流程&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;用户调用&lt;code&gt;epoll_wait&lt;/code&gt;获取就绪事件后，需自行处理数据（如&lt;code&gt;read&lt;/code&gt;/&lt;code&gt;write&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;处理完毕后，&lt;strong&gt;红黑树中的节点依然存在&lt;/strong&gt;，下次该fd事件就绪时会再次触发回调并加入就绪队列&lt;a class="link" href="@ref" &gt;1,4&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-特殊情况节点被删除的场景"&gt;⚠️ 特殊情况：节点被删除的场景
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;设置&lt;code&gt;EPOLLONESHOT&lt;/code&gt;选项&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;若注册事件时指定&lt;code&gt;EPOLLONESHOT&lt;/code&gt;，则事件触发后&lt;strong&gt;内核会自动将该fd从红黑树中移除&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;目的&lt;/strong&gt;：确保事件仅被处理一次，避免多线程场景下同一事件被重复触发。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;后续操作&lt;/strong&gt;：用户需显式调用&lt;code&gt;epoll_ctl(EPOLL_CTL_MOD)&lt;/code&gt;重新添加fd，才能继续监听&lt;a class="link" href="@ref" &gt;1,4,5&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;适用场景&lt;/em&gt;：高并发下需精确控制事件触发的次数（如定时任务）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;用户主动删除&lt;/strong&gt;
+调用&lt;code&gt;epoll_ctl(EPOLL_CTL_DEL, fd)&lt;/code&gt;手动将fd从红黑树中删除&lt;a class="link" href="@ref" &gt;2,5&lt;/a&gt;。
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;常见场景&lt;/em&gt;：连接关闭（&lt;code&gt;close(fd)&lt;/code&gt;）或业务逻辑不再需要监听该fd时。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-数据结构与内核行为"&gt;🔧 数据结构与内核行为
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;红黑树与就绪队列的关系&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;红黑树（rbr）&lt;/strong&gt;：存储所有注册的&lt;code&gt;epitem&lt;/code&gt;节点，键值由fd和设备标识组成，确保唯一性。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;就绪队列（rdllist）&lt;/strong&gt;：临时存放已触发事件的&lt;code&gt;epitem&lt;/code&gt;节点（通过回调函数动态插入）。&lt;/li&gt;
+&lt;li&gt;节点同时存在于红黑树和就绪队列中，但&lt;strong&gt;删除操作仅由用户或&lt;code&gt;EPOLLONESHOT&lt;/code&gt;触发&lt;/strong&gt;&lt;a class="link" href="@ref" &gt;1,5&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;回调函数的角色&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;当数据到达时，网卡中断触发内核将数据写入socket缓冲区。&lt;/li&gt;
+&lt;li&gt;内核调用&lt;code&gt;ep_poll_callback&lt;/code&gt;，将对应&lt;code&gt;epitem&lt;/code&gt;节点加入就绪队列，&lt;strong&gt;不涉及红黑树修改&lt;/strong&gt;&lt;a class="link" href="@ref" &gt;4,5&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-总结何时节点会被删除"&gt;💎 总结：何时节点会被删除？
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;场景&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;节点是否删除&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;触发方&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;后续操作&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;默认情况&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;❌ 否&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;节点保留，持续监听&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;设置&lt;code&gt;EPOLLONESHOT&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;✅ 是&lt;/td&gt;
+&lt;td&gt;内核自动删除&lt;/td&gt;
+&lt;td&gt;需显式调用&lt;code&gt;EPOLL_CTL_MOD&lt;/code&gt;重新添加&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;用户调用&lt;code&gt;DEL&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;✅ 是&lt;/td&gt;
+&lt;td&gt;用户主动删除&lt;/td&gt;
+&lt;td&gt;不再监听该fd&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;blockquote&gt;
+&lt;p&gt;⚙️ &lt;strong&gt;设计意图&lt;/strong&gt;：epoll通过保留红黑树节点避免重复注册的开销，仅当明确要求（如&lt;code&gt;EPOLLONESHOT&lt;/code&gt;）或连接关闭时才删除节点，以最大化性能&lt;a class="link" href="@ref" &gt;1,5&lt;/a&gt;。
+🔧 ​&lt;strong&gt;实践建议&lt;/strong&gt;​：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;对于长连接通信（如Web服务器），无需设置&lt;code&gt;EPOLLONESHOT&lt;/code&gt;；&lt;/li&gt;
+&lt;li&gt;对于单次任务（如定时触发），使用&lt;code&gt;EPOLLONESHOT&lt;/code&gt;避免事件重复处理。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;</description></item></channel></rss>

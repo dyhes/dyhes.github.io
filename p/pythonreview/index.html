@@ -1,0 +1,1291 @@
+<!doctype html><html lang=en-us dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='核心语法 以下是Python关键语法的系统总结，结合语言特性、核心语法元素和工程实践，帮助开发者快速掌握核心概念：\n🧠 核心语言特性 动态类型 变量无需声明类型，运行时自动推断（如 x = 10 为整型，y = "text" 为字符串）。 强类型约束 类型转换需显式处理（如 str(10) 将整数转为字符串），避免隐式转换错误。 缩进即结构 用4空格缩进替代大括号 {} 定义代码块，缩进错误会引发 IndentationError。 🔢 基本语法元素 变量与数据类型 基本类型：整型 int、浮点型 float、字符串 str、布尔型 bool、空值 NoneType。 复合类型： 列表 list：有序可变（如 [1, "a", True]） 元组 tuple：有序不可变（如 (10, 20)） 字典 dict：键值对集合（如 {"name": "Alice"}） 集合 set：无序不重复（如 {1, 2, 3}）。 运算符 算术：+, -, *, /, //（整除）, %（取模）, **（幂运算） 比较：==, >, is（身份比对） 逻辑：and, or, not。 🔁 流程控制 条件语句 if score >= 90: print("A") elif score >= 80: print("B") else: print("C") ```。 循环结构\n'><title>【Python】Review</title><link rel=canonical href=https://dyhes.github.io/p/pythonreview/><link rel=stylesheet href=/scss/style.min.f7091bff8043bd3e53b22be6c05dd86b506e8dec4d0d75d249d2dfb0fe074a46.css><meta property='og:title' content="【Python】Review"><meta property='og:description' content='核心语法 以下是Python关键语法的系统总结，结合语言特性、核心语法元素和工程实践，帮助开发者快速掌握核心概念：\n🧠 核心语言特性 动态类型 变量无需声明类型，运行时自动推断（如 x = 10 为整型，y = "text" 为字符串）。 强类型约束 类型转换需显式处理（如 str(10) 将整数转为字符串），避免隐式转换错误。 缩进即结构 用4空格缩进替代大括号 {} 定义代码块，缩进错误会引发 IndentationError。 🔢 基本语法元素 变量与数据类型 基本类型：整型 int、浮点型 float、字符串 str、布尔型 bool、空值 NoneType。 复合类型： 列表 list：有序可变（如 [1, "a", True]） 元组 tuple：有序不可变（如 (10, 20)） 字典 dict：键值对集合（如 {"name": "Alice"}） 集合 set：无序不重复（如 {1, 2, 3}）。 运算符 算术：+, -, *, /, //（整除）, %（取模）, **（幂运算） 比较：==, >, is（身份比对） 逻辑：and, or, not。 🔁 流程控制 条件语句 if score >= 90: print("A") elif score >= 80: print("B") else: print("C") ```。 循环结构\n'><meta property='og:url' content='https://dyhes.github.io/p/pythonreview/'><meta property='og:site_name' content='飞鸿踏雪泥'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='Python'><meta property='article:published_time' content='2025-07-15T00:00:00+00:00'><meta property='article:modified_time' content='2025-07-31T19:25:11+08:00'><meta name=twitter:title content="【Python】Review"><meta name=twitter:description content='核心语法 以下是Python关键语法的系统总结，结合语言特性、核心语法元素和工程实践，帮助开发者快速掌握核心概念：\n🧠 核心语言特性 动态类型 变量无需声明类型，运行时自动推断（如 x = 10 为整型，y = "text" 为字符串）。 强类型约束 类型转换需显式处理（如 str(10) 将整数转为字符串），避免隐式转换错误。 缩进即结构 用4空格缩进替代大括号 {} 定义代码块，缩进错误会引发 IndentationError。 🔢 基本语法元素 变量与数据类型 基本类型：整型 int、浮点型 float、字符串 str、布尔型 bool、空值 NoneType。 复合类型： 列表 list：有序可变（如 [1, "a", True]） 元组 tuple：有序不可变（如 (10, 20)） 字典 dict：键值对集合（如 {"name": "Alice"}） 集合 set：无序不重复（如 {1, 2, 3}）。 运算符 算术：+, -, *, /, //（整除）, %（取模）, **（幂运算） 比较：==, >, is（身份比对） 逻辑：and, or, not。 🔁 流程控制 条件语句 if score >= 90: print("A") elif score >= 80: print("B") else: print("C") ```。 循环结构\n'><link rel="shortcut icon" href=/github.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label="Toggle Menu">
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu_b567f26f71c49c33.png width=300 height=300 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>飞鸿踏雪泥</a></h1><h2 class=site-description>没有记录，就没有发生</h2></div></header><ol class=menu-social><li><a href=https://leetcode.cn/u/dyhes/ target=_blank title=LeetCode rel=me><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 13h7.5"/><path d="M9.424 7.268l4.999-4.999"/><path d="M16.633 16.644l-2.402 2.415a3.189 3.189.0 01-4.524.0l-3.77-3.787a3.223 3.223.0 010-4.544l3.77-3.787a3.189 3.189.0 014.524.0l2.302 2.313"/></svg></a></li><li><a href=https://github.com/dyhes target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=mailto:dyheslin@gmail.com target=_blank title=Gmail rel=me><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-gmail"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16 20h3a1 1 0 001-1V5a1 1 0 00-1-1h-3v16z"/><path d="M5 20h3V4H5A1 1 0 004 5v14a1 1 0 001 1z"/><path d="M16 4l-4 4-4-4"/><path d="M4 6.5l8 7.5 8-7.5"/></svg></a></li><li><a href=mailto:1325574784@qq.com target=_blank title=Mail rel=me><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 19H5a2 2 0 01-2-2V7a2 2 0 012-2h14a2 2 0 012 2v5.5"/><path d="M3 7l9 6 9-6"/><path d="M19 16l-2 3h4l-2 3"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/about/><svg class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>About</span></a></li><li><a href=/categories/><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+<span>Categories</span></a></li><li><a href=/tags/><svg class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11 3l9 9a1.5 1.5.0 010 2l-6 6a1.5 1.5.0 01-2 0L3 11V7a4 4 0 014-4h4"/><circle cx="9" cy="9" r="2"/></svg>
+<span>Tags</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>Dark Mode</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">Table of contents</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#核心语法>核心语法</a><ol><li><a href=#-核心语言特性>🧠 核心语言特性</a></li><li><a href=#-基本语法元素>🔢 基本语法元素</a></li><li><a href=#-流程控制>🔁 流程控制</a></li><li><a href=#-函数与模块化>📦 函数与模块化</a></li><li><a href=#-面向对象编程oop>🧩 面向对象编程（OOP）</a></li><li><a href=#-高级特性>⚙️ 高级特性</a></li><li><a href=#-错误与文件处理>🛡️ 错误与文件处理</a></li><li><a href=#-总结>💎 总结</a></li></ol></li><li><a href=#--is>== & is</a><ol><li><a href=#-核心区别>🔍 <strong>核心区别</strong></a></li><li><a href=#-特殊行为与常见误区>⚠️ <strong>特殊行为与常见误区</strong></a></li><li><a href=#-使用场景建议>🛠️ <strong>使用场景建议</strong></a></li><li><a href=#-性能与最佳实践>⚡ <strong>性能与最佳实践</strong></a></li><li><a href=#-总结-1>💎 <strong>总结</strong></a></li></ol></li><li><a href=#-默认行为>== 默认行为</a><ol><li><a href=#-内置容器类型的默认行为递归深层比较>🔍 <strong>内置容器类型的默认行为（递归深层比较）</strong></a></li><li><a href=#-自定义类的默认行为对象标识比较>⚙️ <strong>自定义类的默认行为（对象标识比较）</strong></a></li><li><a href=#-特殊值与边界情况>⚠️ <strong>特殊值与边界情况</strong></a></li><li><a href=#-性能与优化>⚡ <strong>性能与优化</strong></a></li><li><a href=#-总结与使用建议>💡 <strong>总结与使用建议</strong></a></li></ol></li><li><a href=#-默认行为-1>= 默认行为</a><ol><li><a href=#-赋值操作的本质>🔍 <strong>赋值操作的本质</strong></a></li><li><a href=#-浅拷贝-vs-深拷贝-vs-赋值的区别>⚖️ <strong>浅拷贝 vs. 深拷贝 vs. 赋值的区别</strong></a><ol><li><a href=#-关键说明>📌 <strong>关键说明</strong>：</a></li></ol></li><li><a href=#-常见误区与示例>⚠️ <strong>常见误区与示例</strong></a><ol><li><a href=#误区认为赋值是浅拷贝><strong>误区</strong>：认为赋值是浅拷贝</a></li></ol></li><li><a href=#-何时使用何种操作>💡 <strong>何时使用何种操作</strong></a></li><li><a href=#-性能与注意事项>⚡ <strong>性能与注意事项</strong></a></li><li><a href=#-总结-2>💎 <strong>总结</strong></a></li><li><a href=#-java的赋值行为>⚙️ <strong>Java的赋值行为</strong></a></li><li><a href=#-c的赋值行为>⚙️ <strong>C++的赋值行为</strong></a></li><li><a href=#-java与c赋值行为对比>⚖️ <strong>Java与C++赋值行为对比</strong></a></li><li><a href=#-关键注意事项>⚠️ <strong>关键注意事项</strong></a></li><li><a href=#-总结-3>💎 <strong>总结</strong></a></li><li><a href=#-python-基础数据类型>🔢 <strong>Python 基础数据类型</strong></a><ol><li><a href=#不可变类型immutable><strong>不可变类型（Immutable）</strong></a></li><li><a href=#可变类型mutable><strong>可变类型（Mutable）</strong></a></li><li><a href=#其他类型><strong>其他类型</strong></a></li></ol></li><li><a href=#-赋值操作>⚖️ <strong>赋值操作 <code>=</code> 的本质：引用传递</strong></a><ol><li><a href=#不可变类型的赋值行为><strong>不可变类型的赋值行为</strong></a></li><li><a href=#可变类型的赋值行为><strong>可变类型的赋值行为</strong></a></li><li><a href=#赋值-vs-浅拷贝深拷贝><strong>赋值 vs. 浅拷贝/深拷贝</strong></a></li></ol></li><li><a href=#-赋值行为的注意事项>⚠️ <strong>赋值行为的注意事项</strong></a></li><li><a href=#-总结-4>💎 <strong>总结</strong></a></li></ol></li><li><a href=#range>range</a><ol><li><a href=#-基础语法与参数>🔢 <strong>基础语法与参数</strong></a></li><li><a href=#-返回值与内存机制>⚡ <strong>返回值与内存机制</strong></a></li><li><a href=#-核心应用场景>🛠️ <strong>核心应用场景</strong></a><ol><li><a href=#循环控制><strong>循环控制</strong></a></li><li><a href=#生成特定序列><strong>生成特定序列</strong></a></li><li><a href=#索引与切片操作><strong>索引与切片操作</strong></a></li><li><a href=#结合高阶函数><strong>结合高阶函数</strong></a></li></ol></li><li><a href=#-高级技巧与避坑指南>🧠 <strong>高级技巧与避坑指南</strong></a></li><li><a href=#-与其他工具的对比>⚖️ <strong>与其他工具的对比</strong></a></li><li><a href=#-总结-5>💎 <strong>总结</strong></a></li></ol></li><li><a href=#enumerate>enumerate</a><ol><li><a href=#-核心功能与语法>🔍 核心功能与语法</a><ol><li><a href=#作用原理><strong>作用原理</strong></a></li><li><a href=#语法>语法</a></li></ol></li><li><a href=#-与传统写法的对比>⚖️ 与传统写法的对比</a></li><li><a href=#-核心应用场景-1>🛠️ 核心应用场景</a><ol><li><a href=#修改列表元素><strong>修改列表元素</strong></a></li><li><a href=#字符串文本处理><strong>字符串/文本处理</strong></a></li><li><a href=#字典遍历><strong>字典遍历</strong></a></li><li><a href=#文件处理><strong>文件处理</strong></a></li><li><a href=#构建索引映射><strong>构建索引映射</strong></a></li></ol></li><li><a href=#-性能与优化-1>⚡ 性能与优化</a></li><li><a href=#-高级技巧>🧠 高级技巧</a><ol><li><a href=#与推导式结合><strong>与推导式结合</strong></a></li><li><a href=#并行遍历多个列表><strong>并行遍历多个列表</strong></a></li></ol></li><li><a href=#-注意事项>⚠️ 注意事项</a></li><li><a href=#-总结-6>💎 总结</a></li></ol></li><li><a href=#slice>Slice</a><ol><li><a href=#-核心语法规则>⚙️ <strong>核心语法规则</strong></a><ol><li><a href=#-关键特性>📌 <strong>关键特性</strong></a></li></ol></li><li><a href=#-高级技巧与避坑指南-1>🧠 <strong>高级技巧与避坑指南</strong></a><ol><li><a href=#反向切片与序列反转><strong>反向切片与序列反转</strong></a></li><li><a href=#切片赋值与动态修改><strong>切片赋值与动态修改</strong></a></li><li><a href=#切片对象><strong>切片对象（<code>slice()</code>）</strong></a></li><li><a href=#深浅拷贝问题><strong>深浅拷贝问题</strong></a></li></ol></li><li><a href=#-应用场景>⚡️ <strong>应用场景</strong></a><ol><li><a href=#数据分块处理><strong>数据分块处理</strong></a></li><li><a href=#字符串与序列操作><strong>字符串与序列操作</strong></a></li><li><a href=#多维数据结构numpy><strong>多维数据结构（NumPy）</strong></a></li><li><a href=#快速算法实现><strong>快速算法实现</strong></a></li></ol></li><li><a href=#-注意事项-1>⚠️ <strong>注意事项</strong></a></li><li><a href=#-总结-7>💎 <strong>总结</strong></a></li></ol></li><li><a href=#面向对象>面向对象</a><ol><li><a href=#-类与对象>⚙️ <strong>类与对象</strong></a><ol><li><a href=#基本概念><strong>基本概念</strong></a></li><li><a href=#属性与方法的类型><strong>属性与方法的类型</strong></a></li></ol></li><li><a href=#-面向对象三大特性>🔒 <strong>面向对象三大特性</strong></a><ol><li><a href=#封装encapsulation><strong>封装（Encapsulation）</strong></a></li><li><a href=#继承inheritance><strong>继承（Inheritance）</strong></a></li><li><a href=#多态polymorphism><strong>多态（Polymorphism）</strong></a></li></ol></li><li><a href=#-高级特性-1>🎩 <strong>高级特性</strong></a><ol><li><a href=#魔术方法magic-methods><strong>魔术方法（Magic Methods）</strong></a></li><li><a href=#抽象类与接口><strong>抽象类与接口</strong></a></li><li><a href=#属性装饰器property><strong>属性装饰器（@property）</strong></a></li></ol></li><li><a href=#-应用场景-1>🛠️ <strong>应用场景</strong></a></li><li><a href=#-总结-8>💎 <strong>总结</strong></a></li></ol></li><li><a href=#_var-vs-__var>_var vs. __var</a><ol><li><a href=#-_var>⚙️ <strong><code>_var</code>（单下划线前缀）</strong></a></li><li><a href=#-__var>🔒 <strong><code>__var</code>（双下划线前缀）</strong></a></li><li><a href=#-核心区别对比>⚖️ <strong>核心区别对比</strong></a></li><li><a href=#-注意事项-2>⚠️ <strong>注意事项</strong></a></li><li><a href=#-总结-9>💎 <strong>总结</strong></a></li></ol></li><li><a href=#__var__>__var__</a><ol><li><a href=#-核心作用>⚙️ <strong>核心作用</strong></a></li><li><a href=#-常用魔法方法及示例>🧩 <strong>常用魔法方法及示例</strong></a></li><li><a href=#-关键注意事项-1>⚠️ <strong>关键注意事项</strong></a></li><li><a href=#-总结-10>💎 <strong>总结</strong></a></li><li><a href=#-默认存在的魔术方法>⚙️ <strong>默认存在的魔术方法</strong></a></li><li><a href=#-何时需要自定义魔术方法>🧩 <strong>何时需要自定义魔术方法</strong></a></li><li><a href=#-关键注意事项-2>⚠️ <strong>关键注意事项</strong></a></li><li><a href=#-总结-11>💎 <strong>总结</strong></a></li></ol></li><li><a href=#decorator>Decorator</a><ol><li><a href=#-装饰器的核心原理>⚙️ <strong>装饰器的核心原理</strong></a></li><li><a href=#-装饰器类型与实现>🧩 <strong>装饰器类型与实现</strong></a><ol><li><a href=#无参装饰器><strong>无参装饰器</strong></a></li><li><a href=#带参装饰器><strong>带参装饰器</strong></a></li><li><a href=#类装饰器><strong>类装饰器</strong></a></li><li><a href=#内置装饰器><strong>内置装饰器</strong></a></li></ol></li><li><a href=#-关键注意事项-3>⚠️ <strong>关键注意事项</strong></a></li><li><a href=#-应用场景-2>🛠️ <strong>应用场景</strong></a></li><li><a href=#-综合示例缓存--计时装饰器>💎 <strong>综合示例：缓存 + 计时装饰器</strong></a></li><li><a href=#总结><strong>总结</strong></a></li></ol></li><li><a href=#args>*args</a><ol><li><a href=#-核心概念>⚙️ <strong>核心概念</strong></a></li><li><a href=#-基本用法>🧩 <strong>基本用法</strong></a><ol><li><a href=#接收任意数量参数><strong>接收任意数量参数</strong></a></li><li><a href=#与固定参数结合><strong>与固定参数结合</strong></a></li></ol></li><li><a href=#-参数顺序规则>⚖️ <strong>参数顺序规则</strong></a></li><li><a href=#-高级技巧-1>🔧 <strong>高级技巧</strong></a><ol><li><a href=#解包序列为位置参数><strong>解包序列为位置参数</strong></a></li><li><a href=#动态函数调用><strong>动态函数调用</strong></a></li><li><a href=#避免子类参数冲突><strong>避免子类参数冲突</strong></a></li></ol></li><li><a href=#-典型应用场景>🛠️ <strong>典型应用场景</strong></a></li><li><a href=#-注意事项-3>⚠️ <strong>注意事项</strong></a></li><li><a href=#-总结-12>💎 <strong>总结</strong></a></li></ol></li><li><a href=#kwargs>**kwargs</a><ol><li><a href=#-基本概念与语法>⚙️ <strong>基本概念与语法</strong></a></li><li><a href=#-核心特性>📦 <strong>核心特性</strong></a></li><li><a href=#-典型应用场景-1>🛠️ <strong>典型应用场景</strong></a></li><li><a href=#-高级技巧与注意事项>🔧 <strong>高级技巧与注意事项</strong></a></li></ol></li></ol><ol><li><ol><li><a href=#-高级模式与工具>⚡ <strong>高级模式与工具</strong></a></li><li><a href=#-常见错误与避坑指南>⚠️ <strong>常见错误与避坑指南</strong></a></li><li><a href=#-性能对比与适用场景>⚖️ <strong>性能对比与适用场景</strong></a></li><li><a href=#-底层原理进阶>🔍 <strong>底层原理（进阶）</strong></a></li><li><a href=#-总结-13>💎 <strong>总结</strong></a></li></ol></li><li><a href=#iterator>Iterator</a><ol><li><a href=#-迭代器的核心概念>⚙️ <strong>迭代器的核心概念</strong></a><ol><li><a href=#迭代器协议><strong>迭代器协议</strong></a></li><li><a href=#迭代器-vs-可迭代对象iterable><strong>迭代器 vs 可迭代对象（Iterable）</strong></a></li></ol></li><li><a href=#-迭代器的实现方式>🛠️ <strong>迭代器的实现方式</strong></a><ol><li><a href=#自定义迭代器类><strong>自定义迭代器类</strong></a></li><li><a href=#生成器generator更简洁的实现><strong>生成器（Generator）：更简洁的实现</strong></a></li></ol></li><li><a href=#-迭代器的核心优势>⚡ <strong>迭代器的核心优势</strong></a></li><li><a href=#-内置迭代器工具>🔧 <strong>内置迭代器工具</strong></a><ol><li><a href=#itertools><strong><code>itertools</code> 模块（标准库利器）</strong></a></li><li><a href=#常用内置函数><strong>常用内置函数</strong></a></li></ol></li><li><a href=#-实战应用场景>🧩 <strong>实战应用场景</strong></a></li><li><a href=#-常见陷阱与最佳实践>⚠️ <strong>常见陷阱与最佳实践</strong></a></li><li><a href=#-总结-14>💎 <strong>总结</strong></a></li></ol></li><li><a href=#yield>yield</a><ol><li><a href=#-核心机制执行流程与协程状态>⚙️ <strong>核心机制：执行流程与协程状态</strong></a><ol><li><a href=#函数执行流程控制><strong>函数执行流程控制</strong></a></li><li><a href=#协程状态机><strong>协程状态机</strong></a></li></ol></li><li><a href=#-与迭代器协议的关系>🔗 <strong>与迭代器协议的关系</strong></a></li><li><a href=#-内存模型与性能优化>💾 <strong>内存模型与性能优化</strong></a><ol><li><a href=#惰性求值lazy-evaluation><strong>惰性求值（Lazy Evaluation）</strong></a></li><li><a href=#生成器表达式优化><strong>生成器表达式优化</strong></a></li></ol></li><li><a href=#-高级控制机制>⚡ <strong>高级控制机制</strong></a></li><li><a href=#-底层实现解析>🧠 <strong>底层实现解析</strong></a></li><li><a href=#-设计哲学与最佳实践>💎 <strong>设计哲学与最佳实践</strong></a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/temple/ style=background-color:#69a794;color:>白玉京</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/pythonreview/>【Python】Review</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Jul 15, 2025</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>28 minute read</time></div></footer></div></header><section class=article-content><h2 id=核心语法>核心语法</h2><p>以下是Python关键语法的系统总结，结合语言特性、核心语法元素和工程实践，帮助开发者快速掌握核心概念：</p><h3 id=-核心语言特性>🧠 核心语言特性</h3><ol><li><strong>动态类型</strong>
+变量无需声明类型，运行时自动推断（如 <code>x = 10</code> 为整型，<code>y = "text"</code> 为字符串）。</li><li><strong>强类型约束</strong>
+类型转换需显式处理（如 <code>str(10)</code> 将整数转为字符串），避免隐式转换错误。</li><li><strong>缩进即结构</strong>
+用<strong>4空格缩进</strong>替代大括号 <code>{}</code> 定义代码块，缩进错误会引发 <code>IndentationError</code>。</li></ol><h3 id=-基本语法元素>🔢 基本语法元素</h3><ol><li><strong>变量与数据类型</strong><ul><li><strong>基本类型</strong>：整型 <code>int</code>、浮点型 <code>float</code>、字符串 <code>str</code>、布尔型 <code>bool</code>、空值 <code>NoneType</code>。</li><li>复合类型：<ul><li>列表 <code>list</code>：有序可变（如 <code>[1, "a", True]</code>）</li><li>元组 <code>tuple</code>：有序不可变（如 <code>(10, 20)</code>）</li><li>字典 <code>dict</code>：键值对集合（如 <code>{"name": "Alice"}</code>）</li><li>集合 <code>set</code>：无序不重复（如 <code>{1, 2, 3}</code>）。</li></ul></li></ul></li><li><strong>运算符</strong><ul><li>算术：<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>//</code>（整除）, <code>%</code>（取模）, <code>**</code>（幂运算）</li><li>比较：<code>==</code>, <code>></code>, <code>is</code>（身份比对）</li><li>逻辑：<code>and</code>, <code>or</code>, <code>not</code>。</li></ul></li></ol><h3 id=-流程控制>🔁 流程控制</h3><ol><li>条件语句</li></ol><pre tabindex=0><code>   if score &gt;= 90:
+       print(&#34;A&#34;)
+   elif score &gt;= 80:
+       print(&#34;B&#34;)
+   else:
+       print(&#34;C&#34;)
+   ```。
+</code></pre><ol start=2><li></li></ol><p>循环结构</p><ul><li><code>for</code> 循环：遍历序列（如 <code>for i in range(5):</code>）<ul><li><code>while</code> 循环：条件控制（需手动更新条件变量）</li><li>控制关键字：<code>break</code>（终止循环）、<code>continue</code>（跳过当前迭代）。</li></ul></li></ul><h3 id=-函数与模块化>📦 函数与模块化</h3><ol><li></li></ol><p>函数定义</p><pre tabindex=0><code>   def greet(name=&#34;Guest&#34;):  # 默认参数
+       return f&#34;Hello, {name}&#34;
+</code></pre><ul><li>参数类型：位置参数、默认参数、可变参数 <code>*args</code>、关键字参数 <code>**kwargs</code>。</li></ul><ol start=2><li><p><strong>Lambda函数</strong>
+匿名函数简化短逻辑（如 <code>add = lambda x, y: x + y</code>）。</p></li><li></li></ol><p>模块与包</p><ul><li>导入：<code>import math</code> 或 <code>from math import sqrt</code><ul><li>包管理：用 <code>__init__.py</code> 定义包目录。</li></ul></li></ul><h3 id=-面向对象编程oop>🧩 面向对象编程（OOP）</h3><ol><li></li></ol><p>类与对象</p><pre tabindex=0><code>   class Dog:
+       species = &#34;Canis&#34;  # 类属性
+       def __init__(self, name):  # 构造方法
+           self.name = name
+       def bark(self):  # 实例方法
+           print(f&#34;{self.name} barks!&#34;)
+   ```。
+</code></pre><ol start=2><li>继承与多态</li></ol><pre tabindex=0><code>   class GoldenRetriever(Dog):
+       def bark(self):  # 方法重写
+           print(&#34;Gentle bark!&#34;)
+   ```。
+</code></pre><h3 id=-高级特性>⚙️ 高级特性</h3><ol><li></li></ol><p>上下文管理器</p><p>用</p><pre tabindex=0><code>   with
+</code></pre><p>自动管理资源（如文件操作）：</p><pre tabindex=0><code>with open(&#34;file.txt&#34;, &#34;r&#34;) as f:  # 自动关闭文件
+    content = f.read()
+```。
+</code></pre><ol start=2><li><p>装饰器
+动态增强函数行为：</p><pre tabindex=0><code>def log_decorator(func):
+    def wrapper(*args):
+        print(f&#34;Calling {func.__name__}&#34;)
+        return func(*args)
+    return wrapper
+
+@log_decorator
+def hello():
+    print(&#34;Hello!&#34;)
+```。
+</code></pre></li><li></li></ol><p>推导式</p><ul><li>列表推导：<code>squares = [x**2 for x in range(10)]</code><ul><li>字典推导：<code>{x: x**2 for x in range(5)}</code></li><li>生成器：<code>(x**2 for x in range(10))</code>（惰性求值）。</li></ul></li></ul><h3 id=-错误与文件处理>🛡️ 错误与文件处理</h3><ol><li></li></ol><p>异常处理</p><pre tabindex=0><code>   try:
+       10 / 0
+   except ZeroDivisionError:
+       print(&#34;除零错误！&#34;)
+   finally:
+       print(&#34;清理资源&#34;)
+   ```。
+</code></pre><ol start=2><li>文件操作</li></ol><pre tabindex=0><code>   with open(&#34;data.txt&#34;, &#34;w&#34;) as f:
+       f.write(&#34;Hello&#34;)  # 写入
+   with open(&#34;data.txt&#34;, &#34;r&#34;) as f:
+       print(f.read())   # 读取
+   ```。
+</code></pre><h3 id=-总结>💎 总结</h3><p>Python以<strong>简洁性</strong>（如列表推导式替代循环）、<strong>一致性</strong>（“一种明显的方式”哲学）和<strong>工程友好性</strong>（丰富的标准库）著称。建议结合PEP8规范（如变量命名 <code>snake_case</code>）和虚拟环境（<code>venv</code>）提升代码质量。</p><h2 id=--is>== & is</h2><p>在Python中，<code>==</code>（相等运算符）和<code>is</code>（身份运算符）的核心区别在于<strong>比较的维度不同</strong>，具体差异及使用场景如下：</p><hr><h3 id=-核心区别>🔍 <strong>核心区别</strong></h3><ol><li><p><strong>比较对象不同</strong></p><ul><li><p>**</p><pre tabindex=0><code>==
+</code></pre><p>：比较两个对象的</p><p>值是否相等**（通过调用对象的</p><pre tabindex=0><code>__eq__()
+</code></pre><p>方法实现）。</p><pre tabindex=0><code>a = [1, 2]; b = [1, 2]
+print(a == b)  # True（值相同）
+</code></pre></li><li><p>**</p><pre tabindex=0><code>is
+</code></pre><p>：比较两个对象的</p><p>内存地址是否相同**（即是否为同一个对象）。</p><pre tabindex=0><code>a = [1, 2]; b = a
+print(a is b)  # True（同一对象）
+</code></pre></li></ul><p><em>引用：</em></p></li><li><p><strong>底层机制</strong></p><ul><li><code>is</code> 等价于 <code>id(a) == id(b)</code>，直接比较对象在内存中的地址。</li><li><code>==</code> 依赖对象的<code>__eq__()</code>方法，可被重写（如自定义类中定义值相等规则）。
+<em>引用：</em></li></ul></li></ol><hr><h3 id=-特殊行为与常见误区>⚠️ <strong>特殊行为与常见误区</strong></h3><ol><li><p><strong>Python的优化机制</strong></p><ul><li></li></ul></li></ol><pre><code> 小整数缓存（-5 ~ 256）
+
+ ：
+
+ ```
+ a = 256; b = 256
+ print(a is b)  # True（缓存优化）
+ c = 257; d = 257
+ print(c is d)  # False（超出缓存范围）
+ ```
+</code></pre><ul><li></li></ul><pre><code> 字符串驻留
+
+ ：短字符串或代码中重复出现的字符串可能共享内存。
+
+ ```
+ s1 = &quot;hello&quot;; s2 = &quot;hello&quot;
+ print(s1 is s2)  # True（驻留优化）
+ ```
+</code></pre><p><em>引用：</em></p><ol start=2><li><p><strong>不可变对象的陷阱</strong>
+即使值相同，不可变对象（如元组、浮点数）也可能占用不同内存：</p><pre tabindex=0><code>t1 = (1, 2); t2 = (1, 2)
+print(t1 is t2)  # False（非同一对象）
+f1 = 3.14; f2 = 3.14
+print(f1 is f2)  # False（无缓存）
+</code></pre><p><em>引用：</em></p></li><li><p><strong>运算结果的影响</strong>
+涉及运算时，即使结果值相同，对象也可能不同：</p><pre tabindex=0><code>a = 1000
+b = 999 + 1
+print(a == b)  # True（值相等）
+print(a is b)  # False（非同一对象）
+</code></pre><p><em>引用：</em></p></li></ol><hr><h3 id=-使用场景建议>🛠️ <strong>使用场景建议</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>场景</strong></th><th><strong>推荐运算符</strong></th><th><strong>示例</strong></th><th><strong>原因</strong></th></tr></thead><tbody><tr><td>比较值是否相等</td><td><code>==</code></td><td><code>list1 == list2</code>（内容相同）</td><td>关注逻辑等价性</td></tr><tr><td>判断是否为 <code>None</code></td><td><code>is</code></td><td><code>if x is None:</code></td><td><code>None</code> 是全局单例对象</td></tr><tr><td>验证单例模式</td><td><code>is</code></td><td><code>singleton1 is singleton2</code></td><td>确保引用同一实例</td></tr><tr><td>比较可变对象的身份</td><td><code>is</code></td><td><code>obj1 is obj2</code>（是否同一列表）</td><td>避免意外修改副本</td></tr><tr><td>自定义对象的等价性</td><td><code>==</code></td><td>需重写 <code>__eq__()</code> 方法</td><td>自定义值相等规则</td></tr></tbody></table></div><p><em>引用：</em></p><hr><h3 id=-性能与最佳实践>⚡ <strong>性能与最佳实践</strong></h3><ul><li><p><strong>性能差异</strong>：<code>is</code> 比 <code>==</code> 更快，因为前者直接比较地址，后者可能递归遍历复杂对象（如嵌套列表）。</p></li><li></li></ul><p>避免误用</p><p>：</p><ul><li>❌ 不要用 <code>is</code> 比较值类型（如数值、字符串），除非明确知晓缓存机制。</li><li>✅ 判断 <code>None</code>、<code>True</code>、<code>False</code> 时必用 <code>is</code>（安全且高效）。
+<em>引用：</em></li></ul><hr><h3 id=-总结-1>💎 <strong>总结</strong></h3><ul><li><strong>值相等 → <code>==</code></strong>：用于数据内容比对（如数字、字符串、列表元素）。</li><li>*<em>对象同一性 → <code>is</code>**：用于验证内存地址（如单例、变量引用关系）。
+理解Python的缓存机制（小整数、字符串驻留）可避免因优化导致的意外结果，但*<em>切勿依赖这些机制做值比较</em></em>。遵循“值用<code>==</code>，身份用<code>is</code>”的原则，代码更健壮。</li></ul><h2 id=-默认行为>== 默认行为</h2><p>在 Python 中，<code>==</code> 运算符的默认实现是否执行递归深层比较，取决于被比较对象的类型。以下是具体分析：</p><h3 id=-内置容器类型的默认行为递归深层比较>🔍 <strong>内置容器类型的默认行为（递归深层比较）</strong></h3><ul><li></li></ul><p>列表、元组、字典、集合等容器类型</p><p>：</p><p>当比较这些容器时，</p><pre tabindex=0><code>==
+</code></pre><p>默认会递归比较每个元素的值（深层比较）。</p><p>示例</p><p>：</p><pre tabindex=0><code>a = [[1, 2], {&#34;key&#34;: &#34;value&#34;}]
+b = [[1, 2], {&#34;key&#34;: &#34;value&#34;}]
+print(a == b)  # True（递归比较嵌套元素）
+</code></pre><ul><li>列表和元组：按顺序逐元素递归比较。</li><li>字典：比较键值对是否相同（键和值均递归比较），顺序无关（Python 3.7+ 保留插入顺序，但比较时不考虑顺序）。</li><li>集合：仅比较元素是否相同（无序）。</li></ul><h3 id=-自定义类的默认行为对象标识比较>⚙️ <strong>自定义类的默认行为（对象标识比较）</strong></h3><ul><li></li></ul><p>未定义 <code>__eq__</code> 方法时</p><p>：</p><pre tabindex=0><code>==
+</code></pre><p>默认比较对象的标识（内存地址），等同于</p><pre tabindex=0><code>  is
+</code></pre><p>运算符，</p><p>不会递归比较属性</p><p>。</p><p>示例</p><p>：</p><pre tabindex=0><code>class Person:
+    def __init__(self, name):
+        self.name = name
+p1 = Person(&#34;Alice&#34;)
+p2 = Person(&#34;Alice&#34;)
+print(p1 == p2)  # False（比较内存地址）
+</code></pre><ul><li></li></ul><p>定义 <code>__eq__</code> 方法后</p><p>：</p><p>可自定义深层比较逻辑（需手动实现递归）。</p><p>示例</p><p>：</p><pre tabindex=0><code>class Person:
+    def __init__(self, name):
+        self.name = name
+    def __eq__(self, other):
+        return self.name == other.name  # 手动比较属性
+</code></pre><h3 id=-特殊值与边界情况>⚠️ <strong>特殊值与边界情况</strong></h3><ul><li><strong>不可变类型（字符串、数值）</strong>：
+直接比较值，不涉及递归（例如 <code>"hello" == "hello"</code> 为 <code>True</code>）。</li><li><strong>NaN 值</strong>：
+<code>float('nan') == float('nan')</code> 返回 <code>False</code>（遵循 IEEE 754 标准）。</li><li><strong>类型差异</strong>：
+不同类型直接返回 <code>False</code>（如 <code>[1, 2] == (1, 2)</code> 为 <code>False</code>）。</li></ul><h3 id=-性能与优化>⚡ <strong>性能与优化</strong></h3><ul><li><strong>递归的代价</strong>：
+深层嵌套容器可能因递归比较导致性能下降（例如大型多维列表）。</li><li><strong>短路优化</strong>：
+部分实现会在发现不匹配时提前终止比较（如列表首个元素不等则直接返回 <code>False</code>）。</li></ul><h3 id=-总结与使用建议>💡 <strong>总结与使用建议</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>场景</strong></th><th><code>==</code> 行为</th><th><strong>注意事项</strong></th></tr></thead><tbody><tr><td>内置容器（列表、字典等）</td><td>✅ 递归深层比较</td><td>嵌套层级深时注意性能</td></tr><tr><td>自定义类（无 <code>__eq__</code>）</td><td>❌ 仅比较内存地址（等同 <code>is</code>）</td><td>需重写 <code>__eq__</code> 实现深层比较</td></tr><tr><td>字符串、数值</td><td>✅ 直接值比较</td><td>无递归行为</td></tr><tr><td>NaN 值</td><td>❌ 始终返回 <code>False</code></td><td>用 <code>math.isnan()</code> 替代</td></tr></tbody></table></div><p><strong>建议</strong>：</p><ul><li>对自定义类实现深层比较时，需显式重写 <code>__eq__</code> 并递归调用子元素的 <code>==</code> 比较。</li><li>避免用 <code>==</code> 检查 <code>NaN</code>，优先使用 <code>math.isnan()</code>。</li></ul><h2 id=-默认行为-1>= 默认行为</h2><p>在Python中，<strong>赋值操作（<code>=</code>）既不是浅拷贝也不是深拷贝，而是直接创建对象的引用</strong>。赋值操作的本质是将变量指向同一内存地址，而非创建新对象。以下是详细分析：</p><hr><h3 id=-赋值操作的本质>🔍 <strong>赋值操作的本质</strong></h3><ul><li><p><strong>引用传递</strong>：
+当执行 <code>b = a</code> 时，<code>b</code> 仅获得 <code>a</code> 所指向对象的引用，两者共享同一内存地址。修改任意变量（若对象可变）会影响另一个。</p><pre tabindex=0><code>a = [1, 2, [3, 4]]
+b = a
+b.append(5)
+print(a)  # [1, 2, [3, 4], 5] （a 同步被修改）
+</code></pre></li><li><p><strong>与拷贝的区别</strong>：</p><ul><li><strong>赋值</strong>：内存地址完全一致（<code>id(a) == id(b)</code>）。</li><li><strong>浅拷贝/深拷贝</strong>：创建新对象（<code>id(a) != id(b)</code>）。</li></ul></li></ul><hr><h3 id=-浅拷贝-vs-深拷贝-vs-赋值的区别>⚖️ <strong>浅拷贝 vs. 深拷贝 vs. 赋值的区别</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>操作类型</strong></th><th><strong>实现方式</strong></th><th><strong>内存行为</strong></th><th><strong>嵌套对象影响</strong></th><th><strong>示例</strong></th></tr></thead><tbody><tr><td><strong>赋值</strong></td><td><code>b = a</code></td><td>共享内存地址</td><td>修改嵌套对象时相互影响</td><td><code>b[0]=99</code> → <code>a[0]</code>同步变为 <code>99</code></td></tr><tr><td><strong>浅拷贝</strong></td><td><code>copy.copy()</code> / <code>a[:]</code></td><td>创建新对象，但嵌套对象仍共享引用</td><td>修改嵌套对象时相互影响</td><td><code>b[2][0]=99</code> → <code>a[2][0]</code>同步修改</td></tr><tr><td><strong>深拷贝</strong></td><td><code>copy.deepcopy()</code></td><td>递归创建全新对象（包括嵌套对象）</td><td>完全独立，互不影响</td><td><code>b[2][0]=99</code> → <code>a</code> 不变</td></tr><tr><td><strong>赋值</strong></td><td><code>b = a</code></td><td>共享内存地址</td><td>修改嵌套对象时相互影响</td><td><code>b[0]=99</code> → <code>a[0]</code>同步变为 <code>99</code></td></tr></tbody></table></div><h4 id=-关键说明>📌 <strong>关键说明</strong>：</h4><ol><li></li></ol><p>浅拷贝</p><p>：</p><ul><li>仅复制顶层对象（如列表本身），但嵌套的子对象（如列表中的列表）仍是原对象的引用。</li><li>示例：切片操作 <code>b = a[:]</code> 或 <code>b = list(a)</code> 均为浅拷贝。</li></ul><ol start=2><li></li></ol><p>深拷贝</p><p>：</p><ul><li>递归复制所有层级，生成完全独立的副本。</li><li>需显式调用 <code>copy.deepcopy()</code>。</li></ul><hr><h3 id=-常见误区与示例>⚠️ <strong>常见误区与示例</strong></h3><h4 id=误区认为赋值是浅拷贝><strong>误区</strong>：认为赋值是浅拷贝</h4><p><strong>修正</strong>：赋值无拷贝行为，仅是别名绑定。浅拷贝会创建新对象（尽管嵌套层共享）。</p><pre tabindex=0><code>import copy
+a = [1, [2, 3]]
+# 赋值
+b = a
+b[0] = 99        # a 同步变为 [99, [2, 3]]
+# 浅拷贝
+c = copy.copy(a)
+c[1][0] = 88     # a 同步变为 [99, [88, 3]]（嵌套层共享）
+# 深拷贝
+d = copy.deepcopy(a)
+d[1][0] = 77     # a 不受影响，仍为 [99, [88, 3]]
+</code></pre><hr><h3 id=-何时使用何种操作>💡 <strong>何时使用何种操作</strong></h3><ul><li><strong>赋值</strong>：
+需多个变量操作同一对象时（如共享配置）。</li><li><strong>浅拷贝</strong>：
+复制简单结构（无嵌套可变对象），或允许嵌套层共享时（如日志记录）。</li><li><strong>深拷贝</strong>：
+复制复杂嵌套结构（如多层列表/字典），需完全独立修改时（如数据处理）。</li></ul><hr><h3 id=-性能与注意事项>⚡ <strong>性能与注意事项</strong></h3><ul><li><strong>性能</strong>：
+深拷贝 > 浅拷贝 > 赋值（深拷贝递归复制耗时，尤其对大型嵌套对象）。</li><li><strong>不可变对象例外</strong>：
+对数字、字符串、元组（若元组内无可变元素）等不可变对象，赋值、浅拷贝、深拷贝行为一致（因无法修改）。</li></ul><hr><h3 id=-总结-2>💎 <strong>总结</strong></h3><ul><li><p><strong>赋值</strong>：仅是引用别名，无拷贝行为。</p></li><li><p><strong>默认无拷贝</strong>：Python 赋值既不默认浅拷贝也不默认深拷贝。</p></li><li></li></ul><p>显式拷贝</p><p>：</p><ul><li>浅拷贝 → <code>copy.copy()</code>、切片 <code>[:]</code>、<code>list()</code> 等。</li><li>深拷贝 → <code>copy.deepcopy()</code>。</li></ul><p>合理选择拷贝方式，可避免因引用共享导致的数据意外修改，尤其在处理嵌套可变对象时。</p><p>在Java和C++中，赋值操作的行为因数据类型和语言设计差异而显著不同，以下是详细分析：</p><hr><h3 id=-java的赋值行为>⚙️ <strong>Java的赋值行为</strong></h3><ol><li><p><strong>基本数据类型（值复制）</strong>
+赋值时直接复制值本身，新旧变量独立存储数据。</p><pre tabindex=0><code>int a = 10;
+int b = a; // b获得a的副本（值复制）
+a = 20;    // b仍为10，不受a影响
+</code></pre><ul><li>适用类型：<code>int</code>、<code>double</code>、<code>char</code>、<code>boolean</code>等。</li></ul></li><li><p><strong>引用数据类型（引用复制）</strong>
+赋值仅复制对象的内存地址，新旧变量共享同一对象：</p><pre tabindex=0><code>Person p1 = new Person(&#34;Alice&#34;);
+Person p2 = p1; // p2和p1指向同一个对象
+p2.setName(&#34;Bob&#34;); 
+System.out.println(p1.getName()); // 输出&#34;Bob&#34;
+</code></pre><ul><li><p>包括类实例、数组、集合等。</p></li><li></li></ul></li></ol><pre><code> 特例
+
+ ：
+
+ ```
+ String
+ ```
+
+ 虽为引用类型，但因不可变性，修改时会创建新对象：
+
+ ```
+ String s1 = &quot;Hello&quot;;
+ String s2 = s1;  // s2指向&quot;Hello&quot;
+ s1 = &quot;World&quot;;    // s2仍为&quot;Hello&quot;
+ ```
+</code></pre><ol start=3><li><strong>复合赋值运算符的隐式类型转换</strong>
+如 <code>a += 1.5</code> 等价于 <code>a = (int)(a + 1.5)</code>，可能导致精度丢失。</li></ol><hr><h3 id=-c的赋值行为>⚙️ <strong>C++的赋值行为</strong></h3><ol><li><p><strong>内置数据类型（值复制）</strong>
+与Java基本类型行为一致：</p><pre tabindex=0><code>int x = 10;
+int y = x; // y获得x的副本
+x = 20;    // y仍为10
+</code></pre></li><li><p><strong>指针类型（地址复制）</strong>
+赋值复制指针值（内存地址），新旧指针指向同一对象：</p><pre tabindex=0><code>int* p1 = new int(10);
+int* p2 = p1; // p2和p1指向同一内存
+*p2 = 20;     // *p1也变为20
+</code></pre></li><li><p><strong>自定义对象（可自定义深浅拷贝）</strong></p><ul><li></li></ul></li></ol><pre><code> 默认行为（浅拷贝）
+
+ ：复制成员变量值（含指针地址），不复制指针指向的对象：
+
+ ```
+ class MyClass { public: int* data; };
+ MyClass obj1; obj1.data = new int(10);
+ MyClass obj2 = obj1; // obj2.data与obj1.data指向同一地址
+ ```
+</code></pre><ul><li></li></ul><pre><code> 深拷贝需重载赋值运算符
+
+ ：
+
+ ```
+ MyClass&amp; operator=(const MyClass&amp; other) {
+     if (this != &amp;other) {
+         delete data; // 释放旧内存
+         data = new int(*other.data); // 复制值
+     }
+     return *this;
+ }
+ ```
+</code></pre><hr><h3 id=-java与c赋值行为对比>⚖️ <strong>Java与C++赋值行为对比</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>特性</strong></th><th><strong>Java</strong></th><th><strong>C++</strong></th></tr></thead><tbody><tr><td><strong>基本类型</strong></td><td>值复制（独立存储）</td><td>值复制（独立存储）</td></tr><tr><td><strong>引用/指针</strong></td><td>引用复制（共享对象）</td><td>指针复制（共享对象）</td></tr><tr><td><strong>对象赋值</strong></td><td>仅引用复制（无深拷贝默认支持）</td><td>默认浅拷贝，可重载运算符实现深拷贝</td></tr><tr><td><strong>字符串行为</strong></td><td>不可变（修改时创建新对象）</td><td>可修改（需手动管理）</td></tr><tr><td><strong>类型安全</strong></td><td>严格（禁止不兼容类型赋值）</td><td>较弱（支持强制类型转换）</td></tr></tbody></table></div><hr><h3 id=-关键注意事项>⚠️ <strong>关键注意事项</strong></h3><ol><li><strong>Java的共享陷阱</strong>
+引用类型赋值后，任一变量修改对象内容会影响所有引用该对象的变量。</li><li><strong>C++的内存管理责任</strong>
+默认浅拷贝可能导致重复释放内存（需重载运算符或自定义拷贝构造函数）。</li><li><strong>不可变对象的优势</strong>
+Java的<code>String</code>、<code>Integer</code>等因不可变性，赋值后修改不影响原变量，减少错误。</li></ol><hr><h3 id=-总结-3>💎 <strong>总结</strong></h3><ul><li><strong>Java</strong>：严格区分基本类型（值复制）和引用类型（引用复制），依赖不可变性规避部分风险。</li><li><strong>C++</strong>：内置类型值复制，对象默认浅拷贝但支持深拷贝自定义，需开发者主动管理内存。</li><li><strong>通用原则</strong>：理解赋值行为是避免数据共享错误的关键，尤其在多线程或复杂对象结构中。</li></ul><p>Python 的基础类型可分为<strong>可变类型</strong>和<strong>不可变类型</strong>，赋值操作 <code>=</code> <strong>不是值复制，而是创建对象的引用</strong>。以下是详细解析：</p><hr><h3 id=-python-基础数据类型>🔢 <strong>Python 基础数据类型</strong></h3><h4 id=不可变类型immutable><strong>不可变类型（Immutable）</strong></h4><p>对象创建后值不可修改，修改时会创建新对象：</p><ul><li><strong>数字类型</strong>：<code>int</code>（整数）、<code>float</code>（浮点数）、<code>complex</code>（复数）
+示例：<code>a = 10; b = a; a = 20</code> → <code>b</code> 仍为 <code>10</code> 。</li><li><strong>字符串</strong>（<code>str</code>）：文本序列，如 <code>s = "hello"</code>，修改需创建新字符串 。</li><li><strong>元组</strong>（<code>tuple</code>）：有序不可变容器，如 <code>t = (1, 2)</code>，元素不可修改（若元素为可变类型，其内容可修改）。</li><li><strong>布尔值</strong>（<code>bool</code>）：<code>True</code>/<code>False</code>，是 <code>int</code> 的子类（<code>True == 1</code>, <code>False == 0</code>）。</li><li><strong>冻结集合</strong>（<code>frozenset</code>）：不可变集合 。</li></ul><h4 id=可变类型mutable><strong>可变类型（Mutable）</strong></h4><p>对象创建后值可原地修改：</p><ul><li><strong>列表</strong>（<code>list</code>）：有序可变序列，如 <code>lst = [1, 2]</code>，支持增删改操作 。</li><li><strong>字典</strong>（<code>dict</code>）：键值对映射，如 <code>d = {"a": 1}</code>，键需为不可变类型 。</li><li><strong>集合</strong>（<code>set</code>）：无序唯一元素集，如 <code>s = {1, 2}</code> 。</li><li><strong>字节数组</strong>（<code>bytearray</code>）：可修改的字节序列 。</li></ul><h4 id=其他类型><strong>其他类型</strong></h4><ul><li><strong>NoneType</strong>：表示空值（<code>None</code>）。</li><li><strong>范围</strong>（<code>range</code>）：生成整数序列（惰性求值）。</li><li><strong>二进制类型</strong>：<code>bytes</code>、<code>memoryview</code> 等 。</li></ul><hr><h3 id=-赋值操作>⚖️ <strong>赋值操作 <code>=</code> 的本质：引用传递</strong></h3><p>Python 的赋值是<strong>创建对象的引用</strong>，而非复制值：</p><h4 id=不可变类型的赋值行为><strong>不可变类型的赋值行为</strong></h4><ul><li><p>变量指向同一对象，但修改时会创建新对象：</p><pre tabindex=0><code>a = 10
+b = a   # b 和 a 指向同一整数对象
+a = 20  # 创建新整数对象 20，a 指向新对象
+print(b)  # 输出 10（b 仍指向原对象）
+</code></pre></li></ul><h4 id=可变类型的赋值行为><strong>可变类型的赋值行为</strong></h4><ul><li><p>变量共享同一对象，修改时相互影响：</p><pre tabindex=0><code>lst1 = [1, 2]
+lst2 = lst1   # lst2 和 lst1 指向同一列表
+lst1.append(3)
+print(lst2)   # 输出 [1, 2, 3]（共享修改）
+</code></pre></li></ul><h4 id=赋值-vs-浅拷贝深拷贝><strong>赋值 vs. 浅拷贝/深拷贝</strong></h4><div class=table-wrapper><table><thead><tr><th><strong>操作</strong></th><th><strong>是否创建新对象</strong></th><th><strong>嵌套对象处理</strong></th><th><strong>示例</strong></th></tr></thead><tbody><tr><td><strong>赋值 (<code>=</code>)</strong></td><td>❌</td><td>共享所有层级</td><td><code>b = a</code></td></tr><tr><td><strong>浅拷贝</strong></td><td>✔️</td><td>仅复制顶层，嵌套层共享</td><td><code>b = a.copy()</code></td></tr><tr><td><strong>深拷贝</strong></td><td>✔️</td><td>递归复制所有层级</td><td><code>b = copy.deepcopy(a)</code></td></tr></tbody></table></div><blockquote><p>💡 <strong>关键区别</strong>：</p><ul><li>浅拷贝仅复制顶层容器（如列表本身），嵌套列表仍共享引用。</li><li>深拷贝递归复制所有层级，完全独立。</li></ul></blockquote><hr><h3 id=-赋值行为的注意事项>⚠️ <strong>赋值行为的注意事项</strong></h3><ol><li><p><strong>函数参数传递</strong>：</p><ul><li>传递的是对象引用。</li><li>修改<strong>可变参数</strong>会影响原始对象（如列表、字典）。</li></ul><pre tabindex=0><code>def modify(lst):
+    lst.append(4)
+data = [1, 2, 3]
+modify(data)  # data 变为 [1, 2, 3, 4]
+</code></pre></li><li><p><strong>不可变对象的“修改”假象</strong>：</p><ul><li><p>对字符串、元组等操作时，看似修改实则是创建新对象：</p><pre tabindex=0><code>s = &#34;hello&#34;
+s += &#34; world&#34;  # 创建新字符串对象，原对象未变 
+</code></pre></li></ul></li><li><p><strong>判断对象同一性</strong>：</p><ul><li>用 <code>is</code> 检查是否同一对象（<code>a is b</code>），用 <code>==</code> 检查值是否相等 。</li></ul></li></ol><hr><h3 id=-总结-4>💎 <strong>总结</strong></h3><ul><li><p><strong>基础类型</strong>：分为可变（列表、字典等）和不可变（数字、字符串等）。</p></li><li></li></ul><p>赋值行为</p><p>：</p><pre tabindex=0><code>=
+</code></pre><p>始终是引用传递</p><p>，而非值复制。</p><ul><li><p>不可变类型：修改时创建新对象，原对象不受影响。</p></li><li><p>可变类型：修改时影响所有引用该对象的变量。</p></li><li></li></ul><p>需要独立副本时</p><p>：</p><ul><li>简单结构 → 浅拷贝（<code>copy.copy()</code> 或 <code>a[:]</code>）。</li><li>嵌套结构 → 深拷贝（<code>copy.deepcopy()</code>）。</li></ul><blockquote><p>理解赋值机制可避免因共享引用导致的数据意外修改，尤其在处理嵌套可变对象时！</p></blockquote><h2 id=range>range</h2><p><code>range()</code> 是 Python 中用于生成整数序列的核心内置函数，广泛用于循环控制、序列生成和索引操作。以下从语法、特性到应用场景的详细解析：</p><hr><h3 id=-基础语法与参数>🔢 <strong>基础语法与参数</strong></h3><p><code>range()</code> 有三种调用形式，生成<strong>左闭右开</strong>的整数序列：</p><ol><li></li></ol><p>单参数</p><pre tabindex=0><code>   range(stop)
+</code></pre><ul><li>生成 <code>0</code> 到 <code>stop-1</code> 的序列，步长为 1。</li><li>示例：<code>list(range(5)) → [0, 1, 2, 3, 4]</code></li></ul><ol start=2><li></li></ol><p>双参数</p><pre tabindex=0><code>   range(start, stop)
+</code></pre><ul><li>从 <code>start</code> 开始（包含），到 <code>stop-1</code> 结束（不包含）。</li><li>示例：<code>list(range(2, 6)) → [2, 3, 4, 5]</code></li></ul><ol start=3><li></li></ol><p>三参数</p><pre tabindex=0><code>   range(start, stop, step)
+</code></pre><ul><li>指定步长 <code>step</code>（可为负数实现逆序）。</li><li>示例：<ul><li>正步长：<code>list(range(1, 10, 2)) → [1, 3, 5, 7, 9]</code></li><li>负步长：<code>list(range(5, -1, -1)) → [5, 4, 3, 2, 1, 0]</code></li></ul></li></ul><p>⚠️ <strong>参数限制</strong>：</p><ul><li>所有参数必须是<strong>整数</strong>（不支持浮点数，需用 <code>numpy.arange</code> 替代）。</li><li>步长 <code>step=0</code> 会触发 <code>ValueError</code> 。</li></ul><hr><h3 id=-返回值与内存机制>⚡ <strong>返回值与内存机制</strong></h3><ul><li><strong>返回对象类型</strong>：
+在 Python 3 中，<code>range()</code> 返回一个 ​<strong>惰性求值的可迭代对象</strong>​（类型为 <code>range</code>），而非实际列表。</li><li><strong>内存高效性</strong>：
+序列元素在迭代时动态生成，不预先生成所有值，适合处理大规模序列（如 <code>range(1000000)</code> 仅占用固定内存）。</li><li><strong>转换为列表</strong>：
+需显式调用 <code>list(range(...))</code> 获取实际列表。</li></ul><hr><h3 id=-核心应用场景>🛠️ <strong>核心应用场景</strong></h3><h4 id=循环控制><strong>循环控制</strong></h4><ul><li><p>固定次数循环：</p><pre tabindex=0><code>for i in range(3):  # 执行 3 次
+    print(f&#34;Loop {i+1}&#34;)
+</code></pre></li><li><p>遍历序列索引：</p><pre tabindex=0><code>colors = [&#34;red&#34;, &#34;green&#34;, &#34;blue&#34;]
+for i in range(len(colors)):
+    print(colors[i])  # 输出每个元素
+</code></pre></li></ul><h4 id=生成特定序列><strong>生成特定序列</strong></h4><ul><li>等差数列：<code>list(range(0, 20, 5)) → [0, 5, 10, 15]</code></li><li>自定义集合：<ul><li>奇数序列：<code>list(range(1, 10, 2)) → [1, 3, 5, 7, 9]</code></li><li>偶数序列：<code>list(range(0, 10, 2)) → [0, 2, 4, 6, 8]</code></li></ul></li></ul><h4 id=索引与切片操作><strong>索引与切片操作</strong></h4><ul><li><p>安全访问列表索引：</p><pre tabindex=0><code>data = [10, 20, 30, 40]
+for i in range(len(data)):
+    if i % 2 == 0:
+        data[i] *= 2  # 偶数索引元素加倍
+</code></pre></li></ul><h4 id=结合高阶函数><strong>结合高阶函数</strong></h4><ul><li><p>与 <code>enumerate</code> 对比：
+<code>range(len())</code> 适合需修改原序列的场景，<code>enumerate</code> 更适合同时获取索引和值。</p></li><li><p>生成器表达式：</p><pre tabindex=0><code>squares = (x**2 for x in range(10))  # 生成器，节省内存
+</code></pre></li></ul><hr><h3 id=-高级技巧与避坑指南>🧠 <strong>高级技巧与避坑指南</strong></h3><ol><li><strong>逆序迭代</strong>：
+用负步长反向遍历序列，如 <code>range(10, 0, -1)</code> 生成 <code>[10, 9, ..., 1]</code> 。</li><li><strong>空序列的条件</strong>：
+当 <code>start ≥ stop</code> 且步长为正，或 <code>start ≤ stop</code> 且步长为负时，返回空序列。</li><li><strong>成员检测优化</strong>：
+<code>range</code> 对象支持 <code>in</code> 操作符（时间复杂度 O(1)），如 <code>5 in range(10) → True</code> 。</li><li><strong>大数处理的隐患</strong>：
+虽内存高效，但超大规模 <code>range</code>（如 <code>range(10**9)</code>）在遍历时仍可能消耗时间，建议改用分块处理。</li></ol><hr><h3 id=-与其他工具的对比>⚖️ <strong>与其他工具的对比</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>场景</strong></th><th><strong>推荐工具</strong></th><th><strong>优势</strong></th></tr></thead><tbody><tr><td>生成整数序列</td><td><code>range()</code></td><td>内存高效，惰性求值</td></tr><tr><td>生成浮点数序列</td><td><code>numpy.arange()</code></td><td>支持浮点数步长</td></tr><tr><td>复杂条件生成序列</td><td>列表推导式</td><td>灵活（如 <code>[x**2 for x in range(5)]</code>）</td></tr><tr><td>同时获取索引和值</td><td><code>enumerate()</code></td><td>代码更简洁，避免手动索引</td></tr></tbody></table></div><hr><h3 id=-总结-5>💎 <strong>总结</strong></h3><p><code>range()</code> 凭借<strong>惰性求值</strong>和<strong>内存高效性</strong>成为 Python 循环与序列生成的基石。核心使用原则：</p><ol><li>循环次数控制 → <code>for i in range(n)</code></li><li>索引访问 → <code>range(len(seq))</code></li><li>灵活序列生成 → 结合步长和 <code>list()</code> 转换</li><li>大范围遍历 → 优先 <code>range</code> 而非预生成列表</li></ol><blockquote><p>对浮点序列需求，可转向 <code>numpy</code>；对复杂逻辑生成，列表推导式更合适。掌握其特性，能显著提升代码性能与可读性。</p></blockquote><h2 id=enumerate>enumerate</h2><p><code>enumerate()</code> 是 Python 中用于<strong>同步获取迭代索引与元素</strong>的内置函数，能显著提升代码简洁性与可读性。以下从核心机制到应用场景的详细解析：</p><hr><h3 id=-核心功能与语法>🔍 核心功能与语法</h3><h4 id=作用原理><strong>作用原理</strong></h4><ul><li>将可迭代对象（列表、元组、字符串、字典等）转换为<strong>惰性生成器</strong>，每次迭代返回 <code>(index, value)</code> 元组。</li><li><strong>索引默认从 0 开始</strong>，可通过 <code>start</code> 参数自定义起始值。</li></ul><h4 id=语法>语法</h4><pre tabindex=0><code>enumerate(iterable, start=0)  # 返回枚举对象（迭代器）
+</code></pre><ul><li></li></ul><p>示例</p><p>：</p><pre tabindex=0><code>fruits = [&#34;apple&#34;, &#34;banana&#34;, &#34;cherry&#34;]
+for idx, fruit in enumerate(fruits, start=1):
+    print(f&#34;{idx}. {fruit}&#34;)
+# 输出：
+# apple
+# banana
+# cherry
+</code></pre><hr><h3 id=-与传统写法的对比>⚖️ 与传统写法的对比</h3><p><strong>场景</strong>：遍历列表并输出索引和值</p><div class=table-wrapper><table><thead><tr><th><strong>方法</strong></th><th><strong>代码示例</strong></th><th><strong>缺点</strong></th></tr></thead><tbody><tr><td><code>range(len())</code></td><td><code>for i in range(len(fruits)): print(f"{i}: {fruits[i]}")</code></td><td>需手动索引，代码冗余且易越界</td></tr><tr><td><strong><code>enumerate()</code></strong></td><td><code>for idx, fruit in enumerate(fruits): print(f"{idx}: {fruit}")</code></td><td><strong>直接解包索引和值，简洁安全</strong></td></tr></tbody></table></div><blockquote><p>✅ <strong>优势</strong>：避免手动管理索引变量，减少错误（如忘记 <code>index += 1</code>），提升可读性。</p></blockquote><hr><h3 id=-核心应用场景-1>🛠️ 核心应用场景</h3><h4 id=修改列表元素><strong>修改列表元素</strong></h4><p>通过索引定位并更新值：</p><pre tabindex=0><code>values = [10, 20, 30]
+for idx, val in enumerate(values):
+    values[idx] = val * 2  # 原地修改为 [20, 40, 60]
+</code></pre><h4 id=字符串文本处理><strong>字符串/文本处理</strong></h4><p>定位字符位置：</p><pre tabindex=0><code>text = &#34;hello&#34;
+for idx, char in enumerate(text):
+    if char == &#34;l&#34;:
+        print(f&#34;字符 &#39;l&#39; 在位置 {idx}&#34;)  # 输出位置 2 和 3
+</code></pre><h4 id=字典遍历><strong>字典遍历</strong></h4><ul><li><p>遍历键的索引：</p><pre tabindex=0><code>person = {&#34;name&#34;: &#34;Alice&#34;, &#34;age&#34;: 30}
+for idx, key in enumerate(person):
+    print(f&#34;键{idx}: {key}&#34;)  # 输出键的索引
+</code></pre></li><li><p>遍历键值对：</p><pre tabindex=0><code>for idx, (key, value) in enumerate(person.items()):
+    print(f&#34;索引{idx}: {key}={value}&#34;)
+</code></pre></li></ul><h4 id=文件处理><strong>文件处理</strong></h4><p>统计文本行号及关键词位置：</p><pre tabindex=0><code>with open(&#34;log.txt&#34;) as f:
+    for line_no, line in enumerate(f, start=1):
+        if &#34;ERROR&#34; in line:
+            print(f&#34;第 {line_no} 行存在错误&#34;)
+</code></pre><h4 id=构建索引映射><strong>构建索引映射</strong></h4><p>将列表转为 <code>{索引: 值}</code> 字典：</p><pre tabindex=0><code>words = [&#34;hello&#34;, &#34;world&#34;]
+index_map = {idx: word for idx, word in enumerate(words)}  # {0: &#34;hello&#34;, 1: &#34;world&#34;}
+</code></pre><hr><h3 id=-性能与优化-1>⚡ 性能与优化</h3><ul><li><p><strong>惰性迭代</strong>：<code>enumerate()</code> 返回迭代器，<strong>不预生成完整列表</strong>，适合处理大规模数据。</p></li><li></li></ul><p>效率对比</p><p>：</p><ul><li><code>enumerate</code> 直接访问元素，比 <code>range(len())</code> 的索引查找更快（尤其在大数据量时）。</li><li>若只需值（无需索引），直接迭代可读性更优（如 <code>for fruit in fruits</code>）。</li></ul><hr><h3 id=-高级技巧>🧠 高级技巧</h3><h4 id=与推导式结合><strong>与推导式结合</strong></h4><p>生成带索引的元组列表：</p><pre tabindex=0><code>indexed_fruits = [(idx, fruit) for idx, fruit in enumerate(fruits)]  # [(0, &#34;apple&#34;), (1, &#34;banana&#34;)]
+</code></pre><h4 id=并行遍历多个列表><strong>并行遍历多个列表</strong></h4><p>使用 <code>zip</code> 嵌套 <code>enumerate</code> 同步处理多列表：</p><pre tabindex=0><code>names = [&#34;Alice&#34;, &#34;Bob&#34;]
+scores = [85, 92]
+for idx, (name, score) in enumerate(zip(names, scores)):
+    print(f&#34;{idx}: {name}得分{score}&#34;)
+</code></pre><hr><h3 id=-注意事项>⚠️ 注意事项</h3><ol><li><strong>不可变对象</strong>：
+字符串、元组等不可变对象无法通过索引修改（需新建对象）。</li><li><strong>迭代器特性</strong>：
+直接打印 <code>enumerate()</code> 对象显示内存地址，需用 <code>list()</code> 转换查看内容。</li><li><strong>起始索引设置</strong>：
+<code>start</code> 参数仅影响索引编号，不改变原数据结构。</li></ol><hr><h3 id=-总结-6>💎 总结</h3><ul><li><strong>适用场景</strong>：遍历需同时使用索引和值、需自定义起始编号、代码简洁性要求高时。</li><li><strong>替代方案</strong>：仅需索引 → <code>range(len())</code>；仅需值 → 直接迭代。</li><li><strong>核心价值</strong>：<code>enumerate()</code> 以 <strong>Pythonic 方式消除索引冗余</strong>，提升代码可维护性与执行效率。</li></ul><h2 id=slice>Slice</h2><p>切片（Slicing）是Python中处理序列类型（如列表、字符串、元组）的核心操作，通过简洁的语法实现高效的数据提取和修改。以下从语法规则、高级技巧到实际应用进行全面解析：</p><hr><h3 id=-核心语法规则>⚙️ <strong>核心语法规则</strong></h3><p>切片基本结构：<strong><code>sequence[start:stop:step]</code></strong></p><ul><li><p>**</p><pre tabindex=0><code>start
+</code></pre><p>**：起始索引（</p><p>包含</p><p>），默认值由步长决定：</p><ul><li><code>step > 0</code> 时默认为 <code>0</code>（序列开头）</li><li><code>step &lt; 0</code> 时默认为 <code>-1</code>（序列末尾）</li></ul></li><li><p>**</p><pre tabindex=0><code>stop
+</code></pre><p>**：结束索引（</p><p>不包含</p><p>），默认值规则：</p><ul><li><code>step > 0</code> 时默认为 <code>len(sequence)</code></li><li><code>step &lt; 0</code> 时默认为 <code>-len(sequence)-1</code>（序列开头前一位）</li></ul></li><li><p><strong><code>step</code></strong>：步长（元素间隔），默认 <code>1</code>；为负时反向遍历</p></li></ul><h4 id=-关键特性>📌 <strong>关键特性</strong></h4><ol><li><p><strong>左闭右开区间</strong>
+<code>s[1:4]</code> 包含索引 <code>1, 2, 3</code>，不包含 <code>4</code></p></li><li></li></ol><p>自动处理越界索引</p><p>超范围时返回有效部分或空序列：</p><pre tabindex=0><code>lst = [0, 1, 2]
+print(lst[5:10])  # []（空列表）
+print(lst[-10:2]) # [0, 1]（自动截断）
+</code></pre><ol start=3><li></li></ol><p>负数索引转换</p><pre tabindex=0><code>   -1
+</code></pre><p>表示最后一个元素，计算方式：</p><pre tabindex=0><code>index = index + len(seq) if index &lt; 0
+</code></pre><pre tabindex=0><code>s = &#34;Hello&#34;
+print(s[-3:])  # &#34;llo&#34;（等价于 s[2:]）
+</code></pre><hr><h3 id=-高级技巧与避坑指南-1>🧠 <strong>高级技巧与避坑指南</strong></h3><h4 id=反向切片与序列反转><strong>反向切片与序列反转</strong></h4><ul><li></li></ul><p>负步长反转序列</p><p>：</p><pre tabindex=0><code>s = &#34;Python&#34;
+print(s[::-1])  # &#34;nohtyP&#34;（完整反转）
+</code></pre><ul><li></li></ul><p>指定范围的反向切片</p><p>：</p><pre tabindex=0><code>nums = [0, 1, 2, 3]
+print(nums[3:0:-1])  # [3, 2, 1]（不包含索引0）
+print(nums[3::-1])   # [3, 2, 1, 0]（包含起始点）
+</code></pre><h4 id=切片赋值与动态修改><strong>切片赋值与动态修改</strong></h4><ul><li></li></ul><p>列表的灵活修改</p><p>：</p><pre tabindex=0><code>a = [1, 2, 3, 4]
+a[1:3] = [20, 30]     # [1, 20, 30, 4]（等长替换）
+a[1:3] = [&#34;x&#34;]        # [1, &#34;x&#34;, 4]（缩短序列）
+a[2:2] = [50, 60]     # [1, &#34;x&#34;, 50, 60, 4]（插入元素）
+</code></pre><ul><li><strong>元组不可修改</strong>：
+元组切片会生成新对象，无法直接赋值</li></ul><h4 id=切片对象><strong>切片对象（<code>slice()</code>）</strong></h4><p>动态生成切片，提高代码复用性：</p><pre tabindex=0><code>data = list(range(20))
+slicer = slice(5, 15, 2)  # 定义切片对象
+print(data[slicer])        # [5, 7, 9, 11, 13]
+</code></pre><h4 id=深浅拷贝问题><strong>深浅拷贝问题</strong></h4><ul><li></li></ul><p>嵌套结构的风险</p><p>：</p><p>切片是浅拷贝，嵌套元素仍为引用：</p><pre tabindex=0><code>a = [[1, 2], [3, 4]]
+b = a[:]
+b[0][0] = 99
+print(a)  # [[99, 2], [3, 4]]（原数据被修改）
+</code></pre><hr><h3 id=-应用场景>⚡️ <strong>应用场景</strong></h3><h4 id=数据分块处理><strong>数据分块处理</strong></h4><p>分批处理大型数据集：</p><pre tabindex=0><code>data = [1, 2, 3, ..., 1000]
+chunk_size = 100
+chunks = [data[i:i+chunk_size] for i in range(0, len(data), chunk_size)]
+</code></pre><h4 id=字符串与序列操作><strong>字符串与序列操作</strong></h4><ul><li></li></ul><p>提取子串</p><p>：</p><pre tabindex=0><code>text = &#34;Hello, World!&#34;
+print(text[7:12])  # &#34;World&#34;
+</code></pre><ul><li></li></ul><p>间隔采样</p><p>：</p><pre tabindex=0><code>nums = [0, 1, 2, 3, 4, 5]
+print(nums[::2])   # [0, 2, 4]（偶数索引元素）
+</code></pre><h4 id=多维数据结构numpy><strong>多维数据结构（NumPy）</strong></h4><p>高效提取子矩阵：</p><pre tabindex=0><code>import numpy as np
+arr = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+print(arr[:2, 1:])  # [[2, 3], [5, 6]]（前两行，第2-3列）
+</code></pre><h4 id=快速算法实现><strong>快速算法实现</strong></h4><ul><li></li></ul><p>回文检测</p><p>：</p><pre tabindex=0><code>def is_palindrome(s):
+    return s == s[::-1]
+</code></pre><hr><h3 id=-注意事项-1>⚠️ <strong>注意事项</strong></h3><ol><li></li></ol><p>不可变序列的限制</p><p>字符串、元组等不可变类型的切片会生成新对象，修改需重新赋值：</p><pre tabindex=0><code>s = &#34;hello&#34;
+s_new = s[:3] + &#34;p&#34; + s[4:]  # &#34;help&#34;
+</code></pre><ol start=2><li><p><strong>步长为0的禁止</strong>
+<code>step=0</code> 会触发 <code>ValueError</code></p></li><li></li></ol><p>性能优化</p><ul><li>时间复杂度：<strong>O(k)</strong>（k为结果长度）<ul><li>内存占用：浅拷贝（字符串除外，因不可变性每次切片生成新对象）</li></ul></li></ul><hr><h3 id=-总结-7>💎 <strong>总结</strong></h3><p>切片是Python高效处理序列数据的核心工具，其价值在于：</p><ul><li><strong>语法简洁性</strong>：<code>[start:stop:step]</code> 覆盖多数数据操作需求；</li><li><strong>功能强大性</strong>：支持反转、分块、动态修改等复杂场景；</li><li><strong>工程友好性</strong>：自动处理越界索引，结合 <code>slice()</code> 对象提升代码复用。</li></ul><p>掌握切片技巧可显著减少循环嵌套，提升代码可读性与执行效率。对多维数据推荐结合NumPy使用，对深浅拷贝敏感场景需显式使用 <code>copy.deepcopy()</code>。</p><h2 id=面向对象>面向对象</h2><p>Python 面向对象编程（OOP）是一种以<strong>对象</strong>为核心的编程范式，通过<strong>类</strong>（Class）定义对象的属性和方法，实现代码的模块化、重用和扩展。以下是 Python OOP 的核心概念与高级特性详解：</p><hr><h3 id=-类与对象>⚙️ <strong>类与对象</strong></h3><h4 id=基本概念><strong>基本概念</strong></h4><ul><li><strong>类（Class）</strong>：对象的蓝图，定义属性和方法。</li><li><strong>对象（Object）</strong>：类的实例，拥有独立的属性值并共享类的方法。
+​<strong>示例</strong>​：</li></ul><pre tabindex=0><code>class Dog:
+    species = &#34;Canine&#34;  # 类属性（所有对象共享）
+    def __init__(self, name, age):  # 构造方法
+        self.name = name  # 实例属性
+        self.age = age
+    def bark(self):  # 实例方法
+        print(f&#34;{self.name} says: Woof!&#34;)
+# 创建对象
+fido = Dog(&#34;Fido&#34;, 5)
+fido.bark()  # 输出: Fido says: Woof!
+</code></pre><h4 id=属性与方法的类型><strong>属性与方法的类型</strong></h4><div class=table-wrapper><table><thead><tr><th><strong>类型</strong></th><th><strong>定义</strong></th><th><strong>访问方式</strong></th><th><strong>示例</strong></th></tr></thead><tbody><tr><td><strong>实例属性</strong></td><td>通过 <code>self</code> 定义，对象独享</td><td><code>obj.attr</code></td><td><code>fido.name</code></td></tr><tr><td><strong>类属性</strong></td><td>类内部直接定义，所有对象共享</td><td><code>Class.attr</code> 或 <code>obj.attr</code></td><td><code>Dog.species</code></td></tr><tr><td><strong>实例方法</strong></td><td>首个参数为 <code>self</code>，操作实例属性</td><td><code>obj.method()</code></td><td><code>fido.bark()</code></td></tr><tr><td><strong>类方法</strong></td><td><code>@classmethod</code> 装饰，参数为 <code>cls</code></td><td><code>Class.method()</code></td><td><code>Dog.set_species("Wolf")</code></td></tr><tr><td><strong>静态方法</strong></td><td><code>@staticmethod</code> 装饰，无特殊参数</td><td><code>Class.method()</code></td><td><code>MathUtils.add(3, 5)</code></td></tr></tbody></table></div><hr><h3 id=-面向对象三大特性>🔒 <strong>面向对象三大特性</strong></h3><h4 id=封装encapsulation><strong>封装（Encapsulation）</strong></h4><ul><li><p><strong>目的</strong>：隐藏对象内部细节，通过接口控制访问。</p></li><li></li></ul><p>实现</p><p>：</p><ul><li><code>_var</code>：受保护成员（约定勿直接访问）。</li><li><code>__var</code>：私有成员（自动重命名为 <code>_Class__var</code>）。
+​<strong>示例</strong>​：</li></ul><pre tabindex=0><code>class BankAccount:
+    def __init__(self, balance):
+        self.__balance = balance  # 私有属性
+    def deposit(self, amount):
+        self.__balance += amount
+    def get_balance(self):  # 公开接口
+        return self.__balance
+</code></pre><h4 id=继承inheritance><strong>继承（Inheritance）</strong></h4><ul><li><strong>作用</strong>：子类继承父类属性和方法，实现代码复用。</li><li><strong>语法</strong>：<code>class Child(Parent):</code></li><li><strong>关键函数</strong>：<code>super()</code> 调用父类方法。
+​<strong>示例</strong>​：</li></ul><pre tabindex=0><code>class Animal:
+    def __init__(self, name):
+        self.name = name
+    def speak(self):
+        print(&#34;Animal sound&#34;)
+class Dog(Animal):
+    def speak(self):  # 方法重写
+        print(f&#34;{self.name} barks!&#34;)
+dog = Dog(&#34;Buddy&#34;)
+dog.speak()  # 输出: Buddy barks!
+</code></pre><h4 id=多态polymorphism><strong>多态（Polymorphism）</strong></h4><ul><li><p><strong>定义</strong>：不同对象对同一方法调用产生不同行为。</p></li><li></li></ul><p>实现方式</p><p>：</p><ul><li><strong>继承重写</strong>：子类重写父类方法。</li><li><strong>鸭子类型</strong>：不依赖继承，只关注对象行为。
+​<strong>示例</strong>​：</li></ul><pre tabindex=0><code>def animal_sound(animal):
+    animal.speak()  # 只要对象有 speak 方法即可
+dog = Dog(&#34;Buddy&#34;)
+cat = Cat(&#34;Whiskers&#34;)
+animal_sound(dog)  # 输出: Buddy barks!
+animal_sound(cat)  # 输出: Whiskers meows!
+</code></pre><hr><h3 id=-高级特性-1>🎩 <strong>高级特性</strong></h3><h4 id=魔术方法magic-methods><strong>魔术方法（Magic Methods）</strong></h4><ul><li><p><strong>作用</strong>：自定义对象行为（如运算符重载、字符串表示）。</p></li><li></li></ul><p>常用方法</p><p>：</p><ul><li><code>__init__</code>：构造方法</li><li><code>__str__</code>：定义 <code>print(obj)</code> 的输出</li><li><code>__add__</code>：重载 <code>+</code> 运算符
+​<strong>示例</strong>​：</li></ul><pre tabindex=0><code>class Vector:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+    def __add__(self, other):  # 重载加法
+        return Vector(self.x + other.x, self.y + other.y)
+    def __str__(self):
+        return f&#34;Vector({self.x}, {self.y})&#34;
+v1 = Vector(2, 3)
+v2 = Vector(4, 5)
+print(v1 + v2)  # 输出: Vector(6, 8)
+</code></pre><h4 id=抽象类与接口><strong>抽象类与接口</strong></h4><ul><li><strong>抽象类</strong>：不能被实例化，需子类实现抽象方法（<code>@abstractmethod</code>）。
+​<strong>示例</strong>​：</li></ul><pre tabindex=0><code>from abc import ABC, abstractmethod
+class Shape(ABC):
+    @abstractmethod
+    def area(self):
+        pass
+class Circle(Shape):
+    def __init__(self, radius):
+        self.radius = radius
+    def area(self):  # 必须实现
+        return 3.14 * self.radius ** 2
+</code></pre><h4 id=属性装饰器property><strong>属性装饰器（@property）</strong></h4><ul><li><strong>用途</strong>：将方法转为属性，实现访问控制与逻辑验证。
+​<strong>示例</strong>​：</li></ul><pre tabindex=0><code>class Circle:
+    def __init__(self, radius):
+        self._radius = radius
+    @property
+    def radius(self):  # 只读属性
+        return self._radius
+    @property
+    def area(self):
+        return 3.14 * self._radius ** 2
+</code></pre><hr><h3 id=-应用场景-1>🛠️ <strong>应用场景</strong></h3><ol><li><strong>模块化开发</strong>：将系统拆分为独立对象（如用户模块、订单模块）。</li><li><strong>GUI 开发</strong>：窗口、按钮等控件作为对象管理。</li><li><strong>游戏开发</strong>：角色、道具等实体封装为对象。</li><li><strong>框架设计</strong>：Django（ORM）、PyQt（UI组件）均基于 OOP 思想。</li></ol><hr><h3 id=-总结-8>💎 <strong>总结</strong></h3><p>Python 面向对象编程的核心价值在于：</p><ul><li><strong>可维护性</strong>：通过封装隔离变化。</li><li><strong>扩展性</strong>：继承与多态支持功能扩展。</li><li><strong>灵活性</strong>：魔术方法实现对象行为定制。</li><li><strong>复用性</strong>：类属性和方法减少重复代码。</li></ul><p>掌握类与对象、三大特性（封装/继承/多态）、高级工具（魔术方法/抽象类/装饰器），可构建健壮且易扩展的 Python 应用。</p><h2 id=_var-vs-__var>_var vs. __var</h2><p>在 Python 中，<code>_var</code>（单下划线前缀）和 <code>__var</code>（双下划线前缀）是两种不同的命名约定，分别用于实现“受保护”和“伪私有”成员，其核心区别在于<strong>访问控制机制</strong>和<strong>名称处理方式</strong>。以下是详细对比：</p><hr><h3 id=-_var>⚙️ <strong><code>_var</code>（单下划线前缀）</strong></h3><ul><li><p><strong>含义</strong>：约定上的“受保护”成员（protected member），提示开发者该变量或方法仅供内部使用，但<strong>不强制限制访问</strong>。</p></li><li></li></ul><p>行为特点</p><p>：</p><ul><li><p><strong>外部可访问</strong>：不触发名称修饰（name mangling），可直接通过 <code>obj._var</code> 访问。</p></li><li><p><strong>模块级作用</strong>：在模块中使用时，<code>from module import *</code> 不会导入 <code>_var</code> 命名的变量/方法。</p></li><li><p><strong>子类继承</strong>：子类可自由重写 <code>_var</code> 方法或属性，不会与父类冲突。</p></li><li></li></ul><p>使用场景</p><p>：</p><ul><li>内部工具方法（如 <code>_helper()</code>）。</li><li>非敏感数据（如 <code>_internal_cache</code>）。</li><li>避免与关键字冲突（如 <code>class_</code>）。</li></ul><p><strong>示例</strong>：</p><pre tabindex=0><code>class ProtectedExample:
+    def __init__(self):
+        self._internal = 42  # 受保护属性
+    def _helper(self):       # 受保护方法
+        return self._internal
+obj = ProtectedExample()
+print(obj._internal)        # 42（可访问但不推荐）
+</code></pre><hr><h3 id=-__var>🔒 <strong><code>__var</code>（双下划线前缀）</strong></h3><ul><li><p><strong>含义</strong>：伪私有成员（private member），通过 <strong>名称修饰</strong> 机制限制直接访问。</p></li><li></li></ul><p>行为特点</p><p>：</p><ul><li><p><strong>名称修饰</strong>：解释器自动重命名为 <code>_ClassName__var</code>（如 <code>__var</code> → <code>_MyClass__var</code>）。</p></li><li><p><strong>外部访问限制</strong>：直接访问 <code>obj.__var</code> 会引发 <code>AttributeError</code>，但可通过修饰后的名称强制访问（如 <code>obj._MyClass__var</code>）。</p></li><li><p><strong>子类防冲突</strong>：子类定义同名 <code>__var</code> 不会覆盖父类属性（父类保留为 <code>_ParentClass__var</code>，子类变为 <code>_ChildClass__var</code>）。</p></li><li></li></ul><p>使用场景</p><p>：</p><ul><li>敏感数据封装（如数据库密码 <code>__credentials</code>）。</li><li>防止子类意外重写父类属性。</li></ul><p><strong>示例</strong>：</p><pre tabindex=0><code>class PrivateExample:
+    def __init__(self):
+        self.__secret = &#34;password&#34;  # 修饰为 _PrivateExample__secret
+obj = PrivateExample()
+print(obj.__secret)           # AttributeError（无法直接访问）
+print(obj._PrivateExample__secret)  # &#34;password&#34;（强制访问不推荐）
+</code></pre><hr><h3 id=-核心区别对比>⚖️ <strong>核心区别对比</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>特性</strong></th><th><code>_var</code>（单下划线）</th><th><code>__var</code>（双下划线）</th></tr></thead><tbody><tr><td><strong>访问控制</strong></td><td>约定提示，可外部访问</td><td>名称修饰，限制直接访问</td></tr><tr><td><strong>名称是否被修改</strong></td><td>否</td><td>是（变为 <code>_ClassName__var</code>）</td></tr><tr><td><strong>子类重写冲突</strong></td><td>可能发生冲突</td><td>避免冲突（修饰后名称不同）</td></tr><tr><td><strong>模块导入行为</strong></td><td><code>import *</code> 不导入</td><td>无特殊影响</td></tr><tr><td><strong>典型用途</strong></td><td>内部工具方法/非敏感数据</td><td>封装敏感数据/防子类覆盖</td></tr></tbody></table></div><hr><h3 id=-注意事项-2>⚠️ <strong>注意事项</strong></h3><ol><li><p><strong>伪私有的本质</strong>：
+<code>__var</code> 不是真正的私有，通过修饰名仍可访问，因此<strong>不应依赖其做安全加密</strong>，而是作为开发者间的约定。</p></li><li></li></ol><p>替代方案</p><p>：</p><p>更推荐用</p><pre tabindex=0><code>   @property
+</code></pre><p>+ 单下划线（如</p><pre tabindex=0><code>   _data
+</code></pre><p>）实现安全封装，既能隐藏细节又可添加逻辑验证：</p><pre tabindex=0><code>class Circle:
+    def __init__(self, radius):
+        self._radius = radius  # 受保护属性
+    @property
+    def radius(self):          # 通过方法控制访问
+        return self._radius
+</code></pre><ol start=3><li><strong>双下划线结尾</strong>：
+<code>__var__</code> 是 Python 的<strong>魔术方法</strong>​（如 <code>__init__</code>），禁止自定义使用，避免与内置方法冲突。</li></ol><hr><h3 id=-总结-9>💎 <strong>总结</strong></h3><ul><li><strong><code>_var</code></strong>：轻量级约定，提示“内部使用”，不强制限制，适合非敏感场景。</li><li><strong><code>__var</code></strong>：通过名称修饰实现“伪私有”，主要解决<strong>子类命名冲突</strong>问题，但非绝对安全。</li><li><strong>优先选择</strong>：
+多数情况下用 <code>_var</code> + <code>@property</code> 更符合 Python 的“约定优于强制”哲学，保留灵活性的同时提供封装性。</li></ul><h2 id=__var__>__var__</h2><p>在 Python 中，变量名或方法名以双下划线开头和结尾（<code>__var__</code>）的形式被称为<strong>魔法方法（Magic Methods）</strong> 或<strong>特殊方法（Special Methods）</strong>。它们的作用是<strong>让自定义类支持 Python 内置的操作或语法</strong>，例如对象的初始化、运算符重载、字符串表示等。以下是详细解析：</p><hr><h3 id=-核心作用>⚙️ <strong>核心作用</strong></h3><ol><li><strong>定义对象的内置行为</strong>
+<code>__var__</code> 方法由 Python 解释器在特定场景自动调用，例如：<ul><li><code>__init__</code>：对象构造时调用（初始化属性）。</li><li><code>__str__</code>：调用 <code>print(obj)</code> 或 <code>str(obj)</code> 时触发。</li><li><code>__add__</code>：重载 <code>+</code> 运算符（如 <code>obj1 + obj2</code>）。</li></ul></li><li><strong>支持内置函数的操作</strong><ul><li><code>__len__</code>：调用 <code>len(obj)</code> 时触发。</li><li><code>__getitem__</code>：支持下标访问（如 <code>obj[key]</code>）。</li><li><code>__call__</code>：使对象可调用（如 <code>obj()</code>）。</li></ul></li></ol><hr><h3 id=-常用魔法方法及示例>🧩 <strong>常用魔法方法及示例</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>魔法方法</strong></th><th><strong>触发场景</strong></th><th><strong>示例代码</strong></th></tr></thead><tbody><tr><td><code>__init__</code></td><td>对象初始化</td><td><code>class User: def __init__(self, name): self.name = name</code></td></tr><tr><td><code>__str__</code></td><td>对象转为字符串</td><td><code>def __str__(self): return f"User: {self.name}"</code></td></tr><tr><td><code>__add__</code></td><td>重载 <code>+</code> 运算符</td><td><code>def __add__(self, other): return Vector(self.x + other.x, self.y + other.y)</code></td></tr><tr><td><code>__len__</code></td><td><code>len(obj)</code> 调用</td><td><code>def __len__(self): return len(self.data)</code></td></tr><tr><td><code>__getitem__</code></td><td>下标访问（<code>obj[0]</code>）</td><td><code>def __getitem__(self, idx): return self.data[idx]</code></td></tr><tr><td><code>__iter__</code></td><td>支持迭代（<code>for x in obj</code>）</td><td><code>def __iter__(self): return iter(self.items)</code></td></tr></tbody></table></div><blockquote><p>💡 <strong>注意</strong>：魔法方法需按需实现，未实现时默认行为可能报错（如未定义 <code>__len__</code> 时调用 <code>len(obj)</code> 会抛出 <code>TypeError</code>）。</p></blockquote><hr><h3 id=-关键注意事项-1>⚠️ <strong>关键注意事项</strong></h3><ol><li><p><strong>禁止自定义 <code>__var__</code> 命名</strong></p><ul><li>Python 保留所有双下划线包围的名称（如 <code>__init__</code>），自定义变量/方法名<strong>禁止使用此格式</strong>，否则可能覆盖内置行为或引发冲突。</li></ul></li><li><p><strong>非私有性</strong></p><ul><li><pre tabindex=0><code>__var__
+</code></pre></li></ul></li></ol><p>不是私有成员
+！它与单下划线（
+<code>_var</code>
+）或双下划线前缀（
+<code>__var</code>
+）不同：
+- <code>_var</code>：约定为“受保护”，可外部访问但不推荐。
+- <code>__var</code>：触发名称改写（Name Mangling），变为 <code>_ClassName__var</code> 形式。
+- <code>__var__</code>：公开且由解释器管理，无需手动调用。
+3. <strong>调试与反射的复杂性</strong></p><ul><li>魔法方法可能增加调试难度（如 <code>dir(obj)</code> 会列出大量内置方法）。</li></ul><hr><h3 id=-总结-10>💎 <strong>总结</strong></h3><ul><li><strong>作用</strong>：<code>__var__</code> 是 Python 的<strong>魔法方法标识符</strong>，用于定制类的内置行为（如初始化、运算符、迭代等）。</li><li><strong>使用场景</strong>：需让自定义类支持 Python 原生语法（如 <code>+</code>、<code>print()</code>、<code>len()</code>）时实现。</li><li><strong>重要原则</strong>：
+✅ ​<strong>仅用于实现内置行为</strong>，禁止自定义同名变量/方法。
+❌ 不可与“私有变量”（<code>__var</code>）混淆——后者通过名称改写避免子类冲突，而 <code>__var__</code> 是公开接口。</li></ul><blockquote><p>通过合理使用魔法方法，开发者可以创建更直观、更 Pythonic 的类，无缝融入语言生态。
+在Python中，自定义类会<strong>自动继承所有内置魔术方法的默认实现</strong>，但部分默认行为可能不符合需求，此时需开发者<strong>选择性重写</strong>。以下是具体分析：</p></blockquote><hr><h3 id=-默认存在的魔术方法>⚙️ <strong>默认存在的魔术方法</strong></h3><p>Python为所有自定义类提供了基础魔术方法的默认实现，这些方法主要处理对象的<strong>核心行为</strong>：</p><ol><li><strong>对象标识与基础操作</strong><ul><li><code>__init__</code>：默认无操作（若未定义，创建实例时不初始化属性）。</li><li><code>__new__</code>：由<code>object</code>类提供，负责实例创建。</li><li><code>__del__</code>：默认无操作，对象销毁时自动调用（但依赖垃圾回收时机）。</li><li><code>__repr__</code>：默认返回类名和内存地址（如<code>&lt;__main__.Student at 0x11883aa60></code>）。</li><li><code>__str__</code>：默认调用<code>__repr__</code>，两者输出相同。</li></ul></li><li><strong>比较与哈希</strong><ul><li><code>__eq__</code>：默认比较对象ID（即<code>is</code>行为），而非值相等。</li><li><code>__hash__</code>：默认基于对象ID生成哈希值，确保唯一性。</li></ul></li><li><strong>属性访问</strong><ul><li><code>__getattribute__</code>：默认实现属性查找（按<code>__dict__</code> → 类继承链顺序）。</li><li><code>__setattr__</code>：默认将属性存入<code>__dict__</code>。</li><li><code>__delattr__</code>：默认从<code>__dict__</code>删除属性。</li></ul></li></ol><hr><h3 id=-何时需要自定义魔术方法>🧩 <strong>何时需要自定义魔术方法</strong></h3><p>当默认行为<strong>不满足需求</strong>时，需重写特定方法：</p><div class=table-wrapper><table><thead><tr><th><strong>场景</strong></th><th><strong>需重写的魔术方法</strong></th><th><strong>示例</strong></th></tr></thead><tbody><tr><td><strong>定制初始化逻辑</strong></td><td><code>__init__</code></td><td>初始化实例属性：<code>def __init__(self, name): self.name = name</code></td></tr><tr><td><strong>友好对象显示</strong></td><td><code>__str__</code>、<code>__repr__</code></td><td><code>__str__</code>返回用户可读描述，<code>__repr__</code>返回可重建对象的表达式</td></tr><tr><td><strong>支持运算符操作</strong></td><td><code>__add__</code>、<code>__eq__</code>等</td><td>向量加法：<code>def __add__(self, other): return Vector(self.x + other.x, ...)</code></td></tr><tr><td><strong>容器类行为</strong></td><td><code>__getitem__</code>、<code>__len__</code></td><td>实现类列表索引：<code>def __getitem__(self, idx): return self.data[idx]</code></td></tr><tr><td><strong>控制属性访问</strong></td><td><code>__getattr__</code>、<code>__setattr__</code></td><td>动态属性处理：<code>def __getattr__(self, name): return self.data.get(name)</code></td></tr><tr><td><strong>支持迭代</strong></td><td><code>__iter__</code>、<code>__next__</code></td><td>返回迭代器：<code>def __iter__(self): return iter(self.items)</code></td></tr></tbody></table></div><blockquote><p>💡 <strong>说明</strong>：若未重写，类仍可运行，但行为可能不符合预期（如未定义<code>__str__</code>时，<code>print(obj)</code>输出内存地址）。</p></blockquote><hr><h3 id=-关键注意事项-2>⚠️ <strong>关键注意事项</strong></h3><ol><li><strong>避免无限递归</strong>
+重写<code>__setattr__</code>或<code>__getattribute__</code>时，需调用父类方法（<code>super().__setattr__()</code>），否则会触发递归错误：<pre tabindex=0><code>class SafeSetAttr:
+    def __init__(self):
+        super().__setattr__(&#39;data&#39;, {})  # 避免直接写self.data
+    def __setattr__(self, key, value):
+        self.data[key] = value  # ❌ 错误！触发__setattr__循环调用
+        super().__setattr__(key, value)  # ✅ 正确
+</code></pre></li><li><strong><code>__del__</code>的不可靠性</strong>
+依赖垃圾回收机制触发，​<strong>不保证及时执行</strong>。资源释放应显式调用（如<code>close()</code>方法）。</li><li><strong>慎用<code>__getattr__</code>与<code>__getattribute__</code></strong><ul><li><code>__getattr__</code>：仅在属性不存在时调用。</li><li><code>__getattribute__</code>：拦截所有属性访问，需更谨慎设计。</li></ul></li></ol><hr><h3 id=-总结-11>💎 <strong>总结</strong></h3><ul><li><strong>默认实现</strong>：所有自定义类均继承<code>object</code>类的魔术方法，提供基础功能（如内存地址显示、ID比较等）。</li><li><strong>自定义场景</strong>：需根据业务逻辑重写特定方法（如初始化、显示、运算符、容器行为等）。</li><li><strong>优先重写</strong>：常用方法包括<code>__init__</code>、<code>__str__</code>、<code>__repr__</code>、<code>__eq__</code>；容器类需额外实现<code>__getitem__</code>、<code>__len__</code>等。</li><li><strong>避免陷阱</strong>：操作属性相关方法时注意递归问题，资源管理避免依赖<code>__del__</code>。</li></ul><blockquote><p>通过选择性重写魔术方法，可让自定义类无缝融入Python生态（如支持<code>len(obj)</code>、<code>for x in obj</code>等原生语法），同时保持代码简洁直观。</p></blockquote><h2 id=decorator>Decorator</h2><p>Python 装饰器是一种高阶函数，用于<strong>在不修改原函数代码的前提下动态增强其功能</strong>。它基于闭包和函数式编程思想，通过 <code>@</code> 语法糖实现简洁调用。以下是详细解析：</p><hr><h3 id=-装饰器的核心原理>⚙️ <strong>装饰器的核心原理</strong></h3><ol><li><strong>本质</strong>
+装饰器是一个接收函数作为参数、返回新函数的高阶函数。其核心是<strong>函数嵌套 + 闭包</strong>​：<pre tabindex=0><code>def decorator(func):          # 接收被装饰函数
+    def wrapper(*args, **kwargs):  # 新函数：添加扩展功能
+        # 增强逻辑（如日志、计时）
+        result = func(*args, **kwargs)  # 调用原函数
+        return result
+    return wrapper            # 返回包装后的函数
+</code></pre></li><li><strong>执行机制</strong>
+<code>@decorator</code> 语法糖等价于：
+<code>原函数 = decorator(原函数)</code>
+例如：<pre tabindex=0><code>@decorator
+def target_func(): ...
+# 等同于：target_func = decorator(target_func)
+</code></pre></li><li><strong>闭包的作用</strong>
+内部函数 <code>wrapper</code> 会记住外层作用域的变量（如 <code>func</code>），即使装饰器已执行完毕，仍能访问原函数。</li></ol><hr><h3 id=-装饰器类型与实现>🧩 <strong>装饰器类型与实现</strong></h3><h4 id=无参装饰器><strong>无参装饰器</strong></h4><ul><li><strong>场景</strong>：为函数添加固定增强逻辑（如日志记录）。</li><li>示例：记录函数执行时间：<pre tabindex=0><code>import time
+def timer(func):
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        print(f&#34;{func.__name__}耗时: {time.time()-start:.2f}s&#34;)
+        return result
+    return wrapper
+
+@timer
+def heavy_calculation(n):
+    time.sleep(n)
+</code></pre></li></ul><h4 id=带参装饰器><strong>带参装饰器</strong></h4><ul><li><strong>场景</strong>：根据参数动态调整装饰行为（如重试次数、权限级别）。</li><li>实现：三层嵌套函数：<pre tabindex=0><code>def retry(max_tries):  # 接收装饰器参数
+    def decorator(func):  # 接收被装饰函数
+        def wrapper(*args, **kwargs):
+            for _ in range(max_tries):
+                try:
+                    return func(*args, **kwargs)
+                except Exception:
+                    pass
+            raise RuntimeError(&#34;重试失败&#34;)
+        return wrapper
+    return decorator
+
+@retry(max_tries=3)
+def unstable_api():
+    import random
+    if random.random() &gt; 0.5:
+        raise ValueError(&#34;服务异常&#34;)
+</code></pre></li></ul><h4 id=类装饰器><strong>类装饰器</strong></h4><ul><li><strong>形式1：装饰类</strong>
+修改类定义（如添加属性/方法）：<pre tabindex=0><code>def add_method(cls):
+    cls.new_method = lambda self: print(&#34;动态添加方法&#34;)
+    return cls
+
+@add_method
+class MyClass: ...
+</code></pre></li><li><strong>形式2：类实现装饰器</strong>
+通过 <code>__call__</code> 方法使类可调用：<pre tabindex=0><code>class Counter:
+    def __init__(self, func):
+        self.func = func
+        self.calls = 0
+
+    def __call__(self, *args, **kwargs):
+        self.calls += 1
+        print(f&#34;调用次数: {self.calls}&#34;)
+        return self.func(*args, **kwargs)
+
+@Counter
+def say_hello():
+    print(&#34;Hello!&#34;)
+</code></pre></li></ul><h4 id=内置装饰器><strong>内置装饰器</strong></h4><ul><li><code>@property</code>：将方法转为属性访问。</li><li><code>@classmethod</code>：定义类方法（第一个参数为 <code>cls</code>）。</li><li><code>@staticmethod</code>：定义静态方法（无 <code>self/cls</code> 参数）。</li></ul><hr><h3 id=-关键注意事项-3>⚠️ <strong>关键注意事项</strong></h3><ol><li><strong>保留元信息</strong>
+装饰后函数的 <code>__name__</code>、<code>__doc__</code> 会被包装函数覆盖，需用 <code>functools.wraps</code> 修复：<pre tabindex=0><code>from functools import wraps
+def decorator(func):
+    @wraps(func)  # 保留原函数元信息
+    def wrapper(*args, **kwargs):
+        ...
+    return wrapper
+</code></pre></li><li><strong>多个装饰器的执行顺序</strong>
+装饰器从下往上应用（就近原则）：<pre tabindex=0><code>@decorator1
+@decorator2
+def func(): ...
+# 等效于：func = decorator1(decorator2(func))
+</code></pre></li><li><strong>装饰器副作用</strong><ul><li>装饰器在函数<strong>定义时立即执行</strong>，而非调用时。</li><li>避免在装饰器中修改可变状态（如全局变量），可能引发并发问题。</li></ul></li></ol><hr><h3 id=-应用场景-2>🛠️ <strong>应用场景</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>场景</strong></th><th><strong>作用</strong></th><th><strong>示例</strong></th></tr></thead><tbody><tr><td><strong>日志记录</strong></td><td>记录函数调用参数/结果</td><td>在数据库操作前打印SQL语句</td></tr><tr><td><strong>性能监控</strong></td><td>统计函数执行时间</td><td>优化算法性能时定位瓶颈函数</td></tr><tr><td><strong>权限验证</strong></td><td>检查用户权限</td><td>Web框架中限制API访问：<code>@login_required</code></td></tr><tr><td><strong>缓存加速</strong></td><td>避免重复计算</td><td><code>@functools.lru_cache</code> 缓存递归函数结果（如斐波那契数列）</td></tr><tr><td><strong>输入校验</strong></td><td>验证参数合法性</td><td>检查参数是否为整数：<code>if not all(isinstance(arg, int) for arg in args)</code></td></tr><tr><td><strong>重试机制</strong></td><td>网络请求失败时自动重试</td><td>调用第三方API时设置最大重试次数</td></tr><tr><td><strong>单例模式</strong></td><td>确保类只有一个实例</td><td>数据库连接池全局唯一</td></tr></tbody></table></div><hr><h3 id=-综合示例缓存--计时装饰器>💎 <strong>综合示例：缓存 + 计时装饰器</strong></h3><pre tabindex=0><code>import time
+from functools import wraps
+
+def cache_and_time(max_size=100):
+    def decorator(func):
+        cache = {}
+        @wraps(func)
+        def wrapper(*args):
+            # 缓存逻辑
+            if args in cache:
+                print(f&#34;缓存命中: {func.__name__}{args}&#34;)
+                return cache[args]
+            # 计时逻辑
+            start = time.time()
+            result = func(*args)
+            end = time.time()
+            print(f&#34;{func.__name__}耗时: {end-start:.4f}s&#34;)
+            # 更新缓存
+            if len(cache) &gt;= max_size:
+                cache.popitem()
+            cache[args] = result
+            return result
+        return wrapper
+    return decorator
+
+@cache_and_time(max_size=50)
+def fibonacci(n):
+    if n &lt; 2:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+</code></pre><hr><h3 id=总结><strong>总结</strong></h3><p>Python装饰器通过<strong>高阶函数+闭包</strong>实现功能扩展，核心价值在于：</p><ol><li><strong>解耦增强逻辑</strong>：分离核心功能与横切关注点（如日志、权限）。</li><li><strong>代码复用</strong>：同一装饰器可应用于多个函数，避免重复代码。</li><li><strong>动态扩展</strong>：运行时修改函数行为，提升灵活性。</li></ol><blockquote><p>掌握装饰器后，可结合 <code>functools</code>、<code>contextlib</code> 等标准库，构建更健壮的应用架构。</p></blockquote><h2 id=args>*args</h2><p><code>*args</code> 是 Python 中用于处理<strong>不定数量位置参数</strong>的特殊语法，它通过将多余的位置参数打包成元组（<code>tuple</code>），极大增强了函数的灵活性。以下是详细解析及典型用法：</p><hr><h3 id=-核心概念>⚙️ <strong>核心概念</strong></h3><ol><li><strong>作用</strong><ul><li>接收任意数量的位置参数（无名参数），并将它们打包为<strong>元组</strong>（<code>tuple</code>）。</li><li>函数定义时无需预先确定参数数量，适应动态调用场景。</li></ul></li><li><strong>命名规则</strong><ul><li><code>*</code> 是语法关键符号，<code>args</code> 是约定名称（可替换为其他合法标识符，如 <code>*numbers</code>），但通常沿用 <code>args</code>保持代码可读性。</li></ul></li></ol><hr><h3 id=-基本用法>🧩 <strong>基本用法</strong></h3><h4 id=接收任意数量参数><strong>接收任意数量参数</strong></h4><pre tabindex=0><code>def sum_numbers(*args):
+    total = 0
+    for num in args:  # args 是一个元组
+        total += num
+    return total
+
+print(sum_numbers(1, 2, 3))       # 输出：6
+print(sum_numbers(10, 20, 30, 40)) # 输出：100
+</code></pre><ul><li>调用时传入的所有位置参数会被打包为元组 <code>args</code>，如 <code>(1, 2, 3)</code>。</li></ul><h4 id=与固定参数结合><strong>与固定参数结合</strong></h4><pre tabindex=0><code>def greet(greeting, *names):
+    for name in names:
+        print(f&#34;{greeting}, {name}!&#34;)
+
+greet(&#34;Hello&#34;, &#34;Alice&#34;, &#34;Bob&#34;, &#34;Charlie&#34;)
+# 输出：
+# Hello, Alice!
+# Hello, Bob!
+# Hello, Charlie!
+</code></pre><ul><li><code>greeting</code> 是固定位置参数，<code>*names</code> 捕获剩余参数。</li></ul><hr><h3 id=-参数顺序规则>⚖️ <strong>参数顺序规则</strong></h3><p>在函数定义中，<code>*args</code> 必须位于<strong>普通位置参数之后</strong>，且在 <code>**kwargs</code> 之前：</p><pre tabindex=0><code>def example(a, b, *args, **kwargs):
+    print(f&#34;固定参数: a={a}, b={b}&#34;)
+    print(f&#34;额外位置参数: {args}&#34;)
+    print(f&#34;关键字参数: {kwargs}&#34;)
+
+example(1, 2, 3, 4, name=&#34;Alice&#34;, age=25)
+# 输出：
+# 固定参数: a=1, b=2
+# 额外位置参数: (3, 4)
+# 关键字参数: {&#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 25}
+</code></pre><hr><h3 id=-高级技巧-1>🔧 <strong>高级技巧</strong></h3><h4 id=解包序列为位置参数><strong>解包序列为位置参数</strong></h4><pre tabindex=0><code>def func(a, b, c):
+    return a + b + c
+
+nums = [1, 2, 3]
+print(func(*nums))  # 等价于 func(1, 2, 3) → 输出：6
+</code></pre><ul><li><code>*nums</code> 将列表解包为独立的位置参数。</li></ul><h4 id=动态函数调用><strong>动态函数调用</strong></h4><pre tabindex=0><code>def dynamic_caller(func, *args):
+    return func(*args)  # 将 args 解包后传递给目标函数
+
+print(dynamic_caller(sum_numbers, 1, 2, 3))  # 输出：6
+</code></pre><ul><li>适用于回调函数或中间层代理。</li></ul><h4 id=避免子类参数冲突><strong>避免子类参数冲突</strong></h4><pre tabindex=0><code>class Animal:
+    def __init__(self, name):
+        self.name = name
+
+class Dog(Animal):
+    def __init__(self, breed, *args):
+        super().__init__(*args)  # 将剩余参数传递给父类
+        self.breed = breed
+
+my_dog = Dog(&#34;Golden Retriever&#34;, &#34;Max&#34;)
+print(my_dog.name)   # 输出：Max
+print(my_dog.breed)  # 输出：Golden Retriever
+</code></pre><ul><li>子类通过 <code>*args</code> 将参数传递给父类构造函数。</li></ul><hr><h3 id=-典型应用场景>🛠️ <strong>典型应用场景</strong></h3><ol><li><strong>可变参数函数</strong>
+如内置函数 <code>sum()</code>、<code>max()</code>，可处理任意数量输入。</li><li><strong>装饰器开发</strong>
+通用装饰器需用 <code>*args</code> 和 <code>**kwargs</code> 捕获被装饰函数的所有参数：<pre tabindex=0><code>def logger(func):
+    def wrapper(*args, **kwargs):
+        print(&#34;函数开始执行&#34;)
+        result = func(*args, **kwargs)
+        print(&#34;函数执行结束&#34;)
+        return result
+    return wrapper
+
+@logger
+def add(a, b):
+    return a + b
+</code></pre></li><li><strong>批量数据处理</strong>
+处理同类型数据的批量操作，如合并字符串：<pre tabindex=0><code>def concatenate(*strings):
+    return &#34; &#34;.join(strings)
+
+print(concatenate(&#34;Hello&#34;, &#34;world!&#34;))  # 输出：Hello world!
+</code></pre></li></ol><hr><h3 id=-注意事项-3>⚠️ <strong>注意事项</strong></h3><ol><li><strong>参数顺序强制</strong>
+若 <code>*args</code> 后需指定关键字参数，必须显式命名：<pre tabindex=0><code>def func(a, *args, b=0):  # b 必须通过关键字传递
+    print(a, args, b)
+
+func(1, 2, 3, b=10)  # 输出：1 (2, 3) 10
+</code></pre></li><li><strong>避免滥用</strong>
+过度使用会降低代码可读性，仅在<strong>参数数量不确定</strong>时使用。</li><li><strong>元组不可变性</strong>
+<code>args</code> 是元组，无法直接修改。需转换为列表操作：<pre tabindex=0><code>def modify_args(*args):
+    args_list = list(args)  # 转为列表
+    args_list[0] = 100
+    print(args_list)
+</code></pre></li></ol><hr><h3 id=-总结-12>💎 <strong>总结</strong></h3><p><code>*args</code> 的核心价值在于<strong>动态处理位置参数</strong>，通过元组打包实现函数的高度灵活性。合理使用可显著提升代码的通用性（如装饰器、继承、批量操作），但需注意参数顺序和可读性平衡。</p><h2 id=kwargs>**kwargs</h2><p>在 Python 中，<code>**kwargs</code> 是一种用于函数定义的特殊语法，用于<strong>接收任意数量的关键字参数</strong>（即 <code>key=value</code> 形式的参数），并将这些参数打包成一个字典（<code>dict</code>）。以下是其核心特性和应用场景的详细解析：</p><hr><h3 id=-基本概念与语法>⚙️ <strong>基本概念与语法</strong></h3><ol><li><strong>作用</strong><ul><li>接收函数调用时传入的<strong>任意数量关键字参数</strong>（如 <code>name="Alice"</code>, <code>age=30</code>）。</li><li>参数在函数内部被封装为<strong>字典</strong>，键为参数名，值为参数值。</li></ul></li><li><strong>语法</strong><pre tabindex=0><code>def function(**kwargs):
+    for key, value in kwargs.items():
+        print(f&#34;{key}: {value}&#34;)
+
+function(name=&#34;Alice&#34;, age=30)  
+# 输出：
+# name: Alice
+# age: 30
+</code></pre></li></ol><hr><h3 id=-核心特性>📦 <strong>核心特性</strong></h3><ol><li><strong>字典打包机制</strong><ul><li>所有关键字参数被自动转换为字典对象，例如 <code>{"name": "Alice", "age": 30}</code>。</li></ul></li><li><strong>参数顺序规则</strong><ul><li>在函数定义中，<pre tabindex=0><code>**kwargs
+</code></pre></li></ul></li></ol><p>必须位于参数列表的
+最后
+，顺序为：
+**普通参数 →</p><pre tabindex=0><code>     *args
+     ```
+→
+</code></pre><pre><code> **kwargs
+ ```
+ **
+ ```
+ def example(a, b, *args, **kwargs):
+     print(f&quot;a={a}, b={b}, args={args}, kwargs={kwargs}&quot;)
+ 
+ example(1, 2, 3, 4, name=&quot;Bob&quot;, age=25)
+ # 输出：a=1, b=2, args=(3,4), kwargs={'name':'Bob', 'age':25}
+ ```
+</code></pre><ol start=3><li><strong>与 <code>\*args</code> 的区别</strong><div class=table-wrapper><table><thead><tr><th><strong>特性</strong></th><th><code>*args</code></th><th><code>**kwargs</code></th></tr></thead><tbody><tr><td><strong>参数类型</strong></td><td>位置参数（无键名）</td><td>关键字参数（键值对）</td></tr><tr><td><strong>内部存储形式</strong></td><td>元组（<code>tuple</code>）</td><td>字典（<code>dict</code>）</td></tr><tr><td><strong>调用示例</strong></td><td><code>func(1, 2, 3)</code></td><td><code>func(a=1, b=2)</code></td></tr><tr><td><strong>典型场景</strong></td><td>处理不定数量同类型参数</td><td>处理命名配置或动态属性</td></tr></tbody></table></div></li></ol><hr><h3 id=-典型应用场景-1>🛠️ <strong>典型应用场景</strong></h3><ol><li><strong>动态函数扩展</strong><ul><li>在不修改函数签名的情况下添加新参数：<pre tabindex=0><code>def user_profile(name, age, **kwargs):
+    print(f&#34;Name: {name}, Age: {age}&#34;)
+    for key, value in kwargs.items():
+        print(f&#34;{key}: {value}&#34;)
+
+user_profile(&#34;Alice&#34;, 30, occupation=&#34;Engineer&#34;, city=&#34;New York&#34;)
+</code></pre></li></ul></li><li><strong>配置参数传递</strong><ul><li>简化复杂配置的传递（如数据库连接、API 设置）：<pre tabindex=0><code>def connect_db(host, port, **options):
+    print(f&#34;Connecting to {host}:{port}&#34;)
+    print(&#34;Options:&#34;, options)
+
+connect_db(&#34;localhost&#34;, 5432, timeout=10, ssl=True)
+</code></pre></li></ul></li><li><strong>类初始化与继承</strong><ul><li>动态设置对象属性或向父类传递参数：<pre tabindex=0><code>class User:
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)  # 动态设置属性
+
+user = User(name=&#34;Bob&#34;, age=25)
+print(user.name, user.age)  # 输出：Bob 25
+</code></pre></li></ul></li><li><strong>装饰器开发</strong><ul><li>捕获被装饰函数的所有关键字参数：<pre tabindex=0><code>def log_args(func):
+    def wrapper(*args, **kwargs):
+        print(f&#34;Args: {args}, Kwargs: {kwargs}&#34;)
+        return func(*args, **kwargs)
+    return wrapper
+
+@log_args
+def demo(x, y, option=None):
+    pass
+
+demo(1, 2, option=&#34;debug&#34;)
+</code></pre></li></ul></li></ol><hr><h3 id=-高级技巧与注意事项>🔧 <strong>高级技巧与注意事项</strong></h3><ol><li><strong>字典解包（Unpacking）</strong><ul><li>使用</li></ul></li></ol><pre tabindex=0><code>     **
+     ```
+将字典解包为关键字参数传递给函数：
+     ```
+     def greet(name, age):
+         print(f&#34;Hello {name}, you are {age} years old.&#34;)
+     
+     params = {&#34;name&#34;: &#34;Charlie&#34;, &#34;age&#34;: 35}
+     greet(**params)  # 等价于 greet(name=&#34;Charlie&#34;, age=35)
+     ```
+2. **默认值与安全访问**
+   - 使用
+</code></pre><pre><code> dict.get()
+ ```
+</code></pre><p>避免</p><pre tabindex=0><code>     KeyError
+     ```
+或设置默认值：
+     ```
+     def safe_access(**kwargs):
+         name = kwargs.get(&#34;name&#34;, &#34;Unknown&#34;)  # 无 name 时返回 &#34;Unknown&#34;
+         age = kwargs.get(&#34;age&#34;, 0)
+     ```
+3. **参数冲突处理**
+   - 避免关键字参数与位置参数同名：
+     ```
+     def conflict(a, **kwargs):
+         # 若调用 conflict(a=1, a=2) 会引发 TypeError（重复赋值）
+         pass
+     ```
+4. **谨慎使用原则**
+   - **适用场景**：参数数量不确定、需动态扩展时。
+   - **避免滥用**：明确命名的参数更易读（如 `def save_user(name, age)` 优于 `def save_user(**data)`）。
+
+
+------
+### ⚠️ **常见问题解决**
+
+1. **检查键是否存在**
+</code></pre><p>if &ldquo;key&rdquo; in kwargs: # 直接检查
+value = kwargs[&ldquo;key&rdquo;]</p><pre tabindex=0><code>2. **类型验证**
+</code></pre><p>try:
+age = int(kwargs[&ldquo;age&rdquo;]) # 强制类型转换
+except (KeyError, ValueError):
+age = None</p><pre tabindex=0><code>
+
+------
+### 💎 **总结**
+
+`**kwargs` 是 Python 灵活性的核心机制之一，通过**字典打包关键字参数**实现函数的高度可扩展性。其核心价值在于：
+- **动态性**：支持不确定数量的命名参数传递。
+- **解耦设计**：分离函数核心逻辑与可变配置。
+- **代码复用**：适用于装饰器、继承、配置管理等通用场景。
+&gt; 合理使用 `**kwargs`（结合 `*args` 和普通参数）能显著提升代码的适应性和简洁性，但需注意避免过度使用导致的维护复杂度。
+## 推导式
+
+推导式（Comprehension）是 Python 中一种高效且简洁的语法结构，用于**快速构建列表、字典、集合或生成器**。它通过一行代码实现循环、条件判断和数据转换，大幅提升代码可读性和执行效率。以下是详细解析：
+
+
+------
+### ⚙️ **核心类型与语法**
+
+#### **列表推导式（List Comprehension）**
+
+- **作用**：创建新列表。
+- **语法**：
+`[expression for item in iterable if condition]`
+- 示例：
+</code></pre><h1 id=生成平方数列表>生成平方数列表</h1><p>squares = [x**2 for x in range(10)] # [0, 1, 4, &mldr;, 81]</p><h1 id=过滤偶数并转换为大写>过滤偶数并转换为大写</h1><p>names = [&lsquo;Bob&rsquo;, &lsquo;Alice&rsquo;, &lsquo;Tom&rsquo;]
+upper_names = [name.upper() for name in names if len(name) > 3] # [&lsquo;ALICE&rsquo;]</p><pre tabindex=0><code>#### **字典推导式（Dictionary Comprehension）**
+
+- **作用**：创建新字典。
+- **语法**：
+`{key_expr: value_expr for item in iterable if condition}`
+- 示例：
+</code></pre><h1 id=键值反转>键值反转</h1><p>fruit_prices = {&lsquo;apple&rsquo;: 5, &lsquo;banana&rsquo;: 3}
+price_fruit = {v: k for k, v in fruit_prices.items()} # {5: &lsquo;apple&rsquo;, 3: &lsquo;banana&rsquo;}</p><h1 id=合并两个列表为字典>合并两个列表为字典</h1><p>keys = [&rsquo;name&rsquo;, &lsquo;age&rsquo;]; values = [&lsquo;Alice&rsquo;, 30]
+person = {k: v for k, v in zip(keys, values)} # {&rsquo;name&rsquo;: &lsquo;Alice&rsquo;, &lsquo;age&rsquo;: 30}</p><pre tabindex=0><code>#### **集合推导式（Set Comprehension）**
+
+- **作用**：创建**去重**的集合。
+- **语法**：
+`{expression for item in iterable if condition}`
+- 示例：
+</code></pre><h1 id=获取不重复字母>获取不重复字母</h1><p>chars = {char for char in &lsquo;abracadabra&rsquo; if char not in &lsquo;abc&rsquo;} # {&rsquo;d&rsquo;, &lsquo;r&rsquo;}</p><h1 id=计算不重复的单词长度>计算不重复的单词长度</h1><p>words = [&lsquo;hello&rsquo;, &lsquo;world&rsquo;, &lsquo;hello&rsquo;]
+unique_lengths = {len(word) for word in words} # {5}</p><pre tabindex=0><code>#### **生成器表达式（Generator Expression）**
+
+- **作用**：**惰性生成**数据，节省内存。
+- **语法**：
+`(expression for item in iterable if condition)`
+- 示例：
+</code></pre><h1 id=生成大数据的平方不立即计算>生成大数据的平方（不立即计算）</h1><p>gen = (x**2 for x in range(1000000))
+print(next(gen)) # 0（按需生成）</p><h1 id=转换为元组>转换为元组</h1><p>tuple_from_gen = tuple(x for x in range(5)) # (0, 1, 2, 3, 4)</p><pre tabindex=0><code>
+
+------
+### 🔧 **嵌套推导式**
+
+用于处理**多维数据**（如矩阵、嵌套字典）：
+</code></pre><h1 id=矩阵转置>矩阵转置</h1><p>matrix = [[1, 2, 3], [4, 5, 6]]
+transposed = [[row[i] for row in matrix] for i in range(3)] # [[1,4], [2,5], [3,6]]</p><h1 id=多层字典构建>多层字典构建</h1><p>students = [&ldquo;Alice&rdquo;, &ldquo;Bob&rdquo;]
+scores = {&ldquo;math&rdquo;: [90, 85], &ldquo;english&rdquo;: [88, 92]}
+report = {
+student: {subject: scores[subject][i] for subject in scores}
+for i, student in enumerate(students)
+} # {&lsquo;Alice&rsquo;: {&lsquo;math&rsquo;:90, &rsquo;english&rsquo;:88}, &mldr;}</p><pre tabindex=0><code>
+
+------
+### ⚡ **性能与优化**
+
+#### **性能对比**
+
+| **方法**     | **执行速度**   | **内存占用** | **适用场景** |
+| ------------ | -------------- | ------------ | ------------ |
+| 传统循环     | 慢             | 正常         | 复杂逻辑     |
+| 推导式       | 快（C 层优化） | 正常         | 简单数据转换 |
+| 生成器表达式 | 最快           | **极低**     | 大数据流处理 |
+#### **优化策略**
+
+- **生成器替代列表**：处理大数据时用 `(x for x in range(N))` 避免内存溢出。
+- **条件顺序优化**：将高效条件放在前面（如 `if x &gt; 0` 在 `if x % 2 == 0` 前）。
+- **避免复杂嵌套**：超过两层嵌套时改用传统循环。
+
+
+------
+### 🚫 **使用禁忌与注意事项**
+
+1. **可读性优先**
+   - 避免过度复杂：如同时含多层循环、多个条件或函数调用时，改用 `for` 循环。
+   - 反例：
+     ```
+     # 难以理解的嵌套
+     result = [[x*y for y in range(10) if y%2] for x in range(5) if x&gt;2]
+     ```
+2. **无副作用的表达式**
+   - 推导式内**禁止修改外部变量**（如 `[x.append(1) for x in lists]`）。
+3. **元组无直接推导式**
+   - 需通过生成器转换：`tuple(x for x in iterable)`。
+
+
+------
+### 💎 **应用场景总结**
+
+| **场景**          | **推荐推导式类型** | **示例**                                                     |
+| ----------------- | ------------------ | ------------------------------------------------------------ |
+| 数据清洗/过滤     | 列表推导式         | `clean_data = [x.strip() for x in raw_data if x != &#34;&#34;]`      |
+| 快速构建键值映射  | 字典推导式         | `word_count = {word: text.count(word) for word in set(text.split())}` |
+| 去重统计          | 集合推导式         | `unique_chars = {char for char in text if char.isalpha()}`   |
+| 大规模数据流处理  | 生成器表达式       | `sum_squares = sum(x**2 for x in range(1000000))`            |
+| 矩阵/多维数据处理 | 嵌套推导式         | `flattened = [num for row in matrix for num in row]`         |
+
+
+------
+### 💡 **核心原则**
+
+- ✅ **简洁性**：用一行代替多行循环。
+- ✅ **效率**：底层优化提升执行速度。
+- ⚠️ **克制使用**：当推导式超过 **80 字符**或 **3 层嵌套**时，改用传统循环。
+&gt; 记住：**可维护性 &gt; 简洁性**。推导式是工具而非目标，合理使用方能发挥最大价值。
+## 多线程
+
+Python的多线程编程通过`threading`模块实现，适合处理**I/O密集型任务**（如网络请求、文件读写），但在CPU密集型任务中受限于**全局解释器锁（GIL）** 无法真正并行。以下从核心概念到实践全面解析：
+
+
+------
+### ⚙️ **多线程基础与实现**
+
+#### **线程与进程的区别**
+
+- **进程**：操作系统资源分配的最小单位，独立内存空间，切换开销大。
+- **线程**：进程内的执行单元，**共享进程内存**，切换开销小，适合高并发任务。
+- **GIL限制**：CPython中，GIL确保同一时间仅一个线程执行字节码，导致多线程无法利用多核CPU并行计算。
+#### **线程创建方法**
+
+- 函数式：通过
+</code></pre><p>Thread</p><pre tabindex=0><code>类指定目标函数。
+</code></pre><p>import threading
+def task(name):
+print(f"{name}执行中")
+t = threading.Thread(target=task, args=(&ldquo;线程1&rdquo;,))
+t.start()
+t.join() # 等待线程结束</p><pre tabindex=0><code>- 面向对象：继承
+</code></pre><p>Thread</p><pre tabindex=0><code>类并重写
+</code></pre><p>run()</p><pre tabindex=0><code>。
+</code></pre><p>class MyThread(threading.Thread):
+def <strong>init</strong>(self, delay):
+super().<strong>init</strong>()
+self.delay = delay
+def run(self):
+time.sleep(self.delay)
+print(&ldquo;线程执行完成&rdquo;)
+t = MyThread(2)
+t.start()</p><pre tabindex=0><code>**关键方法**：
+- `start()`：启动线程
+- `join(timeout)`：阻塞至线程结束
+- `is_alive()`：检查线程状态
+- `daemon=True`：设为守护线程（主线程退出时自动终止）。
+
+
+------
+### 🔒 **线程同步与安全**
+
+多线程共享内存需同步机制避免**竞态条件**：
+1. 
+ 互斥锁（Lock）
+确保同一时间仅一个线程访问共享资源。
+</code></pre><p>lock = threading.Lock()
+def safe_increment():
+with lock: # 自动获取和释放锁
+global counter
+counter += 1</p><pre tabindex=0><code>2. 
+条件变量（Condition）
+协调线程间通信，如生产者-消费者模型。
+</code></pre><p>condition = threading.Condition()
+def producer():
+with condition:
+items.append(data)
+condition.notify() # 唤醒等待线程
+def consumer():
+with condition:
+while not items:
+condition.wait() # 阻塞直至通知
+items.pop()</p><pre tabindex=0><code>3. 
+其他同步工具：
+- **事件（Event）**：线程间事件通知（如`set()`触发、`wait()`阻塞）。
+- **信号量（Semaphore）**：限制同时访问资源的线程数。
+
+
+------
+### ⚖️ **GIL的影响与应对策略**
+
+#### **GIL的核心问题**
+
+- CPU密集型任务中，多线程因GIL无法并行执行，性能甚至低于单线程。
+- **示例**：计算斐波那契数列时，多线程因GIL切换反而增加开销。
+#### **解决方案**
+
+- 多进程替代：使用
+</code></pre><p>multiprocessing</p><pre tabindex=0><code>模块绕过GIL，每个进程独立GIL。
+</code></pre><p>from multiprocessing import Pool
+with Pool(4) as p:
+results = p.map(cpu_intensive_func, data)</p><pre tabindex=0><code>- **协程（asyncio）**：单线程内异步I/O，适合高并发网络请求。
+- **C扩展**：用C/C++编写计算逻辑，释放GIL（如NumPy）。
+
+
+------
+### 📊 **适用场景与性能对比**
+
+#### **多线程适用场景**
+
+| **场景类型**     | **示例**               | **优势**               |
+| ---------------- | ---------------------- | ---------------------- |
+| **I/O密集型**    | 网络请求、文件读写     | 线程在I/O等待时释放GIL |
+| **GUI应用**      | 界面响应与后台任务分离 | 避免界面卡顿           |
+| **高并发轻任务** | Web服务器处理简单请求  | 资源占用低 。          |
+#### **多线程 vs 多进程**
+
+| **特性**     | 多线程（threading） | 多进程（multiprocessing） |
+| ------------ | ------------------- | ------------------------- |
+| **内存开销** | 低（共享内存）      | 高（独立内存）            |
+| **数据共享** | 直接共享变量        | 需队列/管道等IPC机制      |
+| **适用任务** | I/O密集型           | CPU密集型                 |
+| **GIL影响**  | 受限制              | 无影响 。                 |
+
+
+------
+### ⚡ **高级技巧与最佳实践**
+
+1. **线程池优化资源**
+ 使用`ThreadPoolExecutor`避免频繁创建/销毁线程：
+</code></pre><p>from concurrent.futures import ThreadPoolExecutor
+with ThreadPoolExecutor(max_workers=5) as executor:
+futures = [executor.submit(task, i) for i in range(10)]
+results = [f.result() for f in futures]</p><pre tabindex=0><code>2. **线程本地数据（Thread-Local）**
+为每个线程维护独立数据副本：
+</code></pre><p>thread_local = threading.local()
+def worker():
+thread_local.data = threading.get_ident() # 存储线程ID</p><pre tabindex=0><code>3. **避免常见陷阱**：
+- **死锁**：按固定顺序获取多个锁。
+- **资源泄漏**：守护线程中确保资源释放（如文件句柄）。
+- **线程数控制**：过量线程导致切换开销激增（建议不超过CPU核心数×5）。
+
+
+------
+### 💎 **总结**
+
+- **核心价值**：多线程在**I/O密集型任务**中提升吞吐量，简化高并发编程。
+- **核心局限**：**GIL**使CPU密集型任务需改用多进程或协程。
+- 最佳实践：
+- I/O任务 → `threading` + 线程池
+- CPU任务 → `multiprocessing`
+- 高并发网络 → `asyncio`
+&gt; 通过合理选择同步机制、规避GIL限制，Python多线程可显著提升程序响应效率，尤其在网络与GUI场景中优势显著。
+## open()
+
+Python 的 `open()` 函数是文件操作的核心工具，用于创建、读取或修改文件，返回文件对象供后续操作。以下从参数解析、模式选择到最佳实践进行全面详解：
+
+
+------
+### ⚙️ **函数语法与参数解析**
+</code></pre><p>open(
+file,
+mode=&lsquo;r&rsquo;,
+buffering=-1,
+encoding=None,
+errors=None,
+newline=None,
+closefd=True,
+opener=None
+)</p><pre tabindex=0><code>- **`file`（必需）**
+  文件路径（绝对或相对路径）。
+  示例：`open(&#39;data.txt&#39;)`（相对路径）或 `open(&#39;/home/user/data.txt&#39;)`（绝对路径）。
+- **`mode`（可选）**
+  文件打开模式，默认为 `&#39;r&#39;`（只读）。完整模式见下表 。
+- **`encoding`（关键）**
+  指定字符编码（如 `&#39;utf-8&#39;`）。处理中文或跨平台文件时必选，避免 `UnicodeDecodeError`。
+  示例：`open(&#39;file.txt&#39;, encoding=&#39;utf-8&#39;)`。
+- **`errors`**
+  编码错误处理：`&#39;ignore&#39;`（忽略错误）、`&#39;replace&#39;`（用 `?` 替换乱码）。
+- **`buffering`**
+  缓冲区大小：
+  - `0`：无缓冲（直接读写）
+  - `1`：行缓冲（文本模式）
+  - `&gt;1`：指定缓冲区字节数（默认 `-1` 表示系统优化）。
+
+
+------
+### 📂 **文件打开模式详解**
+
+| **模式**  | **描述**     | **注意事项**                                                 |
+| --------- | ------------ | ------------------------------------------------------------ |
+| **`&#39;r&#39;`** | 只读（默认） | 文件必须存在                                                 |
+| **`&#39;w&#39;`** | 写入模式     | 文件存在则清空内容；不存在则创建新文件                       |
+| **`&#39;a&#39;`** | 追加模式     | 在文件末尾写入，保留原内容                                   |
+| **`&#39;x&#39;`** | 独占创建     | 文件必须不存在，否则报错 `FileExistsError`                   |
+| **`&#39;b&#39;`** | 二进制模式   | 需配合 `r`/`w`/`a` 使用（如 `&#39;rb&#39;`, `&#39;wb&#39;`），处理图片、音频等非文本 |
+| **`&#39;+&#39;`** | 读写模式     | 扩展原有功能（如 `&#39;r+&#39;` 可读写，指针在开头）                 |
+&gt; **注意**：
+&gt;
+&gt; - `&#39;a+&#39;` 模式下指针默认在文件末尾，需用 `seek(0)` 移动指针到开头才能读取内容 。
+&gt; - 二进制模式（`&#39;b&#39;`）**不可**与 `encoding` 参数同时使用 。
+
+
+------
+### 📖 **文件读取方法**
+
+文件对象提供多种读取方式：
+- **`read(size=-1)`**
+  读取整个文件（`size` 指定字节数），返回字符串或字节对象 。
+  示例：`content = file.read()`。
+- **
+</code></pre><p>readline()</p><pre tabindex=0><code>**
+逐行读取（保留换行符
+</code></pre><p>\n</p><pre tabindex=0><code>），适用于大文件 。
+示例：
+</code></pre><p>while line := file.readline():
+print(line.strip())</p><pre tabindex=0><code>- **`readlines()`**
+读取所有行并返回列表，每行为一个字符串元素 。
+示例：`lines = file.readlines()`。
+
+
+------
+### ✍️ **文件写入与定位**
+
+- **`write(str)`**
+写入字符串，返回写入字符数。需手动添加换行符 `\n`。
+示例：`file.write(&#34;Hello\n&#34;)`。
+- **`writelines(sequence)`**
+写入字符串列表（不自动换行）。
+示例：`file.writelines([&#34;Line1\n&#34;, &#34;Line2\n&#34;])`。
+- 定位操作
+- `seek(offset, whence=0)`：移动文件指针（`0`=开头, `1`=当前位置, `2`=末尾）。
+  示例：`file.seek(0)`（移动到开头）。
+- `tell()`：返回当前指针位置（字节偏移量）。
+
+
+------
+### 🛡️ **最佳实践与常见问题**
+
+#### **使用 `with` 语句自动管理资源**
+
+避免忘记关闭文件导致资源泄漏，即使发生异常也能安全关闭 ：
+</code></pre><p>with open(&lsquo;file.txt&rsquo;, &lsquo;r&rsquo;) as file:
+data = file.read()</p><h1 id=文件自动关闭>文件自动关闭</h1><pre tabindex=0><code>#### **处理中文编码问题**
+
+指定 `encoding=&#39;utf-8&#39;` 解决乱码或解码错误：
+</code></pre><p>with open(&lsquo;中文.txt&rsquo;, &lsquo;r&rsquo;, encoding=&lsquo;utf-8&rsquo;) as f:
+print(f.read())</p><pre tabindex=0><code>#### **避免覆盖文件的陷阱**
+
+- `&#39;w&#39;` 模式会清空原文件，误用可能导致数据丢失。
+- 需保留原内容时，应使用 `&#39;a&#39;`（追加）或 `&#39;r+&#39;`（读写）。
+#### **二进制文件操作**
+
+处理图片、视频等非文本文件时，必须用二进制模式：
+</code></pre><p>with open(&lsquo;image.jpg&rsquo;, &lsquo;rb&rsquo;) as img:
+data = img.read()</p><pre tabindex=0><code>
+
+------
+### ⚠️ **关键注意事项**
+
+- **文件关闭**：显式调用 `close()` 或使用 `with` 语句，否则可能导致数据未写入或资源占用 。
+- **路径分隔符**：Windows 路径建议用 `/` 代替 `\`，避免转义错误（如 `open(&#39;C:/data/file.txt&#39;)`）。
+- **跨平台换行符**：`newline=&#39;\n&#39;` 可统一换行符格式 。
+
+
+------
+### 💎 **总结**
+
+`open()` 是 Python 文件操作的基石，核心要点包括：
+1. **模式选择**：根据需求选 `r`/`w`/`a`/`x`，结合 `b` 或 `+` 扩展功能。
+2. **编码指定**：文本文件务必设置 `encoding=&#39;utf-8&#39;`。
+3. **资源管理**：强制使用 `with` 语句避免泄漏。
+4. **二进制处理**：非文本文件必须用 `&#39;b&#39;` 模式。
+&gt; 通过合理组合参数与模式，可高效实现文件读写、数据持久化及跨平台兼容性。
+## 异步
+
+Python 的 `async/await` 是异步编程的核心语法，基于协程（Coroutine）和事件循环（Event Loop）实现高效并发，特别适合 I/O 密集型任务（如网络请求、文件读写）。以下从基础到进阶全面解析其工作原理、用法及最佳实践：
+
+
+------
+### ⚙️ **核心概念与工作原理**
+
+1. **协程（Coroutine）**
+   - 使用 `async def` 定义的函数称为**协程函数**，调用时返回协程对象（不立即执行）。
+   - 协程可通过 `await` 暂停自身，将控制权交还给事件循环，待异步操作完成后再恢复执行。
+   - 示例：
+     ```
+     async def fetch_data():
+         print(&#34;Start fetching&#34;)
+         await asyncio.sleep(1)  # 模拟I/O等待
+         return &#34;Data&#34;
+     ```
+2. **事件循环（Event Loop）**
+   - 协程的调度中心，负责监控协程状态、I/O事件及回调。
+   - 当协程遇到 `await` 时，事件循环暂停当前任务，执行其他就绪任务，实现单线程内并发。
+   - 启动方式：`asyncio.run()`（Python 3.7+）。
+3. **`async/await` 工作流程**
+</code></pre><p>graph LR
+A[调用 async 函数] &ndash;> B[返回协程对象]
+B &ndash;> C[提交给事件循环]
+C &ndash;> D[执行协程]
+D &ndash;> E{遇到 await}
+E &ndash;>|暂停| F[执行其他任务]
+F &ndash;> G[异步操作完成]
+G &ndash;> H[恢复原协程]</p><pre tabindex=0><code>
+
+------
+### 🛠️ **基础语法与用法**
+
+1. **定义与调用**
+- **`async`**：声明异步函数。
+- **
+  ```
+  await
+  ```
+  **：等待异步操作完成（仅限
+</code></pre><pre><code> async
+ ```
+</code></pre><p>函数内使用）。
+<code>async def main(): data = await fetch_data() # 等待 fetch_data 完成 print(data) asyncio.run(main()) # 启动事件循环</code>
+2. <strong>并发执行任务</strong></p><ul><li>**<pre tabindex=0><code>asyncio.gather()
+</code></pre>**：并行执行多个协程，返回结果列表。<pre tabindex=0><code>async def main():
+    results = await asyncio.gather(
+        task1(), task2(), task3()  # 并发执行
+    )
+</code></pre></li><li>**<pre tabindex=0><code>asyncio.create_task()
+</code></pre>**：创建后台任务，不阻塞当前协程。<pre tabindex=0><code>async def main():
+    task = asyncio.create_task(fetch_data())
+    # 可继续执行其他代码
+    result = await task  # 需要时等待结果
+</code></pre></li></ul><hr><h3 id=-高级模式与工具>⚡ <strong>高级模式与工具</strong></h3><ol><li><strong>异步上下文管理器（<code>async with</code>）</strong>
+管理异步资源（如数据库连接）：<pre tabindex=0><code>async with aiohttp.ClientSession() as session:
+    async with session.get(url) as response:
+        data = await response.json()
+</code></pre></li><li><strong>任务控制</strong><ul><li>超时处理：<pre tabindex=0><code>asyncio.wait_for(task, timeout)
+</code></pre>。<pre tabindex=0><code>try:
+    await asyncio.wait_for(slow_operation(), timeout=2.0)
+except asyncio.TimeoutError:
+    print(&#34;Timeout!&#34;)
+</code></pre></li><li><strong>取消任务</strong>：<code>task.cancel()</code>。</li></ul></li><li><strong>同步原语</strong><ul><li>锁（<code>asyncio.Lock</code>）：确保临界区代码互斥访问。<pre tabindex=0><code>async def worker(lock):
+    async with lock:  # 获取锁
+        await critical_section()
+</code></pre></li></ul></li><li><strong>任务组（Python 3.11+）</strong>
+更安全的任务管理方式：<pre tabindex=0><code>async with asyncio.TaskGroup() as tg:
+    tg.create_task(task1())
+    tg.create_task(task2())  # 任一任务失败则全部取消
+</code></pre></li></ol><hr><h3 id=-常见错误与避坑指南>⚠️ <strong>常见错误与避坑指南</strong></h3><ol><li><strong>忘记使用 <code>await</code></strong><pre tabindex=0><code># 错误：未等待协程，函数不会执行
+async def main():
+    fetch_data()  # 应改为 await fetch_data()
+</code></pre><strong>修正</strong>：始终对协程使用 <code>await</code>。</li><li><strong>阻塞事件循环</strong><pre tabindex=0><code>async def bad_task():
+    time.sleep(5)  # 同步阻塞！应用 await asyncio.sleep(5)
+</code></pre><strong>修正</strong>：避免在协程中使用同步 I/O 或 CPU 密集型操作。</li><li><strong>混合同步/异步代码</strong><ul><li>错误：在同步函数中直接调用协程（需通过事件循环启动）。</li><li>方案：全链路异步化，或用 <code>asyncio.run()</code> 封装调用。</li></ul></li></ol><hr><h3 id=-性能对比与适用场景>⚖️ <strong>性能对比与适用场景</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>场景</strong></th><th><strong>同步耗时</strong></th><th><strong>异步耗时</strong></th><th><strong>说明</strong></th></tr></thead><tbody><tr><td>3次网络请求（各1秒）</td><td>≈3秒</td><td>≈1秒</td><td>异步并发减少等待时间</td></tr><tr><td>文件批量读写</td><td>高</td><td>低</td><td>异步I/O避免阻塞</td></tr><tr><td>数据加密计算</td><td>低（多线程）</td><td>高</td><td>CPU密集型任务需用多进程</td></tr><tr><td><strong>适用场景</strong>：</td><td></td><td></td><td></td></tr></tbody></table></div><ul><li>✅ 高并发网络服务（API服务器、爬虫）</li><li>✅ 实时通信（WebSocket）</li><li>✅ 数据库/文件异步操作
+​<strong>不适用场景</strong>​：</li><li>❌ 纯CPU计算（如图像处理）</li><li>❌ 强顺序执行逻辑（如交易流程）</li></ul><hr><h3 id=-底层原理进阶>🔍 <strong>底层原理（进阶）</strong></h3><ol><li><strong>协程的本质</strong>
+基于生成器（Generator），通过 <code>yield</code> 暂停/恢复状态，由事件循环驱动。</li><li><strong>Future 对象</strong>
+表示异步操作的最终结果，协程的 <code>await</code> 实际是等待 <code>Future</code> 完成。</li><li><strong>I/O 多路复用</strong>
+事件循环通过 <code>epoll</code>/<code>kqueue</code> 等系统调用监听大量 I/O 事件，实现高效调度。</li></ol><hr><h3 id=-总结-13>💎 <strong>总结</strong></h3><ul><li><strong>核心价值</strong>：单线程内高并发处理 I/O 任务，避免线程切换开销。</li><li>关键步骤：<ol><li>用 <code>async def</code> 定义协程</li><li>用 <code>await</code> 调用异步操作</li><li>用 <code>asyncio.run()</code> 启动事件循环</li></ol></li><li>最佳实践：<ul><li>全链路异步化（库如 <code>aiohttp</code>、<code>aiomysql</code>）</li><li>使用 <code>TaskGroup</code> 管理任务</li><li>避免阻塞事件循环</li></ul></li></ul><blockquote><p>通过合理应用 <code>async/await</code>，可轻松构建支持数千并发连接的高性能应用，典型场景如微服务网关、实时数据管道等。</p></blockquote><h2 id=iterator>Iterator</h2><p>Python 中的迭代器（Iterator）是数据遍历的核心机制，通过<strong>惰性计算</strong>实现高效内存管理和灵活的数据访问。以下从底层原理到实战应用全面解析：</p><hr><h3 id=-迭代器的核心概念>⚙️ <strong>迭代器的核心概念</strong></h3><h4 id=迭代器协议><strong>迭代器协议</strong></h4><p>迭代器必须实现两个方法：</p><ul><li><strong><code>__iter__()</code></strong>：返回迭代器自身（即 <code>self</code>），用于初始化迭代过程。</li><li><strong><code>__next__()</code></strong>：返回下一个元素；若无元素，抛出 <code>StopIteration</code> 异常。</li></ul><h4 id=迭代器-vs-可迭代对象iterable><strong>迭代器 vs 可迭代对象（Iterable）</strong></h4><div class=table-wrapper><table><thead><tr><th><strong>特性</strong></th><th>可迭代对象（如列表、元组）</th><th>迭代器（如生成器、文件对象）</th></tr></thead><tbody><tr><td><strong>实现方法</strong></td><td>仅需 <code>__iter__()</code></td><td>需 <code>__iter__()</code> + <code>__next__()</code></td></tr><tr><td><strong>内存占用</strong></td><td>高（存储所有数据）</td><td>极低（仅存储当前状态）</td></tr><tr><td><strong>数据生成方式</strong></td><td>一次性生成</td><td>惰性计算（按需生成）</td></tr><tr><td><strong>典型代表</strong></td><td><code>list</code>, <code>tuple</code>, <code>dict</code></td><td><code>generator</code>, <code>open()</code> 返回对象</td></tr></tbody></table></div><blockquote><p>可迭代对象通过 <code>iter()</code> 转换为迭代器：</p><pre tabindex=0><code>my_list = [1, 2, 3]
+my_iter = iter(my_list)  # 转换为迭代器
+print(next(my_iter))     # 输出：1 
+</code></pre></blockquote><hr><h3 id=-迭代器的实现方式>🛠️ <strong>迭代器的实现方式</strong></h3><h4 id=自定义迭代器类><strong>自定义迭代器类</strong></h4><pre tabindex=0><code>class Countdown:
+    def __init__(self, start):
+        self.current = start
+        
+    def __iter__(self):
+        return self  # 返回自身
+        
+    def __next__(self):
+        if self.current &lt;= 0:
+            raise StopIteration  # 终止迭代
+        num = self.current
+        self.current -= 1
+        return num
+
+# 使用示例
+for i in Countdown(5):
+    print(i, end=&#39; &#39;)  # 输出：5 4 3 2 1 
+</code></pre><h4 id=生成器generator更简洁的实现><strong>生成器（Generator）：更简洁的实现</strong></h4><p>生成器是迭代器的语法糖，使用 <code>yield</code> 按需生成值：</p><pre tabindex=0><code>def countdown(start):
+    while start &gt; 0:
+        yield start  # 暂停并返回值
+        start -= 1
+
+# 等效于自定义迭代器
+for num in countdown(5):
+    print(num)  # 输出：5 4 3 2 1 
+</code></pre><hr><h3 id=-迭代器的核心优势>⚡ <strong>迭代器的核心优势</strong></h3><ol><li><strong>惰性计算</strong><ul><li>按需生成数据，避免一次性加载所有结果，适合无限序列：<pre tabindex=0><code>def fibonacci():
+    a, b = 0, 1
+    while True:
+        yield a
+        a, b = b, a + b
+fib = fibonacci()
+print(next(fib))  # 0 
+</code></pre></li></ul></li><li><strong>内存高效</strong><ul><li>处理大型文件时，逐行读取避免内存溢出：<pre tabindex=0><code>def read_large_file(file_path):
+    with open(file_path) as f:
+        for line in f:
+            yield line.strip()  # 内存占用 ≈ 单行数据大小 
+</code></pre></li></ul></li><li><strong>管道式处理</strong><ul><li>链式操作多个迭代器，实现流式数据处理：<pre tabindex=0><code>lines = (line.strip() for line in open(&#39;data.txt&#39;))
+filtered = (line for line in lines if &#39;error&#39; in line)
+for error_line in filtered:
+    process(error_line)  # 逐行处理 
+</code></pre></li></ul></li></ol><hr><h3 id=-内置迭代器工具>🔧 <strong>内置迭代器工具</strong></h3><h4 id=itertools><strong><code>itertools</code> 模块（标准库利器）</strong></h4><div class=table-wrapper><table><thead><tr><th><strong>工具类型</strong></th><th><strong>函数示例</strong></th><th><strong>作用</strong></th></tr></thead><tbody><tr><td>无限迭代器</td><td><code>itertools.count(start=10, step=2)</code></td><td>生成 10, 12, 14&mldr;</td></tr><tr><td>有限迭代器</td><td><code>itertools.islice(range(100), 5, 50, 3)</code></td><td>切片 [5, 8, 11&mldr;47]</td></tr><tr><td>组合迭代器</td><td><code>itertools.combinations('ABCD', 2)</code></td><td>生成 AB, AC, AD 等组合</td></tr></tbody></table></div><h4 id=常用内置函数><strong>常用内置函数</strong></h4><ul><li><pre tabindex=0><code>enumerate()
+</code></pre><p>：为元素添加索引</p><pre tabindex=0><code>for i, char in enumerate(&#39;abc&#39;):
+    print(f&#34;{i}:{char}&#34;)  # 0:a, 1:b, 2:c 
+</code></pre></li><li><pre tabindex=0><code>zip()
+</code></pre><p>：并行遍历多个可迭代对象</p><pre tabindex=0><code>for num, char in zip([1, 2], [&#39;a&#39;, &#39;b&#39;]):
+    print(f&#34;{num}-{char}&#34;)  # 1-a, 2-b 
+</code></pre></li></ul><hr><h3 id=-实战应用场景>🧩 <strong>实战应用场景</strong></h3><ol><li><strong>数据库流式查询</strong><pre tabindex=0><code>import sqlite3
+def db_iter(query, chunk_size=1000):
+    conn = sqlite3.connect(&#39;large_db.db&#39;)
+    cursor = conn.cursor()
+    cursor.execute(query)
+    while True:
+        rows = cursor.fetchmany(chunk_size)  # 分块读取
+        if not rows: break
+        yield from rows  # 逐行生成 
+</code></pre></li><li><strong>实时数据流处理</strong><pre tabindex=0><code>def sensor_stream():
+    while True:
+        yield get_live_sensor_data()  # 持续生成实时数据
+
+# 滑动窗口计算平均值
+window = []
+for data in sensor_stream():
+    window.append(data)
+    if len(window) &gt; 100: window.pop(0)
+    avg = sum(window) / len(window) 
+</code></pre></li><li><strong>大文件差异比对</strong><pre tabindex=0><code>def compare_files(file1, file2):
+    with open(file1) as f1, open(file2) as f2:
+        for i, (line1, line2) in enumerate(zip(f1, f2)):
+            if line1 != line2:
+                yield i, line1, line2  # 仅返回差异行 
+</code></pre></li></ol><hr><h3 id=-常见陷阱与最佳实践>⚠️ <strong>常见陷阱与最佳实践</strong></h3><ol><li><strong>迭代器一次性使用</strong><ul><li>迭代器遍历后耗尽，再次使用无输出：<pre tabindex=0><code>nums = iter([1, 2, 3])
+list(nums)  # [1, 2, 3]
+list(nums)  # [] （需重新创建迭代器）
+</code></pre></li></ul></li><li><strong>避免在迭代器中执行耗时操作</strong><ul><li><pre tabindex=0><code>__next__()
+</code></pre></li></ul></li></ol><p>应快速返回，复杂计算需预加载：</p><pre><code> ```
+ # 错误做法（每次迭代休眠）
+ def slow_iter():
+     for i in range(10):
+         time.sleep(1)  # 阻塞迭代
+         yield i
+ # 正确做法（预加载数据）
+ def fast_iter():
+     data = load_expensive_data()  # 一次性加载
+     yield from data 
+ ```
+</code></pre><ol start=3><li><p><strong>性能对比：迭代器 vs 列表</strong></p><div class=table-wrapper><table><thead><tr><th><strong>指标</strong></th><th>列表推导式</th><th>生成器表达式</th></tr></thead><tbody><tr><td>内存占用（100万）</td><td>~85 MB</td><td>128 Bytes</td></tr><tr><td>计算速度（1万次）</td><td>0.0005 秒</td><td>0.0008 秒</td></tr></tbody></table></div><blockquote><p><strong>结论</strong>：大数据场景用迭代器省内存，小数据用列表更快。</p></blockquote></li></ol><hr><h3 id=-总结-14>💎 <strong>总结</strong></h3><ul><li><p><strong>核心价值</strong>：迭代器通过惰性计算实现<strong>内存高效</strong>的数据遍历，尤其适合处理大型文件、数据库流、无限序列。</p></li><li></li></ul><p>实现方式</p><p>：</p><ul><li><p>类实现：重写 <code>__iter__</code> + <code>__next__</code></p></li><li><p>生成器：<code>yield</code> 语法更简洁</p></li><li></li></ul><p>最佳实践</p><p>：</p><ul><li><p>大数据处理 → 用生成器或 <code>itertools</code></p></li><li><p>资源敏感场景 → 避免在 <code>__next__()</code> 中阻塞</p></li><li><p>链式操作 → 组合 <code>map()</code>/<code>filter()</code>/<code>zip()</code></p></li><li></li></ul><p>避坑指南</p><p>：</p><ul><li>迭代器不可复用 → 需重新创建</li><li>生成器是迭代器的子集 → 优先用 <code>yield</code> 简化代码</li></ul><blockquote><p>掌握迭代器能显著提升代码性能与可维护性，尤其在数据工程、科学计算等领域不可或缺。</p></blockquote><h2 id=yield>yield</h2><p>Python 的 <code>yield</code> 关键字是生成器（Generator）的核心，其底层原理涉及<strong>函数状态暂停与恢复</strong>、<strong>迭代器协议实现</strong>及<strong>协程基础支持</strong>。以下从机制到实现全面解析：</p><hr><h3 id=-核心机制执行流程与协程状态>⚙️ <strong>核心机制：执行流程与协程状态</strong></h3><h4 id=函数执行流程控制><strong>函数执行流程控制</strong></h4><ul><li></li></ul><p>暂停与恢复</p><p>：</p><p>当函数执行到</p><pre tabindex=0><code>  yield
+</code></pre><p>时，解释器会：</p><ol><li>保存当前<strong>栈帧（Stack Frame）</strong>（含局部变量、指令指针等状态）；</li><li>返回 <code>yield</code> 右侧表达式的值；</li><li>暂停函数执行，等待下次唤醒。</li></ol><ul><li></li></ul><p>唤醒方式</p><p>：</p><ul><li><code>next(gen)</code>：恢复执行至下一个 <code>yield</code>；</li><li><code>gen.send(value)</code>：恢复执行并向 <code>yield</code> 左侧表达式注入值（如 <code>data = yield</code>）。</li></ul><pre tabindex=0><code>def gen_func():
+    print(&#34;Start&#34;)
+    x = yield 1  # 暂停点1
+    print(f&#34;Received: {x}&#34;)
+    yield 2     # 暂停点2
+gen = gen_func()
+next(gen)        # 输出 &#34;Start&#34;，返回 1（停在 yield 1）
+gen.send(&#34;data&#34;)  # 注入 x=&#34;data&#34;，输出 &#34;Received: data&#34;，返回 2（停在 yield 2）
+</code></pre><h4 id=协程状态机><strong>协程状态机</strong></h4><p>生成器通过 <code>gi_code</code>（代码对象）、<code>gi_frame</code>（栈帧）维护状态：</p><ul><li><strong><code>gi_frame</code></strong>：存储局部变量（如 <code>x</code>）和指令指针（指向下一个 <code>yield</code>）；</li><li><strong><code>gi_running</code></strong>：标记执行状态（避免重入）。</li><li>函数结束时自动触发 <code>StopIteration</code> 并释放帧资源。</li></ul><hr><h3 id=-与迭代器协议的关系>🔗 <strong>与迭代器协议的关系</strong></h3><p>生成器是<strong>迭代器的语法糖</strong>，自动实现迭代器协议：</p><ol><li><strong><code>__iter__()</code></strong>：返回自身（生成器对象）；</li><li><strong><code>__next__()</code></strong>：驱动执行至下一个 <code>yield</code> 或抛出 <code>StopIteration</code>。</li></ol><pre tabindex=0><code># 等价于手动实现迭代器
+class CustomIterator:
+    def __init__(self, n):
+        self.n = n
+        self.i = 0
+    def __iter__(self): return self
+    def __next__(self):
+        if self.i &gt;= self.n:
+            raise StopIteration
+        self.i += 1
+        return self.i - 1
+# 生成器简化版
+def gen(n):
+    for i in range(n):
+        yield i  # 自动满足迭代器协议
+</code></pre><hr><h3 id=-内存模型与性能优化>💾 <strong>内存模型与性能优化</strong></h3><h4 id=惰性求值lazy-evaluation><strong>惰性求值（Lazy Evaluation）</strong></h4><ul><li><p><strong>动态生成数据</strong>：仅计算当前需要的值（如处理 1GB 文件时，每次只加载一行到内存）。</p></li><li></li></ul><p>内存对比</p><p>：</p><div class=table-wrapper><table><thead><tr><th><strong>数据结构</strong></th><th>100万数据内存占用</th><th>适用场景</th></tr></thead><tbody><tr><td>列表</td><td>~85 MB</td><td>小数据快速访问</td></tr><tr><td>生成器</td><td>~128 Bytes</td><td>大数据流/无限序列</td></tr></tbody></table></div><h4 id=生成器表达式优化><strong>生成器表达式优化</strong></h4><p>语法 <code>(x for x in iterable)</code> 比列表推导式节省内存，等效于生成器函数。</p><hr><h3 id=-高级控制机制>⚡ <strong>高级控制机制</strong></h3><ol><li><p><strong><code>yield from</code>（生成器委托）</strong>
+嵌套生成器的语法糖，简化多层 <code>yield</code>：</p><pre tabindex=0><code>def sub_gen():
+    yield &#39;a&#39;
+    yield &#39;b&#39;
+def main_gen():
+    yield 1
+    yield from sub_gen()  # 委托执行，等价于手动遍历 sub_gen
+    yield 2
+list(main_gen())  # [1, &#39;a&#39;, &#39;b&#39;, 2] 
+</code></pre></li><li><p><strong>异常处理</strong></p><ul><li><code>gen.throw(exc)</code>：向生成器内抛出异常（可在 <code>yield</code> 处捕获）；</li><li><code>gen.close()</code>：强制终止生成器（触发 <code>GeneratorExit</code>）。</li></ul></li></ol><hr><h3 id=-底层实现解析>🧠 <strong>底层实现解析</strong></h3><ol><li><strong>解释器层（CPython）</strong><ul><li>生成器对象为 <code>PyGenObject</code>，含 <code>gi_frame</code>（指向 <code>PyFrameObject</code>）；</li><li>每次 <code>next()</code> 调用 <code>gen_send_ex()</code> 函数，恢复栈帧执行。</li></ul></li><li><strong>字节码分析</strong>
+函数含 <code>yield</code> 时被编译为生成器，关键字节码：<ul><li><code>YIELD_VALUE</code>：暂停并返回值；</li><li><code>GET_YIELD_FROM_ITER</code>：处理 <code>yield from</code>。</li></ul></li></ol><hr><h3 id=-设计哲学与最佳实践>💎 <strong>设计哲学与最佳实践</strong></h3><ul><li></li></ul><p>适用场景</p><p>：</p><ul><li><p>大数据流处理（文件/网络）；</p></li><li><p>无限序列（斐波那契数列）；</p></li><li><p>状态机（工作流引擎）。</p></li><li></li></ul><p>避坑指南</p><p>：</p><ul><li><strong>不可重用</strong>：遍历后需重新创建（<code>new_gen = gen_func()</code>）；</li><li><strong>避免阻塞</strong>：<code>yield</code> 后尽快返回，避免耗时操作。</li></ul><blockquote><p><strong>总结</strong>：<code>yield</code> 的底层是<strong>基于栈帧的状态机</strong>，通过暂停/恢复实现惰性计算，其设计完美契合 Python “按需生成” 的迭代思想。掌握它可写出<strong>内存高效、逻辑清晰</strong>的流式处理代码，并为深入异步编程（协程）奠定基础。</p></blockquote></section><footer class=article-footer><section class=article-tags><a href=/tags/python/>Python</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section><section class=article-lastmod><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<span>Last updated on Jul 31, 2025 19:25 CST</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>Related content</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/pythonvenv/><div class=article-details><h2 class=article-title>【Python】venv</h2></div></a></article><article><a href=/p/pythonfstring/><div class=article-details><h2 class=article-title>【Python】fstring</h2></div></a></article><article><a href=/p/python.venv/><div class=article-details><h2 class=article-title>【Python】.venv</h2></div></a></article><article><a href=/p/cppreview/><div class=article-details><h2 class=article-title>【CPP】Review</h2></div></a></article><article><a href=/p/nowcoderjava-2/><div class=article-details><h2 class=article-title>【NowCoder】JAVA 2</h2></div></a></article></div></div></aside><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//hugo-theme-stack.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2025 飞鸿踏雪泥</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.30.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

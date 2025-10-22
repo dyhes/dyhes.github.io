@@ -1,0 +1,704 @@
+<!doctype html><html lang=en-us dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="取模 取模运算（Modulo Operation）遵循一系列重要的运算律，这些规则在与加、减、乘和幂运算结合时尤其有用。下面通过一个表格汇总了它的主要运算律，并附上了简要说明和应用提示。\n运算类型 运算律 数学表达式 说明 基本运算 模加 (a + b) % p = (a % p + b % p) % p 和的模等于模的和再取模。这可以防止中间结果溢出。 模减 (a - b) % p = (a % p - b % p) % p 注意：结果可能为负，通常需调整：(a % p - b % p + p) % p 模乘 (a * b) % p = (a % p * b % p) % p 积的模等于模的积再取模。同样有助于避免大数相乘溢出。 模幂 a^b % p = ((a % p)^b) % p 幂的模等于底数取模后再求幂并取模。是快速幂算法的基础。 结合律 模加结合律 ((a+b) % p + c) % p = (a + (b+c) % p) % p 模加法满足结合律，意味着分组计算不影响最终结果。 模乘结合律 ((a*b) % p * c) % p = (a * (b*c) % p) % p 模乘法满足结合律，计算顺序可调整。 交换律 模加交换律 (a + b) % p = (b + a) % p 模加法满足交换律，顺序可交换。 模乘交换律 (a * b) % p = (b * a) % p 模乘法满足交换律，顺序可交换。 分配律 乘法对模加分配律 ((a + b) % p * c) % p = ((a * c) % p + (b * c) % p) % p 模运算下，乘法对加法满足分配律。 💡 运算律的核心价值与同余性质 这些运算律的核心价值在于，它们允许我们在进行加、减、乘、幂运算时，随时对中间结果取模而不影响最终结果的正确性（相对于同样的运算最后再取模而言）。这能有效防止计算过程中数值过大而导致的溢出问题，在编程和算法设计中非常重要。\n"><title>【LeetCode-C】Sep 2025</title><link rel=canonical href=https://dyhes.github.io/p/leetcode-csep-2025/><link rel=stylesheet href=/scss/style.min.f7091bff8043bd3e53b22be6c05dd86b506e8dec4d0d75d249d2dfb0fe074a46.css><meta property='og:title' content="【LeetCode-C】Sep 2025"><meta property='og:description' content="取模 取模运算（Modulo Operation）遵循一系列重要的运算律，这些规则在与加、减、乘和幂运算结合时尤其有用。下面通过一个表格汇总了它的主要运算律，并附上了简要说明和应用提示。\n运算类型 运算律 数学表达式 说明 基本运算 模加 (a + b) % p = (a % p + b % p) % p 和的模等于模的和再取模。这可以防止中间结果溢出。 模减 (a - b) % p = (a % p - b % p) % p 注意：结果可能为负，通常需调整：(a % p - b % p + p) % p 模乘 (a * b) % p = (a % p * b % p) % p 积的模等于模的积再取模。同样有助于避免大数相乘溢出。 模幂 a^b % p = ((a % p)^b) % p 幂的模等于底数取模后再求幂并取模。是快速幂算法的基础。 结合律 模加结合律 ((a+b) % p + c) % p = (a + (b+c) % p) % p 模加法满足结合律，意味着分组计算不影响最终结果。 模乘结合律 ((a*b) % p * c) % p = (a * (b*c) % p) % p 模乘法满足结合律，计算顺序可调整。 交换律 模加交换律 (a + b) % p = (b + a) % p 模加法满足交换律，顺序可交换。 模乘交换律 (a * b) % p = (b * a) % p 模乘法满足交换律，顺序可交换。 分配律 乘法对模加分配律 ((a + b) % p * c) % p = ((a * c) % p + (b * c) % p) % p 模运算下，乘法对加法满足分配律。 💡 运算律的核心价值与同余性质 这些运算律的核心价值在于，它们允许我们在进行加、减、乘、幂运算时，随时对中间结果取模而不影响最终结果的正确性（相对于同样的运算最后再取模而言）。这能有效防止计算过程中数值过大而导致的溢出问题，在编程和算法设计中非常重要。\n"><meta property='og:url' content='https://dyhes.github.io/p/leetcode-csep-2025/'><meta property='og:site_name' content='飞鸿踏雪泥'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='LeetCode-C'><meta property='article:published_time' content='2025-09-09T00:00:00+00:00'><meta property='article:modified_time' content='2025-09-30T19:46:00+08:00'><meta name=twitter:title content="【LeetCode-C】Sep 2025"><meta name=twitter:description content="取模 取模运算（Modulo Operation）遵循一系列重要的运算律，这些规则在与加、减、乘和幂运算结合时尤其有用。下面通过一个表格汇总了它的主要运算律，并附上了简要说明和应用提示。\n运算类型 运算律 数学表达式 说明 基本运算 模加 (a + b) % p = (a % p + b % p) % p 和的模等于模的和再取模。这可以防止中间结果溢出。 模减 (a - b) % p = (a % p - b % p) % p 注意：结果可能为负，通常需调整：(a % p - b % p + p) % p 模乘 (a * b) % p = (a % p * b % p) % p 积的模等于模的积再取模。同样有助于避免大数相乘溢出。 模幂 a^b % p = ((a % p)^b) % p 幂的模等于底数取模后再求幂并取模。是快速幂算法的基础。 结合律 模加结合律 ((a+b) % p + c) % p = (a + (b+c) % p) % p 模加法满足结合律，意味着分组计算不影响最终结果。 模乘结合律 ((a*b) % p * c) % p = (a * (b*c) % p) % p 模乘法满足结合律，计算顺序可调整。 交换律 模加交换律 (a + b) % p = (b + a) % p 模加法满足交换律，顺序可交换。 模乘交换律 (a * b) % p = (b * a) % p 模乘法满足交换律，顺序可交换。 分配律 乘法对模加分配律 ((a + b) % p * c) % p = ((a * c) % p + (b * c) % p) % p 模运算下，乘法对加法满足分配律。 💡 运算律的核心价值与同余性质 这些运算律的核心价值在于，它们允许我们在进行加、减、乘、幂运算时，随时对中间结果取模而不影响最终结果的正确性（相对于同样的运算最后再取模而言）。这能有效防止计算过程中数值过大而导致的溢出问题，在编程和算法设计中非常重要。\n"><link rel="shortcut icon" href=/github.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label="Toggle Menu">
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu_b567f26f71c49c33.png width=300 height=300 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>飞鸿踏雪泥</a></h1><h2 class=site-description>没有记录，就没有发生</h2></div></header><ol class=menu-social><li><a href=https://leetcode.cn/u/dyhes/ target=_blank title=LeetCode rel=me><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 13h7.5"/><path d="M9.424 7.268l4.999-4.999"/><path d="M16.633 16.644l-2.402 2.415a3.189 3.189.0 01-4.524.0l-3.77-3.787a3.223 3.223.0 010-4.544l3.77-3.787a3.189 3.189.0 014.524.0l2.302 2.313"/></svg></a></li><li><a href=https://github.com/dyhes target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=mailto:dyheslin@gmail.com target=_blank title=Gmail rel=me><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-gmail"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16 20h3a1 1 0 001-1V5a1 1 0 00-1-1h-3v16z"/><path d="M5 20h3V4H5A1 1 0 004 5v14a1 1 0 001 1z"/><path d="M16 4l-4 4-4-4"/><path d="M4 6.5l8 7.5 8-7.5"/></svg></a></li><li><a href=mailto:1325574784@qq.com target=_blank title=Mail rel=me><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 19H5a2 2 0 01-2-2V7a2 2 0 012-2h14a2 2 0 012 2v5.5"/><path d="M3 7l9 6 9-6"/><path d="M19 16l-2 3h4l-2 3"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/about/><svg class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>About</span></a></li><li><a href=/categories/><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+<span>Categories</span></a></li><li><a href=/tags/><svg class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11 3l9 9a1.5 1.5.0 010 2l-6 6a1.5 1.5.0 01-2 0L3 11V7a4 4 0 014-4h4"/><circle cx="9" cy="9" r="2"/></svg>
+<span>Tags</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>Dark Mode</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">Table of contents</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#取模>取模</a><ol><li><a href=#-运算律的核心价值与同余性质>💡 运算律的核心价值与同余性质</a></li><li><a href=#-重要提醒除法与负数>⚠️ 重要提醒：除法与负数</a></li><li><a href=#-取模-mod-与取余-rem-的细微差别>📊 取模 (Mod) 与取余 (Rem) 的细微差别</a></li></ol></li><li><a href=#tolower>tolower</a><ol><li><a href=#-使用方法>📌 使用方法</a><ol><li><a href=#使用标准库函数-stdtolower>使用标准库函数 <code>std::tolower</code></a></li><li><a href=#手动转换-基于-ascii-码>手动转换 (基于 ASCII 码)</a></li></ol></li><li><a href=#-重要注意事项>⚠️ 重要注意事项</a></li><li><a href=#-简单建议>💡 简单建议</a></li></ol></li><li><a href=#下标-string>下标 String</a><ol><li><a href=#1-传统下标循环>1. 传统下标循环</a></li><li><a href=#2-范围for循环--手动维护下标>2. 范围for循环 + 手动维护下标</a></li><li><a href=#3-使用-stdfor_each和-lambda-表达式带捕获>3. 使用 <code>std::for_each</code>和 Lambda 表达式（带捕获）</a></li><li><a href=#-注意事项>💡 注意事项</a></li><li><a href=#-如何选择>🎯 如何选择</a></li></ol></li><li><a href=#互质>互质</a><ol><li><a href=#-互质的基本概念>📊 互质的基本概念</a></li><li><a href=#-互质的性质与判断>🔍 互质的性质与判断</a></li><li><a href=#-互质的应用>🧮 互质的应用</a></li><li><a href=#-编程判断互质>💻 编程判断互质</a></li></ol></li><li><a href=#互质判断>互质判断</a><ol><li><a href=#-快速判断的规律>🔢 快速判断的规律</a></li><li><a href=#-编程实现判断>🖥️ 编程实现判断</a></li><li><a href=#-互质的应用-1>🧠 互质的应用</a></li></ol></li><li><a href=#辗转相除法>辗转相除法</a><ol><li><a href=#-基本原理>📊 基本原理</a></li><li><a href=#-算法步骤>📝 算法步骤</a></li><li><a href=#-计算实例>🧮 计算实例</a></li><li><a href=#-原理证明>🔍 原理证明</a></li><li><a href=#-编程实现>💻 编程实现</a><ol><li><a href=#递归实现-c>递归实现 (C++)</a></li><li><a href=#迭代实现-c>迭代实现 (C++)</a></li></ol></li><li><a href=#-算法特性与应用>⚙️ 算法特性与应用</a></li><li><a href=#-与其他方法的比较>🤔 与其他方法的比较</a></li></ol></li><li><a href=#最小公倍数>最小公倍数</a><ol><li><a href=#-基本原理-1>📊 基本原理</a></li><li><a href=#-算法步骤-1>📝 算法步骤</a></li><li><a href=#-计算实例-1>🧮 计算实例</a></li><li><a href=#-原理证明-1>🔍 原理证明</a></li><li><a href=#-编程实现-1>💻 编程实现</a><ol><li><a href=#递归实现-c-1>递归实现 (C++)</a></li><li><a href=#迭代实现-c-1>迭代实现 (C++)</a></li></ol></li><li><a href=#-算法特性与应用-1>⚙️ 算法特性与应用</a></li><li><a href=#-与其他方法的比较-1>🤔 与其他方法的比较</a></li></ol></li><li><a href=#extract>extract</a><ol><li><a href=#-深入了解-extract>🧰 深入了解 extract</a></li><li><a href=#-深入了解-erase>🗑️ 深入了解 erase</a></li><li><a href=#-如何选择-extract-还是-erase>💡 如何选择 extract 还是 erase？</a></li><li><a href=#-注意事项-1>⚠️ 注意事项</a></li></ol></li><li><a href=#懒删除堆>懒删除堆</a><ol><li><a href=#-核心思想与工作原理>🧠 核心思想与工作原理</a></li><li><a href=#-常见实现方式>🔧 常见实现方式</a></li><li><a href=#-优缺点分析>⚖️ 优缺点分析</a><ol><li><a href=#-优点>✅ 优点</a></li><li><a href=#-缺点>❌ 缺点</a></li></ol></li><li><a href=#-典型应用场景>🚀 典型应用场景</a></li><li><a href=#-总结>📌 总结</a></li></ol></li><li><a href=#访问不存在的键>访问不存在的键</a><ol><li><a href=#-值初始化规则>🔍 值初始化规则</a></li><li><a href=#-如何安全地检查键是否存在>🛡️ 如何安全地检查键是否存在</a></li><li><a href=#-关键要点与建议>💡 关键要点与建议</a></li></ol></li><li><a href=#split>split</a><ol><li><a href=#1-使用-stdstringstream和-stdgetline>1. 使用 <code>std::stringstream</code>和 <code>std::getline</code></a></li><li><a href=#2-使用-stdstringfind和-stdstringsubstr>2. 使用 <code>std::string::find</code>和 <code>std::string::substr</code></a></li><li><a href=#3-使用-stdstringfind_first_not_of和-stdstringfind_first_of>3. 使用 <code>std::string::find_first_not_of</code>和 <code>std::string::find_first_of</code></a></li><li><a href=#4-使用正则表达式c11及以上>4. 使用正则表达式（C++11及以上）</a></li><li><a href=#5-使用-strtok函数c风格字符串>5. 使用 <code>strtok</code>函数（C风格字符串）</a></li><li><a href=#选择建议>选择建议</a></li><li><a href=#注意事项>注意事项</a></li></ol></li><li><a href=#长除法>长除法</a></li><li><a href=#unordered_set--set-底层实现>unordered_set & set 底层实现</a><ol><li><a href=#-底层实现揭秘>🧠 底层实现揭秘</a></li><li><a href=#-如何选择-1>⚖️ 如何选择</a></li><li><a href=#-使用注意事项>🛠 使用注意事项</a></li><li><a href=#-简单总结>💎 简单总结</a></li></ol></li><li><a href=#tuple-hash>tuple Hash</a><ol><li><a href=#1-stdsetstdtuple的比较行为>1. <code>std::set&lt;std::tuple&lt;...>></code>的比较行为</a></li><li><a href=#2-stdunordered_setstdtuple的哈希与比较行为>2. <code>std::unordered_set&lt;std::tuple&lt;...>></code>的哈希与比较行为</a><ol><li><a href=#如何为-stdtuple实现自定义哈希函数>如何为 <code>std::tuple</code>实现自定义哈希函数？</a></li><li><a href=#相等比较行为>相等比较行为</a></li></ol></li></ol></li><li><a href=#stdless--stdhash>std::less & std::hash</a><ol><li><a href=#如何解决>如何解决</a><ol><li><a href=#方法一自定义哈希函数对象推荐更灵活>方法一：自定义哈希函数对象（推荐，更灵活）</a></li><li><a href=#方法二特化-stdhash更透明但污染-std-命名空间>方法二：特化 <code>std::hash</code>（更透明，但污染 std 命名空间）</a></li></ol></li><li><a href=#总结>总结</a></li></ol></li><li><a href=#deque-底层实现>Deque 底层实现</a><ol><li><a href=#-底层实现核心>🔧 底层实现核心</a></li><li><a href=#-迭代器设计>🧭 迭代器设计</a></li><li><a href=#-扩容机制>📈 扩容机制</a></li><li><a href=#-优缺点>⚖️ 优缺点</a></li><li><a href=#-典型应用>🎯 典型应用</a></li><li><a href=#-总结-1>💡 总结</a></li></ol></li><li><a href=#deque-upper_bound--lower_bound-complexity>Deque upper_bound & lower_bound complexity</a><ol><li><a href=#-复杂度细节>🔍 复杂度细节</a></li><li><a href=#-注意事项-2>⚠️ 注意事项</a></li><li><a href=#-对比其他容器>📊 对比其他容器</a></li><li><a href=#-使用示例>💡 使用示例</a></li></ol></li><li><a href=#upper_bound--lower_bound>Upper_bound & lower_bound</a><ol><li><a href=#-函数说明>🔍 函数说明</a></li><li><a href=#-时间复杂度与前提>⏱ 时间复杂度与前提</a></li><li><a href=#-基本用法>🛠 基本用法</a></li><li><a href=#-常见应用场景>🎯 常见应用场景</a></li><li><a href=#-注意事项-3>⚠️ 注意事项</a></li><li><a href=#-替代与辅助函数>📚 替代与辅助函数</a></li></ol></li><li><a href=#vector-建堆>vector 建堆</a><ol><li><a href=#-详细用法与原理>💡 详细用法与原理</a></li><li><a href=#-实际代码示例>🛠️ 实际代码示例</a></li><li><a href=#-重要注意事项-1>⚠️ 重要注意事项</a></li></ol></li><li><a href=#移动语义>移动语义</a><ol><li><a href=#-代码示例初始化与操作>💻 代码示例：初始化与操作</a></li><li><a href=#-重要注意事项-2>⚠️ 重要注意事项</a></li><li><a href=#-最佳实践建议>💡 最佳实践建议</a></li></ol></li><li><a href=#迭代器初始化>迭代器初始化</a><ol><li><a href=#-原理与原因>🔍 原理与原因</a></li><li><a href=#-如何实现移动初始化>⚡ 如何实现移动初始化</a></li><li><a href=#-核心要点与建议>💡 核心要点与建议</a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/snow/ style=background-color:#aa6a4c;color:>踏雪泥</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/leetcode-csep-2025/>【LeetCode-C】Sep 2025</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Sep 09, 2025</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>22 minute read</time></div></footer></div></header><section class=article-content><h2 id=取模>取模</h2><p>取模运算（Modulo Operation）遵循一系列重要的运算律，这些规则在与加、减、乘和幂运算结合时尤其有用。下面通过一个表格汇总了它的主要运算律，并附上了简要说明和应用提示。</p><div class=table-wrapper><table><thead><tr><th>运算类型</th><th>运算律</th><th>数学表达式</th><th>说明</th></tr></thead><tbody><tr><td><strong>基本运算</strong></td><td>模加</td><td><code>(a + b) % p = (a % p + b % p) % p</code></td><td>和的模等于模的和再取模。这可以防止中间结果溢出。</td></tr><tr><td></td><td>模减</td><td><code>(a - b) % p = (a % p - b % p) % p</code></td><td><strong>注意</strong>：结果可能为负，通常需调整：<code>(a % p - b % p + p) % p</code></td></tr><tr><td></td><td>模乘</td><td><code>(a * b) % p = (a % p * b % p) % p</code></td><td>积的模等于模的积再取模。同样有助于避免大数相乘溢出。</td></tr><tr><td></td><td>模幂</td><td><code>a^b % p = ((a % p)^b) % p</code></td><td>幂的模等于底数取模后再求幂并取模。是快速幂算法的基础。</td></tr><tr><td><strong>结合律</strong></td><td>模加结合律</td><td><code>((a+b) % p + c) % p = (a + (b+c) % p) % p</code></td><td>模加法满足结合律，意味着分组计算不影响最终结果。</td></tr><tr><td></td><td>模乘结合律</td><td><code>((a*b) % p * c) % p = (a * (b*c) % p) % p</code></td><td>模乘法满足结合律，计算顺序可调整。</td></tr><tr><td><strong>交换律</strong></td><td>模加交换律</td><td><code>(a + b) % p = (b + a) % p</code></td><td>模加法满足交换律，顺序可交换。</td></tr><tr><td></td><td>模乘交换律</td><td><code>(a * b) % p = (b * a) % p</code></td><td>模乘法满足交换律，顺序可交换。</td></tr><tr><td><strong>分配律</strong></td><td>乘法对模加分配律</td><td><code>((a + b) % p * c) % p = ((a * c) % p + (b * c) % p) % p</code></td><td>模运算下，乘法对加法满足分配律。</td></tr></tbody></table></div><h3 id=-运算律的核心价值与同余性质>💡 运算律的核心价值与同余性质</h3><p>这些运算律的核心价值在于，它们允许我们在进行加、减、乘、幂运算时，<strong>随时对中间结果取模</strong>而不影响最终结果的正确性（相对于同样的运算最后再取模而言）。这能有效防止计算过程中数值过大而导致的溢出问题，在编程和算法设计中非常重要。</p><p>此外，取模运算还与<strong>同余关系</strong>密切相关。如果 <code>a ≡ b (mod p)</code>（表示 <code>a</code>和 <code>b</code>除以 <code>p</code>的余数相同），那么对于任意整数 <code>c</code>，通常有：</p><ul><li><code>(a + c) ≡ (b + c) (mod p)</code></li><li><code>(a * c) ≡ (b * c) (mod p)</code></li><li>若还有 <code>c ≡ d (mod p)</code>，则 <code>(a + c) ≡ (b + d) (mod p)</code>, <code>(a * c) ≡ (b * d) (mod p)</code></li></ul><h3 id=-重要提醒除法与负数>⚠️ 重要提醒：除法与负数</h3><ul><li><strong>除法（逆元）</strong>：表格中未列出直接的模除运算律。因为普通的除法分配律在模运算中<strong>并不成立</strong>（即 <code>(a / b) % p ≠ (a % p) / (b % p) % p</code>）。在模运算中，“除法”通常通过乘以其<strong>模逆元</strong>来实现，但这要求 <code>b</code>与 <code>p</code>互质。</li><li><strong>负数取模</strong>：不同编程语言对负数取模的结果定义可能不同（主要区别在于商向0舍入还是向负无穷舍入），这会影响到 <code>a % p</code>的具体值（可能为负）。上述部分运算律（如模减）在涉及负数时，为了确保得到非负结果，可能需要额外的调整（如加上 <code>p</code>再取模）。</li></ul><h3 id=-取模-mod-与取余-rem-的细微差别>📊 取模 (Mod) 与取余 (Rem) 的细微差别</h3><p>虽然“取模”和“取余”都得到除法后的余数，但对于<strong>负整数</strong>，两者的结果可能不同。</p><ul><li>区别主要源于<strong>商向哪个方向取整</strong>：<ul><li><strong>取余 (Remainder)</strong>: 商向 <strong>0</strong> 取整 (truncated division)。<strong>结果的符号与被除数 <code>a</code>相同</strong>。常见于 C/C++、Java、JavaScript 等语言中的 <code>%</code>运算符。</li><li><strong>取模 (Modulo)</strong>: 商向 <strong>负无穷</strong> 取整 (floored division)。<strong>结果的符号与除数 <code>p</code>相同</strong>。常见于 Python、Ruby 等语言中的 <code>%</code>运算符。</li></ul></li><li><strong>示例 (<code>-7 mod 4</code>或 <code>-7 % 4</code>)</strong>:<ul><li>取余操作（商向0取整）：<code>c = trunc(-7/4) = trunc(-1.75) = -1</code>, 余数 <code>r = -7 - (-1)*4 = -3</code>。</li><li>取模操作（商向负无穷取整）：<code>c = floor(-7/4) = floor(-1.75) = -2</code>, 余数 <code>r = -7 - (-2)*4 = 1</code>。</li></ul></li><li>当 <code>a</code>和 <code>p</code>同号时，两者结果相同；异号时则不同。 在编程时，务必了解你所用语言的 <code>%</code>运算符定义。</li></ul><p>掌握这些运算律能帮助你在许多计算场景中更加得心应手。</p><h2 id=tolower>tolower</h2><p>在 C++ 中，将 <code>char</code>字符转换为小写字母主要有两种方法：使用标准库函数和手动转换。下面是一个快速的对比表格，帮助你了解它们的主要区别：</p><div class=table-wrapper><table><thead><tr><th>特性</th><th>标准库函数 (<code>std::tolower</code>)</th><th>手动转换 (ASCII 加减)</th></tr></thead><tbody><tr><td><strong>核心机制</strong></td><td>使用 C++ 标准库 <code>&lt;cctype></code>中提供的函数</td><td>利用大写字母 (&lsquo;A&rsquo;-&lsquo;Z&rsquo;) 和小写字母 (&lsquo;a&rsquo;-&lsquo;z&rsquo;) 之间 ASCII 码相差 32 的特性</td></tr><tr><td><strong>优点</strong></td><td><strong>推荐方法</strong>，代码简洁直观，能自动处理非字母字符（保持不变）</td><td>有助于理解底层原理，不依赖特定头文件</td></tr><tr><td><strong>注意事项</strong></td><td>需要包含 <code>&lt;cctype></code>头文件，函数返回 <code>int</code>类型</td><td>需手动检查字符范围，否则可能误改数字、符号等非字母字符</td></tr><tr><td><strong>适用场景</strong></td><td><strong>大多数情况下推荐使用</strong></td><td>学习、理解原理，或在无法使用标准库的特定环境</td></tr></tbody></table></div><h3 id=-使用方法>📌 使用方法</h3><h4 id=使用标准库函数-stdtolower>使用标准库函数 <code>std::tolower</code></h4><p>这是<strong>最常用且推荐</strong>的方法。<code>std::tolower</code>函数在 <code>&lt;cctype></code>头文件中定义。</p><p><strong>示例代码：</strong></p><pre tabindex=0><code>#include &lt;iostream&gt;
+#include &lt;cctype&gt; // 必需包含的头文件
+
+int main() {
+    char upperChar = &#39;G&#39;;
+
+    // 使用 std::tolower 转换
+    char lowerChar = std::tolower(upperChar); // 函数返回 int 类型，但赋值给 char 时会隐式转换
+
+    std::cout &lt;&lt; &#34;原始字符: &#34; &lt;&lt; upperChar &lt;&lt; std::endl;
+    std::cout &lt;&lt; &#34;转换后: &#34; &lt;&lt; lowerChar &lt;&lt; std::endl;
+
+    // 处理字符串中的每个字符
+    std::string str = &#34;Hello, World!&#34;;
+    for (char &amp;c : str) { // 使用引用以修改原字符串
+        c = std::tolower(c); // 逐个字符转换
+    }
+    std::cout &lt;&lt; &#34;转换后的字符串: &#34; &lt;&lt; str &lt;&lt; std::endl; // 输出 &#34;hello, world!&#34;
+
+    return 0;
+}
+</code></pre><p><strong>注意</strong>：<code>std::tolower</code>函数接收一个 <code>int</code>类型参数（代表字符的 ASCII 码），并返回一个 <code>int</code>值。通常将其赋值给 <code>char</code>变量或直接用于字符操作时，类型转换是安全的。</p><h4 id=手动转换-基于-ascii-码>手动转换 (基于 ASCII 码)</h4><p>这种方法通过直接操作字符的 ASCII 码值进行转换。</p><p><strong>示例代码：</strong></p><pre tabindex=0><code>#include &lt;iostream&gt;
+
+// 自定义大写转小写函数
+char toLowerAscii(char c) {
+    // 检查是否为大写字母 (ASCII 范围 65-&#39;A&#39; 到 90-&#39;Z&#39;)
+    if (c &gt;= &#39;A&#39; &amp;&amp; c &lt;= &#39;Z&#39;) {
+        return c + 32; // 大写字母 ASCII 码加 32 得到对应小写
+    }
+    return c; // 不是大写字母则原样返回
+}
+
+int main() {
+    char testChar = &#39;B&#39;;
+    char lowerChar = toLowerAscii(testChar);
+
+    std::cout &lt;&lt; &#34;原始字符: &#34; &lt;&lt; testChar &lt;&lt; std::endl;
+    std::cout &lt;&lt; &#34;手动转换后: &#34; &lt;&lt; lowerChar &lt;&lt; std::endl; // 输出 &#39;b&#39;
+
+    return 0;
+}
+</code></pre><p>这种方法需要<strong>确保字符是英文大写字母</strong>，否则加减 32 可能会得到非预期结果。</p><h3 id=-重要注意事项>⚠️ 重要注意事项</h3><ol><li><strong>本地化设置 (<code>Locale</code>)</strong>：<code>std::tolower</code>和 <code>std::toupper</code>的行为可能会受到当前系统区域设置 (<code>locale</code>) 的影响，这对于处理英文以外的字符（如带重音的字母）可能重要。大多数情况下，基本 ASCII 字符处理不受影响。</li><li><strong>非字母字符</strong>：两种方法对非字母字符（如数字、标点符号）通常都是<strong>保持原状</strong>。</li><li><strong>返回值处理</strong>：<code>std::tolower</code>返回的是 <code>int</code>类型，这是为了可能处理文件结束符 (<code>EOF</code>) 等特殊情况。在给 <code>char</code>变量赋值时，通常可以安全地隐式转换或使用 <code>static_cast&lt;char></code>。</li><li><strong>Unicode 字符</strong>：上述方法主要适用于 <strong>ASCII 字符集</strong>。如果你需要处理 Unicode 字符串（如中文拼音、德文、法文等）中的大小写转换，则需要使用专门的库（如 ICU - International Components for Unicode）。</li></ol><h3 id=-简单建议>💡 简单建议</h3><ul><li>对于<strong>大多数日常用途</strong>，直接使用 <strong><code>std::tolower</code></strong> 是最简单、最清晰且不易出错的方式。</li><li>如果你想<strong>理解背后的原理</strong>或在不方便使用标准库的环境中（极少见），可以使用手动 ASCII 转换的方法。</li><li>如果需要处理<strong>英文以外的语言</strong>，请务必寻找支持 Unicode 的库。</li></ul><h2 id=下标-string>下标 String</h2><p>。在 C++ 中，如果你希望在遍历 <code>std::string</code>时同时获取每个字符的下标，有几种方法可以实现。虽然标准的范围 for 循环 (<code>for (auto ch : str)</code>) 本身不直接提供下标，但你可以通过一些调整来达成目的。</p><p>下面是一个汇总了常见方法的表格，帮助你快速了解选择和区别：</p><div class=table-wrapper><table><thead><tr><th>方法</th><th>优点</th><th>缺点</th><th>适用场景</th></tr></thead><tbody><tr><td><strong>传统下标循环</strong></td><td>直观，直接控制下标</td><td>语法稍显繁琐</td><td>需要频繁使用下标进行随机访问或修改的场景</td></tr><tr><td><strong>范围for循环+手动下标</strong></td><td>代码简洁（循环部分），可读性好</td><td>需额外维护下标变量</td><td>需要顺序遍历并同时知道下标时最优雅的方案</td></tr><tr><td><strong><code>std::for_each</code>+lambda</strong></td><td>函数式风格，可封装复杂操作</td><td>语法相对复杂，需要理解lambda和算法</td><td>需要在遍历中进行复杂操作或希望代码更函数化时</td></tr></tbody></table></div><p>接下来我们看看每种方法的具体代码示例。</p><h3 id=1-传统下标循环>1. 传统下标循环</h3><p>这是最直接的方法，使用 <code>size()</code>方法获取字符串长度，并通过索引 <code>i</code>依次访问每个字符。</p><pre tabindex=0><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+int main() {
+    std::string str = &#34;Hello&#34;;
+    for (size_t i = 0; i &lt; str.size(); ++i) { // 使用 size_t 类型作为下标，与 size() 返回类型一致
+        std::cout &lt;&lt; &#34;Index: &#34; &lt;&lt; i &lt;&lt; &#34;, Character: &#34; &lt;&lt; str[i] &lt;&lt; std::endl;
+        // 你也可以通过 str.at(i) 来访问，它会在越界时抛出异常
+    }
+    return 0;
+}
+</code></pre><h3 id=2-范围for循环--手动维护下标>2. 范围for循环 + 手动维护下标</h3><p>如果你偏爱范围 for 循环的简洁性，可以手动维护一个下标变量。</p><pre tabindex=0><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+int main() {
+    std::string str = &#34;World&#34;;
+    size_t index = 0; // 手动初始化下标
+    for (auto ch : str) { // 范围for循环遍历每个字符
+        std::cout &lt;&lt; &#34;Index: &#34; &lt;&lt; index &lt;&lt; &#34;, Character: &#34; &lt;&lt; ch &lt;&lt; std::endl;
+        ++index; // 每次循环手动增加下标
+    }
+    return 0;
+}
+</code></pre><h3 id=3-使用-stdfor_each和-lambda-表达式带捕获>3. 使用 <code>std::for_each</code>和 Lambda 表达式（带捕获）</h3><p><code>std::for_each</code>算法可以遍历容器，并结合 lambda 表达式来同时处理元素和下标。</p><pre tabindex=0><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;algorithm&gt; // 需要包含 algorithm 头文件
+
+int main() {
+    std::string str = &#34;C++&#34;;
+    size_t idx = 0;
+    std::for_each(str.begin(), str.end(), [&amp;idx](char c) { // 通过引用捕获 [&amp;idx] 来修改外部下标变量
+        std::cout &lt;&lt; &#34;Index: &#34; &lt;&lt; idx &lt;&lt; &#34;, Character: &#34; &lt;&lt; c &lt;&lt; std::endl;
+        ++idx;
+    });
+    return 0;
+}
+</code></pre><h3 id=-注意事项>💡 注意事项</h3><ul><li><strong>下标类型</strong>：<code>std::string::size()</code>返回的类型是 <code>size_t</code>（通常是无符号整数），<strong>建议使用 <code>size_t</code>类型作为下标变量</strong>，以避免有符号与无符号比较时编译器可能产生的警告。</li><li><strong>修改字符</strong>：如果需要在遍历时修改字符串中的字符，在上述方法中：<ul><li><strong>方法1</strong>：直接使用 <code>str[i] = new_char;</code>或 <code>str.at(i) = new_char;</code>。</li><li><strong>方法2</strong>：将循环变量声明为引用 <code>for (auto &amp;ch : str)</code>，然后对 <code>ch</code>赋值。</li><li><strong>方法3</strong>：在 lambda 表达式中，如果字符串是非 const 的，参数可以声明为 <code>char &amp;c</code>以便修改。</li></ul></li><li><strong>Unicode 字符串</strong>：如果字符串包含多字节字符（如中文），直接按索引访问可能无法正确指向一个完整字符的起始位置，需要更复杂的处理逻辑。</li></ul><h3 id=-如何选择>🎯 如何选择</h3><ul><li>追求<strong>代码简洁性</strong>和<strong>现代 C++ 风格</strong>，且只需要<strong>顺序遍历</strong>，<strong>“范围for循环 + 手动下标”（方法2）</strong> 通常是直观且不错的选择。</li><li>如果需要<strong>频繁的随机访问</strong>或者** already习惯传统循环**，<strong>传统下标循环（方法1）</strong> 很直接。</li><li>如果遍历操作<strong>逻辑比较复杂</strong>，或者希望尝试<strong>函数式编程风格</strong>，可以选用 <strong><code>std::for_each</code>（方法3）</strong>。</li></ul><p>希望这些信息能帮助你有效地在 C++ 中遍历字符串并操作下标。</p><h2 id=互质>互质</h2><p>理解“互质”这个概念对于学习数学，特别是数论、分数化简等领域很有帮助。下面我来为你解释一下什么是互质，以及它的一些特性和判断方法。</p><h3 id=-互质的基本概念>📊 互质的基本概念</h3><p>互质，又被称为互素，指的是两个或多个整数的公约数只有1的非零自然数。也就是说，如果两个数 a 和 b 的最大公约数（Greatest Common Divisor, GCD）是1，即 GCD(a, b) = 1，那么我们就可以说 a 和 b 互质。</p><p>例如：</p><ul><li>3 和 11 互质，因为它们的公约数只有1。</li><li>8 和 9 互质，因为 8 的因数有 1, 2, 4, 8；9 的因数有 1, 3, 9；它们唯一的公因数就是1。</li></ul><p>值得注意的是，<strong>互质的两个数并不一定都是质数</strong>。两个合数也有可能互质，比如上面的 8 和 9 都是合数，但它们互质。</p><h3 id=-互质的性质与判断>🔍 互质的性质与判断</h3><p>理解互质的一些性质可以帮助我们更快地判断两个数是否互质：</p><ul><li><strong>1与任何自然数互质</strong>：因为1的因数只有它自己，且1和任何自然数的最大公约数都是1（注意，1本身不是质数也不是合数）。</li><li><strong>两个不同的质数一定互质</strong>：例如 7 和 11。</li><li><strong>相邻的两个自然数互质</strong>：比如 15 和 16。</li><li><strong>相邻的两个奇数常常互质</strong>：例如 5 和 7，或者 49 和 51。</li><li><strong>其他情况</strong>：一个质数和一个合数，如果这个合数不是质数的倍数，则它们互质（如 3 和 10）；两个合数如果没有相同的质因数，则它们互质（如 9 和 10，9=3×3, 10=2×5，没有相同的质因数）。</li></ul><p>判断两个数是否互质，最直接的方法是看它们的<strong>最大公约数是否为1</strong>。对于一些较大的数，可以采用以下方法：</p><ul><li><strong>分解判断法</strong>：如果两个数都是合数，可以分别对它们进行质因数分解。如果<strong>没有相同的质因数</strong>，那么这两个数互质。例如，130 = 2 × 5 × 13, 231 = 3 × 7 × 11，没有相同的质因数，所以130和231互质。</li><li><strong>求差判断法</strong>：如果两个数相差不大，可以先求它们的差，再看这个差与其中较小的数是否互质。如果互质，则原来的两个数也互质。</li></ul><h3 id=-互质的应用>🧮 互质的应用</h3><p>互质的概念在数学和计算机科学中都有广泛的应用：</p><ul><li><strong>最简分数</strong>：一个分数是最简分数（不能再约分），当且仅当其<strong>分子和分母互质</strong>。例如，分数 2/3 是最简分数，因为 GCD(2,3)=1。</li><li><strong>数论与密码学</strong>：互质是许多数论定理和算法的基础。例如，在<strong>RSA公钥加密算法</strong>中，需要选择两个互质的大质数来生成密钥。</li><li><strong>模运算与逆元</strong>：在模运算中，如果两个数互质，那么其中一个数在另一个数的模下存在<strong>乘法逆元</strong>，这对于求解线性同余方程等问题至关重要。</li><li><strong>欧拉函数</strong>：数论中的欧拉函数 φ(n) 定义为小于 n 且与 n 互质的正整数的个数。它在密码学和数论中都有重要应用。</li></ul><h3 id=-编程判断互质>💻 编程判断互质</h3><p>在编程中，我们通常使用<strong>欧几里得算法（辗转相除法）</strong> 来高效地计算两个数的最大公约数。如果最大公约数是1，则两数互质。</p><p>以下是使用C语言实现判断两数是否互质的示例代码：</p><pre tabindex=0><code>#include &lt;stdio.h&gt;
+
+// 递归法求最大公约数
+int gcd(int a, int b) {
+    if (b == 0)
+        return a;
+    else
+        return gcd(b, a % b);
+}
+
+int main() {
+    int x, y;
+    printf(&#34;请输入两个正整数: &#34;);
+    scanf(&#34;%d %d&#34;, &amp;x, &amp;y);
+
+    if (gcd(x, y) == 1) {
+        printf(&#34;%d 和 %d 互质\n&#34;, x, y);
+    } else {
+        printf(&#34;%d 和 %d 不互质\n&#34;, x, y);
+    }
+
+    return 0;
+}
+</code></pre><p>希望这些信息能帮助你更好地理解“互质”的概念。</p><h2 id=互质判断>互质判断</h2><p>判断两个数是否互质，关键在于确认它们的<strong>最大公约数（GCD）是否为 1</strong>。以下是常用的判断方法和一些规律，希望能帮你轻松掌握。</p><div class=table-wrapper><table><thead><tr><th>方法</th><th>做法</th><th>例子</th><th>适用情况</th></tr></thead><tbody><tr><td><strong>最大公约数法</strong></td><td>求两数的最大公约数，若为1则互质。</td><td>GCD(8, 15) = 1，所以 8 和 15 互质。</td><td>通用，最可靠，尤其适合较大或无明显规律的数。</td></tr><tr><td><strong>概念判断法</strong></td><td>检查两数除了1以外是否有其他公因数。</td><td>9和11的公约数只有1，所以它们互质。</td><td>适合因数较少或较小的数。</td></tr><tr><td><strong>分解判断法</strong></td><td>将两个合数分解质因数，若没有相同的质因数则互质。</td><td>130=2×5×13, 231=3×7×11，没有相同质因数，所以130和231互质。</td><td>当两个数都是合数，且便于进行质因数分解时。</td></tr><tr><td><strong>求差判断法</strong></td><td>先求两数之差，若差与较小数互质，则原两数互质。</td><td>201-194=7，7和194互质，则194和201互质。</td><td>两数相差不大时。</td></tr><tr><td><strong>求商判断法</strong></td><td>用大数除以小数，若余数与小数互质，则原两数互质。</td><td>317÷52=6……5，余数5与52互质，则317和52互质。</td><td>适用于除法计算方便时。</td></tr></tbody></table></div><h3 id=-快速判断的规律>🔢 快速判断的规律</h3><p>掌握一些常见规律，能帮助你更快地做出判断：</p><ol><li><strong>两个不同的质数一定互质</strong>。例如 <code>7</code>和 <code>11</code>。</li><li><strong>1和任何自然数都互质</strong>。例如 <code>1</code>和 <code>100</code>。</li><li><strong>相邻的两个自然数互质</strong>。例如 <code>15</code>和 <code>16</code>。</li><li><strong>相邻的两个奇数常常互质</strong>。例如 <code>5</code>和 <code>7</code>，或者 <code>49</code>和 <code>51</code>。</li><li><strong>较大数是质数，则两数互质</strong>。例如 <code>97</code>和 <code>88</code>（97是质数）。</li><li><strong>小数是质数，大数不是小数的倍数，则两数互质</strong>。例如 <code>2</code>和 <code>15</code>（2是质数，15不是2的倍数）。</li></ol><h3 id=-编程实现判断>🖥️ 编程实现判断</h3><p>如果需要用程序判断，可以使用<strong>欧几里得算法（辗转相除法）</strong> 来计算最大公约数。这里提供一个C语言的例子：</p><pre tabindex=0><code>#include &lt;stdio.h&gt;
+
+// 递归函数计算最大公约数
+int gcd(int a, int b) {
+    if (b == 0)
+        return a;
+    else
+        return gcd(b, a % b);
+}
+
+int main() {
+    int num1, num2;
+    printf(&#34;请输入两个正整数: &#34;);
+    scanf(&#34;%d %d&#34;, &amp;num1, &amp;num2);
+
+    if (gcd(num1, num2) == 1) {
+        printf(&#34;%d 和 %d 互质\n&#34;, num1, num2);
+    } else {
+        printf(&#34;%d 和 %d 不互质\n&#34;, num1, num2);
+    }
+
+    return 0;
+}
+</code></pre><h3 id=-互质的应用-1>🧠 互质的应用</h3><p>判断两个数是否互质，在数学和计算机科学中有些重要应用：</p><ul><li><strong>分数约分</strong>：当分数的分子和分母互质时，这个分数就是最简形式。</li><li><strong>密码学</strong>：例如RSA公钥加密算法，其安全性依赖于大质数的选择以及相关参数的互质关系。</li><li><strong>模运算</strong>：在模运算下，如果两个数互质，那么其中一个数存在乘法逆元。</li></ul><p>希望这些方法能帮助你有效判断两个数是否互质。多练习一下，你会更加熟练。</p><h2 id=辗转相除法>辗转相除法</h2><p>辗转相除法，也称欧几里得算法，是计算两个正整数最大公约数（Greatest Common Divisor, GCD）的一种高效方法。下面为你详细介绍它的原理、步骤、应用以及编程实现。</p><h3 id=-基本原理>📊 基本原理</h3><p>辗转相除法的核心原理是：<strong>两个整数的最大公约数，等于其中较小的那个数和两数相除余数的最大公约数</strong>。其计算公式为 <code>gcd(a, b) = gcd(b, a mod b)</code>。</p><h3 id=-算法步骤>📝 算法步骤</h3><p>按照辗转相除法求两个非负整数 <code>a</code>和 <code>b</code>（假设 <code>a ≥ b</code>）的最大公约数的步骤如下：</p><ol><li><strong>用较大数除以较小数</strong>：计算 <code>a</code>除以 <code>b</code>的余数，记为 <code>r = a mod b</code>（即 <code>r = a % b</code>）。</li><li><strong>更新值</strong>：将 <code>b</code>的值赋给 <code>a</code>，将余数 <code>r</code>的值赋给 <code>b</code>。</li><li><strong>判断余数</strong>：若 <code>b</code>不为 <code>0</code>，则返回步骤 1，继续循环。</li><li><strong>终止条件</strong>：当 <code>b</code>为 <code>0</code>时，此时的 <code>a</code>即为两数的最大公约数。</li></ol><p>以下是该算法的流程图，可以帮你直观理解其执行过程：</p><pre tabindex=0><code>flowchart TD
+    A([开始]) --&gt; B[用a除以b, 得余数r]
+    B --&gt; C{r等于0?}
+    C -- 否 --&gt; D[将b赋值给a&lt;br&gt;将r赋值给b]
+    D --&gt; B
+    C -- 是 --&gt; E[当前除数a即为最大公约数]
+    E --&gt; F([结束])
+</code></pre><h3 id=-计算实例>🧮 计算实例</h3><p>让我们通过一个具体的例子来理解这个过程：求 <strong>481</strong> 和 <strong>221</strong> 的最大公约数。</p><div class=table-wrapper><table><thead><tr><th>步骤</th><th>被除数 (a)</th><th>除数 (b)</th><th>商</th><th>余数 (r)</th><th>操作说明</th></tr></thead><tbody><tr><td>1</td><td>481</td><td>221</td><td>2</td><td>39</td><td>481 ÷ 221，商2余39</td></tr><tr><td>2</td><td>221</td><td>39</td><td>5</td><td>26</td><td>用除数221 ÷ 上步余数39，商5余26</td></tr><tr><td>3</td><td>39</td><td>26</td><td>1</td><td>13</td><td>用除数39 ÷ 上步余数26，商1余13</td></tr><tr><td>4</td><td>26</td><td>13</td><td>2</td><td>0</td><td>用除数26 ÷ 上步余数13，商2余0</td></tr><tr><td>结果</td><td></td><td></td><td></td><td></td><td><strong>余数为0，最大公约数为13</strong></td></tr></tbody></table></div><p>所以，481 和 221 的最大公约数是 <strong>13</strong>。</p><h3 id=-原理证明>🔍 原理证明</h3><p>辗转相除法的有效性基于一个关键定理：<strong>如果 <code>a</code>和 <code>b</code>是正整数，且 <code>a > b</code>，那么 <code>gcd(a, b) = gcd(b, a mod b)</code></strong>。</p><p>简单来说，这个定理之所以成立，是因为：</p><ul><li>任何能同时整除 <code>a</code>和 <code>b</code>的数 <code>d</code>，也一定能整除余数 <code>r</code>（因为 <code>r = a - k*b</code>，<code>k</code>是商）。</li><li>反之，任何能同时整除 <code>b</code>和 <code>r</code>的数 <code>d</code>，也一定能整除 <code>a</code>。</li><li>因此，<code>a</code>和 <code>b</code>的公约数集合，与 <code>b</code>和 <code>r</code>的公约数集合完全相同，自然它们的最大公约数也相等。</li></ul><h3 id=-编程实现>💻 编程实现</h3><p>辗转相除法在编程中既可以用递归实现，也可以用迭代（循环）实现。</p><h4 id=递归实现-c>递归实现 (C++)</h4><pre tabindex=0><code>#include &lt;iostream&gt;
+using namespace std;
+
+int gcd(int a, int b) {
+    if (b == 0) {
+        return a;
+    } else {
+        return gcd(b, a % b);
+    }
+}
+
+int main() {
+    int num1 = 481, num2 = 221;
+    cout &lt;&lt; &#34;GCD of &#34; &lt;&lt; num1 &lt;&lt; &#34; and &#34; &lt;&lt; num2 &lt;&lt; &#34; is &#34; &lt;&lt; gcd(num1, num2) &lt;&lt; endl;
+    return 0;
+}
+</code></pre><h4 id=迭代实现-c>迭代实现 (C++)</h4><pre tabindex=0><code>#include &lt;iostream&gt;
+using namespace std;
+
+int gcd_iterative(int a, int b) {
+    while (b != 0) {
+        int temp = b;
+        b = a % b;
+        a = temp;
+    }
+    return a;
+}
+
+int main() {
+    int num1 = 481, num2 = 221;
+    cout &lt;&lt; &#34;GCD of &#34; &lt;&lt; num1 &lt;&lt; &#34; and &#34; &lt;&lt; num2 &lt;&lt; &#34; is &#34; &lt;&lt; gcd_iterative(num1, num2) &lt;&lt; endl;
+    return 0;
+}
+</code></pre><p><strong>注意</strong>：自 C++17 起，标准库 <code>&lt;numeric></code>中提供了 <code>std::gcd</code>函数，可以直接使用。</p><h3 id=-算法特性与应用>⚙️ 算法特性与应用</h3><ul><li><strong>时间复杂度</strong>：辗转相除法的时间复杂度是 <strong>O(log(min(a, b)))</strong>，效率非常高，即使对于非常大的整数也是如此。</li><li><strong>主要应用</strong>：<ul><li><strong>化简分数</strong>：用于将分数化为最简形式。</li><li><strong>密码学</strong>：<strong>RSA公钥加密算法</strong>等密码学协议依赖于大整数的模逆元计算，而扩展欧几里得算法（辗转相除法的扩展）是求解模逆元的关键工具。</li><li><strong>求解线性同余方程</strong>：扩展欧几里得算法可以找到整数 <code>x</code>和 <code>y</code>，使得方程 <code>a*x + b*y = gcd(a, b)</code>成立，这在数论和算法设计中非常重要。</li></ul></li></ul><h3 id=-与其他方法的比较>🤔 与其他方法的比较</h3><p>求最大公约数还有其他方法，例如<strong>更相减损术</strong>和<strong>质因数分解法</strong>。</p><ul><li><strong>更相减损术</strong>：出自《九章算术》，以减法为主。当两个数字大小差别很大时，计算次数可能远多于辗转相除法。</li><li><strong>质因数分解法</strong>：先将两个数分解质因数，然后找出所有公共质因数并将其相乘。但当质因数很大时，分解本身可能非常困难，而辗转相避开了分解步骤，效率更高。</li></ul><p>因此，辗转相除法因其高效性和实现的简洁性，成为了计算最大公约数最常用和最重要的算法。</p><p>希望这些信息能帮助你全面理解辗转相除法。</p><h2 id=最小公倍数>最小公倍数</h2><p>辗转相除法，也称欧几里得算法，是计算两个正整数最大公约数（Greatest Common Divisor, GCD）的一种高效方法。下面为你详细介绍它的原理、步骤、应用以及编程实现。</p><h3 id=-基本原理-1>📊 基本原理</h3><p>辗转相除法的核心原理是：<strong>两个整数的最大公约数，等于其中较小的那个数和两数相除余数的最大公约数</strong>。其计算公式为 <code>gcd(a, b) = gcd(b, a mod b)</code>。</p><h3 id=-算法步骤-1>📝 算法步骤</h3><p>按照辗转相除法求两个非负整数 <code>a</code>和 <code>b</code>（假设 <code>a ≥ b</code>）的最大公约数的步骤如下：</p><ol><li><strong>用较大数除以较小数</strong>：计算 <code>a</code>除以 <code>b</code>的余数，记为 <code>r = a mod b</code>（即 <code>r = a % b</code>）。</li><li><strong>更新值</strong>：将 <code>b</code>的值赋给 <code>a</code>，将余数 <code>r</code>的值赋给 <code>b</code>。</li><li><strong>判断余数</strong>：若 <code>b</code>不为 <code>0</code>，则返回步骤 1，继续循环。</li><li><strong>终止条件</strong>：当 <code>b</code>为 <code>0</code>时，此时的 <code>a</code>即为两数的最大公约数。</li></ol><p>以下是该算法的流程图，可以帮你直观理解其执行过程：</p><pre tabindex=0><code>flowchart TD
+    A([开始]) --&gt; B[用a除以b, 得余数r]
+    B --&gt; C{r等于0?}
+    C -- 否 --&gt; D[将b赋值给a&lt;br&gt;将r赋值给b]
+    D --&gt; B
+    C -- 是 --&gt; E[当前除数a即为最大公约数]
+    E --&gt; F([结束])
+</code></pre><h3 id=-计算实例-1>🧮 计算实例</h3><p>让我们通过一个具体的例子来理解这个过程：求 <strong>481</strong> 和 <strong>221</strong> 的最大公约数。</p><div class=table-wrapper><table><thead><tr><th>步骤</th><th>被除数 (a)</th><th>除数 (b)</th><th>商</th><th>余数 (r)</th><th>操作说明</th></tr></thead><tbody><tr><td>1</td><td>481</td><td>221</td><td>2</td><td>39</td><td>481 ÷ 221，商2余39</td></tr><tr><td>2</td><td>221</td><td>39</td><td>5</td><td>26</td><td>用除数221 ÷ 上步余数39，商5余26</td></tr><tr><td>3</td><td>39</td><td>26</td><td>1</td><td>13</td><td>用除数39 ÷ 上步余数26，商1余13</td></tr><tr><td>4</td><td>26</td><td>13</td><td>2</td><td>0</td><td>用除数26 ÷ 上步余数13，商2余0</td></tr><tr><td>结果</td><td></td><td></td><td></td><td></td><td><strong>余数为0，最大公约数为13</strong></td></tr></tbody></table></div><p>所以，481 和 221 的最大公约数是 <strong>13</strong>。</p><h3 id=-原理证明-1>🔍 原理证明</h3><p>辗转相除法的有效性基于一个关键定理：<strong>如果 <code>a</code>和 <code>b</code>是正整数，且 <code>a > b</code>，那么 <code>gcd(a, b) = gcd(b, a mod b)</code></strong>。</p><p>简单来说，这个定理之所以成立，是因为：</p><ul><li>任何能同时整除 <code>a</code>和 <code>b</code>的数 <code>d</code>，也一定能整除余数 <code>r</code>（因为 <code>r = a - k*b</code>，<code>k</code>是商）。</li><li>反之，任何能同时整除 <code>b</code>和 <code>r</code>的数 <code>d</code>，也一定能整除 <code>a</code>。</li><li>因此，<code>a</code>和 <code>b</code>的公约数集合，与 <code>b</code>和 <code>r</code>的公约数集合完全相同，自然它们的最大公约数也相等。</li></ul><h3 id=-编程实现-1>💻 编程实现</h3><p>辗转相除法在编程中既可以用递归实现，也可以用迭代（循环）实现。</p><h4 id=递归实现-c-1>递归实现 (C++)</h4><pre tabindex=0><code>#include &lt;iostream&gt;
+using namespace std;
+
+int gcd(int a, int b) {
+    if (b == 0) {
+        return a;
+    } else {
+        return gcd(b, a % b);
+    }
+}
+
+int main() {
+    int num1 = 481, num2 = 221;
+    cout &lt;&lt; &#34;GCD of &#34; &lt;&lt; num1 &lt;&lt; &#34; and &#34; &lt;&lt; num2 &lt;&lt; &#34; is &#34; &lt;&lt; gcd(num1, num2) &lt;&lt; endl;
+    return 0;
+}
+</code></pre><h4 id=迭代实现-c-1>迭代实现 (C++)</h4><pre tabindex=0><code>#include &lt;iostream&gt;
+using namespace std;
+
+int gcd_iterative(int a, int b) {
+    while (b != 0) {
+        int temp = b;
+        b = a % b;
+        a = temp;
+    }
+    return a;
+}
+
+int main() {
+    int num1 = 481, num2 = 221;
+    cout &lt;&lt; &#34;GCD of &#34; &lt;&lt; num1 &lt;&lt; &#34; and &#34; &lt;&lt; num2 &lt;&lt; &#34; is &#34; &lt;&lt; gcd_iterative(num1, num2) &lt;&lt; endl;
+    return 0;
+}
+</code></pre><p><strong>注意</strong>：自 C++17 起，标准库 <code>&lt;numeric></code>中提供了 <code>std::gcd</code>函数，可以直接使用。</p><h3 id=-算法特性与应用-1>⚙️ 算法特性与应用</h3><ul><li><strong>时间复杂度</strong>：辗转相除法的时间复杂度是 <strong>O(log(min(a, b)))</strong>，效率非常高，即使对于非常大的整数也是如此。</li><li><strong>主要应用</strong>：<ul><li><strong>化简分数</strong>：用于将分数化为最简形式。</li><li><strong>密码学</strong>：<strong>RSA公钥加密算法</strong>等密码学协议依赖于大整数的模逆元计算，而扩展欧几里得算法（辗转相除法的扩展）是求解模逆元的关键工具。</li><li><strong>求解线性同余方程</strong>：扩展欧几里得算法可以找到整数 <code>x</code>和 <code>y</code>，使得方程 <code>a*x + b*y = gcd(a, b)</code>成立，这在数论和算法设计中非常重要。</li></ul></li></ul><h3 id=-与其他方法的比较-1>🤔 与其他方法的比较</h3><p>求最大公约数还有其他方法，例如<strong>更相减损术</strong>和<strong>质因数分解法</strong>。</p><ul><li><strong>更相减损术</strong>：出自《九章算术》，以减法为主。当两个数字大小差别很大时，计算次数可能远多于辗转相除法。</li><li><strong>质因数分解法</strong>：先将两个数分解质因数，然后找出所有公共质因数并将其相乘。但当质因数很大时，分解本身可能非常困难，而辗转相避开了分解步骤，效率更高。</li></ul><p>因此，辗转相除法因其高效性和实现的简洁性，成为了计算最大公约数最常用和最重要的算法。</p><p>希望这些信息能帮助你全面理解辗转相除法。</p><h2 id=extract>extract</h2><p>在C++中，<code>extract</code>和 <code>erase</code>都是用于从容器中移除元素的操作，但它们在<strong>工作机制</strong>和<strong>使用场景</strong>上有着本质的区别。下面这个表格汇总了它们的核心差异，帮助你快速理解：</p><div class=table-wrapper><table><thead><tr><th>特性</th><th><code>extract</code></th><th><code>erase</code></th></tr></thead><tbody><tr><td><strong>主要功能</strong></td><td>从容器中<strong>移除</strong>元素并返回一个<strong>节点句柄（node_handle）</strong>，<strong>不销毁元素本身</strong></td><td>从容器中<strong>移除并销毁</strong>元素，释放其资源</td></tr><tr><td><strong>所属库/类别</strong></td><td>C++17引入，是<strong>关联容器</strong>（如 <code>std::set</code>, <code>std::map</code>）的<strong>成员函数</strong></td><td>是大多数容器的<strong>成员函数</strong>（如 <code>std::vector</code>, <code>std::list</code>, <code>std::set</code>, <code>std::map</code>）</td></tr><tr><td><strong>对容器影响</strong></td><td>容器<strong>大小减小</strong>，但被提取元素的资源得以保留，可用于转移</td><td>容器<strong>大小减小</strong>，被删除元素的资源被释放</td></tr><tr><td><strong>返回值</strong></td><td>返回一个包含被移除元素的<strong>节点句柄</strong>（<code>node_handle</code>）</td><td>通常返回一个指向被删除元素之后元素的<strong>迭代器</strong>（对于序列容器），或返回删除的元素数量（对于关联容器）</td></tr><tr><td><strong>适用容器</strong></td><td>主要适用于<strong>关联容器</strong>：<code>std::set</code>, <code>std::map</code>, <code>std::unordered_set</code>, <code>std::unordered_map</code>等</td><td>适用于<strong>绝大多数STL容器</strong>，包括序列容器（如 <code>std::vector</code>, <code>std::list</code>, <code>std::deque</code>）和关联容器</td></tr><tr><td><strong>性能特点</strong></td><td><strong>高效转移元素</strong>，避免不必要的拷贝或移动，适合在容器间转移元素</td><td>直接释放资源，但可能导致后续元素的移动（对于 <code>std::vector</code>等连续存储容器）</td></tr></tbody></table></div><h3 id=-深入了解-extract>🧰 深入了解 extract</h3><p><code>extract</code>是 C++17 为<strong>关联容器</strong>（如 <code>std::set</code>, <code>std::map</code>, <code>std::unordered_set</code>, <code>std::unordered_map</code>）引入的成员函数。它的核心思想是“<strong>移除但不销毁</strong>”。</p><ul><li><p><strong>工作原理</strong>：<code>extract</code>将元素从容器中移除，容器大小减小，但会返回一个包含该元素的<strong>节点句柄（<code>node_handle</code>）</strong>。这个节点句柄拥有该元素的所有权，你可以用它来：</p><ul><li><strong>插入到另一个同类型容器中</strong>：这是最高效的元素转移方式，避免了拷贝或移动的开销。</li><li><strong>修改元素的键（key）</strong>：对于 <code>std::map</code>和 <code>std::multimap</code>，可以通过节点句柄修改键值，而这在元素还在容器中时是不允许的。</li><li><strong>如果不再需要，直接销毁</strong>：节点句柄析构时，会正常销毁其包含的元素。</li></ul></li><li><p><strong>示例代码</strong>：</p><pre tabindex=0><code>#include &lt;iostream&gt;
+#include &lt;set&gt;
+
+int main() {
+    std::set&lt;int&gt; source = {1, 2, 3, 4, 5};
+    std::set&lt;int&gt; target;
+
+    // 从 source 中提取元素 3
+    auto node = source.extract(3); // node 的类型是 std::set&lt;int&gt;::node_type
+
+    // 检查提取是否成功
+    if (!node.empty()) {
+        // 将提取出的节点插入到 target
+        target.insert(std::move(node));
+    }
+
+    // 此时 source 包含：{1, 2, 4, 5}
+    // target 包含：{3}
+    // 元素 3 已被成功转移，而非拷贝
+}
+</code></pre></li></ul><h3 id=-深入了解-erase>🗑️ 深入了解 erase</h3><p><code>erase</code>是许多STL容器的成员函数，用于从容器中<strong>移除并销毁</strong>一个或多个元素。它的核心思想是“<strong>移除并清理</strong>”。</p><ul><li><p><strong>工作原理</strong>：<code>erase</code>会永久性地从容器中删除指定的元素，释放其内存资源。对于像 <code>std::vector</code>和 <code>std::deque</code>这样的连续存储容器，删除元素后，<strong>后面的所有元素都需要向前移动</strong>以填补空隙，这可能会带来性能开销。它有不同的重载形式：</p><ul><li><strong>接受迭代器</strong>：删除迭代器指向的元素。</li><li><strong>接受迭代器范围</strong>：删除 <code>[first, last)</code>范围内的所有元素。</li><li><strong>接受键值（关联容器）</strong>：删除所有键等于给定值的元素（对于 <code>std::multimap</code>和 <code>std::multiset</code>会删除所有匹配项）。</li></ul></li><li><p><strong>示例代码</strong>：</p><pre tabindex=0><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;set&gt;
+
+int main() {
+    // 1. 从 vector 中擦除（序列容器）
+    std::vector&lt;int&gt; vec = {1, 2, 3, 4, 5};
+    vec.erase(vec.begin() + 2); // 删除第三个元素（值为3）
+    // vec 现在为：{1, 2, 4, 5}
+
+    // 2. 从 set 中擦除（关联容器）
+    std::set&lt;int&gt; mySet = {10, 20, 30, 40, 50};
+    mySet.erase(30); // 删除值为30的元素
+    // mySet 现在为：{10, 20, 40, 50}
+
+    return 0;
+}
+</code></pre></li></ul><h3 id=-如何选择-extract-还是-erase>💡 如何选择 extract 还是 erase？</h3><p>选择使用 <code>extract</code>还是 <code>erase</code>取决于你的具体需求：</p><ul><li><strong>需要高效地将元素从一个容器转移到另一个同类型容器</strong>：使用 <code>extract</code>加 <code>insert</code>。这是最节省资源的方式，因为它避免了拷贝或移动构造新元素。</li><li><strong>需要修改关联容器中元素的键（key）</strong>：使用 <code>extract</code>取出节点，修改键，再插回（可以是同一个容器，也可以是另一个容器）。</li><li><strong>只是简单地想从容器中删除元素，不再需要它</strong>：使用 <code>erase</code>。这是最直接和常见的做法。</li><li><strong>要删除容器中满足条件的多个元素</strong>：对于关联容器，可以使用 <code>erase</code>循环（注意迭代器有效性）。或者结合 <code>std::erase_if</code>(C++20)。</li></ul><h3 id=-注意事项-1>⚠️ 注意事项</h3><ul><li><strong>容器支持</strong>：<code>extract</code>目前主要适用于关联容器（<code>set</code>, <code>map</code>, <code>unordered_set</code>, <code>unordered_map</code>及其多键版本）。<code>erase</code>则被更广泛的容器支持。</li><li><strong>迭代器失效</strong>：两者操作都可能使指向被操作元素的迭代器、指针或引用失效，使用时需特别注意。</li><li><strong>错误处理</strong>：使用 <code>extract</code>时，如果提供的键不存在，它会返回一个空的节点句柄（<code>node.empty()</code>为 <code>true</code>），操作是安全的。使用 <code>erase</code>删除不存在的元素通常也是安全的（对于关联容器，<code>erase</code>会返回0表示没有元素被删除）。</li></ul><p>希望这些解释和示例能帮助你更好地理解 <code>extract</code>和 <code>erase</code>的区别！</p><h2 id=懒删除堆>懒删除堆</h2><p>懒删除堆（Lazy Deletion Heap）是一种优化策略，它通过延迟实际删除操作来提升堆结构的性能，特别是在需要频繁删除非堆顶元素或进行复杂堆管理的场景。下面我们来看看它的核心原理、实现和适用场景。</p><h3 id=-核心思想与工作原理>🧠 核心思想与工作原理</h3><p>懒删除堆的基本思路很直接：当需要删除一个元素时，并不立即将其从堆的物理结构中移除，而是先进行<strong>标记</strong>（例如标记为已删除）。实际的数据清除工作会推迟到后续某个必要的时刻（例如当被标记元素出现在堆顶，需要执行 <code>pop</code>操作时）才进行。</p><p>这种策略在处理<strong>非堆顶元素删除</strong>时优势明显，因为直接删除堆中的任意元素（尤其是在大顶堆或小顶堆中）通常代价较高，可能涉及大量的元素调整以维持堆性质。懒删除避免了这种即时调整的开销。</p><h3 id=-常见实现方式>🔧 常见实现方式</h3><p>懒删除堆有两种主流的实现方法：</p><ol><li><p><strong>标记清理法</strong>：为堆中的每个节点增加一个标志位（如 <code>deleted</code>）。进行删除操作时，仅将该标志位置为 <code>true</code>。在执行 <code>pop</code>操作时，检查堆顶元素的标志位，如果已被标记，则直接弹出并重复此过程，直到堆顶元素是有效的。</p></li><li><p><strong>双堆法</strong>：维护两个堆：</p><ul><li><p><strong>主堆（保存堆）</strong>：负责所有元素的插入以及当前有效元素的维护。</p></li><li><p><strong>懒删除堆（删除堆）</strong>：专门用于存放<strong>已被标记删除</strong>的元素。</p><p>当需要获取堆顶元素（如最大值或最小值）时，检查主堆和懒删除堆的堆顶元素。<strong>如果两者相同，说明主堆堆顶元素已被标记删除，于是将两者同时弹出</strong>，重复此过程直到主堆堆顶元素有效或堆为空。</p></li></ul></li></ol><h3 id=-优缺点分析>⚖️ 优缺点分析</h3><h4 id=-优点>✅ 优点</h4><ul><li><strong>提升性能</strong>：延迟了实际删除操作，避免了频繁删除非堆顶元素时立即调整堆结构带来的开销，尤其利于<strong>频繁删除插入</strong>的场景。</li><li><strong>简化逻辑</strong>：对于某些数据结构（如优先队列），懒删除简化了任意元素删除的操作逻辑。</li><li><strong>利于并发</strong>：减少删除操作时所需的锁争用，在高并发环境下能提升性能。</li></ul><h4 id=-缺点>❌ 缺点</h4><ul><li><strong>空间占用可能增加</strong>：被标记删除的元素仍占用内存空间，只有在被清理时才会释放，可能导致<strong>内存使用率较高</strong>。</li><li><strong>查询效率可能波动</strong>：堆中积累过多已删除标记元素时，<code>pop</code>操作可能需要连续清理多个无效堆顶元素才能获取有效值，<strong>最坏情况下时间复杂度会增高</strong>。</li><li><strong>数据一致性风险</strong>：若清理机制实现不当，可能导致已标记元素未被及时清除，引发数据不一致问题。</li></ul><h3 id=-典型应用场景>🚀 典型应用场景</h3><ol><li><strong>需要频繁删除非堆顶元素的优先队列</strong>：例如，Dijkstra算法中若需要更新优先队列中某节点的距离，可用懒删除标记旧值，插入新值。</li><li><strong>滑动窗口问题</strong>：求解滑动窗口最大值或中位数时，当窗口移动，需移除离开窗口的元素。懒删除可高效处理这种移除操作。</li><li><strong>图算法中的优化</strong>：如某些最小生成树算法或网络流算法中，需要动态管理边集，懒删除堆可帮助高效处理边的移除。</li><li><strong>高频数据流处理</strong>：在需要实时维护当前最大/最小值的流数据处理中，懒删除能有效处理过期数据的移除。</li></ol><h3 id=-总结>📌 总结</h3><p>懒删除堆通过<strong>延迟实际删除操作</strong>，以<strong>空间换取时间效率</strong>，特别适合<strong>删除操作频繁</strong>且<strong>对实时性要求较高</strong>的场景。当然，使用时也需注意其可能带来的<strong>内存开销增加</strong>及在<strong>最坏情况下性能波动</strong>的问题。</p><p>希望这些信息能帮助你更好地理解懒删除堆。如果你有具体的应用场景或更深入的问题，我很乐意继续讨论。</p><h2 id=访问不存在的键>访问不存在的键</h2><p>在C++中，使用 <code>unordered_map</code>的 <code>[]</code>操作符访问一个不存在的键，会导致该键<strong>被自动插入到 map 中</strong>，其对应的值则会进行<strong>值初始化</strong>（通常是该类型的默认值）。这是一个需要特别注意的行为。</p><p>为了更清晰地对比通过 <code>[]</code>访问和使用 <code>find()</code>方法查找可能不存在的键时的区别，请看下面的表格：</p><div class=table-wrapper><table><thead><tr><th>特性</th><th>使用 <code>[]</code>操作符访问</th><th>使用 <code>find()</code>方法查找</th></tr></thead><tbody><tr><td><strong>行为</strong></td><td>若键不存在，<strong>自动插入</strong>该键，值进行<strong>值初始化</strong> (如 <code>int</code>为 <code>0</code>)</td><td>若键不存在，返回 <strong><code>end()</code></strong> 迭代器，<strong>不修改</strong>容器</td></tr><tr><td><strong>返回值</strong></td><td>返回对应值的<strong>引用</strong></td><td>返回指向键值对的<strong>迭代器</strong> (找到时) 或 <code>end()</code>(未找到时)</td></tr><tr><td><strong>容器修改</strong></td><td><strong>会</strong>修改容器，可能增加新键值对</td><td><strong>不会</strong>修改容器</td></tr><tr><td><strong>常量性</strong></td><td>不能用于 <code>const std::unordered_map</code></td><td>可用于 <code>const std::unordered_map</code>(有 <code>const</code>重载)</td></tr><tr><td><strong>适用场景</strong></td><td>当<strong>确定</strong>键存在或<strong>允许</strong>自动插入新键时</td><td>需要<strong>安全地检查</strong>键是否存在，并避免副作用时</td></tr><tr><td><strong>性能影响</strong></td><td>可能因意外插入新键导致 map <strong>大小增加</strong>，潜在影响后续操作</td><td>查找操作本身是<strong>常数时间复杂度 O(1)</strong> (平均情况下)</td></tr></tbody></table></div><h3 id=-值初始化规则>🔍 值初始化规则</h3><p>当因为访问不存在的键而插入新元素时，其值会根据类型进行初始化：</p><ul><li><strong>内置类型</strong>：如 <code>int</code>会初始化为 <code>0</code>，<code>double</code>初始化为 <code>0.0</code>，指针初始化为 <code>nullptr</code>。</li><li><strong>标准库类型</strong>：如 <code>std::string</code>会初始化为空字符串，<code>std::vector</code>会初始化为空容器。</li><li><strong>自定义类型</strong>：必须具有<strong>默认构造函数</strong>。如果没有，尝试使用 <code>[]</code>访问不存在的键会导致<strong>编译错误</strong>。</li></ul><h3 id=-如何安全地检查键是否存在>🛡️ 如何安全地检查键是否存在</h3><p>为了避免意外插入键，你应该使用 <code>find()</code>方法来检查键是否存在。</p><pre tabindex=0><code>#include &lt;iostream&gt;
+#include &lt;unordered_map&gt;
+#include &lt;string&gt;
+
+int main() {
+    std::unordered_map&lt;std::string, int&gt; scores = {{&#34;Alice&#34;, 90}, {&#34;Bob&#34;, 85}};
+
+    std::string key = &#34;Charlie&#34;;
+    
+    // 安全的查找方法
+    auto it = scores.find(key);
+    if (it != scores.end()) {
+        std::cout &lt;&lt; key &lt;&lt; &#34;&#39;s score is: &#34; &lt;&lt; it-&gt;second &lt;&lt; std::endl;
+    } else {
+        std::cout &lt;&lt; key &lt;&lt; &#34; not found in the map.&#34; &lt;&lt; std::endl;
+    }
+
+    // 也可以使用 count()，对于 unordered_map 返回 0 或 1
+    // if (scores.count(key)) {
+    //     std::cout &lt;&lt; &#34;Found &#34; &lt;&lt; key &lt;&lt; std::endl;
+    // } else {
+    //     std::cout &lt;&lt; key &lt;&lt; &#34; not found.&#34; &lt;&lt; std::endl;
+    // }
+
+    return 0;
+}
+</code></pre><h3 id=-关键要点与建议>💡 关键要点与建议</h3><ul><li><strong>牢记 <code>[]</code>操作符的副作用</strong>：在使用 <code>myMap[key]</code>之前，心里要很清楚，如果 <code>key</code>不存在，它就会被创建出来。</li><li><strong>优先使用 <code>find()</code>进行存在性检查</strong>：当你只是想确认一个键是否存在或者安全地获取其值而不希望改变 map 时，<code>find()</code>是你的首选方法。</li><li><strong><code>at()</code>方法作为替代</strong>：<code>unordered_map</code>还提供了 <code>at(key)</code>方法。如果键存在，它返回对应的值；如果<strong>键不存在，它会抛出 <code>std::out_of_range</code>异常</strong>。这适用于你不希望自动插入新键，而是将键不存在视为错误情况的场景。</li><li><strong>注意自定义类型</strong>：如果你的 <code>unordered_map</code>的值类型是自定义类且没有默认构造函数，避免使用 <code>[]</code>操作符，否则会导致编译错误。</li></ul><p>理解 <code>unordered_map</code>访问不存在键时的行为，对于编写正确、高效的C++代码至关重要。希望这些解释对你有帮助。</p><h2 id=split>split</h2><p>C++ 标准库中并未直接提供字符串分割（split）函数，但可以通过多种方法实现这一功能。以下是几种常见的实现方式及其特点：</p><h3 id=1-使用-stdstringstream和-stdgetline>1. 使用 <code>std::stringstream</code>和 <code>std::getline</code></h3><p>这种方法适用于按<strong>单字符分隔符</strong>分割字符串，代码简洁易懂。</p><pre tabindex=0><code>#include &lt;sstream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+
+std::vector&lt;std::string&gt; split(const std::string&amp; s, char delimiter) {
+    std::vector&lt;std::string&gt; tokens;
+    std::string token;
+    std::istringstream tokenStream(s);
+    while (std::getline(tokenStream, token, delimiter)) {
+        tokens.push_back(token);
+    }
+    return tokens;
+}
+</code></pre><p><strong>特点</strong>：</p><ul><li>简单直接，适用于简单场景。</li><li>会保留空字符串（例如连续分隔符产生的空段）。</li></ul><h3 id=2-使用-stdstringfind和-stdstringsubstr>2. 使用 <code>std::string::find</code>和 <code>std::string::substr</code></h3><p>这种方法支持<strong>多字符分隔符</strong>，并且可以灵活控制是否保留空字符串。</p><pre tabindex=0><code>#include &lt;vector&gt;
+#include &lt;string&gt;
+
+std::vector&lt;std::string&gt; split(const std::string&amp; str, const std::string&amp; delimiter) {
+    std::vector&lt;std::string&gt; tokens;
+    size_t start = 0, end = 0;
+    while ((end = str.find(delimiter, start)) != std::string::npos) {
+        tokens.push_back(str.substr(start, end - start));
+        start = end + delimiter.length();
+    }
+    tokens.push_back(str.substr(start));
+    return tokens;
+}
+</code></pre><p><strong>特点</strong>：</p><ul><li>支持多字符分隔符。</li><li>通常也会保留空字符串，但逻辑可调整。</li></ul><h3 id=3-使用-stdstringfind_first_not_of和-stdstringfind_first_of>3. 使用 <code>std::string::find_first_not_of</code>和 <code>std::string::find_first_of</code></h3><p>这种方法可以<strong>跳过空字符串</strong>，只返回非空部分。</p><pre tabindex=0><code>#include &lt;vector&gt;
+#include &lt;string&gt;
+
+std::vector&lt;std::string&gt; split(const std::string&amp; s, const std::string&amp; delimiters) {
+    std::vector&lt;std::string&gt; tokens;
+    size_t start = s.find_first_not_of(delimiters, 0);
+    size_t end = s.find_first_of(delimiters, start);
+    while (start != std::string::npos) {
+        tokens.push_back(s.substr(start, end - start));
+        start = s.find_first_not_of(delimiters, end);
+        end = s.find_first_of(delimiters, start);
+    }
+    return tokens;
+}
+</code></pre><p><strong>特点</strong>：</p><ul><li>自动忽略分隔符之间的空字符串。</li><li>适用于需要清理空段的场景。</li></ul><h3 id=4-使用正则表达式c11及以上>4. 使用正则表达式（C++11及以上）</h3><p>这种方法功能强大，支持<strong>复杂分隔规则</strong>（如正则表达式模式）。</p><pre tabindex=0><code>#include &lt;regex&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+
+std::vector&lt;std::string&gt; split(const std::string&amp; s, const std::regex&amp; delimiter) {
+    std::sregex_token_iterator it(s.begin(), s.end(), delimiter, -1);
+    std::sregex_token_iterator end;
+    return std::vector&lt;std::string&gt;(it, end);
+}
+</code></pre><p><strong>示例用法</strong>：</p><pre tabindex=0><code>std::regex delimiter(&#34;[\\s,]+&#34;); // 按空格或逗号分割
+auto tokens = split(&#34;one, two   three&#34;, delimiter);
+</code></pre><p><strong>特点</strong>：</p><ul><li>最灵活，支持复杂分隔符。</li><li>可能性能开销较大，适合复杂场景。</li></ul><h3 id=5-使用-strtok函数c风格字符串>5. 使用 <code>strtok</code>函数（C风格字符串）</h3><p>适用于C风格字符串（<code>char*</code>），但<strong>不安全</strong>（修改原字符串且非线程安全）。</p><pre tabindex=0><code>#include &lt;cstring&gt;
+#include &lt;vector&gt;
+
+std::vector&lt;std::string&gt; split(char* str, const char* delimiter) {
+    std::vector&lt;std::string&gt; tokens;
+    char* token = strtok(str, delimiter);
+    while (token != nullptr) {
+        tokens.push_back(token);
+        token = strtok(nullptr, delimiter);
+    }
+    return tokens;
+}
+</code></pre><p><strong>特点</strong>：</p><ul><li>仅适用于C风格字符串。</li><li>会修改原始字符串，且非线程安全。</li></ul><h3 id=选择建议>选择建议</h3><ul><li><strong>简单字符分隔</strong>：优先使用 <code>std::stringstream</code>和 <code>std::getline</code>。</li><li><strong>多字符分隔或需保留空字符串</strong>：使用 <code>find</code>和 <code>substr</code>。</li><li><strong>需跳过空字符串</strong>：使用 <code>find_first_not_of</code>和 <code>find_first_of</code>。</li><li><strong>复杂分隔规则</strong>：使用正则表达式。</li><li><strong>处理C风格字符串</strong>（且无并发问题）：可考虑 <code>strtok</code>。</li></ul><h3 id=注意事项>注意事项</h3><ul><li>上述方法大多基于搜索结果的代码示例，实际使用时需注意边界条件（如字符串末尾的分隔符）。</li><li>性能敏感场景应避免正则表达式，优先选择基于字符串操作的方案。</li></ul><p>更多实现细节和完整代码示例可参考提供的搜索结果。</p><h2 id=长除法>长除法</h2><p>长除法是一种用于计算两个数相除的详细方法，特别注重计算过程和商数的得出，通过结合乘法和减法操作，将复杂的除法问题分解为更小的步骤。它适用于整数、小数、多项式等多种情况。</p><p>下面是一个简单的整数长除法示例，演示 237 除以 13 的过程：</p><pre tabindex=0><code>18
+   ------
+13|237
+   -13
+   ----
+     107
+    -104
+    -----
+       3
+</code></pre><p>（说明：商为 18，余数为 3，所以 237 ÷ 13 = 18 余 3。）</p><p>📊 <strong>长除法的基本步骤</strong></p><p>长除法的核心步骤可以概括为以下几点：</p><ol><li><strong>准备阶段</strong>：将除数和被除数按同一字母的降幂排列（多项式除法中尤为重要）。如果有某个次方的项缺失，需要用“0”补齐。</li><li><strong>开始试商</strong>：从被除数的当前最高位或最高次项开始，取足够的位数或项，使其大于或等于除数。用此部分除以除数的最高位或最高次项，得到商的首位或首项。</li><li><strong>乘与减</strong>：将得到的商的首位或首项与整个除数相乘，将乘积写在当前被除数的下方。然后进行减法，得到余数。</li><li><strong>下拉后续位</strong>：将原被除数的下一位数字或下一项“下拉”到余数后面，形成新的被除数。</li><li><strong>重复循环</strong>：以新的被除数重复步骤2、3、4（即试商、乘减、下拉）的过程，直到余数为零或余式的次数低于除式的次数（多项式除法中），或没有更多数字可下拉（整数、小数除法中）。</li><li><strong>得出结果</strong>：最终横线上方的数字或多项式就是商，最后剩下的余数就是整个除法运算的余数。</li></ol><p>🧮 <strong>长除法的应用场景</strong></p><p>长除法作为一种基础而重要的算法，其应用范围包括：</p><ul><li><strong>数学学习基础</strong>：是学习整数除法、小数除法和多项式除法的重要工具。</li><li><strong>多项式运算</strong>：在代数中用于多项式的因式分解、求最大公因式等。</li><li><strong>其他专业领域</strong>：在工程计算、计算机科学（特别是处理大数运算或特定算法）以及信号处理（如Z变换）中也有应用。</li></ul><p>💡 <strong>进行长除法需要注意</strong></p><ul><li><strong>排列顺序</strong>：进行多项式长除法时，务必确保被除式和除式都按同一字母的<strong>降幂</strong>排列，并注意缺项补零。</li><li><strong>耐心与细致</strong>：长除法步骤较多，需一步步仔细计算，注意对齐数位和符号。</li><li><strong>余数的意义</strong>：要理解余数的含义，特别是在多项式除法中，最终结果常以“被除式 = 除式 × 商式 + 余式”的形式表示。</li></ul><p>希望这些信息能帮助你更好地理解长除法。如果你在练习具体题目时遇到困难，可以随时再来问。</p><p>Push_back & +=</p><p>了解 <code>push_back</code>和 <code>+=</code>在 C++ string 中的区别，能帮助我们更好地编写高效且清晰的代码。下面是一个对比表格，帮你快速把握它们的核心差异：</p><div class=table-wrapper><table><thead><tr><th>特性</th><th><code>push_back()</code></th><th><code>+=</code>操作符</th></tr></thead><tbody><tr><td><strong>主要功能</strong></td><td>在字符串<strong>末尾添加单个字符</strong></td><td>在字符串末尾<strong>追加内容</strong>，可以是单个字符、字符串或字符数组</td></tr><tr><td><strong>返回值</strong></td><td><code>void</code>(无返回值)</td><td>返回对当前字符串的引用 (<code>string&</code>)，<strong>支持链式调用</strong></td></tr><tr><td><strong>参数类型</strong></td><td>仅接受<strong>单个字符</strong> (<code>char</code>)</td><td>接受单个字符 (<code>char</code>)、字符串 (<code>string</code>)、C风格字符串 (<code>const char*</code>) 等</td></tr><tr><td><strong>使用场景</strong></td><td>适合在<strong>循环中逐个添加字符</strong>或明确只添加一个字符的场景</td><td>适合需要<strong>追加多个字符、字符串</strong>或进行链式追加的场景</td></tr><tr><td><strong>底层性能</strong></td><td>追加单个字符时效率高，可能触发扩容</td><td>追加单个字符时通常<strong>内部调用 <code>push_back</code></strong>，追加字符串时有相应优化</td></tr></tbody></table></div><p>💡 <strong>简单选择建议</strong>：</p><ul><li>如果只想在字符串末尾加<strong>一个字符</strong>，<code>push_back()</code>和 <code>+=</code>都可以，用哪个主要看代码习惯和清晰度。</li><li>如果需要添加<strong>多个字符、一个字符串或者进行链式操作</strong>，<code>+=</code>更方便灵活。</li><li>在<strong>循环中逐个添加字符</strong>时，两者性能相近。</li></ul><p>🧪 <strong>代码示例</strong></p><pre tabindex=0><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main() {
+    string str1 = &#34;Hello&#34;;
+    string str2 = &#34;Hello&#34;;
+    const char* cstr = &#34; World&#34;;
+    char newChar = &#39;!&#39;;
+
+    // 使用 push_back 添加单个字符
+    str1.push_back(&#39; &#39;); // 添加一个空格
+    str1.push_back(&#39;W&#39;); // 添加字符 &#39;W&#39;
+    // str1.push_back(cstr); // 错误！push_back 不能直接追加C风格字符串
+    cout &lt;&lt; &#34;使用 push_back: &#34; &lt;&lt; str1 &lt;&lt; endl; // 输出 &#34;Hello W&#34;
+
+    // 使用 += 追加内容
+    str2 += &#39; &#39;; // 追加一个字符
+    str2 += cstr; // 追加一个C风格字符串
+    str2 += newChar; // 追加一个字符变量
+    // 链式调用
+    str2 += &#34; Have a &#34; + string(&#34;nice day&#34;); // 混合追加
+    cout &lt;&lt; &#34;使用 += : &#34; &lt;&lt; str2 &lt;&lt; endl; // 输出 &#34;Hello World! Have a nice day&#34;
+
+    return 0;
+}
+</code></pre><hr><p>✨ <strong>记住怎么选</strong></p><p>简单来说：</p><ul><li>只想加<strong>一个字符</strong>时，<code>push_back()</code>和 <code>+=</code>都可以。</li><li>要加<strong>更多东西</strong>（多个字符、字符串）或者想<strong>一连串地加</strong>，用 <code>+=</code>更省事。</li><li>在<strong>循环里一个一个加字符</strong>时，两者差不多。</li></ul><p>希望这些解释能帮助你更好地理解和使用它们。</p><h2 id=unordered_set--set-底层实现>unordered_set & set 底层实现</h2><p>C++ 中的 <code>std::set</code>和 <code>std::unordered_set</code>都是用于存储唯一元素的关联容器，但它们的底层实现和特性有显著差异。了解这些区别有助于你在不同场景下做出最合适的选择。</p><div class=table-wrapper><table><thead><tr><th>特性</th><th><code>std::set</code></th><th><code>std::unordered_set</code></th></tr></thead><tbody><tr><td><strong>底层数据结构</strong></td><td><strong>红黑树</strong> (自平衡二叉搜索树)</td><td><strong>哈希表</strong> (桶数组 + 链表/开放寻址)</td></tr><tr><td><strong>元素顺序</strong></td><td><strong>有序存储</strong>，默认按升序排列（可自定义）</td><td><strong>无序存储</strong>，顺序由哈希函数决定</td></tr><tr><td><strong>查找/插入/删除时间复杂度</strong></td><td>O(log n)</td><td><strong>平均 O(1)</strong>，最坏 O(n)</td></tr><tr><td><strong>内存占用</strong></td><td>较高（需存储树结构指针）</td><td>通常较低，但需为哈希桶分配空间</td></tr><tr><td><strong>迭代器稳定性</strong></td><td><strong>稳定</strong>，插入删除通常不使迭代器失效（除当前元素）</td><td><strong>不稳定</strong>，插入可能触发重哈希使所有迭代器失效</td></tr><tr><td><strong>键类型要求</strong></td><td>需定义 <code>&lt;</code>运算符或提供自定义比较器</td><td>需定义 <code>std::hash</code>和 <code>==</code>运算符</td></tr><tr><td><strong>主要适用场景</strong></td><td>需要元素有序、范围查询或遍历</td><td>需要快速查找、插入、删除，不关心顺序</td></tr></tbody></table></div><h3 id=-底层实现揭秘>🧠 底层实现揭秘</h3><ul><li><strong><code>std::set</code>基于红黑树</strong>：红黑树是一种自平衡的二叉搜索树。它通过严格的规则（如节点颜色、从根到叶子的路径包含相同数量的黑节点）来保持树的平衡，从而确保插入、删除和查找操作的时间复杂度稳定在 <strong>O(log n)</strong>。元素在树中按顺序存储，因此遍历时是有序的 。</li><li><strong><code>std::unordered_set</code>基于哈希表</strong>：哈希表的核心是哈希函数，它将元素映射到一个固定范围内的整数（桶索引）。理想情况下，每个元素均匀分布到不同的桶中，从而实现平均 <strong>O(1)</strong> 的访问时间。当多个元素被哈希到同一个桶时（哈希冲突），会通过链表法等解决 。如果冲突严重（如所有元素都映射到同一个桶），性能会退化为 O(n) 。哈希表会根据负载因子（元素数/桶数）自动进行重哈希（扩容并重新分配元素）以维持性能 。</li></ul><h3 id=-如何选择-1>⚖️ 如何选择</h3><p>选择哪一个容器，取决于你的具体需求：</p><ul><li><strong>需要元素有序存储、进行范围查询（如查找所有大于某值的元素）或需要按顺序遍历</strong>，应选择 <code>std::set</code>。</li><li><strong>追求极致的查找、插入和删除速度，且不关心元素的顺序</strong>，应选择 <code>std::unordered_set</code>。这在处理大量数据去重或快速判断元素是否存在时非常高效。</li><li><strong>如果键类型没有良好的哈希函数</strong>，使用 <code>std::set</code>可能更简单（仅需定义比较）。</li><li><strong>如果内存非常敏感</strong>，需要根据哈希函数的质量权衡。哈希函数分布均匀时 <code>std::unordered_set</code>内存效率可能更高，否则 <code>std::set</code>的内存使用更可预测 。</li></ul><h3 id=-使用注意事项>🛠 使用注意事项</h3><ul><li><p><strong>为自定义类型使用 <code>std::unordered_set</code></strong>：你必须同时提供<strong>哈希函数</strong>和<strong>相等比较函数</strong>（通常重载 <code>operator==</code>）。</p><pre tabindex=0><code>struct Point {
+    int x, y;
+    // 相等比较运算符
+    bool operator==(const Point &amp;p) const {
+        return x == p.x &amp;&amp; y == p.y;
+    }
+};
+
+// 自定义哈希函数
+struct HashPoint {
+    size_t operator()(const Point &amp;p) const {
+        return std::hash&lt;int&gt;()(p.x) ^ (std::hash&lt;int&gt;()(p.y) &lt;&lt; 1);
+    }
+};
+
+std::unordered_set&lt;Point, HashPoint&gt; pointSet;
+</code></pre></li><li><p><strong>迭代器失效</strong>：在 <code>std::unordered_set</code>中插入元素可能引发重哈希，导致<strong>所有迭代器失效</strong>。修改容器后，切勿使用之前的迭代器 。</p></li></ul><h3 id=-简单总结>💎 简单总结</h3><p>记住一个简单的原则：<strong>要顺序，选 <code>set</code>；要速度，选 <code>unordered_set</code></strong>。</p><p>希望这些信息能帮助你更好地理解和使用它们。</p><h2 id=tuple-hash>tuple Hash</h2><p>了解 <code>std::set&lt;std::tuple&lt;...>></code>和 <code>std::unordered_set&lt;std::tuple&lt;...>></code>对元组的处理方式非常重要，它直接影响到容器的行为和性能。下面是一个快速的对比表格，帮助你直观把握它们的核心区别：</p><div class=table-wrapper><table><thead><tr><th>特性</th><th><code>std::set&lt;std::tuple&lt;...>></code></th><th><code>std::unordered_set&lt;std::tuple&lt;...>></code></th></tr></thead><tbody><tr><td><strong>底层结构</strong></td><td>红黑树 (平衡二叉搜索树)</td><td>哈希表</td></tr><tr><td><strong>元素顺序</strong></td><td><strong>有序</strong> (按比较规则排序)</td><td><strong>无序</strong> (顺序取决于哈希函数和桶)</td></tr><tr><td><strong>比较行为</strong></td><td>使用 <code>std::less&lt;></code>(默认) 或自定义比较器进行<strong>字典序比较</strong></td><td>需要<strong>自定义哈希函数</strong>和<strong>相等比较函数</strong> (除非重载了 <code>std::hash</code>和 <code>operator==</code>)</td></tr><tr><td><strong>哈希行为</strong></td><td><strong>不涉及</strong>哈希</td><td>依赖 <code>std::hash&lt;></code>(默认) 或自定义哈希函数计算桶位置</td></tr><tr><td><strong>时间复杂度</strong></td><td>插入、查找、删除: <strong>O(log n)</strong></td><td>插入、查找、删除: <strong>平均 O(1), 最坏 O(n)</strong></td></tr><tr><td><strong>迭代器稳定性</strong></td><td>稳定 (除非元素被删除)</td><td>插入操作可能引起重哈希，导致所有迭代器失效</td></tr><tr><td><strong>内存占用</strong></td><td>通常较高 (需存储树结构指针)</td><td>通常较低，但需为哈希桶分配空间</td></tr></tbody></table></div><hr><p>🔍 <strong>详细说明</strong></p><h3 id=1-stdsetstdtuple的比较行为>1. <code>std::set&lt;std::tuple&lt;...>></code>的比较行为</h3><p><code>std::set</code>是一个基于红黑树的有序关联容器，其元素始终是排序的 。它依赖于<strong>比较函数</strong>（默认为 <code>std::less</code>）来确定元素的顺序和唯一性。</p><p>对于 <code>std::tuple</code>，<code>std::less</code>会进行<strong>字典序比较（Lexicographical Comparison）</strong>：</p><ul><li>从第一个元素开始比较。</li><li>如果第一个元素不相等，则根据第一个元素的大小关系确定整个元组的大小关系。</li><li>如果第一个元素相等，则比较第二个元素，以此类推，直到所有元素都比较完毕或找到不相等的元素。</li><li>所有元素的类型都必须支持 <code>&lt;</code>运算符或自定义比较函数中定义的比较操作。</li></ul><p>例如：</p><pre tabindex=0><code>#include &lt;set&gt;
+#include &lt;tuple&gt;
+
+std::set&lt;std::tuple&lt;int, int, int&gt;&gt; s;
+s.insert({1, 2, 3});
+s.insert({1, 3, 2}); // 可以插入，因为 {1,2,3} 和 {1,3,2} 不同
+s.insert({1, 2, 3}); // 不会插入，因为元组 {1,2,3} 已存在
+
+// 遍历set，元素将按字典序排列：{1,2,3}, {1,3,2}
+</code></pre><p><strong>如果需要自定义排序规则</strong>，你可以提供自己的比较函数对象。</p><pre tabindex=0><code>// 一个自定义的比较函数对象，只比较元组的前两个元素
+struct MyTupleCompare {
+    bool operator()(const std::tuple&lt;int, int, int&gt;&amp; a, const std::tuple&lt;int, int, int&gt;&amp; b) const {
+        // 只比较前两个元素
+        if (std::get&lt;0&gt;(a) != std::get&lt;0&gt;(b)) {
+            return std::get&lt;0&gt;(a) &lt; std::get&lt;0&gt;(b);
+        }
+        return std::get&lt;1&gt;(a) &lt; std::get&lt;1&gt;(b);
+        // 忽略第三个元素
+    }
+};
+
+std::set&lt;std::tuple&lt;int, int, int&gt;, MyTupleCompare&gt; customSet;
+customSet.insert({1, 2, 100});
+customSet.insert({1, 2, 200}); // 不会插入，因为根据MyTupleCompare，{1,2,100}和{1,2,200}被视为“相同”
+</code></pre><h3 id=2-stdunordered_setstdtuple的哈希与比较行为>2. <code>std::unordered_set&lt;std::tuple&lt;...>></code>的哈希与比较行为</h3><p><code>std::unordered_set</code>是一个基于哈希表的无序关联容器 。它依赖两个关键操作：</p><ol><li><strong>哈希函数</strong>：将元素映射到一个 <code>std::size_t</code>类型的哈希值，用于确定元素属于哪个“桶”（bucket）。<strong>平均情况下，插入、查找和删除的时间复杂度为 O(1)</strong>，但在最坏情况（如所有元素都哈希到同一个桶）下会退化为 O(n) 。</li><li><strong>相等比较函数</strong>：当两个元素的哈希值映射到同一个桶时，需要用此函数来精确判断它们是否真的相等。<strong>默认使用 <code>std::equal_to</code></strong>，它通常使用 <code>operator==</code>。</li></ol><p><strong>关键点在于：C++ 标准库没有为 <code>std::tuple</code>提供默认的哈希函数 <code>std::hash&lt;std::tuple&lt;...>></code></strong> 。因此，直接使用 <code>std::unordered_set&lt;std::tuple&lt;...>></code>会导致编译错误。</p><h4 id=如何为-stdtuple实现自定义哈希函数>如何为 <code>std::tuple</code>实现自定义哈希函数？</h4><p>你需要定义一个哈希函数对象，通常需要组合元组中每个元素的哈希值。一种常见且有效的方法是使用 <code>hash_combine</code>技术（灵感来源于 Boost 库）。</p><pre tabindex=0><code>#include &lt;unordered_set&gt;
+#include &lt;tuple&gt;
+#include &lt;functional&gt;
+
+// 辅助函数：哈希组合 (模仿Boost::hash_combine)
+template &lt;typename T&gt;
+inline void hash_combine(std::size_t&amp; seed, const T&amp; val) {
+    std::hash&lt;T&gt; hasher;
+    seed ^= hasher(val) + 0x9e3779b9 + (seed &lt;&lt; 6) + (seed &gt;&gt; 2);
+}
+
+// 递归模板：用于哈希元组的每个元素
+template &lt;typename... Types&gt;
+inline std::size_t hash_tuple(const std::tuple&lt;Types...&gt;&amp; t) {
+    std::size_t seed = 0;
+    // 使用C++17的折叠表达式简化代码 (C++14及更早标准需用其他方法展开参数包)
+    std::apply([&amp;seed](const Types&amp;... args) {
+        (hash_combine(seed, args), ...); // C++17 折叠表达式
+    }, t);
+    return seed;
+}
+
+// 为 std::tuple&lt;Types...&gt; 特例化 std::hash
+namespace std {
+    template&lt;typename... Types&gt;
+    struct hash&lt;std::tuple&lt;Types...&gt;&gt; {
+        std::size_t operator()(const std::tuple&lt;Types...&gt;&amp; t) const {
+            return hash_tuple(t);
+        }
+    };
+}
+// 注意：在std命名空间内添加特化需谨慎，确保特化是正确且唯一的。
+
+// 现在可以直接使用了
+std::unordered_set&lt;std::tuple&lt;int, std::string, double&gt;&gt; us;
+us.insert({1, &#34;hello&#34;, 3.14});
+</code></pre><p><em>(上述代码中的 <code>hash_combine</code>和递归展开方法是处理 tuple 哈希的通用模式 。)</em></p><p>如果不想特化 <code>std::hash</code>，也可以在声明 <code>unordered_set</code>时显式指定自定义哈希函数类型。</p><pre tabindex=0><code>struct MyTupleHash {
+    template &lt;typename... Types&gt;
+    std::size_t operator()(const std::tuple&lt;Types...&gt;&amp; t) const {
+        return hash_tuple(t); // 使用上面定义的 hash_tuple 函数
+    }
+};
+
+std::unordered_set&lt;std::tuple&lt;int, std::string, double&gt;, MyTupleHash&gt; us;
+</code></pre><h4 id=相等比较行为>相等比较行为</h4><p><code>std::unordered_set</code>默认使用 <code>std::equal_to</code>，对于 <code>std::tuple</code>，它会进行<strong>逐元素的 <code>operator==</code>比较</strong>（同样是字典序方式）。只有当所有对应元素都相等时，两个元组才被认为相等 。</p><p>如果元组中的元素类型没有定义 <code>operator==</code>，你需要为 <code>unordered_set</code><strong>提供一个自定义的相等比较函数对象</strong>，并在模板参数中指定。</p><pre tabindex=0><code>struct MyTupleEqual {
+    bool operator()(const std::tuple&lt;int, MyClass&gt;&amp; a, const std::tuple&lt;int, MyClass&gt;&amp; b) const {
+        return std::get&lt;0&gt;(a) == std::get&lt;0&gt;(b) &amp;&amp; 
+               std::get&lt;1&gt;(a).someMember == std::get&lt;1&gt;(b).someMember; // 自定义MyClass的比较逻辑
+    }
+};
+
+// 使用时需要同时指定哈希函数和相等比较函数
+std::unordered_set&lt;std::tuple&lt;int, MyClass&gt;, MyTupleHash, MyTupleEqual&gt; customUnorderedSet;
+</code></pre><hr><p>💡 <strong>简单总结与选择建议</strong></p><ul><li><strong>需要元素有序</strong>或<strong>进行范围查询</strong>（如找所有大于某值的元组），选择 <code>std::set</code>。它使用比较函数，无需关心哈希。</li><li><strong>追求极致的查找、插入和删除速度</strong>（平均O(1)），且不关心顺序，选择 <code>std::unordered_set</code>。但你必须为 <code>std::tuple</code><strong>提供有效的自定义哈希函数</strong>（通常需要类似 <code>hash_combine</code>的方法来组合各元素哈希值），并确保元组元素类型支持所需的操作（哈希和相等比较）。</li></ul><p>希望这些信息能帮助你。如果你还有其他关于 C++ 的问题，我很乐意为你解答。</p><h2 id=stdless--stdhash>std::less & std::hash</h2><p>这个编译错误是因为你尝试使用 <code>std::unordered_set&lt;std::tuple&lt;int, int, int>></code>的默认构造函数，但 C++ 标准库没有为 <code>std::tuple</code>提供默认的哈希函数 (<code>std::hash&lt;std::tuple&lt;...>></code>)，所以编译器无法生成有效的默认构造函数。</p><p>简单来说，<code>std::unordered_set</code>的底层实现依赖于哈希表，为了计算元素的存放位置，它需要两个关键的东西：</p><ol><li><strong>哈希函数 (Hash function)</strong>：知道如何计算你传入的元素类型的哈希值。</li><li><strong>相等比较函数 (Equality comparison function)</strong>：当两个元素的哈希值相同时（哈希冲突），用来判断它们是否真的相等。</li></ol><p>C++ 标准库为内置类型（如 <code>int</code>, <code>std::string</code>）和一些标准类型提供了这些函数的默认版本。但对于 <code>std::tuple</code>这样的复合类型，<strong>标准库没有提供默认的哈希函数</strong>，因此你需要自己提供。</p><div class=table-wrapper><table><thead><tr><th>问题核心</th><th><code>std::unordered_set&lt;std::tuple&lt;int, int, int>></code>需要知道如何：</th></tr></thead><tbody><tr><td></td><td>1. <strong>计算元组的哈希值</strong> (Hash)</td></tr><tr><td></td><td>2. <strong>比较两个元组是否相等</strong> (Equal)</td></tr><tr><td><strong>解决方案</strong></td><td><strong>为你使用的 <code>std::tuple</code>类型提供自定义的哈希函数和相等比较函数。</strong></td></tr></tbody></table></div><h3 id=如何解决>如何解决</h3><p>你需要为 <code>std::unordered_set</code>提供自定义的哈希函数对象，有时还需要提供相等的比较函数对象（除非你的元素类型已经正确重载了 <code>operator==</code>）。</p><h4 id=方法一自定义哈希函数对象推荐更灵活>方法一：自定义哈希函数对象（推荐，更灵活）</h4><p>定义一个哈希函数对象，并作为模板参数传递给 <code>unordered_set</code>。</p><pre tabindex=0><code>#include &lt;unordered_set&gt;
+#include &lt;tuple&gt;
+#include &lt;functional&gt; // 用于 std::hash
+
+// 自定义哈希函数对象
+struct TupleHash {
+    size_t operator()(const std::tuple&lt;int, int, int&gt;&amp; t) const {
+        // 一种组合哈希值的常见方式，可有效减少冲突
+        size_t seed = 0;
+        // 使用 std::hash 计算每个分量的哈希值，然后组合它们
+        seed ^= std::hash&lt;int&gt;{}(std::get&lt;0&gt;(t)) + 0x9e3779b9 + (seed &lt;&lt; 6) + (seed &gt;&gt; 2);
+        seed ^= std::hash&lt;int&gt;{}(std::get&lt;1&gt;(t)) + 0x9e3779b9 + (seed &lt;&lt; 6) + (seed &gt;&gt; 2);
+        seed ^= std::hash&lt;int&gt;{}(std::get&lt;2&gt;(t)) + 0x9e3779b9 + (seed &lt;&lt; 6) + (seed &gt;&gt; 2);
+        return seed;
+    }
+};
+
+// 如果你的元组元素没有内置的 == 比较，或者你想自定义，也可以提供一个比较函数对象
+// 但 std::tuple 本身已重载了 ==，所以这里通常不需要，除非有特殊需求
+struct TupleEqual {
+    bool operator()(const std::tuple&lt;int, int, int&gt;&amp; lhs, const std::tuple&lt;int, int, int&gt;&amp; rhs) const {
+        return lhs == rhs; // 直接使用 std::tuple 的默认比较
+    }
+};
+
+// 在你的类中，这样声明 unordered_set 成员变量：
+class Router {
+private:
+    // 在模板参数中指定哈希函数类型（和比较函数类型）
+    std::unordered_set&lt;std::tuple&lt;int, int, int&gt;, TupleHash&gt; mySet;
+    // 如果也需要指定比较函数，则：
+    // std::unordered_set&lt;std::tuple&lt;int, int, int&gt;, TupleHash, TupleEqual&gt; mySet;
+public:
+    Router(int memoryLimit) {
+        // 现在构造函数可以正常工作了
+        // ... 其他初始化代码
+    }
+    // ... 其他成员函数
+};
+</code></pre><h4 id=方法二特化-stdhash更透明但污染-std-命名空间>方法二：特化 <code>std::hash</code>（更透明，但污染 std 命名空间）</h4><p>你可以为 <code>std::tuple&lt;int, int, int></code>特化 <code>std::hash</code>模板。这样在声明 <code>unordered_set</code>时就不需要显式指定哈希函数类型了。</p><pre tabindex=0><code>#include &lt;unordered_set&gt;
+#include &lt;tuple&gt;
+#include &lt;functional&gt;
+
+namespace std {
+    // 在 std 命名空间内特化 std::hash
+    template &lt;&gt;
+    struct hash&lt;tuple&lt;int, int, int&gt;&gt; {
+        size_t operator()(const tuple&lt;int, int, int&gt;&amp; t) const {
+            size_t seed = 0;
+            seed ^= hash&lt;int&gt;{}(get&lt;0&gt;(t)) + 0x9e3779b9 + (seed &lt;&lt; 6) + (seed &gt;&gt; 2);
+            seed ^= hash&lt;int&gt;{}(get&lt;1&gt;(t)) + 0x9e3779b9 + (seed &lt;&lt; 6) + (seed &gt;&gt; 2);
+            seed ^= hash&lt;int&gt;{}(get&lt;2&gt;(t)) + 0x9e3779b9 + (seed &lt;&lt; 6) + (seed &gt;&gt; 2);
+            return seed;
+        }
+    };
+}
+
+// 在你的类中，现在可以像使用内置类型一样声明 unordered_set：
+class Router {
+private:
+    std::unordered_set&lt;std::tuple&lt;int, int, int&gt;&gt; mySet; // 无需额外指定哈希器
+public:
+    Router(int memoryLimit) {
+        // 构造函数现在可以正常工作
+    }
+    // ... 
+};
+</code></pre><p><strong>注意</strong>：在 <code>std</code>命名空间中添加特化需谨慎，确保特化是正确且唯一的。</p><h3 id=总结>总结</h3><p>错误的核心是 <code>std::unordered_set</code>不知道如何处理 <code>std::tuple</code>的哈希和比较。</p><ul><li><strong>提供哈希函数</strong>：这是必须的，通过自定义函数对象或特化 <code>std::hash</code>实现。</li><li><strong>提供比较函数</strong>：如果元素类型（此处是 <code>std::tuple</code>）没有定义 <code>operator==</code>，你也需要提供。幸运的是，<code>std::tuple</code>已经重载了 <code>operator==</code>，所以通常不需要额外提供。</li></ul><p>根据你的代码结构和个人偏好选择上述任一方法即可解决这个编译错误。</p><h2 id=deque-底层实现>Deque 底层实现</h2><p>C++ 中 <code>std::deque</code>（双端队列）的底层实现是一个精巧的设计，它<strong>通过分段连续的内存块和中央控制结构来模拟整体连续的空间</strong>，从而高效地支持在序列两端的操作。</p><p>为了让你快速了解 <code>deque</code>的核心实现思路及其与 <code>vector</code>、<code>list</code>的主要区别，请看下表：</p><div class=table-wrapper><table><thead><tr><th>特性</th><th>deque</th><th>vector</th><th>list</th></tr></thead><tbody><tr><td><strong>内存布局</strong></td><td>分段连续（多个固定大小的内存块 + 中央控制数组）</td><td>一整块连续内存</td><td>分散的节点，通过指针连接</td></tr><tr><td><strong>随机访问</strong></td><td>O(1) (需计算块和偏移，<strong>实际常比vector慢</strong>)</td><td>O(1) (纯粹的指针运算，<strong>非常快</strong>)</td><td>O(n) (必须遍历)</td></tr><tr><td><strong>头部插入删除</strong></td><td>O(1) (<strong>高效</strong>)</td><td>O(n) (需移动所有元素，<strong>低效</strong>)</td><td>O(1) (<strong>高效</strong>)</td></tr><tr><td><strong>尾部插入删除</strong></td><td>O(1) (<strong>高效</strong>)</td><td>O(1) (<strong>高效</strong>)</td><td>O(1) (<strong>高效</strong>)</td></tr><tr><td><strong>中间插入删除</strong></td><td>O(n) (需移动元素，<strong>低效</strong>)</td><td>O(n) (需移动元素，<strong>低效</strong>)</td><td>O(1) (找到位置后，<strong>高效</strong>)</td></tr><tr><td><strong>迭代器失效</strong></td><td>操作位置和类型复杂</td><td>扩容时全部失效</td><td>通常只影响操作点的迭代器</td></tr><tr><td><strong>内存使用</strong></td><td>内存使用较分散，但比list紧凑</td><td>内存连续，碎片少</td><td>每个节点需额外指针，碎片多</td></tr></tbody></table></div><hr><h3 id=-底层实现核心>🔧 底层实现核心</h3><p><code>deque</code>的底层结构主要由两部分组成：</p><ol><li><strong>中央控制数组 (Map)</strong>：一个动态数组（或指针数组），用于存储指向各个内存块（缓冲区）的指针。Map 可以动态扩容，其扩容成本相对较低，主要是拷贝指针而非实际数据。</li><li><strong>内存块 (Blocks / Buffers)</strong>：多个固定大小的连续内存数组，实际存储元素。每个内存块的大小通常由实现定义（如 512 字节或 1024 字节）。</li></ol><p>这种“<strong>分段连续</strong>”的设计，使得 <code>deque</code>在头部和尾部进行插入和删除操作时，通常不需要移动大量现有元素，只需在当前块操作或分配新块即可，因此效率很高（O(1)时间复杂度）。</p><h3 id=-迭代器设计>🧭 迭代器设计</h3><p><code>deque</code>的迭代器比 <code>vector</code>的普通指针迭代器复杂，它是一个包含多个指针的类：</p><ul><li><code>cur</code>: 指向当前元素。</li><li><code>first</code>: 指向当前所在内存块的首元素。</li><li><code>last</code>: 指向当前所在内存块的末尾（最后一个元素的下一个位置）。</li><li><code>node</code>: 指向中央控制数组中管理当前内存块的指针。</li></ul><p>这种设计使迭代器在移动到当前内存块边界时，能跳转到下一个或上一个内存块，从而维护了“整体连续”的假象。</p><h3 id=-扩容机制>📈 扩容机制</h3><p>当在两端插入元素且当前内存块已满时，<code>deque</code>会分配新的内存块，并在中央控制数组的首尾添加指向新块的指针。</p><p>若中央控制数组本身空间不足，则会重新分配一个更大的 Map，并将原有指针复制到新 Map 的中间位置（这有助于两端未来的平衡扩展），最后释放旧 Map。这种机制避免了 <code>vector</code>扩容时整体搬迁数据的高开销。</p><h3 id=-优缺点>⚖️ 优缺点</h3><p><strong>优点</strong>：</p><ul><li><strong>高效的双端操作</strong>：在序列开头和末尾添加/移除元素的时间复杂度为 O(1)。</li><li><strong>高效的随机访问</strong>：支持通过索引直接访问元素，时间复杂度为 O(1)（虽比 <code>vector</code>稍慢）。</li><li><strong>按需扩容</strong>：扩容成本相对 <code>vector</code>更低，不需要搬移所有元素。</li></ul><p><strong>缺点</strong>：</p><ul><li><strong>相对昂贵的随机访问</strong>：虽然时间复杂度是 O(1)，但需要先计算元素所在的块和块内偏移，实际速度通常比 <code>vector</code>慢。</li><li><strong>迭代器失效复杂</strong>：在进行插入、删除操作时，迭代器失效的规则比 <code>vector</code>和 <code>list</code>更复杂，需要特别注意。</li><li><strong>内存相对分散</strong>：虽然比 <code>list</code>紧凑，但不如 <code>vector</code>完全连续，缓存局部性通常不如 <code>vector</code>。</li></ul><h3 id=-典型应用>🎯 典型应用</h3><p><code>deque</code>非常适合以下场景：</p><ul><li><strong>实现标准库的栈 (<code>stack</code>) 和队列 (<code>queue</code>)</strong>：这正是 <code>deque</code>在 STL 中最主要的用途，因为它完美适配了它们只在两端操作的需求，并且效率高。</li><li><strong>滑动窗口算法</strong>：例如计算滑动窗口最大值。</li><li><strong>需要频繁在序列两端进行添加和删除操作</strong>，同时又偶尔需要随机访问。</li></ul><h3 id=-总结-1>💡 总结</h3><p>简单来说，你可以把 <code>deque</code>想象成一个<strong>动态的多页笔记本</strong>。每一页（内存块）是连续书写的，页与页之间不需要连续存放。目录（中央控制数组）记录了每一页的起始位置。要找到某个位置的内容，先通过目录定位到页，再在该页找到具体内容。添加新内容时，如果当前页写满了，就直接新开一页，并在目录中更新，无需重抄所有旧内容。</p><p>这种设计是 <code>vector</code>（一整本连续装订的笔记本，改写开头麻烦）和 <code>list</code>（每句话都单独写在一张卡片上，查找慢）的一种折衷。</p><h2 id=deque-upper_bound--lower_bound-complexity>Deque upper_bound & lower_bound complexity</h2><p>在 C++ 中，对 <code>deque</code>（双端队列）使用 <code>lower_bound</code>和 <code>upper_bound</code>算法时，其<strong>时间复杂度为 O(log n)</strong>，其中 n 是 <code>deque</code>中的元素数量。</p><p>下面是关于这个问题的详细说明：</p><h3 id=-复杂度细节>🔍 复杂度细节</h3><p><code>lower_bound</code>和 <code>upper_bound</code>是 C++ 标准模板库 (STL) 中定义在 <code>&lt;algorithm></code>头文件里的算法。它们基于<strong>二分查找</strong> (Binary Search) 原理工作，这要求范围内的元素必须已经排序。</p><p>虽然 <code>deque</code>在内存中的物理存储是<strong>分段连续</strong>的（由多个固定大小的内存块和中控映射表组成），但其迭代器是<strong>随机访问迭代器</strong> (Random Access Iterator)。这意味着迭代器可以像指针一样在常数时间内进行加减运算（例如 <code>it + n</code>），从而满足二分查找算法对迭代器类别的要求。</p><p>因此，即使在 <code>deque</code>这种结构稍复杂的容器上，<code>lower_bound</code>和 <code>upper_bound</code>也能保持对数级别的时间复杂度。</p><h3 id=-注意事项-2>⚠️ 注意事项</h3><ul><li><strong>序列必须有序</strong>：<code>lower_bound</code>和 <code>upper_bound</code>都<strong>必须在已排序的序列上使用</strong>，否则结果是未定义的。</li><li><strong>实际性能可能略低于 <code>vector</code></strong>：尽管时间复杂度相同，但由于 <code>deque</code>的分段连续存储结构导致其缓存局部性 (Cache Locality) 通常不如 <code>vector</code>那样完全连续的内存布局，因此在<strong>实际运行时间上可能会比 <code>vector</code>稍慢一些</strong>（大约慢 10%-30%）。在对性能极其敏感的场景下，这一点可能需要考虑。</li><li><strong>迭代器失效</strong>：需要注意，对 <code>deque</code>进行头尾插入或删除操作可能导致迭代器局部失效，进行中间插入、删除或排序操作则可能使所有迭代器失效。因此，在调用 <code>lower_bound</code>或 <code>upper_bound</code>后，如果修改了 <code>deque</code>，之前获取的迭代器可能需要重新计算。</li></ul><h3 id=-对比其他容器>📊 对比其他容器</h3><div class=table-wrapper><table><thead><tr><th>容器 (Container)</th><th><code>lower_bound</code>/ <code>upper_bound</code>时间复杂度</th><th>说明</th></tr></thead><tbody><tr><td><strong><code>deque</code></strong></td><td><strong>O(log n)</strong></td><td>随机访问迭代器，支持二分查找。</td></tr><tr><td><strong><code>vector</code></strong></td><td><strong>O(log n)</strong></td><td>随机访问迭代器，缓存友好，通常实际性能最佳。</td></tr><tr><td><strong><code>set</code></strong> / <strong><code>multiset</code></strong></td><td><strong>O(log n)</strong></td><td>本身是有序的，其内置的 <code>lower_bound</code>成员函数效率很高。</td></tr><tr><td><strong><code>list</code></strong></td><td><strong>O(n)</strong></td><td>仅支持双向迭代器，无法随机访问，只能顺序查找。</td></tr></tbody></table></div><h3 id=-使用示例>💡 使用示例</h3><pre tabindex=0><code>#include &lt;iostream&gt;
+#include &lt;deque&gt;
+#include &lt;algorithm&gt;
+
+int main() {
+    std::deque&lt;int&gt; dq = {1, 2, 4, 4, 5, 7, 8}; // 必须已排序
+
+    // 查找第一个 &gt;= 4 的元素
+    auto lb = std::lower_bound(dq.begin(), dq.end(), 4);
+    if (lb != dq.end()) {
+        std::cout &lt;&lt; &#34;lower_bound points to: &#34; &lt;&lt; *lb &lt;&lt; &#34; at index &#34; &lt;&lt; (lb - dq.begin()) &lt;&lt; std::endl;
+    }
+
+    // 查找第一个 &gt; 4 的元素
+    auto ub = std::upper_bound(dq.begin(), dq.end(), 4);
+    if (ub != dq.end()) {
+        std::cout &lt;&lt; &#34;upper_bound points to: &#34; &lt;&lt; *ub &lt;&lt; &#34; at index &#34; &lt;&lt; (ub - dq.begin()) &lt;&lt; std::endl;
+    }
+
+    // 计算元素4的出现次数
+    int count_4 = std::upper_bound(dq.begin(), dq.end(), 4) - std::lower_bound(dq.begin(), dq.end(), 4);
+    std::cout &lt;&lt; &#34;Number of 4: &#34; &lt;&lt; count_4 &lt;&lt; std::endl;
+
+    return 0;
+}
+</code></pre><p>希望这些信息能帮助你。如果你还有其他关于 C++ 的问题，我很乐意为你解答。</p><h2 id=upper_bound--lower_bound>Upper_bound & lower_bound</h2><p>lower_bound 和 upper_bound 是 C++ 标准库 <algorithm>中提供的两种基于二分查找的算法函数，用于在<strong>已排序</strong>的序列（如数组、vector、deque 等）中快速查找元素。要理解它们的区别，可以记住一个核心概念：<strong><code>lower_bound</code>找的是第一个‘不小于’目标值的位置，而 <code>upper_bound</code>找的是第一个‘大于’目标值的位置</strong>。</p><p>下面这个表格汇总了它们的主要区别，帮助你快速理解：</p><div class=table-wrapper><table><thead><tr><th>特性</th><th><code>std::lower_bound</code></th><th><code>std::upper_bound</code></th></tr></thead><tbody><tr><td><strong>比较条件</strong></td><td>第一个 <strong>≥</strong> (大于等于) 目标值的元素</td><td>第一个 <strong>></strong> (严格大于) 目标值的元素</td></tr><tr><td><strong>目标值存在时</strong></td><td>返回<strong>第一个</strong>匹配元素的迭代器</td><td>返回<strong>最后一个匹配元素之后</strong>的迭代器</td></tr><tr><td><strong>目标值不存在时</strong></td><td>返回第一个大于目标值的元素的迭代器</td><td>返回第一个大于目标值的元素的迭代器</td></tr><tr><td><strong>典型应用</strong></td><td>查找插入点以保持升序、判断元素是否存在</td><td>确定元素范围的结束位置、统计元素个数</td></tr></tbody></table></div><h3 id=-函数说明>🔍 函数说明</h3><ul><li><strong><code>std::lower_bound</code></strong>:<ul><li>在有序序列中查找<strong>第一个不小于</strong>（即大于等于）给定值的元素。</li><li>如果找到等于目标值的元素，则返回指向<strong>第一个</strong>该元素的迭代器。</li><li>如果所有元素都小于目标值，则返回 <code>end</code>迭代器。</li></ul></li><li><strong><code>std::upper_bound</code></strong>:<ul><li>在有序序列中查找<strong>第一个大于</strong>给定值的元素。</li><li>如果存在等于目标值的元素，则返回指向<strong>最后一个该元素之后</strong>的迭代器。</li><li>如果所有元素都不大于目标值，则返回 <code>end</code>迭代器。</li></ul></li></ul><h3 id=-时间复杂度与前提>⏱ 时间复杂度与前提</h3><ul><li><strong>时间复杂度</strong>：两者均为 <strong>O(log n)</strong>，因为其底层基于二分查找实现。</li><li><strong>前提条件</strong>：所查找的序列必须<strong>已经按升序排列</strong>（或按照你提供的比较规则排序）。如果序列未排序，结果将是未定义的。</li></ul><h3 id=-基本用法>🛠 基本用法</h3><pre tabindex=0><code>#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    std::vector&lt;int&gt; vec = {1, 2, 4, 4, 5, 7, 8}; // 必须已排序
+
+    // 使用 lower_bound 查找第一个 &gt;= 4 的元素
+    auto low = std::lower_bound(vec.begin(), vec.end(), 4);
+    std::cout &lt;&lt; &#34;lower_bound 指向索引: &#34; &lt;&lt; (low - vec.begin()) &lt;&lt; &#34;, 值: &#34; &lt;&lt; *low &lt;&lt; std::endl; // 输出 2, 4
+
+    // 使用 upper_bound 查找第一个 &gt; 4 的元素
+    auto up = std::upper_bound(vec.begin(), vec.end(), 4);
+    std::cout &lt;&lt; &#34;upper_bound 指向索引: &#34; &lt;&lt; (up - vec.begin()) &lt;&lt; &#34;, 值: &#34; &lt;&lt; *up &lt;&lt; std::endl; // 输出 4, 5
+
+    return 0;
+}
+</code></pre><h3 id=-常见应用场景>🎯 常见应用场景</h3><ol><li><p><strong>统计元素出现次数</strong></p><p>通过计算 <code>upper_bound</code>和 <code>lower_bound</code>的差值，可以快速得知某个值在有序序列中出现的次数。</p><pre tabindex=0><code>int target = 4;
+int count = std::upper_bound(vec.begin(), vec.end(), target) 
+          - std::lower_bound(vec.begin(), vec.end(), target);
+std::cout &lt;&lt; &#34;数字 &#34; &lt;&lt; target &lt;&lt; &#34; 出现了 &#34; &lt;&lt; count &lt;&lt; &#34; 次。&#34;; // 输出 2 次
+</code></pre></li><li><p><strong>在有序序列中插入元素</strong></p><p>希望插入新元素后序列仍保持有序，可以使用 <code>upper_bound</code>或 <code>lower_bound</code>来查找合适的插入位置。</p><ul><li>使用 <code>upper_bound</code>查找插入点，新元素会插入到所有相同值的后面。</li></ul><pre tabindex=0><code>int new_val = 4;
+auto insert_pos = std::upper_bound(vec.begin(), vec.end(), new_val); 
+vec.insert(insert_pos, new_val); // 插入后 vec: {1, 2, 4, 4, 4, 5, 7, 8}
+</code></pre><ul><li>使用 <code>lower_bound</code>查找插入点，新元素会插入到所有相同值的前面。</li></ul><pre tabindex=0><code>auto insert_pos = std::lower_bound(vec.begin(), vec.end(), new_val); 
+vec.insert(insert_pos, new_val); // 插入后 vec: {1, 2, 4, 4, 4, 5, 7, 8} (结果相同，因原值存在)
+</code></pre></li><li><p><strong>检查元素是否存在</strong></p><p>可以结合 <code>lower_bound</code>来检查元素是否存在于有序序列中。</p><pre tabindex=0><code>int target = 6;
+auto it = std::lower_bound(vec.begin(), vec.end(), target);
+if (it != vec.end() &amp;&amp; *it == target) {
+    std::cout &lt;&lt; &#34;元素 &#34; &lt;&lt; target &lt;&lt; &#34; 找到了。&#34;;
+} else {
+    std::cout &lt;&lt; &#34;元素 &#34; &lt;&lt; target &lt;&lt; &#34; 未找到。&#34;;
+}
+</code></pre></li><li><p><strong>处理降序序列或自定义比较</strong></p><p>当序列为降序排列，或者元素是自定义类型时，需要提供相应的比较函数。</p><pre tabindex=0><code>std::vector&lt;int&gt; descending_vec = {10, 8, 5, 5, 2, 1}; // 降序
+int target = 5;
+// 使用 greater&lt;int&gt;() 显式指定比较规则
+auto low_desc = std::lower_bound(descending_vec.begin(), descending_vec.end(), target, std::greater&lt;int&gt;());
+std::cout &lt;&lt; &#34;在降序序列中，第一个小于等于 &#34; &lt;&lt; target &lt;&lt; &#34; 的元素是: &#34; &lt;&lt; *low_desc; // 输出 5
+</code></pre></li></ol><h3 id=-注意事项-3>⚠️ 注意事项</h3><ul><li><strong>务必保证有序</strong>：使用前必须确保序列已按你指定的比较规则排序，否则结果不可预测。</li><li><strong>迭代器有效性</strong>：返回的迭代器在使用前（如解引用）应注意检查是否等于 <code>end()</code>，避免越界。</li><li><strong>自定义比较函数的一致性</strong>：如果序列排序时使用了自定义比较函数，那么在调用 <code>lower_bound</code>和 <code>upper_bound</code>时也必须使用<strong>相同的比较规则</strong>。</li></ul><h3 id=-替代与辅助函数>📚 替代与辅助函数</h3><ul><li><strong><code>std::equal_range</code></strong>：这个函数会返回一个 <code>pair</code>，其 <code>first</code>和 <code>second</code>分别相当于对相同值调用 <code>lower_bound</code>和 <code>upper_bound</code>的结果。当你需要同时获取一个值的起始和结束范围时，用它更方便。</li></ul><p>希望这些信息能帮助你。如果你还有其他关于 C++ 的问题，我很乐意为你解答。</p><h2 id=vector-建堆>vector 建堆</h2><p>是的，C++ 中的 <code>std::priority_queue</code>完全可以传入一个 <code>vector</code>来初始化建堆。这是一种非常高效且常见的用法，可以直接将现有容器中的数据批量转换为堆结构。</p><p>下面是一个表格，帮助你快速了解几种常见的初始化方式：</p><div class=table-wrapper><table><thead><tr><th>初始化方式</th><th>代码示例</th></tr></thead><tbody><tr><td>使用 vector 的迭代器范围</td><td><code>priority_queue&lt;int> pq(vec.begin(), vec.end());</code></td></tr><tr><td>指定构建最小堆</td><td><code>priority_queue&lt;int, vector&lt;int>, greater&lt;int>> pq(vec.begin(), vec.end());</code></td></tr><tr><td>使用默认构造函数，然后逐个插入</td><td><code>priority_queue&lt;int> pq; for(int num : vec) { pq.push(num); }</code></td></tr></tbody></table></div><h3 id=-详细用法与原理>💡 详细用法与原理</h3><ol><li><p><strong>高效建堆</strong>：使用迭代器范围构造 <code>priority_queue</code>时，底层会调用 <code>make_heap</code>算法进行批量建堆，其时间复杂度为 <strong>O(n)</strong>，这比逐个调用 <code>push()</code>方法的 <strong>O(n log n)</strong> 要高效得多。因此，当你已经拥有全部数据时，推荐使用这种方式。</p></li><li><p><strong>默认行为</strong>：默认情况下，<code>priority_queue</code>会构建一个<strong>大顶堆</strong>（最大堆），即堆顶元素是最大的。这是因为其默认的比较标准是 <code>std::less&lt;T></code>，它会使数值较大的元素拥有更高的优先级。</p></li><li><p><strong>构建小顶堆</strong>：如果你想构建一个<strong>小顶堆</strong>（最小堆），让最小的元素位于堆顶，需要在声明时显式指定三个模板参数，特别是将比较标准改为 <code>std::greater&lt;T></code>。语法如下：</p><pre tabindex=0><code>#include &lt;queue&gt;
+#include &lt;vector&gt;
+#include &lt;functional&gt; // 需要包含此头文件以使用 std::greater
+
+std::vector&lt;int&gt; vec = {5, 2, 8, 1};
+// 构建小顶堆
+std::priority_queue&lt;int, std::vector&lt;int&gt;, std::greater&lt;int&gt;&gt; min_pq(vec.begin(), vec.end());
+</code></pre></li></ol><h3 id=-实际代码示例>🛠️ 实际代码示例</h3><pre tabindex=0><code>#include &lt;iostream&gt;
+#include &lt;queue&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+int main() {
+    // 1. 使用 vector 初始化一个大顶堆
+    vector&lt;int&gt; myVec = {3, 1, 4, 1, 5, 9};
+    priority_queue&lt;int&gt; max_heap(myVec.begin(), myVec.end());
+
+    cout &lt;&lt; &#34;大顶堆（默认）出队顺序: &#34;;
+    while (!max_heap.empty()) {
+        cout &lt;&lt; max_heap.top() &lt;&lt; &#34; &#34;; // 输出：9 5 4 3 1 1
+        max_heap.pop();
+    }
+    cout &lt;&lt; endl;
+
+    // 2. 使用 vector 初始化一个小顶堆
+    priority_queue&lt;int, vector&lt;int&gt;, greater&lt;int&gt;&gt; min_heap(myVec.begin(), myVec.end());
+
+    cout &lt;&lt; &#34;小顶堆出队顺序: &#34;;
+    while (!min_heap.empty()) {
+        cout &lt;&lt; min_heap.top() &lt;&lt; &#34; &#34;; // 输出：1 1 3 4 5 9
+        min_heap.pop();
+    }
+    cout &lt;&lt; endl;
+
+    return 0;
+}
+</code></pre><h3 id=-重要注意事项-1>⚠️ 重要注意事项</h3><ul><li><strong>底层容器</strong>：<code>priority_queue</code>是一个容器适配器，它默认使用 <code>vector</code>作为其底层容器来存储数据。你也可以选择 <code>deque</code>，但不能使用 <code>list</code>，因为建堆算法需要随机访问迭代器。</li><li><strong>自定义类型</strong>：如果你的 <code>vector</code>中存储的是自定义的数据类型（如结构体或类），则需要在该类型中重载 <code>&lt;</code>运算符（对于大顶堆）或 <code>></code>运算符（对于小顶堆），或者提供一个自定义的比较函数对象，以便 <code>priority_queue</code>知道如何比较元素的优先级。</li></ul><p>希望这些信息能帮助你更好地使用 <code>priority_queue</code>。如果你对自定义类型的比较方式有疑问，或者想了解更高级的用法，我可以提供进一步的例子。</p><h2 id=移动语义>移动语义</h2><p>是的，在满足特定条件时，<code>std::priority_queue</code>确实会<strong>自动使用移动语义</strong>来提升性能，尤其是在使用 <code>vector</code>进行初始化或日常操作时。这主要取决于你传递的是左值还是右值。</p><p>为了让你快速了解不同操作下的语义选择，请看下表：</p><div class=table-wrapper><table><thead><tr><th>操作场景</th><th>语义选择</th><th>说明</th></tr></thead><tbody><tr><td>使用命名 <code>vector</code>初始化 (如 <code>myVec</code>)</td><td><strong>拷贝语义</strong></td><td>源容器 <code>myVec</code>之后仍需使用，故进行拷贝。</td></tr><tr><td>使用临时 <code>vector</code>初始化 (如函数返回值)</td><td><strong>自动移动语义</strong></td><td>识别为右值，自动移动，效率高。</td></tr><tr><td>使用 <code>std::move(myVec)</code>初始化</td><td><strong>强制移动语义</strong></td><td>明确转移资源，此后 <code>myVec</code>变为空。</td></tr><tr><td><code>push()</code>传入临时对象</td><td><strong>自动移动语义</strong></td><td>识别为右值，自动调用 <code>push(T&&)</code>。</td></tr><tr><td><code>push()</code>传入命名对象</td><td><strong>拷贝语义</strong></td><td>源对象之后仍需使用，故进行拷贝。</td></tr><tr><td><code>emplace()</code>传入参数</td><td><strong>原位构造</strong></td><td>直接在容器内构造对象，避免拷贝和移动。</td></tr></tbody></table></div><h3 id=-代码示例初始化与操作>💻 代码示例：初始化与操作</h3><p>下面的代码展示了不同情况下移动语义的应用：</p><pre tabindex=0><code>#include &lt;queue&gt;
+#include &lt;vector&gt;
+#include &lt;utility&gt; // for std::move
+
+int main() {
+    std::vector&lt;int&gt; data = {5, 1, 8, 3};
+
+    // 场景1：拷贝语义 - 使用已存在的命名vector初始化
+    std::priority_queue&lt;int&gt; pq1(data); // data 被拷贝，此后 data 仍可正常使用
+    // 此时 data.size() 仍为 4
+
+    // 场景2：移动语义 - 使用std::move强制移动
+    std::priority_queue&lt;int&gt; pq2(std::move(data)); // data 的资源被转移给 pq2
+    // 此后 data 为空，data.size() 变为 0
+
+    // 场景3：自动移动语义 - 使用临时vector（右值）初始化
+    std::priority_queue&lt;int&gt; pq3(std::vector&lt;int&gt;{9, 2, 7}); // 自动移动，高效
+
+    // 日常操作中的移动语义
+    std::priority_queue&lt;int&gt; pq;
+
+    // 拷贝：因为 value 是左值
+    int value = 10;
+    pq.push(value);
+
+    // 自动移动：因为 std::move(value) 将左值转换为右值
+    pq.push(std::move(value));
+
+    // 自动移动：因为临时对象是右值
+    pq.push(20);
+
+    // 最佳选择：原位构造，避免创建临时对象
+    pq.emplace(30);
+
+    return 0;
+}
+</code></pre><h3 id=-重要注意事项-2>⚠️ 重要注意事项</h3><p>使用移动语义时，有两点需要特别注意：</p><ol><li><strong>对象状态</strong>：一旦一个容器（如 <code>vector</code>）被移动，它的资源（即内存所有权）就转移到了新的 <code>priority_queue</code>中。<strong>源容器将变为空</strong>，不再持有原来的数据。因此，除非你确定不再需要源容器的内容，否则不要轻易使用 <code>std::move</code>。</li><li><strong>触发条件</strong>：移动语义的自动触发依赖于<strong>右值</strong>。对于命名变量，如果你希望移动它，必须使用 <code>std::move()</code>将其显式转换为右值引用。</li></ol><h3 id=-最佳实践建议>💡 最佳实践建议</h3><p>为了编写出更高效、更现代的 C++ 代码，建议你：</p><ul><li><strong>优先使用 <code>emplace</code></strong>：当需要向容器中添加新元素，尤其是自定义类型的对象时，<code>emplace</code>函数可以直接在容器内部使用给定的参数构造对象，从而避免创建临时对象，比 <code>push</code>更高效。</li><li><strong>善用移动初始化</strong>：当你有一个不再需要的 <code>vector</code>，并且想用它来初始化 <code>priority_queue</code>时，使用 <code>std::move</code>进行移动初始化是性能最佳的选择。</li></ul><p>希望这些解释和示例能帮助你更好地理解 <code>priority_queue</code>中的移动语义。如果你还有其他疑问，随时可以提出。</p><h2 id=迭代器初始化>迭代器初始化</h2><p>关于使用迭代器初始化 <code>std::priority_queue</code>时是否会自动移动元素，核心答案是：<strong>不会自动移动元素，而是进行拷贝</strong>。使用迭代器范围初始化时，数据会从源容器复制到 <code>priority_queue</code>自己的底层容器中。</p><h3 id=-原理与原因>🔍 原理与原因</h3><p><code>std::priority_queue</code>的迭代器范围构造函数是通过遍历您提供的迭代器范围，并将每个元素<strong>拷贝</strong>到其底层容器（默认是 <code>std::vector</code>）来实现的。这个过程可以简化为：</p><pre tabindex=0><code>template&lt;class InputIterator&gt;
+priority_queue(InputIterator first, InputIterator last) {
+    // 遍历迭代器范围，将元素拷贝到内部的容器中
+    while (first != last) {
+        _con.push_back(*first); // 这里是拷贝，因为 *first 是左值
+        ++first;
+    }
+    // ... 然后进行建堆操作 ...
+}
+</code></pre><p>之所以采用拷贝而非移动，主要出于安全性和通用性的考虑。构造函数无法确定这些迭代器背后的源容器是否之后还需要被使用。如果贸然进行移动，可能会使源容器处于一种不确定的状态（例如元素被“掏空”），导致后续程序出现未定义行为。因此，拷贝是默认的、更安全的选择。</p><h3 id=-如何实现移动初始化>⚡ 如何实现移动初始化</h3><p>如果您明确知道源容器在初始化 <code>priority_queue</code>之后不再需要，并且希望提升性能（特别是当元素是昂贵的拷贝对象时），您可以主动使用 <code>std::move</code>来将源容器<strong>整体</strong>传递给 <code>priority_queue</code>的构造函数。这会触发移动语义。</p><p>具体做法是使用 <code>std::move</code>将整个源容器作为右值引用传递：</p><pre tabindex=0><code>#include &lt;queue&gt;
+#include &lt;vector&gt;
+#include &lt;utility&gt; // for std::move
+
+int main() {
+    std::vector&lt;int&gt; myVec = {1, 2, 3, 4, 5};
+
+    // 方法：使用 std::move 将整个vector移动给priority_queue
+    std::priority_queue&lt;int&gt; pq(std::move(myVec));
+
+    // 注意：此时 myVec 可能为空，不应再使用
+    // std::cout &lt;&lt; myVec.size(); // 可能是 0
+
+    return 0;
+}
+</code></pre><p>这种方式直接使用容器对象（如 <code>std::vector</code>）进行构造，而不是迭代器范围。<code>priority_queue</code>有一个接受容器右值引用的构造函数，此时会调用底层容器的移动构造函数，从而高效地转移资源所有权。</p><h3 id=-核心要点与建议>💡 核心要点与建议</h3><p>为了帮助您更好地理解和使用，这里总结一下关键点：</p><div class=table-wrapper><table><thead><tr><th>初始化方式</th><th>语义</th><th>性能</th><th>源容器状态</th></tr></thead><tbody><tr><td>使用迭代器范围 (如 <code>vec.begin(), vec.end()</code>)</td><td><strong>拷贝</strong></td><td>相对较慢，O(N)</td><td>保持不变，可继续使用</td></tr><tr><td>使用 <code>std::move(整个容器)</code></td><td><strong>移动</strong></td><td>高效，O(1) (通常)</td><td>被移空，状态有效但不可预知，不应再使用</td></tr></tbody></table></div><p><strong>最佳实践建议：</strong></p><ul><li><strong>需要保留源容器</strong>：使用迭代器范围初始化。这是最安全、最常用的方式。</li><li><strong>不需要保留源容器</strong>：使用 <code>std::move(容器)</code>进行初始化。这可以避免不必要的拷贝，提升性能，尤其是在处理大型对象或自定义类型时。</li><li><strong>使用 <code>emplace</code>添加新元素</strong>：当需要向已存在的 <code>priority_queue</code>中添加新元素时，特别是对于自定义类型，优先使用 <code>emplace</code>函数，它可以直接在容器内构造对象，避免创建临时对象，从而可能避免拷贝或移动。</li></ul><p>希望这个解释能帮助您清晰地理解 <code>priority_queue</code>初始化时的行为！如果您还有其他关于 C++ 标准库容器的问题，我很乐意继续为您解答。</p></section><footer class=article-footer><section class=article-tags><a href=/tags/leetcode-c/>LeetCode-C</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section><section class=article-lastmod><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<span>Last updated on Sep 30, 2025 19:46 CST</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>Related content</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/opensourcesm2-cipher/><div class=article-details><h2 class=article-title>【OpenSource】SM2 Cipher</h2></div></a></article><article><a href=/p/databasetest/><div class=article-details><h2 class=article-title>【DataBase】Test</h2></div></a></article><article><a href=/p/shopeeannotations/><div class=article-details><h2 class=article-title>【Shopee】Annotations</h2></div></a></article><article><a href=/p/shopeethread/><div class=article-details><h2 class=article-title>【Shopee】Thread</h2></div></a></article><article><a href=/p/shopeejava-parser/><div class=article-details><h2 class=article-title>【Shopee】Java Parser</h2></div></a></article></div></div></aside><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//hugo-theme-stack.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2025 飞鸿踏雪泥</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.30.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

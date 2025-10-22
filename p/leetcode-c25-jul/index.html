@@ -1,0 +1,983 @@
+<!doctype html><html lang=en-us dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='随机数 以下是C++中随机数生成的系统介绍，涵盖传统方法、现代库、分布类型及实践建议：\n🔧 传统方法：rand()与srand() 基本原理 rand() 生成 0 到 RAND_MAX （通常为32767）的伪随机整数。需配合 srand(seed) 设置种子，否则每次运行序列相同。 #include <cstdlib> #include <ctime> int main() { srand(time(nullptr)); // 时间作为种子 int num = rand() % 100; // 生成0-99的随机数[2,5](@ref) float frac = rand() / static_cast<float>(RAND_MAX); // [0,1)浮点数[1](@ref) } 局限性 分布不均匀（模运算导致低位重复）7 随机性质量低，周期短，不适合加密或高精度模拟6,8。 ⚙️ 现代C++11随机数库（<random>） 核心组件 组件类型 代表类/引擎 特点 随机数引擎 std::mt19937 (梅森旋转) 高质量、长周期(2^19937-1)，适合多数场景1,8 std::minstd_rand (线性同余) 速度快，但周期较短 随机数分布器 uniform_int_distribution 均匀整数分布 normal_distribution 正态分布 种子源 std::random_device 基于硬件的真随机数（可能回退为伪随机）3,9 代码示例 #include <random> #include <iostream> int main() { std::random_device rd; // 硬件种子源 std::mt19937 gen(rd()); // 初始化梅森引擎 std::uniform_int_distribution<> dis(10, 20); // [10,20]整数 std::normal_distribution<> norm(0.0, 1.0); // 均值0, 标准差1 std::cout << dis(gen) << "\\n"; // 输出均匀分布随机数 std::cout << norm(gen) << "\\n"; // 输出正态分布随机数[3,8](@ref) } 📊 常用随机数分布类型 分布类型 类名 应用场景 示例代码 均匀分布（整数） std::uniform_int_distribution 抽奖、游戏事件 dis(gen) 生成区间内等概率整数7,9 均匀分布（浮点） std::uniform_real_distribution 模拟连续现象（如物理运动） dis(1.0, 2.0) 生成(1.0, 2.0)浮点数3 正态分布 std::normal_distribution 统计学、自然现象模拟（身高、误差） norm(gen) 生成高斯分布随机数2,8 伯努利分布 std::bernoulli_distribution 二值事件（如抛硬币） dis(gen) 返回true的概率为0.63 ⚠️ 关键实践建议 种子管理 避免固定种子（如 srand(0)），优先用 std::random_device 或 time(nullptr)6,9。 多次生成时重用引擎对象，而非重复创建（避免性能开销）8。 性能优化 轻量场景可用 std::minstd_rand；高要求场景用 std::mt199373,6。 分布对象构造成本低，可重复使用。 常见陷阱 传统 rand() % N 在 N 非 RAND_MAX+1 因子时分布不均7。 浮点数范围错误：rand() / RAND_MAX 结果为整数除法，需显式转浮点1。 🎯 应用场景 游戏开发：敌人行为、道具掉落（均匀分布）8 科学模拟：蒙特卡洛方法（正态分布）6 密码学：密钥生成（需结合 std::random_device）8 数据增强：机器学习数据集扩充（随机扰动）8 💎 总结 基础需求：用 rand() + srand(time(nullptr)) 快速实现。 高质量需求：必选 <random> 库，组合引擎（如 mt19937）与分布器（如 uniform_int_distribution）。 特殊分布：直接使用正态、伯努利等高级分布器简化代码3,8。 完整代码示例及进阶技巧可参考：C++随机数生成技术详解6；现代C++随机数应用8。\n'><title>【LeetCode-C】25-Jul</title><link rel=canonical href=https://dyhes.github.io/p/leetcode-c25-jul/><link rel=stylesheet href=/scss/style.min.f7091bff8043bd3e53b22be6c05dd86b506e8dec4d0d75d249d2dfb0fe074a46.css><meta property='og:title' content="【LeetCode-C】25-Jul"><meta property='og:description' content='随机数 以下是C++中随机数生成的系统介绍，涵盖传统方法、现代库、分布类型及实践建议：\n🔧 传统方法：rand()与srand() 基本原理 rand() 生成 0 到 RAND_MAX （通常为32767）的伪随机整数。需配合 srand(seed) 设置种子，否则每次运行序列相同。 #include <cstdlib> #include <ctime> int main() { srand(time(nullptr)); // 时间作为种子 int num = rand() % 100; // 生成0-99的随机数[2,5](@ref) float frac = rand() / static_cast<float>(RAND_MAX); // [0,1)浮点数[1](@ref) } 局限性 分布不均匀（模运算导致低位重复）7 随机性质量低，周期短，不适合加密或高精度模拟6,8。 ⚙️ 现代C++11随机数库（<random>） 核心组件 组件类型 代表类/引擎 特点 随机数引擎 std::mt19937 (梅森旋转) 高质量、长周期(2^19937-1)，适合多数场景1,8 std::minstd_rand (线性同余) 速度快，但周期较短 随机数分布器 uniform_int_distribution 均匀整数分布 normal_distribution 正态分布 种子源 std::random_device 基于硬件的真随机数（可能回退为伪随机）3,9 代码示例 #include <random> #include <iostream> int main() { std::random_device rd; // 硬件种子源 std::mt19937 gen(rd()); // 初始化梅森引擎 std::uniform_int_distribution<> dis(10, 20); // [10,20]整数 std::normal_distribution<> norm(0.0, 1.0); // 均值0, 标准差1 std::cout << dis(gen) << "\\n"; // 输出均匀分布随机数 std::cout << norm(gen) << "\\n"; // 输出正态分布随机数[3,8](@ref) } 📊 常用随机数分布类型 分布类型 类名 应用场景 示例代码 均匀分布（整数） std::uniform_int_distribution 抽奖、游戏事件 dis(gen) 生成区间内等概率整数7,9 均匀分布（浮点） std::uniform_real_distribution 模拟连续现象（如物理运动） dis(1.0, 2.0) 生成(1.0, 2.0)浮点数3 正态分布 std::normal_distribution 统计学、自然现象模拟（身高、误差） norm(gen) 生成高斯分布随机数2,8 伯努利分布 std::bernoulli_distribution 二值事件（如抛硬币） dis(gen) 返回true的概率为0.63 ⚠️ 关键实践建议 种子管理 避免固定种子（如 srand(0)），优先用 std::random_device 或 time(nullptr)6,9。 多次生成时重用引擎对象，而非重复创建（避免性能开销）8。 性能优化 轻量场景可用 std::minstd_rand；高要求场景用 std::mt199373,6。 分布对象构造成本低，可重复使用。 常见陷阱 传统 rand() % N 在 N 非 RAND_MAX+1 因子时分布不均7。 浮点数范围错误：rand() / RAND_MAX 结果为整数除法，需显式转浮点1。 🎯 应用场景 游戏开发：敌人行为、道具掉落（均匀分布）8 科学模拟：蒙特卡洛方法（正态分布）6 密码学：密钥生成（需结合 std::random_device）8 数据增强：机器学习数据集扩充（随机扰动）8 💎 总结 基础需求：用 rand() + srand(time(nullptr)) 快速实现。 高质量需求：必选 <random> 库，组合引擎（如 mt19937）与分布器（如 uniform_int_distribution）。 特殊分布：直接使用正态、伯努利等高级分布器简化代码3,8。 完整代码示例及进阶技巧可参考：C++随机数生成技术详解6；现代C++随机数应用8。\n'><meta property='og:url' content='https://dyhes.github.io/p/leetcode-c25-jul/'><meta property='og:site_name' content='飞鸿踏雪泥'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='LeetCode-C'><meta property='article:published_time' content='2025-07-02T00:00:00+00:00'><meta property='article:modified_time' content='2025-07-31T19:25:11+08:00'><meta name=twitter:title content="【LeetCode-C】25-Jul"><meta name=twitter:description content='随机数 以下是C++中随机数生成的系统介绍，涵盖传统方法、现代库、分布类型及实践建议：\n🔧 传统方法：rand()与srand() 基本原理 rand() 生成 0 到 RAND_MAX （通常为32767）的伪随机整数。需配合 srand(seed) 设置种子，否则每次运行序列相同。 #include <cstdlib> #include <ctime> int main() { srand(time(nullptr)); // 时间作为种子 int num = rand() % 100; // 生成0-99的随机数[2,5](@ref) float frac = rand() / static_cast<float>(RAND_MAX); // [0,1)浮点数[1](@ref) } 局限性 分布不均匀（模运算导致低位重复）7 随机性质量低，周期短，不适合加密或高精度模拟6,8。 ⚙️ 现代C++11随机数库（<random>） 核心组件 组件类型 代表类/引擎 特点 随机数引擎 std::mt19937 (梅森旋转) 高质量、长周期(2^19937-1)，适合多数场景1,8 std::minstd_rand (线性同余) 速度快，但周期较短 随机数分布器 uniform_int_distribution 均匀整数分布 normal_distribution 正态分布 种子源 std::random_device 基于硬件的真随机数（可能回退为伪随机）3,9 代码示例 #include <random> #include <iostream> int main() { std::random_device rd; // 硬件种子源 std::mt19937 gen(rd()); // 初始化梅森引擎 std::uniform_int_distribution<> dis(10, 20); // [10,20]整数 std::normal_distribution<> norm(0.0, 1.0); // 均值0, 标准差1 std::cout << dis(gen) << "\\n"; // 输出均匀分布随机数 std::cout << norm(gen) << "\\n"; // 输出正态分布随机数[3,8](@ref) } 📊 常用随机数分布类型 分布类型 类名 应用场景 示例代码 均匀分布（整数） std::uniform_int_distribution 抽奖、游戏事件 dis(gen) 生成区间内等概率整数7,9 均匀分布（浮点） std::uniform_real_distribution 模拟连续现象（如物理运动） dis(1.0, 2.0) 生成(1.0, 2.0)浮点数3 正态分布 std::normal_distribution 统计学、自然现象模拟（身高、误差） norm(gen) 生成高斯分布随机数2,8 伯努利分布 std::bernoulli_distribution 二值事件（如抛硬币） dis(gen) 返回true的概率为0.63 ⚠️ 关键实践建议 种子管理 避免固定种子（如 srand(0)），优先用 std::random_device 或 time(nullptr)6,9。 多次生成时重用引擎对象，而非重复创建（避免性能开销）8。 性能优化 轻量场景可用 std::minstd_rand；高要求场景用 std::mt199373,6。 分布对象构造成本低，可重复使用。 常见陷阱 传统 rand() % N 在 N 非 RAND_MAX+1 因子时分布不均7。 浮点数范围错误：rand() / RAND_MAX 结果为整数除法，需显式转浮点1。 🎯 应用场景 游戏开发：敌人行为、道具掉落（均匀分布）8 科学模拟：蒙特卡洛方法（正态分布）6 密码学：密钥生成（需结合 std::random_device）8 数据增强：机器学习数据集扩充（随机扰动）8 💎 总结 基础需求：用 rand() + srand(time(nullptr)) 快速实现。 高质量需求：必选 <random> 库，组合引擎（如 mt19937）与分布器（如 uniform_int_distribution）。 特殊分布：直接使用正态、伯努利等高级分布器简化代码3,8。 完整代码示例及进阶技巧可参考：C++随机数生成技术详解6；现代C++随机数应用8。\n'><link rel="shortcut icon" href=/github.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label="Toggle Menu">
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu_b567f26f71c49c33.png width=300 height=300 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>飞鸿踏雪泥</a></h1><h2 class=site-description>没有记录，就没有发生</h2></div></header><ol class=menu-social><li><a href=https://leetcode.cn/u/dyhes/ target=_blank title=LeetCode rel=me><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 13h7.5"/><path d="M9.424 7.268l4.999-4.999"/><path d="M16.633 16.644l-2.402 2.415a3.189 3.189.0 01-4.524.0l-3.77-3.787a3.223 3.223.0 010-4.544l3.77-3.787a3.189 3.189.0 014.524.0l2.302 2.313"/></svg></a></li><li><a href=https://github.com/dyhes target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=mailto:dyheslin@gmail.com target=_blank title=Gmail rel=me><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-gmail"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16 20h3a1 1 0 001-1V5a1 1 0 00-1-1h-3v16z"/><path d="M5 20h3V4H5A1 1 0 004 5v14a1 1 0 001 1z"/><path d="M16 4l-4 4-4-4"/><path d="M4 6.5l8 7.5 8-7.5"/></svg></a></li><li><a href=mailto:1325574784@qq.com target=_blank title=Mail rel=me><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 19H5a2 2 0 01-2-2V7a2 2 0 012-2h14a2 2 0 012 2v5.5"/><path d="M3 7l9 6 9-6"/><path d="M19 16l-2 3h4l-2 3"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/about/><svg class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>About</span></a></li><li><a href=/categories/><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+<span>Categories</span></a></li><li><a href=/tags/><svg class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11 3l9 9a1.5 1.5.0 010 2l-6 6a1.5 1.5.0 01-2 0L3 11V7a4 4 0 014-4h4"/><circle cx="9" cy="9" r="2"/></svg>
+<span>Tags</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>Dark Mode</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">Table of contents</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#随机数>随机数</a><ol><li><a href=#-传统方法>🔧 <strong>传统方法：<code>rand()</code>与<code>srand()</code></strong></a></li><li><a href=#-现代c11随机数库>⚙️ <strong>现代C++11随机数库（<code>&lt;random></code>）</strong></a><ol><li><a href=#核心组件><strong>核心组件</strong></a></li><li><a href=#代码示例><strong>代码示例</strong></a></li></ol></li><li><a href=#-常用随机数分布类型>📊 <strong>常用随机数分布类型</strong></a></li><li><a href=#-关键实践建议>⚠️ <strong>关键实践建议</strong></a></li><li><a href=#-应用场景>🎯 <strong>应用场景</strong></a></li><li><a href=#-总结>💎 总结</a></li></ol></li><li><a href=#万能头>万能头</a><ol><li><a href=#-万能头文件是什么>🔍 <strong>万能头文件是什么？</strong></a></li><li><a href=#-优缺点分析>⚖️ <strong>优缺点分析</strong></a><ol><li><a href=#-优点>✅ <strong>优点</strong></a></li><li><a href=#-缺点>❌ <strong>缺点</strong></a></li></ol></li><li><a href=#-编译器支持情况>🌐 <strong>编译器支持情况</strong></a></li><li><a href=#-适用场景-vs-规避场景>🛠️ <strong>适用场景 vs 规避场景</strong></a></li><li><a href=#-替代方案>🔧 <strong>替代方案</strong></a></li><li><a href=#-实践建议>💎 <strong>实践建议</strong></a></li><li><a href=#-总结-1>📌 总结</a></li></ol></li><li><a href=#快排>快排</a><ol><li><a href=#-核心原理与指针定义>🔍 <strong>核心原理与指针定义</strong></a></li><li><a href=#-分区过程与代码实现>⚙️ <strong>分区过程与代码实现</strong></a><ol><li><a href=#左右指针法步骤><strong>左右指针法步骤</strong></a></li><li><a href=#快慢指针法步骤><strong>快慢指针法步骤</strong></a></li></ol></li><li><a href=#-效率与稳定性对比>⏱️ <strong>效率与稳定性对比</strong></a></li><li><a href=#-适用场景与选择建议>🎯 <strong>适用场景与选择建议</strong></a></li><li><a href=#-总结-2>💎 <strong>总结</strong></a></li></ol></li><li><a href=#三路快排>三路快排</a><ol><li><a href=#-算法思想与核心优势>🔍 <strong>算法思想与核心优势</strong></a><ol><li><a href=#三路划分原理><strong>三路划分原理</strong></a></li><li><a href=#核心优势><strong>核心优势</strong></a></li></ol></li><li><a href=#-分区过程与指针操作>⚙️ <strong>分区过程与指针操作</strong></a><ol><li><a href=#指针定义><strong>指针定义</strong></a></li><li><a href=#分区步骤><strong>分区步骤</strong></a></li><li><a href=#递归排序><strong>递归排序</strong></a></li></ol></li><li><a href=#-时间复杂度与空间复杂度>⏱️ <strong>时间复杂度与空间复杂度</strong></a></li><li><a href=#-性能优化技巧>🚀 <strong>性能优化技巧</strong></a></li><li><a href=#-与传统快排的对比>🆚 <strong>与传统快排的对比</strong></a></li><li><a href=#-代码实现c示例>💻 <strong>代码实现（C++示例）</strong></a></li><li><a href=#-适用场景>🎯 <strong>适用场景</strong></a></li><li><a href=#-总结-3>💎 <strong>总结</strong></a></li></ol></li><li><a href=#单调栈>单调栈</a><ol><li><a href=#-定义与基本特性>⚙️ 定义与基本特性</a></li><li><a href=#-核心原理与操作机制>🔍 核心原理与操作机制</a><ol><li><a href=#维护单调性的流程以单调递减栈为例>维护单调性的流程（以单调递减栈为例）</a></li></ol></li><li><a href=#-典型应用场景与问题解析>📊 典型应用场景与问题解析</a><ol><li><a href=#下一个更大元素nge><strong>下一个更大元素（NGE）</strong></a></li><li><a href=#接雨水问题><strong>接雨水问题</strong></a></li><li><a href=#柱状图最大矩形面积><strong>柱状图最大矩形面积</strong></a></li><li><a href=#每日温度问题><strong>每日温度问题</strong></a></li></ol></li><li><a href=#-实现模板与技巧>⚠️ 实现模板与技巧</a><ol><li><a href=#通用解题步骤>通用解题步骤：</a></li><li><a href=#常见错误>常见错误：</a></li></ol></li><li><a href=#-进阶应用与优化>🚀 进阶应用与优化</a></li><li><a href=#-总结与学习建议>💎 总结与学习建议</a></li></ol></li><li><a href=#单调队列>单调队列</a><ol><li><a href=#-定义与核心特性>⚙️ 定义与核心特性</a></li><li><a href=#-工作原理与操作流程>🔍 工作原理与操作流程</a><ol><li><a href=#入队操作维护单调性><strong>入队操作（维护单调性）</strong></a></li><li><a href=#出队操作维护窗口范围><strong>出队操作（维护窗口范围）</strong></a></li><li><a href=#查询操作获取极值><strong>查询操作（获取极值）</strong></a></li><li><a href=#操作流程示例滑动窗口最大值><strong>操作流程示例（滑动窗口最大值）</strong></a></li></ol></li><li><a href=#-典型应用场景>📊 典型应用场景</a><ol><li><a href=#滑动窗口极值问题><strong>滑动窗口极值问题</strong></a></li><li><a href=#动态规划优化><strong>动态规划优化</strong></a></li><li><a href=#经典问题扩展><strong>经典问题扩展</strong></a></li></ol></li><li><a href=#-实现模板与复杂度>⚖️ 实现模板与复杂度</a><ol><li><a href=#java-实现单调递减队列><strong>Java 实现（单调递减队列）</strong></a></li><li><a href=#c-实现滑动窗口最大值><strong>C++ 实现（滑动窗口最大值）</strong></a></li><li><a href=#时间复杂度与空间复杂度><strong>时间复杂度与空间复杂度</strong></a></li></ol></li><li><a href=#-常见错误与技巧>⚠️ 常见错误与技巧</a></li><li><a href=#-总结与学习建议-1>💎 总结与学习建议</a></li></ol></li><li><a href=#__builtin_popcount>__builtin_popcount</a><ol><li><a href=#-核心原理与函数定义>🔍 <strong>核心原理与函数定义</strong></a><ol><li><a href=#函数原型><strong>函数原型</strong></a></li><li><a href=#底层实现机制><strong>底层实现机制</strong></a></li></ol></li><li><a href=#-性能优势与对比>⚡ <strong>性能优势与对比</strong></a></li><li><a href=#-使用场景与示例>🛠️ <strong>使用场景与示例</strong></a><ol><li><a href=#位图操作与组合枚举><strong>位图操作与组合枚举</strong></a></li><li><a href=#数学与算法优化><strong>数学与算法优化</strong></a></li><li><a href=#实际应用案例><strong>实际应用案例</strong></a></li></ol></li><li><a href=#-局限性与注意事项>⚠️ <strong>局限性与注意事项</strong></a></li><li><a href=#-替代方案c20-前>🔄 <strong>替代方案（C++20 前）</strong></a></li><li><a href=#-总结-4>💎 <strong>总结</strong></a></li></ol></li><li><a href=#__lg>__lg</a><ol><li><a href=#-核心功能与数学原理>🔍 <strong>核心功能与数学原理</strong></a></li><li><a href=#-底层实现机制>⚙️ <strong>底层实现机制</strong></a></li><li><a href=#-性能对比>⚡ <strong>性能对比</strong></a></li><li><a href=#-应用场景-1>🛠️ <strong>应用场景</strong></a></li><li><a href=#-注意事项与替代方案>⚠️ <strong>注意事项与替代方案</strong></a></li><li><a href=#-总结-5>💎 <strong>总结</strong></a></li></ol></li><li><a href=#using>using</a><ol><li><a href=#-核心功能与语法对比>⚙️ <strong>核心功能与语法对比</strong></a><ol><li><a href=#基本类型别名><strong>基本类型别名</strong></a></li></ol></li><li><a href=#-核心差异模板别名支持>🧩 <strong>核心差异：模板别名支持</strong></a><ol><li><a href=#typedef><strong><code>typedef</code> 的局限性</strong></a></li><li><a href=#using-1><strong><code>using</code> 的模板别名</strong></a></li></ol></li><li><a href=#-using>📌 <strong><code>using</code> 的扩展功能</strong></a><ol><li><a href=#引入命名空间成员><strong>引入命名空间成员</strong></a></li><li><a href=#解决继承中的名称隐藏><strong>解决继承中的名称隐藏</strong></a></li><li><a href=#继承构造函数c11><strong>继承构造函数（C++11）</strong></a></li></ol></li><li><a href=#-使用场景与推荐实践>⚖️ <strong>使用场景与推荐实践</strong></a><ol><li><a href=#工程实践建议><strong>工程实践建议</strong>：</a></li></ol></li><li><a href=#-总结-6>💎 <strong>总结</strong></a></li></ol></li><li><a href=#局部变量>局部变量</a><ol><li><a href=#-变量作用域与编译器行为>🔒 <strong>变量作用域与编译器行为</strong></a><ol><li><a href=#1-作用域规则><strong>(1) 作用域规则</strong></a></li><li><a href=#2-编译器是否外提><strong>(2) 编译器是否“外提”？</strong></a></li></ol></li><li><a href=#-性能差异分析>⚡ <strong>性能差异分析</strong></a><ol><li><a href=#1-内部定义的性能优势><strong>(1) 内部定义的性能优势</strong></a></li><li><a href=#2-外部定义的潜在开销><strong>(2) 外部定义的潜在开销</strong></a></li><li><a href=#3-性能对比场景><strong>(3) 性能对比场景</strong></a></li></ol></li><li><a href=#-工程实践建议>🛠 <strong>工程实践建议</strong></a></li><li><a href=#-总结-7>💎 <strong>总结</strong></a></li></ol></li><li><a href=#汉字>汉字</a><ol><li><a href=#-字符编码基础>⚙️ 字符编码基础</a></li><li><a href=#-c中的存储实现方式>💾 C++中的存储实现方式</a><ol><li><a href=#使用><strong>使用<code>char</code>数组（多字节编码）</strong></a></li><li><a href=#宽字符类型><strong>宽字符类型（<code>wchar_t</code>）</strong></a></li><li><a href=#现代字符串类型c11起><strong>现代字符串类型（C++11起）</strong></a></li></ol></li><li><a href=#-平台差异与兼容性处理>🌐 平台差异与兼容性处理</a></li><li><a href=#-关键问题与最佳实践>⚠️ 关键问题与最佳实践</a></li><li><a href=#-总结-8>💎 总结</a></li></ol></li><li><a href=#字符串相等>字符串相等</a><ol><li><a href=#-stdstring字符串的比较>🔍 <code>std::string</code>字符串的比较</a><ol><li><a href=#heading><strong><code>==</code>运算符（最常用）</strong></a></li><li><a href=#compare><strong><code>compare()</code>函数</strong></a></li></ol></li><li><a href=#-c风格字符串字符数组的比较>⚠️ C风格字符串（字符数组）的比较</a></li><li><a href=#-特殊场景的字符串比较>🛠 特殊场景的字符串比较</a><ol><li><a href=#忽略大小写比较><strong>忽略大小写比较</strong></a></li><li><a href=#部分字符串比较><strong>部分字符串比较</strong></a></li><li><a href=#忽略空格的比较><strong>忽略空格的比较</strong></a></li></ol></li><li><a href=#-性能优化与常见陷阱>⚡ 性能优化与常见陷阱</a><ol><li><a href=#性能优化><strong>性能优化</strong></a></li><li><a href=#常见陷阱><strong>常见陷阱</strong></a></li></ol></li><li><a href=#-总结不同场景下的推荐方法>💎 总结：不同场景下的推荐方法</a></li></ol></li><li><a href=#字符串比较>字符串比较</a><ol><li><a href=#-基本比较规则>🧠 基本比较规则</a></li><li><a href=#-c-风格字符串的比较方法>⚙️ C 风格字符串的比较方法</a></li><li><a href=#-c-stdstring-类的比较方法>📚 C++ <code>std::string</code> 类的比较方法</a></li><li><a href=#-注意事项>⚠️ 注意事项</a></li><li><a href=#-总结-9>💎 总结</a></li></ol></li><li><a href=#移动语义>移动语义</a><ol><li><a href=#-本质与原理>🔧 <strong>本质与原理</strong></a></li><li><a href=#-典型应用场景-1>🚀 <strong>典型应用场景</strong></a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/pearl/ style=background-color:#a7535a;color:>拾珠玑
+</a><a href=/categories/temple/ style=background-color:#69a794;color:>白玉京</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/leetcode-c25-jul/>【LeetCode-C】25-Jul</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Jul 02, 2025</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>21 minute read</time></div></footer></div></header><section class=article-content><h2 id=随机数>随机数</h2><p>以下是C++中随机数生成的系统介绍，涵盖传统方法、现代库、分布类型及实践建议：</p><hr><h3 id=-传统方法>🔧 <strong>传统方法：<code>rand()</code>与<code>srand()</code></strong></h3><ul><li>基本原理<pre tabindex=0><code>rand()
+</code></pre>生成<pre tabindex=0><code>0
+</code></pre>到<pre tabindex=0><code>RAND_MAX
+</code></pre>（通常为32767）的伪随机整数。需配合<pre tabindex=0><code>srand(seed) 
+</code></pre>设置种子，否则每次运行序列相同。<pre tabindex=0><code>#include &lt;cstdlib&gt;
+#include &lt;ctime&gt;
+int main() {
+    srand(time(nullptr));          // 时间作为种子
+    int num = rand() % 100;        // 生成0-99的随机数[2,5](@ref)
+    float frac = rand() / static_cast&lt;float&gt;(RAND_MAX); // [0,1)浮点数[1](@ref)
+}
+</code></pre></li><li>局限性<ul><li>分布不均匀（模运算导致低位重复）<a class=link href=@ref>7</a></li><li>随机性质量低，周期短，不适合加密或高精度模拟<a class=link href=@ref>6,8</a>。</li></ul></li></ul><hr><h3 id=-现代c11随机数库>⚙️ <strong>现代C++11随机数库（<code>&lt;random></code>）</strong></h3><h4 id=核心组件><strong>核心组件</strong></h4><div class=table-wrapper><table><thead><tr><th><strong>组件类型</strong></th><th><strong>代表类/引擎</strong></th><th><strong>特点</strong></th></tr></thead><tbody><tr><td><strong>随机数引擎</strong></td><td><code>std::mt19937</code> (梅森旋转)</td><td>高质量、长周期(2^19937-1)，适合多数场景<a class=link href=@ref>1,8</a></td></tr><tr><td></td><td><code>std::minstd_rand</code> (线性同余)</td><td>速度快，但周期较短</td></tr><tr><td><strong>随机数分布器</strong></td><td><code>uniform_int_distribution</code></td><td>均匀整数分布</td></tr><tr><td></td><td><code>normal_distribution</code></td><td>正态分布</td></tr><tr><td><strong>种子源</strong></td><td><code>std::random_device</code></td><td>基于硬件的真随机数（可能回退为伪随机）<a class=link href=@ref>3,9</a></td></tr></tbody></table></div><h4 id=代码示例><strong>代码示例</strong></h4><pre tabindex=0><code>#include &lt;random&gt;
+#include &lt;iostream&gt;
+int main() {
+    std::random_device rd;  // 硬件种子源
+    std::mt19937 gen(rd()); // 初始化梅森引擎
+    std::uniform_int_distribution&lt;&gt; dis(10, 20); // [10,20]整数
+    std::normal_distribution&lt;&gt; norm(0.0, 1.0);   // 均值0, 标准差1
+
+    std::cout &lt;&lt; dis(gen) &lt;&lt; &#34;\n&#34;;  // 输出均匀分布随机数
+    std::cout &lt;&lt; norm(gen) &lt;&lt; &#34;\n&#34;; // 输出正态分布随机数[3,8](@ref)
+}
+</code></pre><hr><h3 id=-常用随机数分布类型>📊 <strong>常用随机数分布类型</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>分布类型</strong></th><th><strong>类名</strong></th><th><strong>应用场景</strong></th><th><strong>示例代码</strong></th></tr></thead><tbody><tr><td><strong>均匀分布（整数）</strong></td><td><code>std::uniform_int_distribution</code></td><td>抽奖、游戏事件</td><td><code>dis(gen)</code> 生成区间内等概率整数<a class=link href=@ref>7,9</a></td></tr><tr><td><strong>均匀分布（浮点）</strong></td><td><code>std::uniform_real_distribution</code></td><td>模拟连续现象（如物理运动）</td><td><code>dis(1.0, 2.0)</code> 生成(1.0, 2.0)浮点数<a class=link href=@ref>3</a></td></tr><tr><td><strong>正态分布</strong></td><td><code>std::normal_distribution</code></td><td>统计学、自然现象模拟（身高、误差）</td><td><code>norm(gen)</code> 生成高斯分布随机数<a class=link href=@ref>2,8</a></td></tr><tr><td><strong>伯努利分布</strong></td><td><code>std::bernoulli_distribution</code></td><td>二值事件（如抛硬币）</td><td><code>dis(gen)</code> 返回true的概率为0.6<a class=link href=@ref>3</a></td></tr></tbody></table></div><hr><h3 id=-关键实践建议>⚠️ <strong>关键实践建议</strong></h3><ol><li><strong>种子管理</strong><ul><li>避免固定种子（如 <code>srand(0)</code>），优先用 <code>std::random_device</code> 或 <code>time(nullptr)</code><a class=link href=@ref>6,9</a>。</li><li>多次生成时重用引擎对象，而非重复创建（避免性能开销）<a class=link href=@ref>8</a>。</li></ul></li><li><strong>性能优化</strong><ul><li>轻量场景可用 <code>std::minstd_rand</code>；高要求场景用 <code>std::mt19937</code><a class=link href=@ref>3,6</a>。</li><li>分布对象构造成本低，可重复使用。</li></ul></li><li><strong>常见陷阱</strong><ul><li>传统 <code>rand() % N</code> 在 <code>N</code> 非 <code>RAND_MAX+1</code> 因子时分布不均<a class=link href=@ref>7</a>。</li><li>浮点数范围错误：<code>rand() / RAND_MAX</code> 结果为整数除法，需显式转浮点<a class=link href=@ref>1</a>。</li></ul></li></ol><hr><h3 id=-应用场景>🎯 <strong>应用场景</strong></h3><ul><li><strong>游戏开发</strong>：敌人行为、道具掉落（均匀分布）<a class=link href=@ref>8</a></li><li><strong>科学模拟</strong>：蒙特卡洛方法（正态分布）<a class=link href=@ref>6</a></li><li><strong>密码学</strong>：密钥生成（需结合 <code>std::random_device</code>）<a class=link href=@ref>8</a></li><li><strong>数据增强</strong>：机器学习数据集扩充（随机扰动）<a class=link href=@ref>8</a></li></ul><hr><h3 id=-总结>💎 总结</h3><ul><li><strong>基础需求</strong>：用 <code>rand()</code> + <code>srand(time(nullptr))</code> 快速实现。</li><li><strong>高质量需求</strong>：必选 <code>&lt;random></code> 库，组合引擎（如 <code>mt19937</code>）与分布器（如 <code>uniform_int_distribution</code>）。</li><li><strong>特殊分布</strong>：直接使用正态、伯努利等高级分布器简化代码<a class=link href=@ref>3,8</a>。</li></ul><blockquote><p>完整代码示例及进阶技巧可参考：<a class=link href=https://wenku.csdn.net/doc/5s8qjpqw6r target=_blank rel=noopener>C++随机数生成技术详解</a><a class=link href=@ref>6</a>；<a class=link href=https://wenku.csdn.net/doc/32k7baj6ob target=_blank rel=noopener>现代C++随机数应用</a><a class=link href=@ref>8</a>。</p></blockquote><h2 id=万能头>万能头</h2><p>在C++中，<strong>万能头文件</strong>特指 <code>&lt;bits/stdc++.h></code>，它是一个非标准但广泛用于竞赛编程的头文件，通过预处理器一次性包含几乎所有C++标准库头文件。以下是其核心要点：</p><hr><h3 id=-万能头文件是什么>🔍 <strong>万能头文件是什么？</strong></h3><ul><li><strong>定义</strong>：<code>&lt;bits/stdc++.h></code> 是GCC编译器特有的头文件，内部聚合了C++标准库的绝大多数头文件（如<code>&lt;iostream></code>、<code>&lt;vector></code>、<code>&lt;algorithm></code>等）<a class=link href=@ref>1,4</a>。</li><li><strong>目的</strong>：简化代码编写，避免手动包含多个头文件，尤其适用于算法竞赛和快速原型开发<a class=link href=@ref>1,2</a>。</li></ul><hr><h3 id=-优缺点分析>⚖️ <strong>优缺点分析</strong></h3><h4 id=-优点>✅ <strong>优点</strong></h4><ol><li>高效便捷<ul><li>一行代码替代数十行头文件包含，提升编码效率<a class=link href=@ref>2,8</a>。</li><li>竞赛中避免因漏写头文件导致编译失败<a class=link href=@ref>1,10</a>。</li></ul></li><li><strong>覆盖全面</strong>
+支持STL容器、字符串处理、数学计算、输入输出等常用功能，涵盖C++11/14/17特性<a class=link href=@ref>4,7</a>。</li></ol><h4 id=-缺点>❌ <strong>缺点</strong></h4><ol><li>编译性能下降<ul><li>包含大量未使用的头文件，显著增加编译时间（大型项目编译时间可能增长300%+）<a class=link href=@ref>1</a>。</li><li>示例：1万行代码的编译时间从8.5秒增至21.4秒<a class=link href=@ref>1</a>。</li></ul></li><li>可移植性差<ul><li>仅支持GCC和Clang（需GNU C++库），<strong>MSVC等编译器不支持</strong><a class=link href=@ref>1,4</a>。</li><li>跨平台项目可能因头文件缺失编译失败。</li></ul></li><li><strong>命名污染</strong>
+与<code>using namespace std;</code>结合易引发命名冲突（如自定义类<code>list</code>与<code>std::list</code>混淆）<a class=link href=@ref>1,8</a>。</li><li><strong>学习障碍</strong>
+初学者过度依赖会忽略各头文件的具体作用，影响对C++标准库的理解<a class=link href=@ref>2,8</a>。</li></ol><hr><h3 id=-编译器支持情况>🌐 <strong>编译器支持情况</strong></h3><div class=table-wrapper><table><thead><tr><th>编译器</th><th>支持情况</th><th>版本要求</th></tr></thead><tbody><tr><td>GCC</td><td>✅ 完全支持</td><td>4.8+</td></tr><tr><td>Clang</td><td>⚠️ 需GNU C++库</td><td>3.4+</td></tr><tr><td>MSVC</td><td>❌ 不支持</td><td>-</td></tr><tr><td><a class=link href=@ref>1,4</a></td><td></td><td></td></tr></tbody></table></div><hr><h3 id=-适用场景-vs-规避场景>🛠️ <strong>适用场景 vs 规避场景</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>场景类型</strong></th><th><strong>建议</strong></th><th><strong>示例</strong></th></tr></thead><tbody><tr><td>编程竞赛</td><td>✅ 推荐</td><td>Codeforces、ACM-ICPC</td></tr><tr><td>教学演示/快速验证</td><td>✅ 推荐</td><td>课堂示例、算法原型</td></tr><tr><td>大型工程项目</td><td>❌ 避免</td><td>Chromium、LLVM等生产代码<a class=link href=@ref>1</a></td></tr><tr><td>跨平台开发</td><td>❌ 避免</td><td>Windows/Linux混合编译</td></tr><tr><td>严格编译时效要求</td><td>❌ 避免</td><td>CI/CD流水线</td></tr><tr><td><a class=link href=@ref>1,8</a></td><td></td><td></td></tr></tbody></table></div><hr><h3 id=-替代方案>🔧 <strong>替代方案</strong></h3><ol><li><strong>手动包含常用头文件</strong>
+精选高频头文件组合，如：<pre tabindex=0><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+#include &lt;string&gt;
+</code></pre><a class=link href=@ref>1,9</a></li><li><strong>自定义聚合头文件</strong>
+创建<code>my_std.hpp</code>，按需包含项目所需头文件：<pre tabindex=0><code>#pragma once
+#include &lt;vector&gt;
+#include &lt;map&gt;
+#include &lt;algorithm&gt;
+</code></pre><a class=link href=@ref>1,3</a></li><li><strong>条件编译兼容</strong>
+跨平台时区分编译器：<pre tabindex=0><code>#if defined(__GNUC__) &amp;&amp; !defined(__clang__)
+    #include &lt;bits/stdc++.h&gt;
+#else
+    #include &lt;iostream&gt;
+    // 手动补充其他头文件
+#endif
+</code></pre><a class=link href=@ref>1</a></li><li><strong>C++20模块（未来趋势）</strong>
+使用标准库模块替代头文件：<pre tabindex=0><code>import std.core;  // 提案中，尚未完全实现
+</code></pre><a class=link href=@ref>1</a></li></ol><hr><h3 id=-实践建议>💎 <strong>实践建议</strong></h3><ul><li><strong>竞赛场景</strong>：直接使用<code>#include &lt;bits/stdc++.h> + using namespace std;</code>，专注解题效率<a class=link href=@ref>2,10</a>。</li><li><strong>学习阶段</strong>：<strong>手动包含头文件</strong>，深入理解各库的归属（如<code>&lt;vector></code>定义容器、<code>&lt;cmath></code>提供数学函数）<a class=link href=@ref>8,9</a>。</li><li><strong>工程项目</strong>：用<strong>预编译头（PCH）</strong> 技术优化编译速度，而非万能头<a class=link href=@ref>1</a>。</li></ul><hr><h3 id=-总结-1>📌 总结</h3><p><code>&lt;bits/stdc++.h></code>是C++竞赛编程的“利器”，但需警惕其编译开销和可移植性缺陷。<strong>理解头文件的作用机制</strong>比盲目依赖万能头更重要——正如Bjarne Stroustrup所言：“用抽象管理复杂性，而非消除对复杂性的认知。”<a class=link href=@ref>1</a> 合理选择工具，方能平衡效率与工程严谨性。</p><h2 id=快排>快排</h2><p>快速排序中的左右指针法和快慢指针法是两种不同的分区（Partition）策略，它们在实现逻辑、指针移动方式和适用场景上存在显著差异。以下从核心原理、实现步骤、效率和应用场景四个维度进行对比分析：</p><hr><h3 id=-核心原理与指针定义>🔍 <strong>核心原理与指针定义</strong></h3><ul><li><strong>左右指针法（对撞指针）</strong><ul><li><strong>原理</strong>：基于双向遍历，通过左右指针从数组两端向中间逼近，交换不符合分区规则的元素<a class=link href=@ref>5,7</a>。</li><li>指针角色：<ul><li><code>left</code>：从左侧向右扫描，寻找<strong>大于基准值</strong>的元素。</li><li><code>right</code>：从右侧向左扫描，寻找<strong>小于基准值</strong>的元素<a class=link href=@ref>6,7</a>。</li></ul></li><li><strong>终止条件</strong>：<code>left >= right</code>（指针相遇或错开）<a class=link href=@ref>3,7</a>。</li></ul></li><li><strong>快慢指针法（前后指针）</strong><ul><li><strong>原理</strong>：基于同向遍历，慢指针维护分区边界，快指针扫描并交换小于基准值的元素<a class=link href=@ref>3,9</a>。</li><li>指针角色：<ul><li><code>slow</code>：标记<strong>下一个小于基准值的位置</strong>，初始为起始位置。</li><li><code>fast</code>：遍历整个数组，发现小于基准值的元素时与<code>slow</code>交换并右移<code>slow</code><a class=link href=@ref>9</a>。</li></ul></li><li><strong>终止条件</strong>：<code>fast</code>遍历完数组，最后将基准值与<code>slow</code>位置交换<a class=link href=@ref>9</a>。</li></ul></li></ul><hr><h3 id=-分区过程与代码实现>⚙️ <strong>分区过程与代码实现</strong></h3><h4 id=左右指针法步骤><strong>左右指针法步骤</strong></h4><ol><li>选择基准值（如<code>arr[left]</code>）。</li><li><code>right</code>左移直至找到小于基准值的元素；<code>left</code>右移直至找到大于基准值的元素。</li><li>交换<code>arr[left]</code>和<code>arr[right]</code>，重复直至<code>left >= right</code>。</li><li>交换基准值与<code>arr[right]</code>，完成分区<a class=link href=@ref>6,7</a>。
+​<strong>代码片段</strong>​：</li></ol><pre tabindex=0><code>while (left &lt; right) {
+    while (left &lt; right &amp;&amp; arr[right] &gt;= key) right--;
+    while (left &lt; right &amp;&amp; arr[left] &lt;= key) left++;
+    swap(arr[left], arr[right]);  // 交换不满足条件的元素
+}
+swap(arr[begin], arr[right]);    // 基准值归位
+</code></pre><h4 id=快慢指针法步骤><strong>快慢指针法步骤</strong></h4><ol><li><p>选择基准值（如<code>arr[0]</code>），<code>slow</code>指向起始位置。</p></li><li><pre tabindex=0><code>fast
+</code></pre><p>从</p><pre tabindex=0><code>slow+1
+</code></pre><p>开始遍历：</p><ul><li>若<code>arr[fast] &lt; key</code>，则<code>slow++</code>并交换<code>arr[slow]</code>与<code>arr[fast]</code>。</li></ul></li><li><p>遍历结束后，交换<code>arr[0]</code>与<code>arr[slow]</code>，分区完成<a class=link href=@ref>9</a>。
+​<strong>代码片段</strong>​：</p></li></ol><pre tabindex=0><code>slow = begin
+for fast in range(begin+1, end+1):
+    if arr[fast] &lt; key:
+        slow += 1
+        swap(arr[slow], arr[fast])
+swap(arr[begin], arr[slow])  // 基准值归位
+</code></pre><hr><h3 id=-效率与稳定性对比>⏱️ <strong>效率与稳定性对比</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>维度</strong></th><th><strong>左右指针法</strong></th><th><strong>快慢指针法</strong></th></tr></thead><tbody><tr><td><strong>时间复杂度</strong></td><td>平均 O(n log n)，最坏 O(n²)（有序数组）<a class=link href=@ref>8</a></td><td>同左，但交换次数更少<a class=link href=@ref>9</a></td></tr><tr><td><strong>交换次数</strong></td><td>较多（需多次左右交换）<a class=link href=@ref>7</a></td><td>较少（仅与慢指针交换）<a class=link href=@ref>9</a></td></tr><tr><td><strong>稳定性</strong></td><td>不稳定（交换可能打乱相等元素顺序）<a class=link href=@ref>7</a></td><td>不稳定（同左）<a class=link href=@ref>9</a></td></tr><tr><td><strong>边界处理</strong></td><td>需注意指针移动顺序（如先右后左）<a class=link href=@ref>6</a></td><td>逻辑简单，不易越界<a class=link href=@ref>9</a></td></tr></tbody></table></div><hr><h3 id=-适用场景与选择建议>🎯 <strong>适用场景与选择建议</strong></h3><ul><li><strong>左右指针法适用场景</strong>：<ul><li>需显式处理元素交换的优化场景（如三数取中优化）<a class=link href=@ref>6,7</a>。</li><li>对代码可读性要求较高的教学场景（逻辑直观）<a class=link href=@ref>7</a>。</li></ul></li><li><strong>快慢指针法适用场景</strong>：<ul><li>追求代码简洁性（如算法竞赛或面试手写）<a class=link href=@ref>9</a>。</li><li>数据量中等且需减少交换次数的场景<a class=link href=@ref>3,9</a>。</li></ul></li></ul><blockquote><p>💡 <strong>实践建议</strong>：若需避免最坏时间复杂度（如有序数组），<strong>两者均需结合随机化基准值或三数取中法</strong><a class=link href=@ref>6,8</a>。</p></blockquote><hr><h3 id=-总结-2>💎 <strong>总结</strong></h3><p>左右指针法通过<strong>双向逼近</strong>实现分区，逻辑清晰但交换频繁；快慢指针法通过<strong>同向扫描</strong>减少交换，代码更简洁但分区逻辑略抽象。两者核心目标均为将数组划分为基准值两侧的子序列，实际选择需结合具体需求：</p><ul><li><strong>教学/显式交换优化</strong> → 左右指针法<a class=link href=@ref>6,7</a></li><li><strong>代码简洁/减少交换</strong> → 快慢指针法<a class=link href=@ref>3,9</a></li></ul><p>两种方法均可通过基准值优化（如随机选择）提升性能，避免退化至 O(n²) 的最坏情况<a class=link href=@ref>8</a>。</p><h2 id=三路快排>三路快排</h2><p>三路快速排序（3-Way QuickSort）是传统快速排序的优化版本，通过将数组划分为<strong>小于基准值</strong>、<strong>等于基准值</strong>和<strong>大于基准值</strong>三个区域，显著提升对<strong>含大量重复元素数组</strong>的排序效率。以下从核心原理、实现步骤、性能分析到应用场景进行全面解析：</p><hr><h3 id=-算法思想与核心优势>🔍 <strong>算法思想与核心优势</strong></h3><h4 id=三路划分原理><strong>三路划分原理</strong></h4><ul><li>分区目标：将数组分为三部分：<ul><li><strong>小于区（&lt; pivot）</strong>：位于左侧。</li><li><strong>等于区（= pivot）</strong>：位于中部，无需再排序。</li><li><strong>大于区（> pivot）</strong>：位于右侧<a class=link href=@ref>1,3,7</a>。</li></ul></li><li><strong>核心改进</strong>：传统快排将重复元素分散到左右子数组，导致递归深度增加；三路快排将重复元素集中到等于区，避免冗余操作<a class=link href=@ref>3,9</a>。</li></ul><h4 id=核心优势><strong>核心优势</strong></h4><ul><li><strong>高效处理重复元素</strong>：当重复元素占比高时，时间复杂度从传统快排的 <strong>O(n²) 优化至 O(n)</strong><a class=link href=@ref>3,8</a>。</li><li><strong>减少递归深度</strong>：等于区不参与递归，子问题规模更均衡<a class=link href=@ref>7,9</a>。</li></ul><hr><h3 id=-分区过程与指针操作>⚙️ <strong>分区过程与指针操作</strong></h3><h4 id=指针定义><strong>指针定义</strong></h4><ul><li><strong><code>lt</code>（Less Than）</strong>：指向小于区的右边界（初始为<code>low</code>）。</li><li><strong><code>gt</code>（Greater Than）</strong>：指向大于区的左边界（初始为<code>high</code>）。</li><li><strong><code>current</code></strong>：遍历指针（初始为<code>low+1</code>）<a class=link href=@ref>3,6,7</a>。</li></ul><h4 id=分区步骤><strong>分区步骤</strong></h4><ul><li><p>遍历规则（</p><pre tabindex=0><code>current ≤ gt
+</code></pre><p>时循环）：</p><ol><li><strong><code>arr[current] &lt; pivot</code></strong>：交换<code>arr[current]</code>与<code>arr[lt]</code>，<code>lt++</code>，<code>current++</code>。</li><li><strong><code>arr[current] > pivot</code></strong>：交换<code>arr[current]</code>与<code>arr[gt]</code>，<code>gt--</code>（<code>current</code>不动，需检查新元素）。</li><li><strong><code>arr[current] == pivot</code></strong>：<code>current++</code><a class=link href=@ref>3,7</a>。</li></ol></li><li><p>终止条件：</p><pre tabindex=0><code>current &gt; gt
+</code></pre><p>，此时数组划分为：</p><ul><li><code>[low, lt-1]</code>：小于基准值。</li><li><code>[lt, gt]</code>：等于基准值。</li><li><code>[gt+1, high]</code>：大于基准值<a class=link href=@ref>6,7</a>。</li></ul></li></ul><h4 id=递归排序><strong>递归排序</strong></h4><ul><li>仅对<strong>小于区</strong>和<strong>大于区</strong>递归排序，等于区已就位<a class=link href=@ref>4,9</a>。</li></ul><pre tabindex=0><code># 伪代码示例
+def three_way_quicksort(arr, low, high):
+    if low &gt;= high: return
+    lt, gt = partition(arr, low, high)  # 分区操作
+    three_way_quicksort(arr, low, lt-1)  # 排序小于区
+    three_way_quicksort(arr, gt+1, high) # 排序大于区
+</code></pre><hr><h3 id=-时间复杂度与空间复杂度>⏱️ <strong>时间复杂度与空间复杂度</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>场景</strong></th><th><strong>时间复杂度</strong></th><th><strong>解释</strong></th></tr></thead><tbody><tr><td><strong>最佳/平均</strong></td><td>O(n log n)</td><td>数据随机分布时，递归树平衡<a class=link href=@ref>4,8</a>。</td></tr><tr><td><strong>最坏</strong></td><td>O(n²)</td><td>基准值始终为极值（可通过优化避免）<a class=link href=@ref>4</a>。</td></tr><tr><td><strong>大量重复元素</strong></td><td><strong>O(n)</strong></td><td>等于区快速收敛，子问题规模指数级减少<a class=link href=@ref>3,8</a>。</td></tr><tr><td><strong>空间复杂度</strong></td><td>O(log n)</td><td>递归栈深度，与传统快排相同<a class=link href=@ref>4,7</a>。</td></tr></tbody></table></div><blockquote><p>💡 <strong>关键点</strong>：通过<strong>随机化基准值</strong>或<strong>三数取中法</strong>（选左、中、右三元素的中位数）可避免最坏情况<a class=link href=@ref>6,8</a>。</p></blockquote><hr><h3 id=-性能优化技巧>🚀 <strong>性能优化技巧</strong></h3><ol><li><strong>小数组优化</strong>
+当子数组长度 &lt; 15 时，改用插入排序（插入排序在小规模数据中更高效）<a class=link href=@ref>9</a>。</li><li><strong>避免重复递归等于区</strong>
+等于区元素已有序，跳过递归减少函数调用开销<a class=link href=@ref>7</a>。</li><li><strong>随机化基准值</strong>
+交换<code>arr[low]</code>与随机位置的元素，降低最坏情况概率<a class=link href=@ref>6,9</a>。</li></ol><hr><h3 id=-与传统快排的对比>🆚 <strong>与传统快排的对比</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>维度</strong></th><th><strong>传统快排</strong></th><th><strong>三路快排</strong></th></tr></thead><tbody><tr><td><strong>分区方式</strong></td><td>二路（&lt; pivot 和 ≥ pivot）</td><td>三路（&lt;、=、> pivot）</td></tr><tr><td><strong>重复元素处理</strong></td><td>重复元素分散递归，效率退化至 O(n²)</td><td>重复元素集中处理，效率保持 O(n)</td></tr><tr><td><strong>适用场景</strong></td><td>重复元素较少</td><td><strong>大量重复元素</strong>（如日志数据、用户行为数据）<a class=link href=@ref>3,9</a></td></tr><tr><td><strong>代码复杂度</strong></td><td>简单（双指针）</td><td>略复杂（三指针+交换逻辑）<a class=link href=@ref>7</a></td></tr></tbody></table></div><hr><h3 id=-代码实现c示例>💻 <strong>代码实现（C++示例）</strong></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;iostream&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;vector&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=k>using</span> <span class=k>namespace</span> <span class=n>std</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=nf>swap</span><span class=p>(</span><span class=kt>int</span><span class=o>&amp;</span> <span class=n>a</span><span class=p>,</span> <span class=kt>int</span><span class=o>&amp;</span> <span class=n>b</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>temp</span> <span class=o>=</span> <span class=n>a</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>a</span> <span class=o>=</span> <span class=n>b</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>b</span> <span class=o>=</span> <span class=n>temp</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=nf>threeWayQuickSort</span><span class=p>(</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;&amp;</span> <span class=n>arr</span><span class=p>,</span> <span class=kt>int</span> <span class=n>low</span><span class=p>,</span> <span class=kt>int</span> <span class=n>high</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>low</span> <span class=o>&gt;=</span> <span class=n>high</span><span class=p>)</span> <span class=k>return</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 三数取中优化基准值选择
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kt>int</span> <span class=n>mid</span> <span class=o>=</span> <span class=n>low</span> <span class=o>+</span> <span class=p>(</span><span class=n>high</span> <span class=o>-</span> <span class=n>low</span><span class=p>)</span> <span class=o>/</span> <span class=mi>2</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>arr</span><span class=p>[</span><span class=n>mid</span><span class=p>]</span> <span class=o>&lt;</span> <span class=n>arr</span><span class=p>[</span><span class=n>low</span><span class=p>])</span> <span class=n>swap</span><span class=p>(</span><span class=n>arr</span><span class=p>[</span><span class=n>low</span><span class=p>],</span> <span class=n>arr</span><span class=p>[</span><span class=n>mid</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>arr</span><span class=p>[</span><span class=n>high</span><span class=p>]</span> <span class=o>&lt;</span> <span class=n>arr</span><span class=p>[</span><span class=n>low</span><span class=p>])</span> <span class=n>swap</span><span class=p>(</span><span class=n>arr</span><span class=p>[</span><span class=n>low</span><span class=p>],</span> <span class=n>arr</span><span class=p>[</span><span class=n>high</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>arr</span><span class=p>[</span><span class=n>mid</span><span class=p>]</span> <span class=o>&lt;</span> <span class=n>arr</span><span class=p>[</span><span class=n>high</span><span class=p>])</span> <span class=n>swap</span><span class=p>(</span><span class=n>arr</span><span class=p>[</span><span class=n>mid</span><span class=p>],</span> <span class=n>arr</span><span class=p>[</span><span class=n>high</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>pivot</span> <span class=o>=</span> <span class=n>arr</span><span class=p>[</span><span class=n>low</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>lt</span> <span class=o>=</span> <span class=n>low</span><span class=p>,</span> <span class=n>gt</span> <span class=o>=</span> <span class=n>high</span><span class=p>,</span> <span class=n>current</span> <span class=o>=</span> <span class=n>low</span> <span class=o>+</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>while</span> <span class=p>(</span><span class=n>current</span> <span class=o>&lt;=</span> <span class=n>gt</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=n>arr</span><span class=p>[</span><span class=n>current</span><span class=p>]</span> <span class=o>&lt;</span> <span class=n>pivot</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>swap</span><span class=p>(</span><span class=n>arr</span><span class=p>[</span><span class=n>current</span><span class=p>],</span> <span class=n>arr</span><span class=p>[</span><span class=n>lt</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>            <span class=n>lt</span><span class=o>++</span><span class=p>,</span> <span class=n>current</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span> <span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=n>arr</span><span class=p>[</span><span class=n>current</span><span class=p>]</span> <span class=o>&gt;</span> <span class=n>pivot</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>swap</span><span class=p>(</span><span class=n>arr</span><span class=p>[</span><span class=n>current</span><span class=p>],</span> <span class=n>arr</span><span class=p>[</span><span class=n>gt</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>            <span class=n>gt</span><span class=o>--</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>current</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=n>threeWayQuickSort</span><span class=p>(</span><span class=n>arr</span><span class=p>,</span> <span class=n>low</span><span class=p>,</span> <span class=n>lt</span> <span class=o>-</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=n>threeWayQuickSort</span><span class=p>(</span><span class=n>arr</span><span class=p>,</span> <span class=n>gt</span> <span class=o>+</span> <span class=mi>1</span><span class=p>,</span> <span class=n>high</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><hr><h3 id=-适用场景>🎯 <strong>适用场景</strong></h3><ul><li><strong>高重复数据集</strong>：如用户行为日志、传感器数据、词频统计等<a class=link href=@ref>3,9</a>。</li><li><strong>稳定性要求低</strong>：快排本身不稳定，但三路快排通过减少交换次数提升效率。</li><li><strong>大规模数据排序</strong>：工业级排序库（如Java的<code>Arrays.sort()</code>）在检测到重复元素时自动切换三路快排<a class=link href=@ref>3</a>。</li></ul><hr><h3 id=-总结-3>💎 <strong>总结</strong></h3><p>三路快速排序通过<strong>三指针分区策略</strong>，将重复元素收敛至中间区域，彻底解决传统快排面对重复数据时的性能瓶颈。其核心优势在于：</p><ul><li><strong>时间复杂度优化</strong>：大量重复元素时从 O(n²) → <strong>O(n)</strong><a class=link href=@ref>3,8</a>。</li><li><strong>工程实用性强</strong>：结合随机化基准值和小数组优化，适合处理真实世界的高重复数据集<a class=link href=@ref>7,9</a>。</li></ul><blockquote><p>正如算法大师Robert Sedgewick所言：“三路划分是快速排序在处理重复键时的救星。” 掌握此算法，方能在数据洪流中游刃有余。</p></blockquote><h2 id=单调栈>单调栈</h2><p>单调栈（Monotonic Stack）是一种特殊的栈数据结构，其核心特性是栈内元素始终保持<strong>单调递增或单调递减</strong>的顺序。它通过动态维护元素的单调性，高效解决序列中“下一个更大/更小元素”、“区间最值”等经典问题，时间复杂度为均摊 O(n)。以下是其核心内容详解：</p><hr><h3 id=-定义与基本特性>⚙️ 定义与基本特性</h3><ol><li>单调递增栈<ul><li>栈内元素从栈底到栈顶<strong>严格递增</strong>（栈顶最小）。</li><li>适用场景：寻找元素右侧第一个更小值、计算柱状图最大矩形<a class=link href=@ref>1,3,7</a>。</li></ul></li><li>单调递减栈<ul><li>栈内元素从栈底到栈顶<strong>严格递减</strong>（栈顶最大）。</li><li>适用场景：寻找元素右侧第一个更大值、接雨水问题<a class=link href=@ref>1,4,6</a>。</li></ul></li></ol><p><strong>与普通栈的区别</strong>：</p><ul><li>普通栈仅支持后进先出（LIFO），无顺序约束。</li><li>单调栈在入栈时需<strong>弹出破坏单调性的元素</strong>，确保栈内有序<a class=link href=@ref>1,7</a>。</li></ul><hr><h3 id=-核心原理与操作机制>🔍 核心原理与操作机制</h3><h4 id=维护单调性的流程以单调递减栈为例>维护单调性的流程（以单调递减栈为例）</h4><ol><li><strong>遍历序列</strong>：依次处理每个元素。</li><li><strong>比较与弹出</strong>：若当前元素 > 栈顶元素，则弹出栈顶（此时当前元素为栈顶的“下一个更大元素”）。</li><li><strong>入栈</strong>：当前元素入栈，保持栈的单调递减性<a class=link href=@ref>1,3,6</a>。</li></ol><p><strong>操作模板（Java）</strong>：</p><pre tabindex=0><code>// 单调递减栈模板（寻找下一个更大元素）
+Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+for (int i = 0; i &lt; nums.length; i++) {
+    while (!stack.isEmpty() &amp;&amp; nums[i] &gt; nums[stack.peek()]) {
+        int idx = stack.pop();  // 弹出栈顶，记录结果：nums[i] 是 nums[idx] 的下一个更大元素
+        res[idx] = nums[i]; 
+    }
+    stack.push(i);  // 当前索引入栈
+}
+</code></pre><p><strong>时间复杂度分析</strong>：每个元素最多入栈、出栈各一次，整体 O(n)<a class=link href=@ref>1,3,7</a>。</p><hr><h3 id=-典型应用场景与问题解析>📊 典型应用场景与问题解析</h3><h4 id=下一个更大元素nge><strong>下一个更大元素（NGE）</strong></h4><ul><li><strong>问题</strong>：对数组每个元素，找到右侧第一个比它大的数。</li><li>解法：单调递减栈 + 从左向右遍历。<ul><li>示例：<code>[3,1,4,5,2]</code> → NGE: <code>[4,4,5,-1,-1]</code><a class=link href=@ref>1,6,7</a>。</li></ul></li></ul><h4 id=接雨水问题><strong>接雨水问题</strong></h4><ul><li><strong>问题</strong>：计算柱状图中凹槽能容纳的雨水量。</li><li>解法：单调递减栈维护左边界，计算凹槽宽度和高度。<ul><li>关键公式：水量 = <code>(min(左边界高度, 当前高度) - 凹槽底高度) × 宽度</code><a class=link href=@ref>1,4</a>。</li></ul></li></ul><h4 id=柱状图最大矩形面积><strong>柱状图最大矩形面积</strong></h4><ul><li><strong>问题</strong>：求直方图中面积最大的矩形。</li><li>解法：单调递增栈 + 首尾补0处理边界。<ul><li>弹出元素时计算：<code>面积 = 高度 × (右边界 - 左边界 - 1)</code><a class=link href=@ref>1,3,4</a>。</li></ul></li></ul><h4 id=每日温度问题><strong>每日温度问题</strong></h4><ul><li><strong>问题</strong>：对于每天温度，求需等待几天才有更高温度。</li><li><strong>解法</strong>：单调递减栈，记录下标差（<code>i - 栈顶索引</code>）<a class=link href=@ref>4,6</a>。</li></ul><hr><h3 id=-实现模板与技巧>⚠️ 实现模板与技巧</h3><h4 id=通用解题步骤>通用解题步骤：</h4><ol><li>确定单调性方向：<ul><li>找更大元素 → 单调递减栈；找更小元素 → 单调递增栈<a class=link href=@ref>1,4</a>。</li></ul></li><li><strong>存储索引而非值</strong>：便于计算距离（如矩形宽度、天数差）<a class=link href=@ref>3,7</a>。</li><li>处理边界：<ul><li>数组首尾添加虚拟元素（如高度0），避免空栈判断<a class=link href=@ref>1,3</a>。</li></ul></li></ol><h4 id=常见错误>常见错误：</h4><ul><li><strong>忽略重复元素</strong>：若值可重复，需在比较条件中处理等号（如 <code>>=</code> 或 <code>&lt;=</code>）<a class=link href=@ref>4</a>。</li><li><strong>混淆值与索引</strong>：比较时需用 <code>nums[stack.peek()]</code> 而非 <code>stack.peek()</code><a class=link href=@ref>3,7</a>。</li></ul><hr><h3 id=-进阶应用与优化>🚀 进阶应用与优化</h3><ol><li><strong>双向单调栈</strong><ul><li>同时计算左右边界（如接雨水问题）：<ul><li>左栈记录左侧最大值，右栈记录右侧最大值，取较小值计算水量<a class=link href=@ref>1,4</a>。</li></ul></li><li>优势：逻辑更清晰，避免嵌套循环。</li></ul></li><li><strong>与动态规划结合</strong><ul><li>优化股票跨度问题：单调栈维护价格递减序列，快速定位前一个更高价日<a class=link href=@ref>1,5</a>。</li></ul></li><li><strong>循环数组处理</strong><ul><li>扩展数组为 <code>2n</code> 长度，用 <code>i % n</code> 模拟环形遍历<a class=link href=@ref>4,6</a>。</li></ul></li></ol><hr><h3 id=-总结与学习建议>💎 总结与学习建议</h3><p>单调栈的核心价值在于<strong>将序关系的嵌套查询优化至线性时间</strong>，适用于序列中“局部序关系决定全局解”的问题。关键要点总结如下表：</p><div class=table-wrapper><table><thead><tr><th><strong>特性</strong></th><th><strong>应用场景</strong></th><th><strong>时间复杂度</strong></th></tr></thead><tbody><tr><td>单调递增栈</td><td>右侧首个更小元素、柱状图最大矩形</td><td>O(n)</td></tr><tr><td>单调递减栈</td><td>右侧首个更大元素、接雨水问题</td><td>O(n)</td></tr></tbody></table></div><p><strong>学习建议</strong>：</p><ol><li><strong>从模板入手</strong>：掌握基础模板后，通过经典问题（如LeetCode 739、84、42）练习变形<a class=link href=@ref>3,6,7</a>。</li><li><strong>可视化调试</strong>：手动画出栈状态变化，理解元素入栈/出栈的逻辑<a class=link href=@ref>3,7</a>。</li><li><strong>扩展练习</strong>：尝试环形数组（503）、双向单调栈（42）等变体<a class=link href=@ref>4,6</a>。</li></ol><blockquote><p>单调栈的威力在于其 <strong>“空间换序”</strong> 的本质——通过缓存未处理的元素，并利用单调性快速定位边界，将暴力 O(n²) 优化至 O(n)。掌握其核心思想，可高效解决一系列经典算法难题<a class=link href=@ref>1,7</a>。</p></blockquote><h2 id=单调队列>单调队列</h2><p>单调队列（Monotonic Queue）是一种基于双端队列（Deque）实现的数据结构，其核心特性是<strong>队列内元素始终保持单调递增或单调递减的顺序</strong>。它通过动态维护数据的单调性，高效解决滑动窗口极值、动态规划优化等问题，将时间复杂度从暴力解的 O(n²) 降低至 <strong>O(n)</strong>。以下是其核心内容详解：</p><hr><h3 id=-定义与核心特性>⚙️ 定义与核心特性</h3><ol><li>基本定义：<ul><li><strong>单调递增队列</strong>：队头到队尾元素递增，队头为最小值（例如 <code>[1,3,5]</code>）<a class=link href=@ref>1,6</a>。</li><li><strong>单调递减队列</strong>：队头到队尾元素递减，队头为最大值（例如 <code>[9,6,2]</code>）<a class=link href=@ref>6,9</a>。</li></ul></li><li>与普通队列的区别：<ul><li>普通队列仅支持 FIFO（先进先出），无顺序约束。</li><li>单调队列在入队时需<strong>动态剔除破坏单调性的元素</strong>，并支持双端操作（队头出队、队尾入队）<a class=link href=@ref>3,8</a>。</li></ul></li></ol><hr><h3 id=-工作原理与操作流程>🔍 工作原理与操作流程</h3><h4 id=入队操作维护单调性><strong>入队操作（维护单调性）</strong></h4><ul><li><strong>单调递减队列</strong>：新元素入队时，从队尾向前移除所有<strong>小于当前值</strong>的元素，再插入新元素。
+<em>示例</em>：队列 <code>[8,5,3]</code> 插入 <code>6</code> → 移除 <code>5,3</code> → 新队列 <code>[8,6]</code><a class=link href=@ref>3,6</a>。</li><li><strong>单调递增队列</strong>：移除所有<strong>大于当前值</strong>的元素后再插入<a class=link href=@ref>9</a>。</li></ul><h4 id=出队操作维护窗口范围><strong>出队操作（维护窗口范围）</strong></h4><ul><li>当队头元素超出滑动窗口范围（如索引差 ≥ 窗口大小 <code>k</code>），将其从队头移除<a class=link href=@ref>7,9</a>。</li></ul><h4 id=查询操作获取极值><strong>查询操作（获取极值）</strong></h4><ul><li>队头元素即为当前窗口的<strong>最大值（递减队列）或最小值（递增队列）</strong>，时间复杂度 <strong>O(1)</strong><a class=link href=@ref>1,6</a>。</li></ul><h4 id=操作流程示例滑动窗口最大值><strong>操作流程示例（滑动窗口最大值）</strong></h4><div class=table-wrapper><table><thead><tr><th>步骤</th><th>操作</th><th>队列状态（递减）</th><th>当前窗口最大值</th></tr></thead><tbody><tr><td>插入 <code>1</code></td><td><code>push(1)</code></td><td><code>[1]</code></td><td>-</td></tr><tr><td>插入 <code>3</code></td><td>移除 <code>1</code>，<code>push(3)</code></td><td><code>[3]</code></td><td>-</td></tr><tr><td>插入 <code>-1</code></td><td><code>push(-1)</code></td><td><code>[3,-1]</code></td><td><code>3</code>（窗口完整）</td></tr><tr><td>插入 <code>-3</code></td><td><code>push(-3)</code></td><td><code>[3,-1,-3]</code></td><td><code>3</code></td></tr><tr><td>插入 <code>5</code></td><td>移除 <code>-1,-3</code>，<code>push(5)</code></td><td><code>[5]</code></td><td><code>5</code></td></tr></tbody></table></div><hr><h3 id=-典型应用场景>📊 典型应用场景</h3><h4 id=滑动窗口极值问题><strong>滑动窗口极值问题</strong></h4><ul><li><strong>问题</strong>：给定数组和窗口大小 <code>k</code>，求每个窗口的最大值/最小值。</li><li><strong>解法</strong>：单调递减队列维护最大值，单调递增队列维护最小值。
+<em>示例</em>：<code>nums=[1,3,-1,-3,5], k=3</code> → 最大值输出 <code>[3,3,5]</code><a class=link href=@ref>5,9</a>。</li></ul><h4 id=动态规划优化><strong>动态规划优化</strong></h4><ul><li><strong>适用方程</strong>：<code>f[x] = max/min{g(k)} + w[x]</code>（<code>b[x] ≤ k &lt; x</code> 且 <code>b[x]</code> 单调不减）。</li><li><strong>优化思路</strong>：单调队列维护 <code>g(k)</code> 的候选集，避免重复计算区间极值<a class=link href=@ref>1,7</a>。</li></ul><h4 id=经典问题扩展><strong>经典问题扩展</strong></h4><ul><li><strong>广告牌最大矩形</strong>：通过单调队列（或单调栈）计算每个建筑左右边界，求最大矩形面积（例题见<a class=link href=@ref>1,2</a>）。</li><li><strong>接雨水问题</strong>：结合单调递减队列动态计算凹槽水量<a class=link href=@ref>6</a>。</li><li><strong>最长递增子数组</strong>：单调递增队列维护连续递增序列<a class=link href=@ref>6</a>。</li></ul><hr><h3 id=-实现模板与复杂度>⚖️ 实现模板与复杂度</h3><h4 id=java-实现单调递减队列><strong>Java 实现（单调递减队列）</strong></h4><pre tabindex=0><code>import java.util.Deque;
+import java.util.LinkedList;
+class MonotonicQueue {
+    private Deque&lt;Integer&gt; deque = new LinkedList&lt;&gt;();
+    public void push(int value) {
+        while (!deque.isEmpty() &amp;&amp; deque.getLast() &lt; value) {
+            deque.removeLast();  // 移除队尾小于当前值的元素
+        }
+        deque.addLast(value);
+    }
+    public void pop(int value) {
+        if (!deque.isEmpty() &amp;&amp; deque.getFirst() == value) {
+            deque.removeFirst();  // 移除过期队头元素
+        }
+    }
+    public int max() {
+        return deque.getFirst();  // 返回当前最大值
+    }
+}
+</code></pre><h4 id=c-实现滑动窗口最大值><strong>C++ 实现（滑动窗口最大值）</strong></h4><pre tabindex=0><code>vector&lt;int&gt; maxSlidingWindow(vector&lt;int&gt;&amp; nums, int k) {
+    deque&lt;int&gt; dq;
+    vector&lt;int&gt; res;
+    for (int i = 0; i &lt; nums.size(); i++) {
+        while (!dq.empty() &amp;&amp; nums[i] &gt;= nums[dq.back()]) 
+            dq.pop_back();  // 维护递减性
+        dq.push_back(i);
+        if (dq.front() &lt;= i - k) 
+            dq.pop_front();  // 移除越界队头
+        if (i &gt;= k - 1) 
+            res.push_back(nums[dq.front()]);  // 记录窗口最大值
+    }
+    return res;
+}
+</code></pre><h4 id=时间复杂度与空间复杂度><strong>时间复杂度与空间复杂度</strong></h4><div class=table-wrapper><table><thead><tr><th>操作</th><th>时间复杂度</th><th>空间复杂度</th></tr></thead><tbody><tr><td>插入/删除</td><td>均摊 O(1)</td><td>O(k)</td></tr><tr><td>查询极值</td><td>O(1)</td><td>-</td></tr><tr><td>整体遍历</td><td>O(n)</td><td>-</td></tr></tbody></table></div><hr><h3 id=-常见错误与技巧>⚠️ 常见错误与技巧</h3><ol><li>索引 vs. 值：<ul><li>队列存储<strong>索引</strong>而非值，便于判断元素是否在窗口内<a class=link href=@ref>3,9</a>。</li></ul></li><li>重复元素处理：<ul><li>比较时需包含等号（如 <code>>=</code> 或 <code>&lt;=</code>），避免遗漏同值元素<a class=link href=@ref>7</a>。</li></ul></li><li>边界处理：<ul><li>虚拟首尾元素（如补 <code>0</code>）可简化代码，避免空队列判断<a class=link href=@ref>1,7</a>。</li></ul></li></ol><hr><h3 id=-总结与学习建议-1>💎 总结与学习建议</h3><p>单调队列的核心价值在于通过 <strong>“空间换序”</strong> 动态维护候选极值序列，将嵌套查询优化至线性时间。其应用场景可总结如下：</p><div class=table-wrapper><table><thead><tr><th><strong>问题类型</strong></th><th><strong>适用队列类型</strong></th><th><strong>经典例题</strong></th></tr></thead><tbody><tr><td>滑动窗口最大值</td><td>单调递减队列</td><td>LeetCode 239</td></tr><tr><td>动态规划区间极值优化</td><td>单调递增/递减</td><td>广告牌问题（POJ 2823）</td></tr><tr><td>连续子数组极值</td><td>单调队列 + 前缀和</td><td>“切蛋糕”问题</td></tr></tbody></table></div><p><strong>学习建议</strong>：</p><ol><li><strong>从模板入手</strong>：掌握基础模板后，通过 <a class=link href=https://leetcode.com/problems/sliding-window-maximum/ target=_blank rel=noopener>LeetCode 239</a> 和 <a class=link href=https://leetcode.com/problems/largest-rectangle-in-histogram/ target=_blank rel=noopener>LeetCode 84</a> 练习变形。</li><li><strong>可视化调试</strong>：手动画出入队/出队过程（如 <a class=link href=https://visualgo.net/ target=_blank rel=noopener>Visualgo 动画演示</a>）。</li><li><strong>进阶扩展</strong>：学习单调队列在环形数组（LeetCode 503）和斜率优化 DP 中的应用<a class=link href=@ref>1,7</a>。</li></ol><blockquote><p>单调队列的威力在于其 <strong>“以序换效”</strong> 的本质——通过缓存可能成为未来极值的候选元素，并利用单调性快速剔除无效数据，将暴力 O(n²) 优化至 O(n)。掌握其核心思想，可高效解决一系列经典算法难题。</p></blockquote><h2 id=__builtin_popcount>__builtin_popcount</h2><p><code>__builtin_popcount</code> 是 GCC 和 Clang 编译器提供的内置函数，用于高效计算<strong>无符号整数二进制表示中 <code>1</code> 的个数</strong>（Population Count）。以下从核心原理、使用场景、性能优化到替代方案进行全面解析：</p><hr><h3 id=-核心原理与函数定义>🔍 <strong>核心原理与函数定义</strong></h3><h4 id=函数原型><strong>函数原型</strong></h4><pre tabindex=0><code>int __builtin_popcount(unsigned int x); // 32位整数
+int __builtin_popcountll(unsigned long long x); // 64位整数
+</code></pre><ul><li><strong>参数</strong>：无符号整数（<code>unsigned int</code> 或 <code>unsigned long long</code>）。</li><li><strong>返回值</strong>：二进制中 <code>1</code> 的个数<a class=link href=@ref>2,5</a>。</li></ul><h4 id=底层实现机制><strong>底层实现机制</strong></h4><ul><li><p><strong>硬件加速</strong>：若 CPU 支持 <code>POPCNT</code> 指令（x86 架构从 SSE4.2 引入），编译器直接生成该指令，单条指令完成位计数，时间复杂度 <strong>O(1)</strong><a class=link href=@ref>1,3</a>。</p></li><li><p>软件回退：若无 POPCNT 支持，编译器自动切换为高效位操作算法：</p><ul><li><p>二分法：分治合并相邻位的 1 的数量，时间复杂度 O(log₂ n)。</p><pre tabindex=0><code>u = (u &amp; 0x55555555) + ((u &gt;&gt; 1) &amp; 0x55555555); // 每2位分组统计
+u = (u &amp; 0x33333333) + ((u &gt;&gt; 2) &amp; 0x33333333); // 每4位合并
+u = (u &amp; 0x0F0F0F0F) + ((u &gt;&gt; 4) &amp; 0x0F0F0F0F); // 每8位合并
+// ... 最终合并为32位结果
+</code></pre></li><li><p><strong>查表法</strong>：预计算 8 位整数的 <code>1</code> 的数量表（256 元素），分段查表求和<a class=link href=@ref>4,7</a>。</p></li></ul></li></ul><hr><h3 id=-性能优势与对比>⚡ <strong>性能优势与对比</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>实现方法</strong></th><th>时间复杂度</th><th>适用场景</th><th>性能对比（相对时间）</th></tr></thead><tbody><tr><td><code>__builtin_popcount</code>（硬件）</td><td><strong>O(1)</strong></td><td>支持 POPCNT 指令的 CPU</td><td>1x（基准）</td></tr><tr><td>二分法</td><td>O(log₂ n)</td><td>通用算法</td><td>3~5x 慢</td></tr><tr><td>Brian Kernighan 算法</td><td><strong>O(k)</strong></td><td><code>1</code> 的位数极少时（k 为实际位数）</td><td>10x 慢</td></tr><tr><td>逐位循环</td><td>O(n)</td><td>简单实现</td><td>20x 慢 <a class=link href=@ref>4,7</a></td></tr></tbody></table></div><blockquote><p>✅ <strong>实测案例</strong>：对 1 亿次 <code>__builtin_popcount</code> 调用耗时约 <strong>21ms</strong>，而手动循环实现需 <strong>500ms+</strong><a class=link href=@ref>1</a>。</p></blockquote><hr><h3 id=-使用场景与示例>🛠️ <strong>使用场景与示例</strong></h3><h4 id=位图操作与组合枚举><strong>位图操作与组合枚举</strong></h4><ul><li><p>子集筛选：在状态压缩算法中，快速过滤满足位数要求的组合。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>mask</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>mask</span> <span class=o>&lt;</span> <span class=p>(</span><span class=mi>1</span> <span class=o>&lt;&lt;</span> <span class=n>n</span><span class=p>);</span> <span class=n>mask</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>__builtin_popcount</span><span class=p>(</span><span class=n>mask</span><span class=p>)</span> <span class=o>==</span> <span class=n>k</span><span class=p>)</span> <span class=p>{</span> <span class=c1>// 筛选含 k 个元素的子集
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=c1>// 处理逻辑
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div></li></ul><h4 id=数学与算法优化><strong>数学与算法优化</strong></h4><ul><li><strong>判断 2 的幂</strong>：<code>(x & (x-1)) == 0</code> 且 <code>__builtin_popcount(x) == 1</code>。</li><li><strong>汉明距离</strong>：计算两数异或后的 <code>1</code> 的个数。</li></ul><h4 id=实际应用案例><strong>实际应用案例</strong></h4><ul><li><p>路径规划：在网格问题中用二进制表示移动路径</p><pre tabindex=0><code>int path = 0b1100101; // 路径编码
+int down_steps = __builtin_popcount(path); // 统计向下次数
+</code></pre></li></ul><hr><h3 id=-局限性与注意事项>⚠️ <strong>局限性与注意事项</strong></h3><ol><li><strong>可移植性问题</strong>：<ul><li>仅 GCC/Clang 支持，<strong>MSVC 不可用</strong>（需改用 <code>std::popcount</code> 或手动实现）<a class=link href=@ref>5,6</a>。</li><li>硬件依赖：老旧 CPU 无 <code>POPCNT</code> 指令时性能下降。</li></ul></li><li><strong>类型匹配</strong>：<ul><li>32 位用 <code>__builtin_popcount</code>，64 位用 <code>__builtin_popcountll</code>。</li><li><strong>禁止传入负数</strong>（需先转为无符号类型）<a class=link href=@ref>6</a>。</li></ul></li><li><strong>工程权衡</strong>：<ul><li><strong>高性能场景</strong>：优先依赖硬件指令（需检测 CPU 支持性）。</li><li><strong>跨平台场景</strong>：使用 C++20 标准库 <code>std::popcount</code>（<code>&lt;bit></code> 头文件）<a class=link href=@ref>6</a>。</li></ul></li></ol><hr><h3 id=-替代方案c20-前>🔄 <strong>替代方案（C++20 前）</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>方法</strong></th><th>代码示例</th><th>适用场景</th></tr></thead><tbody><tr><td><strong>Brian Kernighan</strong></td><td><code>while (n) { n &= n-1; count++; }</code></td><td><code>1</code> 的位数较少时</td></tr><tr><td><strong>查表法</strong></td><td>预计算 <code>table[256]</code>，分段求和<a class=link href=@ref>7</a></td><td>频繁调用且内存允许</td></tr><tr><td><strong>二分法</strong></td><td>分治合并（见上文）</td><td>无硬件加速且需稳定性能</td></tr></tbody></table></div><hr><h3 id=-总结-4>💎 <strong>总结</strong></h3><ul><li><strong>核心价值</strong>：<code>__builtin_popcount</code> 以近硬件极限的速度解决位计数问题，是算法竞赛和位操作密集型应用的利器⚡。</li><li>工程建议：<ul><li><strong>GCC/Clang 环境</strong>：直接使用，搭配 <code>-mpopcnt</code> 编译选项确保硬件加速<a class=link href=@ref>1,3</a>。</li><li><strong>生产代码</strong>：C++20+ 项目优先用 <code>std::popcount</code>；旧项目可封装适配层，自动切换内置函数与手动实现<a class=link href=@ref>6</a>。</li><li><strong>可移植性</strong>：通过 <code>__has_builtin(__builtin_popcount)</code> 检测编译器支持性<a class=link href=@ref>5</a>。</li></ul></li></ul><blockquote><p>正如 Linux 内核开发者所言：“位操作是系统编程的基石，而 <code>popcnt</code> 是其中最高效的原子工具之一。” 掌握其原理与应用，可显著提升底层性能优化能力。</p></blockquote><h2 id=__lg>__lg</h2><p><code>__lg</code> 是 GCC 和 Clang 编译器提供的内置函数（<strong>非标准 C++ 函数</strong>），用于高效计算无符号整数的二进制表示中<strong>最高有效位（MSB）的位置</strong>（从 0 开始计数）。以下是其核心原理、使用场景、实现方式及注意事项的详细解析：</p><hr><h3 id=-核心功能与数学原理>🔍 <strong>核心功能与数学原理</strong></h3><ol><li><p><strong>功能定义</strong></p><ul><li><p>输入一个无符号整数 <code>x</code>（<code>x > 0</code>），返回其二进制形式中最高位 <code>1</code> 的位置索引（<strong>索引从 0 开始</strong>）。</p></li><li><p>数学等价</p><p>：</p><pre tabindex=0><code>\text{\_\_lg}(x) = \lfloor \log_2(x) \rfloor
+</code></pre><ul><li>例如：<ul><li><code>__lg(8) = 3</code>（8 的二进制为 <code>1000</code>，最高位在第 4 位，索引为 3）<a class=link href=@ref>1,2</a>。</li><li><code>__lg(5) = 2</code>（5 的二进制为 <code>101</code>，最高位在第 3 位，索引为 2）<a class=link href=@ref>1</a>。</li></ul></li></ul></li></ul></li><li><p><strong>输入要求</strong></p><ul><li><strong>必须为无符号整数类型</strong>（如 <code>unsigned int</code>、<code>uint64_t</code>）。</li><li><strong>禁止输入 <code>x = 0</code></strong>：此时行为未定义（可能导致程序崩溃或错误结果）<a class=link href=@ref>1,2</a>。</li></ul></li></ol><hr><h3 id=-底层实现机制>⚙️ <strong>底层实现机制</strong></h3><p><code>__lg</code> 的底层通过编译器优化实现高效计算，通常有两种方式：</p><ol><li><p><strong>硬件指令加速</strong>：</p><ul><li>若 CPU 支持 <code>CLZ</code>（Count Leading Zeros）指令（如 x86 的 <code>BSR</code> 指令），编译器直接生成该指令：
+<code>\text{\_\_lg}(x) = 31 - \text{\_\_builtin\_clz}(x) \quad \text{(32 位整数)}</code>
+时间复杂度为 ​<strong>O(1)​</strong>​<a class=link href=@ref>1</a>。</li></ul></li><li><p><strong>软件算法回退</strong>：</p><ul><li><p>若无硬件支持，编译器使用二分法或查表法计算：</p><pre tabindex=0><code>u = x;
+u |= u &gt;&gt; 1;  // 将最高位1扩散至低位
+u |= u &gt;&gt; 2;
+u |= u &gt;&gt; 4;
+u |= u &gt;&gt; 8;
+u |= u &gt;&gt; 16;
+return count_ones(u) - 1;  // 统计1的个数并减1
+</code></pre><p>时间复杂度为</p><p>O(log n)</p></li></ul></li></ol><p>1</p><pre><code> 。
+</code></pre><hr><h3 id=-性能对比>⚡ <strong>性能对比</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>方法</strong></th><th>时间复杂度</th><th>适用场景</th><th>性能（相对时间）</th></tr></thead><tbody><tr><td><code>__lg</code>（硬件支持）</td><td><strong>O(1)</strong></td><td>支持 <code>CLZ</code> 指令的 CPU</td><td>1x（基准）</td></tr><tr><td><code>std::bit_width(x)-1</code></td><td>O(log n)</td><td>C++20 标准库</td><td>1.5~2x 慢</td></tr><tr><td>手动位操作</td><td>O(log n)</td><td>无编译器扩展支持</td><td>3~5x 慢</td></tr><tr><td><code>std::log2(x)</code></td><td>O(1)</td><td>需浮点数结果（非整数索引）</td><td>10x 慢（含浮点转换）</td></tr></tbody></table></div><blockquote><p>💡 <strong>实测案例</strong>：对 1 亿次 <code>__lg</code> 调用，硬件加速仅需 <strong>15ms</strong>，而手动位操作需 <strong>50ms+</strong><a class=link href=@ref>1</a>。</p></blockquote><hr><h3 id=-应用场景-1>🛠️ <strong>应用场景</strong></h3><ol><li><p><strong>算法优化</strong></p><ul><li><p><strong>二分查找</strong>：快速计算中间点索引 <code>mid = (left + right) >> 1</code> 的等效对数形式<a class=link href=@ref>1</a>。</p></li><li><p>线段树/区间树</p><p>：确定区间长度对应的层级：</p><pre tabindex=0><code>int tree_height = __lg(interval_length) + 1;  // 计算树高
+</code></pre></li></ul></li><li><p><strong>位运算与状态压缩</strong></p><ul><li><p>枚举子集时筛选固定位数状态：</p><pre tabindex=0><code>for (int mask = 0; mask &lt; (1 &lt;&lt; n); mask++) {
+    if (__builtin_popcount(mask) == k) {  // 结合 __builtin_popcount
+        // 处理含 k 个元素的子集
+    }
+}
+</code></pre></li></ul></li><li><p><strong>数学计算替代</strong></p><ul><li>避免浮点运算开销，用整数指令替代</li></ul></li></ol><pre tabindex=0><code>     log2(x)
+</code></pre><pre><code> ：
+
+ ```
+ int bits_required = __lg(n) + 1;  // 计算表示 n 所需的最小比特数
+ ```
+</code></pre><hr><h3 id=-注意事项与替代方案>⚠️ <strong>注意事项与替代方案</strong></h3><ol><li><p><strong>可移植性问题</strong></p><ul><li><strong>仅 GCC/Clang 支持</strong>：MSVC 需改用 <code>std::bit_width(x) - 1</code>（C++20）或手动实现<a class=link href=@ref>1,2</a>。</li><li><strong>老旧 CPU 性能下降</strong>：无 <code>CLZ</code> 指令时退化为软件算法。</li></ul></li><li><p><strong>输入合法性检查</strong></p><ul><li>必须确保</li></ul></li></ol><pre tabindex=0><code>     x &gt; 0
+</code></pre><pre><code> ：
+
+ ```
+ if (x == 0) return -1;  // 显式处理 x=0
+ else return __lg(x);
+ ```
+</code></pre><ol start=3><li><strong>替代方案实现</strong><div class=table-wrapper><table><thead><tr><th><strong>场景</strong></th><th>推荐方案</th><th>示例代码</th></tr></thead><tbody><tr><td><strong>C++20 标准</strong></td><td><code>#include &lt;bit></code> <code>std::bit_width(x)-1</code></td><td><code>int pos = std::bit_width(8)-1; // 3</code></td></tr><tr><td><strong>通用算法</strong></td><td>二分法 + 位操作</td><td>见上文软件算法实现</td></tr><tr><td><strong>浮点数兼容</strong></td><td><code>std::log2(x)</code> + 取整</td><td><code>int pos = static_cast&lt;int>(std::log2(x));</code></td></tr></tbody></table></div></li></ol><hr><h3 id=-总结-5>💎 <strong>总结</strong></h3><ul><li><p><strong>核心价值</strong>：<code>__lg</code> 以近硬件极限的速度计算最高有效位位置，是<strong>算法竞赛</strong>和<strong>位操作密集型系统</strong>的利器⚡。</p></li><li><p>工程建议</p><p>：</p><ul><li><strong>GCC/Clang 环境</strong>：直接使用，搭配 <code>-O2</code> 编译选项确保优化。</li><li><strong>生产代码</strong>：C++20+ 项目优先用 <code>std::bit_width</code>；旧项目封装适配层。</li><li><strong>安全边界</strong>：强制检查 <code>x>0</code>，避免未定义行为。</li></ul></li></ul><blockquote><p>正如 Linux 内核开发者所言：“最高位索引是位操作的基石，而 <code>__lg</code> 是其最高效的实现。” 掌握其原理，可显著提升底层性能优化能力。</p></blockquote><h2 id=using>using</h2><p>在 C++ 中，<code>using</code> 和 <code>typedef</code> 均用于定义类型别名，但二者在语法、功能和使用场景上存在显著差异。以下是结合 C++11 及后续标准的详细对比分析：</p><hr><h3 id=-核心功能与语法对比>⚙️ <strong>核心功能与语法对比</strong></h3><h4 id=基本类型别名><strong>基本类型别名</strong></h4><ul><li><p><strong><code>typedef</code>（传统方式）</strong>
+语法为 <code>typedef 原类型 新类型名</code>，适用于简单类型：</p><pre tabindex=0><code>typedef int Integer;       // 定义 int 的别名
+typedef void (*FuncPtr)(int, int);  // 函数指针别名
+</code></pre><p><strong>缺点</strong>：函数指针等复杂类型需将别名嵌入原类型中，可读性较差<a class=link href=@ref>1,2</a>。</p></li><li><p><strong><code>using</code>（C++11 引入）</strong>
+语法为 <code>using 新类型名 = 原类型</code>，更直观：</p><pre tabindex=0><code>using Integer = int;                     // 等价于 typedef int Integer
+using FuncPtr = void (*)(int, int);      // 函数指针别名更清晰
+</code></pre><p><strong>优势</strong>：类似赋值语法，复杂类型声明更易读<a class=link href=@ref>1,3,4</a>。</p></li></ul><hr><h3 id=-核心差异模板别名支持>🧩 <strong>核心差异：模板别名支持</strong></h3><h4 id=typedef><strong><code>typedef</code> 的局限性</strong></h4><p>无法直接定义模板别名，需包裹在结构体中：</p><pre tabindex=0><code>template &lt;typename T&gt;
+struct MyVector {
+    typedef std::vector&lt;T&gt; type;  // 嵌套定义
+};
+MyVector&lt;int&gt;::type vec;          // 使用需加 ::type
+</code></pre><p>代码冗余，且需额外作用域访问<a class=link href=@ref>1,3,5</a>。</p><h4 id=using-1><strong><code>using</code> 的模板别名</strong></h4><p>直接支持模板别名定义：</p><pre tabindex=0><code>template &lt;typename T&gt;
+using Vec = std::vector&lt;T&gt;;  // 直接定义别名
+Vec&lt;int&gt; numbers;            // 直接使用
+</code></pre><p><strong>优势</strong>：</p><ul><li><p>简化泛型编程，避免嵌套结构<a class=link href=@ref>3,11</a>；</p></li><li><p>支持复杂模板（如</p></li></ul><pre tabindex=0><code>  std::enable_if
+</code></pre><p>）：</p><pre tabindex=0><code>template &lt;typename T&gt;
+using EnableIfInt = typename std::enable_if&lt;std::is_integral&lt;T&gt;::value, T&gt;::type;
+</code></pre><hr><h3 id=-using>📌 <strong><code>using</code> 的扩展功能</strong></h3><p><code>using</code> 不仅用于类型别名，还支持以下场景：</p><h4 id=引入命名空间成员><strong>引入命名空间成员</strong></h4><pre tabindex=0><code>namespace NS { void foo(); int value; }
+int main() {
+    using NS::foo;       // 引入 foo
+    using NS::value;     // 引入 value
+    foo();               // 直接调用
+    return value;
+}
+</code></pre><p><strong>注意</strong>：避免在头文件中使用 <code>using namespace</code>，防止命名污染<a class=link href=@ref>6,8</a>。</p><h4 id=解决继承中的名称隐藏><strong>解决继承中的名称隐藏</strong></h4><p>派生类可通过 <code>using</code> 引入基类成员：</p><pre tabindex=0><code>class Base {
+public:
+    void func(int x) {}
+};
+class Derived : public Base {
+public:
+    using Base::func;    // 引入基类 func
+    void func(double y) {}  // 派生类重载
+};
+Derived d;
+d.func(10);  // 调用 Base::func(int)，避免被隐藏[1,4](@ref)
+</code></pre><h4 id=继承构造函数c11><strong>继承构造函数（C++11）</strong></h4><pre tabindex=0><code>class Base {
+public:
+    Base(int x) {}
+};
+class Derived : public Base {
+public:
+    using Base::Base;  // 继承基类构造函数
+};
+Derived d(42);        // 调用 Base(int)[4,9](@ref)
+</code></pre><hr><h3 id=-使用场景与推荐实践>⚖️ <strong>使用场景与推荐实践</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>场景</strong></th><th><strong>推荐方案</strong></th><th><strong>示例/说明</strong></th></tr></thead><tbody><tr><td><strong>简单类型别名</strong></td><td><code>typedef</code> 或 <code>using</code></td><td>无显著差异，但 <code>using</code> 语法更统一<a class=link href=@ref>3,5</a>。</td></tr><tr><td><strong>函数指针/复杂类型</strong></td><td><code>using</code></td><td>语法更清晰：<code>using FuncPtr = void(*)(int)</code> vs <code>typedef void(*FuncPtr)(int)</code><a class=link href=@ref>4</a>。</td></tr><tr><td><strong>模板别名</strong></td><td><code>using</code></td><td><code>typedef</code> 无法直接支持，<code>using</code> 是唯一方案<a class=link href=@ref>1,11</a>。</td></tr><tr><td><strong>跨平台兼容性</strong></td><td><code>typedef</code></td><td>需兼容 C 或 C++98 的旧代码时使用<a class=link href=@ref>2,9</a>。</td></tr><tr><td><strong>引入基类成员/构造函数</strong></td><td><code>using</code></td><td><code>typedef</code> 无此功能<a class=link href=@ref>4,9</a>。</td></tr></tbody></table></div><h4 id=工程实践建议><strong>工程实践建议</strong>：</h4><ol><li><strong>现代 C++ 项目</strong>：优先使用 <code>using</code>，尤其在模板和复杂类型场景<a class=link href=@ref>3,5</a>。</li><li><strong>旧代码维护</strong>：保留 <code>typedef</code> 以保证兼容性。</li><li><strong>命名空间引入</strong>：局部作用域使用 <code>using NS::member</code>，避免全局 <code>using namespace</code><a class=link href=@ref>6,8</a>。</li></ol><hr><h3 id=-总结-6>💎 <strong>总结</strong></h3><div class=table-wrapper><table><thead><tr><th><strong>特性</strong></th><th><code>typedef</code></th><th><code>using</code></th></tr></thead><tbody><tr><td><strong>语法</strong></td><td>原类型在前，别名在后</td><td>别名 = 原类型（更直观）</td></tr><tr><td><strong>模板别名</strong></td><td>❌ 不支持（需嵌套结构体）</td><td>✅ 直接支持</td></tr><tr><td><strong>函数指针可读性</strong></td><td>较差（别名嵌入原类型）</td><td>更清晰（类似赋值）</td></tr><tr><td><strong>扩展功能</strong></td><td>仅类型别名</td><td>引入命名空间成员、解决继承名称隐藏等</td></tr><tr><td><strong>兼容性</strong></td><td>✅ 兼容 C/C++98</td><td>❌ 仅 C++11 及以上</td></tr></tbody></table></div><blockquote><p><strong>核心结论</strong>：在现代 C++ 开发中，<code>using</code> 凭借其语法简洁性、模板支持及扩展功能，已逐渐取代 <code>typedef</code> 成为类型别名的首选方案。仅在兼容旧代码或特定场景（如匿名结构体）时保留 <code>typedef</code><a class=link href=@ref>1,3,5</a>。</p></blockquote><h2 id=局部变量>局部变量</h2><p>在C++中，代码块（由花括号<code>{}</code>界定）内部的变量定义是否会被编译器“外提”，以及定义在内部与外部的性能差异，需从作用域、存储位置和编译器优化三个角度综合分析。以下是具体结论：</p><hr><h3 id=-变量作用域与编译器行为>🔒 <strong>变量作用域与编译器行为</strong></h3><h4 id=1-作用域规则><strong>(1) 作用域规则</strong></h4><ul><li><strong>内部定义</strong>：代码块内定义的变量（如<code>{ int x = 10; }</code>）具有<strong>块作用域</strong>，仅在块内可见，退出块时自动销毁。</li><li><strong>外部定义</strong>：在代码块外部定义的变量（如函数内但在<code>{}</code>前）具有<strong>函数作用域</strong>，在整个函数内可见。</li></ul><h4 id=2-编译器是否外提><strong>(2) 编译器是否“外提”？</strong></h4><ul><li><p><strong>不会自动外提作用域</strong>：编译器不会将块内变量提升到块外作用域，否则会破坏封装性并可能导致命名冲突。</p></li><li><p>可能优化存储位置：在开启优化（如</p><pre tabindex=0><code>-O2
+</code></pre><p>）时，编译器可能将块内变量的存储位置调整到函数栈帧的更高地址（即“外提存储地址”），但</p><p>不改变其作用域</p><p>。例如：</p><pre tabindex=0><code>void func() {
+    // 编译器可能将y的存储地址提前分配，但y的作用域仍在块内
+    int x = 0;
+    {
+        int y = x + 1;  // y的存储可能被提前分配，但作用域不超出块
+    }
+}
+</code></pre><p>这种优化避免了重复分配栈空间，但变量生命周期仍严格限定在块内。</p></li></ul><hr><h3 id=-性能差异分析>⚡ <strong>性能差异分析</strong></h3><h4 id=1-内部定义的性能优势><strong>(1) 内部定义的性能优势</strong></h4><ul><li><strong>栈分配效率高</strong>：块内变量在栈上分配，进出块时仅需调整栈指针（约1时钟周期），无堆内存管理的开销。</li><li><strong>缓存友好性</strong>：局部变量更易被L1缓存命中。块内变量的集中访问可提升缓存利用率，减少缓存未命中（Cache Miss）。</li><li><strong>减少寄存器压力</strong>：短生命周期变量可能被编译器优化到寄存器中，避免内存访问延迟。</li></ul><h4 id=2-外部定义的潜在开销><strong>(2) 外部定义的潜在开销</strong></h4><ul><li><strong>延长生命周期</strong>：外部变量在整个函数内存在，占用栈空间更久，可能导致栈帧增大，影响缓存效率。</li><li><strong>增加寄存器竞争</strong>：长生命周期变量需长期占用寄存器或内存地址，可能限制编译器的寄存器分配优化。</li></ul><h4 id=3-性能对比场景><strong>(3) 性能对比场景</strong></h4><div class=table-wrapper><table><thead><tr><th><strong>场景</strong></th><th><strong>内部定义性能</strong></th><th><strong>外部定义性能</strong></th></tr></thead><tbody><tr><td><strong>变量生命周期</strong></td><td>短（仅块内）</td><td>长（整个函数）</td></tr><tr><td><strong>栈分配次数</strong></td><td>可能多次（未优化时）</td><td>一次</td></tr><tr><td><strong>缓存命中率</strong></td><td>高（局部性强）</td><td>可能低（分散访问）</td></tr><tr><td><strong>寄存器优化机会</strong></td><td>高（短生命周期）</td><td>低（需长期占用）</td></tr></tbody></table></div><blockquote><p>✅ <strong>关键结论</strong>：在未覆盖（无命名冲突）且开启编译器优化时，<strong>内部定义通常更优</strong>，因更符合局部性原则，利于缓存和寄存器分配。</p></blockquote><hr><h3 id=-工程实践建议>🛠 <strong>工程实践建议</strong></h3><ol><li><p><strong>优先块内定义</strong>：</p><ul><li><p>将变量定义在最小必要作用域内，避免污染外部命名空间，同时提升可读性和缓存性能。</p></li><li><p>示例：</p><pre tabindex=0><code>// ✅ 推荐：内部定义
+for (int i = 0; i &lt; n; i++) {
+    int temp = compute(i);  // 作用域限定在循环内
+}
+</code></pre></li></ul></li><li><p><strong>避免重复初始化</strong>：</p><ul><li><p>若变量需在多个块中重复使用（如循环中的临时变量），可外提定义但</p><p>立即初始化</p><p>，防止未定义行为：</p><pre tabindex=0><code>// ✅ 外提但立即初始化
+int temp;
+for (int i = 0; i &lt; n; i++) {
+    temp = compute(i);  // 避免每次重新定义
+}
+</code></pre></li></ul></li><li><p><strong>警惕隐藏问题（Shadowing）</strong>：</p><ul><li><p>内部变量若与外层同名，会隐藏外部变量。确保逻辑正确性：</p><pre tabindex=0><code>int x = 10;
+{
+    int x = 20;  // 隐藏外部x，可能非预期
+}
+</code></pre></li></ul></li><li><p><strong>编译器优化指令</strong>：</p><ul><li>使用<code>-O2</code>/<code>-O3</code>优化级别，允许编译器合并栈分配（如将相邻块的变量存储地址外提），减少栈指针操作次数。</li></ul></li></ol><hr><h3 id=-总结-7>💎 <strong>总结</strong></h3><ul><li><strong>作用域</strong>：块内变量作用域不自动外提，生命周期严格受限。</li><li><strong>性能</strong>：块内定义通常更优（栈分配高效、缓存友好），尤其配合编译器优化时。</li><li><strong>建议</strong>：默认在块内定义变量，仅当需跨块复用或避免重复初始化时才外提，并启用编译优化（如<code>-O2</code>）最大化性能。</li></ul><h2 id=汉字>汉字</h2><p>在C++中存储汉字需理解字符编码、字符串类型和平台差异。以下是核心要点及实现方案：</p><hr><h3 id=-字符编码基础>⚙️ 字符编码基础</h3><ol><li><strong>常用编码标准</strong><ul><li><strong>GBK/GB2312</strong>：Windows中文系统默认双字节编码（部分生僻字4字节）。</li><li><strong>UTF-8</strong>：变长编码（1-4字节），兼容ASCII，跨平台首选（如网页、网络传输）。</li><li><strong>UTF-16</strong>：定长2或4字节（代理对），Windows API内部使用（<code>wchar_t</code>存储）。</li></ul></li><li><strong>Unicode与编码实现</strong><ul><li>Unicode为字符集标准，UTF-8/UTF-16是其具体编码方式。</li><li>汉字在Unicode中的码点范围：<code>U+4E00</code>至<code>U+9FFF</code>（基本多文种平面）。</li></ul></li></ol><hr><h3 id=-c中的存储实现方式>💾 C++中的存储实现方式</h3><h4 id=使用><strong>使用<code>char</code>数组（多字节编码）</strong></h4><ul><li></li></ul><p>GBK示例</p><p>：每个汉字占2字节，英文字符1字节。</p><pre tabindex=0><code>char gbk_str[] = &#34;你好&#34;;  // 内存：D6 D0（你） + B9 FA（好）
+</code></pre><ul><li></li></ul><p>UTF-8示例</p><p>：汉字占3字节（C++11起支持</p><pre tabindex=0><code>u8
+</code></pre><p>前缀）：</p><pre tabindex=0><code>const char* utf8_str = u8&#34;你好&#34;;  // 内存：E4 BD A0（你） + E5 A5 BD（好）
+</code></pre><h4 id=宽字符类型><strong>宽字符类型（<code>wchar_t</code>）</strong></h4><ul><li><p>Windows：</p><pre tabindex=0><code>wchar_t
+</code></pre><p>为2字节（UTF-16），Linux为4字节（UTF-32）：</p><pre tabindex=0><code>wchar_t wide_str[] = L&#34;你好&#34;;  // Windows内存：4F60（你） + 597D（好）
+</code></pre></li></ul><h4 id=现代字符串类型c11起><strong>现代字符串类型（C++11起）</strong></h4><ul><li><p>**</p><pre tabindex=0><code>std::u16string
+</code></pre><p>**：UTF-16编码，适用于Windows：</p><pre tabindex=0><code>std::u16string u16_str = u&#34;你好&#34;;  
+</code></pre></li><li><p><strong><code>std::u32string</code></strong>：UTF-32编码，平台无关但空间大。</p></li><li><p>**</p><pre tabindex=0><code>std::string
+</code></pre><p>（UTF-8）**：需显式指定编码，推荐跨平台使用：</p><pre tabindex=0><code>std::string utf8_str = u8&#34;你好&#34;;
+</code></pre></li></ul><hr><h3 id=-平台差异与兼容性处理>🌐 平台差异与兼容性处理</h3><ol><li><p><strong>Windows特有机制</strong></p><ul><li><p>API双版本：<code>CreateFileA</code>（ANSI/GBK） vs. <code>CreateFileW</code>（UTF-16）。</p></li><li><p>编码转换：用</p><pre tabindex=0><code>MultiByteToWideChar
+</code></pre><p>（GBK/UTF-8 → UTF-16）：</p><pre tabindex=0><code>std::string utf8_str = u8&#34;你好&#34;;
+int len = MultiByteToWideChar(CP_UTF8, 0, utf8_str.c_str(), -1, nullptr, 0);
+std::wstring wstr(len, 0);
+MultiByteToWideChar(CP_UTF8, 0, utf8_str.c_str(), -1, &amp;wstr[0], len);
+</code></pre></li></ul></li><li><p><strong>控制台输出</strong></p><ul><li><p>Windows默认GBK，输出UTF-8需设置代码页：</p><pre tabindex=0><code>SetConsoleOutputCP(CP_UTF8);  // 或执行命令`chcp 65001`
+std::cout &lt;&lt; u8&#34;你好&#34;;  
+</code></pre></li></ul></li><li><p><strong>文件读写</strong></p><ul><li>写入UTF-8时建议加BOM（<code>\xEF\xBB\xBF</code>）。</li><li>读取时需检测编码（如BOM头），再转换到程序内部格式。</li></ul></li></ol><hr><h3 id=-关键问题与最佳实践>⚠️ 关键问题与最佳实践</h3><ol><li><strong>常见陷阱</strong><ul><li><strong><code>strlen</code>误区</strong>：统计字节数而非字符数（如UTF-8汉字算3字节）。</li><li><strong>源文件编码</strong>：确保源代码文件保存为UTF-8（带BOM），编译器设置<code>/utf-8</code>（MSVC）或<code>-finput-charset=UTF-8</code>（GCC）。</li></ul></li><li><strong>推荐实践</strong><ul><li><strong>跨平台</strong>：统一用UTF-8编码的<code>std::string</code>，避免<code>wchar_t</code>。</li><li><strong>Windows开发</strong>：优先Unicode版本API（<code>*W</code>后缀），内部用<code>std::wstring</code>。</li><li><strong>复杂场景</strong>：第三方库如ICU（编码转换）、Boost.Locale（跨平台本地化）。</li></ul></li></ol><hr><h3 id=-总结-8>💎 总结</h3><div class=table-wrapper><table><thead><tr><th>场景</th><th>推荐方案</th><th>示例/工具</th></tr></thead><tbody><tr><td>跨平台文本存储/传输</td><td>UTF-8 + <code>std::string</code></td><td><code>u8"汉字"</code></td></tr><tr><td>Windows API交互</td><td>UTF-16 + <code>std::wstring</code></td><td><code>L"汉字"</code> + <code>MultiByteToWideChar</code></td></tr><tr><td>文件读写</td><td>显式BOM或统一编码</td><td><code>fstream</code> + 检测BOM</td></tr></tbody></table></div><blockquote><p>关键原则：<strong>从输入到输出全程统一编码</strong>，避免混合编码导致乱码。 测试时务必验证多语言环境下的行为，如中英混合字符串的截取、比较等操作。</p></blockquote><h2 id=字符串相等>字符串相等</h2><p>在C++中判断字符串是否相等，需根据字符串类型（<code>std::string</code>或C风格字符串）和具体场景选择合适的方法。以下是详细总结及最佳实践：</p><hr><h3 id=-stdstring字符串的比较>🔍 <code>std::string</code>字符串的比较</h3><h4 id=heading><strong><code>==</code>运算符（最常用）</strong></h4><p>直接比较两个<code>std::string</code>对象的内容是否完全相同：</p><pre tabindex=0><code>#include &lt;string&gt;
+#include &lt;iostream&gt;
+int main() {
+    std::string s1 = &#34;Hello&#34;;
+    std::string s2 = &#34;Hello&#34;;
+    if (s1 == s2) {  // 返回true
+        std::cout &lt;&lt; &#34;字符串相等&#34; &lt;&lt; std::endl;
+    }
+}
+</code></pre><p><strong>注意</strong>：</p><ul><li>区分大小写（如<code>"hello" != "Hello"</code>）。</li><li>空格和长度敏感（如<code>"Hello" != "Hello "</code>）。</li></ul><h4 id=compare><strong><code>compare()</code>函数</strong></h4><p>提供更详细的比较结果（相等返回<code>0</code>，否则返回非零值）：</p><pre tabindex=0><code>if (s1.compare(s2) == 0) {  // 等价于 s1 == s2
+    std::cout &lt;&lt; &#34;字符串相等&#34; &lt;&lt; std::endl;
+}
+</code></pre><p><strong>适用场景</strong>：</p><ul><li>需判断字典序关系（如排序）时，返回值可区分大小（<code>&lt;0</code>表示<code>s1 &lt; s2</code>，<code>>0</code>表示<code>s1 > s2</code>）。</li></ul><hr><h3 id=-c风格字符串字符数组的比较>⚠️ C风格字符串（字符数组）的比较</h3><p>C风格字符串需使用**<code>strcmp()</code>函数**，不可用<code>==</code>（否则比较的是地址而非内容）：</p><pre tabindex=0><code>#include &lt;cstring&gt;
+#include &lt;iostream&gt;
+int main() {
+    const char* str1 = &#34;Hello&#34;;
+    const char* str2 = &#34;Hello&#34;;
+    if (strcmp(str1, str2) == 0) {  // 返回0表示相等
+        std::cout &lt;&lt; &#34;字符串相等&#34; &lt;&lt; std::endl;
+    }
+}
+</code></pre><p><strong>注意</strong>：</p><ul><li>需包含头文件<code>&lt;cstring></code>。</li><li>同样区分大小写和空格。</li></ul><hr><h3 id=-特殊场景的字符串比较>🛠 特殊场景的字符串比较</h3><h4 id=忽略大小写比较><strong>忽略大小写比较</strong></h4><p>需先统一转换为小写/大写：</p><pre tabindex=0><code>#include &lt;algorithm&gt;
+#include &lt;cctype&gt;
+bool caseInsensitiveCompare(const std::string&amp; a, const std::string&amp; b) {
+    std::string a_lower = a;
+    std::string b_lower = b;
+    std::transform(a_lower.begin(), a_lower.end(), a_lower.begin(), ::tolower);
+    std::transform(b_lower.begin(), b_lower.end(), b_lower.begin(), ::tolower);
+    return a_lower == b_lower;
+}
+</code></pre><p><strong>应用场景</strong>：用户名验证、模糊匹配等。</p><h4 id=部分字符串比较><strong>部分字符串比较</strong></h4><p>使用<code>substr()</code>或迭代器比较子串：</p><pre tabindex=0><code>// 比较前n个字符
+if (str1.substr(0, n) == str2.substr(0, n)) { /* 相等 */ }
+// 或使用迭代器
+bool partialEqual = std::equal(str1.begin(), str1.begin() + n, str2.begin());
+</code></pre><h4 id=忽略空格的比较><strong>忽略空格的比较</strong></h4><p>遍历时跳过空格字符：</p><pre tabindex=0><code>bool ignoreSpaceCompare(const std::string&amp; a, const std::string&amp; b) {
+    size_t i = 0, j = 0;
+    while (i &lt; a.size() &amp;&amp; j &lt; b.size()) {
+        if (a[i] == &#39; &#39;) { i++; continue; }
+        if (b[j] == &#39; &#39;) { j++; continue; }
+        if (a[i] != b[j]) return false;
+        i++; j++;
+    }
+    // 处理剩余字符
+    while (i &lt; a.size() &amp;&amp; a[i] == &#39; &#39;) i++;
+    while (j &lt; b.size() &amp;&amp; b[j] == &#39; &#39;) j++;
+    return (i == a.size() &amp;&amp; j == b.size());
+}
+</code></pre><p><strong>应用场景</strong>：文本处理（如NOI题目中的字符串判等）。</p><hr><h3 id=-性能优化与常见陷阱>⚡ 性能优化与常见陷阱</h3><h4 id=性能优化><strong>性能优化</strong></h4><ul><li><p><strong>避免拷贝</strong>：使用<code>const std::string&</code>传递参数，减少临时对象。</p></li><li></li></ul><p>快速失败</p><p>：先比较长度，长度不等直接返回</p><pre tabindex=0><code>false
+</code></pre><p>，避免逐字符比较：</p><pre tabindex=0><code>bool efficientCompare(const std::string&amp; a, const std::string&amp; b) {
+    if (a.size() != b.size()) return false;
+    return a == b;  // 或 a.compare(b) == 0
+}
+</code></pre><h4 id=常见陷阱><strong>常见陷阱</strong></h4><ul><li><p>**</p><pre tabindex=0><code>==
+</code></pre><p>误用于C风格字符串**：</p><pre tabindex=0><code>const char* s1 = &#34;Hello&#34;;
+const char* s2 = &#34;Hello&#34;;
+if (s1 == s2)  // 比较地址而非内容！可能返回true（编译器优化），但不可靠
+</code></pre></li><li><p><strong>未处理编码差异</strong>：多字节字符（如中文）需确保字符串编码一致（如UTF-8）。</p></li><li><p><strong>生命周期问题</strong>：<code>c_str()</code>返回的指针在<code>std::string</code>修改后失效。</p></li></ul><hr><h3 id=-总结不同场景下的推荐方法>💎 总结：不同场景下的推荐方法</h3><div class=table-wrapper><table><thead><tr><th><strong>场景</strong></th><th><strong>推荐方法</strong></th><th><strong>示例</strong></th></tr></thead><tbody><tr><td><code>std::string</code>内容比较</td><td><code>==</code> 运算符</td><td><code>if (str1 == str2)</code></td></tr><tr><td>需获取字典序关系</td><td><code>compare()</code></td><td><code>if (str1.compare(str2) == 0)</code></td></tr><tr><td>C风格字符串比较</td><td><code>strcmp()</code></td><td><code>if (strcmp(cstr1, cstr2) == 0)</code></td></tr><tr><td>忽略大小写比较</td><td>转换为小写后使用<code>==</code></td><td>见第三节示例</td></tr><tr><td>高性能场景（长字符串）</td><td>先比较长度，再比较内容</td><td>见第四节优化代码</td></tr></tbody></table></div><p><strong>最佳实践</strong>：</p><ul><li>优先使用<code>std::string</code>而非C风格字符串，避免指针陷阱。</li><li>明确比较需求（是否大小写敏感、是否忽略空格），选择对应策略。</li><li>对性能敏感的场景（如大文本处理），采用长度预判和引用传参优化。</li></ul><h2 id=字符串比较>字符串比较</h2><p>在 C++ 中，字符串比较遵循**字典序（Lexicographical Order）**规则，具体实现方式因字符串类型（C 风格字符串或 <code>std::string</code>）而异。以下是核心规则和实现方法的详细说明：</p><hr><h3 id=-基本比较规则>🧠 基本比较规则</h3><ol><li><strong>逐字符比较</strong>
+从左向右依次比较每个字符的编码值（如 ASCII 或 Unicode）：<ul><li>若当前字符不同，编码值较小的字符串更小。例如 <code>"apple" &lt; "banana"</code>（<code>'a'</code>（97） &lt; <code>'b'</code>（98））。</li><li>若字符相同，则继续比较下一个字符。</li></ul></li><li><strong>长度影响结果</strong>
+若两字符串前缀完全相同，​<strong>较短字符串更小</strong>。例如：<ul><li><code>"app" &lt; "apple"</code>（长度 3 &lt; 5）。</li><li>空字符串 <code>""</code> 被视为小于任何非空字符串。</li></ul></li><li><strong>大小写敏感性</strong>
+默认<strong>区分大小写</strong>，大写字母（如 <code>'A'</code>（65））小于小写字母（如 <code>'a'</code>（97））。
+例如：<ul><li><code>"Apple" &lt; "apple"</code>（<code>'A'</code> &lt; <code>'a'</code>）</li><li><code>"DEF" &lt; "def"</code>（大写字母的 ASCII 值均小于小写字母）。</li></ul></li></ol><hr><h3 id=-c-风格字符串的比较方法>⚙️ C 风格字符串的比较方法</h3><p>使用 <code>&lt;cstring></code> 中的函数：</p><ol><li><p><strong><code>strcmp(const char* s1, const char* s2)</code></strong></p><ul><li>返回负值：<code>s1 &lt; s2</code></li><li>返回 <code>0</code>：<code>s1 == s2</code></li><li>返回正值：<code>s1 > s2</code></li></ul><pre tabindex=0><code>if (strcmp(&#34;apple&#34;, &#34;banana&#34;) &lt; 0) // 结果为真。
+</code></pre></li><li><p><strong><code>strncmp(const char* s1, const char* s2, size_t n)</code></strong>
+比较前 <code>n</code> 个字符：</p><pre tabindex=0><code>strncmp(&#34;hello&#34;, &#34;helicopter&#34;, 3); // 比较 &#34;hel&#34; 和 &#34;hel&#34;，返回 0。
+</code></pre></li></ol><hr><h3 id=-c-stdstring-类的比较方法>📚 C++ <code>std::string</code> 类的比较方法</h3><ol><li><p><strong>重载的比较运算符</strong>（<code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>></code>, <code>&lt;=</code>, <code>>=</code>）
+直接使用运算符，符合字典序规则：</p><pre tabindex=0><code>std::string s1 = &#34;apple&#34;, s2 = &#34;banana&#34;;
+if (s1 &lt; s2) // 结果为真。
+</code></pre></li><li><p><strong><code>compare()</code> 成员函数</strong>
+支持灵活的子串比较，返回规则同 <code>strcmp()</code>：</p><pre tabindex=0><code>std::string s = &#34;Hello, world&#34;;
+s.compare(7, 5, &#34;world&#34;); // 比较 &#34;world&#34; 和 &#34;world&#34;，返回 0。
+</code></pre><p>支持多种重载形式：</p><ul><li>比较整个字符串：<code>s1.compare(s2)</code></li><li>比较子串：<code>s1.compare(pos1, len1, s2, pos2, len2)</code></li></ul></li></ol><hr><h3 id=-注意事项>⚠️ 注意事项</h3><ol><li><p><strong>不区分大小写的比较</strong>
+需手动转换字符串为统一大小写：</p><pre tabindex=0><code>#include &lt;cctype&gt;
+std::string s1 = &#34;Apple&#34;, s2 = &#34;apple&#34;;
+auto lower = [](std::string s) {
+    for (char&amp; c : s) c = std::tolower(c);
+    return s;
+};
+if (lower(s1) == lower(s2)) // 相等。
+</code></pre></li><li><p><strong>边界安全</strong>
+使用 <code>strncmp</code> 或 <code>compare()</code> 时需确保范围不越界。</p></li><li><p><strong>数值字符串比较</strong>
+<code>"123" > "45"</code>（字典序）但数值 <code>123 > 45</code>，需用 <code>std::stoi</code> 转换后比较。</p></li></ol><hr><h3 id=-总结-9>💎 总结</h3><div class=table-wrapper><table><thead><tr><th><strong>场景</strong></th><th><strong>规则</strong></th></tr></thead><tbody><tr><td><strong>字符不同</strong></td><td>编码值小的字符串更小（如 <code>"a" &lt; "b"</code>）</td></tr><tr><td><strong>字符相同但长度不同</strong></td><td>较短的字符串更小（如 <code>"app" &lt; "apple"</code>）</td></tr><tr><td><strong>大小写敏感</strong></td><td>大写字母 &lt; 小写字母（如 <code>"A" &lt; "a"</code>）</td></tr></tbody></table></div><p>根据需求选择：</p><ul><li><strong>简洁性</strong> → <code>std::string</code> 的运算符（如 <code>s1 &lt; s2</code>）。</li><li><strong>灵活性</strong> → <code>compare()</code> 或 <code>strncmp</code>（支持子串比较）。</li><li><strong>忽略大小写</strong> → 预处理转换为统一大小写。</li></ul><h2 id=移动语义>移动语义</h2><p><code>std::move</code> 是 C++11 引入的核心工具，用于<strong>触发移动语义（Move Semantics）</strong>，通过资源所有权转移而非复制来提升性能。以下是其核心要点及使用场景：</p><hr><h3 id=-本质与原理>🔧 <strong>本质与原理</strong></h3><ol><li><p><strong>类型转换工具</strong></p><ul><li><p><code>std::move</code> 将左值强制转换为右值引用（<code>T&&</code>），表明该对象可被“移动”。</p></li><li><p><strong>注意</strong>：它本身不执行任何移动操作，仅改变类型标识，真正的移动由<strong>移动构造函数/赋值运算符</strong>实现。</p></li><li><p>原型：</p><pre tabindex=0><code>template &lt;class T&gt; 
+constexpr typename std::remove_reference&lt;T&gt;::type&amp;&amp; move(T&amp;&amp; t) noexcept;
+</code></pre></li></ul></li><li><p><strong>移动语义的核心</strong></p><ul><li></li></ul></li></ol><pre><code> 资源窃取
+
+ ：移动构造函数或赋值运算符直接接管原对象的资源（如动态内存、文件句柄），避免深拷贝。
+
+ ```
+ // 移动构造函数示例
+ MyString(MyString&amp;&amp; other) noexcept : data(other.data) {
+     other.data = nullptr;  // 原对象资源置空
+ }
+ ```
+</code></pre><ul><li><strong>性能提升</strong>：对 <code>std::vector</code>、<code>std::string</code> 等资源密集型对象，移动成本为 O(1)，而拷贝为 O(n)。</li></ul><hr><h3 id=-典型应用场景-1>🚀 <strong>典型应用场景</strong></h3><ol><li><p><strong>容器操作优化</strong></p><ul><li>向容器插入大对象时，用</li></ul></li></ol><pre tabindex=0><code>     std::move
+     ```
+
+避免拷贝：
+
+     ```
+     std::vector&lt;std::string&gt; vec;
+     std::string s = &#34;Hello&#34;;
+     vec.push_back(std::move(s));  // 移动而非拷贝，s 变为空
+     ```
+
+2. **资源所有权转移**
+
+   - 适用于独占型资源管理类（如
+</code></pre><pre><code> std::unique_ptr
+ ```
+
+ ）：
+
+ ```
+ auto ptr1 = std::make_unique&lt;int&gt;(42);
+ auto ptr2 = std::move(ptr1);  // ptr1 变为 nullptr
+ ```
+</code></pre><ol start=3><li><p><strong>函数返回值优化</strong></p><ul><li>返回局部对象时，编译器可能自动使用移动语义（RVO/NRVO），显式用</li></ul></li></ol><pre tabindex=0><code>     std::move
+     ```
+
+可确保移动：
+
+     ```
+     std::vector&lt;int&gt; createVector() {
+         std::vector&lt;int&gt; tmp;
+         return std::move(tmp);  // 强制触发移动（C++17 后通常无需显式调用）
+     }
+     ```
+
+
+
+------
+
+### ⚠️ **关键注意事项**
+
+1. **原对象状态失效**
+
+   - 被移动后的对象处于**有效但未定义状态**（如 `std::vector` 的 `size()` 可能为 0）。
+
+   - 
+
+     禁止再访问资源
+
+     ：
+
+     ```
+     std::string s1 = &#34;text&#34;;
+     std::string s2 = std::move(s1);
+     std::cout &lt;&lt; s1.size();  // 未定义行为！可能输出 0 或崩溃
+     ```
+
+2. **移动语义需显式实现**
+
+   - 若类未定义移动构造函数/赋值运算符，`std::move` 会退化为拷贝操作。
+   - **标记 `noexcept`**：确保移动操作不会抛出异常，避免 STL 容器扩容时回退到拷贝。
+
+3. **禁用场景**
+
+   - **
+
+     ```
+     const
+     ```
+
+对象**：无法移动（移动操作需修改原对象）：
+
+     ```
+     const std::string s = &#34;immutable&#34;;
+     auto s2 = std::move(s);  // 实际触发拷贝！
+     ```
+
+   - **小型对象**（如 `int`、`char`）：移动与拷贝开销相同，无需使用。
+
+
+
+------
+
+### 💎 **拷贝 vs 移动对比**
+
+| **特性**       | **拷贝语义**            | **移动语义**            |
+| -------------- | ----------------------- | ----------------------- |
+| **资源操作**   | 深拷贝（复制资源）      | 资源转移（窃取资源）    |
+| **性能**       | 高开销（O(n) 内存复制） | 低开销（O(1) 指针交换） |
+| **原对象状态** | 不变                    | 有效但未定义            |
+| **适用对象**   | 所有类型                | 支持移动构造/赋值的类型 |
+| **语法示例**   | `v2 = v1;`              | `v2 = std::move(v1);`   |
+
+
+
+------
+
+### ⚡ **最佳实践**
+
+1. **明确所有权转移意图**：仅对不再使用的对象使用 `std::move`。
+2. **优先依赖编译器优化**：函数返回值尽量依赖 RVO（返回值优化），而非显式 `std::move`。
+3. **验证移动支持**：自定义资源管理类需实现移动构造函数/赋值运算符。
+
+&gt; **移动的本质是“资源窃取许可证”** —— 它授权目标对象接管原对象的资源，但需确保原对象不再被依赖。合理使用可显著提升程序性能，尤其在处理容器、智能指针或大型数据结构时。
+
+## auto 语义
+
+“error: variable &#39;construct&#39; declared with deduced type &#39;auto&#39; cannot appear in its own initializer” 是 C++ 编译器的类型推导错误，表示 **变量在初始化表达式中引用了自身**，导致编译器无法推导出该变量的类型。以下是详细分析和解决方案：
+
+
+
+------
+
+### ⚠️ **错误原因**
+
+`auto` 类型推导依赖**初始化表达式**在编译时确定变量类型。若变量在初始化表达式中引用自身，会形成**循环依赖**：
+</code></pre><p>auto construct = construct + 1; // 错误！初始化时引用了自身</p><pre tabindex=0><code>
+编译器在推导 `construct` 的类型时，发现其初始化表达式包含 `construct` 自身，此时 `construct` 的类型尚未确定，导致推导失败。
+
+
+
+------
+
+### 🔧 **解决方法**
+
+#### **拆分声明与初始化**
+
+将变量声明和初始化分离，先声明变量再赋值（需明确指定类型）：
+</code></pre><p>int construct; // 显式声明类型
+construct = construct + 1; // 后续赋值（注意：此处逻辑可能仍有问题）</p><pre tabindex=0><code>
+**注意**：若初始化依赖自身值（如 `construct = construct + 1`），逻辑本身是错误的，因为未初始化的变量值是未定义的（UB）。
+
+#### **显式指定变量类型**
+
+若初始化表达式需依赖其他变量，直接指定类型而非使用 `auto`：
+</code></pre><p>int x = 10;
+int construct = x + 1; // 显式指定 int 类型</p><pre tabindex=0><code>
+#### **避免循环依赖的初始化**
+
+重构代码，确保初始化表达式**不引用当前声明的变量**：
+</code></pre><p>auto value = 42; // 合法：初始化表达式是字面量
+auto result = value * 2; // 合法：依赖已定义的 value</p><pre tabindex=0><code>
+
+
+------
+
+### ⚠️ **其他常见 `auto` 错误场景**
+
+1. **未初始化变量**
+   `auto` 变量必须初始化，否则编译器无法推导类型：
+</code></pre><p>auto x; // ❌ 错误：declaration of &lsquo;auto x&rsquo; has no initializer</p><pre tabindex=0><code>
+2. **与旧版 C++ 的 `auto` 混淆**
+在 C++11 前，`auto` 表示“自动存储期”（如 `auto int b=0;`）。C++11 起该用法被废弃，组合使用会报错：
+</code></pre><p>auto int x = 10; // ❌ 错误：auto 不能与其他类型说明符组合</p><pre tabindex=0><code>
+3. **初始化表达式类型不明确**
+若初始化表达式类型不一致或为空，推导失败：
+</code></pre><p>auto a = {1, 2.5}; // ❌ C++14 前错误：无法推导统一类型
+auto b; // ❌ 未初始化</p><pre tabindex=0><code>
+
+
+------
+
+### 💡 **最佳实践**
+
+1. **确保初始化表达式独立**：
+初始化表达式应仅依赖**已定义变量**或**字面量**，避免自引用。
+2. **复杂场景显式指定类型**：
+若类型推导可能歧义（如多类型表达式），优先显式声明类型。
+3. **检查循环逻辑**：
+自引用初始化通常是逻辑错误，需重新设计变量初始化流程。
+
+
+
+------
+
+### 📝 **修正案例**
+</code></pre><p>// 错误示例
+auto construct = construct * 2; // ❌ 自引用
+// 修正方案1：显式指定类型
+int construct = 10; // 先初始化
+construct = construct * 2; // 再赋值
+// 修正方案2：拆分步骤
+int init_value = 10; // 定义初始值
+auto construct = init_value * 2; // ✅ 依赖已定义的 init_value</p><pre tabindex=0><code>
+&gt; 提示：在 Visual Studio 等 IDE 中，可通过编译器选项 `/Zc:auto` 强制使用 C++11 的 `auto` 语义，避免与旧版混淆。
+
+## 匿名函数
+
+在C++中，匿名函数（即Lambda表达式）的类型是由编译器自动生成的**唯一闭包类型（closure type）**。这一类型具有以下核心特性：
+
+### 🔍 **闭包类型（Compiler-Generated Closure Type）**
+
+- 每个Lambda表达式在编译时都会生成一个**匿名、唯一的类类型**，该类重载了`operator()`以实现函数调用语义。
+- 该类型的具体名称由编译器内部定义，程序员无法显式声明或直接使用（如`decltype(lambda)`可获取类型，但无法显式写出类型名）。
+
+### ⚙️ **使用 `auto` 声明变量**
+
+- 因闭包类型名称不可知，通常用
+</code></pre><p>auto</p><pre tabindex=0><code>
+声明Lambda的变量：
+</code></pre><p>auto lambda = [](int a, int b) { return a + b; };</p><pre tabindex=0><code>
+此处
+</code></pre><p>lambda</p><pre tabindex=0><code>
+的类型即为编译器生成的闭包类型。
+
+### 🔄 **隐式转换为函数指针（无捕获时）**
+
+- 若Lambda
+
+未捕获任何外部变量
+
+（即捕获列表为
+</code></pre><p>[]</p><pre tabindex=0><code>
+），它可隐式转换为
+
+普通函数指针
+
+：
+</code></pre><p>int (*funcPtr)(int, int) = [](int a, int b) { return a + b; };</p><pre tabindex=0><code>
+此时类型为
+</code></pre><p>int (*)(int, int)</p><pre tabindex=0><code>
+。
+
+### 📦 **`std::function` 包装器**
+
+- 为统一处理不同类型的Lambda，可使用
+</code></pre><p>std::function</p><pre tabindex=0><code>
+包装：
+</code></pre><p>#include <functional>std::function&lt;int(int, int)> func = [](int a, int b) { return a + b; };</p><pre tabindex=0><code></code></pre><p>std::function</p><pre tabindex=0><code>
+可存储任意可调用对象（包括带捕获的Lambda），但会引入轻微运行时开销。
+
+### 🧩 **C++14 的泛型Lambda**
+
+- C++14 支持泛型Lambda，参数类型可为
+</code></pre><p>auto</p><pre tabindex=0><code>
+：
+</code></pre><p>auto generic = [](auto x, auto y) { return x + y; };</p><pre tabindex=0><code>
+此时闭包类型的
+</code></pre><p>operator()</p><pre tabindex=0><code>
+是
+
+模板函数
+
+，类型仍唯一但支持多类型参数。
+
+
+
+------
+
+### 💎 总结：Lambda类型特性对比表
+
+| **场景**                 | **Lambda类型**                    | **是否可显式声明** | **典型声明方式**        | **支持捕获** |
+| ------------------------ | --------------------------------- | ------------------ | ----------------------- | ------------ |
+| **无捕获**               | 函数指针（如 `int(*)(int, int)`） | ✅                  | `函数指针类型`          | ❌            |
+| **有捕获**               | 唯一闭包类型                      | ❌                  | `auto`                  | ✅            |
+| **需统一接口存储**       | `std::function`                   | ✅                  | `std::function&lt;签名&gt;`   | ✅            |
+| **泛型Lambda（C++14+）** | 模板化的闭包类型                  | ❌                  | `auto`（参数含 `auto`） | ✅            |
+
+### ⚠️ 注意事项
+
+- **避免默认捕获**：`[=]`或`[&amp;]`可能引发悬空引用或性能问题，推荐显式指定捕获变量。
+- **生命周期管理**：按引用捕获的变量需确保其生命周期长于Lambda。
+
+通过理解Lambda的闭包类型本质，可更安全地用于回调、STL算法（如`std::sort`）等场景，提升代码的简洁性与表现力。
+
+## 捕获方式
+
+在C++的Lambda表达式中，捕获方式决定了外部变量的访问规则。`[=]`（隐式值捕获）、`[&amp;]`（隐式引用捕获）和**明确指定捕获变量**（如`[x, &amp;y]`）各有优缺点和使用场景。以下是详细对比分析：
+
+
+
+------
+
+### 📊 **捕获方式对比**
+
+| **特性**         | **`[=]`（隐式值捕获）**                         | **`[&amp;]`（隐式引用捕获）**                  | **明确指定捕获（如`[x, &amp;y]`）**                       |
+| ---------------- | ----------------------------------------------- | ------------------------------------------ | ----------------------------------------------------- |
+| **捕获规则**     | 自动捕获所有**外部变量的副本**                  | 自动捕获所有**外部变量的引用**             | 仅捕获**显式列出的变量**，可混合值/引用捕获           |
+| **修改权限**     | 内部不可修改（需`mutable`修饰）                 | 内部可直接修改原变量                       | 值捕获变量不可修改（需`mutable`），引用捕获可直接修改 |
+| **生命周期依赖** | 不依赖原变量（拷贝发生在创建时）                | 依赖原变量生命周期（可能悬空引用）         | 部分依赖（引用捕获需确保原变量有效）                  |
+| **典型用例**     | 只读访问外部变量，避免副作用                    | 需修改外部变量或避免拷贝开销               | 精确控制捕获范围，避免隐式捕获的风险                  |
+| **风险**         | 拷贝开销大（大型对象）；`mutable`修改不影响外部 | 悬空引用（如Lambda生命周期长于捕获的变量） | 需手动管理变量列表，但风险可控                        |
+
+
+
+------
+
+### ⚙️ **关键差异详解**
+
+#### **(1) 变量修改与`mutable`**
+
+- **
+</code></pre><p>[=]</p><pre tabindex=0><code>
+**：
+
+值捕获的变量默认是
+</code></pre><p>const</p><pre tabindex=0><code>
+，修改需加
+</code></pre><p>mutable</p><pre tabindex=0><code>
+，且修改仅影响Lambda内部的副本：
+</code></pre><p>int x = 10;
+auto lambda = <a class=link href>=</a> mutable { x++; }; // 修改内部副本，外部x仍为10</p><pre tabindex=0><code>
+- **
+</code></pre><p>[&]</p><pre tabindex=0><code>
+**：
+
+引用捕获可直接修改原变量：
+</code></pre><p>int y = 20;
+auto lambda = <a class=link href>&</a> { y++; }; // 修改外部y为21</p><pre tabindex=0><code>
+- 
+
+明确指定捕获
+
+：
+
+可自由组合值/引用捕获，灵活性高：
+</code></pre><p>int a = 5, b = 15;
+auto lambda = <a class=link href>a, &amp;b</a> { b += a; }; // a值捕获只读，b引用捕获可修改</p><pre tabindex=0><code>
+#### **(2) 生命周期与悬空引用**
+
+- **
+</code></pre><p>[&]</p><pre tabindex=0><code>
+的高风险场景**：
+
+若Lambda被传递到外部（如异步线程），而捕获的局部变量已销毁，会导致未定义行为：
+</code></pre><p>std::function&lt;int()> create_danger() {
+int local = 42;
+return [&] { return local; }; // 危险！返回时local已销毁
+}
+auto func = create_danger();
+func(); // 悬空引用！</p><pre tabindex=0><code>
+- **
+</code></pre><p>[=]</p><pre tabindex=0><code>
+和明确指定捕获**：
+
+值捕获的变量不依赖原对象生命周期，但若捕获指针（如
+</code></pre><p>this</p><pre tabindex=0><code>
+或指针变量），仍可能悬空：
+</code></pre><p>class Widget {
+int data = 100;
+auto get_handler() {
+return [=] { return data; }; // 实际捕获this指针，Widget销毁后失效
+}
+}; // 解决方案：用初始化捕获<code>[data=data]</code></p><pre tabindex=0><code>
+#### **(3) 性能与开销**
+
+- **`[=]`**：
+可能引发不必要的拷贝（如大型对象），但安全。
+- **`[&amp;]`**：
+无拷贝开销，但需警惕悬空引用。
+- **明确指定捕获**：
+优化性能的关键：对小型对象值捕获，大型对象或需修改时引用捕获（确保生命周期安全）。
+
+
+
+------
+
+### 🛡️ **最佳实践与推荐**
+
+1. **避免隐式捕获（`[=]`/`[&amp;]`）**：
+
+ - 隐式捕获易导致意外行为（如误捕不需要的变量或悬空引用）。
+ - 优先使用**显式捕获列表**（如`[x, &amp;y]`），明确意图并减少风险。
+
+2. **C++14+ 使用初始化捕获**：
+
+ - 支持闭包内变量自定义初始化，避免悬空引用：
+
+   ```
+   auto ptr = std::make_shared&lt;int&gt;(42);
+   auto lambda = [ptr] { return *ptr; };  // 共享所有权，安全
+   ```
+
+ - 可移动捕获大型对象：
+
+   ```
+   std::vector&lt;int&gt; large_data;
+   auto lambda = [data = std::move(large_data)] { ... };  // 零拷贝
+   ```
+
+3. **引用捕获的适用场景**：
+
+ - 需修改外部变量（如累加器）。
+ - 对象不可拷贝（如`std::unique_ptr`）且生命周期可控时。
+ - **必须确保Lambda生命周期 ≤ 被捕获变量**。
+
+4. **值捕获的适用场景**：
+
+ - 小型内置类型（如`int`、`double`）。
+
+ - 需要快照数据（如循环计数器
+
+   ```
+   i
+   ```
+
+   ）：
+
+   ```
+   for (int i = 0; i &lt; 5; i++) {
+       threads.emplace_back([i] { ... });  // 每个线程捕获独立的i
+   }
+   ```
+
+
+
+------
+
+### 💎 **总结**
+
+| **场景**               | **推荐方式**                          | **原因**                 |
+| ---------------------- | ------------------------------------- | ------------------------ |
+| 只读访问小型变量       | 显式值捕获（`[x]`）                   | 安全且无额外开销         |
+| 需修改外部变量         | 显式引用捕获（`[&amp;y]`）                | 直接修改原变量，避免拷贝 |
+| 大型对象或资源管理     | 初始化捕获（`[data=std::move(obj)]`） | 零拷贝，所有权清晰       |
+| 异步或长生命周期Lambda | 值捕获或`shared_ptr`                  | 避免悬空引用             |
+
+&gt; **黄金准则**：
+&gt; ✅ ​**显式 &gt; 隐式**​：明确列出捕获变量，避免`[=]`/`[&amp;]`的模糊性。
+&gt; ✅ ​**生命周期 &gt; 性能**​：引用捕获前，100%确认对象生命周期覆盖Lambda。
+&gt; ✅ ​**C++14+优先用初始化捕获**​：灵活且安全，尤其适合资源管理场景。
+
+## substr
+
+在C++中，`s.substr()` 是 `std::string` 类的成员函数，用于从原字符串中提取子字符串。其核心功能是根据指定的起始位置和长度截取字符串的特定部分，返回一个新的字符串对象。以下是详细解析：
+
+
+
+------
+
+### 📜 **函数原型**
+</code></pre><p>std::string substr(size_t pos = 0, size_t len = npos) const;</p><pre tabindex=0><code>
+- 
+
+  参数
+
+  ：
+
+  - `pos`：子字符串的起始位置（从0开始索引）。默认值为 `0`（字符串开头）。
+  - `len`：要提取的字符数量。默认值为 `npos`（特殊常量，表示截取到字符串末尾）。
+
+- **返回值**：新生成的 `std::string` 对象，包含截取的子字符串。
+
+
+
+------
+
+### ⚙️ **参数详解与行为规则**
+
+#### **`pos` 的合法性**
+
+- 若 `pos` 等于字符串长度：返回空字符串（`&#34;&#34;`）。
+
+- 若 `pos &gt; 字符串长度`：抛出 `std::out_of_range` 异常。
+
+- 
+
+  正确做法
+
+  ：调用前检查
+</code></pre><p>pos</p><pre tabindex=0><code>
+范围：
+</code></pre><p>if (pos &lt;= s.size()) {
+auto sub = s.substr(pos);
+} else {
+// 错误处理
+}</p><pre tabindex=0><code>
+#### **`len` 的截断机制**
+
+- 若 `len` 超过从 `pos` 到末尾的字符数：自动截取到末尾。
+
+- 若 `len = 0`：返回空字符串。
+
+- 
+
+示例
+
+：
+</code></pre><p>string s = &ldquo;Hello&rdquo;;
+cout &#171; s.substr(1, 3); // 输出 &ldquo;ell&rdquo;
+cout &#171; s.substr(1, 10); // 输出 &ldquo;ello&rdquo;（自动截断）</p><pre tabindex=0><code>
+
+
+------
+
+### 🛠️ **基础用法示例**
+
+#### 场景1：默认截取整个字符串
+</code></pre><p>string s = &ldquo;C++ Programming&rdquo;;
+string sub = s.substr(); // 等效于 s.substr(0, npos)
+cout &#171; sub; // 输出 &ldquo;C++ Programming&rdquo;</p><pre tabindex=0><code>
+#### 场景2：从指定位置截取到末尾
+</code></pre><p>string s = &ldquo;Hello, World!&rdquo;;
+string sub = s.substr(7); // 从索引7开始（字符 &lsquo;W&rsquo;）
+cout &#171; sub; // 输出 &ldquo;World!&rdquo;</p><pre tabindex=0><code>
+#### 场景3：截取固定长度子串
+</code></pre><p>string s = &ldquo;123abc&rdquo;;
+string sub = s.substr(2, 2); // 从索引2开始，截取2个字符
+cout &#171; sub; // 输出 &ldquo;3a&rdquo;</p><pre tabindex=0><code>
+
+
+------
+
+### 🔍 **常见应用场景**
+
+#### **文件路径处理**
+
+提取文件名或扩展名：
+</code></pre><p>// 提取文件名（不含路径）
+string path = &ldquo;/usr/bin/gcc&rdquo;;
+size_t pos = path.find_last_of(&rsquo;/&rsquo;);
+string filename = (pos != string::npos) ? path.substr(pos+1) : path;
+// 提取扩展名
+string file = &ldquo;image.jpg&rdquo;;
+size_t dot = file.find_last_of(&rsquo;.&rsquo;);
+string ext = (dot != string::npos) ? file.substr(dot+1) : &ldquo;&rdquo;; // &ldquo;jpg&rdquo;</p><pre tabindex=0><code>
+#### **结构化数据解析**
+
+分割日期字符串：
+</code></pre><p>string date = &ldquo;2025-07-21&rdquo;;
+string year = date.substr(0, 4); // &ldquo;2025&rdquo;
+string month = date.substr(5, 2); // &ldquo;07&rdquo;
+string day = date.substr(8, 2); // &ldquo;21&rdquo;</p><pre tabindex=0><code>
+#### **与 `find()` 配合定位子串**
+</code></pre><p>string s = &ldquo;Error: File not found&rdquo;;
+size_t pos = s.find(&ldquo;File&rdquo;);
+if (pos != string::npos) {
+string errorMsg = s.substr(pos, 12); // &ldquo;File not found&rdquo;
+}</p><pre tabindex=0><code>
+
+
+------
+
+### ⚠️ **关键注意事项**
+
+1. 
+
+   异常安全
+
+   ：
+
+   - 始终检查 `pos` 是否越界，避免未捕获的 `std::out_of_range` 异常。
+
+2. 
+
+   性能开销
+
+   ：
+
+   - 返回新字符串对象，可能涉及内存复制（小字符串通常优化）。
+
+3. 
+
+   空字符串处理
+
+   ：
+
+   - 原字符串为空时，`substr()` 返回空字符串。
+
+4. 
+
+   与 `[]` 操作符区别
+
+   ：
+
+   - `s[i]` 返回单个字符的引用，`substr()` 返回新字符串对象。
+
+
+
+------
+
+### 🔄 **与其他语言对比**
+
+| **语言**   | **类似方法**              | **差异点**                            |
+| ---------- | ------------------------- | ------------------------------------- |
+| Python     | `s[start:end]`            | 支持负数索引（如 `s[-3:]`）           |
+| Java       | `s.substring(start, end)` | `end` 参数表示结束索引（不包含）      |
+| JavaScript | `s.substr(start, len)`    | 支持负数起始索引（如 `s.substr(-3)`） |
+
+
+
+------
+
+### 💎 **总结**
+
+- **核心作用**：安全、灵活地提取子字符串，支持动态截取范围。
+
+- 
+
+  最佳实践
+
+  ：
+
+  - 始终校验 `pos` 合法性，避免异常。
+  - 结合 `find()` 实现动态定位。
+  - 优先显式指定 `len` 避免隐式截断歧义。
+
+- **适用场景**：文件处理、数据解析、日志过滤等需提取文本片段的场景。
+
+&gt; 通过合理使用 `s.substr()`，可显著提升字符串操作的效率和代码可读性，但需时刻警惕边界条件带来的风险。
+</code></pre></section><footer class=article-footer><section class=article-tags><a href=/tags/leetcode-c/>LeetCode-C</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section><section class=article-lastmod><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<span>Last updated on Jul 31, 2025 19:25 CST</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>Related content</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/leetcode-c-containerunorered_map-unorered_set-map-set/><div class=article-details><h2 class=article-title>【LeetCode-C-Container】unorered_map & unorered_set & map & set</h2></div></a></article><article><a href=/p/leetcode-c-containertype-cast/><div class=article-details><h2 class=article-title>【LeetCode-C-Container】type cast</h2></div></a></article><article><a href=/p/leetcode-cprimary/><div class=article-details><h2 class=article-title>【LeetCode-C】Primary</h2></div></a></article><article><a href=/p/leetcode-clambda/><div class=article-details><h2 class=article-title>【LeetCode-C】lambda</h2></div></a></article><article><a href=/p/leetcode-cperformance/><div class=article-details><h2 class=article-title>【LeetCode-C】Performance</h2></div></a></article></div></div></aside><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//hugo-theme-stack.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2025 飞鸿踏雪泥</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.30.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

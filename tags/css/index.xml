@@ -1,0 +1,1890 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>CSS on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/css/</link><description>Recent content in CSS on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 26 Feb 2025 16:37:27 +0800</lastBuildDate><atom:link href="https://dyhes.github.io/tags/css/index.xml" rel="self" type="application/rss+xml"/><item><title>【CSS】Object-fit</title><link>https://dyhes.github.io/p/cssobject-fit/</link><pubDate>Thu, 25 Jul 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/cssobject-fit/</guid><description>&lt;p&gt;The object-fit CSS property is used to specify how the content of a &lt;strong&gt;replaced element&lt;/strong&gt;, such as an &lt;img&gt; or &lt;video&gt;, should be resized to fit its container. Replaced elements are elements &lt;strong&gt;whose content is not managed by the CSS box model,&lt;/strong&gt; like images, videos, or iframes.
+The object-fit property can take several values, which control how the replaced element’s content is resized:&lt;/p&gt;
+&lt;h2 id="fill"&gt;&lt;strong&gt;fill&lt;/strong&gt;
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;This is the &lt;strong&gt;default&lt;/strong&gt; value.&lt;/li&gt;
+&lt;li&gt;The content is resized to fill the container, &lt;strong&gt;ignoring its aspect ratio&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;The image or video may look distorted if the aspect ratio of the container &lt;strong&gt;differs&lt;/strong&gt; from that of the content.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="contain"&gt;&lt;strong&gt;contain&lt;/strong&gt;
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;The content is scaled to &lt;strong&gt;maintain its aspect ratio&lt;/strong&gt; while fitting within the container.&lt;/li&gt;
+&lt;li&gt;The entire content will be visible, but there may be &lt;strong&gt;empty space&lt;/strong&gt; (letterboxing or pillarboxing) if the aspect ratios do not match.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="cover"&gt;&lt;strong&gt;cover&lt;/strong&gt;
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;The content is scaled to maintain its aspect ratio while covering the entire container.&lt;/li&gt;
+&lt;li&gt;Parts of the content might be cropped if the aspect ratio of the container and content do not match.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="none"&gt;&lt;strong&gt;none&lt;/strong&gt;
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;The content is not resized.&lt;/li&gt;
+&lt;li&gt;The content is displayed at its original size, and it may overflow the container if it is larger than the container.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="scale-down"&gt;&lt;strong&gt;scale-down&lt;/strong&gt;
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;The content is scaled down to fit within the container while maintaining its aspect ratio.&lt;/li&gt;
+&lt;li&gt;This behaves like &lt;strong&gt;contain&lt;/strong&gt; if the content is larger than the container, or like &lt;strong&gt;none&lt;/strong&gt; if the content is smaller than the container.&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>【CSS】Basics</title><link>https://dyhes.github.io/p/cssbasics/</link><pubDate>Sat, 17 Apr 2021 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/cssbasics/</guid><description>&lt;p&gt;CSS stands for Cascading Style Sheets&lt;/p&gt;
+&lt;h2 id="comment"&gt;Comment
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;/* comment */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="how-to-use"&gt;How to use
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;External&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-html" data-lang="html"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;link&lt;/span&gt; &lt;span class="na"&gt;rel&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;stylesheet&amp;#34;&lt;/span&gt; &lt;span class="na"&gt;href&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;mystyle.css&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;Internal&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-html" data-lang="html"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;style&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;style&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;Inline&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-html" data-lang="html"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;link&lt;/span&gt; &lt;span class="na"&gt;rel&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;stylesheet&amp;#34;&lt;/span&gt; &lt;span class="na"&gt;href&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;mystyle.css&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If some properties have been defined for the same selector (element) in different style sheets, the value from &lt;strong&gt;the last read&lt;/strong&gt; style sheet will be used.&lt;/p&gt;
+&lt;p&gt;All the styles in a page will &amp;ldquo;cascade&amp;rdquo; into a new &amp;ldquo;virtual&amp;rdquo; style sheet by the following rules, where number one has the highest priority:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Inline style (inside an HTML element)&lt;/li&gt;
+&lt;li&gt;External and internal style sheets (in the head section)&lt;/li&gt;
+&lt;li&gt;Browser default&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;So, an inline style has the highest priority, and will override external and internal styles and browser defaults.&lt;/p&gt;
+&lt;h2 id="selector"&gt;Selector
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Simple selectors (select elements based on name, id, class)&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.w3schools.com/css/css_combinators.asp" target="_blank" rel="noopener"
+&gt;Combinator selectors&lt;/a&gt; (select elements based on a specific relationship between them)&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.w3schools.com/css/css_pseudo_classes.asp" target="_blank" rel="noopener"
+&gt;Pseudo-class selectors&lt;/a&gt; (select elements based on a certain state)&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.w3schools.com/css/css_pseudo_elements.asp" target="_blank" rel="noopener"
+&gt;Pseudo-elements selectors&lt;/a&gt; (select and style a part of an element)&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.w3schools.com/css/css_attribute_selectors.asp" target="_blank" rel="noopener"
+&gt;Attribute selectors&lt;/a&gt; (select elements based on an attribute or attribute value)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="simple-selector"&gt;Simple Selector
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;element selector&lt;/li&gt;
+&lt;li&gt;id selector&lt;/li&gt;
+&lt;li&gt;class selector&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="combinator-selector"&gt;Combinator Selector
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;descendant selector (space) ：matches all elements that are &lt;strong&gt;descendants&lt;/strong&gt; of a specified element&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="nt"&gt;p&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;background-color&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;yellow&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;child selector (&amp;gt;) ：selects all elements that are the &lt;strong&gt;children&lt;/strong&gt; of a specified element.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nt"&gt;p&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;background-color&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;yellow&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;adjacent sibling selector (+) : select an element that is &lt;strong&gt;directly after&lt;/strong&gt; another specific element.:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nt"&gt;p&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;background-color&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;yellow&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;general sibling selector (~) : selects &lt;strong&gt;all&lt;/strong&gt; elements that are &lt;strong&gt;next siblings&lt;/strong&gt; of a specified element.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="o"&gt;~&lt;/span&gt; &lt;span class="nt"&gt;p&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;background-color&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;yellow&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="pseudo-classes-selector"&gt;Pseudo-classes Selector
+&lt;/h3&gt;&lt;p&gt;A pseudo-class is used to define a &lt;strong&gt;special state&lt;/strong&gt; of an element.&lt;/p&gt;
+&lt;h4 id="syntax"&gt;syntax
+&lt;/h4&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;selector&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;pseudo-class&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;property&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="anchor-pseudo-classes-order"&gt;Anchor pseudo-classes order
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;:link (unvisited)&lt;/li&gt;
+&lt;li&gt;:visited&lt;/li&gt;
+&lt;li&gt;:hover&lt;/li&gt;
+&lt;li&gt;:active (clicked)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="first-child"&gt;:first-child
+&lt;/h4&gt;&lt;p&gt;The &lt;code&gt;:first-child&lt;/code&gt; pseudo-class matches a specified element that is the first child of another element.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;p&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;first-child&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;color&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;blue&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;//&lt;/span&gt;&lt;span class="nt"&gt;first&lt;/span&gt; &lt;span class="nt"&gt;i&lt;/span&gt; &lt;span class="nt"&gt;in&lt;/span&gt; &lt;span class="nt"&gt;p&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;p&lt;/span&gt; &lt;span class="nt"&gt;i&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;first-child&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;color&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;blue&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;//&lt;/span&gt;&lt;span class="nt"&gt;all&lt;/span&gt; &lt;span class="nt"&gt;i&lt;/span&gt; &lt;span class="nt"&gt;in&lt;/span&gt; &lt;span class="nt"&gt;first&lt;/span&gt; &lt;span class="nt"&gt;p&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;p&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;first-child&lt;/span&gt; &lt;span class="nt"&gt;i&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="lang"&gt;:lang
+&lt;/h4&gt;&lt;p&gt;The &lt;code&gt;:lang&lt;/code&gt; pseudo-class allows you to define special rules for different languages.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-vue" data-lang="vue"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;p&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;&lt;span class="nx"&gt;Some&lt;/span&gt; &lt;span class="nx"&gt;text&lt;/span&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;q&lt;/span&gt; &lt;span class="na"&gt;lang&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;no&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;&lt;span class="nx"&gt;A&lt;/span&gt; &lt;span class="nx"&gt;quote&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt; &lt;span class="nx"&gt;a&lt;/span&gt; &lt;span class="nx"&gt;paragraph&lt;/span&gt;&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;q&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nx"&gt;Some&lt;/span&gt; &lt;span class="nx"&gt;text&lt;/span&gt;&lt;span class="p"&gt;.&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;p&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;style&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;q&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nx"&gt;lang&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;no&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;quotes&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;~&amp;#34;&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;~&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;style&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="all-pseudo-classes"&gt;all pseudo classes
+&lt;/h4&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style="text-align: left"&gt;Selector&lt;/th&gt;
+&lt;th style="text-align: left"&gt;Example&lt;/th&gt;
+&lt;th style="text-align: left"&gt;Example description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_active.asp" target="_blank" rel="noopener"
+&gt;:active&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;a:active&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects the active link&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_checked.asp" target="_blank" rel="noopener"
+&gt;:checked&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;input:checked&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects every checked &lt;input&gt; element&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_disabled.asp" target="_blank" rel="noopener"
+&gt;:disabled&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;input:disabled&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects every disabled &lt;input&gt; element&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_empty.asp" target="_blank" rel="noopener"
+&gt;:empty&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;p:empty&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects every &lt;p&gt; element that has no children&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_enabled.asp" target="_blank" rel="noopener"
+&gt;:enabled&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;input:enabled&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects every enabled &lt;input&gt; element&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_firstchild.asp" target="_blank" rel="noopener"
+&gt;:first-child&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;p:first-child&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects every &lt;p&gt; elements that is the first child of its parent&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_first-of-type.asp" target="_blank" rel="noopener"
+&gt;:first-of-type&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;p:first-of-type&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects every &lt;p&gt; element that is the first &lt;p&gt; element of its parent&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_focus.asp" target="_blank" rel="noopener"
+&gt;:focus&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;input:focus&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects the &lt;input&gt; element that has focus&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_hover.asp" target="_blank" rel="noopener"
+&gt;:hover&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;a:hover&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects links on mouse over&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_in-range.asp" target="_blank" rel="noopener"
+&gt;:in-range&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;input:in-range&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects &lt;input&gt; elements with a value within a specified range&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_invalid.asp" target="_blank" rel="noopener"
+&gt;:invalid&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;input:invalid&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects all &lt;input&gt; elements with an invalid value&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_lang.asp" target="_blank" rel="noopener"
+&gt;:lang(&lt;em&gt;language&lt;/em&gt;)&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;p:lang(it)&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects every &lt;p&gt; element with a lang attribute value starting with &amp;ldquo;it&amp;rdquo;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_last-child.asp" target="_blank" rel="noopener"
+&gt;:last-child&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;p:last-child&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects every &lt;p&gt; elements that is the last child of its parent&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_last-of-type.asp" target="_blank" rel="noopener"
+&gt;:last-of-type&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;p:last-of-type&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects every &lt;p&gt; element that is the last &lt;p&gt; element of its parent&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_link.asp" target="_blank" rel="noopener"
+&gt;:link&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;a:link&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects all unvisited links&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_not.asp" target="_blank" rel="noopener"
+&gt;:not(selector)&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;:not(p)&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects every element that is not a &lt;p&gt; element&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_nth-child.asp" target="_blank" rel="noopener"
+&gt;:nth-child(n)&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;p:nth-child(2)&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects every &lt;p&gt; element that is the second child of its parent&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_nth-last-child.asp" target="_blank" rel="noopener"
+&gt;:nth-last-child(n)&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;p:nth-last-child(2)&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects every &lt;p&gt; element that is the second child of its parent, counting from the last child&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_nth-last-of-type.asp" target="_blank" rel="noopener"
+&gt;:nth-last-of-type(n)&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;p:nth-last-of-type(2)&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects every &lt;p&gt; element that is the second &lt;p&gt; element of its parent, counting from the last child&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_nth-of-type.asp" target="_blank" rel="noopener"
+&gt;:nth-of-type(n)&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;p:nth-of-type(2)&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects every &lt;p&gt; element that is the second &lt;p&gt; element of its parent&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_only-of-type.asp" target="_blank" rel="noopener"
+&gt;:only-of-type&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;p:only-of-type&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects every &lt;p&gt; element that is the only &lt;p&gt; element of its parent&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_only-child.asp" target="_blank" rel="noopener"
+&gt;:only-child&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;p:only-child&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects every &lt;p&gt; element that is the only child of its parent&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_optional.asp" target="_blank" rel="noopener"
+&gt;:optional&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;input:optional&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects &lt;input&gt; elements with no &amp;ldquo;required&amp;rdquo; attribute&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_out-of-range.asp" target="_blank" rel="noopener"
+&gt;:out-of-range&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;input:out-of-range&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects &lt;input&gt; elements with a value outside a specified range&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_read-only.asp" target="_blank" rel="noopener"
+&gt;:read-only&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;input:read-only&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects &lt;input&gt; elements with a &amp;ldquo;readonly&amp;rdquo; attribute specified&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_read-write.asp" target="_blank" rel="noopener"
+&gt;:read-write&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;input:read-write&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects &lt;input&gt; elements with no &amp;ldquo;readonly&amp;rdquo; attribute&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_required.asp" target="_blank" rel="noopener"
+&gt;:required&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;input:required&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects &lt;input&gt; elements with a &amp;ldquo;required&amp;rdquo; attribute specified&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_root.asp" target="_blank" rel="noopener"
+&gt;:root&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;root&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects the document&amp;rsquo;s root element&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_target.asp" target="_blank" rel="noopener"
+&gt;:target&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;#news:target&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects the current active #news element (clicked on a URL containing that anchor name)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_valid.asp" target="_blank" rel="noopener"
+&gt;:valid&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;input:valid&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects all &lt;input&gt; elements with a valid value&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_visited.asp" target="_blank" rel="noopener"
+&gt;:visited&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;a:visited&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects all visited links&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="pseudo-element-selector"&gt;Pseudo-element Selector
+&lt;/h3&gt;&lt;p&gt;A CSS pseudo-element is used to style &lt;strong&gt;specified parts&lt;/strong&gt; of an element.&lt;/p&gt;
+&lt;h4 id="syntax-1"&gt;syntax
+&lt;/h4&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;selector&lt;/span&gt;&lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="nd"&gt;pseudo-element&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;property&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="first-line"&gt;::first-line
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; The &lt;code&gt;::first-line&lt;/code&gt; pseudo-element can only be applied to &lt;strong&gt;block-level elements&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;The following properties apply to the &lt;code&gt;::first-line&lt;/code&gt; pseudo-element:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;font properties&lt;/li&gt;
+&lt;li&gt;color properties&lt;/li&gt;
+&lt;li&gt;background properties&lt;/li&gt;
+&lt;li&gt;word-spacing&lt;/li&gt;
+&lt;li&gt;letter-spacing&lt;/li&gt;
+&lt;li&gt;text-decoration&lt;/li&gt;
+&lt;li&gt;vertical-align&lt;/li&gt;
+&lt;li&gt;text-transform&lt;/li&gt;
+&lt;li&gt;line-height&lt;/li&gt;
+&lt;li&gt;clear&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="first-letter"&gt;::first-letter
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; The &lt;code&gt;::first-letter&lt;/code&gt; pseudo-element can only be applied to block-level elements.&lt;/p&gt;
+&lt;p&gt;The following properties apply to the ::first-letter pseudo- element:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;font properties&lt;/li&gt;
+&lt;li&gt;color properties&lt;/li&gt;
+&lt;li&gt;background properties&lt;/li&gt;
+&lt;li&gt;margin properties&lt;/li&gt;
+&lt;li&gt;padding properties&lt;/li&gt;
+&lt;li&gt;border properties&lt;/li&gt;
+&lt;li&gt;text-decoration&lt;/li&gt;
+&lt;li&gt;vertical-align (only if &amp;ldquo;float&amp;rdquo; is &amp;ldquo;none&amp;rdquo;)&lt;/li&gt;
+&lt;li&gt;text-transform&lt;/li&gt;
+&lt;li&gt;line-height&lt;/li&gt;
+&lt;li&gt;float&lt;/li&gt;
+&lt;li&gt;clear&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="before-and-after"&gt;::before and ::after
+&lt;/h4&gt;&lt;p&gt;The &lt;code&gt;::before&lt;/code&gt; and &lt;code&gt;::after&lt;/code&gt; pseudo-element can be used to insert some content before the content of an element.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;h1&lt;/span&gt;&lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="nd"&gt;before&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;content&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sx"&gt;smiley.gif&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="all-pseudo-elements"&gt;all pseudo elements
+&lt;/h4&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style="text-align: left"&gt;Selector&lt;/th&gt;
+&lt;th style="text-align: left"&gt;Example&lt;/th&gt;
+&lt;th style="text-align: left"&gt;Example description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_after.asp" target="_blank" rel="noopener"
+&gt;::after&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;p::after&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Insert something after the content of each &lt;p&gt; element&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_before.asp" target="_blank" rel="noopener"
+&gt;::before&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;p::before&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Insert something before the content of each &lt;p&gt; element&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_firstletter.asp" target="_blank" rel="noopener"
+&gt;::first-letter&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;p::first-letter&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects the first letter of each &lt;p&gt; element&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_firstline.asp" target="_blank" rel="noopener"
+&gt;::first-line&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;p::first-line&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects the first line of each &lt;p&gt; element&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_marker.asp" target="_blank" rel="noopener"
+&gt;::marker&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;::marker&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects the markers of list items&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/sel_selection.asp" target="_blank" rel="noopener"
+&gt;::selection&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;p::selection&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Selects the portion of an element that is &lt;strong&gt;selected by a user&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="attribute-selector"&gt;Attribute Selector
+&lt;/h3&gt;&lt;h4 id="attribute-selector-1"&gt;[attribute] Selector
+&lt;/h4&gt;&lt;p&gt;The &lt;code&gt;[attribute]&lt;/code&gt; selector is used to select elements with a specified attribute.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;a&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="nt"&gt;target&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;background-color&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;yellow&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="attributevalue-selector-等于"&gt;[attribute=&amp;ldquo;value&amp;rdquo;] Selector （等于）
+&lt;/h4&gt;&lt;p&gt;The &lt;code&gt;[attribute=&amp;quot;value&amp;quot;]&lt;/code&gt; selector is used to select elements with a specified attribute and value.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;a&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="nt"&gt;target&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;_blank&amp;#34;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;background-color&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;yellow&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="attributevalue-selector限制包含"&gt;[attribute~=&amp;ldquo;value&amp;rdquo;] Selector（限制包含）
+&lt;/h4&gt;&lt;p&gt;The &lt;code&gt;[attribute~=&amp;quot;value&amp;quot;]&lt;/code&gt; selector is used to select elements with an attribute value &lt;strong&gt;containing a specified word.&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="nt"&gt;title&lt;/span&gt;&lt;span class="o"&gt;~=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;flower&amp;#34;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;border&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="kt"&gt;px&lt;/span&gt; &lt;span class="kc"&gt;solid&lt;/span&gt; &lt;span class="kc"&gt;yellow&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The example above will match elements with title=&amp;ldquo;flower&amp;rdquo;, title=&amp;ldquo;summer flower&amp;rdquo;, and title=&amp;ldquo;flower new&amp;rdquo;, but not title=&amp;ldquo;my-flower&amp;rdquo; or title=&amp;ldquo;flowers&amp;rdquo;.&lt;/p&gt;
+&lt;h4 id="attributevalue-selector包含"&gt;[attribute*=&amp;ldquo;value&amp;rdquo;] Selector（包含）
+&lt;/h4&gt;&lt;p&gt;The &lt;code&gt;[attribute*=&amp;quot;value&amp;quot;]&lt;/code&gt; selector is used to select elements whose attribute value contains a specified value.&lt;/p&gt;
+&lt;p&gt;The following example selects all elements with a class attribute value that contains &amp;ldquo;te&amp;rdquo;:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; The value does not have to be a whole word!&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="nt"&gt;class&lt;/span&gt;&lt;span class="o"&gt;*=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;te&amp;#34;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;background&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;yellow&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="attributevalue-selector限制开始"&gt;[attribute|=&amp;ldquo;value&amp;rdquo;] Selector（限制开始）
+&lt;/h4&gt;&lt;p&gt;The &lt;code&gt;[attribute|=&amp;quot;value&amp;quot;]&lt;/code&gt; selector is used to select elements with the specified attribute, whose value can be exactly the specified value, or the specified value followed by a hyphen (-).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; The value has to be a whole word, either alone, like class=&amp;ldquo;top&amp;rdquo;, or followed by a hyphen( - ), like class=&amp;ldquo;top-text&amp;rdquo;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="nt"&gt;class&lt;/span&gt;&lt;span class="o"&gt;|=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;top&amp;#34;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;background&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;yellow&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="attributevalue-selector开始"&gt;[attribute^=&amp;ldquo;value&amp;rdquo;] Selector（开始）
+&lt;/h4&gt;&lt;p&gt;The &lt;code&gt;[attribute^=&amp;quot;value&amp;quot;]&lt;/code&gt; selector is used to select elements with the specified attribute, whose value starts with the specified value.&lt;/p&gt;
+&lt;p&gt;The following example selects all elements with a class attribute value that starts with &amp;ldquo;top&amp;rdquo;:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; The value does not have to be a whole word!&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="nt"&gt;class&lt;/span&gt;&lt;span class="o"&gt;^=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;test&amp;#34;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;background&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;yellow&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="attributevalue-selector结束"&gt;[attribute$=&amp;ldquo;value&amp;rdquo;] Selector（结束）
+&lt;/h4&gt;&lt;p&gt;The &lt;code&gt;[attribute$=&amp;quot;value&amp;quot;]&lt;/code&gt; selector is used to select elements whose attribute value ends with a specified value.&lt;/p&gt;
+&lt;p&gt;The following example selects all elements with a class attribute value that ends with &amp;ldquo;test&amp;rdquo;:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; The value does not have to be a whole word!&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="nt"&gt;class&lt;/span&gt;&lt;span class="o"&gt;$=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;test&amp;#34;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;background&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;yellow&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="special-selector"&gt;Special Selector
+&lt;/h3&gt;&lt;h4 id="universal-selector"&gt;Universal Selector
+&lt;/h4&gt;&lt;p&gt;The universal selector (*) selects all HTML elements on the page.&lt;/p&gt;
+&lt;h4 id="grouping-selector"&gt;Grouping Selector
+&lt;/h4&gt;&lt;p&gt;The universal selector (*) selects all HTML elements on the page.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;h1&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nt"&gt;h2&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nt"&gt;p&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;text-align&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;center&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;color&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;red&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="specificity"&gt;Specificity
+&lt;/h3&gt;&lt;p&gt;If there are two or more CSS rules that point to the same element, the selector with the highest specificity value will &amp;ldquo;win&amp;rdquo;, and its style declaration will be applied to that HTML element.&lt;/p&gt;
+&lt;p&gt;Every CSS selector has its place in the specificity hierarchy.&lt;/p&gt;
+&lt;p&gt;There are four categories which define the specificity level of a selector:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Inline styles&lt;/strong&gt; (1000)- Example: &lt;h1 style="color: pink;"&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;IDs&lt;/strong&gt; (100) - Example: #navbar&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Classes, pseudo-classes, attribute selectors&lt;/strong&gt; (10) - Example: .test, :hover, [href]&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Elements and pseudo-elements&lt;/strong&gt; (1 ) - Example: h1, ::before&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Equal specificity: the latest rule wins&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The universal selector (*) and inherited values have a specificity of 0&lt;/strong&gt; - The universal selector (*) and inherited values are ignored!&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id="important"&gt;！important
+&lt;/h4&gt;&lt;p&gt;if you use the &lt;code&gt;!important&lt;/code&gt; rule, it will override ALL previous styling rules for that specific property on that element!&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;#&lt;/span&gt;&lt;span class="nn"&gt;myid&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;background-color&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;blue&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;myclass&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;background-color&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;gray&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;p&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;background-color&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;red&lt;/span&gt; &lt;span class="cp"&gt;!important&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The only way to override an &lt;code&gt;!important&lt;/code&gt; rule is to include another &lt;code&gt;!important&lt;/code&gt; rule on a declaration with the same (or higher) specificity in the source code - and here the problem starts! This makes the CSS code confusing and the debugging will be hard, especially if you have a large style sheet!&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;do not use it unless you absolutely have to.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="colors"&gt;Colors
+&lt;/h2&gt;&lt;h3 id="type"&gt;type
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;background color&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;background-color&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;background&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;text color&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;color&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;border color&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;border&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="value"&gt;value
+&lt;/h3&gt;&lt;h4 id="rgb"&gt;RGB
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;rgb(red,green, blue)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Each parameter (red, green, and blue) defines the intensity of the color between 0 and 255.&lt;/p&gt;
+&lt;h5 id="rgba"&gt;RGBA
+&lt;/h5&gt;&lt;p&gt;&lt;strong&gt;rgba(red,green,blue, alpha)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The alpha parameter is a number between 0.0 (fully transparent) and 1.0 (not transparent at all)&lt;/p&gt;
+&lt;h4 id="hex"&gt;HEX
+&lt;/h4&gt;&lt;p&gt;A hexadecimal color is specified with: #RRGGBB, where the RR (red), GG (green) and BB (blue) hexadecimal integers specify the components of the color.&lt;/p&gt;
+&lt;p&gt;In CSS, a color can be specified using a hexadecimal value in the form:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;#rrggbb&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Where rr (red), gg (green) and bb (blue) are hexadecimal values between 00 and ff (same as decimal 0-255).&lt;/p&gt;
+&lt;h4 id="hsl"&gt;HSL
+&lt;/h4&gt;&lt;p&gt;In CSS, a color can be specified using hue, saturation, and lightness (HSL) in the form:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;hsl(&lt;em&gt;hue&lt;/em&gt;, &lt;em&gt;saturation&lt;/em&gt;, &lt;em&gt;lightness&lt;/em&gt;)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Hue is a degree on the color wheel from 0 to 360. 0 is red, 120 is green, and 240 is blue.&lt;/p&gt;
+&lt;p&gt;Saturation is a percentage value, 0% means a shade of gray, and 100% is the full color.&lt;/p&gt;
+&lt;p&gt;Lightness is also a percentage, 0% is black, 50% is neither light or dark, 100% is white&lt;/p&gt;
+&lt;h5 id="hsla"&gt;HSLA
+&lt;/h5&gt;&lt;p&gt;&lt;strong&gt;hsla(&lt;em&gt;hue,&lt;/em&gt; &lt;em&gt;saturation&lt;/em&gt;, &lt;em&gt;lightness, alpha&lt;/em&gt;)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The alpha parameter is a number between 0.0 (fully transparent) and 1.0 (not transparent at all)&lt;/p&gt;
+&lt;h3 id="keyword"&gt;Keyword
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;transparent&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;equal to rgba(0,0,0,0)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;currentcolor&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;is like a variable that holds the current value of the color property of an element.&lt;/p&gt;
+&lt;h3 id="opacity"&gt;Opacity
+&lt;/h3&gt;&lt;p&gt;The alpha parameter is a number between 0.0 (fully transparent) and 1.0 (not transparent at all)&lt;/p&gt;
+&lt;h3 id="gradients"&gt;Gradients
+&lt;/h3&gt;&lt;p&gt;CSS defines three types of gradients:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Linear Gradients (goes down/up/left/right/diagonally)&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;background-image: (repeating)-linear-gradient(&lt;em&gt;direction&lt;/em&gt;/angle, &lt;em&gt;color-stop1&lt;/em&gt;, &lt;em&gt;color-stop2, &amp;hellip;&lt;/em&gt;);&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Radial Gradients (defined by their center)&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;background-image: (repeating)-radial-gradient(&lt;em&gt;shape size&lt;/em&gt; at &lt;em&gt;position, start-color, &amp;hellip;, last-color&lt;/em&gt;);&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Conic Gradients (rotated around a center point)&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;background-image: (repeating)-radial-gradient(&lt;em&gt;shape size&lt;/em&gt; at &lt;em&gt;position, start-color, &amp;hellip;, last-color&lt;/em&gt;);&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="background"&gt;Background
+&lt;/h2&gt;&lt;h3 id="background-color"&gt;&lt;code&gt;background-color&lt;/code&gt;
+&lt;/h3&gt;&lt;p&gt;explained before&lt;/p&gt;
+&lt;h3 id="background-image"&gt;&lt;code&gt;background-image&lt;/code&gt;
+&lt;/h3&gt;&lt;p&gt;By default, the image is repeated so it covers the entire element.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;body&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;background-image&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;paper.gif&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="background-repeat"&gt;&lt;code&gt;background-repeat&lt;/code&gt;
+&lt;/h4&gt;&lt;p&gt;By default, the &lt;code&gt;background-image&lt;/code&gt; property repeats an image both horizontally and vertically.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;body&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;background-image&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;gradient_bg.png&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;background-repeat&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nf"&gt;repeat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kc"&gt;default&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="kc"&gt;repeat-x&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="kc"&gt;repeat-y&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="kc"&gt;no-repeat&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="kc"&gt;space&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="kc"&gt;round&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="kc"&gt;initial&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="kc"&gt;inherit&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="background-position"&gt;&lt;code&gt;background-position&lt;/code&gt;
+&lt;/h4&gt;&lt;p&gt;The &lt;code&gt;background-position&lt;/code&gt; property is used to specify the position of the background image.&lt;/p&gt;
+&lt;h4 id="background-attachment"&gt;&lt;code&gt;background-attachment&lt;/code&gt;
+&lt;/h4&gt;&lt;p&gt;The &lt;code&gt;background-attachment&lt;/code&gt; property specifies whether the background image should scroll or be fixed (will not scroll with the rest of the page)&lt;/p&gt;
+&lt;h3 id="background-1"&gt;&lt;code&gt;background&lt;/code&gt;
+&lt;/h3&gt;&lt;p&gt;shorthand property for above properties&lt;/p&gt;
+&lt;h2 id="box-model"&gt;Box Model
+&lt;/h2&gt;&lt;p&gt;&lt;img src="https://www.runoob.com/images/box-model.gif"
+loading="lazy"
+alt="CSS box-model"
+&gt;&lt;/p&gt;
+&lt;p&gt;Explanation of the different parts:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Content&lt;/strong&gt; - The content of the box, where text and images appear&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Padding&lt;/strong&gt; - Clears an area around the content. The padding is &lt;strong&gt;transparent&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Border&lt;/strong&gt; - A border that goes around the padding and content&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Margin&lt;/strong&gt; - Clears an area outside the border. The margin is &lt;strong&gt;transparent&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="padding"&gt;Padding
+&lt;/h2&gt;&lt;p&gt;Padding is used to create space around an element&amp;rsquo;s content, inside of any defined borders.&lt;/p&gt;
+&lt;p&gt;CSS has properties for specifying the padding for each side of an element:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;padding-top&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;padding-right&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;padding-bottom&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;padding-left&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;padding&lt;/code&gt;(shorthand)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;All the padding properties can have the following values:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;length&lt;/em&gt; - specifies a padding in px, pt, cm, etc.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;%&lt;/em&gt; - specifies a padding in % of the width of the containing element&lt;/li&gt;
+&lt;li&gt;inherit - specifies that the padding should be inherited from the parent element&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; Negative values are &lt;strong&gt;not allowed.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;If the &lt;code&gt;padding&lt;/code&gt; property has three values:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;padding: 25px 50px 75px;
+&lt;ul&gt;
+&lt;li&gt;top padding is 25px&lt;/li&gt;
+&lt;li&gt;right and left paddings are 50px&lt;/li&gt;
+&lt;li&gt;bottom padding is 75px&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="border"&gt;Border
+&lt;/h2&gt;&lt;p&gt;The CSS border properties allow you to specify the style, width, and color of an element&amp;rsquo;s border.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;border-style&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;border-width&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The width can be set as a specific size (in px, pt, cm, em, etc) or by using one of the three pre-defined values: thin, medium, or thick&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;border-width&lt;/code&gt; property can have from one to four values (for the top border, right border, bottom border, and the left border)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;border-color&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;border&lt;/code&gt;(shorthand)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;the &lt;code&gt;border-style&lt;/code&gt; is required&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;border-image&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;you can set an image to be used as the border around an element.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Tip:&lt;/strong&gt; The &lt;code&gt;border-image&lt;/code&gt; property is actually a shorthand property for the &lt;code&gt;border-image-source&lt;/code&gt;, &lt;code&gt;border-image-slice&lt;/code&gt;, &lt;code&gt;border-image-width&lt;/code&gt;, &lt;code&gt;border-image-outset&lt;/code&gt; and &lt;code&gt;border-image-repeat&lt;/code&gt; properties.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="side-specific"&gt;Side-Specific
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;border-(side)-(value)&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id="rounded"&gt;Rounded
+&lt;/h3&gt;&lt;p&gt;With the CSS &lt;code&gt;border-radius&lt;/code&gt; property, you can give any element &amp;ldquo;rounded corners&amp;rdquo;.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Tip:&lt;/strong&gt; The &lt;code&gt;border-radius&lt;/code&gt; property is actually a shorthand property for the &lt;code&gt;border-top-left-radius&lt;/code&gt;, &lt;code&gt;border-top-right-radius&lt;/code&gt;, &lt;code&gt;border-bottom-right-radius&lt;/code&gt; and &lt;code&gt;border-bottom-left-radius&lt;/code&gt; properties&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="margins"&gt;Margins
+&lt;/h2&gt;&lt;p&gt;Margins are used to create space around elements, &lt;strong&gt;outside&lt;/strong&gt; of any defined borders.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;margin-top&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;margin-right&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;margin-bottom&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;margin-left&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;margin&lt;/code&gt; (shorthand)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;All the margin properties can have the following values:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;auto - the browser calculates the margin&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;length&lt;/em&gt; - specifies a margin in px, pt, cm, etc.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;%&lt;/em&gt; - specifies a margin in % of the width of the containing element&lt;/li&gt;
+&lt;li&gt;inherit - specifies that the margin should be inherited from the parent element&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Tip:&lt;/strong&gt; Negative values are allowed.&lt;/p&gt;
+&lt;p&gt;If the &lt;code&gt;margin&lt;/code&gt; property has three values:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;margin: 25px 50px 75px;
+&lt;ul&gt;
+&lt;li&gt;top margin is 25px&lt;/li&gt;
+&lt;li&gt;right and left margins are 50px&lt;/li&gt;
+&lt;li&gt;bottom margin is 75px&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="margin-collapse"&gt;Margin Collapse
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Top and bottom&lt;/strong&gt; margins of elements are sometimes collapsed into a single margin that is equal to the &lt;strong&gt;largest&lt;/strong&gt; of the two margins.&lt;/p&gt;
+&lt;p&gt;This does not happen on left and right margins! Only top and bottom margins!&lt;/p&gt;
+&lt;h2 id="widthheight"&gt;Width/Height
+&lt;/h2&gt;&lt;p&gt;The &lt;code&gt;height&lt;/code&gt; and &lt;code&gt;width&lt;/code&gt; properties are used to set the height and width of an element.&lt;/p&gt;
+&lt;p&gt;The height and width properties do not include padding, borders, or margins. It sets the height/width of the area inside the padding, border, and margin of the element.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;height&lt;/code&gt; and &lt;code&gt;width&lt;/code&gt; properties may have the following values:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;auto&lt;/code&gt; - This is default. The browser calculates the height and width&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;length&lt;/code&gt; - Defines the height/width in px, cm etc.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;%&lt;/code&gt; - Defines the height/width in percent of the containing block&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;initial&lt;/code&gt; - Sets the height/width to its default value&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;inherit&lt;/code&gt; - The height/width will be inherited from its parent value&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;we can also use &lt;code&gt;min/max-width/height&lt;/code&gt; to achieve our goal.&lt;/p&gt;
+&lt;h3 id="box-sizing"&gt;Box Sizing
+&lt;/h3&gt;&lt;p&gt;The CSS &lt;code&gt;box-sizing&lt;/code&gt; property allows us to include the padding and border in an element&amp;rsquo;s total width and height.&lt;/p&gt;
+&lt;p&gt;By default, the width and height of an element is calculated like this:&lt;/p&gt;
+&lt;p&gt;width + padding + border = actual width of an element
+height + padding + border = actual height of an element&lt;/p&gt;
+&lt;p&gt;This means: When you set the width/height of an element, the element often appears &lt;strong&gt;bigger&lt;/strong&gt; than you have set&lt;/p&gt;
+&lt;p&gt;If you set &lt;code&gt;box-sizing: border-box;&lt;/code&gt; on an element, padding and border are included in the width and height&lt;/p&gt;
+&lt;h2 id="outline"&gt;Outline
+&lt;/h2&gt;&lt;p&gt;An outline is a line drawn outside the element&amp;rsquo;s border.&lt;/p&gt;
+&lt;p&gt;CSS has the following outline properties:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;outline-style&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;outline-color&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;outline-width&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;outline-offset&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;outline&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; Outline differs from &lt;a class="link" href="https://www.w3schools.com/css/css_border.asp" target="_blank" rel="noopener"
+&gt;borders&lt;/a&gt;! Unlike border, the outline is drawn outside the element&amp;rsquo;s border, and may overlap other content. Also, the outline is NOT a part of the element&amp;rsquo;s dimensions; the element&amp;rsquo;s total width and height is not affected by the width of the outline.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="text"&gt;Text
+&lt;/h2&gt;&lt;h3 id="text-color"&gt;Text Color
+&lt;/h3&gt;&lt;p&gt;The &lt;code&gt;color&lt;/code&gt; property is used to set the color of the text.&lt;/p&gt;
+&lt;h3 id="text-alignment"&gt;Text Alignment
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;text-align &lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;set the &lt;strong&gt;horizontal&lt;/strong&gt; alignment of a text.&lt;/p&gt;
+&lt;p&gt;When the &lt;code&gt;text-align&lt;/code&gt; property is set to &amp;ldquo;justify&amp;rdquo;, each line is stretched so that every line has equal width, and the left and right margins are straight (like in magazines and newspapers)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;text-align-last&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The &lt;code&gt;text-align-last&lt;/code&gt; property specifies how to align the last line of a text.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;direction&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;unicode-bidi&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The &lt;code&gt;direction&lt;/code&gt; and &lt;code&gt;unicode-bidi&lt;/code&gt; properties can be used to change the text direction of an element&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;vertical-align&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;vertical-align&lt;/code&gt; property sets the vertical alignment of an element.&lt;/p&gt;
+&lt;h3 id="text-decoration"&gt;Text Decoration
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;text-decoration-line&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;text-decoration-color&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;text-decoration-style&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;text-decoration-thickness&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;text-decoration&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="text-transformation"&gt;Text Transformation
+&lt;/h3&gt;&lt;p&gt;The &lt;code&gt;text-transform&lt;/code&gt; property is used to specify uppercase and lowercase letters in a text.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;text-transform: none|capitalize|uppercase|lowercase|initial|inherit;&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id="text-spacing"&gt;Text Spacing
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;text-indent&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;specify the indentation of the first line of a text&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;letter-spacing&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;line-height&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;word-spacing&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;white-space&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="text-shadow"&gt;Text Shadow
+&lt;/h3&gt;&lt;p&gt;horizontal shadow ;vertical shadow ;blur effect;colors&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;h1&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;color&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;white&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;text-shadow&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="kt"&gt;px&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="kt"&gt;px&lt;/span&gt; &lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="kt"&gt;px&lt;/span&gt; &lt;span class="mh"&gt;#000000&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="text-effect"&gt;Text Effect
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;text-overflow&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;specifies how overflowed content that is not displayed should be signaled to the user.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;word-wrap&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;allows long words to be able to be broken and wrap onto the next line.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;word-break&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;specifies line breaking rules.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;writing-mode&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;specifies whether lines of text are laid out horizontally or vertically.&lt;/p&gt;
+&lt;h2 id="font"&gt;Font
+&lt;/h2&gt;&lt;h3 id="font-family"&gt;Font Family
+&lt;/h3&gt;&lt;p&gt;In CSS there are five generic font families:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Serif&lt;/strong&gt; fonts have a small stroke at the edges of each letter. They create a sense of formality and elegance.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Sans-serif&lt;/strong&gt; fonts have clean lines (no small strokes attached). They create a modern and minimalistic look.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Monospace&lt;/strong&gt; fonts - here all the letters have the same fixed width. They create a mechanical look.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Cursive&lt;/strong&gt; fonts imitate human handwriting.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Fantasy&lt;/strong&gt; fonts are decorative/playful fonts.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: If the font name is more than one word, it must be in quotation marks, like: &amp;ldquo;Times New Roman&amp;rdquo;.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Tip:&lt;/strong&gt; The &lt;code&gt;font-family&lt;/code&gt; property should hold several font names as a &amp;ldquo;&lt;strong&gt;fallback&lt;/strong&gt;&amp;rdquo; system, to ensure maximum compatibility between browsers/operating systems. Start with the font you want, and end with a generic family (to let the browser pick a similar font in the generic family, if no other fonts are available). The font names should be separated with comma.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The following list are the best web safe fonts for HTML and CSS:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Arial (sans-serif)&lt;/li&gt;
+&lt;li&gt;Verdana (sans-serif)&lt;/li&gt;
+&lt;li&gt;Helvetica (sans-serif)&lt;/li&gt;
+&lt;li&gt;Tahoma (sans-serif)&lt;/li&gt;
+&lt;li&gt;Trebuchet MS (sans-serif)&lt;/li&gt;
+&lt;li&gt;Times New Roman (serif)&lt;/li&gt;
+&lt;li&gt;Georgia (serif)&lt;/li&gt;
+&lt;li&gt;Garamond (serif)&lt;/li&gt;
+&lt;li&gt;Courier New (monospace)&lt;/li&gt;
+&lt;li&gt;Brush Script MT (cursive)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="font-style"&gt;Font Style
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;font-style&lt;/code&gt; property is mostly used to specify italic text.&lt;/p&gt;
+&lt;p&gt;This property has three values:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;normal - The text is shown normally&lt;/li&gt;
+&lt;li&gt;italic - The text is shown in italics&lt;/li&gt;
+&lt;li&gt;oblique - The text is &amp;ldquo;leaning&amp;rdquo; (oblique is very similar to italic, but less supported)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;font-weight&lt;/code&gt; specifies the weight of a font ( normal bold)&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;font-variant&lt;/code&gt; property specifies whether or not a text should be displayed in a small-caps font.( In a small-caps font, all lowercase letters are converted to uppercase letters. However, the converted uppercase letters appears in a smaller font size than the original uppercase letters in the text. )&lt;/p&gt;
+&lt;h3 id="font-size"&gt;Font Size
+&lt;/h3&gt;&lt;p&gt;The font-size value can be an absolute, or relative size.&lt;/p&gt;
+&lt;p&gt;Absolute size:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Sets the text to a specified size&lt;/li&gt;
+&lt;li&gt;Does not allow a user to change the text size in all browsers (bad for accessibility reasons)&lt;/li&gt;
+&lt;li&gt;Absolute size is useful when the physical size of the output is known&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Relative size:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Sets the size relative to surrounding elements&lt;/li&gt;
+&lt;li&gt;Allows a user to change the text size in browsers&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; If you do not specify a font size, the default size for normal text, like paragraphs, is 16px (16px=1em).&lt;/p&gt;
+&lt;p&gt;1em is equal to the current font size. The default text size in browsers is 16px. So, the default size of 1em is 16px.&lt;/p&gt;
+&lt;p&gt;with the em size, it is possible to adjust the text size in all browsers.&lt;/p&gt;
+&lt;p&gt;The solution that works in all browsers, is to set a default font-size in percent for the &lt;body&gt; element:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;body&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;font-size&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="kt"&gt;%&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;h1&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;font-size&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;2.5&lt;/span&gt;&lt;span class="kt"&gt;em&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;h2&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;font-size&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;1.875&lt;/span&gt;&lt;span class="kt"&gt;em&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;p&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;font-size&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;0.875&lt;/span&gt;&lt;span class="kt"&gt;em&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="font-1"&gt;&lt;code&gt;font&lt;/code&gt;
+&lt;/h3&gt;&lt;p&gt;The &lt;code&gt;font&lt;/code&gt; property is a shorthand property for:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;font-style&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;font-variant&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;font-weight&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;font-size/line-height&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;font-family&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; The &lt;code&gt;font-size&lt;/code&gt; and &lt;code&gt;font-family&lt;/code&gt; values are required. If one of the other values is missing, their default value are used.&lt;/p&gt;
+&lt;h3 id="google-fonts"&gt;Google Fonts
+&lt;/h3&gt;&lt;p&gt;If you do not want to use any of the standard fonts in HTML, you can use Google Fonts.&lt;/p&gt;
+&lt;p&gt;Google Fonts are free to use, and have more than 1000 fonts to choose from.&lt;/p&gt;
+&lt;p&gt;Just add a special style sheet link in the &lt;head&gt; section and then refer to the font in the CSS.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;link&lt;/span&gt; &lt;span class="nt"&gt;rel&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;stylesheet&amp;#34;&lt;/span&gt; &lt;span class="nt"&gt;href&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;https://fonts.googleapis.com/css?family=Sofia|Audiowide|Sofia|Trirong&amp;#34;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Google have also enabled different font effects that you can use.&lt;/p&gt;
+&lt;p&gt;First add &lt;code&gt;effect=effectname&lt;/code&gt; to the Google API, then add a special class name to the element that is going to use the special effect. The class name always starts with &lt;code&gt;font-effect-&lt;/code&gt; and ends with the &lt;code&gt;effectname&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;link&lt;/span&gt; &lt;span class="nt"&gt;rel&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;stylesheet&amp;#34;&lt;/span&gt; &lt;span class="nt"&gt;href&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;https://fonts.googleapis.com/css?family=Sofia&amp;amp;effect=fire&amp;#34;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;h1&lt;/span&gt; &lt;span class="nt"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;font-effect-fire&amp;#34;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="nt"&gt;Sofia&lt;/span&gt; &lt;span class="nt"&gt;on&lt;/span&gt; &lt;span class="nt"&gt;Fire&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;h1&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="web-fonts"&gt;Web Fonts
+&lt;/h3&gt;&lt;p&gt;Web fonts allow Web designers to use fonts that are not installed on the user&amp;rsquo;s computer.&lt;/p&gt;
+&lt;p&gt;When you have found/bought the font you wish to use, just include the font file on your web server, and it will be automatically downloaded to the user when needed.&lt;/p&gt;
+&lt;p&gt;Your &amp;ldquo;own&amp;rdquo; fonts are defined within the CSS &lt;code&gt;@font-face&lt;/code&gt; rule.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;@&lt;/span&gt;&lt;span class="k"&gt;font-face&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;font-family&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nt"&gt;myFirstFont&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;src&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nt"&gt;url&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;sansation_light&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;woff&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;font-family&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;myFirstFont&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="lists"&gt;Lists
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;list-style-type&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;`list-style-image``&lt;/li&gt;
+&lt;li&gt;``list-style-position`&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;list-style&lt;/code&gt; ( shorthand )&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="layout"&gt;Layout
+&lt;/h2&gt;&lt;h3 id="display"&gt;Display
+&lt;/h3&gt;&lt;p&gt;The &lt;code&gt;display&lt;/code&gt; property is the most important CSS property for controlling layout.&lt;/p&gt;
+&lt;p&gt;Every HTML element has a default display value depending on what type of element it is. The default display value for most elements is &lt;code&gt;block&lt;/code&gt; or &lt;code&gt;inline&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;display: none;&lt;/code&gt; is commonly used with JavaScript to hide and show elements without deleting and recreating them.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;visibility:hidden;&lt;/code&gt; also hides an element.&lt;/p&gt;
+&lt;p&gt;However, the element will still take up the same space as before. The element will be hidden, but still affect the layout&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style="text-align: left"&gt;Value&lt;/th&gt;
+&lt;th style="text-align: left"&gt;Description&lt;/th&gt;
+&lt;th style="text-align: left"&gt;Play it&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;inline&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Displays an element as an inline element (like &lt;span&gt;). Any height and width properties will have no effect&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/playdemo.asp?filename=playcss_display&amp;amp;preval=inline" target="_blank" rel="noopener"
+&gt;Demo ❯&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;block&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Displays an element as a block element (like &lt;p&gt;). It starts on a new line, and takes up the whole width&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/playdemo.asp?filename=playcss_display&amp;amp;preval=block" target="_blank" rel="noopener"
+&gt;Demo ❯&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;contents&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Makes the container disappear, making the child elements children of the element the next level up in the DOM&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;flex&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Displays an element as a &lt;strong&gt;block-level flex container&lt;/strong&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;grid&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Displays an element as a &lt;strong&gt;block-level grid container&lt;/strong&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;inline-block&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Displays an element as an inline-level block container. The element itself is formatted as an inline element, but you &lt;strong&gt;can apply height and width values&lt;/strong&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;inline-flex&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Displays an element as an inline-level flex container&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;inline-grid&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Displays an element as an inline-level grid container&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;inline-table&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The element is displayed as an inline-level table&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;list-item&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Let the element behave like a &lt;li&gt; element&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/cssref/playdemo.asp?filename=playcss_display&amp;amp;preval=list-item" target="_blank" rel="noopener"
+&gt;Demo ❯&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;run-in&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Displays an element as either block or inline, depending on context&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;table&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Let the element behave like a &lt;table&gt; element&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;table-caption&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Let the element behave like a &lt;caption&gt; element&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;table-column-group&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Let the element behave like a &lt;colgroup&gt; element&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;table-header-group&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Let the element behave like a &lt;thead&gt; element&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;table-footer-group&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Let the element behave like a &lt;tfoot&gt; element&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;table-row-group&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Let the element behave like a &lt;tbody&gt; element&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;table-cell&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Let the element behave like a &lt;td&gt; element&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;table-column&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Let the element behave like a &lt;col&gt; element&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;table-row&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Let the element behave like a &lt;tr&gt; element&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;none&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The element is completely removed&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;initial&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Sets this property to its default value. &lt;a class="link" href="https://www.w3schools.com/cssref/css_initial.asp" target="_blank" rel="noopener"
+&gt;Read about &lt;em&gt;initial&lt;/em&gt;&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;inherit&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Inherits this property from its parent element. &lt;a class="link" href="https://www.w3schools.com/cssref/css_inherit.asp" target="_blank" rel="noopener"
+&gt;Read about &lt;em&gt;inherit&lt;/em&gt;&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h4 id="displayinline-block"&gt;&lt;code&gt;display:inline-block&lt;/code&gt;
+&lt;/h4&gt;&lt;p&gt;Compared to &lt;code&gt;display: inline&lt;/code&gt;, the major difference is that &lt;code&gt;display: inline-block&lt;/code&gt; allows to set a width and height on the element.&lt;/p&gt;
+&lt;p&gt;Also, with &lt;code&gt;display: inline-block&lt;/code&gt;, the top and bottom margins/paddings are respected, but with &lt;code&gt;display: inline&lt;/code&gt; they are not.&lt;/p&gt;
+&lt;p&gt;Compared to &lt;code&gt;display: block&lt;/code&gt;, the major difference is that &lt;code&gt;display: inline-block&lt;/code&gt; does not add a line-break after the element, so the element can sit next to other elements.&lt;/p&gt;
+&lt;h3 id="position"&gt;Position
+&lt;/h3&gt;&lt;p&gt;The &lt;code&gt;position&lt;/code&gt; property specifies the type of positioning method used for an element.&lt;/p&gt;
+&lt;p&gt;There are five different position values:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;static&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;HTML elements are positioned static by default.&lt;/p&gt;
+&lt;p&gt;An element with &lt;code&gt;position: static;&lt;/code&gt; is not positioned in any special way; it is always positioned according to the normal flow of the page&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;relative&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;An element with &lt;code&gt;position: relative;&lt;/code&gt; is positioned relative to its normal position.&lt;/p&gt;
+&lt;p&gt;Setting the &lt;strong&gt;top, right, bottom, and left&lt;/strong&gt; properties of a relatively-positioned element will cause it to be adjusted away from its normal position. Other content &lt;strong&gt;will not be adjusted&lt;/strong&gt; to fit into any gap left by the element.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;fixed&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;An element with &lt;code&gt;position: fixed;&lt;/code&gt; is positioned &lt;strong&gt;relative to the viewport&lt;/strong&gt;, which means it always stays in the same place even if the page is scrolled. The top, right, bottom, and left properties are used to position the element.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;absolute&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;An element with &lt;code&gt;position: absolute;&lt;/code&gt; is positioned relative to the nearest positioned ancestor (instead of positioned relative to the viewport, like fixed).&lt;/p&gt;
+&lt;p&gt;However; if an absolute positioned element has no positioned ancestors, it uses the document body, and moves along with page scrolling.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;sticky&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;A sticky element toggles between &lt;code&gt;relative&lt;/code&gt; and &lt;code&gt;fixed&lt;/code&gt;, depending on the scroll position. It is positioned relative until a given offset position is met in the viewport - then it &amp;ldquo;sticks&amp;rdquo; in place (like position:fixed).&lt;/p&gt;
+&lt;h3 id="z-index"&gt;Z-index
+&lt;/h3&gt;&lt;p&gt;specifies the stack order of an element.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;z-index&lt;/code&gt; &lt;strong&gt;only works&lt;/strong&gt; on &lt;a class="link" href="https://www.w3schools.com/css/css_positioning.asp" target="_blank" rel="noopener"
+&gt;positioned elements&lt;/a&gt; (position: absolute, position: relative, position: fixed, or position: sticky) and &lt;a class="link" href="https://www.w3schools.com/css/css3_flexbox.asp" target="_blank" rel="noopener"
+&gt;flex items&lt;/a&gt; (elements that are direct children of display: flex elements).&lt;/p&gt;
+&lt;h3 id="overflow"&gt;Overflow
+&lt;/h3&gt;&lt;p&gt;controls what happens to content that is too big to fit into an area, specifies whether to clip the content or to add scrollbars when the content of an element is too big to fit in the specified area.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;visible&lt;/code&gt; - Default. The overflow is not clipped. The content renders outside the element&amp;rsquo;s box&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;hidden&lt;/code&gt; - The overflow is clipped, and the rest of the content will be invisible&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;scroll&lt;/code&gt; - The overflow is clipped, and a scrollbar is added to see the rest of the content&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;auto&lt;/code&gt; - Similar to &lt;code&gt;scroll&lt;/code&gt;, but it adds scrollbars only when necessary&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The &lt;code&gt;overflow-x&lt;/code&gt; and &lt;code&gt;overflow-y&lt;/code&gt; properties specifies whether to change the overflow of content just horizontally or vertically (or both):&lt;/p&gt;
+&lt;h3 id="float-and-clear"&gt;Float and Clear
+&lt;/h3&gt;&lt;h4 id="float"&gt;&lt;code&gt;float&lt;/code&gt;
+&lt;/h4&gt;&lt;p&gt;The CSS &lt;code&gt;float&lt;/code&gt; property specifies how an element should float.&lt;/p&gt;
+&lt;p&gt;The CSS &lt;code&gt;clear&lt;/code&gt; property specifies what elements can float beside the cleared element and on which side.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;float&lt;/code&gt; property can have one of the following values:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;left&lt;/code&gt; - The element floats to the left of its container&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;right&lt;/code&gt; - The element floats to the right of its container&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;none&lt;/code&gt; - The element does not float (will be displayed just where it occurs in the text). This is default&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;inherit&lt;/code&gt; - The element inherits the float value of its parent&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="clear"&gt;&lt;code&gt;clear&lt;/code&gt;
+&lt;/h4&gt;&lt;p&gt;When we use the &lt;code&gt;float&lt;/code&gt; property, and we want the next element below (not on right or left), we will have to use the &lt;code&gt;clear&lt;/code&gt; property.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;clear&lt;/code&gt; property specifies what should happen with the element that is next to a floating element.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;clear&lt;/code&gt; property can have one of the following values:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;none&lt;/code&gt; - The element is not pushed below left or right floated elements. This is default&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;left&lt;/code&gt; - The element is pushed below left floated elements&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;right&lt;/code&gt; - The element is pushed below right floated elements&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;both&lt;/code&gt; - The element is pushed below both left and right floated elements&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;inherit&lt;/code&gt; - The element inherits the clear value from its parent&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;When clearing floats, you should &lt;strong&gt;match&lt;/strong&gt; the clear to the float: If an element is floated to the left, then you should clear to the left. Your floated element will continue to float, but the cleared element will appear below it on the web page.&lt;/p&gt;
+&lt;p&gt;If a floated element is taller than the containing element, it will &amp;ldquo;overflow&amp;rdquo; outside of its container. We can then add a clearfix hack to solve this problem&lt;/p&gt;
+&lt;h3 id="align"&gt;Align
+&lt;/h3&gt;&lt;h4 id="horizontally"&gt;Horizontally
+&lt;/h4&gt;&lt;p&gt;To horizontally center a block element (like &lt;div&gt;), use &lt;code&gt;margin: auto;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; Center aligning has no effect if the &lt;code&gt;width&lt;/code&gt; property is not set (or set to 100%).&lt;/p&gt;
+&lt;p&gt;To just center the text inside an element, use &lt;code&gt;text-align: center;&lt;/code&gt;&lt;/p&gt;
+&lt;h4 id="vertically"&gt;Vertically
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;There are many ways to center an element vertically in CSS. A simple solution is to use top and bottom &lt;code&gt;padding&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Another trick is to use the &lt;code&gt;line-height&lt;/code&gt; property with a value that is equal to the &lt;code&gt;height&lt;/code&gt; property&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;another solution is to use positioning and the &lt;code&gt;transform&lt;/code&gt; property&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;center&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;height&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;200&lt;/span&gt;&lt;span class="kt"&gt;px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;position&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;relative&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;border&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="kt"&gt;px&lt;/span&gt; &lt;span class="kc"&gt;solid&lt;/span&gt; &lt;span class="kc"&gt;green&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;center&lt;/span&gt; &lt;span class="nt"&gt;p&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;margin&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;position&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;absolute&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;top&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;50&lt;/span&gt;&lt;span class="kt"&gt;%&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;left&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;50&lt;/span&gt;&lt;span class="kt"&gt;%&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kp"&gt;-ms-&lt;/span&gt;&lt;span class="k"&gt;transform&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;translate&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;-50&lt;/span&gt;&lt;span class="kt"&gt;%&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;-50&lt;/span&gt;&lt;span class="kt"&gt;%&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;transform&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;translate&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;-50&lt;/span&gt;&lt;span class="kt"&gt;%&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;-50&lt;/span&gt;&lt;span class="kt"&gt;%&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;You can also use flexbox to center things. Just note that flexbox is not supported in IE10 and earlier versions&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="flex"&gt;Flex
+&lt;/h2&gt;&lt;p&gt;The Flexible Box Layout Module, makes it easier to design flexible responsive layout structure without using float or positioning.&lt;/p&gt;
+&lt;h3 id="container"&gt;container
+&lt;/h3&gt;&lt;p&gt;The flex container becomes flexible by setting the &lt;code&gt;display&lt;/code&gt; property to &lt;code&gt;flex&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The flex container properties are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.w3schools.com/css/css3_flexbox_container.asp#flex-direction" target="_blank" rel="noopener"
+&gt;&lt;code&gt;flex-direction&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;defines in which direction the container wants to stack the flex items.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;column | column-reverse | row | row-reverse &lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.w3schools.com/css/css3_flexbox_container.asp#flex-wrap" target="_blank" rel="noopener"
+&gt;&lt;code&gt;flex-wrap&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;specifies whether the flex items should wrap or not.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;nowrap(default) | wrap |wrap-reverse&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.w3schools.com/css/css3_flexbox_container.asp#flex-flow" target="_blank" rel="noopener"
+&gt;&lt;code&gt;flex-flow&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;shorthand for &lt;code&gt;flex-direction&lt;/code&gt; and &lt;code&gt;flex-wrap&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class="link" href="https://www.w3schools.com/css/css3_flexbox_container.asp#justify-content" target="_blank" rel="noopener"
+&gt;&lt;code&gt;justify-content&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;flex-start&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;center&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;flex-end&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;space-around&lt;/code&gt; :displays the flex items with space before, between, and after the lines&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;space-between&lt;/code&gt;：displays the flex items with space between the lines&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;space-evenly&lt;/code&gt;:equal space around them&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class="link" href="https://www.w3schools.com/css/css3_flexbox_container.asp#align-items" target="_blank" rel="noopener"
+&gt;&lt;code&gt;align-items&lt;/code&gt;&lt;/a&gt; :used to align the flex items.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;flex-start&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;flex-end&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;center&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;stretch &lt;/code&gt;: Items are stretched to fit the container&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;baseline&lt;/code&gt;: Items are positioned at the baseline of the container&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class="link" href="https://www.w3schools.com/css/css3_flexbox_container.asp#align-content" target="_blank" rel="noopener"
+&gt;&lt;code&gt;align-content&lt;/code&gt;&lt;/a&gt;: but instead of aligning flex items, it aligns flex lines&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="item"&gt;item
+&lt;/h3&gt;&lt;p&gt;The flex item properties are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.w3schools.com/css/css3_flexbox_items.asp#order" target="_blank" rel="noopener"
+&gt;&lt;code&gt;order&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;specifies the appearance order of the flex items.&lt;/p&gt;
+&lt;p&gt;The first flex item in the code does not have to appear as the first item in the layout.&lt;/p&gt;
+&lt;p&gt;The order value must be a number, default value is 0.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.w3schools.com/css/css3_flexbox_items.asp#flex-grow" target="_blank" rel="noopener"
+&gt;&lt;code&gt;flex-grow&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The &lt;code&gt;flex-grow&lt;/code&gt; property specifies how much a flex item will grow relative to the rest of the flex items.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.w3schools.com/css/css3_flexbox_items.asp#flex-shrink" target="_blank" rel="noopener"
+&gt;&lt;code&gt;flex-shrink&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The &lt;code&gt;flex-grow&lt;/code&gt; property specifies how much a flex item will shrink relative to the rest of the flex items.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.w3schools.com/css/css3_flexbox_items.asp#flex-basis" target="_blank" rel="noopener"
+&gt;&lt;code&gt;flex-basis&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;specifies the initial length of a flex item.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.w3schools.com/css/css3_flexbox_items.asp#flex" target="_blank" rel="noopener"
+&gt;&lt;code&gt;flex&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;shorthand property for the &lt;code&gt;flex-grow&lt;/code&gt;, &lt;code&gt;flex-shrink&lt;/code&gt;, and &lt;code&gt;flex-basis&lt;/code&gt; properties.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.w3schools.com/css/css3_flexbox_items.asp#align-self" target="_blank" rel="noopener"
+&gt;&lt;code&gt;align-self&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;specifies the alignment for the selected item inside the flexible container.&lt;/p&gt;
+&lt;h2 id="grid"&gt;Grid
+&lt;/h2&gt;&lt;h3 id="container-1"&gt;container
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;grid-template-columns&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;grid-template-rows&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;justify-content&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;align-content&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="item-1"&gt;item
+&lt;/h3&gt;&lt;p&gt;By default, a container has one grid item for each column, in each row, but you can style the grid items so that they will span multiple columns and/or rows.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;grid-column&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;shorthand property for the &lt;code&gt;grid-column-start&lt;/code&gt; and the &lt;code&gt;grid-column-end&lt;/code&gt; properties., defines on which column(s) to place an item.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;item1&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;grid-column&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;item1&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;grid-column&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="n"&gt;span&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;grid-row&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;gird-area&lt;/code&gt; : shorthand for the above two properties&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;item8&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;grid-area&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="mi"&gt;6&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;item8&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;grid-area&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="mi"&gt;6&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="units"&gt;Units
+&lt;/h2&gt;&lt;p&gt;CSS has several different units for expressing a length.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; A whitespace cannot appear between the number and the unit. However, if the value is &lt;code&gt;0&lt;/code&gt;, the unit can be omitted.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;There are two types of length units: &lt;strong&gt;absolute&lt;/strong&gt; and &lt;strong&gt;relative&lt;/strong&gt;.&lt;/p&gt;
+&lt;h3 id="absolute"&gt;Absolute
+&lt;/h3&gt;&lt;p&gt;Absolute length units are not recommended for use on screen, because screen sizes vary so much. However, they can be used if the output medium is known, such as for print layout.&lt;/p&gt;
+&lt;p&gt;Absolute length units are not recommended for use on screen, because screen sizes vary so much. However, they can be used if the output medium is known, such as for print layout.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style="text-align: left"&gt;Unit&lt;/th&gt;
+&lt;th style="text-align: left"&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;cm&lt;/td&gt;
+&lt;td style="text-align: left"&gt;centimeters&lt;a class="link" href="https://www.w3schools.com/css/tryit.asp?filename=trycss_unit_cm" target="_blank" rel="noopener"
+&gt;Try it&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;mm&lt;/td&gt;
+&lt;td style="text-align: left"&gt;millimeters&lt;a class="link" href="https://www.w3schools.com/css/tryit.asp?filename=trycss_unit_mm" target="_blank" rel="noopener"
+&gt;Try it&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;in&lt;/td&gt;
+&lt;td style="text-align: left"&gt;inches (1in = 96px = 2.54cm)&lt;a class="link" href="https://www.w3schools.com/css/tryit.asp?filename=trycss_unit_in" target="_blank" rel="noopener"
+&gt;Try it&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;px *&lt;/td&gt;
+&lt;td style="text-align: left"&gt;pixels (1px = 1/96th of 1in)&lt;a class="link" href="https://www.w3schools.com/css/tryit.asp?filename=trycss_unit_px" target="_blank" rel="noopener"
+&gt;Try it&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;pt&lt;/td&gt;
+&lt;td style="text-align: left"&gt;points (1pt = 1/72 of 1in)&lt;a class="link" href="https://www.w3schools.com/css/tryit.asp?filename=trycss_unit_pt" target="_blank" rel="noopener"
+&gt;Try it&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;pc&lt;/td&gt;
+&lt;td style="text-align: left"&gt;picas (1pc = 12 pt)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;* Pixels (px) are relative to the viewing device. For low-dpi devices, 1px is one device pixel (dot) of the display. For printers and high resolution screens 1px implies multiple device pixels.&lt;/p&gt;
+&lt;h3 id="relative"&gt;Relative
+&lt;/h3&gt;&lt;p&gt;Relative length units specify a length relative to another length property. Relative length units scales better between different rendering mediums.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style="text-align: left"&gt;Unit&lt;/th&gt;
+&lt;th style="text-align: left"&gt;Description&lt;/th&gt;
+&lt;th style="text-align: left"&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;em&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Relative to the font-size of the element (2em means 2 times the size of the current font)&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/css/tryit.asp?filename=trycss_unit_em" target="_blank" rel="noopener"
+&gt;Try it&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;ex&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Relative to the x-height of the current font (rarely used)&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/css/tryit.asp?filename=trycss_unit_ex" target="_blank" rel="noopener"
+&gt;Try it&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;ch&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Relative to width of the &amp;ldquo;0&amp;rdquo; (zero)&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/css/tryit.asp?filename=trycss_unit_ch" target="_blank" rel="noopener"
+&gt;Try it&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;rem&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Relative to font-size of the root element&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/css/tryit.asp?filename=trycss_unit_rem" target="_blank" rel="noopener"
+&gt;Try it&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;vw&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Relative to 1% of the width of the viewport*&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/css/tryit.asp?filename=trycss_unit_vw" target="_blank" rel="noopener"
+&gt;Try it&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;vh&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Relative to 1% of the height of the viewport*&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/css/tryit.asp?filename=trycss_unit_vh" target="_blank" rel="noopener"
+&gt;Try it&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;vmin&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Relative to 1% of viewport&amp;rsquo;s* smaller dimension&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/css/tryit.asp?filename=trycss_unit_vmin" target="_blank" rel="noopener"
+&gt;Try it&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;vmax&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Relative to 1% of viewport&amp;rsquo;s* larger dimension&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;a class="link" href="https://www.w3schools.com/css/tryit.asp?filename=trycss_unit_vmax" target="_blank" rel="noopener"
+&gt;Try it&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;%&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Relative to the parent element&lt;/td&gt;
+&lt;td style="text-align: left"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="math-functions"&gt;Math Functions
+&lt;/h2&gt;&lt;h3 id="calc"&gt;calc()
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;calc(&lt;em&gt;expression&lt;/em&gt;)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;width&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;calc&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="kt"&gt;%&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="kt"&gt;px&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="max"&gt;max()
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;max(&lt;em&gt;value1&lt;/em&gt;, &lt;em&gt;value2&lt;/em&gt;, &amp;hellip;)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;width&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nf"&gt;max&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;50&lt;/span&gt;&lt;span class="kt"&gt;%&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;300&lt;/span&gt;&lt;span class="kt"&gt;px&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="min"&gt;min()
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;max(&lt;em&gt;value1&lt;/em&gt;, &lt;em&gt;value2&lt;/em&gt;, &amp;hellip;)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;width&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nf"&gt;min&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;50&lt;/span&gt;&lt;span class="kt"&gt;%&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;300&lt;/span&gt;&lt;span class="kt"&gt;px&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="transforms"&gt;Transforms
+&lt;/h2&gt;&lt;h3 id="2d"&gt;2D
+&lt;/h3&gt;&lt;p&gt;With the CSS &lt;code&gt;transform&lt;/code&gt; property you can use the following 2D transformation methods:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;translate()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;moves an element from its current position (according to the parameters given for the X-axis and the Y-axis).&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;rotate()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;rotates an element clockwise(positive deg) or counter-clockwise (negative deg) according to a given degree.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;scaleX()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;increases or decreases the width of an element.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;scaleY()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;increases or decreases the height of an element.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;scale()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;increases or decreases the size of an element (according to the parameters given for the width and height).&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;skewX()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;skews an element along the X-axis by the given angle.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;skewY()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;skews an element along the Y-axis by the given angle.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;skew()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;skews an element along the X and Y-axis by the given angles.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;matrix()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;combines all the 2D transform methods into one.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;matrix(scaleX(),skewY(),skewX(),scaleY(),translateX(),translateY())&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="3d"&gt;3D
+&lt;/h3&gt;&lt;p&gt;CSS also supports 3D transformations.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style="text-align: left"&gt;Function&lt;/th&gt;
+&lt;th style="text-align: left"&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;matrix3d (&lt;em&gt;n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n&lt;/em&gt;)&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Defines a 3D transformation, using a 4x4 matrix of 16 values&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;translate3d(&lt;em&gt;x,y,z&lt;/em&gt;)&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Defines a 3D translation&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;translateX(&lt;em&gt;x&lt;/em&gt;)&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Defines a 3D translation, using only the value for the X-axis&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;translateY(&lt;em&gt;y&lt;/em&gt;)&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Defines a 3D translation, using only the value for the Y-axis&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;translateZ(&lt;em&gt;z&lt;/em&gt;)&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Defines a 3D translation, using only the value for the Z-axis&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;scale3d(&lt;em&gt;x,y,z&lt;/em&gt;)&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Defines a 3D scale transformation&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;scaleX(&lt;em&gt;x&lt;/em&gt;)&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Defines a 3D scale transformation by giving a value for the X-axis&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;scaleY(&lt;em&gt;y&lt;/em&gt;)&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Defines a 3D scale transformation by giving a value for the Y-axis&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;scaleZ(&lt;em&gt;z&lt;/em&gt;)&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Defines a 3D scale transformation by giving a value for the Z-axis&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;rotate3d(&lt;em&gt;x,y,z,angle&lt;/em&gt;)&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Defines a 3D rotation&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;rotateX(&lt;em&gt;angle&lt;/em&gt;)&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Defines a 3D rotation along the X-axis&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;rotateY(&lt;em&gt;angle&lt;/em&gt;)&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Defines a 3D rotation along the Y-axis&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;rotateZ(&lt;em&gt;angle&lt;/em&gt;)&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Defines a 3D rotation along the Z-axis&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;perspective(&lt;em&gt;n&lt;/em&gt;)&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Defines a perspective view for a 3D transformed element&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="transitions"&gt;Transitions
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;transition&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;transition-delay&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;specifies a delay (in seconds) for the transition effect.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;transition-duration&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;transition-property&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;transition-timing-function&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;To create a transition effect, you must specify two things:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;the CSS property you want to add an effect to&lt;/li&gt;
+&lt;li&gt;the duration of the effect&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; If the duration part is not specified, the transition will have no effect, because the default value is 0.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;transition&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="k"&gt;width&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="kt"&gt;s&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="k"&gt;height&lt;/span&gt; &lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="kt"&gt;s&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;hover&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;width&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;300&lt;/span&gt;&lt;span class="kt"&gt;px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;/*Several Property Values*/&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;hover&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;width&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;300&lt;/span&gt;&lt;span class="kt"&gt;px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="timing-function"&gt;Timing Function
+&lt;/h3&gt;&lt;p&gt;The &lt;code&gt;transition-timing-function&lt;/code&gt; property specifies the speed curve of the transition effect.&lt;/p&gt;
+&lt;p&gt;The transition-timing-function property can have the following values:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ease&lt;/code&gt; - specifies a transition effect with a slow start, then fast, then end slowly (this is default)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;linear&lt;/code&gt; - specifies a transition effect with the same speed from start to end&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ease-in&lt;/code&gt; - specifies a transition effect with a slow start&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ease-out&lt;/code&gt; - specifies a transition effect with a slow end&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ease-in-out&lt;/code&gt; - specifies a transition effect with a slow start and end&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cubic-bezier(n,n,n,n)&lt;/code&gt; - lets you define your own values in a cubic-bezier function&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="animations"&gt;Animations
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;@keyframes&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;To use CSS animation, you must first specify some keyframes for the animation.&lt;/p&gt;
+&lt;p&gt;Keyframes hold what styles the element will have at certain times.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;animation-name&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;animation-duration&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The &lt;code&gt;animation-duration&lt;/code&gt; property defines how long an animation should take to complete. If the &lt;code&gt;animation-duration&lt;/code&gt; property is not specified, no animation will occur, because the default value is 0s (0 seconds).&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;animation-delay&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Negative values are also allowed. If using negative values, the animation will start as if it had already been playing for &lt;em&gt;N&lt;/em&gt; seconds.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;animation-iteration-count&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;animation-direction&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;normal&lt;/code&gt; - The animation is played as normal (forwards). This is default&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;reverse&lt;/code&gt; - The animation is played in reverse direction (backwards)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;alternate &lt;/code&gt;- The animation is played forwards first, then backwards&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;alternate-reverse&lt;/code&gt; - The animation is played backwards first, then forwards&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;animation-timing-function&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;animation-fill-mode&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;none&lt;/code&gt; - Default value. Animation will not apply any styles to the element before or after it is executing&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;forwards&lt;/code&gt; - The element will retain the style values that is set by the last keyframe (depends on animation-direction and animation-iteration-count)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;backwards&lt;/code&gt; - The element will get the style values that is set by the first keyframe (depends on animation-direction), and retain this during the animation-delay period&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;both&lt;/code&gt; - The animation will follow the rules for both forwards and backwards, extending the animation properties in both directions&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;CSS animations do not affect an element before the first keyframe is played or after the last keyframe is played. The animation-fill-mode property can override this behavior.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;animation&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="media-queries"&gt;Media Queries
+&lt;/h2&gt;&lt;p&gt;The &lt;code&gt;@media&lt;/code&gt; rule, introduced in CSS2, made it possible to define different style rules for different media types.&lt;/p&gt;
+&lt;p&gt;Unfortunately these media types never got a lot of support by devices, other than the print media type.&lt;/p&gt;
+&lt;p&gt;Media queries in CSS3 extended the CSS2 media types idea: Instead of looking for a type of device, they look at the capability of the device.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;width and height of the viewport&lt;/li&gt;
+&lt;li&gt;width and height of the device&lt;/li&gt;
+&lt;li&gt;orientation (is the tablet/phone in landscape or portrait mode?)&lt;/li&gt;
+&lt;li&gt;resolution&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;A media query consists of a media type and can contain one or more expressions, which resolve to either true or false.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;@&lt;/span&gt;&lt;span class="k"&gt;media&lt;/span&gt; &lt;span class="nt"&gt;not&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="nt"&gt;only&lt;/span&gt; &lt;span class="nt"&gt;mediatype&lt;/span&gt; &lt;span class="nt"&gt;and&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;mediafeature&lt;/span&gt; &lt;span class="nt"&gt;and&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="nt"&gt;or&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="nt"&gt;not&lt;/span&gt; &lt;span class="nt"&gt;mediafeature&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;CSS-Code&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="media-types"&gt;Media Types
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style="text-align: left"&gt;Value&lt;/th&gt;
+&lt;th style="text-align: left"&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;all&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Default. Used for all media type devices&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;print&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Used for printers&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;screen&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Used for computer screens, tablets, smart-phones etc.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;speech&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Used for screenreaders that &amp;ldquo;reads&amp;rdquo; the page out loud&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="media-features"&gt;Media Features
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style="text-align: left"&gt;Value&lt;/th&gt;
+&lt;th style="text-align: left"&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;any-hover&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Does any available input mechanism allow the user to hover over elements? (added in Media Queries Level 4)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;any-pointer&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Is any available input mechanism a pointing device, and if so, how accurate is it? (added in Media Queries Level 4)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;aspect-ratio&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The ratio between the width and the height of the viewport&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;color&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The number of bits per color component for the output device&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;color-gamut&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The approximate range of colors that are supported by the user agent and output device (added in Media Queries Level 4)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;color-index&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The number of colors the device can display&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;grid&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Whether the device is a grid or bitmap&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;height&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The viewport height&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;hover&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Does the primary input mechanism allow the user to hover over elements? (added in Media Queries Level 4)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;inverted-colors&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Is the browser or underlying OS inverting colors? (added in Media Queries Level 4)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;light-level&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Current ambient light level (added in Media Queries Level 4)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;max-aspect-ratio&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The maximum ratio between the width and the height of the display area&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;max-color&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The maximum number of bits per color component for the output device&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;max-color-index&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The maximum number of colors the device can display&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;max-height&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The maximum height of the display area, such as a browser window&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;max-monochrome&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The maximum number of bits per &amp;ldquo;color&amp;rdquo; on a monochrome (greyscale) device&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;max-resolution&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The maximum resolution of the device, using dpi or dpcm&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;max-width&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The maximum width of the display area, such as a browser window&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;min-aspect-ratio&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The minimum ratio between the width and the height of the display area&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;min-color&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The minimum number of bits per color component for the output device&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;min-color-index&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The minimum number of colors the device can display&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;min-height&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The minimum height of the display area, such as a browser window&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;min-monochrome&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The minimum number of bits per &amp;ldquo;color&amp;rdquo; on a monochrome (greyscale) device&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;min-resolution&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The minimum resolution of the device, using dpi or dpcm&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;min-width&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The minimum width of the display area, such as a browser window&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;monochrome&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The number of bits per &amp;ldquo;color&amp;rdquo; on a monochrome (greyscale) device&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;orientation&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The orientation of the viewport (landscape or portrait mode)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;overflow-block&lt;/td&gt;
+&lt;td style="text-align: left"&gt;How does the output device handle content that overflows the viewport along the block axis (added in Media Queries Level 4)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;overflow-inline&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Can content that overflows the viewport along the inline axis be scrolled (added in Media Queries Level 4)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;pointer&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Is the primary input mechanism a pointing device, and if so, how accurate is it? (added in Media Queries Level 4)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;resolution&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The resolution of the output device, using dpi or dpcm&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;scan&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The scanning process of the output device&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;scripting&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Is scripting (e.g. JavaScript) available? (added in Media Queries Level 4)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;update&lt;/td&gt;
+&lt;td style="text-align: left"&gt;How quickly can the output device modify the appearance of the content (added in Media Queries Level 4)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;width&lt;/td&gt;
+&lt;td style="text-align: left"&gt;The viewport width&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;e.g.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;/* changes the background-color to lightgreen if the viewport is 480 pixels wide or wider */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;@&lt;/span&gt;&lt;span class="k"&gt;media&lt;/span&gt; &lt;span class="nt"&gt;screen&lt;/span&gt; &lt;span class="nt"&gt;and&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;min-width&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nt"&gt;480px&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;body&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;background-color&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;lightgreen&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="variables"&gt;Variables
+&lt;/h2&gt;&lt;p&gt;The &lt;code&gt;var()&lt;/code&gt; function is used to insert the value of a CSS variable.&lt;/p&gt;
+&lt;p&gt;CSS variables have access to the DOM, which means that you can create variables with local or global scope, change the variables with JavaScript, and change the variables based on media queries.&lt;/p&gt;
+&lt;p&gt;A good way to use CSS variables is when it comes to the &lt;strong&gt;colors&lt;/strong&gt; of your design. Instead of copy and paste the same colors over and over again, you can place them in variables.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;var(&amp;ndash;&lt;em&gt;name, value&lt;/em&gt;)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;em&gt;name&lt;/em&gt;&lt;/th&gt;
+&lt;th&gt;Required. The variable name (must start with two dashes)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;em&gt;value&lt;/em&gt;&lt;/td&gt;
+&lt;td&gt;Optional. The fallback value (used if the variable is not found)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="global-and-local"&gt;global and local
+&lt;/h3&gt;&lt;p&gt;CSS variables can have a global or local scope.&lt;/p&gt;
+&lt;p&gt;Global variables can be accessed/used through the entire document, while local variables can be used only inside the selector where it is declared.&lt;/p&gt;
+&lt;p&gt;To create a variable with global scope, declare it inside the &lt;code&gt;:root&lt;/code&gt; selector. The &lt;code&gt;:root&lt;/code&gt; selector matches the document&amp;rsquo;s root element.&lt;/p&gt;
+&lt;p&gt;To create a variable with local scope, declare it inside the selector that is going to use it.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nd"&gt;root&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;--blue&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mh"&gt;#1e90ff&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;--white&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mh"&gt;#ffffff&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;body&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="k"&gt;background-color&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nf"&gt;var&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="kc"&gt;blue&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;h2&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="k"&gt;border-bottom&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="kt"&gt;px&lt;/span&gt; &lt;span class="kc"&gt;solid&lt;/span&gt; &lt;span class="nf"&gt;var&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="kc"&gt;blue&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;container&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;color&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nf"&gt;var&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="kc"&gt;blue&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;background-color&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nf"&gt;var&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="kc"&gt;white&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;padding&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="kt"&gt;px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;button&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;background-color&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nf"&gt;var&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="kc"&gt;white&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;color&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nf"&gt;var&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="kc"&gt;blue&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;border&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="kt"&gt;px&lt;/span&gt; &lt;span class="kc"&gt;solid&lt;/span&gt; &lt;span class="nf"&gt;var&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="kc"&gt;blue&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;padding&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="kt"&gt;px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="override"&gt;override
+&lt;/h3&gt;&lt;p&gt;we can re-declare the &amp;ndash;blue variable inside a specific selector. When we use var(&amp;ndash;blue) inside this selector, it will use the local variable redeclared within it.&lt;/p&gt;
+&lt;h3 id="with-javascript"&gt;with javascript
+&lt;/h3&gt;&lt;p&gt;CSS variables have access to the DOM, which means that you can change them with JavaScript.&lt;/p&gt;
+&lt;h2 id="responsive"&gt;Responsive
+&lt;/h2&gt;&lt;h3 id="viewport"&gt;Viewport
+&lt;/h3&gt;&lt;p&gt;HTML5 introduced a method to let web designers take control over the viewport, through the &lt;code&gt;&amp;lt;meta&amp;gt;&lt;/code&gt; tag.&lt;/p&gt;
+&lt;p&gt;You should include the following &lt;code&gt;&amp;lt;meta&amp;gt;&lt;/code&gt; viewport element in all your web pages:&lt;/p&gt;
+&lt;p&gt;&amp;lt;meta name=&amp;ldquo;viewport&amp;rdquo; content=&amp;ldquo;width=device-width, initial-scale=1.0&amp;rdquo;&amp;gt;&lt;/p&gt;
+&lt;p&gt;This gives the browser instructions on how to control the page&amp;rsquo;s dimensions and scaling.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;width=device-width&lt;/code&gt; part sets the width of the page to follow the screen-width of the device (which will vary depending on the device).&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;initial-scale=1.0&lt;/code&gt; part sets the initial zoom level when the page is first loaded by the browser.&lt;/p&gt;
+&lt;h3 id="media-queries-1"&gt;Media Queries
+&lt;/h3&gt;&lt;p&gt;Media Queries are about defining different style rules for different devices (screens, tablets, mobile phones, etc.)&lt;/p&gt;
+&lt;h2 id="others"&gt;Others
+&lt;/h2&gt;&lt;h3 id="object-fit"&gt;&lt;code&gt;object-fit&lt;/code&gt;
+&lt;/h3&gt;&lt;p&gt;The CSS &lt;code&gt;object-fit&lt;/code&gt; property is used to specify how an &lt;img&gt; or &lt;video&gt; should be resized to fit its container.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;fill&lt;/code&gt; - This is default. The image is resized to fill the given dimension. If necessary, the image will be stretched or squished to fit&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;contain&lt;/code&gt; - The image keeps its aspect ratio, but is resized to fit within the given dimension&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cover&lt;/code&gt; - The image keeps its aspect ratio and fills the given dimension. The image will be clipped to fit&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;none&lt;/code&gt; - The image is not resized&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;scale-down&lt;/code&gt; - the image is scaled down to the smallest version of &lt;code&gt;none&lt;/code&gt; or &lt;code&gt;contain&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="object-position"&gt;&lt;code&gt;object-position&lt;/code&gt;
+&lt;/h3&gt;&lt;h3 id="masking"&gt;Masking
+&lt;/h3&gt;&lt;p&gt;With CSS masking you create a mask layer to place over an element to partially or fully hide portions of the element.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; Most browsers only have partial support for CSS masking. You will need to use the -webkit- prefix in addition to the standard property in most browsers.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-css" data-lang="css"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nc"&gt;mask1&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kp"&gt;-webkit-&lt;/span&gt;&lt;span class="k"&gt;mask-image&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sx"&gt;w3logo.png&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;mask-image&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sx"&gt;w3logo.png&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kp"&gt;-webkit-&lt;/span&gt;&lt;span class="k"&gt;mask-repeat&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;no-repeat&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;mask-repeat&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;no-repeat&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="user-interface"&gt;User Interface
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;resize&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The &lt;code&gt;resize&lt;/code&gt; property specifies if (and how) an element should be resizable by the user.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;outline-offset&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The &lt;code&gt;outline-offset&lt;/code&gt; property adds space between an outline and the edge or border of an element.&lt;/p&gt;</description></item></channel></rss>

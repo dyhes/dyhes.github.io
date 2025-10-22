@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Molecule Docking on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/molecule-docking/</link><description>Recent content in Molecule Docking on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 15 Jul 2025 00:57:45 +0800</lastBuildDate><atom:link href="https://dyhes.github.io/tags/molecule-docking/index.xml" rel="self" type="application/rss+xml"/><item><title>【MD】Uni-Dock</title><link>https://dyhes.github.io/p/mduni-dock/</link><pubDate>Mon, 09 Jun 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/mduni-dock/</guid><description>&lt;h2 id="overall-structure"&gt;&lt;strong&gt;Overall Structure&lt;/strong&gt;
+&lt;/h2&gt;&lt;p&gt;The codebase is organized into several major components:
+&lt;strong&gt;1&lt;/strong&gt; &lt;strong&gt;Core Library (&lt;strong&gt;&lt;strong&gt;src/lib/&lt;/strong&gt;&lt;/strong&gt;)&lt;/strong&gt;: Contains fundamental data structures and algorithms
+&lt;strong&gt;2&lt;/strong&gt; &lt;strong&gt;CUDA Implementation (&lt;strong&gt;&lt;strong&gt;src/cuda/&lt;/strong&gt;&lt;/strong&gt;)&lt;/strong&gt;: GPU-accelerated components for performance
+&lt;strong&gt;3&lt;/strong&gt; &lt;strong&gt;Main Application (&lt;strong&gt;&lt;strong&gt;src/main/&lt;/strong&gt;&lt;/strong&gt;)&lt;/strong&gt;: Command-line interface and application entry point
+&lt;strong&gt;4&lt;/strong&gt; &lt;strong&gt;Split Utility (&lt;strong&gt;&lt;strong&gt;src/split/&lt;/strong&gt;&lt;/strong&gt;)&lt;/strong&gt;: Tool for processing multi-model PDBQT files&lt;/p&gt;
+&lt;h2 id="workflow"&gt;Workflow
+&lt;/h2&gt;&lt;p&gt;A typical Uni-Dock workflow appears to be:
+1 Parse input files (receptors and ligands)
+2 Set up the scoring function and parameters
+3 Generate or load grid maps for efficient scoring
+4 Perform global search (docking)
+5 Refine and score the resulting poses
+6 Output the best conformations
+&lt;img src="https://i.ibb.co/BVShhPJq/image.png"
+loading="lazy"
+&gt;&lt;/p&gt;
+&lt;h2 id="file-format"&gt;File Format
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;PDBQT是AutoDock和AutoDock Vina等分子对接软件专用的格式，用于描述受体（如蛋白质）和配体（小分子）的结构信息。它在PDB格式基础上扩展了&lt;strong&gt;电荷（Q）&lt;/strong&gt; 和&lt;strong&gt;原子类型（T）&lt;/strong&gt; 两个关键字段&lt;/li&gt;
+&lt;li&gt;SDF（Structure-Data File）是化学信息学中通用的分子结构描述格式，主要用于存储小分子的&lt;strong&gt;2D/3D结构&lt;/strong&gt;、&lt;strong&gt;化学性质&lt;/strong&gt;及&lt;strong&gt;实验数据&lt;/strong&gt; （如生物活性）。常见于PubChem、DrugBank等数据库&lt;/li&gt;
+&lt;li&gt;unidock/src/lib/parse_pdbqt.cpp&lt;/li&gt;
+&lt;li&gt;unidock/src/split/split.cpp：处理 Multi-model PDBQT 多构象分子
+&lt;ul&gt;
+&lt;li&gt;通过将每个模型提取到单独的文件中，以便在实际对接过程中更有效地处理。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="unidocksrcmainmaincpp"&gt;unidock/src/main/main.cpp
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;1&lt;/strong&gt; &lt;strong&gt;Command Line Interface&lt;/strong&gt;: Uses Boost&amp;rsquo;s &lt;a class="link" href="vscode-file://vscode-app/Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/code/electron-sandbox/workbench/workbench.html" &gt;program_options&lt;/a&gt; library to process command-line arguments and configuration files.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Input&lt;/strong&gt;: Specifies receptors, flexible residues, and ligand files&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Search space&lt;/strong&gt;: Defines the docking grid dimensions and positioning&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Output&lt;/strong&gt;: Controls where results are stored&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Advanced options&lt;/strong&gt;: Fine-tunes the docking algorithm behavior&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Misc options&lt;/strong&gt;: Sets general parameters like CPU usage and random seed&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Boost是C++领域最具影响力的开源程序库集合，由全球开发者社区共同维护，旨在为C++标准库提供扩展功能，被称为“准标准库”
+&lt;strong&gt;残基&lt;/strong&gt; （Residue）是生物大分子（如蛋白质、核酸）中构成其基本单元的组成部分，由氨基酸或核苷酸通过化学键连接后剩余的结构片段形成。
+分子对接中的&lt;strong&gt;柔性残基&lt;/strong&gt; （Flexible Residues）是指在对接过程中允许构象变化的受体蛋白残基。这类残基通常位于结合口袋内，其侧链或主链的灵活性会影响配体与受体的结合模式。通过模拟这些残基的动态调整，柔性残基对接能够更真实地反映生物分子间的相互作用，提升预测准确性。
+&lt;strong&gt;2&lt;/strong&gt; &lt;strong&gt;Docking Workflow Management&lt;/strong&gt;: Handles various docking workflows including:&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Single ligand-receptor docking on CPU&lt;/li&gt;
+&lt;li&gt;Batch docking of multiple ligands on GPU&lt;/li&gt;
+&lt;li&gt;Paired batch processing for one-to-one ligand-protein docking
+&lt;strong&gt;3&lt;/strong&gt; &lt;strong&gt;Memory Management&lt;/strong&gt;: Implements GPU memory management strategies to optimize batch processing.
+A sophisticated batch processing system:
+1 Classifies ligands into &lt;strong&gt;size categories&lt;/strong&gt; (small, medium, large, extra large)
+2 Processes ligands in batches to maximize GPU utilization
+3 Predicts memory requirements to determine optimal batch sizes&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>

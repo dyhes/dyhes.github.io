@@ -1,0 +1,486 @@
+<!doctype html><html lang=en-us dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="left recursive grammar The biggest thing is the new adaptive parsing strategy, which lets us accept any grammar we care to write. That gives us a huge productivity boost because we can now write much more natural expression rules (which occur in almost every grammar).\nANTLR v4 will also take left recursive grammar now, translating it secretly to a non-left recursive version.\nGrammar Lexicon identifier Token names always start with a capital letter and so do lexer rules.\n"><title>【ANTLR】Basics</title><link rel=canonical href=https://dyhes.github.io/p/antlrbasics/><link rel=stylesheet href=/scss/style.min.f7091bff8043bd3e53b22be6c05dd86b506e8dec4d0d75d249d2dfb0fe074a46.css><meta property='og:title' content="【ANTLR】Basics"><meta property='og:description' content="left recursive grammar The biggest thing is the new adaptive parsing strategy, which lets us accept any grammar we care to write. That gives us a huge productivity boost because we can now write much more natural expression rules (which occur in almost every grammar).\nANTLR v4 will also take left recursive grammar now, translating it secretly to a non-left recursive version.\nGrammar Lexicon identifier Token names always start with a capital letter and so do lexer rules.\n"><meta property='og:url' content='https://dyhes.github.io/p/antlrbasics/'><meta property='og:site_name' content='飞鸿踏雪泥'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2023-04-13T00:00:00+00:00'><meta property='article:modified_time' content='2024-09-12T10:34:23+08:00'><meta name=twitter:title content="【ANTLR】Basics"><meta name=twitter:description content="left recursive grammar The biggest thing is the new adaptive parsing strategy, which lets us accept any grammar we care to write. That gives us a huge productivity boost because we can now write much more natural expression rules (which occur in almost every grammar).\nANTLR v4 will also take left recursive grammar now, translating it secretly to a non-left recursive version.\nGrammar Lexicon identifier Token names always start with a capital letter and so do lexer rules.\n"><link rel="shortcut icon" href=/github.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label="Toggle Menu">
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu_b567f26f71c49c33.png width=300 height=300 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>飞鸿踏雪泥</a></h1><h2 class=site-description>没有记录，就没有发生</h2></div></header><ol class=menu-social><li><a href=https://leetcode.cn/u/dyhes/ target=_blank title=LeetCode rel=me><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 13h7.5"/><path d="M9.424 7.268l4.999-4.999"/><path d="M16.633 16.644l-2.402 2.415a3.189 3.189.0 01-4.524.0l-3.77-3.787a3.223 3.223.0 010-4.544l3.77-3.787a3.189 3.189.0 014.524.0l2.302 2.313"/></svg></a></li><li><a href=https://github.com/dyhes target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=mailto:dyheslin@gmail.com target=_blank title=Gmail rel=me><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-gmail"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16 20h3a1 1 0 001-1V5a1 1 0 00-1-1h-3v16z"/><path d="M5 20h3V4H5A1 1 0 004 5v14a1 1 0 001 1z"/><path d="M16 4l-4 4-4-4"/><path d="M4 6.5l8 7.5 8-7.5"/></svg></a></li><li><a href=mailto:1325574784@qq.com target=_blank title=Mail rel=me><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 19H5a2 2 0 01-2-2V7a2 2 0 012-2h14a2 2 0 012 2v5.5"/><path d="M3 7l9 6 9-6"/><path d="M19 16l-2 3h4l-2 3"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/about/><svg class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>About</span></a></li><li><a href=/categories/><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+<span>Categories</span></a></li><li><a href=/tags/><svg class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11 3l9 9a1.5 1.5.0 010 2l-6 6a1.5 1.5.0 01-2 0L3 11V7a4 4 0 014-4h4"/><circle cx="9" cy="9" r="2"/></svg>
+<span>Tags</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>Dark Mode</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">Table of contents</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#left-recursive-grammar><strong>left recursive grammar</strong></a></li><li><a href=#grammar-lexicon>Grammar Lexicon</a><ol><li><a href=#identifier><strong>identifier</strong></a></li><li><a href=#literal><strong>literal</strong></a></li><li><a href=#actions>Actions</a></li><li><a href=#keywords><strong>Keywords</strong></a></li></ol></li><li><a href=#grammar-structure>Grammar Structure</a><ol><li><a href=#grammar-import>Grammar import</a></li><li><a href=#tokens-section>Tokens Section</a></li><li><a href=#action-at-the-grammar-level>Action at the grammar level</a></li></ol></li><li><a href=#parser-rules>Parser Rules</a><ol><li><a href=#alternative-labels>Alternative labels</a></li><li><a href=#rule-context-objects>Rule Context Objects</a></li><li><a href=#rule-element-labels>Rule Element Labels</a><ol><li><a href=#-operator>= operator</a></li><li><a href=#-operator-1>+= operator</a></li></ol></li><li><a href=#rule-elements>Rule Elements</a></li><li><a href=#subrules>Subrules</a></li><li><a href=#catching-exceptions>Catching Exceptions</a></li><li><a href=#rule-attribute-definitions>Rule Attribute Definitions</a><ol><li><a href=#rule-level-named-actions>rule-level named actions</a></li></ol></li><li><a href=#start-rules-and-eof>Start Rules and EOF</a></li></ol></li><li><a href=#left-recursive-rules>Left-recursive rules</a><ol><li><a href=#formal-rules>Formal rules</a></li></ol></li><li><a href=#actions-and-attributes>Actions and Attributes</a><ol><li><a href=#token-attributes>Token Attributes</a></li><li><a href=#parser-rule-attributes>Parser Rule Attributes</a></li><li><a href=#dynamically-scoped-attributes>Dynamically-Scoped Attributes</a></li></ol></li><li><a href=#parse-tree-listeners>Parse Tree Listeners</a><ol><li><a href=#listening-during-the-parse>Listening during the parse</a></li></ol></li><li><a href=#semantic-predicates>Semantic Predicates</a><ol><li><a href=#making-predicated-parsing-decisions>Making Predicated Parsing Decisions</a></li><li><a href=#finding-visible-predicates>Finding Visible Predicates</a></li><li><a href=#using-context-dependent-predicates>Using Context-Dependent Predicates</a></li><li><a href=#predicates-in-lexer-rules>Predicates in Lexer Rules</a></li></ol></li><li><a href=#华为云>华为云</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/snow/ style=background-color:#aa6a4c;color:>踏雪泥</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/antlrbasics/>【ANTLR】Basics</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Apr 13, 2023</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>39 minute read</time></div></footer></div></header><section class=article-content><h2 id=left-recursive-grammar><strong>left recursive grammar</strong></h2><p>The biggest thing is the new adaptive parsing strategy, which lets us accept any grammar we care to write. That gives us a huge productivity boost because we can now write much more natural expression rules (which occur in almost every grammar).</p><p>ANTLR v4 will also take <strong>left recursive grammar</strong> now, translating it secretly to a non-left recursive version.</p><h2 id=grammar-lexicon>Grammar Lexicon</h2><h3 id=identifier><strong>identifier</strong></h3><p>Token names always start with a capital letter and so do lexer rules.</p><p>Parser rule names always start with a lowercase letter (those that fail <code>Character.isUpperCase</code>). The initial character can be followed by uppercase and lowercase letters, digits, and underscores.</p><p>Here are some sample names:</p><pre tabindex=0><code class=language-g4 data-lang=g4>ID, LPAREN, RIGHT_CURLY // token names/lexer rules
+expr, simpleDeclarator, d2, header_file // parser rule names
+</code></pre><h3 id=literal><strong>literal</strong></h3><p>ANTLR <strong>does not distinguish</strong> between character and string literals as most languages do. All literal strings one or more characters in length are enclosed <strong>in single quotes</strong> such as <code>';'</code>, <code>'if'</code>, <code>'>='</code>, and <code>'\''</code> (refers to the one-character string containing the single quote character).</p><p>Literals <strong>never</strong> contain regular expressions.</p><p>Literals can contain Unicode escape sequences of the form <code>'\uXXXX'</code> (for Unicode code points up to <code>'U+FFFF'</code>) or <code>'\u{XXXXXX}'</code> (for all Unicode code points), where <code>'XXXX'</code> is the hexadecimal Unicode code point value.</p><p>ANTLR also understands the usual special escape sequences: <code>'\n'</code> (newline), <code>'\r'</code> (carriage return), <code>'\t'</code> (tab), <code>'\b'</code> (backspace), and <code>'\f'</code> (form feed). You can use Unicode code points directly within literals or use the Unicode escape sequences.</p><h3 id=actions>Actions</h3><p>Actions are <strong>code blocks written in the target language</strong>.</p><p>You can use actions in a number of places within a grammar, but the syntax is always the same:</p><p>arbitrary text surrounded by curly braces.</p><p>You don’t need to escape a closing curly character if it’s in a string or comment</p><p>If the curlies are balanced, you also don’t need to escape }.</p><p>Otherwise, escape extra curlies with a backslash: <code>\{</code> or <code>\}</code>.</p><p>Embedded code can appear in: <code>@header</code> and <code>@members</code> named actions, parser and lexer rules, exception catching specifications, attribute sections for parser rules (return values, arguments, and locals), and some rule element options (currently predicates).</p><p>The <strong>only interpretation</strong> ANTLR does inside actions relates to grammar attributes; see <a class=link href=http://pragprog.com/book/tpantlr2/the-definitive-antlr-4-reference target=_blank rel=noopener>Token Attributes</a> and Chapter 10, <a class=link href=http://pragprog.com/book/tpantlr2/the-definitive-antlr-4-reference target=_blank rel=noopener>Attributes and Actions</a>.</p><p>Actions embedded within lexer rules are emitted without any interpretation or translation into generated lexers.</p><h3 id=keywords><strong>Keywords</strong></h3><p>Here’s a list of the reserved words in ANTLR grammars:</p><pre tabindex=0><code>import, fragment, lexer, parser, grammar, returns,
+locals, throws, catch, finally, mode, options, tokens
+</code></pre><p>Also, although it is not a keyword, do not use the word <code>rule</code> as a rule name. Further, do not use any keyword of the target language as a token, label, or rule name. For example, rule <code>if</code> would result in a generated function called <code>if</code>. That would not compile obviously.</p><h2 id=grammar-structure>Grammar Structure</h2><p>A grammar is essentially a grammar declaration followed by a list of rules, but has the general form:</p><pre tabindex=0><code>/** Optional javadoc style comment */
+grammar Name;
+options {...}
+import ... ;
+ 	
+tokens {...}
+channels {...} // lexer only
+@actionName {...}
+ 	 
+rule1 // parser and lexer rules, possibly intermingled
+...
+ruleN
+</code></pre><p>You can specify options, imports, token specifications, and actions in any order.</p><p>All of those elements are optional except for the header grammar Name and at least one rule. Rules take the basic form:</p><pre tabindex=0><code>ruleName : alternative1 | ... | alternativeN ;
+</code></pre><p>Grammars defined without a prefix on the <code>grammar</code> header are combined grammars that can contain both lexical and parser rules.</p><p>Only lexer grammars can contain <code>mode</code> specifications.</p><p>Only lexer grammars can contain custom channels specifications</p><pre tabindex=0><code>channels {
+  WHITESPACE_CHANNEL,
+  COMMENTS_CHANNEL
+}
+</code></pre><p>Those channels can then be used like enums within lexer rules</p><h3 id=grammar-import>Grammar import</h3><p>Grammar <code>imports</code> let you break up a grammar into logical and reusable chunks. ANTLR treats imported grammars very much like object-oriented programming languages treat super-classes. A grammar inherits all of the rules, tokens specifications, and named actions from the imported grammar. Rules in the “main grammar” <strong>override rules</strong> from imported grammars to implement inheritance.</p><h3 id=tokens-section>Tokens Section</h3><p>The purpose of the <code>tokens</code> section is to define token types needed by a grammar for which there is no associated lexical rule. The basic syntax is:</p><pre tabindex=0><code>tokens { Token1, ..., TokenN }
+</code></pre><p>Most of the time, the tokens section is used to define token types <strong>needed by actions in the grammar</strong>.</p><pre tabindex=0><code>// explicitly define keyword token types to avoid implicit definition warnings
+tokens { BEGIN, END, IF, THEN, WHILE }
+ 
+@lexer::members { // keywords map used in lexer to assign token types
+Map&lt;String,Integer&gt; keywords = new HashMap&lt;String,Integer&gt;() {{
+	put(&#34;begin&#34;, KeywordsParser.BEGIN);
+	put(&#34;end&#34;, KeywordsParser.END);
+	...
+}};
+}
+</code></pre><h3 id=action-at-the-grammar-level>Action at the grammar level</h3><p>Currently there are <strong>only two</strong> defined named actions (for the Java target) used outside of grammar rules: <code>header</code> and <code>members</code>. The former injects code into the generated recognizer class file, before the recognizer class definition,</p><p>and the latter injects code into the recognizer class definition, as fields and methods.</p><p>For combined grammars, ANTLR injects the actions into both the parser and the lexer. To restrict an action to the generated parser or lexer, use <code>@parser::name</code> or <code>@lexer::name</code>.</p><pre tabindex=0><code>grammar Count;
+ 
+@header {
+package foo;
+}
+ 
+@members {
+int count = 0;
+}
+</code></pre><h2 id=parser-rules>Parser Rules</h2><p>Parsers consist of a set of parser rules either in a parser or a combined grammar. A Java application launches a parser by invoking the rule function, generated by ANTLR, associated with the desired start rule.</p><p>Rules can also have alternatives separated by the |</p><pre tabindex=0><code>operator:
+ 	stat: retstat
+ 	| &#39;break&#39; &#39;;&#39;
+ 	| &#39;continue&#39; &#39;;&#39;
+ 	;
+</code></pre><p>Alternatives are either <strong>a list of rule elements or empty</strong>. For example, here’s a rule with an empty alternative that makes the entire rule optional:</p><pre tabindex=0><code>superClass
+ 	: &#39;extends&#39; ID
+ 	| // empty
+ 	;
+</code></pre><h3 id=alternative-labels>Alternative labels</h3><p>Labeling Rule Alternatives for Precise Event Methods, we can get <strong>more precise parse-tree listener</strong> events by labeling the outermost alternatives of a rule using the ## operator. <strong>All</strong> alternatives within a rule must be labeled, <strong>or none</strong> of them.</p><p>Here are two rules with labeled alternatives.</p><pre tabindex=0><code>grammar T;
+stat: &#39;return&#39; e &#39;;&#39; ## Return
+ 	| &#39;break&#39; &#39;;&#39; ## Break
+ 	;
+e   : e &#39;*&#39; e ## Mult
+    | e &#39;+&#39; e ## Add
+    | INT ## Int
+    ;
+</code></pre><p>Alternative labels do not have to be at the end of the line and there does not have to be a space after the ## symbol.</p><p>ANTLR generates a <strong>rule context class definition</strong> for each label. For example, here is the listener that ANTLR generates:</p><pre tabindex=0><code>public interface AListener extends ParseTreeListener {
+ 	void enterReturn(AParser.ReturnContext ctx);
+ 	void exitReturn(AParser.ReturnContext ctx);
+ 	void enterBreak(AParser.BreakContext ctx);
+ 	void exitBreak(AParser.BreakContext ctx);
+ 	void enterMult(AParser.MultContext ctx);
+ 	void exitMult(AParser.MultContext ctx);
+ 	void enterAdd(AParser.AddContext ctx);
+ 	void exitAdd(AParser.AddContext ctx);
+ 	void enterInt(AParser.IntContext ctx);
+ 	void exitInt(AParser.IntContext ctx);
+}
+</code></pre><p>There are <strong>enter and exit methods</strong> associated with each labeled alternative. The parameters to those methods are <strong>specific</strong> to alternatives.</p><p>You can reuse the same label on multiple alternatives to indicate that the parse tree walker should trigger <strong>the same event</strong> for those alternatives.</p><pre tabindex=0><code>e : e &#39;*&#39; e ## BinaryOp
+| e &#39;+&#39; e ## BinaryOp
+| INT ## Int
+;
+</code></pre><h3 id=rule-context-objects>Rule Context Objects</h3><p>ANTLR generates methods to access the <strong>rule context objects (parse tree nodes)</strong> associated with each rule reference. For rules with a single rule reference, ANTLR generates a method with no arguments. Consider the following rule.</p><pre tabindex=0><code> 	inc : e &#39;++&#39; ;
+</code></pre><p>ANTLR generates this context class:</p><pre tabindex=0><code>public static class IncContext extends ParserRuleContext {
+ 	public EContext e() { ... } // return context object associated with e
+ 	...
+}
+</code></pre><p>ANTLR also provide support to access context objects when there is more than a single reference to a rule:</p><pre tabindex=0><code>field : e &#39;.&#39; e ;
+</code></pre><p>ANTLR generates a method with an index to access the ith element as well as a method to get context for all references to that rule:</p><pre tabindex=0><code>public static class FieldContext extends ParserRuleContext {
+ 	public EContext e(int i) { ... } // get ith e context
+ 	public List&lt;EContext&gt; e() { ... } // return ALL e contexts
+ 	...
+}
+</code></pre><p>If we had another rule, s, that references field, an embedded action <strong>could access the list of e rule matches performed by field</strong>:</p><pre tabindex=0><code>s : field
+ 	{
+ 	List&lt;EContext&gt; x = $field.ctx.e();
+ 	...
+ 	}
+;
+</code></pre><h3 id=rule-element-labels>Rule Element Labels</h3><h4 id=-operator>= operator</h4><p>You can label rule elements using the <strong>= operator</strong> to add fields to the rule context objects:</p><pre tabindex=0><code>stat: &#39;return&#39; value=e &#39;;&#39; ## Return
+ 	| &#39;break&#39; &#39;;&#39; ## Break
+ 	;
+</code></pre><p>Here value is the label for the return value of rule e, which is defined elsewhere. Labels become fields in the appropriate parse tree node class.</p><p>In this case, label value becomes a field in ReturnContext because of the Return alternative label:</p><pre tabindex=0><code>public static class ReturnContext extends StatContext {
+ 	public EContext value;
+ 	...
+}
+</code></pre><h4 id=-operator-1>+= operator</h4><p>It’s often handy to <strong>track a number of tokens</strong>, which you can do with the <strong>+= “list label” operator</strong>. For example, the following rule creates a list of the Token objects matched for a simple array construct:</p><pre tabindex=0><code> 	array : &#39;{&#39; el+=INT (&#39;,&#39; el+=INT)* &#39;}&#39; ;
+</code></pre><p>ANTLR generates a List field in the appropriate rule context class:</p><pre tabindex=0><code> 	public static class ArrayContext extends ParserRuleContext {
+ 	public List&lt;Token&gt; el = new ArrayList&lt;Token&gt;();
+ 	...
+ 	}
+</code></pre><p>These list labels also work for rule references:</p><pre tabindex=0><code> 	elist : exprs+=e (&#39;,&#39; exprs+=e)* ;
+</code></pre><p>ANTLR generates a field holding the list of context objects:</p><pre tabindex=0><code> 	public static class ElistContext extends ParserRuleContext {
+ 	public List&lt;EContext&gt; exprs = new ArrayList&lt;EContext&gt;();
+ 	...
+ 	}
+</code></pre><h3 id=rule-elements>Rule Elements</h3><p>Rule elements specify what the parser should do at a given moment just like statements in a programming language. The elements can be rule, token, string literal like expression, ID, and &lsquo;return&rsquo;. Here’s a complete list of the rule elements (we’ll look at actions and predicates in more detail later):</p><div class=table-wrapper><table><thead><tr><th>Syntax</th><th>Description</th></tr></thead><tbody><tr><td>T</td><td>Match token T at the current input position. Tokens always begin with a capital letter.</td></tr><tr><td>&rsquo;literal&rsquo;</td><td>Match the string literal at the current input position. A string literal is simply <strong>a token with a fixed string</strong>.</td></tr><tr><td>r</td><td>Match rule r at current input position, which amounts to invoking the rule just like a function call. Parser rule names always begin with a lowercase letter.</td></tr><tr><td>r [«args»]</td><td>Match rule r at current input position, <strong>passing in a list of arguments just like a function call</strong>. The arguments inside the square brackets are in the syntax of the target language and are usually a comma-separated list of expressions.</td></tr><tr><td>{«action»}</td><td>Execute an action immediately after the preceding alternative element and immediately before the following alternative element. The action conforms to the syntax of the target language. ANTLR copies the action code to the generated class verbatim, except for substituting attribute and token references such as $x and $x.y.</td></tr><tr><td>{«p»}?</td><td>Evaluate <strong>semantic predicate</strong> «p». Do not continue parsing past a predicate if «p» <strong>evaluates to false</strong> at runtime. Predicates encountered during prediction, when ANTLR distinguishes between alternatives, enable or disable the alternative(s) surrounding the predicate(s).</td></tr><tr><td>.</td><td>Match any single token except for the end of file token. The “dot” operator is called the <strong>wildcard</strong>.</td></tr></tbody></table></div><p>When you want to match everything but a particular token or set of tokens, use the <code>~</code> “not” operator. This operator is rarely used in the parser but is available.</p><h3 id=subrules>Subrules</h3><p>A rule can contain alternative blocks called subrules (as allowed in Extended BNF Notation: EBNF). <strong>A subrule is like a rule that lacks a name and is enclosed in parentheses</strong>. Subrules can have one or more alternatives inside the parentheses. Subrules cannot define attributes with locals and returns like rules can. There are four kinds of subrules (x, y, and z represent grammar fragments):</p><div class=table-wrapper><table><thead><tr><th>Syntax</th><th>Description</th></tr></thead><tbody><tr><td><a class=link href=https://github.com/antlr/antlr4/blob/master/doc/images/xyz.png target=_blank rel=noopener><img src=https://github.com/antlr/antlr4/raw/master/doc/images/xyz.png loading=lazy alt=img></a></td><td>(x|y|z). Match any alternative within the subrule exactly once. Example: ` returnType : (type</td></tr><tr><td><a class=link href=https://github.com/antlr/antlr4/blob/master/doc/images/xyz_opt.png target=_blank rel=noopener><img src=https://github.com/antlr/antlr4/raw/master/doc/images/xyz_opt.png loading=lazy alt=img></a></td><td>(x|y|z)? Match nothing or any alternative within subrule. Example: <code>classDeclaration : 'class' ID (typeParameters)? ('extends' type)? ('implements' typeList)? classBody ;</code></td></tr><tr><td><a class=link href=https://github.com/antlr/antlr4/blob/master/doc/images/xyz_star.png target=_blank rel=noopener><img src=https://github.com/antlr/antlr4/raw/master/doc/images/xyz_star.png loading=lazy alt=img></a></td><td>(x|y|z)* Match an alternative within subrule zero or more times. Example: <code>annotationName : ID ('.' ID)* ;</code></td></tr><tr><td><a class=link href=https://github.com/antlr/antlr4/blob/master/doc/images/xyz_plus.png target=_blank rel=noopener><img src=https://github.com/antlr/antlr4/raw/master/doc/images/xyz_plus.png loading=lazy alt=img></a></td><td>(x|y|z)+ Match an alternative within subrule one or more times. Example: <code>annotations : (annotation)+ ;</code></td></tr></tbody></table></div><p>You can suffix the <code>?</code>, <code>*</code>, and <code>+</code> subrule operators with the <strong>nongreedy operator</strong>, which is also a question mark: <code>??</code>, <code>*?</code>, and <code>+?</code>.</p><p>As a <strong>shorthand</strong>, you can omit the parentheses for subrules composed of a single alternative with a single rule element reference. For example, <code>annotation+</code> is the same as <code>(annotation)+</code> and <code>ID+</code> is the same as <code>(ID)+</code>. Labels also work with the shorthand. <code>ids+=INT+</code> make a list of <code>INT</code> token objects.</p><h3 id=catching-exceptions>Catching Exceptions</h3><p>When a syntax error occurs within a rule, ANTLR catches the exception, reports the error, attempts to recover (possibly by consuming more tokens), and then returns from the rule. Every rule is wrapped in a <code>try/catch/finally</code> statement:</p><pre tabindex=0><code>void r() throws RecognitionException {
+ 	try {
+ 		rule-body
+ 	}
+ 	catch (RecognitionException re) {
+	 	_errHandler.reportError(this, re);
+	 	_errHandler.recover(this, re);
+ 	}
+ 	finally {
+		exitRule();
+ 	}
+}
+</code></pre><p>We can use a strategy object to alter ANTLR’s error handling. Replacing the strategy changes the strategy <strong>for all rules</strong>, however. To alter the exception handling for a single rule, specify an exception after the rule definition:</p><pre tabindex=0><code>r : ...
+  ;
+  catch[RecognitionException e] { throw e; }
+</code></pre><p>That example shows how to avoid default error reporting and recovery. r rethrows the exception, which is useful when it makes more sense for a higher-level rule to report the error. Specifying any exception clause, prevents ANTLR from generating a clause to handle <code>RecognitionException</code>.</p><p>You can specify other exceptions as well:</p><pre tabindex=0><code>r : ...
+  ;
+  catch[FailedPredicateException fpe] { ... }
+  catch[RecognitionException e] { ... }
+</code></pre><p>The code snippets inside curly braces and the exception “argument” actions must be written in the target language; Java, in this case. When you need to execute an action even if an exception occurs, put it into the <code>finally</code> clause:</p><pre tabindex=0><code>r : ...
+  ;
+  // catch blocks go first
+  finally { System.out.println(&#34;exit rule r&#34;); }
+</code></pre><p>The finally clause executes right before the rule triggers <code>exitRule</code> before returning. If you want to execute an action after the rule finishes matching the alternatives but before it does its cleanup work, use an <code>after</code> action.</p><p>Here’s a complete list of exceptions:</p><div class=table-wrapper><table><thead><tr><th>Exception name</th><th>Description</th></tr></thead><tbody><tr><td>RecognitionException</td><td>The superclass of all exceptions thrown by an ANTLR-generated recognizer. It’s a subclass of RuntimeException to avoid the hassles of checked exceptions. This exception records where the recognizer (lexer or parser) was in the input, where it was in the ATN (internal graph data structure representing the grammar), the rule invocation stack, and what kind of problem occurred.</td></tr><tr><td>NoViableAltException</td><td>Indicates that the parser could not decide which of two or more paths to take by looking at the remaining input. This exception tracks the starting token of the offending input and also knows where the parser was in the various paths when the error occurred.</td></tr><tr><td>LexerNoViableAltException</td><td>The equivalent of NoViableAltException but for lexers only.</td></tr><tr><td>InputMismatchException</td><td>The current input Token does not match what the parser expected.</td></tr><tr><td>FailedPredicateException</td><td>A semantic predicate that evaluates to false during prediction renders the surrounding alternative nonviable. Prediction occurs when a rule is predicting which alternative to take. If all viable paths disappear, parser will throw NoViableAltException. This predicate gets thrown by the parser when a semantic predicate evaluates to false outside of prediction, during the normal parsing process of matching tokens and calling rules.</td></tr></tbody></table></div><h3 id=rule-attribute-definitions>Rule Attribute Definitions</h3><p>There are a number of action-related syntax elements associated with rules to be aware of. Rules can have <strong>arguments, return values, and local variables</strong> just like functions in a programming language. ANTLR <strong>collects all of the variables you define and stores them in the rule context object</strong>. These variables are usually called <strong>attributes</strong>.</p><p>Here’s the general syntax showing all possible attribute definition locations:</p><pre tabindex=0><code>rulename[args] returns [retvals] locals [localvars] : ... ;
+</code></pre><p>The attributes defined within those [&mldr;] can be used like any other variable. Here is a sample rule that copies parameters to return values:</p><pre tabindex=0><code>// Return the argument plus the integer value of the INT token
+add[int x] returns [int result] : &#39;+=&#39; INT {$result = $x + $INT.int;} ;
+</code></pre><p>The args, locals, and return <code>[...]</code> are generally in the target language but <strong>with some constraints</strong>. The <code>[...]</code> string is a comma-separated list of declarations either with prefix or postfix type notation or no-type notation. The elements can have initializer such as <code>[int x = 32, float y]</code> but don&rsquo;t go too crazy as we are parsing this generic text manually in <a class=link href=https://github.com/antlr/antlr4/blob/master/tool/src/org/antlr/v4/parse/ScopeParser.java target=_blank rel=noopener>ScopeParser</a>.</p><h4 id=rule-level-named-actions>rule-level named actions</h4><p>As with the grammar level, you can specify rule-level named actions. For rules, the valid names are <strong><code>init</code> and <code>after</code>.</strong> As the names imply, parsers execute init actions immediately before trying to match the associated rule and execute after actions immediately after matching the rule.</p><p>ANTLR after actions do not execute as part of the finally code block of the generated rule function. Use the ANTLR finally action to place code in the generated rule function finally code block.</p><p>The actions come after any argument, return value, or local attribute definition actions. The <code>row</code> rule preamble from Section 10.2, Accessing Token and Rule Attributes illustrates the syntax nicely: actions/CSV.g4</p><pre tabindex=0><code>/** Derived from rule &#34;row : field (&#39;,&#39; field)* &#39;\r&#39;? &#39;\n&#39; ;&#34; */
+row[String[] columns]
+   returns [Map&lt;String,String&gt; values]
+   locals [int col=0]
+	@init {
+	$values = new HashMap&lt;String,String&gt;();
+	}
+	@after {
+	if ($values!=null &amp;&amp; $values.size()&gt;0) {
+	System.out.println(&#34;values = &#34;+$values);
+	}
+	}
+	: ...
+	;
+</code></pre><p>Rule row takes argument columns, returns values, and defines local variable col. The “actions” in square brackets are copied directly into the generated code. The generated rule functions also specify the rule arguments as function arguments, but they are quickly copied into the local RowContext object:</p><pre tabindex=0><code>public class CSVParser extends Parser {
+	...
+	public static class RowContext extends ParserRuleContext {
+		public String [] columns;
+		public Map&lt;String,String&gt; values;
+		public int col=0;
+		...
+		public final RowContext row(String [] columns) throws RecognitionException {
+	 	RowContext _localctx = new RowContext(_ctx, 4, columns);
+	 	enterRule(_localctx, RULE_row);
+	 	...
+ 		}
+	}
+	...
+}
+</code></pre><p>ANTLR tracks nested <code>[...]</code> within the action so that <code>String[]</code> columns is parsed properly. It also tracks angle brackets so that commas within generic type parameters do not signify the start of another attribute. <code>Map&lt;String,String></code> values is one attribute definition.</p><p>There can be multiple attributes in each action, even for return values. Use a comma to separate attributes within the same action:</p><pre tabindex=0><code>a[Map&lt;String,String&gt; x, int y] : ... ;
+</code></pre><p>ANTLR interprets that action to define two arguments, x and y:</p><pre tabindex=0><code>public final AContext a(Map&lt;String,String&gt; x, int y)
+	throws RecognitionException
+{
+	AContext _localctx = new AContext(_ctx, 0, x, y);
+	enterRule(_localctx, RULE_a);
+	...
+}
+</code></pre><h3 id=start-rules-and-eof>Start Rules and EOF</h3><p>A start rule is the rule engaged first by the parser; it’s the rule function called by the language application. <strong>Any</strong> rule in the grammar can act as a start rule.</p><p>Start rules don’t necessarily consume all of the input. They consume <strong>only as much input as needed</strong> to match an alternative of the rule. For example, consider the following rule that matches one, two, or three tokens, depending on the input.</p><pre tabindex=0><code>s : ID
+  | ID &#39;+&#39;
+  | ID &#39;+&#39; INT
+  ;
+</code></pre><p>Upon <code>a+3</code>, rule <code>s</code> matches the third alternative. Upon <code>a+b</code>, it matches the second alternative and ignores the final <code>b</code> token. Upon <code>a b</code>, it matches the first alternative, ignoring the <code>b</code> token. The parser does not consume the complete input in the latter two cases because rule <code>s</code> doesn’t explicitly say that end of file must occur after matching an alternative of the rule.</p><p>On the other hand, <strong>rules that describe entire input files should reference special predefined-token <code>EOF</code>.</strong> If they don’t, you might scratch your head for a while wondering why the start rule doesn’t report errors for any input no matter what you give it. Here’s a rule that’s part of a grammar for reading configuration files:</p><pre tabindex=0><code>config : element*; // can &#34;match&#34; even with invalid input.
+</code></pre><p>Invalid input would cause <code>config</code> to return immediately without matching any input and without reporting an error. Here’s the proper specification:</p><pre tabindex=0><code>file : element* EOF; // don&#39;t stop early. must match all input
+</code></pre><h2 id=left-recursive-rules>Left-recursive rules</h2><p>The most natural expression of some common language constructs is left recursive. Unfortunately, left recursive specifications of arithmetic expressions are typically <strong>ambiguous</strong> but much easier to write out than the multiple levels required in a typical top-down grammar. Here is a sample ANTLR 4 grammar with a left recursive expression rule:</p><pre tabindex=0><code>stat: expr &#39;=&#39; expr &#39;;&#39; // e.g., x=y; or x=f(x);
+    | expr &#39;;&#39;          // e.g., f(x); or f(g(x));
+    ;
+expr: expr &#39;*&#39; expr
+    | expr &#39;+&#39; expr
+    | expr &#39;(&#39; expr &#39;)&#39; // f(x)
+    | id
+    ;
+</code></pre><p>In straight context free grammars, such a rule is ambiguous because 1+2*3 it can interpret either operator as occurring first, but ANTLR rewrites that to be non-left recursive and unambiguous using <strong>semantic predicates</strong>:</p><pre tabindex=0><code>expr[int pr] : id
+               ( {4 &gt;= $pr}? &#39;*&#39; expr[5]
+               | {3 &gt;= $pr}? &#39;+&#39; expr[4]
+               | {2 &gt;= $pr}? &#39;(&#39; expr[0] &#39;)&#39;
+               )*
+             ;
+</code></pre><p>The predicates resolve ambiguities by comparing the precedence of the current operator against the precedence of the previous operator. An expansion of expr[pr] can match only those subexpressions whose precedence meets or exceeds pr.</p><h3 id=formal-rules>Formal rules</h3><p>The formal 4.0, 4.1 ANTLR left-recursion elimination rules were changed (simplified) for 4.2 and are laid out in the <a class=link href=http://www.antlr.org/papers/allstar-techreport.pdf target=_blank rel=noopener>ALL(*) tech report</a>:</p><ul><li>Binary expressions are expressions which contain a recursive invocation of the rule as the first and last element of the alternative.</li><li>Suffix expressions contain a recursive invocation of the rule as the first element of the alternative, but not as the last element.</li><li>Prefix expressions contain a recursive invocation of the rule as the last element of the alternative, but not as the first element.</li></ul><p>There is no such thing as a &ldquo;ternary&rdquo; expression&ndash;they are just binary expressions in disguise.</p><p>The right associativity specifiers used to be on the individual tokens but it&rsquo;s done on alternative basis anyway so the option is now on the individual alternative; e.g.,</p><pre tabindex=0><code>e : e &#39;*&#39; e
+  | e &#39;+&#39; e
+  |&lt;assoc=right&gt; e &#39;?&#39; e &#39;:&#39; e
+  |&lt;assoc=right&gt; e &#39;=&#39; e
+  | INT
+  ;
+</code></pre><p>If your 4.0 or 4.1 grammar uses a right-associative ternary operator, you will need to update your grammar to include <code>&lt;assoc=right></code> on the alternative operator. To smooth the transition, <code>&lt;assoc=right></code> is still allowed on token references but it is ignored.</p><h2 id=actions-and-attributes>Actions and Attributes</h2><p>Actions are blocks of text written in the target language and enclosed in curly braces. The recognizer triggers them according to their locations within the grammar. For example, the following rule emits &ldquo;found a decl&rdquo; after the parser has seen a valid declaration:</p><pre tabindex=0><code>decl: type ID &#39;;&#39; {System.out.println(&#34;found a decl&#34;);} ;
+type: &#39;int&#39; | &#39;float&#39; ;
+</code></pre><p>Most often, actions access the attributes of tokens and rule references:</p><pre tabindex=0><code>decl: type ID &#39;;&#39;
+      {System.out.println(&#34;var &#34;+$ID.text+&#34;:&#34;+$type.text+&#34;;&#34;);}
+    | t=ID id=ID &#39;;&#39;
+      {System.out.println(&#34;var &#34;+$id.text+&#34;:&#34;+$t.text+&#34;;&#34;);}
+    ;
+</code></pre><h3 id=token-attributes>Token Attributes</h3><p>All tokens have a collection of predefined, read-only <strong>attributes</strong>. The attributes include useful token <strong>properties</strong> such as the token type and text matched for a token. Actions can access these attributes via <code>$label.attribute</code> where label labels a particular instance of a token reference (<code>a</code> and <code>b</code> in the example below are used in the action code as <code>$a</code> and <code>$b</code>). Often, a particular token is only referenced once in the rule, in which case the token name itself can be used unambiguously in the action code (token <code>INT</code> can be used as <code>$INT</code> in the action). The following example illustrates token attribute expression syntax:</p><pre tabindex=0><code>r : INT {int x = $INT.line;}
+    ( ID {if ($INT.line == $ID.line) ...;} )?
+    a=FLOAT b=FLOAT {if ($a.line == $b.line) ...;}
+  ;
+</code></pre><p>The action within the <code>(...)?</code> subrule can see the <code>INT</code> token matched before it in the outer level.</p><p>Because there are two references to the <code>FLOAT</code> token, a reference to <code>$FLOAT</code> in an action is not unique; you must use labels to specify which token reference you’re interested in.</p><p>Token references within different alternatives are unique because only one of them can be matched for any invocation of the rule. For example, in the following rule, actions in both alternatives can reference <code>$ID</code> directly without using a label:</p><pre tabindex=0><code> 	r : ... ID {System.out.println($ID.text);}
+ 	| ... ID {System.out.println($ID.text);}
+ 	;
+</code></pre><p>To access the tokens matched for literals, you must use a label:</p><pre tabindex=0><code> 	stat: r=&#39;return&#39; expr &#39;;&#39; {System.out.println(&#34;line=&#34;+$r.line);} ;
+</code></pre><p>Most of the time you access the attributes of the token, but sometimes it is useful to access the Token object itself because it aggregates all the attributes. Further, you can use it to test whether an optional subrule matched a token:</p><pre tabindex=0><code> 	stat: &#39;if&#39; expr &#39;then&#39; stat (el=&#39;else&#39; stat)?
+ 	{if ( $el!=null ) System.out.println(&#34;found an else&#34;);}
+ 	| ...
+ 	;
+</code></pre><p><code>$T</code> and <code>$L</code> evaluate to <code>Token</code> objects for token name <code>T</code> and token label <code>L</code>. <code>$ll</code> evaluates to <code>List&lt;Token></code> for list label <code>ll</code>. <code>$T.attr</code> evaluates to the type and value specified in the following table for attribute <code>attr</code>:</p><div class=table-wrapper><table><thead><tr><th>Attribute</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>text</td><td>String</td><td>The text matched for the token; translates to a call to getText. Example: $ID.text.</td></tr><tr><td>type</td><td>int</td><td>The token type (nonzero positive integer) of the token such as INT; translates to a call to getType. Example: $ID.type.</td></tr><tr><td>line</td><td>int</td><td>The line number on which the token occurs, counting from 1; translates to a call to getLine. Example: $ID.line.</td></tr><tr><td>pos</td><td>int</td><td>The character position within the line at which the token’s first character occurs counting from zero; translates to a call to getCharPositionInLine. Example: $ID.pos.</td></tr><tr><td>index</td><td>int</td><td>The overall index of this token in the token stream, counting from zero; translates to a call to getTokenIndex. Example: $ID.index.</td></tr><tr><td>channel</td><td>int</td><td>The token’s channel number. The parser tunes to only one channel, effectively ignoring off-channel tokens. The default channel is 0 (Token.DEFAULT_CHANNEL), and the default hidden channel is Token.HIDDEN_CHANNEL. Translates to a call to getChannel. Example: $ID.channel.</td></tr><tr><td>int</td><td>int</td><td>The integer value of the text held by this token; it assumes that the text is a valid numeric string. Handy for building calculators and so on. Translates to Integer.valueOf(text-of-token). Example: $INT.int.</td></tr></tbody></table></div><h3 id=parser-rule-attributes>Parser Rule Attributes</h3><p>ANTLR predefines a number of read-only attributes associated with parser rule references that are available to actions. Actions can access rule attributes only for references that precede the action. The syntax is <code>$r.attr</code> for rule name <code>r</code> or a label assigned to a rule reference. For example, <code>$expr.text</code> returns the complete text matched by a preceding invocation of rule <code>expr</code>:</p><pre tabindex=0><code>returnStat : &#39;return&#39; expr {System.out.println(&#34;matched &#34;+$expr.text);} ;
+</code></pre><p>Using a rule label looks like this:</p><pre tabindex=0><code>returnStat : &#39;return&#39; e=expr {System.out.println(&#34;matched &#34;+$e.text);} ;
+</code></pre><p>You can also use <code>$</code> followed by the name of the attribute to access the value associated with the currently executing rule. For example, <code>$start</code> is the starting token of the current rule.</p><pre tabindex=0><code>returnStat : &#39;return&#39; expr {System.out.println(&#34;first token &#34;+$start.getText());} ;
+</code></pre><p><code>$r</code> and <code>$rl</code> evaluate to <code>ParserRuleContext</code> objects of type <code>RContext</code> for rule name <code>r</code> and rule label <code>rl</code>. <code>$rll</code> evaluates to <code>List&lt;RContext></code> for rule list label <code>rll</code>. <code>$r.attr</code> evaluates to the type and value specified in the following table for attribute <code>attr</code>:</p><div class=table-wrapper><table><thead><tr><th>Attribute</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>text</td><td>String</td><td>The <strong>text matched</strong> for a rule or the text matched from the start of the rule up until the point of the <code>$text</code> expression evaluation. Note that this includes the text for all tokens including those on hidden channels, which is what you want because usually that has all the whitespace and comments. When referring to the current rule, this attribute is available in any action including any exception actions.</td></tr><tr><td>start</td><td>Token</td><td>The <strong>first token</strong> to be potentially matched by the rule that is on the main token channel; in other words, this attribute is never a hidden token. For rules that end up matching no tokens, this attribute points at the first token that could have been matched by this rule. When referring to the current rule, this attribute is available to any action within the rule.</td></tr><tr><td>stop</td><td>Token</td><td>The last nonhidden channel token to be matched by the rule. When referring to the current rule, this attribute is available only to the after and finally actions.</td></tr><tr><td>ctx</td><td>ParserRuleContext</td><td>The rule context object associated with a rule invocation. All of the other attributes are available through this attribute. For example, <code>$ctx.start</code> accesses the start field within the current rules context object. It’s the same as <code>$start</code>.</td></tr><tr><td>parser</td><td>Parser</td><td>The parser itself. This attribute can be used, for example, to invoke a method defined in the parser&rsquo;s <code>@members</code> section from a semantic predicate.</td></tr></tbody></table></div><h3 id=dynamically-scoped-attributes>Dynamically-Scoped Attributes</h3><p>You can pass information to and from rules using parameters and return values, just like functions in a general-purpose programming language. Programming languages don’t allow functions to access the local variables or parameters of invoking functions, however. For example, the following reference to local variable <code>x</code> form a nested method call is illegal in Java:</p><pre tabindex=0><code>void f() {
+	int x = 0;
+	g();
+}
+void g() {
+	h();
+}
+void h() {
+	int y = x; // INVALID reference to f&#39;s local variable x
+}
+</code></pre><p>Variable <code>x</code> is available only within the scope of <code>f</code>, which is the text lexically delimited by curly brackets. For this reason, Java is said to use lexical scoping. Lexical scoping is the norm for most programming languages. Languages that allow methods further down in the call chain to access local variables defined earlier are said to use dynamic scoping. The term dynamic refers to the fact that a compiler cannot statically determine the set of visible variables. This is because the set of variables visible to a method changes depending on who calls that method.</p><p>It turns out that, in the grammar realm, distant rules sometimes need to communicate with each other, mostly to provide context information to rules matched below in the rule invocation chain. (Naturally, this assumes that you are using actions directly in the grammar instead of the parse-tree listener event mechanism.) ANTLR allows dynamic scoping in that actions can access attributes from invoking rules using syntax <code>$r::x</code> where <code>r</code> is a rule name and <code>x</code> is an attribute within that rule. It is up to the programmer to ensure that <code>r</code> is in fact an invoking rule of the current rule. A runtime exception occurs if <code>r</code> is not in the current call chain when you access <code>$r::x</code>.</p><p>To illustrate the use of dynamic scoping, consider the real problem of defining variables and ensuring that variables in expressions are defined. The following grammar defines the symbols attribute where it belongs in the block rule but adds variable names to it in rule <code>decl</code>. Rule <code>stat</code> then consults the list to see whether variables have been defined.</p><pre tabindex=0><code>grammar DynScope;
+ 
+prog: block ;
+ 
+block
+	/* List of symbols defined within this block */
+	locals [
+	List&lt;String&gt; symbols = new ArrayList&lt;String&gt;()
+	]
+	: &#39;{&#39; decl* stat+ &#39;}&#39;
+	// print out all symbols found in block
+	// $block::symbols evaluates to a List as defined in scope
+	{System.out.println(&#34;symbols=&#34;+$symbols);}
+	;
+ 
+/** Match a declaration and add identifier name to list of symbols */
+decl: &#39;int&#39; ID {$block::symbols.add($ID.text);} &#39;;&#39; ;
+ 
+/** Match an assignment then test list of symbols to verify
+ * that it contains the variable on the left side of the assignment.
+ * Method contains() is List.contains() because $block::symbols
+ * is a List.
+ */
+stat: ID &#39;=&#39; INT &#39;;&#39;
+	{
+	if ( !$block::symbols.contains($ID.text) ) {
+	System.err.println(&#34;undefined variable: &#34;+$ID.text);
+	}
+	}
+	| block
+	;
+ 
+ID : [a-z]+ ;
+INT : [0-9]+ ;
+WS : [ \t\r\n]+ -&gt; skip ;
+</code></pre><p>Here’s a simple build and test sequence:</p><pre tabindex=0><code>$ antlr4 DynScope.g4
+$ javac DynScope*.java
+$ grun DynScope prog
+=&gt; 	{
+=&gt; 	int i;
+=&gt; 	i = 0;
+=&gt; 	j = 3;
+=&gt; 	}
+=&gt; 	EOF
+&lt;= 	undefined variable: j
+ 	symbols=[i]
+</code></pre><p>There’s an important difference between a simple field declaration in a <code>@members</code> action and dynamic scoping. symbols is a local variable and so there is a copy for each invocation of rule <code>block</code>. That’s exactly what we want for nested blocks so that we can reuse the same input variable name in an inner block. For example, the following nested code block redefines <code>i</code> in the inner scope. This new definition must hide the definition in the outer scope.</p><pre tabindex=0><code>{
+	int i;
+	int j;
+	i = 0;
+	{
+		int i;
+		int x;
+		x = 5;
+	}
+	x = 3;
+}
+</code></pre><p>Here’s the output generated for that input by DynScope:</p><pre tabindex=0><code>$ grun DynScope prog nested-input
+symbols=[i, x]
+undefined variable: x
+symbols=[i, j]
+</code></pre><p>Referencing <code>$block::symbols</code> accesses the <code>symbols</code> field of the most recently invoked <code>block</code>’s rule context object. If you need access to a symbols instance from a rule invocation farther up the call chain, you can walk backwards starting at the current context, <code>$ctx</code>. Use <code>getParent</code> to walk up the chain.</p><h2 id=parse-tree-listeners>Parse Tree Listeners</h2><p>By default, ANTLR-generated parsers build a data structure called a parse tree or syntax tree that records how the parser recognized the structure of the input sentence and component phrases.</p><p>The interior nodes of the parse tree are <strong>phrase names</strong> that <strong>group and identify their children</strong>. The root node is the <strong>most abstract</strong> phrase name. The leaves of a parse tree are always the <strong>input tokens</strong>.</p><p>Parse trees sit between a language recognizer and an interpreter or translator implementation. They are extremely effective data structures because they contain all of the input and complete knowledge of <strong>how</strong> the parser grouped the symbols into phrases. Better yet, they are easy to understand and the parser generates them <strong>automatically</strong> (unless you turn them off with <code>parser.setBuildParseTree(false)</code>).</p><p>Because we specify phrase structure with a set of rules, parse tree subtree roots <strong>correspond to grammar rule names</strong>.</p><p>ANTLR has a <strong>ParseTreeWalker</strong> that knows how to walk these parse trees and trigger events in listener implementation objects that you can create. The ANTLR tool generates listener interfaces for you also, <strong>unless you turn that off</strong> with a commandline option. You can also have it generate <strong>visitors</strong>.</p><p>For example from a Java.g4 grammar, ANTLR generates:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>interface</span> <span class=nc>JavaListener</span><span class=w> </span><span class=kd>extends</span><span class=w> </span><span class=n>ParseTreeListener</span><span class=o>&lt;</span><span class=n>Token</span><span class=o>&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=kt>void</span><span class=w> </span><span class=nf>enterClassDeclaration</span><span class=p>(</span><span class=n>JavaParser</span><span class=p>.</span><span class=na>ClassDeclarationContext</span><span class=w> </span><span class=n>ctx</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=kt>void</span><span class=w> </span><span class=nf>exitClassDeclaration</span><span class=p>(</span><span class=n>JavaParser</span><span class=p>.</span><span class=na>ClassDeclarationContext</span><span class=w> </span><span class=n>ctx</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=kt>void</span><span class=w> </span><span class=nf>enterMethodDeclaration</span><span class=p>(</span><span class=n>JavaParser</span><span class=p>.</span><span class=na>MethodDeclarationContext</span><span class=w> </span><span class=n>ctx</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w> </span><span class=p>...</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div><p>where there is an <strong>enter and exit method</strong> for <strong>each rule</strong> in the parser grammar.</p><p>ANTLR also generates <strong>a base listener with empty implementations</strong> of all listener interface methods, in this case called JavaBaseListener. You can build your listener by subclassing this base and overriding the methods of interest.</p><p>Assuming you&rsquo;ve created a listener object called <code>MyListener</code>, here is how to call the Java parser and walk the parse tree:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=n>JavaLexer</span><span class=w> </span><span class=n>lexer</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>JavaLexer</span><span class=p>(</span><span class=n>input</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=n>CommonTokenStream</span><span class=w> </span><span class=n>tokens</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>CommonTokenStream</span><span class=p>(</span><span class=n>lexer</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=n>JavaParser</span><span class=w> </span><span class=n>parser</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>JavaParser</span><span class=p>(</span><span class=n>tokens</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=n>JavaParser</span><span class=p>.</span><span class=na>CompilationUnitContext</span><span class=w> </span><span class=n>tree</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>parser</span><span class=p>.</span><span class=na>compilationUnit</span><span class=p>();</span><span class=w> </span><span class=c1>// parse a compilationUnit</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=n>MyListener</span><span class=w> </span><span class=n>extractor</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>MyListener</span><span class=p>(</span><span class=n>parser</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=n>ParseTreeWalker</span><span class=p>.</span><span class=na>DEFAULT</span><span class=p>.</span><span class=na>walk</span><span class=p>(</span><span class=n>extractor</span><span class=p>,</span><span class=w> </span><span class=n>tree</span><span class=p>);</span><span class=w> </span><span class=c1>// initiate walk of tree with listener in use of default walker</span><span class=w>
+</span></span></span></code></pre></div><p>Listeners and visitors are great because they <strong>keep application-specific code out of grammars</strong>, making grammars easier to read and preventing them from getting entangled with a particular application.</p><p>The biggest difference between the listener and visitor mechanisms is that <strong>listener methods are called independently by an ANTLR-provided walker object</strong>, whereas <strong>visitor methods must walk their children with explicit visit calls</strong>. Forgetting to invoke visitor methods on a node’s children, means those subtrees don’t get visited.</p><h3 id=listening-during-the-parse>Listening during the parse</h3><p>We can also use listeners to execute code <strong>during the parse</strong> instead of waiting for a tree walker walks the resulting parse tree. Let&rsquo;s say we have the following simple expression grammar.</p><pre tabindex=0><code>grammar CalcNoLR;
+
+s : expr EOF ;
+
+expr:	add ((MUL | DIV) add)* ;
+
+add :   atom ((ADD | SUB) atom)* ;
+
+atom : INT ;
+
+INT : [0-9]+;
+MUL : &#39;*&#39;;
+DIV : &#39;/&#39;;
+ADD : &#39;+&#39;;
+SUB : &#39;-&#39;;
+WS : [ \t]+ -&gt; channel(HIDDEN);
+</code></pre><p>We can create a listener that executes during the parse by implementing the listener interface as before:</p><pre tabindex=0><code>class CountListener extends CalcNoLRBaseListener {
+	public int nums = 0;
+	public boolean execExitS = false;
+
+	@Override
+	public void exitS(CalcNoLRParser.SContext ctx) {
+		execExitS = true;
+	}
+
+	@Override
+	public void exitAtom(CalcNoLRParser.AtomContext ctx) {
+		nums++;
+	}
+}
+</code></pre><p>And then passing it to <code>addParseListener()</code>:</p><pre tabindex=0><code>String input = &#34;2 + 8 / 2&#34;;
+CalcNoLRLexer lexer = new CalcNoLRLexer(new ANTLRInputStream(input));
+CalcNoLRParser parser = new CalcNoLRParser(new CommonTokenStream(lexer));
+CountListener counter = new CountListener();
+parser.addParseListener(counter);
+
+// Check that the purses valid first
+CalcNoLRParser.SContext context = parser.s();
+String parseTreeS = context.toStringTree(parser);
+assertEquals(&#34;(s (expr (add (atom 2) + (atom 8)) / (add (atom 2))) &lt;EOF&gt;)&#34;, parseTreeS);
+assertEquals(3, counter.nums);
+assertEquals(true, counter.execExitS);
+</code></pre><p>One should not do very complicated work during the parse because the parser is throwing exception to handle syntax errors. If you&rsquo;re complicated code throws different kind of exception it will screw up the parsing and things will go nuts. If you want to catch and properly handle exceptions in your listener code during the parse, you should override this method from <code>Parser</code>:</p><pre tabindex=0><code>protected boolean listenerExceptionOccurred = false;
+
+/**
+ * Notify any parse listeners of an exit rule event.
+ *
+ * @see #addParseListener
+ */
+@override
+protected void triggerExitRuleEvent() {
+	if ( listenerExceptionOccurred ) return;
+	try {
+		// reverse order walk of listeners
+		for (int i = _parseListeners.size() - 1; i &gt;= 0; i--) {
+			ParseTreeListener listener = _parseListeners.get(i);
+			_ctx.exitRule(listener);
+			listener.exitEveryRule(_ctx);
+		}
+	}
+	catch (Throwable e) {
+		// If an exception is thrown in the user&#39;s listener code, we need to bail out
+		// completely out of the parser, without executing anymore user code. We
+		// must also stop the parse otherwise other listener actions will attempt to execute
+		// almost certainly with invalid results. So, record the fact an exception occurred
+		listenerExceptionOccurred = true;
+		throw e;
+	}
+}
+</code></pre><p>Now, if you throw an exception inside one of the listener methods:</p><pre tabindex=0><code>// Now throw an exception in the listener
+class ErrorListener extends CalcNoLRBaseListener {
+	public boolean execExitS = false;
+	public boolean execExitAtom = false;
+
+	@Override
+	public void exitS(CalcNoLRParser.SContext ctx) {
+		execExitS = true;
+	}
+
+	@Override
+	public void exitAtom(CalcNoLRParser.AtomContext ctx) {
+		execExitAtom = true;
+		throw new NullPointerException(&#34;bail out&#34;);
+	}
+}
+</code></pre><p>then the exception will properly cause the parser to bailout and the exception will not be thrown out:</p><pre tabindex=0><code>java.lang.NullPointerException: bail out
+
+	at org.antlr.v4.test.runtime.java.api.TestParseListener$2ErrorListener.exitAtom(TestParseListener.java:102)
+	at org.antlr.v4.test.runtime.java.api.CalcNoLRParser$AtomContext.exitRule(CalcNoLRParser.java:311)
+	at org.antlr.v4.runtime.Parser.triggerExitRuleEvent(Parser.java:412)
+	at org.antlr.v4.runtime.Parser.exitRule(Parser.java:654)
+	at org.antlr.v4.test.runtime.java.api.CalcNoLRParser.atom(CalcNoLRParser.java:336)
+	at org.antlr.v4.test.runtime.java.api.CalcNoLRParser.add(CalcNoLRParser.java:261)
+	at org.antlr.v4.test.runtime.java.api.CalcNoLRParser.expr(CalcNoLRParser.java:181)
+	at org.antlr.v4.test.runtime.java.api.CalcNoLRParser.s(CalcNoLRParser.java:123)
+</code></pre><h2 id=semantic-predicates>Semantic Predicates</h2><p>Semantic predicates, <code>{...}?</code>, are <strong>boolean expressions</strong> written in the target language that indicate the validity of continuing the parse along the path &ldquo;guarded&rdquo; by the predicate. <strong>Predicates can appear anywhere within a parser rule just like actions can</strong>, but only those appearing on the left edge of alternatives can affect prediction (choosing between alternatives). This section provides all of the fine print regarding the use of semantic predicates in parser and lexer rules. Let&rsquo;s start out by digging deeper into how the parser incorporates predicates into parsing decisions.</p><h3 id=making-predicated-parsing-decisions>Making Predicated Parsing Decisions</h3><p>ANTLR&rsquo;s general decision-making strategy is to find all viable alternatives and then ignore the alternatives guarded with predicates that currently evaluate to false. (A viable alternative is one that matches the current input.) If more than one viable alternative remains, the parser chooses the alternative specified first in the decision.</p><p>Consider a variant of C++ where array references also use parentheses instead of square brackets. If we only predicate one of the alternatives, we still have an ambiguous decision in expr:</p><pre tabindex=0><code>expr: ID &#39;(&#39; expr &#39;)&#39; // array reference (ANTLR picks this one)
+ 	| {istype()}? ID &#39;(&#39; expr &#39;)&#39; // ctor-style typecast
+ 	| ID &#39;(&#39; expr &#39;)&#39; // function call
+ 	;
+</code></pre><p>In this case, all three alternatives are viable for input <code>x(i)</code>. When <code>x</code> is not a type name, the predicate evaluates to false, leaving only the first and third alternatives as possible matches for expr. ANTLR automatically chooses the first alternative matching the array reference to resolve the ambiguity. Leaving ANTLR with more than one viable alternative because of too few predicates is probably not a good idea. It&rsquo;s best to cover n viable alternatives with at least n-1 predicates. In other words, don&rsquo;t build rules like expr with too few predicates.</p><p>Sometimes, the parser finds multiple visible predicates associated with a single choice. No worries. ANTLR just combines the predicates with appropriate logical operators to conjure up a single meta-predicate on-the-fly.</p><p>For example, the decision in rule <code>stat</code> joins the predicates from both alternatives of expr with the <code>||</code> operator to guard the second stat alternative:</p><pre tabindex=0><code>stat: decl | expr ;
+decl: ID ID ;
+expr: {istype()}? ID &#39;(&#39; expr &#39;)&#39; // ctor-style typecast
+ 	| {isfunc()}? ID &#39;(&#39; expr &#39;)&#39; // function call
+ 	;
+</code></pre><p>The parser will only predict an expr from stat when <code>istype()||isfunc()</code> evaluates to true. This makes sense because the parser should only choose to match an expression if the upcoming <code>ID</code> is a type name or function name. It wouldn&rsquo;t make sense to just test one of the predicates in this case. Note that, when the parser gets to <code>expr</code> itself, the parsing decision tests the predicates individually, one for each alternative.</p><p>If multiple predicates occur in a sequence, the parser joins them with the <code>&&</code> operator. For example, consider changing <code>stat</code> to include a predicate before the call <code>toexpr</code>:</p><pre tabindex=0><code>stat: decl | {java5}? expr ;
+</code></pre><p>Now, the parser would only predict the second alternative if <code>java5&&(istype()||isfunc())</code> evaluated to true.</p><p>Turning to the code inside the predicates themselves now, keep in mind the following guidelines.</p><p>Even when the parser isn&rsquo;t making decisions, predicates can deactivate alternatives, causing rules to fail. This happens when a rule only has a single alternative. There is no choice to make, but ANTLR evaluates the predicate as part of the normal parsing process, just like it does for actions. That means that the following rule always fails to match.</p><pre tabindex=0><code>prog: {false}? &#39;return&#39; INT ; // throws FailedPredicateException
+</code></pre><p>ANTLR converts <code>{false}?</code> in the grammar to a conditional in the generated parser:</p><pre tabindex=0><code>if ( !false ) throw new FailedPredicateException(...);
+</code></pre><p>So far, all of the predicates we&rsquo;ve seen have been visible and available to the prediction process, but that&rsquo;s not always the case.</p><h3 id=finding-visible-predicates>Finding Visible Predicates</h3><p>The parser will not evaluate predicates during prediction that occur after an action or token reference. Let&rsquo;s think about the relationship between actions and predicates first.</p><p>ANTLR has no idea what&rsquo;s inside the raw code of an action and so it must assume any predicate could depend on side effects of that action. Imagine an action that computed value <code>x</code> and a predicate that tested <code>x</code>. Evaluating that predicate before the action executed to create <code>x</code> would violate the implied order of operations within the grammar.</p><p>More importantly, the parser can&rsquo;t execute actions until it has decided which alternative to match. That&rsquo;s because actions have side effects and we can&rsquo;t undo things like print statements. For example, in the following rule, the parser can&rsquo;t execute the action in front of the <code>{java5}?</code> predicate before committing to that alternative.</p><pre tabindex=0><code>@members {boolean allowgoto=false;}
+stat: {System.out.println(&#34;goto&#34;); allowgoto=true;} {java5}? &#39;goto&#39; ID &#39;;&#39;
+ 	| ...
+ 	;
+</code></pre><p>If we can&rsquo;t execute the action during prediction, we shouldn&rsquo;t evaluate the <code>{java5}?</code> predicate because it depends on that action.</p><p>The prediction process also can&rsquo;t see through token references. Token references have the side effect of advancing the input one symbol. A predicate that tested the current input symbol would find itself out of sync if the parser shifted it over the token reference. For example, in the following grammar, the predicates expect <code>getCurrentToken</code> to return an <code>ID</code> token.</p><pre tabindex=0><code>stat: &#39;{&#39; decl &#39;}&#39;
+ 	| &#39;{&#39; stat &#39;}&#39;
+ 	;
+decl: {istype(getCurrentToken().getText())}? ID ID &#39;;&#39; ;
+expr: {isvar(getCurrentToken().getText())}? ID ;
+</code></pre><p>The decision in stat can&rsquo;t test those predicates because, at the start of stat, the current token is a left curly. To preserve the semantics, ANTLR won&rsquo;t test the predicates in that decision.</p><p>Visible predicates are those that prediction encounters before encountering an action or token. The prediction process ignores nonvisible predicates, treating them as if they don&rsquo;t exist.</p><p>In rare cases, the parser won&rsquo;t be able to use a predicate, even if it&rsquo;s visible to a particular decision. That brings us to our next fine print topic.</p><h3 id=using-context-dependent-predicates>Using Context-Dependent Predicates</h3><p>A predicate that depends on a parameter or local variable of the surrounding rule, is considered a context-dependent predicate. Clearly, we can only evaluate such predicates within the rules in which they&rsquo;re defined. For example, it makes no sense for the decision in prog below to test context-dependent predicate <code>{$i&lt;=5}?</code>. That <code>$i</code> local variable is not even defined in <code>prog</code>.</p><pre tabindex=0><code>prog: vec5
+ 	| ...
+ 	;
+vec5
+locals [int i=1]
+ 	: ( {$i&lt;=5}? INT {$i++;} )* // match 5 INTs
+ 	;
+</code></pre><p>ANTLR ignores context-dependent predicates that it can&rsquo;t evaluate in the proper context. Normally the proper context is simply the rule defining the predicate, but sometimes the parser can&rsquo;t even evaluate a context-dependent predicate from within the same rule! Detecting these cases is done on-the-fly at runtime during adaptive LL(*) prediction.</p><p>For example, prediction for the optional branch of the else subrule in stat below &ldquo;falls off&rdquo; the end of stat and continues looking for symbols in the invoking prog rule.</p><pre tabindex=0><code>prog: stat+ ; // stat can follow stat
+stat
+locals [int i=0]
+ 	: {$i==0}? &#39;if&#39; expr &#39;then&#39; stat {$i=5;} (&#39;else&#39; stat)?
+ 	| &#39;break&#39; &#39;;&#39;
+ 	;
+</code></pre><p>The prediction process is trying to figure out what can follow an if statement other than an else clause. Since the input can have multiple stats in a row, the prediction for the optional branch of the else subrule reenters stat. This time, of course, it gets a new copy of <code>$i</code> with a value of 0, not 5. ANTLR ignores context-dependent predicate <code>{$i==0}?</code> because it knows that the parser isn&rsquo;t in the original stat call. The predicate would test a different version of <code>$i</code> so the parser can&rsquo;t evaluate it.</p><p>The fine print for predicates in the lexer more or less follow these same guidelines, except of course lexer rules can&rsquo;t have parameters and local variables. Let&rsquo;s look at all of the lexer-specific guidelines in the next section.</p><h3 id=predicates-in-lexer-rules>Predicates in Lexer Rules</h3><p>In parser rules, predicates must appear on the left edge of alternatives to aid in alternative prediction. Lexers, on the other hand, prefer predicates on the right edge of lexer rules because they choose rules after seeing a token&rsquo;s entire text. Predicates in lexer rules can technically be anywhere within the rule. Some positions might be more or less efficient than others; ANTLR makes no guarantees about the optimal spot. A predicate in a lexer rule might be executed multiple times even during a single token match. You can embed multiple predicates per lexer rule and they are evaluated as the lexer reaches them during matching.</p><p>Loosely speaking, the lexer&rsquo;s goal is to choose the rule that matches the most input characters. At each character, the lexer decides which rules are still viable. Eventually, only a single rule will be still viable. At that point, the lexer creates a token object according the rule&rsquo;s token type and matched text.</p><p>Sometimes the lexer is faced with more than a single viable matching rule. For example, input enum would match an <code>ENUM</code> rule and an <code>ID</code> rule. If the next character after enum is a space, neither rule can continue. The lexer resolves the ambiguity by choosing the viable rule specified first in the grammar. That&rsquo;s why we have to place keyword rules before an identifier rule like this:</p><pre tabindex=0><code>ENUM : &#39;enum&#39; ;
+ID : [a-z]+ ;
+</code></pre><p>If, on the other hand, the next character after input <code>enum</code> is a letter, then only <code>ID</code> is viable.</p><p>Predicates come into play by pruning the set of viable lexer rules. When the lexer encounters a false predicate, it deactivates that rule just like parsers deactivate alternatives with false predicates.</p><p>Like parser predicates, lexer predicates can&rsquo;t depend on side effects from lexer actions. That said, the predicate can depend on a side effect of an action that occured during the recognition of the previous token. That&rsquo;s because actions can only execute after the lexer positively identifies the rule to match. Since predicates are part of the rule selection process, they can&rsquo;t rely on action side effects created by actions in currently-prospective rules. Lexer actions must appear after predicates in lexer rules. As an example, here&rsquo;s another way to match enum as a keyword in the lexer:</p><pre tabindex=0><code>ENUM: [a-z]+ {getText().equals(&#34;enum&#34;)}?
+	   {System.out.println(&#34;enum!&#34;);}
+    ;
+ID  : [a-z]+ {System.out.println(&#34;ID &#34;+getText());} ;
+</code></pre><p>The print action in <code>ENUM</code> appears last and executes only if the current input matches <code>[a-z]+</code> and the predicate is true. Let&rsquo;s build and test <code>Enum3</code> to see if it distinguishes between enum and an identifier:</p><pre tabindex=0><code>$ antlr4 Enum3.g4
+$ javac Enum3.java
+$ grun Enum3 tokens
+=&gt; 	enum abc
+=&gt; 	EOF
+&lt;= 	enum!
+ 	ID abc
+</code></pre><p>That works great, but it&rsquo;s really just for instructional purposes. It&rsquo;s easier to understand and more efficient to match enum keywords with a simple rule like this:</p><pre tabindex=0><code>ENUM : &#39;enum&#39; ;
+</code></pre><p>Here&rsquo;s another example of a predicate. It&rsquo;s important to note that the predicate is evaluated before the action because actions are only executed if the lexer rule matches. The actions are not executed in line; they are collected and executed en mass later.</p><pre tabindex=0><code>INDENT : [ \t]+ {System.out.println(&#34;INDENT&#34;)&gt;} {this.getCharPositionInLine()==0}? ;
+</code></pre><p>For more information on how actions and predicates operate in the lexer, see <a class=link href=https://github.com/antlr/antlr4/issues/3611 target=_blank rel=noopener>Lexer actions and semantic predicates are executed out of order</a> and <a class=link href=https://github.com/antlr/antlr4/issues/3606 target=_blank rel=noopener>Lexer.getCharIndex() return value not behaving as expected</a>. The lexer rule that will not work as expected is:</p><pre tabindex=0><code>Stuff : ( &#39;a&#39;+ {count++;} | &#39;b&#39;) &#39;c&#39; &#39;d&#39; {count == 3}? ;
+</code></pre><p>The <code>count++</code> code we&rsquo;ll not execute until after <code>Stuff</code> has been recognized (assuming count!=3).</p><h2 id=华为云>华为云</h2><p>一般如果语法非常复杂，会基于Lexer和Parser写到两个不同的文件中（例如Java，可参考：https://github.com/antlr/grammars-v4/tree/master/java/java8），如果语法比较简单，可以只写到一个文件中（例如Lua，可参考：https://github.com/antlr/grammars-v4/blob/master/lua/Lua.g4）。</p><p>Antlr4<strong>整体结构</strong>如下：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=cm>/** Optional javadoc style comment */</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>grammar</span> <span class=nx>Name</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>options</span> <span class=p>{...}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>...</span> <span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=nx>tokens</span> <span class=p>{...}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>channels</span> <span class=p>{...}</span> <span class=c1>// lexer only
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=err>@</span><span class=nx>actionName</span> <span class=p>{...}</span>
+</span></span><span class=line><span class=cl><span class=nx>rule1</span> <span class=c1>// parser and lexer rules, possibly intermingled
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=p>...</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>ruleN</span>
+</span></span></code></pre></div><p><strong>替代标签</strong></p><p>通过在语句后面，添加 #替代标签，可以将语句转换为这些替代标签，从而加以区分</p><p><strong>结合性</strong></p><p>默认情况下，ANTLR从左到右结合运算符，然而某些像指数群这样的运算符则是从右到左。可以使用选项assoc手动指定运算符记号上的相关性。</p><p>实际上，Antlr4 已经对一些常用的操作符的优先级进行了处理，例如加减乘除等，这些就不需要再特殊处理</p><p><strong>通道</strong></p><p>很多信息，例如注释、空格等，是结果信息生成不需要处理的，但是我们又不适合直接丢弃，安全地忽略掉注释和空格的方法是把这些发送给语法分析器的记号放到一个“隐藏通道”中，语法分析器仅需要调协到单个通道即可。我们可以把任何我们想要的东西传递到其它通道中。</p></section><footer class=article-footer><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section><section class=article-lastmod><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<span>Last updated on Sep 12, 2024 10:34 CST</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>Related content</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/opensourcesm2-cipher/><div class=article-details><h2 class=article-title>【OpenSource】SM2 Cipher</h2></div></a></article><article><a href=/p/leetcode-csep-2025/><div class=article-details><h2 class=article-title>【LeetCode-C】Sep 2025</h2></div></a></article><article><a href=/p/databasetest/><div class=article-details><h2 class=article-title>【DataBase】Test</h2></div></a></article><article><a href=/p/shopeeannotations/><div class=article-details><h2 class=article-title>【Shopee】Annotations</h2></div></a></article><article><a href=/p/shopeethread/><div class=article-details><h2 class=article-title>【Shopee】Thread</h2></div></a></article></div></div></aside><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//hugo-theme-stack.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2025 飞鸿踏雪泥</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.30.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>
