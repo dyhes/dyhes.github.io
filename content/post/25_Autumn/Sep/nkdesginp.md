@@ -133,7 +133,7 @@ Java中的动态代理主要依赖于两个核心组件：
 
 例如，为一个简单的服务接口创建代理：
 
-```
+```java
 // 1. 定义接口
 interface Service {
     void execute();
