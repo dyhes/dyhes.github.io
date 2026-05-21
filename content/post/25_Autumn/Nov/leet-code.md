@@ -1,5 +1,11 @@
 ---
-
+title: 【LeetCode-C】Shopee
+date: 2025-11-04 00:00:00+0000
+categories: 
+- pearl
+- temple
+tags:
+- LeetCode-C
 ---
 
 ## c++ lambda function
