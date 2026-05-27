@@ -136,15 +136,15 @@ ConcurrentHashMap通过分段锁+CAS机制实现线程安全：
 | **深拷贝** | 创建一个新对象，并**递归复制所有内部引用对象的字段值** | 新对象与原对象完全独立，不共享任何引用类型字段的实例 | Person p2 = p1.deepClone();<br>（内部Address对象也被复制） |
 ### 序列化
 序列化是将对象转换为可存储或传输的格式（如字节流、JSON），便于保存或网络传输。反序列化是逆向过程，将序列化后的数据恢复为原始对象结构，实现数据的重构和使用。两者常用于数据持久化、缓存或跨平台通信场景。
-1. **Java序列化**  
-   * 实现`Serializable`接口，使用`ObjectOutputStream`/`ObjectInputStream`  
-   * **缺点**：生成二进制流不可读，跨语言兼容性差  
-2. **文本协议**  
-   * **JSON/XML**：可读性强，适合Web API（如RESTful接口）  
-   * **YAML**：结构化配置文件常用（如Spring Boot的`application.yml`）  
-3. **二进制协议**  
-   * **Protocol Buffers (Protobuf)**：Google开发，高效紧凑，适合RPC通信  
-   * **MessagePack**：混合文本与二进制，性能优于JSON  
-4. **框架支持**  
-   * **Java**：Jackson/Gson（JSON序列化库）  
-   * **Python**：Pickle（原生序列化工具，注意安全风险）  
+1. **Java序列化**
+   * 实现`Serializable`接口，使用`ObjectOutputStream`/`ObjectInputStream`
+   * **缺点**：生成二进制流不可读，跨语言兼容性差
+2. **文本协议**
+   * **JSON/XML**：可读性强，适合Web API（如RESTful接口）
+   * **YAML**：结构化配置文件常用（如Spring Boot的`application.yml`）
+3. **二进制协议**
+   * **Protocol Buffers (Protobuf)**：Google开发，高效紧凑，适合RPC通信
+   * **MessagePack**：混合文本与二进制，性能优于JSON
+4. **框架支持**
+   * **Java**：Jackson/Gson（JSON序列化库）
+   * **Python**：Pickle（原生序列化工具，注意安全风险）

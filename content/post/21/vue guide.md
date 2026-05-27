@@ -2,8 +2,8 @@
 title: 【Vue】Guide
 date: 2021-05-08 00:00:00+0000
 categories: 
--  nutrition
--  temple
+- nutrition
+- temple
 tags:
     - Vue
 ---
@@ -110,7 +110,7 @@ To ensure consistent access to the proxy, calling `reactive()` on the same objec
 The `reactive()` API has two limitations:
 
 * It only works for object types
-* we couldn't pass it around without losing reactivity. 
+* we couldn't pass it around without losing reactivity.
 
  `ref()` allows us to create a "reference" to any value and pass it around without losing reactivity. 
 
@@ -246,10 +246,8 @@ However, this won't automatically pass any data to the component, because compon
 
 ```vue
 <my-component
-  v-for="(item, index) in items"
-  :item="item"
-  :index="index"
-  :key="item.id"
+  **v-for="(item, index) in items"**：item="item"
+  **:index="index"**：key="item.id"
 ></my-component>
 ```
 
@@ -890,7 +888,7 @@ There is no strictly defined scope for a plugin, but common scenarios where plug
 
 Vue offers two built-in components that can help work with transitions and animations in response to changing state:
 
-- `<Transition>` for applying animations when an element or component is entering and leaving the DOM. 
+- `<Transition>` for applying animations when an element or component is entering and leaving the DOM.
 - `<TransitionGroup>` for applying animations when an element or component is inserted into, removed from, or moved within a `v-for` list.
 
 `<Transition>` only supports a single element or component as its slot content. If the content is a component, the component must also have only one single root element.

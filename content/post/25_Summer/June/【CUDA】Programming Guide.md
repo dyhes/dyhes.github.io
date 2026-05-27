@@ -154,10 +154,10 @@ The runtime is implemented in the cudart library, which is linked to the appli
 All its entry points are **prefixed with cuda**.
 #### Initialization
 CUDA 12.0
-* **核心变化** 
-  * **cudaInitDevice() 与 cudaSetDevice() **在CUDA 12.0中成为**显式初始化入口**。调用二者之一会立即：✅ 初始化CUDA运行时库✅ 创建指定设备的Primary Context（主上下文）
+* **核心变化**
+  * **cudaInitDevice() 与 cudaSetDevice() **：在CUDA 12.0中成为**显式初始化入口**。调用二者之一会立即：✅ 初始化CUDA运行时库✅ 创建指定设备的Primary Context（主上下文）
   * **未调用时的默认行为** ：运行时自动选择device 0，并在首次需要时隐式初始化（如调用cudaMalloc或内核启动）
-* **工程意义** 
+* **工程意义**
   * **性能分析** ：显式初始化将耗时集中在可控阶段，避免首次API调用的延迟干扰计时。
   * **错误处理** ：必须检查cudaSetDevice()的返回值（如cudaError_t），因其可能返回设备初始化错误（如cudaErrorInvalidDevice）
 历史行为（CUDA 11.x及更早）
@@ -610,7 +610,7 @@ Optimal performance in multi-device synchronization is achieved by enabling peer
 The \_\_global__ execution space specifier declares a function as **being a kernel**. Such a function is:
 * Executed on the device,
 * Callable from the host,
-* Callable from the device for devices of compute capability 5.0 or higher 
+* Callable from the device for devices of compute capability 5.0 or higher
 A \_\_global__ function must have **void** return type, and cannot be a member of a class.
 Any call to a \_\_global__ function must specify its **execution configuration** as described in [Execution Configuration](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#execution-configuration).
 A call to a \_\_global__ function is **asynchronous**, meaning it returns before the device has completed its execution.

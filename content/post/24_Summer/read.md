@@ -7,19 +7,19 @@ categories:
 ---
 
 ## How to read faster
-* Cut the Inner Monologue 
+* **Cut the Inner Monologue**
   try reading without sounding out the words in your head
-* Read With Your Finger 
+* **Read With Your Finger**
   our eyes kind of naturally jump around and it takes **mental effort** to keep our eyes focused on each line
 * Stop reading content you don’t like
   skip entire book or chapter when you don’t like the contents, table of contents he
-* Schedule Reading
+* **Schedule Reading**
   utilize scattered time
 * Read more than one book simultaneously
 
 ## How to remember What you read
 * Highlighting and note-taking is basically **worthless**.
-* We remember what’s **useful**
+* **We remember what’s **：useful****
   * find ways to implement ideas you read into your life
   * mental effort: how does this(things I read) apply to my own life?
   * there are ways to kind of trick your brain into thinking that you were using the stuff you read

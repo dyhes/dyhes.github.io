@@ -2,10 +2,10 @@
 title: 【JS】ES6
 date: 2021-04-19 00:00:00+0000
 categories: 
--  nutrition
--  temple
+- nutrition
+- temple
 tags:
--  JS
+- JS
 ---
 
 ## Parameter
@@ -428,7 +428,7 @@ ES6 provides predefined symbols which are called well-known symbols. The well-kn
 
 There are two iteration protocols: **iterable protocol** and **iterator protocol**.
 
-* Iterator protocol
+* **Iterator protocol**
 
   An object is an iterator when it implements an interface (or API) that answers two questions:
 
@@ -440,7 +440,7 @@ There are two iteration protocols: **iterable protocol** and **iterator protocol
   * `done`: a boolean value indicating whether or not there are any more elements that could be iterated upon.
   * `value`: the current element.
 
-* Iterable protocol
+* **Iterable protocol**
 
   An object is iterable when it contains a method called `[Symbol.iterator]` that takes no argument and returns an object which conforms to the iterator protocol.
 
@@ -604,10 +604,10 @@ A `WeakMap` is similar to a `Map` except the keys of a `WeakMap` **must be objec
 
 A `WeakMap` only has subset methods of a `Map` object:
 
--  `get(key)`
--  `set(key, value)`
--  `has(key)`
--  `delete(key)`
+- `get(key)`
+- `set(key, value)`
+- `has(key)`
+- `delete(key)`
 
 Here are the main difference between a `Map` and a `WeekMap`:
 
@@ -716,7 +716,7 @@ Unlike the most global objects, the `Reflect` **is not a constructor**. It means
 
 ## New Functions
 
-* `Array.of()`
+* **`Array.of()`**
 
   In ES5, when you pass a number to the Array constructor, JavaScript creates an array whose length equals the number.
 
@@ -728,7 +728,7 @@ Unlike the most global objects, the `Reflect` **is not a constructor**. It means
 
   In other words, the `Array.of()` method always creates an array that contains the values that you pass to it regardless of the types or the number of arguments.
 
-* `Array.from()`
+* **`Array.from()`**
 
   ES6 introduces the `Array.from()` method that creates a new instance of the `Array` from an array-like or iterable object. The following illustrates the syntax of the `Array.from()` method:
 
@@ -744,7 +744,7 @@ Unlike the most global objects, the `Reflect` **is not a constructor**. It means
 
   The `Array.from()` returns a new instance of `Array` that contains all elements of the `target` object.
 
-* `find()`
+* **`find()`**
 
   ES6 introduced a new method called `find()`added to the `Array.prototype` object.
 
@@ -770,7 +770,7 @@ Unlike the most global objects, the `Reflect` **is not a constructor**. It means
 
   If the callback returns a truthy value, the `find()` immediately returns the element and stop searching. Otherwise, it returns `undefined`.
 
-* `Object.assign()`
+* **`Object.assign()`**
 
   The following shows the syntax of the `Object.assign()` method:
 
@@ -809,17 +809,17 @@ Unlike the most global objects, the `Reflect` **is not a constructor**. It means
 
   If the source objects have the same property, the property of the **later** object **overwrites** the earlier one
 
-* `Object.is()`
+* **`Object.is()`**
 
   The `Object.is()` behaves like the `===` operator with two differences:
 
-  * -0 and +0
+  * **-0 and +0**
 
     The `===` operator treats `-0` and `+0` are the same value:
 
     However, the `Object.is()` treats +0 and -0 as different values. 
 
-  * NaN
+  * **NaN**
 
     The `===` operator considers `NaN` and `NaN` are different values. The `NaN` is the only number that does not equal itself. 
 
@@ -829,7 +829,7 @@ Unlike the most global objects, the `Reflect` **is not a constructor**. It means
 
   The `startsWith()` returns `true` if a [string](https://www.javascripttutorial.net/javascript-string/) begins with the characters of a specified string; otherwise `false`.
 
-* `startsWith()`
+* **`startsWith()`**
 
   The following shows the syntax of the `startsWith()` method:
 
@@ -840,8 +840,7 @@ Unlike the most global objects, the `Reflect` **is not a constructor**. It means
     * `searchString` is the characters to be searched for at the start of this string.
     * `position` is an optional parameter that determines the start position to search for the `searchString`. It defaults to 0.
 
-* `endsWith()`
-
+* **`endsWith()`**
     ```js
     String.startsWith(searchString(pattern) [,position])
     ```
@@ -890,7 +889,7 @@ Despite the similarities between a class and a custom type defined via a constru
 * class declarations are **not hoisted** like function declarations.
 * all the code inside a class **automatically executes in the strict mode**. And you cannot change this behavior.
 * class methods are **non-emunerable**.If you use a constructor/prototype pattern, you have to use the `Object.defineProperty()` method to make a property non-enumerable.
-* calling the class constructor without the `new` operator will result in an **error** 
+* calling the class constructor without the `new` operator will result in an **error**
 
 ES6 provides a specific syntax for defining the getter and setter using the get and set keywords. For example:
 
@@ -911,7 +910,7 @@ class Person {
     }
 ```
 
-* Getter
+* **Getter**
 
   To call the getter, you use the following syntax:
 
@@ -921,7 +920,7 @@ class Person {
 
   When JavaScript sees the access to `name` property of the `Person` class, it checks if the `Person` class has any **`name` property**. If not, JavaScript checks if the Person class has any **method that binds to the `name` property**. In this example, the `name()` method binds to the `name` property via the `get` keyword. Once JavaScript finds the getter method, it executes the getter method and returns a value.
 
-* Setter
+* **Setter**
 
   The setter uses the `set` keyword followed by the method name:
 
@@ -943,7 +942,7 @@ class Person {
 
   If a class has only getter but not setter and you attempt to use the setter, the change won’t take any effect.
 
-* Static Method
+* **Static Method**
 
   By definition, static methods are bound to a class, **not the instances** of that class. Therefore, static methods are useful for defining helper or utility methods.
 
@@ -991,8 +990,7 @@ class Person {
   this.constructor.staticMethodName();
   ```
 
-* Static Property
-
+* **Static Property**
     Like a  static method, a static property is **shared** by all instances of a class. To define static property, you use the `static` keyword followed by the property name like this:
 
     ```
@@ -1012,7 +1010,7 @@ class Person {
     this.constructor.staticPropertyName;
     ```
 
-* class expression
+* **class expression**
 
   A class expression **doesn’t require an identifier** after the `class` keyword. And you can use a class expression in a variable declaration and pass it into a function as an argument.
 
@@ -1033,7 +1031,7 @@ class Person {
 
   [JavaScript classes are first-class citizens](https://www.javascripttutorial.net/javascript-functions-are-first-class-citizens/). It means that you can pass a class into a function, return it from a function, and assign it to a variable.
 
-*  `extends` and `super`  keyword
+* **`extends` and `super`  keyword**
 
   Prior to ES6, implementing a proper inheritance required multiple steps. One of the most commonly used strategies is the prototypal inheritance.
 
@@ -1059,7 +1057,7 @@ class Person {
 
   To call the method of the parent class in the child class, you use `super.method(arguments)`,
 
-* `new.target`
+* **`new.target`**
 
   ES6 provides a **metaproperty** named `new.target` that allows you to detect whether a  **function** or **constructor** was called using the `new` operator.
 
@@ -1132,7 +1130,7 @@ If the promise reaches `fulfilled` or `rejected` state, the promise is resolved.
 
 ### Consuming a promise
 
-* `then()`
+* **`then()`**
 
   To get the value of a promise when it’s fulfilled, you call the `then()` method of the promise object. The following shows the syntax of the `then()` method:
 
@@ -1152,11 +1150,11 @@ If the promise reaches `fulfilled` or `rejected` state, the promise is resolved.
 
   > Note that both `onFulfilled` and `onRejected` arguments are **optional**. We usually use `then()` method to schedule a callback to be executed when the promise is fulfilled
 
-* `catch()`
+* **`catch()`**
 
   `catch()` method schedule a callback to be invoked when the promise is rejected. If the `catch()` method to handle the error inside the promise is not provided. It will cause a runtime error and terminate the program.
 
-* `finally()`
+* **`finally()`**
 
   Place the code that you want to execute in the `finally()` method whether the promise is fulfilled or rejected.
 

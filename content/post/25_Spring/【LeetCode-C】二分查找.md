@@ -9,16 +9,16 @@ tags:
 ---
 
 在 C++ STL 中，std::vector 结合 <algorithm> 头文件提供的二分查找算法可实现快速二分查找。
-* `std::lower_bound‌`
+* **`std::lower_bound‌`**
   返回第一个 ‌**不小于目标值**‌ 的元素的迭代器。若未找到，返回 end()‌
   ```cpp
   auto it = std::lower_bound(vec.begin(), vec.end(), target);
   ```
-* `std::upper_bound‌`
+* **`std::upper_bound‌`**
   返回第一个 ‌**大于目标值**‌ 的元素的迭代器‌
-* `std::binary_search`
+* **`std::binary_search`**
   返回布尔值，表示目标值是否存在‌
-* `‌std::equal_range`
+* **`‌std::equal_range`**
   返回一个迭代器对，表示等于目标值的元素范围‌
 
 ## 自定义比较函数

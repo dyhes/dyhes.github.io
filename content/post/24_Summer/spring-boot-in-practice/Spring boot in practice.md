@@ -20,16 +20,16 @@ It provides an additional layer between the Spring Framework for the user to sim
 A Spring Boot web application can be either Servlet-based or reactive type.
 
 ### Components
-* spring-boot
+* **spring-boot**
 
   This is the **primary** Spring Boot component that provides support to other components. For example, it contains the **SpringApplication class**, which contains several static methods to create a standalone Spring Boot application. It also provides support for embedded web servers (e.g., Tomcat) and supports externalized application configurations (e.g., database details of your application), etc. 
 * spring-boot-autoconfigure
 * Spring-boot-starters
-* spring-boot-actuator
+* **spring-boot-actuator**
 
   In the context of software, particularly within the Spring Boot framework, “Actuator” refers to a set of tools and features that provide insights into the application’s runtime behavior and health.
-* spring-boot-actuator-autoconfigure 
-* spring-boot-loader 
+* spring-boot-actuator-autoconfigure
+* **spring-boot-loader**
 
   This component allows a Spring Boot application to be packaged as a single fat JAR file, including all dependencies and the embedded web servers that can be run standalone. You don’t use this module independently; instead, it is used along with Maven or Gradle plugins
 * spring-boot-devtools
@@ -76,18 +76,18 @@ The “Bean” part of the term is a metaphor borrowed from the agricultural sen
 ### @SpringBootApplication
 @SpringBootApplication annotation is a convenient annotation that consists of three annotations: 
 
-* @EnableAutoConfiguration
+* **@EnableAutoConfiguration**
 
   provides the necessary support for Spring Boot to autoconfigure your application based on the JAR dependencies present in the application 
   classpath
 
-* @ComponentScan
+* **@ComponentScan**
 
   Provides support to scan the packages for Spring components in the application. 
   
 ### Spring Component
   **A component in Spring is a Java bean that is managed by Spring** and annotated with the **@Component, @Bean, or specialized component annotations**. With the presence of @ComponentScan annotation, the Spring Boot application scans for all components present in the **root package and sub-packages** under it to manage their lifecycle. The key point to remember with ComponentScan is that the scan starts from a root package and continues to all child packages. Thus, if you have packages that are not in the root or its sub-package, none of those components will be scanned by the component scan.
-* @SpringBootConfiguration
+* **@SpringBootConfiguration**
   This annotation indicates that **the annotated class provides the Spring Boot application configuration**. It is meta-annotated with Spring @Configuration annotation so that the configurations in the annotated class can be found automatically by Spring Boot. Thus, the beans defined in this main class can be autodetected and loaded by Spring. 
 
 ### run() method

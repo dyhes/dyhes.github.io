@@ -56,7 +56,7 @@ sudo systemctl enable nginx
 
 ## Terminology
 
-* context
+* **context**
 
   ```nginx
   events {
@@ -64,7 +64,7 @@ sudo systemctl enable nginx
   }
   ```
 
-* directive
+* **directive**
 
   ```nginx
   worker_connections 768;

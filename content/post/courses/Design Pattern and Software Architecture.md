@@ -11,7 +11,7 @@ categories:
 
 产品为了满足用户的业务需求而必须具备的除功能之外的特性，它与功能需求是互补的
 
-* 性能 
+* 性能
 * 可扩展性/伸缩性
 * 可维护性
 * 可用性
@@ -26,16 +26,13 @@ categories:
 
 **面向对象设计的三大原则（特性）**
 
-1. 封装
-
+1. **封装**
    就是将客观事物抽象为逻辑实体，实体的属性和功能相结合，形成一个有机的整体。并**对实体的属性和功能实现进行访问控制**，向信任的实体开放，对不信任的实体隐藏。，**通过开放的外部接口即可访问**，无需知道功能如何实现。
 
-2. 继承
-
+2. **继承**
    在继承机制下形成有层级的类，使得低层级的类可以延用高层级类的特征和方法
 
-3. 多态
-
+3. **多态**
    是指一个类的同名方法，在不同情况下的实现细节不同
 
 ## Design Pattern
@@ -48,7 +45,7 @@ categories:
 
 ### 原则
 
-- 开闭原则（Open Closed Principle，OCP）
+- **开闭原则（Open Closed Principle，OCP）**
 
   对扩展开放，对修改关闭
 
@@ -61,7 +58,6 @@ categories:
   依赖于抽象，不能依赖于具体实现
 
 - 里氏代换原则（Liskov Substitution Principle，LSP）
-
    所有引用基类的地方必须能透明地使用其子类的对象
 
 - 接口隔离原则（Interface Segregation Principle，ISP）
@@ -562,8 +558,8 @@ fun reactorDemo() {
 ##### MVC
 
 - **模型（Model）** 用于封装与应用程序的业务逻辑相关的数据以及对数据的处理方法。“ Model ”有对数据直接访问的权力，例如对数据库的访问。“Model”不依赖“View”和“Controller”，也就是说， Model 不关心它会被如何显示或是如何被操作。但是 Model 中数据的变化一般会通过一种刷新机制被公布。为了实现这种机制， View 或事先在此 Model 上注册，从而，View 可以了解在数据 Model 上发生的改变（[观察者模式](https://zh.m.wikipedia.org/wiki/观察者模式)）或在Controller操控下更新View
-- **视图（View）**能够实现数据有目的的显示（理论上，这不是必需的）。在 View 中一般没有程序上的逻辑。为了实现 View 上的刷新功能，View 需要访问它监视的数据模型（Model），因此应该事先在被它监视的数据那里注册。
-- **控制器（Controller）**起到不同层面间的组织作用，用于控制应用程序的流程。它处理事件并作出响应。“事件”包括用户的行为和数据 Model 上的改变。
+- **视图（View）**：能够实现数据有目的的显示（理论上，这不是必需的）。在 View 中一般没有程序上的逻辑。为了实现 View 上的刷新功能，View 需要访问它监视的数据模型（Model），因此应该事先在被它监视的数据那里注册。
+- **控制器（Controller）**：起到不同层面间的组织作用，用于控制应用程序的流程。它处理事件并作出响应。“事件”包括用户的行为和数据 Model 上的改变。
 
 ![img](https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/MVC-Process.svg/200px-MVC-Process.svg.png)
 
@@ -1618,11 +1614,11 @@ class Church(override val map: HashMap<FlyWeightEnum, Deity> = HashMap()) : FlyW
 
 pipes and filters
 
-* Filter
+* **Filter**
 
   Component
 
-* Pipe
+* **Pipe**
 
   Connector
 
@@ -1634,11 +1630,11 @@ pipes and filters
 
 Main program and subroutine
 
-* Hierarchical decomposition:
+* **Hierarchical decomposition**:
   Based on definition-use relations
   * Definition-call
   * Call-return
-* Single thread of control
+* **Single thread of control**
   Supported directly by programming languages
 
 ### **面向对象风格**
@@ -1647,21 +1643,21 @@ Object-Oriented Organization
 
 * Each object contains **data and operations** on these data.
 
-* Data within an object can only be accessed by methods of its inclosing object. 
+* Data within an object can only be accessed by methods of its inclosing object.
 
 * Object is probably instantiated from a template (Class)
 
-* feature
+* **feature**
 
-  * Encapsulation
+  * **Encapsulation**
 
     Restrict access to certain information
 
-  * Polymorphism
+  * **Polymorphism**
 
     Choose the method at run-time
 
-  * Inheritance
+  * **Inheritance**
 
     take over (or inherit) attributes and behavior of the pre-existing classes
 
@@ -1686,49 +1682,48 @@ Call and return systems
 
 - 软件体系结构＝（元素，形态，基本理论）
 
-- 软件体系结构层次的设计主要包括以下方面：
+- **软件体系结构层次的设计主要包括以下方面**：
 
   * 组成系统的构件**描述**
   * 构件之间的**交互**
   * 指导构件交互的**模式**
   * 施加在模式上的**约束**
 
-- 一个软件系统的体系结构定义了组成系统的
+- **一个软件系统的体系结构定义了组成系统的**
 
-  * 构件（components）
+  * **构件（components）**
 
     构件用于**实施计算和保存状态**
 
-  * 连接件（connectors）
+  * **连接件（connectors）**
 
     连接件用于表达构件之间的**关系**
 
-  * 和它们之间的匹配 
+  * **和它们之间的匹配**
 
     构件和连接件之间的匹 配表示了系统的**拓扑结构**
 
-- * Components: 
-
+- *** Components**:
     define the locus of **computation**
 
     Examples: filters, databases, objects, clients/servers
 
-  * Connectors: 
+  * **Connectors**:
 
     mediate component **interactions**
 
     Examples: procedure call, pipes, event broadcast
 
-- Batch Sequential Systems
+- **Batch Sequential Systems**
 
   * Processing steps are **independent programs**
   * Each step runs to **completion** before next step starts
   * Data transmitted **as a whole** between steps
-  * Typical applications:
+  * **Typical applications**:
     * classical data processing
     * program development
 
-- data flow System
+- **data flow System**
 
   - A data flow system is one in which
     * the **availability of data** controls the computation

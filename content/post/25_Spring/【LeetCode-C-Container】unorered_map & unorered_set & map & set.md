@@ -57,8 +57,7 @@ umap.insert({"banana", 5});  // 仅当键不存在时插入
 ---
 
 ### 通用遍历方法（适用于所有版本）
-1. **范围for循环（C++11+）**  
-   最简洁的现代语法，直接遍历键值对：  
+1. **范围for循环（C++11+）** 最简洁的现代语法，直接遍历键值对：
    ```cpp
    for (const auto& pair : container) {
        std::cout << "Key: " << pair.first << ", Value: " << pair.second << "\n";
@@ -66,8 +65,7 @@ umap.insert({"banana", 5});  // 仅当键不存在时插入
    ```  
    *适用场景*：只需顺序访问元素，无需修改键值。
 
-2. **迭代器遍历**  
-   传统方法，支持正向和反向遍历（反向仅限`std::map`）：  
+2. **迭代器遍历** 传统方法，支持正向和反向遍历（反向仅限`std::map`）：
    ```cpp
    // 正向遍历
    for (auto it = container.begin(); it != container.end(); ++it) {
@@ -80,8 +78,7 @@ umap.insert({"banana", 5});  // 仅当键不存在时插入
    ```  
    *适用场景*：需要灵活控制遍历过程（如条件删除元素）。
 
-3. **`std::for_each`算法**  
-   结合Lambda表达式实现函数式编程：  
+3. **`std::for_each`算法** 结合Lambda表达式实现函数式编程：
    ```cpp
    #include <algorithm>
    std::for_each(container.begin(), container.end(), [](const auto& pair) {
@@ -93,8 +90,7 @@ umap.insert({"banana", 5});  // 仅当键不存在时插入
 ---
 
 ### 进阶方法（C++17+）
-4. **结构化绑定结构化绑定**  
-   解构键值对，提升代码可读性：  
+4. **结构化绑定结构化绑定** 解构键值对，提升代码可读性：
    ```cpp
    for (const auto& [key, value] : container) {
        std::cout << "Key: " << key << ", Value: " << value << "\n";
@@ -102,7 +98,7 @@ umap.insert({"banana", 5});  // 仅当键不存在时插入
    ```  
    *适用场景*：需要分离键和值的操作（如仅处理键或值）。
 
-5. **键/值视图（C++20+）**  
+5. **键/值视图（C++20+）**
    通过`std::views::keys`或`std::views::values`遍历单一部分：  
    ```cpp
    for (const auto& key : container | std::views::keys) {
@@ -114,14 +110,14 @@ umap.insert({"banana", 5});  // 仅当键不存在时插入
 ---
 
 ### 注意事项
-1. **顺序差异**  
-   - `std::map`按键升序排列，支持反向迭代。  
+1. **顺序差异**
+   - `std::map`按键升序排列，支持反向迭代。
    - `std::unordered_map`无固定顺序，反向迭代不可用。
 
-2. **安全性**  
+2. **安全性**
    - 遍历时插入或删除元素可能导致迭代器失效，需谨慎操作。
 
-3. **性能**  
+3. **性能**
    - `std::unordered_map`的遍历速度通常更快，但受哈希冲突影响。
 
 ---
@@ -140,8 +136,8 @@ umap.insert({"banana", 5});  // 仅当键不存在时插入
 
 ### `map`与`unordered_map`的键值对存储方式  
 在C++中，`std::map`和`std::unordered_map`的底层确实使用`std::pair`来存储键值对。每个元素的类型为`std::pair<const Key, T>`，其中`Key`是键的类型，`T`是值的类型。  
-- **`std::map`**：基于红黑树实现，元素按键的升序排列，键不可修改。  
-- **`std::unordered_map`**：基于哈希表实现，元素无序存储，键通过哈希函数映射到桶中。  
+- **`std::map`**：基于红黑树实现，元素按键的升序排列，键不可修改。
+- **`std::unordered_map`**：基于哈希表实现，元素无序存储，键通过哈希函数映射到桶中。
 
 两者在插入、查找等操作中均通过`pair`对象管理键值对。例如：  
 ```cpp
@@ -193,10 +189,9 @@ for (const auto& [key, value] : umap) {  // 将pair解构为key和value
 ---
 
 ### `pair`的扩展用法  
-1. **自定义比较规则**  
+1. **自定义比较规则**
    若需自定义排序或哈希函数（如`unordered_map`中键为自定义类型），需为`pair`提供哈希和比较方法。  
-2. **通过`tie`解构返回值**  
-   当函数返回`pair`时，可用`std::tie`直接解构接收值：  
+2. **通过`tie`解构返回值** 当函数返回`pair`时，可用`std::tie`直接解构接收值：
    ```cpp
    std::string name; int age;
    std::tie(name, age) = getPerson();  // 假设getPerson返回pair<string, int>

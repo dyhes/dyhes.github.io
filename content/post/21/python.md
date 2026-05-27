@@ -2,8 +2,8 @@
 title: 【Python】语法
 date: 2021-01-12 00:00:00+0000
 categories: 
--  nutrition
--  temple
+- nutrition
+- temple
 tags:
 - AI
 ---
@@ -123,12 +123,12 @@ Lists are one of 4 built-in data types in Python used to store collections of da
 
 A list can contain different data types
 
-* add
+* **add**
   * To add an item to the end of the list, use the append() method
   * To insert a list item at a specified index, use the `insert()` method.
   * To append elements from *another list* ( or any iterable object ) to the current list, use the `extend()` method.
 
-* remove
+* **remove**
   * The `remove()` method removes the specified **item**.
   * The `pop()` method removes the specified index. If you do not specify the index, the `pop()` method removes the last item.
   * The `del` keyword also removes the specified index and can also delete the list completely.
@@ -197,21 +197,21 @@ A set is a collection which is *unordered*, *unchangeable**, and *unindexed*.
 
 > **Note:** Set *items* are unchangeable, but you can remove items and add new items.
 
-* add
+* **add**
 
   * To add one item to a set use the `add()` method.
 
   * To add items from another set into the current set, use the `update()` method.
 
-* remove
-  *  `remove()`: if the item to remove does not exist, `remove()` will raise an error.
+* **remove**
+  * `remove()`: if the item to remove does not exist, `remove()` will raise an error.
   * `discard()` : if the item to remove does not exist, `discard()` will **NOT** raise an error.
   * `pop()` :remove  and return the *last* item,  you will not know what item that gets removed.
   * `clear()` : you will not know what item that gets removed.
   * `del` :delete the set completely
 
-* join
-  *  `union()` :  returns a new set containing all items from both sets
+* **join**
+  * `union()` :  returns a new set containing all items from both sets
   * `update()` : inserts all the items from one set into another.
 
 #### Set Operation
@@ -230,7 +230,7 @@ A dictionary is a collection which is ordered*, changeable and do not allow dupl
 
 > As of Python version 3.7, dictionaries are *ordered*. In Python 3.6 and earlier, dictionaries are *unordered*.
 
-* Access
+* **Access**
   * referring to its key name inside square brackets
   * `get()`
   * `keys()`: return a list of all the **keys** in the dictionary.
@@ -242,10 +242,10 @@ thisdict["model"]
 thisdict.get("model")
 ```
 
-* Change / Add
+* **Change / Add**
   * referring to its key name
   * `update()`
-* Remove
+* **Remove**
   * `pop()` : removes the item with the specified key name
   * `popitem()`:  removes the last inserted item (in versions before 3.7, a random item is removed instead)
   * `del` : removes the item with the specified key name or the entire dictionary

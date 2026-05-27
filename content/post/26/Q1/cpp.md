@@ -79,7 +79,7 @@ static int fileLocal = 0;  // 静态全局，只在main.cpp中可用
 
 ### 7. 最佳实践建议
 1. **尽量少用全局变量**，优先使用局部变量和参数传递
-2. 如果需要共享数据，考虑使用：
+2. **如果需要共享数据，考虑使用**：
    - 静态成员变量
    - 命名空间
    - 单例模式
@@ -859,8 +859,7 @@ private:
     std::vector<uint8_t> buffer;
     
 public:
-    Device(uintptr_t addr) 
-        : hw_register(reinterpret_cast<volatile uint32_t*>(addr)) {}
+    **Device(uintptr_t addr)**：hw_register(reinterpret_cast<volatile uint32_t*>(addr)) {}
     
     // 硬件操作
     void write_to_device(uint32_t value) {
@@ -1277,8 +1276,7 @@ protected:
         return static_cast<T*>(::operator new(n * sizeof(T)));
     }
     
-    void deallocate(T* p, size_t) {
-        ::operator delete(p);
+    **void deallocate(T* p, size_t) {**：:operator delete(p);
     }
 };
 
@@ -1492,10 +1490,10 @@ class Container : private Alloc {  // 私有继承满足概念的类型
 ### 12. 使用建议
 
 1. **优先使用组合**，除非有特殊需求
-2. **需要访问基类保护成员**时考虑私有继承
-3. **需要重写虚函数但不暴露接口**时考虑私有继承
-4. **进行空基类优化**时使用私有继承
-5. **明确使用 `using` 声明**控制哪些接口暴露
+2. **需要访问基类保护成员**：时考虑私有继承
+3. **需要重写虚函数但不暴露接口**：时考虑私有继承
+4. **进行空基类优化**：时使用私有继承
+5. **明确使用 `using` 声明**：控制哪些接口暴露
 6. **避免通过转型绕过访问控制**
 7. **文档化使用私有继承的原因**
 
@@ -3533,8 +3531,8 @@ int main() {
 
 ### 15. 关键要点
 
-1. **全特化**提供完全特定的实现
-2. **偏特化**提供部分特定的实现
+1. **全特化**：提供完全特定的实现
+2. **偏特化**：提供部分特定的实现
 3. **函数模板不能偏特化**，用重载替代
 4. 特化匹配遵循**最具体优先**原则
 5. 特化必须**保持接口一致性**

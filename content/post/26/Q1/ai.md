@@ -980,8 +980,8 @@ OpenClaw的完整人设体系由四个核心文件构成：
 
 **SOUL.md与IDENTITY.md的根本区别在于：前者定义AI"是什么样的人"，后者定义AI"被看作什么角色"。**
 
-- **SOUL.md**是**内在的、稳定的、原则性的**，定义了AI的价值观、行为准则和沟通风格，相当于AI的"宪法"和"灵魂"。
-- **IDENTITY.md**是**外在的、可调整的、标识性的**，定义了AI的名称、头像、表情符号等展示元素，相当于AI的"名片"和"外观"。
+- **SOUL.md**：是**内在的、稳定的、原则性的**，定义了AI的价值观、行为准则和沟通风格，相当于AI的"宪法"和"灵魂"。
+- **IDENTITY.md**：是**外在的、可调整的、标识性的**，定义了AI的名称、头像、表情符号等展示元素，相当于AI的"名片"和"外观"。
 
 **这种分离设计的优势**：
 1. **灵活性**：可以独立调整外观而不影响核心性格
@@ -1831,7 +1831,7 @@ mcp.run()  ## 启动服务器
 #### 4. 组合使用策略
 2026年的趋势是"组合栈"而非单一框架：
 - **LangGraph**：负责状态管理和推理控制
-- **CrewAI**：负责多Agent协作编排  
+- **CrewAI**：负责多Agent协作编排
 - **n8n**：负责外部工具集成
 - **Claude Agent SDK**：负责代码执行和任务自动化
 - **MCP协议**：标准化工具调用接口
@@ -1862,7 +1862,7 @@ mcp.run()  ## 启动服务器
 #### 1. 框架融合趋势
 一个明显的趋势是：**框架之间的边界在模糊**：
 - LangGraph加了多Agent支持
-- CrewAI底层可以换成不同的LLM编排引擎  
+- CrewAI底层可以换成不同的LLM编排引擎
 - AutoGen在加强工程化能力
 - OpenClaw原生支持MCP协议，可直接调用200+现成工具
 
@@ -2633,7 +2633,7 @@ KV Cache的核心思想：**计算一次，永久缓存**
 #### 1. **在注意力机制中的角色**
 在自注意力机制中，每个Token会生成三个向量：
 - **Q (Query)**：查询向量，用于“问问题”
-- **K (Key)**：键向量，用于“匹配问题”  
+- **K (Key)**：键向量，用于“匹配问题”
 - **V (Value)**：值向量，用于“提供答案”
 
 公式：`Attention(Q, K, V) = softmax(QKᵀ/√d) V`
@@ -5287,10 +5287,8 @@ import jieba  ## 中文分词
 class BM25:
     def __init__(self, k1=1.5, b=0.75, epsilon=0.25):
         """
-        初始化BM25模型
-        :param k1: 控制词频饱和度的参数，通常1.2-2.0
-        :param b: 控制文档长度归一化的参数，通常0.75
-        :param epsilon: 平滑参数，避免除零
+        **初始化BM25模型**：param k1: 控制词频饱和度的参数，通常1.2-2.0
+        **:param b: 控制文档长度归一化的参数，通常0.75**：param epsilon: 平滑参数，避免除零
         """
         self.k1 = k1
         self.b = b
@@ -5725,10 +5723,8 @@ class BM25ParameterTuner:
     """BM25参数调优器"""
     
     def __init__(self, documents, queries, relevance_labels):
-        """
-        :param documents: 文档集
-        :param queries: 查询集
-        :param relevance_labels: 相关性标注，格式为{(query_idx, doc_idx): relevance}
+        **"""**：param documents: 文档集
+        **:param queries: 查询集**：param relevance_labels: 相关性标注，格式为{(query_idx, doc_idx): relevance}
         """
         self.documents = documents
         self.queries = queries
@@ -6130,8 +6126,7 @@ class NeuralBM25:
     """神经BM25：结合深度学习的BM25变体"""
     
     def __init__(self, base_bm25, neural_encoder):
-        """
-        :param base_bm25: 基础BM25模型
+        **"""**：param base_bm25: 基础BM25模型
         :param neural_encoder: 神经编码器（如BERT）
         """
         self.bm25 = base_bm25

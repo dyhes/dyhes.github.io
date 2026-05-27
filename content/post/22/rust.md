@@ -2,8 +2,8 @@
 title: 【Rust】Basics
 date: 2022-09-12 00:00:00+0000
 categories: 
--  nutrition
--  temple
+- nutrition
+- temple
 ---
 
 ## Expressions and  Statements

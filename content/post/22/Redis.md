@@ -2,8 +2,8 @@
 title: 【Redis】Concepts
 date: 2022-03-02 00:00:00+0000
 categories: 
--  nutrition
--  willow
+- nutrition
+- willow
 ---
 
 ## Introduction

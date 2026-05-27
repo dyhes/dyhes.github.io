@@ -2,8 +2,8 @@
 title: 【CPP】W3C C++
 date: 2020-12-01 00:00:00+0000
 categories: 
--  nutrition
--  temple
+- nutrition
+- temple
 tags:
     - CPP
 ---

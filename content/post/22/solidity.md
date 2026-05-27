@@ -2,8 +2,8 @@
 title: 【Solidity】Concepts
 date: 2022-10-13 00:00:00+0000
 categories: 
--  nutrition
--  temple
+- nutrition
+- temple
 ---
 
 ## smart contract

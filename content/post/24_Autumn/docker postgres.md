@@ -4,8 +4,8 @@ date: 2024-09-19 00:00:00+0000
 categories: 
     - willow
 tags:
-    -  docker
-    -  postgres
+    - docker
+    - postgres
 ---
 
 Postgres Docker Image

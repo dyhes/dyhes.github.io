@@ -2,7 +2,7 @@
 title: 【Linux】Basics
 date: 2022-11-07 00:00:00+0000
 categories: 
--  nutrition
+- nutrition
 tags:
 - Linux
 ---
@@ -24,7 +24,6 @@ The three most popular Desktop distributions of Linux are;
 The four most popular Server versions of Linux are;
 
 1. [Debian](https://www.linux.org/resources/debian.11/)
-
    The Debian Project was founded by Ian Murdock in 1993. Debian gets its name from the combination of Ian Murdock and his wife Debra's name (Deb-Ian) .Despite its not-for-profit status, Debian is an extremely versatile distribution. It forms the base of many user-friendly distributions like Ubuntu, Linspire and Xandros. 
 
    mv sources.list.old sources.list
@@ -115,7 +114,7 @@ start with -(d for directories)
 #### three entity types
 
 * owner
-* group 
+* group
 * world
 
 ##### permission symbol

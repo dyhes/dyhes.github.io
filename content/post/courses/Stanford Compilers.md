@@ -38,7 +38,7 @@ Def. Let $\sum$ be a set of characters (an alphabet). A language over $\sum$ is 
 
 * prioritized match
 
-* Error match
+* **Error match**
 
   Error = {all strings not in the lexical specification}
 
@@ -138,7 +138,7 @@ A grammar is ambiguous if it has more than one parse tree for some string. Equiv
 
 * Impossible to convert automatically an ambiguous grammar to an unanbiguous one
 * Used with care, ambiguity can simplify the grammar
-  * sometimes allows more natural definitions  
+  * sometimes allows more natural definitions
   * we need disambiguation mechanisms
 * most tools allow **precedence and associativity declarations** to disambiguate grammars
 
@@ -146,10 +146,10 @@ A grammar is ambiguous if it has more than one parse tree for some string. Equiv
 
 #### Panic mode
 
-* when an error is detected:
+* **when an error is detected**:
   * discard tokens until one with a clear role is found
   * continue from there
-* Looking for synchronizing tokens
+* **Looking for synchronizing tokens**
   * typically the statement or expression terminators
 
 #### Error productions
@@ -164,7 +164,7 @@ Like parse trees but ignore some details
 
 * Traces the operation of the parser
 * Captures nesting structure
-* But too much information
+* **But too much information**
   * Parentheses
   * Single-successor nodes
 
@@ -177,7 +177,7 @@ Like parse trees but ignore some details
 
 ### Recursive Descent Algorithm
 
-* The parse tree is constructed
+* **The parse tree is constructed**
   * from the top to down
   * from left to right
 * Terminals are seen in order of appearance in the token stream
@@ -226,7 +226,7 @@ frontier:
 top of stack: leftmost pending terminal or non-terminal
 
 * consider non-terminal $A$, production $A\rightarrow \alpha$ and token $t$
-*  $T[A,t] = \alpha$ in two cases:
+* **$T[A,t] = \alpha$ in two cases**:
   * if $\alpha \rightarrow^{*} t\beta$
     * $\alpha$ can derive a $t$ in the first position
     * we say that $t\in First(\alpha)$
@@ -244,7 +244,7 @@ $$
 **Algorithm**
 
 * $First(t)=\{t\}$
-* $\epsilon\in First(X)$
+* **$\epsilon\in First(X)$**
   * if $X\rightarrow \epsilon$
   * if $X\rightarrow A_1...A_n$ and $\epsilon\in First(A_i)$ for $1\le i \le n$
 * $First(\alpha)\subseteq First(X)$ if $X\rightarrow A_1...A_n\alpha$ and  $\epsilon\in First(A_i)$ for $1\le i \le n$
@@ -336,13 +336,13 @@ steps:
 
 LR(0) Parsing steps:
 
-* LR(0) Parsing: Assume
+* **LR(0) Parsing: Assume**
   * stack contains $\alpha$
   * next input is $t$
   * DFA on input $\alpha$ terminates in state $s$
-* Reduce by $X\rightarrow\beta$ if
+* **Reduce by $X\rightarrow\beta$ if**
   * $s$ contains item $X\rightarrow\beta.$
-* Shift if
+* **Shift if**
   * $s$ contains item $X\rightarrow\beta.t\omega$
   * equivalent to saying $s$ has a transition labeled $t$
 * LR(0) gas a reduce/reduce conflict if:
@@ -356,13 +356,13 @@ LR(0) Parsing steps:
 
 simple left-to-right right-most parsing
 
-* Assume
+* **Assume**
   * stack contains $\alpha$
   * next input is $t$
   * DFA on input $\alpha$ terminates in state $s$
-* Reduce by $X\rightarrow\beta$ if
+* **Reduce by $X\rightarrow\beta$ if**
   * $s$ contains item $X\rightarrow\beta.$ and $t\in Follow(X)$
-* Shift if
+* **Shift if**
   * $s$ contains item $X\rightarrow\beta.t\omega$
   * equivalent to saying $s$ has a transition labeled $t$
 * LR(0) gas a reduce/reduce conflict if:
@@ -424,10 +424,10 @@ A symbol table is a data structure that tracks the current bindings of identifie
 ###  Types
 
 * the notion varies from language to language
-* consensus
+* **consensus**
   * a set of values
   * a set of operations on those values
-*  classes are one instantiation of the modern notion of type
+* classes are one instantiation of the modern notion of type
 
 the goal of type checking is to ensure that operations are used with the correct types
 
@@ -498,9 +498,9 @@ method environment $M$
 
 ####  General themes
 
-*  Type rules are defined on the structure of expressions
+* Type rules are defined on the structure of expressions
 * Types of variables are modeled by an environment
-* cam be implemented in a single traversal over the AST 
+* cam be implemented in a single traversal over the AST
 * Type environment is passes down the tree
 * Types are passed up the tree
 
@@ -516,7 +516,7 @@ $$
 ## Code Generation
 
 * Management of run-time resources
-* Correspondence between
+* **Correspondence between**
   * static (compile-time)
   * dynamic (run-time)
 * Storage organization
@@ -529,7 +529,7 @@ compiler is responsible for:
 two goals:
 
 * correctness
-* speed
+* **speed**
 
  ### Activations
 
@@ -592,7 +592,7 @@ Spaces
 
   each AR usually fixed size, contains locals
 
-* Heap contains all other data
+* **Heap contains all other data**
 
   heap is managed by malloc and free in C
 
@@ -633,7 +633,7 @@ consider a 1-register stack machine
 
 1. consider an expression $op(e_1,...,e_n)$, $e_1,...,e_n$ are subexpressions
 2. for each $e_i$
-3. * compute $e_i$
+3. *** compute $e_i$**
    * push result on the stack
 4. pop $n - 1$ values from the stack, compute $op$
 5. store result in the accumulator
@@ -703,11 +703,11 @@ This means that code in class A works unmodified for an object of class B
 
 Object are laid out in **contiguous memory**
 
-* Class tag is an integer
+* **Class tag is an integer**
 
   identifies class of the object
 
-* Object size is an integer
+* **Object size is an integer**
 
   size of the object in words
 
@@ -835,24 +835,24 @@ seeks to improve a program's resource utilization
 
 when：
 
-* On AST
+* **On AST**
 
   * Pro: machine independent
   * Con: too high level
 
-* On assembly language
+* **On assembly language**
 
   * Pro: Exposes optimization opportunities
 
-  * Con: 
+  * **Con**:
 
     Machine dependent
 
     Must reimplement optimizations when retargeting
 
-* On an intermediate language
+* **On an intermediate language**
 
-  * Pro: 
+  * **Pro**:
 
     Machine independent
 
@@ -882,16 +882,13 @@ the body of a method (or procedure) can be represented as a control-flow graph
 
 ### Granularity
 
-1. local optimizations
-
+1. **local optimizations**
    apply to a basic block in isolation
 
-2. Global optimizations
-
+2. **Global optimizations**
    apply to a control-flow graph (method body) in isolation
 
-3. Inter-procedural optimizations
-
+3. **Inter-procedural optimizations**
    apply across method boundaries
 
 most compilers do 1. many do 2. few do 3.
@@ -909,7 +906,7 @@ optimize one basic block
 
 no need to analyze the whole procedure body
 
-* some statement can be deleted
+* **some statement can be deleted**
 
   $x:= x + 0$
 

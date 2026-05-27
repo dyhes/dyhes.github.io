@@ -2,8 +2,8 @@
 title: 【C#】Basics
 date: 2020-12-28 00:00:00+0000
 categories: 
--  nutrition
--  temple
+- nutrition
+- temple
 ---
 
 ## Introduction

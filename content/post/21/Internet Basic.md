@@ -2,8 +2,8 @@
 title: 【Internet】Basics
 date: 2021-05-15 00:00:00+0000
 categories: 
--  nutrition
--  grass
+- nutrition
+- grass
 ---
 
 ## What is Internet
@@ -32,19 +32,19 @@ the web is just one of many internet applications. Other popular Internet applic
 
 The internet has three basic parts:
 
-- **The last mile** is the part of the internet that connects homes and small businesses to the internet. 
+- **The last mile** is the part of the internet that connects homes and small businesses to the internet.
 - **Data centers** are rooms full of servers that store user data and host online apps and content.
-- **The backbone** consists of long-distance networks — mostly on **fiber optic cables**   —that carry data between data centers and consumers. 
+- **The backbone** consists of long-distance networks — mostly on **fiber optic cables**   —that carry data between data centers and consumers.
 
 ### Wireless Internet
 
 There are two basic types of **wireless internet** access: 
 
-* **wifi** 
+* **wifi**
 
 Wifi networks use **unlicensed spectrum**: electromagnetic frequencies that are available for anyone to use without charge. To prevent neighbors’ networks from interfering with each other, there are strict limits on the power (and therefore the range) of wifi networks.
 
-*  **cellular**.
+* **cellular**：.
 
 Cellular networks are more centralized. They work by breaking up the service territory into **cells**.  Each cell has a **tower** at its **center** providing services to devices there. 
 
@@ -59,7 +59,7 @@ A packet is the **basic unit of information** transmitted over the internet.  Sp
 
 A packet consists of  two parts:
 
-* header
+* **header**
 
  The header contains information that **helps the packet get to its destination**,  including the **length** of the packet, its **source and destination**, and a **checksum value** that helps the recipient detect if a packet was damaged in transit.
 

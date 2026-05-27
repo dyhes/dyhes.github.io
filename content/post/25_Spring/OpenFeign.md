@@ -26,14 +26,13 @@ public interface ExampleServiceClient {
 ---
 
 ### 灵活的应用场景
-1. **单个请求头**  
-   直接在参数中声明单个头名称：
+1. **单个请求头** 直接在参数中声明单个头名称：
    ```java
    @GetMapping("/getStuDetail")
    StudentVo getStudentDetail(@RequestHeader("X-Trace-Id") String traceId);
    ```
 
-2. **多个请求头**  
+2. **多个请求头**
    使用 `MultiValueMap<String, String>` 或 `HttpHeaders` 类型参数接收多个头：
    ```java
    @PostMapping("/card")
@@ -41,7 +40,7 @@ public interface ExampleServiceClient {
    ```
    调用时传入包含多个键值对的集合即可。
 
-3. **结合路径参数/请求体**  
+3. **结合路径参数/请求体**
    `@RequestHeader` 可与其他注解（如 `@PathVariable`、`@RequestBody`）混合使用：
    ```java
    @PostMapping("/service/{id}")
@@ -53,11 +52,11 @@ public interface ExampleServiceClient {
 ---
 
 ### 与其他方式的对比
-1. **优势**  
+1. **优势**
    - **动态性**：适合需要根据调用上下文动态传递头信息的场景（如用户 Token、追踪 ID）。
    - **简洁性**：无需编写拦截器，直接在接口中声明即可。
 
-2. **局限性**  
+2. **局限性**
    - **代码侵入性**：需修改接口方法的参数列表，可能影响代码简洁性。
    - **异步调用问题**：在异步非阻塞调用时可能出现头信息丢失（需结合 `RequestContextHolder` 或拦截器处理）。
 
@@ -78,10 +77,10 @@ OpenFeign 可以通过以下方式实现 **UserInfo 到 SpaceUserInfo 的自动 
 
 ### 默认情况下能否自动映射？
 **若满足以下条件，OpenFeign 可自动完成字段映射：**
-1. **字段名与类型完全一致**  
+1. **字段名与类型完全一致**
    例如 `username`、`nickname`、`avatar` 等字段在 `UserInfo` 和 `SpaceUserInfo` 中名称与类型完全匹配，则 OpenFeign 的默认解码器（如 `SpringDecoder`）会通过 JSON 反序列化自动填充这些字段。
 
-2. **多余字段自动忽略**  
+2. **多余字段自动忽略**
    OpenFeign 默认使用 Jackson 进行 JSON 转换，若 `UserInfo` 包含 `SpaceUserInfo` 没有的字段（如 `userId`、`email`），可通过在 `SpaceUserInfo` 类上添加 `@JsonIgnoreProperties(ignoreUnknown = true)` 注解忽略未知字段。
 
 ---
@@ -143,13 +142,13 @@ OpenFeign 可以通过以下方式实现 **UserInfo 到 SpaceUserInfo 的自动 
 ---
 
 ### 最佳实践建议
-1. **保持 DTO 结构一致性**  
+1. **保持 DTO 结构一致性**
    尽量让 `SpaceUserInfo` 与 `UserInfo` 的字段名和类型保持一致，避免复杂映射。
 
-2. **优先使用 Jackson 配置**  
+2. **优先使用 Jackson 配置**
    通过 `@JsonIgnoreProperties` 和 `@JsonProperty` 实现轻量级适配，无需侵入代码逻辑。
 
-3. **复杂场景选择自定义解码器**  
+3. **复杂场景选择自定义解码器**
    若涉及字段类型转换（如 `Long` 转 `String`）或逻辑处理，自定义 `Decoder` 更灵活。
 
 ---

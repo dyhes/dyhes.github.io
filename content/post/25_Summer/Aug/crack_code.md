@@ -63,7 +63,7 @@ Not everything you did will fit intothis approach, butthe principle is the same:
 
 * *Insightful Questions*
 
-* *Passion Questions*
+* ***Passion Questions***
 
   "I'm very interested in scalability, and I'd love to learn more about it. What opportunities are there at this
 
@@ -95,7 +95,7 @@ In almost all cases, the "action" is the most important part of the story. Unfor
 * Listen Carefully
 * Draw an Example
 * State a Brute Force
-* Optimize
+* **Optimize**
   * Look for any unused information
   * Make time vs. space tradeoff
   * Precompute information
@@ -126,7 +126,7 @@ Look for BUD
 
 - 使用**第一行**记录各列是否需要清零（`matrix[0][j] = 0`表示第 `j`列需清零）。
 - 使用**第一列**记录各行是否需要清零（`matrix[i][0] = 0`表示第 `i`行需清零）。
-- **额外变量**标记第一行和第一列自身是否需要清零（避免覆盖标记信息）
+- **额外变量**：标记第一行和第一列自身是否需要清零（避免覆盖标记信息）
 
 
 
@@ -186,13 +186,11 @@ A number of linked list problems rely on recursion. If you're having trouble sol
 
 * **空间高效方案（两端栈 + 可移动中间栈）**
 
-  * **栈1**​：从数组起始位置（索引0）向右生长。
+  * **栈1**：​：从数组起始位置（索引0）向右生长。
   * **栈2**：从数组末尾（索引`n-1`）向左生长。
   * **栈3**：起始于数组中部，可向左/右动态移动以避免碰撞。
 
-* **链表式方案（动态节点分配）**
-
-  将数组划分为节点池，每个节点包含：
+* **链表式方案（动态节点分配）** 将数组划分为节点池，每个节点包含：
 
   * `value`：存储数据。
   * `prev`：指向上一个节点的索引（模拟链表指针）。
@@ -256,7 +254,7 @@ id 作为隐式的时间戳
 
 > 公共祖先
 
-* 最优：递归后序
+* **最优：递归后序**
 
   * **终止条件**：
 
@@ -296,15 +294,12 @@ id 作为隐式的时间戳
 **前缀和 + 哈希表 + DFS 回溯**
 
 1. **前缀和定义**：
-
    记录从根节点到当前节点的路径和 `currSum`。若存在节点 A和 B满足 currSumB−currSumA=targetSum，则 A→B的路径和即为目标值。
 
 2. **哈希表作用**：
-
    存储路径前缀和及其出现次数，键为 `currSum`，值为出现次数。
 
 3. **回溯机制**：
-
    在 DFS 递归返回时，移除当前节点的前缀和，确保不同分支的路径计算互不干扰
 
 

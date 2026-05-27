@@ -82,27 +82,27 @@ draft: true
 
 ## Difficulties
 * spring cloud stream (kafka) 解析
-* Nebula 语句
+* **Nebula 语句**
   * selectActiveTails
-* Ngbatis 冷门框架
+* **Ngbatis 冷门框架**
   * 文档
   * issue
   * 源码 + 逐句 Debug
   * 联系作者
-* beetl 转义语句
+* **beetl 转义语句**
   无法解决->换个思路
-* 大模型限速
+* **大模型限速**
   多个 API Key
   GO AWAY received(to much concurrent stream):  单个 http connection 限制
 * Prompt 调优
-* nebula 数据
+* **nebula 数据**
   * 悬挂
   * 完整性校验
-* lombok
+* **lombok**
   * 借助大模型
 * 多态
 * staging 环境不一致行为：考虑网络限制
-* fernflower 解析内部类
+* **fernflower 解析内部类**
   * IndexOutOfBoundException
 * OutofMemoryError
 ## Results
@@ -175,7 +175,7 @@ draft: true
 ## W10
 * Resolved the private_package_class_edge dangling error, 100%.
 * Merged configFileParser and configItemParser for improved code consolidation, 100%.
-* Refactored parser architecture implementing a unified visitor pattern for better maintainability and performance, 100%. 
+* Refactored parser architecture implementing a unified visitor pattern for better maintainability and performance, 100%.
 * Exploring LLM integration in code parsing workflows, using Cursor as a case study, 100%.
 ## M2
 * 完善解析的内容，完整性提升
@@ -188,11 +188,11 @@ draft: true
 ## W12
 * Debugging and troubleshooting staging environment issues, 100%.
 * Added project_module_edge, 100%.
-* Compiled parsed projects to capture annotation-generated code (e.g., Lombok getters/setters) and ensure complete Maven dependency resolution for accurate code analysis.100%. 
+* Compiled parsed projects to capture annotation-generated code (e.g., Lombok getters/setters) and ensure complete Maven dependency resolution for accurate code analysis.100%.
 * Decompiled .class file by Fernflower, 50%.
 ## W13
 * Added fqn field to class_tag, 100%.
-* Compiled and decompiled parsed projects to avoid method resolution error, 100%. 
+* Compiled and decompiled parsed projects to avoid method resolution error, 100%.
 * Researched approaches to capture polymorphism relationships in java-callgraph2, 60%.
 ## W14
 * Implemented JavaCacheCollector to pre-parse Java files and collect essential information about class inheritance and Spring beans, 100%.
@@ -268,10 +268,10 @@ ClassOrInterfaceDeclaration 过于
 关键代码：ProjectServiceImpl::decompileProject
 #### 源码解析
 入口：GraphServiceImpl 的 insertProject 方法
-* 配置文件解析 ConfigFileParser 
-* Maven 模块解析 PomModuleParser 
+* 配置文件解析 ConfigFileParser
+* Maven 模块解析 PomModuleParser
 * Mybatis XML解析 MyBatisXMLFileParser
-* Java 文件解析
+* **Java 文件解析**
   * ParsingContext
   * JavaCacheCollector
   * JavaFileParser

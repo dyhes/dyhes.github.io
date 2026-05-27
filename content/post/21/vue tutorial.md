@@ -2,8 +2,8 @@
 title: 【Vue】Tutorial
 date: 2021-05-07 00:00:00+0000
 categories: 
--  nutrition
--  temple
+- nutrition
+- temple
 tags:
     - Vue
 ---

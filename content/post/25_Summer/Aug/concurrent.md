@@ -28,8 +28,7 @@ tags: [Shopee]
   );
   ```
 
-- **`ScheduledThreadPoolExecutor`**
-  扩展 `ThreadPoolExecutor`，支持定时任务：
+- **`ScheduledThreadPoolExecutor`** 扩展 `ThreadPoolExecutor`，支持定时任务：
 
   - `schedule()`：延迟执行单次任务。
   - `scheduleAtFixedRate()`：固定频率执行任务（忽略任务执行时间）。
@@ -89,9 +88,7 @@ tags: [Shopee]
   - `future.get(timeout, unit)`：设置超时时间（超时抛出 `TimeoutException`）。
   - `future.cancel(true)`：中断任务（需任务响应中断）。
 
-- 
-
-  批量任务方法
+- **批量任务方法**
 
   
 
@@ -108,11 +105,7 @@ tags: [Shopee]
 - **`shutdownNow()`**
   尝试立即停止所有任务（返回未执行的任务列表）。
 
-- 
-
-  推荐关闭流程
-
-  （防止资源泄漏）：
+- **推荐关闭流程** （防止资源泄漏）：
 
   ```
   executor.shutdown();
@@ -135,12 +128,7 @@ tags: [Shopee]
 2. **资源管理**
    避免线程泄漏：确保最终调用 `shutdown()`。
 
-3. 
-
-   队列选择
-
-   
-
+3. **队列选择**
    - `LinkedBlockingQueue`：无界队列（可能导致内存溢出）。
    - `SynchronousQueue`：直接传递任务（`newCachedThreadPool` 使用，无缓冲）。
 
@@ -274,8 +262,7 @@ try {
 2. **资源清理**：
    超时后调用 `future.cancel(true)`，并确保最终关闭线程池。
 
-3. **批量任务处理**：
-   使用 `invokeAll()` 设置统一超时时间：
+3. **批量任务处理**： 使用 `invokeAll()` 设置统一超时时间：
 
    ```
    List<Callable<String>> tasks = ...; // 任务列表

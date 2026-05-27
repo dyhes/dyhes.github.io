@@ -2,8 +2,8 @@
 title: 【Python】Pandas
 date: 2021-01-13 00:00:00+0000
 categories: 
--  nutrition
--  temple
+- nutrition
+- temple
 tags:
 - AI
 ---

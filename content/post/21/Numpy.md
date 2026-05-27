@@ -2,8 +2,8 @@
 title: 【Python】Numpy
 date: 2021-01-13 00:00:00+0000
 categories: 
--  nutrition
--  temple
+- nutrition
+- temple
 tags:
 - AI
 ---
@@ -42,8 +42,8 @@ arr[d1,d2,d3...]
 
 ## Slicing
 
-*  `[start:end]`.
-*  `[start:end:step]`
+* `[start:end]`.
+* `[start:end:step]`
 
 If we don't pass start its considered 0
 

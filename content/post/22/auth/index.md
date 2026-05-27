@@ -203,14 +203,14 @@ RePost from :
 
 它是一个很长的字符串，中间用点（`.`）分隔成三个部分
 
-* `Header`
+* **`Header`**
 
   通常包括两部分
 
   * typ：代表 Token 的类型，这里使用的是 JWT 类型；
   * alg：使用的 Hash 算法，例如 HMAC SHA256 或 RSA.
 
-* `Payload`
+* **`Payload`**
 
   包含一些声明 Claim (实体的描述，通常是一个 User 信息，还包括一些其他的元数据) ，用来存放实际需要传递的数据
 
@@ -226,7 +226,7 @@ RePost from :
 
   除了官方字段，还可以在这个部分定义私有字段
 
-* `Signature`
+* **`Signature`**
 
   Signature 部分是对前两部分的签名，**防止数据篡改**。
 
@@ -303,12 +303,12 @@ RePost from :
 **注意**
 
 - 如图中流程所示，我们发现 `CAS 认证服务` 在签发的 `授权令牌 ST` 后，直接重定向，这样其实是比较容易容易被窃取，那么我们需要在系统 A 或者系统 B 在向 CAS 验证成功 (如图中的第 14 步和第 11 步) 后，再生成另一个新的验证 Token 返回给客户端保存；
-- CAS 一般提供四个接口：
+- **CAS 一般提供四个接口**：
   - `/login`：登录接口，用于登录到中央授权服务
   - `/logout`：登出接口，用于从中央授权服务中登出
   - `/validate`：用于验证用户是否登录中央授权服务
   - `/serviceValidate`：用于让各个 Service 验证用户是否登录中央授权服务
-- CAS 生成的票据：
+- **CAS 生成的票据**：
   - **TGT（Ticket Grangting Ticket）** ：TGT 是 CAS 为用户签发的 `登录票据`，拥有了 TGT，用户就可以证明自己在 CAS 成功登录过。
   - **TGC：Ticket Granting Cookie：** CAS Server 生成TGT放入自己的 Session 中，而 TGC 就是这个 Session 的唯一标识（SessionId），以 Cookie 形式放到浏览器端，是 CAS Server 用来明确用户身份的凭证。
   - **ST（Service Ticket）** ：ST 是 CAS 为用户签发的访问某个 Service 的票据。

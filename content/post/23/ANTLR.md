@@ -2,7 +2,7 @@
 title: 【ANTLR】Basics
 date: 2023-04-13 00:00:00+0000
 categories: 
--  snow
+- snow
 ---
 
 ## **left recursive grammar**
@@ -175,8 +175,7 @@ operator:
 Alternatives are either **a list of rule elements or empty**. For example, here’s a rule with an empty alternative that makes the entire rule optional:
 
 ```
-superClass
- 	: 'extends' ID
+**superClass**：'extends' ID
  	| // empty
  	;
 ```
@@ -456,8 +455,7 @@ row[String[] columns]
 	if ($values!=null && $values.size()>0) {
 	System.out.println("values = "+$values);
 	}
-	}
-	: ...
+	**}**：...
 	;
 ```
 
@@ -711,8 +709,7 @@ block
 	/* List of symbols defined within this block */
 	locals [
 	List<String> symbols = new ArrayList<String>()
-	]
-	: '{' decl* stat+ '}'
+	**]**：'{' decl* stat+ '}'
 	// print out all symbols found in block
 	// $block::symbols evaluates to a List as defined in scope
 	{System.out.println("symbols="+$symbols);}
@@ -1052,8 +1049,7 @@ prog: vec5
  	| ...
  	;
 vec5
-locals [int i=1]
- 	: ( {$i<=5}? INT {$i++;} )* // match 5 INTs
+**locals [int i=1]**：( {$i<=5}? INT {$i++;} )* // match 5 INTs
  	;
 ```
 
@@ -1064,8 +1060,7 @@ For example, prediction for the optional branch of the else subrule in stat belo
 ```
 prog: stat+ ; // stat can follow stat
 stat
-locals [int i=0]
- 	: {$i==0}? 'if' expr 'then' stat {$i=5;} ('else' stat)?
+**locals [int i=0]**：{$i==0}? 'if' expr 'then' stat {$i=5;} ('else' stat)?
  	| 'break' ';'
  	;
 ```

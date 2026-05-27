@@ -2,8 +2,8 @@
 title: 【Web】Browser
 date: 2021-05-13 00:00:00+0000
 categories: 
--  nutrition
--  grass
+- nutrition
+- grass
 ---
 
 ## What is a web browser
@@ -33,9 +33,9 @@ Microsoft released its **Edge browser** in **2015** as part of the Windows 10 re
 
 - **User Interface**: This component allows **end-users** to interact with all visual elements available on the web page. The visual elements include the **address bar, home button, next button,** and all other elements that fetch and display the web page requested by the end-user.
 - **Browser Engine:** It is a **core component** of every web browser. The browser engine functions as an intermediary or a bridge between the user interface and the rendering engine. It queries and handles the rendering engine as per the inputs received from the user interface.
-- **Rendering Engine:** As the name suggests, this component is responsible for rendering a specific web page requested by the user on their screen. 
+- **Rendering Engine:** As the name suggests, this component is responsible for rendering a specific web page requested by the user on their screen.
 - **Networking:** This component is responsible for managing network calls using standard protocols like HTTP or FTP. It also looks after security issues associated with internet communication.
-- **JavaScript Interpreter**: As the name suggests, it is responsible for parsing and executing the JavaScript code embedded in a website. 
+- **JavaScript Interpreter**: As the name suggests, it is responsible for parsing and executing the JavaScript code embedded in a website.
 - **UI Backend:** This component uses the **user interface methods of** **the underlying operating system**. It is mainly used for drawing basic widgets (windows and combo boxes).
 - **Data Storage/Persistence:** It is a persistent layer. A web browser needs to store various types of data locally, for example, cookies. As a result, browsers must be compatible with data storage mechanisms such as WebSQL, IndexedDB, FileSystem, etc.
 
@@ -49,15 +49,15 @@ Microsoft released its **Edge browser** in **2015** as part of the Windows 10 re
 
 TCP (Transmission Control Protocol) uses a **three-way handshake** to set up a TCP/IP connection over an IP based network.
 
-* **SYN**chronize
+* **SYN**：chronize
 
 The host, generally the browser, sends a TCP SYNchronize packet to the server. 
 
-* **SYN**chronize-**ACK**nowledgement
+* **SYN**：chronize-**ACK**nowledgement
 
 The server receives the SYN and sends back a SYNchronize-ACKnowledgement. 
 
-* **ACK**nowledge 
+* **ACK**：nowledge
 
 The host receives the server's SYN-ACK and sends an ACKnowledge. The server receives ACK and the TCP socket connection is established.
 
@@ -103,17 +103,17 @@ Once the browser receives the first chunk of data, it can begin parsing the info
 
 It's important for web performance optimization to include everything the browser needs to **start rendering a page**, or at least a **template of the page** - the CSS and HTML needed for the first render -- in the **first 14 kilobytes**.
 
-* Building the DOM tree
+* **Building the DOM tree**
 
   The **first** step is processing the HTML markup and building the DOM tree. HTML parsing involves **tokenization** and **tree construction**. HTML tokens include start and end tags, as well as attribute names and values. If the document is well-formed, parsing it is straightforward and faster. The parser parses tokenized input into the document, building up the document tree.
 
   When the parser finds **non-blocking** resources, such as an image, the browser will request those resources and continue parsing. Parsing can continue when a **CSS file is encountered**, but `<script>` tags—particularly those without an async or defer attribute—**block rendering**, and pause the parsing of HTML. Though the browser's preload scanner hastens this process, excessive scripts can still be a significant bottleneck.
 
-  * Preload Scanner
+  * **Preload Scanner**
 
     While the browser builds the DOM tree, this process occupies **the main thread**. As this happens, the *preload scanner* will parse through the content available and request **high priority resources** like CSS, JavaScript, and web fonts. 
 
-* Building the CSSOM
+* **Building the CSSOM**
 
   The **second** step in the critical rendering path is processing CSS and building the CSSOM tree. The CSS object model is **similar** to the DOM. The DOM and CSSOM are both trees. They are independent data structures. The browser converts the CSS rules into a map of styles it can understand and work with. The browser goes through each rule set in the CSS, creating a tree of nodes with parent, child, and sibling relationships based on the CSS selectors.
 
@@ -121,7 +121,7 @@ It's important for web performance optimization to include everything the browse
 
   The CSSOM tree includes styles from the user agent style sheet. The browser begins with the most general rule applicable to a node and recursively refines the computed styles by applying more specific rules. In other words, it **cascades** the property values.
 
-* Other Processes
+* **Other Processes**
 
   * JavaScript Compilation
 
@@ -135,17 +135,17 @@ It's important for web performance optimization to include everything the browse
 
 Rendering steps include style, layout, paint and, in some cases, compositing. The CSSOM and DOM trees created in the parsing step are combined into a **render tree** which is then used to compute the layout of every visible element, which is then painted to the screen. In some cases, content can be promoted to their own layers and composited, improving performance by painting portions of the screen on the GPU instead of the CPU, freeing up the main thread.
 
-* Style
+* **Style**
 
   The **third** step in the critical rendering path is **combining the DOM and CSSOM into a render tree**. The computed style tree, or render tree, construction starts with the root of the DOM tree, traversing each visible node.
 
-  * tags that aren't going to be displayed are not included in the render tree 
-  * Nodes with `visibility: hidden` applied are included in the render tree, as they do take up space. 
+  * tags that aren't going to be displayed are not included in the render tree
+  * Nodes with `visibility: hidden` applied are included in the render tree, as they do take up space.
   * As we have not given any directives to override the user agent default, the **script node** will not be included in the render tree.
 
   Each visible node has its CSSOM rules applied to it. The render tree holds all the visible nodes with content and computed styles -- matching up all the relevant styles to every visible node in the DOM tree, and determining, based on the CSS cascade, what the computed styles are for each node.
 
-* Layout
+* **Layout**
 
   The **fourth step** in the critical rendering path is **running layout on the render tree to compute the geometry of each node.** 
 
@@ -153,7 +153,7 @@ Rendering steps include style, layout, paint and, in some cases, compositing. Th
 
   The btime the size and position of nodes are determined is called **layout**. **Subsequent** recalculations of node size and locations are called **reflows**. Suppose the initial layout occurs before the image is returned. If the size of a image is not declared, there will be a reflow once the image size is known.
 
-* Paint
+* **Paint**
 
   The **last** step in the critical rendering path is **painting the individual nodes to the screen**, the first occurrence of which is called the first meaningful paint.
 
@@ -166,7 +166,7 @@ Rendering steps include style, layout, paint and, in some cases, compositing. Th
   Painting can break the elements in the layout tree into layers. Promoting content into layers on the GPU (instead of the main thread on the CPU) improves paint and repaint performance. There are **specific properties and elements that instantiate a layer**, including <video> and <canvas>, and any element which has the CSS properties of opacity, a 3D transform, will-change, and a few others. These nodes will be painted onto their own layer, along with their descendants, unless a descendant necessitates its own layer for one (or more) of the above reasons.
 
 
-* Compositing
+* **Compositing**
 
   When sections of the document are drawn in different layers, overlapping each other, compositing is necessary to ensure they are drawn to the screen **in the right order** and the content is rendered correctly.
 

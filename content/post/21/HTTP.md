@@ -2,7 +2,7 @@
 title: 【HTTP】Basics
 date: 2021-05-14 00:00:00+0000
 categories: 
--  nutrition
+- nutrition
 ---
 
 ## HTTP
@@ -69,7 +69,7 @@ Proxies may perform numerous functions:
 When a client wants to communicate with a server, either the final server or an intermediate proxy, it performs the following steps:
 
 1. Open a **TCP connection**: The TCP connection is used to send a request, or several, and receive an answer. The client may open a new connection, reuse an existing connection, or open several TCP connections to the servers.
-2. Send an **HTTP message**: HTTP messages (before HTTP/2) are human-readable. With HTTP/2, these simple messages are encapsulated in frames, making them impossible to read directly, but the principle remains the same. 
+2. Send an **HTTP message**: HTTP messages (before HTTP/2) are human-readable. With HTTP/2, these simple messages are encapsulated in frames, making them impossible to read directly, but the principle remains the same.
 3. **Read the response** sent by the server
 4. **Close or reuse the connection** for further requests.
 
@@ -109,7 +109,7 @@ GET /index.html
 * **status codes** were added to identify the response
 * c**haracter set support** was introduced
 * multi-part types
-*  authorization
+* authorization
 * caching
 * content encoding and more
 

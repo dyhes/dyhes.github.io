@@ -52,15 +52,15 @@ setting state as history always Markov: $s_t=h_t$
 
 often include one or more of
 
-* Model 
+* **Model**
 
   representation of how  the world changes in response to agent's action
 
-* Policy
+* **Policy**
 
   function mapping agent's states to action
 
-* Value function
+* **Value function**
 
   future rewards from being in a state and/or action when following a particular policy
 
@@ -96,10 +96,10 @@ can be used to quantify goodness/badness of states and actions and decide how to
 
 ### Types of RL agents
 
-* Model-based
+* **Model-based**
   * Explicit: Model
   * May or may not have policy and/ or value function
-* Model-free
+* **Model-free**
   * Explicit: Value function and /or policy function
   * No model
 
@@ -111,7 +111,7 @@ can be used to quantify goodness/badness of states and actions and decide how to
 
 * $S$ is a (finite) set of states ($s\in S$)
 
-* $P$ is dynamics/transition model that specifies $p(s_{t+1}=s{'}|s_t=s)$ 
+* $P$ is dynamics/transition model that specifies $p(s_{t+1}=s{'}|s_t=s)$
 
 * no reward, no actions
 
@@ -130,7 +130,7 @@ can be used to quantify goodness/badness of states and actions and decide how to
 ### Markov Reward Process(MRP)
 
 * $S$ is a (finite) set of states ($s\in S$)
-* $P$ is dynamics/transition model that specifies $P(s_{t+1}=s{'}|s_t=s)$ 
+* $P$ is dynamics/transition model that specifies $P(s_{t+1}=s{'}|s_t=s)$
 * $R$ is a reward function $R(s_t=s)=E[r_t|s_t=s]$
 * Discount factor $\gamma\in [0,1]$
 * no actions
@@ -160,7 +160,7 @@ V(s) & = E[G_t|s_t=s] \\
 \end{split}
 $$
 
-* MRP value function satisfies
+* **MRP value function satisfies**
   $$
   V(s)=R(s)+\gamma\sum_{s^{'}\in S}P(s^{'}|s)V(s^{'})
   $$
@@ -179,7 +179,7 @@ $$
 
 * $S$ is a (finite) set of states ($s\in S$)
 * $A$ is a (finite) set of actions $a\in A$
-* $P$ is dynamics/transition model that specifies $P(s_{t+1}=s{'}|s_t=s，a_t=a)$ 
+* $P$ is dynamics/transition model that specifies $P(s_{t+1}=s{'}|s_t=s，a_t=a)$
 * $R$ is a reward function $R(s_t=s,a_t=a)=E[r_t|s_t=s,a_t=a]$
 * Discount factor $\gamma\in [0,1]$
 
@@ -246,7 +246,7 @@ take action a, then follow the policy $\pi$ later on
 
 * compute state-action value of a policy  $\pi_i$
 
-  * for $s$ in $S$ and $a$ in $A$:
+  * **for $s$ in $S$ and $a$ in $A$**:
     $$
     Q^{\pi_i}(s,a)=R(s,a)+\gamma\sum_{s^{'}\in S}P(s^{'}|s,a)V^{\pi_i}(s^{'})
     $$
@@ -274,7 +274,7 @@ iterate to consider longer and longer episodes
 
 * loop until finite horizon or convergence:
 
-  * for each state $s$
+  * **for each state $s$**
     $$
     V_{k+1}(s)=max_aR(s,a)+\gamma\sum_{s^{'}\in S}P^{\pi}(s^{'}|s)V^{\pi}(s^{'})
     $$
@@ -325,9 +325,9 @@ given dynamics model $p$ and reward model $r$, namely the model is known
 
 * initialize $V_0(s)=0$ all states $s$
 
-* for $k=1$ until convergence
+* **for $k=1$ until convergence**
 
-  * for all $s$ in $S$
+  * **for all $s$ in $S$**
 
     $V_{k}^{\pi}(s)=r(s,\pi(s))+\gamma\sum_{s^{'}\in S}P(s^{'}|s,\pi(s))V^{\pi}_{k-1}(s^{'})$
 
@@ -361,7 +361,7 @@ $$
 steps:
 
 * initialize $N(s)=0,G(s)=0\forall s\in S$
-* loop
+* **loop**
   * sample episode $i=s_{i,1},a_{i,1},r_{i,1},s_{i,2},a_{i,2},r_{i,2},...,s_{i,T_i},a_{i,T_i},r_{i,T_i}$
   * define $G_{i,t}=r_{i,t}+\gamma r_{i,t+1}+\gamma^2r_{i,t+2}+...\gamma^{T_i-1}r_{i,T_i}$ as return from  time step $t$ onwards in $ith$ episode
   * for each state $s$ visited in episode $i$
@@ -386,7 +386,7 @@ this estimator is biased but is consistent and often has better MSE
 
   * increment counter of total visits: $N(s)=N(s)+1$
 
-  * update estimate
+  * **update estimate**
     $$
     V^{\pi}(s)=V^{\pi}(s)\frac{N(s)-1}{N(s)}+\frac{G_{i,t}}{N(s)}=V^{\pi}(s)+\frac{1}{N(s)}(G_{i,t}-V^{\pi}(s))
     $$
@@ -423,25 +423,25 @@ $$
 TD learning  
 
 * Initialize $V^{\pi}(s)=0\forall s\in S$
-* loop
+* **loop**
   * sample tuple $(s_t,a_t,r_t,s_{t+1})$
   * $V^{\pi}(s_t)=V^{\pi}(s_t)+\alpha([r_t+\gamma V^{\pi}(s_{t+1})]-V^{\pi}(s_t))$
 
 ## Lecture 4 (model-free control)
 
-* on-policy learning
+* **on-policy learning**
   * direct experience
   * learn to estimate and evaluate a policy from experience obtained from following that policy
 
-* off-policy learning
+* **off-policy learning**
   * learn to estimate and evaluate a policy using experience gathered from following a different policy
 
 ### MC for On Policy Q Evaluation
 
 * initialize $N(s,a)=0,G(s,a)=0,Q^{\pi}(s,a)=0\,\forall s\in S,\forall a\in A$
-* loop
+* **loop**
   * using policy $\pi$ sample episode $i=s_{i,1},a_{i,1},r_{i,1},s_{i,2},a_{i,2},r_{i,2},...,s_{i,T_i},a_{i,T_i},r_{i,T_i}$
-  *  $G_{i,t}=r_{i,t}+\gamma r_{i,t+1}+\gamma^2r_{i,t+2}+...\gamma^{T_i-1}r_{i,T_i}$ 
+  * $G_{i,t}=r_{i,t}+\gamma r_{i,t+1}+\gamma^2r_{i,t+2}+...\gamma^{T_i-1}r_{i,T_i}$
   * for each state,action $(s,a)$ visited in episode $i$
     * for first or every time $t$ that state $(s,a)$ is visited in episode $i$
       * $N(s,a)=N(s,a)+1,G(s,a)=G(s,a)+G_{i,t}$
@@ -449,7 +449,7 @@ TD learning
 
 * given an estimate $Q^{\pi_i}(s,a)\forall s,a$
 
-* update new policy
+* **update new policy**
   $$
   \pi_{i+1}(s)=arg\,max_a\,Q^{\pi_i}(s,a)
   $$
@@ -482,13 +482,13 @@ $$
 
 * initialize $N(s,a)=0,G(s,a)=0,Q(s,a)=0\,\forall s\in S,\forall a\in A,set\,\epsilon=1,k=1$
 * $\pi_1= \epsilon-greedy(Q)$
-* loop
+* **loop**
   * sample $k-th$ episode $(s_{k,1},a_{k,1},r_{k,1},s_{k,2},a_{k,2},r_{k,2},...,s_{k,T},a_{k,T},r_{k,T})$
-  *  $G_{k,t}=r_{k,t}+\gamma r_{k,t+1}+\gamma^2r_{k,t+2}+...\gamma^{T-1}r_{k,T}$ 
-  * for $t=1,...,T$ do
+  * $G_{k,t}=r_{k,t}+\gamma r_{k,t+1}+\gamma^2r_{k,t+2}+...\gamma^{T-1}r_{k,T}$
+  * **for $t=1,...,T$ do**
     * if first(or every ) vistit  to  $(s,a)$ in episode $k$ then
       * $N(s,a)=N(s,a)+1$
-      *  $Q(s_t,a_t)=Q(s_t,a_t)+\frac{1}{N(s,a)}(G_{k,t}-Q(s_t,a_t))$
+      * $Q(s_t,a_t)=Q(s_t,a_t)+\frac{1}{N(s,a)}(G_{k,t}-Q(s_t,a_t))$
   * $k=k+1,\epsilon=\frac{1}{k}$
   * $\pi_k= \epsilon-greedy(Q)$
 
@@ -497,7 +497,7 @@ $$
 * set initial $\epsilon$-greedy policy $\pi$ randomly, $t$=0, initial state $s_t=s_0$
 * take $a_t\sim\pi(s_t)$ //sample action from policy
 * observe $(r_t,s_{t+1})$
-* loop
+* **loop**
   * take action $a_{t+1}\sim\pi(s_{t+1})$
   * observe $(r_{t+1},s_{t+2})$
   * $Q(s_t,a_t)=Q(s_t,a_t)+\alpha(r_t+\gamma Q(s_{t+1},a_{t+1})-Q(s_t,a_t))$
@@ -509,7 +509,7 @@ $$
 * initialize $Q(s,a)\,\forall s\in S,a\in A,t=0 $initial state $s_t=s_0$
 * set $\pi_b$ to be $\epsilon$-greedy w.r.t $Q$
 
-* loop
+* **loop**
   * take action $a_{t}\sim\pi_b(s_{t})$
   * observe $(r_{t},s_{t+1})$
   * $Q(s_t,a_t)=Q(s_t,a_t)+\alpha(r_t+\gamma max_aQ(s_{t+1},a)-Q(s_t,a_t))$
@@ -520,18 +520,16 @@ $$
 
 * initialize $Q_1(s,a)$ and $Q_2(s,a) \,\forall s\in S,a\in A,t=0 $ initial state $s_t=s_0$
 
-* loop
+* **loop**
 
   * select $a_t$ using $\epsilon$-greedy $\pi(s)=arg\,max_aQ_1(s_t,a)+Q_2(s_t,a)$
 
   * observe $(r_{t},s_{t+1})$
 
-  * if (with 0.5 probability then
-
+  * **if (with 0.5 probability then**
      $Q_1(s_t,a_t)=Q_1(s_t,a_t)+\alpha(r_t+\gamma max_aQ_1(s_{t+1},a)-Q_1(s_t,a_t))$
 
-  * else
-
+  * **else**
      $Q_2(s_t,a_t)=Q_2(s_t,a_t)+\alpha(r_t+\gamma max_aQ_2(s_{t+1},a)-Q_2(s_t,a_t))$
 
   * $t=t+1$
@@ -569,12 +567,12 @@ $$
   \hat{V}(s;w)=\sum_{j=1}^nx_j(s)w_j=x(s)^Tw
   $$
 
-* objective function is
+* **objective function is**
   $$
   J(w)=E_{\pi}[(V^{\pi}(s)-\hat{V}(s;w))^2]
   $$
 
-* recall weight update is
+* **recall weight update is**
   $$
   \Delta w=-\frac{1}{2}\alpha \nabla_wJ(w)
   $$
@@ -655,24 +653,24 @@ $$
   \end{pmatrix}
   $$
 
-* monte carlo
+* **monte carlo**
   $$
   \Delta w=\alpha (G_t-\hat{Q}(s,a;w))\nabla_w\hat{Q}^{\pi}(s,a;w)
   $$
 
-* SARSA
+* **SARSA**
   $$
   \Delta w=\alpha (r+\gamma\hat{Q}(s',a';w)-\hat{Q}(s,a;w))\nabla_w\hat{Q}^{\pi}(s,a;w)
   $$
 
-* Q_learning
+* **Q_learning**
   $$
   \Delta w=\alpha (r+\gamma\,max_{a'}\hat{Q}(s',a';w)-\hat{Q}(s,a;w))\nabla_w\hat{Q}^{\pi}(s,a;w)
   $$
 
 ## Lecture 6 (Deep Q Learning)
 
-* Linear VFA often work well given the right set of features 
+* Linear VFA often work well given the right set of features
 * But can require carefully hand designing that feature set
 * An alternative is to use a much richer function approximation class that is able to directly go from states without requiring an explicit specification of features
 
@@ -706,7 +704,7 @@ $$
 
 * $p_i$ for new tuples is set to 0
 
-* one method:
+* **one method**:
   $$
   P(i)=\frac{p_i^{\alpha}}{\sum_kp_k^{\alpha n}}
   $$
@@ -717,7 +715,7 @@ $$
 * use a different set of weights to compute target that is being updated
 * let parameters $w^-$ be the set of weights used in the target, and $``w$ be the weights that are being updated
 * slight change to computation of target value:
-  * sample $(s,a,r,s')\sim D$ 
+  * sample $(s,a,r,s')\sim D$
   * compute $r+\gamma\,max_{a'}\hat{Q}(s',a';w^-)$
   * update $\Delta w=\alpha (r+\gamma\,max_{a'}\hat{Q}(s',a';w^-)-\hat{Q}(s,a;w))\nabla_w\hat{Q}(s,a;w)$
 
@@ -741,20 +739,20 @@ $$
   * specifying a reward that would generate such behavior
   * specifying the desired policy directly
 
-* Input
+* **Input**
 
   * state space, action space
   * transition model $P(s'|s,a)$
   * No reward function $R$
   * set of one or more teacher's demonstrations $(s_0,a_0,s_1,...)$ (actions drawn from teacher's policy $\pi^*$ )
 
-* type
+* **type**
 
-  * Behavioral cloning
+  * **Behavioral cloning**
 
     directly learn the teacher's policy
 
-  * Inverse RL
+  * **Inverse RL**
 
     recover $R$
 
@@ -805,7 +803,7 @@ step
 
 * Initialize policy $\pi_0$
 
-* loop
+* **loop**
 
   * find a reward function such that the teacher maximally outperforms all previous controllers:
     $$
@@ -831,11 +829,11 @@ $$
 $$
 Goal is to find a policy $\pi$ with the highest value function $V^{\pi}$
 
-* Advantages
+* **Advantages**
   * better convergence properties
   * effective in high-dimensional or continuous action spaces
   * can learn stochastic policies
-* Disadvantages
+* **Disadvantages**
   * Typically converge to a local rather than global optimum
-  * Evaluating a policy is typically inefficient and 
+  * Evaluating a policy is typically inefficient and
 

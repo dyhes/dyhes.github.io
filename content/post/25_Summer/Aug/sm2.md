@@ -38,15 +38,13 @@ tags: [Cryptography]
 
 **验证方法：**
 
-1. 检查路径是否包含 JDK 标准子目录：
-
+1. **检查路径是否包含 JDK 标准子目录**：
    ```
    ls /opt/homebrew/opt/openjdk@17
    # 应包含 bin、lib、include、jmods 等目录
    ```
 
-2. 若路径错误，
-
+2. **若路径错误，**
    ```
    configure
    ```

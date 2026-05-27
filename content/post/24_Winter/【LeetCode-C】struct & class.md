@@ -88,18 +88,17 @@ class DerivedClass : BaseClass {
 
 
 ## **其他注意事项**
-1. **模板参数声明**  
+1. **模板参数声明**
    在模板中，`class`和`typename`可以互换，但`struct`不能替代它们：
    ```cpp
    template <class T>  // 合法
    template <struct T> // 非法！
    ```
 
-2. **兼容性**  
+2. **兼容性**
    C语言中的`struct`只能包含数据成员，而C++的`struct`可以包含成员函数、访问控制等，与`class`完全等价（除默认权限外）。
 
-3. **显式指定访问权限**  
-   无论用`struct`还是`class`，均可显式指定访问权限：
+3. **显式指定访问权限** 无论用`struct`还是`class`，均可显式指定访问权限：
    ```cpp
    struct MyStruct {
    private:  // 显式声明 private
@@ -118,6 +117,6 @@ class DerivedClass : BaseClass {
 | **代码风格** | 面向数据（无封装强制要求）        | 面向对象（强调封装性）           |
 
 **实际开发建议**：  
-- 优先用`class`表示需要封装和行为的对象。  
-- 用`struct`表示纯数据集合（如DTO、配置参数等）。  
+- 优先用`class`表示需要封装和行为的对象。
+- 用`struct`表示纯数据集合（如DTO、配置参数等）。
 - 无论用哪种，显式写明访问权限（`public`/`private`）和继承方式，避免依赖默认行为。

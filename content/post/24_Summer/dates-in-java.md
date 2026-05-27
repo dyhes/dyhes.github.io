@@ -192,6 +192,6 @@ It's often a good practice to store times as Instant and convert to appropriate 
 This ensures consistent storage and easier querying, while still allowing flexible display options.
 
 While Instant is great for many scenarios, there are cases where other types might be more appropriate: 
-* a) LocalDate: When you only need the date without time (e.g., birthDate, holidayDate). 
-* b) LocalDateTime: When you need date and time, but the time zone is implicit or unnecessary. 
+* a) LocalDate: When you only need the date without time (e.g., birthDate, holidayDate).
+* b) LocalDateTime: When you need date and time, but the time zone is implicit or unnecessary.
 * c) ZonedDateTime: When you need to **preserve** the specific time zone information.

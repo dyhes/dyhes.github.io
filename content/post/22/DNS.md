@@ -19,11 +19,11 @@ A uniform resource locator (URL), sometimes called a web address, contains the d
 
 There are two types of domain names.
 
-*  **generic** top-level domains (gTLDs) 
+* **generic** top-level domains (gTLDs)
 
 such as .com, .edu, .org, and .gov. Authority over these domains is usually delegated to private organizations.
 
-* **country-code** top-level domains (ccTLDs). 
+* **country-code** top-level domains (ccTLDs).
 
 Each country in the world has its own **2-letter code**. These domains are administered by authorities in each country. 
 
@@ -41,7 +41,7 @@ The domain name system is administered by the **Internet Corporation for Assigne
 
 ## DNS Server Type
 
-* **DNS recursor** ( **librarian** who is asked to go find a particular book somewhere in a library) 
+* **DNS recursor** ( **librarian** who is asked to go find a particular book somewhere in a library)
 
 The DNS recursor is a server designed to **receive queries from client machines through applications such as web browsers**. Typically the recursor is then responsible for **making additional requests** in order to satisfy the client’s DNS query.
 

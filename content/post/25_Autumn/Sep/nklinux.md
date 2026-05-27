@@ -30,16 +30,13 @@ tcpdump 的核心功能包括：
 
 ### 🛠️ 安装与基本使用
 
-1. **安装 tcpdump**
-
-   在许多 Linux 发行版中，可以使用包管理器安装：
+1. **安装 tcpdump** 在许多 Linux 发行版中，可以使用包管理器安装：
 
    - Debian/Ubuntu: `sudo apt install tcpdump`
    - RHEL/CentOS: `sudo yum install tcpdump`
    - macOS (使用 Homebrew): `brew install tcpdump`
 
 2. **基本命令格式**
-
    tcpdump 的基本命令格式为：`sudo tcpdump [选项] [过滤表达式]`
 
    常用选项包括：
@@ -74,31 +71,26 @@ tcpdump 的威力在于其灵活的过滤表达式：
 ### 💡 实用场景与示例
 
 1. **捕获特定主机的 ICMP 包 (如 Ping)**
-
    ```
    sudo tcpdump -i any -nn icmp and host 192.168.1.1
    ```
 
 2. **捕获 HTTP 流量并显示内容**
-
    ```
    sudo tcpdump -i any -A -s0 port 80
    ```
 
 3. **捕获特定端口的流量并保存到文件**
-
    ```
    sudo tcpdump -i eth0 -w web_traffic.pcap port 80 or port 443
    ```
 
 4. **从保存的文件中读取数据包**
-
    ```
    sudo tcpdump -r web_traffic.pcap
    ```
 
 5. **捕获 TCP 三次握手 (SYN, SYN-ACK, ACK)**
-
    ```
    sudo tcpdump -nn 'tcp[tcpflags] & (tcp-syn|tcp-ack) != 0'
    ```
@@ -174,16 +166,13 @@ ls -li original.txt hardlink.txt softlink.txt
 ### ⚙️ 底层原理与行为差异
 
 1. **inode 是关键**：
-
    inode 是文件系统的核心数据结构，记录文件的元数据（权限、大小、时间戳等）及数据块位置。**硬链接**通过共享同一 inode 实现，而**软链接**拥有独立 inode，仅存储路径信息。
 
 2. **删除行为的本质**：
-
    - 在 Linux 中，删除文件 (`rm`) 的实际行为是**减少其 inode 的链接计数**。只有当链接计数降为 0 时，文件的数据块才会被标记为可覆盖。
    - 因此，删除一个**硬链接**只是减少了一个计数，数据依然存在。而删除**软链接**指向的原始文件，数据可能被真正删除，导致软链接失效。
 
 3. **链接计数**：
-
    使用 `ls -l`看到的第二列数字就是硬链接的计数。新建普通文件的链接计数通常为 1，每创建一个硬链接，计数就会 +1。
 
 ------

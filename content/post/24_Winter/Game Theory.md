@@ -15,9 +15,7 @@ Game theory is a branch of mathematics that studies strategic interactions betwe
 
 3. **Payoffs**: The rewards or outcomes resulting from a combination of strategies.
 
-4. Games
-
-   : Defined by rules and can be:
+4. **Games**：Defined by rules and can be:
 
    - **Cooperative or Non-Cooperative**: Players may collaborate or act independently.
    - **Zero-Sum or Non-Zero-Sum**: In zero-sum games, one player's gain is another's loss. In non-zero-sum games, all players can gain or lose.

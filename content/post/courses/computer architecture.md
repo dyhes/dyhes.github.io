@@ -9,39 +9,39 @@ categories:
 
 ### definition
 
-* instruction set
+* **instruction set**
 
   The vocabulary of commands understood by a given architecture.
 
-* stored-program
+* **stored-program**
 
   The idea that  instructions and data of  many types can be stored  in memory as numbers,  leading to the stored-program computer.
 
-* word
+* **word**
 
   The natural unit  of access in a computer,  usually a group of 32 bits;  corresponds to the size  of a register in the MIPS  architecture
 
-* address
+* **address**
 
   A value used to delineate the location of  a specific data element  within a memory array
   
-* instruction format 
+* **instruction format**
 
   A form of representation  of an instruction  composed of fields of  binary numbers. 
 
-* machine  language 
+* **machine  language**
 
   Binary  representation used for communication within a computer system.
 
-* opcode 
+* **opcode**
 
   The field that  denotes the operation and  format of an instruction.
 
-* text segment
+* **text segment**
 
   The segment of a UNIX object  file that contains the machine language code for routines in the source  file
 
-* program counter  (PC) 
+* **program counter  (PC)**
 
   The register containing the address  of the instruction in the  program being executed
 
@@ -63,7 +63,7 @@ categories:
 
 * arithmetic
 
-* data transfer
+* **data transfer**
 
   a command that moves data between memory and registers
 
@@ -87,8 +87,8 @@ Unsign number are quite natural, but computer programs calculate both positive a
 
 ##### shortcomings
 
-* it’s  not obvious where to put the sign bit. 
-* adders for sign and magnitude may need an extra step to set  the sign because we can’t know in advance what the proper sign will be. 
+* it’s  not obvious where to put the sign bit.
+* adders for sign and magnitude may need an extra step to set  the sign because we can’t know in advance what the proper sign will be.
 * a  separate sign bit means that sign and magnitude has both a positive and a negative zero, which can lead to problems for inattentive programmers
 
 ####  two’s complement(补码)
@@ -107,13 +107,13 @@ $$
 $$
 Signed versus unsigned applies to loads as well as to arithmetic. 
 
-* Signed load
+* **Signed load**
 
   copy the sign repeatedly to fill the rest of the register—called sign extension
 
   its purpose is to place a correct representation of the number within that register
 
-* Unsigned load
+* **Unsigned load**
 
   simply fill with 0s to the left of the data
 
@@ -167,25 +167,25 @@ All MIPS instructions are 32 bits long, and can also be represented as fields of
 
 Here is the meaning of each name of the fields in MIPS instructions:
 
-* op
+* **op**
 
   Basic operation of the instruction, traditionally called the **opcode**
 
-* rs
+* **rs**
 
   The first register source operand
 
-* rt
+* **rt**
 
   The second register source operand
 
-* rd
+* **rd**
 
   The register destination operand. It gets the result of the operation
 
-* shamt: Shift amount. 
+* shamt: Shift amount.
 
-* funct: Function. 
+* **funct: Function.**
 
   This field, often called the **function code**, selects the specific  variant of the operation in the op field.
 

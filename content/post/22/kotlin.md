@@ -2,8 +2,8 @@
 title: 【Kotlin】Basics
 date: 2022-06-16 00:00:00+0000
 categories: 
--  nutrition
--  temple
+- nutrition
+- temple
 ---
 
  In Kotlin, code statements do not have to end with a semicolon (`;`)
@@ -52,7 +52,7 @@ The general rule for Kotlin variables are:
 
 Data types are divided into different groups:
 
-- Numbers
+- **Numbers**
 
   Number types are divided into two groups:
 
@@ -62,13 +62,13 @@ Data types are divided into different groups:
 
   To convert a numeric data type to another type, you must use one of the following functions: `toByte()`, `toShort()`, `toInt()`, `toLong()`, `toFloat()`, `toDouble()` or `toChar()`
 
-- Characters
+- **Characters**
 
   The `Char` data type is used to store a **single** character. A char value must be surrounded by **single** quotes
 
 - Booleans
 
-- Strings
+- **Strings**
 
   Instead of concatenation, you can also use "string templates", which is an easy way to add variables and expressions inside a string.
 
@@ -104,7 +104,7 @@ Data types are divided into different groups:
   println(result)
   ```
 
-- ```for...in```
+- **```for...in```**
 
   With the [`for` loop](https://www.w3schools.com/kotlin/kotlin_for_loop.php), you can also create **ranges** of values with "`..`":
 

@@ -19,23 +19,23 @@ Protocols define the format, order of messages sent and received among network e
 
 ### Access network
 
-* cable-based access
+* **cable-based access**
 
   frequency division multiplexing (FDM): different channels transmitted in different frequency bands
 
-* digital subscriber line (DSL)
+* **digital subscriber line (DSL)**
 
   use existing telephone line to central office DSLAM
 
   * data over DSL phone line goes to Internet
   * voice over DSL phone line goes to telephone net
 
-* wireless access
+* **wireless access**
 
   * Wireless local area networks
   * wide-area cellular access networks
 
-* enterprise networks
+* **enterprise networks**
 
   * companies, universities
 
@@ -51,33 +51,33 @@ host sending function:
 
   link transmission rate, aka link capacity, aka link bandwidth
 
-* packet transmission delay:
+* **packet transmission delay**:
 
   time needed to transmit L-bit packet into link $=\frac{L(bits)}{R(bits/sec)}$
 
 ### Physical media
 
-* guided media
+* **guided media**
 
   signals propagate in solid media: copper, fiber, coax
 
-  * Twisted pair (TP)
+  * **Twisted pair (TP)**
 
     two insulated copper wires
 
-  * Coaxial cable
+  * **Coaxial cable**
 
     two concentric copper conductors
 
-  * fiber optic cable
+  * **fiber optic cable**
 
     glass fiber carrying light pulses, each pulse a bit
 
-* unguided media
+* **unguided media**
 
   signals propagate freely: radio
 
-  * wireless radio
+  * **wireless radio**
 
     signal carried in various "bands" in electromagnetic spectrum
 
@@ -85,10 +85,10 @@ host sending function:
 
 #### two key functions
 
-* forwarding
+* **forwarding**
   * aka "switching"
   * local action: move arriving packet from router's input link to appropriate router output link
-* routing:
+* **routing**:
   * global action: determine source-destination paths taken by packets
 
 #### packet switching
@@ -97,11 +97,11 @@ hosts break application-layer messages into packets
 
 network forwards packets from one router to the next, across links on the path from source to destination
 
-* store-and-forwarding
+* **store-and-forwarding**
 
   entire packet must arrive at router before it can be transmitted on next link
 
-* queueing
+* **queueing**
 
   if arrival rate to link exceeds transmission rate of link for some period of time
 
@@ -120,13 +120,13 @@ end-end resources allocated to, reserved for "call" bewteen source and destinati
 
 * commonly used in traditional telephone networks
 
-* types
+* **types**
 
   * frequency division multiplexing (FDM)
 
     optical, electromagnetic frequencies divides into (narrow) frequency bands
 
-  * time division multiplexing (TDM)
+  * **time division multiplexing (TDM)**
 
     time divided into slots
 
@@ -175,53 +175,53 @@ propagation delay
 
  each layer implements a service
 
-* application
+* **application**
 
   supporting network applications
 
   HTTP,IMAP,SMTP,DNS
 
-* transport
+* **transport**
 
   process-process data transfer
 
   TCP,UDP
 
-* network
+* **network**
 
   routing of datagrams from source to destination
 
   IP, routing protocols
 
-* link
+* **link**
 
   data transfer bewteen neighboring network elements
 
   Ethernet, WiFi, PPP
 
-* physical
+* **physical**
 
   bits "on the wire"
 
 #### Services
 
-* application
+* **application**
 
   exchanges message M to implement some application service using services of transport layer
 
-* transport
+* **transport**
 
   transfers application-layer M from one process to another, using network layer services
 
   encapsulates application-layer M with transport layer header $H_t$ to create a transport-layer segment
 
-* network
+* **network**
 
   transfer transport-layer segment $[H_t,M]$ from one host to another, using link layer services
 
   encapsulates transport-later segment $[H_t,M]$ with network layer header $H_n$ to create a network-layer datagram
 
-* link
+* **link**
 
   transfer network-layer datagram $[H_n|H_t,M]$ from host to neighboring host, using physical layer services
 
@@ -243,20 +243,20 @@ propagation delay
 
 ### client-server paradigm
 
-* server
+* **server**
 
   * always-on host
   * permanent IP address
   * often in data centers, for scaling
 
-* clients
+* **clients**
 
   * contact, communicate with server
   * may be intermittently connected
   * may have dynamic IP addresses
   * do not communicate directly with each other
 
-* example
+* **example**
 
   HTTP, IMAP, FTP
 
@@ -280,7 +280,7 @@ process: program running within a host
 ### sockets
 
 * process sends/receives messages to/from its socket
-* socket analogous to door
+* **socket analogous to door**
   * sending process shoves message out door
   * sending process relies on transport infrastructure on other side of door to deliver message to socket at receiving process
 
@@ -292,52 +292,52 @@ to receive messages, process must have identifier which includes both IP address
 
 An application-layer protocol defines:
 
-* types of messages exchanged
+* **types of messages exchanged**
 
   e.g. request, response
 
-* message syntax
+* **message syntax**
 
   what fields in messages & how fields are delineated
 
-* message semantics
+* **message semantics**
 
   meaning of information in fields
 
-* rules
+* **rules**
 
   for when and how send & respond to messages
 
 type of protocol
 
-* open protocols
+* **open protocols**
   * defined in RFCs, everyone has access to protocol definition
   * allows for interoperability
   * e.g. HHTP,SMTP
-* proprietary protocols
+* **proprietary protocols**
   * e.g. Skype, Zoom
 
 ### Internet transport protocols services
 
-* TCP  service
+* **TCP  service**
 
   * reliable transport
 
-  * flow conrtol
+  * **flow conrtol**
 
     sender won't overwhelm receiver
 
-  * congestion control
+  * **congestion control**
 
     throttle sender when network overloaded
 
-  * connection-oriented
+  * **connection-oriented**
 
     setup required between client and server processes
 
   * does not provide: timing, minimum throughput guarantee, security
 
-* UDP service
+* **UDP service**
 
   * unreliable transfer
 
@@ -347,7 +347,7 @@ hypertext transfer protocol (application-layer)
 
 "stateless": server maintains no information about past client requests
 
-* non persistent
+* **non persistent**
 
   * tcp connection opened
   * at most one object sent over tcp connection
@@ -355,7 +355,7 @@ hypertext transfer protocol (application-layer)
 
   downloading multiple objects required multiple connections
 
-* persistent (HTTP1.1)
+* **persistent (HTTP1.1)**
 
   * tcp connection opened
   * multiple objects can be sent over single tcp connection
@@ -398,19 +398,19 @@ services:
 
 * hostname-to-IP-address translation
 
-* host aliasing
+* **host aliasing**
 
   canonical, alias names
 
 * mail server aliasing
 
-* load distribution
+* **load distribution**
 
   replicated Web servers: many IP addresses correspond to one name
 
 #### Hierarchy
 
-* root
+* **root**
 
   official, contact-of-last-resort by name servers that can not resolve name
 
@@ -429,11 +429,11 @@ when host makes DNS query, it is sent to its local DNS server
 
 ### DNS name resolution
 
-* iterated query
+* **iterated query**
 
   ![image-20221008221149895](https://i.ibb.co/ByZm2Sf/image-20221008221149895.png)
 
-* recursive query
+* **recursive query**
 
   puts burden of name resolution on contacted name server
 
@@ -454,19 +454,19 @@ resource records(RR) format: (name, value, type, ttl)
 
 #### Type
 
-* A
+* **A**
 
   name is host
 
   value is IP address
 
-* NS
+* **NS**
 
   name is domain (e.g. foo.com) 
 
   value is hostname of authoritative name server for this domain
 
-* CNAME
+* **CNAME**
 
   name is alias name for some "canonnical" (the real) name
 
@@ -478,15 +478,15 @@ resource records(RR) format: (name, value, type, ttl)
 
 DNS query and reply messages, both have same format
 
-* message header
+* **message header**
 
-  * identification
+  * **identification**
 
     16 bit ## for query
 
     reply to query uses same #
 
-  * flags
+  * **flags**
 
     * query or reply
     * recursion desired
@@ -511,11 +511,11 @@ P2P file distribution
 
 participant
 
-* tracker
+* **tracker**
 
   tracks peers participating in torrent
 
-* torrent
+* **torrent**
 
   group of peers exchanging chunks of a file
 
@@ -523,17 +523,17 @@ participant
 
 stream video traffic: major consumer of Internet bandwidth
 
-* video
+* **video**
 
   sequence of images displayed at constant rate
 
-* digital image
+* **digital image**
 
   array of pixels
 
   each pixel represented by bits
 
-* coding
+* **coding**
 
   use redundancy within and between images to decrease ## bits used to encode image
 
@@ -542,15 +542,15 @@ stream video traffic: major consumer of Internet bandwidth
 
   two type of video encoding method
 
-  * CBR: (constant bit rate)
+  * **CBR: (constant bit rate)**
 
     video encoding rate fixed
 
-  * VBR: (variable bit rate)
+  * **VBR: (variable bit rate)**
 
     video encoding rate changes as amout of spatial, temporal encoding changes
 
-* streaming
+* **streaming**
 
   client playout early part of video, while server still sending later part of video
 
@@ -582,11 +582,11 @@ Dynamic, Adaptive Streaming over HTTP
 
 store/serve multiple copies of videos at multiple geographically distributed sites
 
-* enter deep
+* **enter deep**
 
   push CDN servers deep into many access networks
 
-* bring home
+* **bring home**
 
   smaller number of larger clusters in POPs near access nets
 
@@ -623,12 +623,12 @@ analogy
 
 ### Actions
 
-* Sender:
+* **Sender**:
   * is passed an application-layer message
   * determines segment header fields values
   * creates segment
   * passes segment to IP
-* Receiver
+* **Receiver**
   * receives segment from IP
   * checks header values
   * extracts application-layer message
@@ -641,10 +641,10 @@ analogy
   * congestion control
   * flow control
   * connection setup
-* UDP: user datagram protocol
+* **UDP: user datagram protocol**
   * unreliable, unordered delivery
   * no-frills extension of "best-effort" IP
-* Services not available:
+* **Services not available**:
   * delay guarantees
   * bandwidth guarantees
 
@@ -654,7 +654,7 @@ analogy
 
 use header info to deliver received segments to correct socket
 
-* host receives IP datagrams
+* **host receives IP datagrams**
 
   * each datagram has source IP address, destination IP address
   * each datagram carries one transport-layer segement
@@ -678,8 +678,8 @@ tcp socket identified by 4-tuple:
 * "no frills","bare bones" Internet transport protocol
 * "best effort" service, UDP segments may be：
   * lost
-  * delivered out-of-order to app 
-* connectionless
+  * delivered out-of-order to app
+* **connectionless**
   * no handshaking
   * each UDP segment handled independently
 
@@ -697,11 +697,11 @@ tcp socket identified by 4-tuple:
 
 goal: detect errors in transmitted segment
 
-* sender
+* **sender**
   * treat contents of UDP segment( including UDP header fields and IP addresses) as sequence of 16-bit integers
   * checksum: addition (one's complement sum) of segment content
   * put checksum value into UDP checksum field
-* receiver
+* **receiver**
   * compute checksum
   * check if equals
 
@@ -715,13 +715,13 @@ goal: detect errors in transmitted segment
 
 ![image-20221022211547831](https://i.ibb.co/ggsLWs5/image-20221022211547831.png)
 
-* sequence number
+* **sequence number**
 
   indicate the byte stream number of the first byte in segment payload
 
   count of bytes( not segments)
 
-* Acknowledgement number
+* **Acknowledgement number**
 
   used by receiver to tell sender the sequence number of the next byte that's expected to be received from the sender
 
@@ -731,11 +731,11 @@ goal: detect errors in transmitted segment
 
 multiple senders/receivers
 
-* end-end congestion control
+* **end-end congestion control**
   * no explicit feedback from network
   * congestion inferred from observed loss, delay
   * approch taken by TCP
-*  network-assisted congestion control
+* network-assisted congestion control
   * routers provides direct feedback to sending/receiving hosts with flows passing through congested router
   * may indicate congestion level or explicitly set sending rate
 
@@ -747,11 +747,11 @@ multiple senders/receivers
 
 senders can increase sending rate until packet loss (congestion) occurs, then decrease sending rate on loss event
 
-* Additive Increase
+* **Additive Increase**
 
   increase sending rate by 1 maximum segment size every RTT until loss detected
 
-* Multiplicative Decrease
+* **Multiplicative Decrease**
 
   cut sending rate in half at each loss event
 
@@ -771,11 +771,11 @@ one sender one receiver
 
 transport segment from sending to receiving host
 
-* sender
+* **sender**
 
   encapsulates segments into datagrams, passes to link layer
 
-* receiver
+* **receiver**
 
   delivers segments to transport layer protocol
 
@@ -788,11 +788,11 @@ routers
 
 ### Two key function
 
-* forwarding
+* **forwarding**
 
   move packets from a router's input link to appropriate router output link
 
-* routing
+* **routing**
 
   determine route taken by packets from source to destination
 
@@ -823,19 +823,15 @@ when looking for forwarding table entry for given destination address, use longe
 
 ##### type
 
-* via memory
-
-  first generation routers:
+* **via memory** first generation routers:
 
   * traditional computers with switching under direct control of CPU
 
-* via bus
+* **via bus**
 
   datagram from input port memory to output port memory via a shared bus
 
-* via interconnection network
-
-  can exploiting parallelism:
+* **via interconnection network** can exploiting parallelism:
 
   * fragment datagram into fixed length cells on entry
   * switch cells through the fabric, reassemble datagram at exit
@@ -876,11 +872,11 @@ when looking for forwarding table entry for given destination address, use longe
 
 #### address
 
-* ip address
+* **ip address**
 
   32-bit identifier associated with each host or router interface
 
-* interface
+* **interface**
 
   connection between host/router and physical link
 
@@ -891,10 +887,10 @@ when looking for forwarding table entry for given destination address, use longe
 
   blue are are link layer detail
 
-* subnet part
+* **subnet part**
   devices in same subnet have common high order bits
 
-* host part
+* **host part**
 
   remaining low order bits
 
@@ -932,21 +928,21 @@ host dynamically obtains IP address from network server when it
 
 steps
 
-* DHCP discover (optional)
+* **DHCP discover (optional)**
 
   hsot broadcasts DHCP discover msg
 
-* DHCP offer (optional)
+* **DHCP offer (optional)**
 
   DHCP server responds with DHCP offer msg
 
 * above two steps can be skipped if a client remembers and wishes to reuse a previously allocated network address
 
-* DHCP request
+* **DHCP request**
 
   host requests IP address with DHCP request msg
 
-* DHCP ack
+* **DHCP ack**
 
   DHCP server sends address: DHCP ack msg
 
@@ -976,12 +972,12 @@ all devices in local network share just one IPv4 address as far as outside world
 ![image-20221023174747031](https://i.ibb.co/KrpxXkS/image-20221023174747031.png)
 
 * all devices in local network have 32-bit address in a "private" IP address space (10/8,172.16/12,192.168/16 prefixes) that can only be used in local network
-* advantages:
+* **advantages**:
   * just one IP address needed form provider ISP for all devices
   * can change addresses of host in local network without notifying outside world
   * can change ISP without changing addresses of devices in local network
   * security: devices inside local net not directly addressable, visible by outside world
-* implimentation
+* **implimentation**
   * outgoing datagrams replacement
   * translation pair remembrance
   * incoming datagrams replacement
@@ -1026,11 +1022,11 @@ pers1
 
 * global: all routers have complete topology, link cost info
 
-  * "link state" algorithm
+  * **"link state" algorithm**
 
     e.g. Dijkstra
 
-*  decentralized: iterative process of computation, exchange of info with neighbors
+* decentralized: iterative process of computation, exchange of info with neighbors
 
   * router initially only know link costs to attached neighbors
   * "distance vector" algorithms
@@ -1049,7 +1045,7 @@ aggregate routers into regions known as "autonomous systems"(AS) (a.k.a "domains
 
 routing among routers within same AS ("netwrok")
 
-*  all routers in AS must run same intra-domain protocol
+* all routers in AS must run same intra-domain protocol
 * routers in different AS can run different intra-domain routing protocols
 * gateway router: at "edge" of its own AS, has link(s) to router(s) in other AS'es
 
@@ -1068,7 +1064,7 @@ routing among AS'es
 BGP( Border Gateway Protocol): the de facto inter-domain routing protocol
 
 * allows subnet to advertise its exsistence, and the destinations it can reach, to rest of Internet
-* BGP provides each AS a means to:
+* **BGP provides each AS a means to**:
   * obtain destination network reachability info from neighboring ASes (eBGP)
   * determine routes to other networks based on reachability infomation and policy
   * propagate reachability information to all AS-internal routers (iBGP)
@@ -1081,7 +1077,7 @@ internet control message protocol
 * used by hosts and routers to communicate network-level information
   * error reporting: unreachable host, network, port, protocol
   * echo request/reply (used by ping)
-* network layer "above" IP:
+* **network layer "above" IP**:
   * ICMP messages carried in IP datagrams, protocol number: 1
 * ICMP message: type, code plus header and first 8 bytes of IP datagram causing error
 
@@ -1091,18 +1087,18 @@ internet control message protocol
 
 ### Terminology
 
-* nodes
+* **nodes**
 
   hosts, routers
 
-* links
+* **links**
 
   communication channels that directly connect physically adjacent nodes
 
   * wired, wireless
   * LANs
 
-* frame
+* **frame**
 
   layer-2 packet encapsulates datagram
 
@@ -1115,19 +1111,19 @@ internet control message protocol
 
 ### Services
 
-* framing, link access
+* **framing, link access**
   * encapsulate datagram into frame,  adding header, trailer
   * channel access if shared medium
   * "MAC" accesses in frame headers identify source, destination
 * reliable delivery between adjacent nodes
-* flow control
+* **flow control**
   * pacing between adjacent sending and receiving nodes
-* error detection
+* **error detection**
   * error caused by signal attenuation, noise
   * receiver detects errors, signals retranssmision, or drop frame
-* error correction
+* **error correction**
   * receiver identifies and corrects bit error(s) without retransmission
-* half-duplex and full-duplex
+* **half-duplex and full-duplex**
   * with half duplex, nodes at both ends of link can transmit, but not at same time
 
 ### implementation
@@ -1141,14 +1137,14 @@ internet control message protocol
 
 ### MAC addresses
 
-* used "locally" to get frame from one interface to another physically connected interface 
+* used "locally" to get frame from one interface to another physically connected interface
 * 48-bits MAC address burned in NIC ROM ,also sometimes software settable
 * MAC address allocation administered by IEEEE
 * manufacturer buys portion of MAC address space (to assure uniqueness)
-* analogy
+* **analogy**
   * MAC address: like social security number
   * IP address: like postal address
-* MAC flat address: portability
+* **MAC flat address: portability**
   * can move interface from one LAN to  another
   * recall IP address not portable: depends on IP subnet to which node is attac
 
@@ -1159,7 +1155,7 @@ each interface on LAN
 
 ### Multiple access links
 
-* point to point
+* **point to point**
   * point-to-point link between Ethernet switch, host
   * PPP for dial-up access
 * broadcast( shared wire or medium)
@@ -1181,12 +1177,12 @@ why
 
 #### taxonomy
 
-* taking turns
+* **taking turns**
   * nodes take turns, but nodes with more to send can take longer turns
-* random access
+* **random access**
   * channel not divided, allow collisions
   * "recover" from collisions
-* channel partitioning
+* **channel partitioning**
   * divide channel into smaller "pieces" (time slots, frequency, code)
   * allocate piece to node for exclusive use
 
@@ -1214,15 +1210,15 @@ frequency division multiple access
 
 #### Random access
 
-* when node has packet to send
+* **when node has packet to send**
   * transmit at full channel data rate R
   * no a priori coordination among nodes
 * two+ sending nodes: "collision"
-* random access protocol specifies:
+* **random access protocol specifies**:
   * when to send
   * how to detect collisions
   * how to recover from collisions (e.g., via delayed retransmissions)
-* examples
+* **examples**
   * ALOHA
   * CSMA, CSMA/CD, CSMA/CA
 
@@ -1232,7 +1228,7 @@ frequency division multiple access
 
 * use randomization in choosing when to retransmit
 
-* setting
+* **setting**
 
   * all frames same size
   * time divided into equal size slots (time to transmit 1 frame)
@@ -1240,19 +1236,19 @@ frequency division multiple access
   * nodes begin transmissions (if any) at slot start times
   * if 2 or more nodes transmit in slot, collision detected by sender
 
-* operation
+* **operation**
 
   * when node has new frame to send, transmit in next slot
     * if no collision: success
     * if collision: node retransmits frame in each subsequent slot with probability p until success
 
-* Pros
+* **Pros**
 
   * single active node can continuously transmit at full rate of channel
   * highly decentralized: only slots in nodes need to be in sync
   * simple
 
-* Cons
+* **Cons**
 
   * synchronization
   * collision, "wasting" slots
@@ -1268,14 +1264,14 @@ frequency division multiple access
 
 carrier sense multiple access
 
-* sinle CSMA
+* **sinle CSMA**
 
   listen before transmit
 
   * if channel sensed idel: transmit entire frame
   * if channel sensed busy: defer transmission
 
-* CSMA/CD
+* **CSMA/CD**
 
   CSMA with collision detection
 
@@ -1287,11 +1283,11 @@ carrier sense multiple access
 
   * reduces the amount of time wasted in collisions
 
-  * algorithm
+  * **algorithm**
 
     * Ethernet receives datagram form network layer, creates frame
 
-    * if Ethernet senses channel:
+    * **if Ethernet senses channel**:
 
       if idle: start frame transmission
 
@@ -1352,10 +1348,10 @@ ARP table: each IP node (host, router) on LAN has table
 
 #### topology
 
-* bus
+* **bus**
   * popular through mid 90s
   * all nodes ihn same collision domain (can collide with each other)
-* switched
+* **switched**
   * prevails today
   * active link-layer 2 switch in center
   * each "spoke" run a (seperate) Ethernet protocol (nodes do not collide with each other)
@@ -1368,24 +1364,24 @@ sending interface encapsulates IP datagram (or other network layer protocol pack
 
 ![image-20221025161546416](https://i.ibb.co/16gt5tG/image-20221025161546416.png)
 
-* preamble
+* **preamble**
   * used to synchronize receiver, sender clock rates
   * 7 bytes of 10101010 followed by one byte of 10101011
 
-* dest. source address
+* **dest. source address**
 
   6 byte mac address
 
   * if adapter receives frame with matching destination address, or with broadcast address (e.g., ARP packet), it passes data in frame to network layer protocol
   * otherwise, adapter discards frame
 
-* type
+* **type**
 
   * indicates higher layer protocol
   * mostly IP but others possible e.g., Novell IPX, AppleTalk
   * used to demultiplex up at receiver
 
-* CRC
+* **CRC**
 
   cyclic redundancy check at receiver
 
@@ -1421,11 +1417,11 @@ link-layer device: take an active role
 
 * examine incoming frame's MAC address, selectively forward frame to one-or-more outgoing links when frame is to be forwarded on segment, uses CSMA/CD to access segment
 
-* transparent
+* **transparent**
 
   hosts unaware of presence of switches
 
-* plug-and-play, self-learning
+* **plug-and-play, self-learning**
   don't need to be configured
 
 #### multiple simultaneous transmissions
@@ -1440,7 +1436,7 @@ link-layer device: take an active role
 
 * map host and mac address by link and source address in frame
 
-* frame destination location known
+* **frame destination location known**
 
   selectively send
 
@@ -1452,7 +1448,7 @@ link-layer device: take an active role
 
 motivation
 
-* single broadcast domain
+* **single broadcast domain**
   * scaling
   * efficiency, security, privacy, efficiency issues
 * administrative issues

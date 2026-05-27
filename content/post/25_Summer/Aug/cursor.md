@@ -9,7 +9,7 @@ tags: [AI]
 
 * Java Extension Pack
 * Spring Boot Extension Pack
-* One Dark Pro + Material Icon Theme 
+* One Dark Pro + Material Icon Theme
 * setting.json(cmd + ,)
 
 ```java
@@ -51,21 +51,11 @@ tags: [AI]
 
 - **所属插件**：`java` 或 `java-library`（通过 `apply plugin: 'java'` 启用）。
 
-- 
-
-  任务依赖链
-
-  ：
-
+- **任务依赖链**：
   - `compileJava` 依赖于 `processResources`（处理资源文件）。
   - 执行前会先完成依赖项解析和资源处理。
 
-- 
-
-  输入/输出
-
-  ：
-
+- **输入/输出**：
   - **输入**：`src/main/java` 目录下的 `.java` 文件、依赖库（`classpath`）。
   - **输出**：编译后的 `.class` 文件存放于 `build/classes/java/main` 目录。
 
@@ -74,20 +64,17 @@ tags: [AI]
 ### ⚙️ **2. 核心执行步骤**
 
 1. **检查源码变更**
-
    - 使用增量编译机制，仅重新编译修改过的文件（需配置 `options.incremental = true`）。
    - 未修改的文件跳过编译（标记为 `UP-TO-DATE`）。
 
 2. **解析依赖与类路径**
-
    - 从 `build.gradle` 中的 `dependencies` 块获取依赖库（如 `implementation 'com.google.guava:guava:31.1-jre'`）。
    - 生成完整的类路径（`classpath`）供编译器使用。
 
 3. **调用 Java 编译器（javac）**
-
    - 使用 JDK 中的 `javac` 工具编译源码。
 
-   - 编译参数通过
+   - **编译参数通过**
 
       
 
@@ -108,7 +95,6 @@ tags: [AI]
      ```
 
 4. **生成字节码文件**
-
    - 将 `.java` 文件编译为 `.class` 文件，按包结构输出到 `build/classes/java/main`。
 
 ------
@@ -139,12 +125,7 @@ tags: [AI]
 
 - **原因**：语法错误、依赖缺失或版本冲突。
 
-- 
-
-  解决
-
-  ：
-
+- **解决**：
   - 查看控制台错误日志定位问题。
   - 运行 `gradle compileJava --info` 获取详细编译信息。
 

@@ -83,13 +83,13 @@ When the work is complete, a branch can be merged with the main project.
 
 You can even switch between branches and work on different projects without them interfering with each other.
 
-* new branch
+* **new branch**
 
   ```bash
   git branch branch-name
   ```
 
-* list branch
+* **list branch**
 
   ```bash
   git branch
@@ -99,13 +99,13 @@ You can even switch between branches and work on different projects without them
   git branch -r (only remote)
   ```
 
-* delete branch
+* **delete branch**
 
   ```bash
   git branch -d branch-name
   ```
 
-* switch to branch
+* **switch to branch**
 
   ```bash
   git checkout branch-name
@@ -113,7 +113,7 @@ You can even switch between branches and work on different projects without them
 
   **Note:** Using the `-b` option on `checkout` will create a new branch, and move to it, if it does not exist.
 
-* merge branch
+* **merge branch**
 
   `git merge another-branch`
 
@@ -194,13 +194,13 @@ Git will not track files and folders specified in `.gitignore`. However, the `.g
 
 ## Github
 
-* add origin
+* **add origin**
 
   ```bash
   git remote add ori(or anything you like) URL
   ```
 
-* update local
+* **update local**
 
   When working as a team on a project, it is important that everyone stays up to date.
 
@@ -226,7 +226,7 @@ Git will not track files and folders specified in `.gitignore`. However, the `.g
   git pull ori remote-b:local-b
   ```
 
-* update remote
+* **update remote**
 
   ```bash
   git push ori
@@ -243,7 +243,7 @@ Git will not track files and folders specified in `.gitignore`. However, the `.g
   git init
   ```
 
-* status
+* **status**
 
   ```bash
   git status
@@ -269,7 +269,7 @@ Git will not track files and folders specified in `.gitignore`. However, the `.g
   - M - Modified files
   - D - Deleted files
 
-* add
+* **add**
 
   ```bash
   git add filename/--all
@@ -277,7 +277,7 @@ Git will not track files and folders specified in `.gitignore`. However, the `.g
 
   Using `--all` instead of individual filenames will `stage` all changes (new, modified, and deleted) files. The shorthand command for `git add --all` is `git add -A`
 
-* commit
+* **commit**
 
   ```bash
   git commit -m "First release of Hello World!"
@@ -285,7 +285,7 @@ Git will not track files and folders specified in `.gitignore`. However, the `.g
   git commit -a -m "Updated index.html with a new line"
   ```
 
-* log
+* **log**
 
   ```bash
   git log

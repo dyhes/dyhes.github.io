@@ -21,9 +21,11 @@ title: About
 
 I am a cs student pursuing a master's degree, and I'm currently working as a back-end developer.
 
-I worked as a web developer intern for [@Baidu](https://github.com/baidu) from Nov 2023 to Oct 2024.
+I worked as a front-end web developer intern for [@Baidu](https://github.com/baidu) from Nov 2023 to Oct 2024.
 
-I worked as a web developer intern for [@Shopee](https://shopee.com/) from Jul 2025 to Now.
+I worked as a back-end web developer intern for [@Shopee](https://shopee.com/) from Jul 2025 to Nov 2025.
+
+I am working as a back-end web developer intern for [@Bytedance](https://bytedance.com/) from Nov 2025 to Now.
 
 ## CATEGORIES 释义
 

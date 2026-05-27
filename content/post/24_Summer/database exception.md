@@ -9,5 +9,7 @@ tags:
 ---
 ## EmptyResultDataAccessException
 ### deleteById(ID id)
-* Using deleteById(ID id) with @Transactional: If the method is annotated with @Transactional, it might throw an EmptyResultDataAccessException if the entity doesn’t exist.
-* Using deleteById(ID id): This method doesn’t throw an exception if the entity doesn’t exist. It **silently does nothing**.
+* Using deleteById(ID id) with @Transactional:
+If the method is annotated with @Transactional, it might throw an EmptyResultDataAccessException if the entity doesn’t exist.
+* Using deleteById(ID id):
+This method doesn’t throw an exception if the entity doesn’t exist. It **silently does nothing**.

@@ -130,15 +130,12 @@ cu.findAll(MethodDeclaration.class).forEach(method -> {
 #### **步骤说明**
 
 1. **定义注解访问者类**
-
    继承`VoidVisitorAdapter`，重写`visit`方法处理特定节点（如类声明）的注解检查。
 
 2. **解耦遍历与操作**
-
    将注解检查逻辑封装在访问者内部，避免在`main`方法中混合遍历与业务逻辑。
 
 3. **优化遍历过程**
-
    通过访问者模式自动递归遍历AST，无需手动调用`findAll`。
 
 #### **重构代码**
@@ -184,16 +181,13 @@ public class AnnotationParser {
 #### **优势场景**
 
 1. **复杂操作优化**
-
    - 当需对AST进行**多种操作**（如同时检查注解、统计方法数）时，访问者模式避免重复遍历，效率更高。
    - 例如：在单次遍历中，多个访问者可协同处理不同任务（通过`CompositeVisitor`组合）。
 
 2. **局部遍历控制**
-
    访问者可跳过无关节点（如忽略方法内部代码），减少不必要的子树解析。
 
 3. **缓存优化**
-
    JavaParser内置的访问者实现（如`VoidVisitorAdapter`）已优化遍历算法，减少AST解析开销。
 
 #### **潜在开销**
@@ -539,9 +533,7 @@ composite.addVisitor(new GetMappingVisitorImpl(context));
 
 ### 🚀 **三、扩展优化建议**
 
-1. **并行处理**
-
-   对独立类声明启用多线程检查（线程安全前提下）：
+1. **并行处理** 对独立类声明启用多线程检查（线程安全前提下）：
 
    ```
    cu.findAll(ClassOrInterfaceDeclaration.class).parallelStream()
@@ -550,9 +542,7 @@ composite.addVisitor(new GetMappingVisitorImpl(context));
 
    **适用场景**：超大型项目（类数量 > 1000）。
 
-2. **增量解析**
-
-   仅解析含注解的节点（需结合符号解析）：
+2. **增量解析** 仅解析含注解的节点（需结合符号解析）：
 
    ```
    cu.getTypes().stream()
@@ -562,9 +552,7 @@ composite.addVisitor(new GetMappingVisitorImpl(context));
 
    **优势**：跳过无注解节点，减少 AST 遍历深度。
 
-3. **缓存机制**
-
-   复用已解析的 AST 结构：
+3. **缓存机制** 复用已解析的 AST 结构：
 
    ```
    // 全局缓存 CompilationUnit
@@ -586,7 +574,6 @@ composite.addVisitor(new GetMappingVisitorImpl(context));
 2. **按需分派** → 避免对非目标访问者触发空操作；
 
 3. **共享上下文** → 统一管理检查结果。
-
    针对超大规模代码，可结合 **并行处理**、**增量解析** 和 **AST缓存** 进一步优化性能。此方案适用于静态分析工具、API 路由扫描等场景，兼顾效率与扩展性。
 
 

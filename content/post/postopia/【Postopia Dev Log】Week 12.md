@@ -15,9 +15,9 @@ todo:
 later:
 * 用户行为跟踪，日志分析
 * 语义搜索
-* 推送
+* **推送**
   * AI 喜好分析
-* 性能 optimize
+* **性能 optimize**
   * search after 改造
   * hgetall pipeline优化
 
@@ -193,8 +193,8 @@ public void triggerAsyncTask() {
 ---
 
 ### **总结**
-- **字符串前缀方案**适合简单场景，但存在性能和维护隐患。
-- **字段分离+复合索引**在 PostgreSQL 中更优，兼顾查询效率、扩展性和规范化设计。
+- **字符串前缀方案**：适合简单场景，但存在性能和维护隐患。
+- **字段分离+复合索引**：在 PostgreSQL 中更优，兼顾查询效率、扩展性和规范化设计。
 
 ## Instant 计算
 在Java中使用 `Instant` 类计算从现在起经过一段时间，可以通过以下两种核心方法实现，结合 `Duration` 类或 `ChronoUnit` 单位进行灵活操作：
@@ -299,7 +299,7 @@ public class CombinedExample {
 ---
 
 ### 使用规则
-1. **语法形式**  
+1. **语法形式**
    可变长参数的声明方式与普通方法一致：在参数类型后加三个点`...`，例如：
    ```java
    public class Example {
@@ -310,14 +310,14 @@ public class CombinedExample {
    }
    ```
 
-2. **位置限制**  
+2. **位置限制**
    可变长参数必须是构造函数的**最后一个参数**，且一个构造函数中**只能有一个**可变长参数。以下写法会报错：
    ```java
    public Example(int... nums, String name) {}  // 错误：可变参数不在末尾
    public Example(String... s1, int... s2) {}   // 错误：多个可变参数
    ```
 
-3. **底层实现**  
+3. **底层实现**
    可变长参数本质上是语法糖，编译器会将其转换为数组。例如：
    ```java
    public Example(String... args) { ... }
@@ -364,7 +364,7 @@ MyClass obj = new MyClass("hello");  // 输出："固定参数构造函数"
 ---
 
 ### 注意事项
-1. **避免重载歧义**  
+1. **避免重载歧义**
    如果存在多个可能匹配的可变长参数构造函数，编译器会报错。例如：
    ```java
    public class Test {
@@ -373,8 +373,7 @@ MyClass obj = new MyClass("hello");  // 输出："固定参数构造函数"
    }
    ```
 
-2. **与数组参数的冲突**  
-   构造函数不能同时定义可变长参数和数组参数，因为两者编译后等价：
+2. **与数组参数的冲突** 构造函数不能同时定义可变长参数和数组参数，因为两者编译后等价：
    ```java
    public class Conflict {
        public Conflict(String... args) {}  // 编译报错：重复定义
@@ -382,8 +381,7 @@ MyClass obj = new MyClass("hello");  // 输出："固定参数构造函数"
    }
    ```
 
-3. **空值处理**  
-   如果传递 `null` 给可变长参数，需要显式转型以避免歧义：
+3. **空值处理** 如果传递 `null` 给可变长参数，需要显式转型以避免歧义：
    ```java
    new Example((String[]) null);  // 显式声明参数类型为数组
    ```
@@ -405,18 +403,18 @@ Java 构造函数完全支持可变长参数，但需注意语法规则和重载
 ---
 
 ### 数据结构特性差异
-1. **可变性**  
-   - `String[]`：数组是定长结构，创建后长度不可变。若需修改元素，需重新创建数组。  
+1. **可变性**
+   - `String[]`：数组是定长结构，创建后长度不可变。若需修改元素，需重新创建数组。
    - `List<String>`：基于接口的集合类型，支持动态扩容（如 `ArrayList` 实现类），可灵活增删元素。
 
-2. **类型兼容性**  
-   - `String[]` 是具体实现类，耦合度高。  
+2. **类型兼容性**
+   - `String[]` 是具体实现类，耦合度高。
    - `List<String>` 是接口，遵循面向接口编程原则，可替换为 `LinkedList` 等实现类，提升代码通用性。
 
 ---
 
 ### Spring Boot 的序列化行为
-1. **JSON 转换规则**  
+1. **JSON 转换规则**
    - 两者均会被 Spring Boot 默认序列化为 **JSON 数组**，例如：
      ```json
      // String[] 返回结果
@@ -426,9 +424,9 @@ Java 构造函数完全支持可变长参数，但需注意语法规则和重载
      ```
    - 在序列化结果上无差异，但 `List<String>` 更符合集合操作的语义。
 
-2. **统一响应格式兼容性**  
+2. **统一响应格式兼容性**
    - 若使用统一响应封装类（如 `ResultData<T>`），两者均可作为 `data` 字段的值。但 `List<String>` 更易于扩展其他集合操作（如分页）。
-   - 示例：
+   - **示例**：
      ```java
      // 统一响应类
      public ResultData<List<String>> getList() { ... }
@@ -438,34 +436,34 @@ Java 构造函数完全支持可变长参数，但需注意语法规则和重载
 ---
 
 ### 框架支持与开发实践
-1. **响应类型控制**  
-   - 使用 `ResponseEntity<List<String>>` 可显式声明响应类型，帮助 Spring 自动设置 `Content-Type: application/json`，避免客户端解析歧义。  
+1. **响应类型控制**
+   - 使用 `ResponseEntity<List<String>>` 可显式声明响应类型，帮助 Spring 自动设置 `Content-Type: application/json`，避免客户端解析歧义。
    - `String[]` 虽能隐式转换，但需确保前端能正确处理数组类型。
 
-2. **异常处理**  
+2. **异常处理**
    - 若接口可能返回空集合，`List<String>` 更自然地表示空状态（`[]`），而 `String[]` 的空数组可能需要额外判断 `null`。
 
-3. **代码可维护性**  
-   - `List<String>` 支持 Stream API 和集合工具类（如 `Collectors`），便于数据转换和过滤。  
+3. **代码可维护性**
+   - `List<String>` 支持 Stream API 和集合工具类（如 `Collectors`），便于数据转换和过滤。
    - `String[]` 需借助 `Arrays` 工具类操作，灵活性较低。
 
 ---
 
 ### 性能与内存影响
-- **内存占用**  
+- **内存占用**
   `String[]` 作为连续内存块，随机访问效率高；`List<String>`（如 `ArrayList`）底层基于数组，性能接近，但存在动态扩容时的额外开销。
-- **适用场景**  
-  - 数据量固定且无需修改时，优先选 `String[]`。  
+- **适用场景**
+  - 数据量固定且无需修改时，优先选 `String[]`。
   - 高频增删或不确定数据量时，选 `List<String>`。
 
 ---
 
 ### 最佳实践建议
-1. **优先选择 `List<String>`**  
-   - 符合面向接口编程原则，降低代码耦合。  
+1. **优先选择 `List<String>`**
+   - 符合面向接口编程原则，降低代码耦合。
    - 便于未来替换集合实现（如从 `ArrayList` 改为 `LinkedList`）。
 
-2. **需显式返回数组时**  
+2. **需显式返回数组时**
    - 在需要兼容旧系统或第三方 API 时，可使用 `String[]`，但建议通过注释说明原因。
 
 ---
@@ -485,7 +483,7 @@ Java 构造函数完全支持可变长参数，但需注意语法规则和重载
 在Spring框架中，@RequestPart和@RequestBody不能同时使用。以下是具体原因及替代方案：
 
 两者不能同时使用的原因
-1. HTTP请求体的处理机制冲突  
+1. **HTTP请求体的处理机制冲突**
    • @RequestBody 会尝试将整个请求体（Body）作为一个整体解析，适用于如 `application/json` 的单体数据格式。
 
    • @RequestPart 用于处理 `multipart/form-data` 类型的请求，允许将请求体拆分为多个独立部分（如文件、JSON块等），每个部分可独立解析。
@@ -493,7 +491,7 @@ Java 构造函数完全支持可变长参数，但需注意语法规则和重载
    • 当两者同时使用时，Spring无法同时处理单体请求体和多部分请求体，导致参数绑定失败。
 
 
-2. Content-Type的限制  
+2. **Content-Type的限制**
    `@RequestBody` 要求请求头的 `Content-Type` 为单体格式（如 `application/json`），而 `@RequestPart` 需要 `multipart/form-data`，二者在同一个请求中无法共存。
 
 ---
@@ -551,14 +549,13 @@ public String upload(
 ---
 
 ### 使用 **`LIKE` 操作符结合 B-tree 索引**
-1. **基础语法**  
-   直接使用 `LIKE 'prefix%'` 进行前缀匹配，例如：
+1. **基础语法** 直接使用 `LIKE 'prefix%'` 进行前缀匹配，例如：
    ```sql
    SELECT * FROM table_name WHERE column_name LIKE 'abc%';
    ```
    此语法会匹配所有以 `abc` 开头的字符串。
 
-2. **索引优化**  
+2. **索引优化**
    - 若字段类型为 `text` 或 `varchar`，可创建 **B-tree 索引**并指定 `varchar_pattern_ops` 运算符类：
      ```sql
      CREATE INDEX idx_column_prefix ON table_name (column_name varchar_pattern_ops);
@@ -569,7 +566,7 @@ public String upload(
 
 ### 表达式索引（函数索引）
 若需要动态截取字段前缀或处理复杂条件，可通过表达式索引实现：
-1. **固定长度前缀索引**  
+1. **固定长度前缀索引**
    使用 `LEFT` 或 `SUBSTRING` 函数创建索引，例如截取前 3 个字符：
    ```sql
    CREATE INDEX idx_left_prefix ON table_name (LEFT(column_name, 3));
@@ -579,7 +576,7 @@ public String upload(
    SELECT * FROM table_name WHERE LEFT(column_name, 3) = 'abc';
    ```
 
-2. **动态前缀优化**  
+2. **动态前缀优化**
    结合 `SUBSTRING` 和 `LIKE`，通过两步筛选减少扫描范围：
    ```sql
    SELECT * FROM table_name 
@@ -591,12 +588,12 @@ public String upload(
 
 ### 使用 **`pg_trgm` 扩展加速模糊查询**
 对于更复杂的前缀匹配（如大小写不敏感或部分模糊场景）：
-1. **安装扩展**  
+1. **安装扩展**
    ```sql
    CREATE EXTENSION pg_trgm;
    ```
 
-2. **创建 GIN/GiST 索引**  
+2. **创建 GIN/GiST 索引**
    ```sql
    CREATE INDEX idx_gin_prefix ON table_name USING GIN (column_name gin_trgm_ops);
    ```
@@ -605,18 +602,18 @@ public String upload(
 ---
 
 ### 性能优化注意事项
-1. **避免全表扫描**  
+1. **避免全表扫描**
    - 若 `LIKE` 以通配符开头（如 `%abc`），索引将失效，需调整查询模式。
    - 优先使用固定前缀（如 `abc%`）以利用索引。
 
-2. **大小写敏感问题**  
+2. **大小写敏感问题**
    - 默认 `LIKE` 区分大小写，若需不敏感，改用 `ILIKE` 或转换为小写：
      ```sql
      CREATE INDEX idx_lower_prefix ON table_name (LOWER(column_name));
      SELECT * FROM table_name WHERE LOWER(column_name) LIKE 'abc%';
      ```
 
-3. **数据分布分析**  
+3. **数据分布分析**
    选择合适的前缀长度（如截取前 5 或 10 字符），确保索引的选择性（即唯一性足够高）。
 
 ---
@@ -624,11 +621,11 @@ public String upload(
 ### 示例场景
 **场景**：搜索 `url` 表中以 `https://example.com/blog` 开头的记录。  
 **优化步骤**：
-1. 创建表达式索引：
+1. **创建表达式索引**：
    ```sql
    CREATE INDEX idx_url_prefix ON url (SUBSTRING(url FROM 1 FOR 20));
    ```
-2. 执行查询：
+2. **执行查询**：
    ```sql
    SELECT * FROM url 
    WHERE SUBSTRING(url, 1, 20) = 'https://example.com/b'

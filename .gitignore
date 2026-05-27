@@ -1,6 +1,7 @@
 public
 resources
 md-img-uploader
+.gomodcache
 .hugo_build.lock
 
 .DS_Store

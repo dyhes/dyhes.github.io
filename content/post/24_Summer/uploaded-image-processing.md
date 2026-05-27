@@ -149,7 +149,7 @@ Content-Type: text/plain
 According to the HTTP/1.1 specification (RFC 7231), a GET request **can have a body**. However, the specification also states that a GET request with a body **has no defined semantics, meaning servers are not required to process or even acknowledge the body**.
 ### Real-world Practice
 In practice, while it's **technically possible** to send a body with a GET request, it's generally **discouraged** and often not supported for several reasons:
-* Many servers, clients, and proxies **ignore** the body of a GET request. 
+* Many servers, clients, and proxies **ignore** the body of a GET request.
 * Some implementations might **reject** GET requests with a body.
 * It goes against the **intended** use of GET as defined in the HTTP specification.
 ### RESTful API Design

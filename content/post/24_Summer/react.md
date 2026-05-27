@@ -29,16 +29,16 @@ const node3: React.ReactNode = <div>World</div>;
 const node4: React.ReactNode = [node1, node2, node3];
 ```
 ## Key Differences
-* Specificity:
+* **Specificity**:
   * ReactElement is more specific and always represents a single React element.
   * ReactNode is more general and can represent various types that React can render.
-* Usage:
+* **Usage**:
   * ReactElement is typically used when you specifically need a React element.
   * ReactNode is often used for **component children** or when you want to accept any renderable content.
-* Type Hierarchy:
+* **Type Hierarchy**:
   * ReactNode **includes** ReactElement, but not vice versa.
   * All ReactElements are ReactNodes, but not all ReactNodes are ReactElements.
-* Common Use Cases:
+* **Common Use Cases**:
   * ReactElement: When you’re working with specific React components or elements.
   * ReactNode: When defining props that can accept various types of content, like children.
 ```tsx

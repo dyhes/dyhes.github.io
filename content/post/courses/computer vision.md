@@ -21,17 +21,17 @@ categories:
 
 * 199 SIFT
 
-* 2001 V&J
+* **2001 V&J**
 
   one of the first successful applications of machine learning to vision
 
 * 2001 PASCAL
 
-* 2009 ImageNet
+* **2009 ImageNet**
 
   Olympics of computer vision
 
-* 2012 AlexNet
+* **2012 AlexNet**
 
   deep learning
 
@@ -39,11 +39,11 @@ categories:
 
 * 1958 perceptron
 
-* 1969 Minsky & Papert
+* **1969 Minsky & Papert**
 
   showed that perceptrons could not learn the XOR function caused a lot of sidillusionment in the field
 
-* 1980 Neocognition: Fukushima
+* **1980 Neocognition: Fukushima**
 
   Computational model the visual system, directly inspired by Hubel and Wiesel's hierarchy of complex and simple cells
 
@@ -59,7 +59,7 @@ categories:
 
 * Convolutional Networks:LeCun et al, 1998
 
-* deep learning 2006
+* **deep learning 2006**
 
   people tried to train neural networks that were deeper and deeper
 
@@ -80,7 +80,7 @@ categories:
 
 ### type
 
-* train: train the model 
+* train: train the model
 * validation :choose hypterparameter
 * test: check out performance on new data
 
@@ -91,21 +91,21 @@ split data into folds,try each fold as validation and average the results
 ## K-Nearest Neighbor
 
 * very slow at test time
-* distance metrics on pixels are not infomative  
+* distance metrics on pixels are not infomative
 
 ## Linear Classifier
 
 ### Three Viewpoints
 
-* Algebraic Viewpoint
+* **Algebraic Viewpoint**
 
   $f(x,W)=Wx$
 
-* Visual Viewpoint
+* **Visual Viewpoint**
 
   One template per class
 
-* Geometric Viewpoint
+* **Geometric Viewpoint**
 
   Hyperplanes cutting up space
 
@@ -164,16 +164,13 @@ L(W)=L=\frac{1}{N}\sum_iL_i(f(x_i,W),y_i)+\lambda R(W)
 $$
 where  $\lambda$ is the regularization strength
 
-* L2 Regularization
-
+* **L2 Regularization**
    $R(W)=\sum_k\sum_lW^2_{k,l}$
 
-* L1 Regularization
-
+* **L1 Regularization**
    $R(W)=\sum_k\sum_l\lvert W_{k,l}\lvert$
 
-* Elastic net(L1+L2)
-
+* **Elastic net(L1+L2)**
    $R(W)=\sum_k\sum_l\beta W^2_{k,l}+\lvert W_{k,l}\lvert$
 
 ### Purpose
@@ -258,27 +255,27 @@ $$
 
 ### Activation Functions
 
-* Sigmoid
+* **Sigmoid**
 
   $\sigma(x)=\frac{1}{1+e^{-x}}$
 
-* tanh
+* **tanh**
 
   $tanh(x)$
 
-* ReLU
+* **ReLU**
 
   $max(0,x)$
 
-* Leaky ReLU
+* **Leaky ReLU**
 
   $max(0.1x,x)$
 
-* Maxout
+* **Maxout**
 
   $max(w_1^Tx+b1,w_2^Tx+b2)$
 
-* ELU
+* **ELU**
 
   $\left\{ 
       \begin{array}{lc}
@@ -333,7 +330,7 @@ to expand receptive fields
 
 * Input: $C_{in}\times H \times W$
 
-* Hyperparameters:
+* **Hyperparameters**:
 
   * Kernel size: $K_H \times K_W$
   * Number of filters: $C_{out}$
@@ -354,7 +351,7 @@ to expand receptive fields
 
 common settings:
 
-*  $K_H = K_W$
+* $K_H = K_W$
 * same padding
 * $C_{out} ,C_{in} =32,64,128,256$
 
@@ -428,7 +425,7 @@ a residual network is a stack of many residual blocks
 
 * CUDA(NVIDIA only)
 
-* OpenCL
+* **OpenCL**
 
   similar to CUDA, but runs on anything
 
@@ -438,15 +435,15 @@ a residual network is a stack of many residual blocks
 
 ### Three levels of abstraction
 
-* Tensor
+* **Tensor**
 
   like a numpy array, but can run on GPU
 
-* Autograd
+* **Autograd**
 
   Package for building computational graphs out of Tensors, and automatically computing gradients
 
-* Module
+* **Module**
 
   A neural network layer; may store state or learnable weights
 
@@ -457,7 +454,7 @@ a residual network is a stack of many residual blocks
 #### Sigmoid
 
 * 'kill' the gradient when saturated
-*  outputs are not zero-centered
+* outputs are not zero-centered
 * exp() is a bit compute expensive
 
 #### tanh
@@ -527,19 +524,19 @@ $$
 
 ### Weight Initialization
 
-* small random numbers
+* **small random numbers**
 
   ```python
   W=0.01*np.random.randn(Din,Dout)
   ```
 
-* Xavier initialization
+* **Xavier initialization**
 
   ```python
   W=np.random.randn(Din,Dout)/np.sqrt(Din)
   ```
 
-* Kaiming/MSRA initialization
+* **Kaiming/MSRA initialization**
 
   ```python
   W=np.random.randn(Din,Dout)/np.sqrt(2/Din)
@@ -551,7 +548,7 @@ $$
 * L1
 * Elastic net
 * dropout
-* data augmentation
+* **data augmentation**
   * random crops and scales
   * translation
   * rotation
@@ -579,7 +576,7 @@ $$
 \alpha_t=\alpha_0(1-\frac{t}{T})
 $$
 
-* inverse sqrt
+* **inverse sqrt**
   $$
   \alpha_t=\frac{\alpha_0}{\sqrt{t}}
   $$
@@ -626,11 +623,11 @@ h_t=tanh(W_{hh}h_{t-1}+W_{xh}x_t)
 y_t=W_{hy}h_t
 $$
 
-* Exploding gradients
+* **Exploding gradients**
 
   gradient clipping:scale gradient if its norm is too big
 
-* vanishing gradients
+* **vanishing gradients**
 
   change RNN architecture
 
@@ -660,19 +657,19 @@ x_t\\
 \end{pmatrix}
 $$
 
-* i
+* **i**
 
   input gate, whether to write cell
 
-* f
+* **f**
 
   forget gate, whether to erase cell
 
-* o
+* **o**
 
   output gate, how much to reveal cell
 
-* g
+* **g**
 
   gate gate, how much to write to cell
 
@@ -686,13 +683,13 @@ where $c_t$ is the cell state and $h_t$ is the hidden state
 
 ### Multilayer
 
-* RNN
+* **RNN**
   $$
   h_t^l=tanhW^l\begin{pmatrix}h_t^{l-1}\\h_{t-1}^l\end{pmatrix}
   $$
   where $h\in R^n$ and $W^l [n\times 2n]$
 
-* LSTM
+* **LSTM**
   $$
   \begin{pmatrix}
   i\\
@@ -737,7 +734,7 @@ Input
 
 * input vectors: $X$ (shape:$N_X \times D_X$)
 
-* similarity function: $f_{att}$
+* **similarity function: $f_{att}$**
 
   usually **scaled dot product**
 
@@ -747,7 +744,7 @@ Input
 
 Computation
 
-* similarities: $e$ (shape $N_X$) 
+* **similarities: $e$ (shape $N_X$)**
 
   $e_i=f_{att}(q,X_i)$
 
@@ -768,8 +765,7 @@ Input
 
 Computation
 
-* similarities: $E=QX^T$ (shape $N_Q\times N_X$) 
-
+* similarities: $E=QX^T$ (shape $N_Q\times N_X$)
    $E_{i,j}=Q_i\cdot X_j/sqrt(D_Q)$
 
 * attention weights: $a=softmax(E,dim=1)$ (shape $N_Q\times N_X$)
@@ -789,11 +785,10 @@ Input
 
 Computation 
 
-* key vectors: $K=XW_K$ (shape $N_X\times D_Q$) 
-* value vectors: $V=XW_V$ (shape $N_X\times D_V$) 
+* key vectors: $K=XW_K$ (shape $N_X\times D_Q$)
+* value vectors: $V=XW_V$ (shape $N_X\times D_V$)
 
-* similarities: $E=QK^T$ (shape $N_Q\times N_X$) 
-
+* similarities: $E=QK^T$ (shape $N_Q\times N_X$)
    $E_{i,j}=Q_i\cdot K_j/sqrt(D_Q)$
 
 * attention weights: $a=softmax(E,dim=1)$ (shape $N_Q\times N_X$)
@@ -817,11 +812,10 @@ Computation
 
 * query vectors:$Q=XW_Q$
 
-* key vectors: $K=XW_K$ (shape $N_X\times D_Q$) 
-* value vectors: $V=XW_V$ (shape $N_X\times D_V$) 
+* key vectors: $K=XW_K$ (shape $N_X\times D_Q$)
+* value vectors: $V=XW_V$ (shape $N_X\times D_V$)
 
-* similarities: $E=QK^T$ (shape $N_Q\times N_X$) 
-
+* similarities: $E=QK^T$ (shape $N_Q\times N_X$)
    $E_{i,j}=Q_i\cdot K_j/sqrt(D_Q)$
 
 * attention weights: $a=softmax(E,dim=1)$ (shape $N_Q\times N_X$)
@@ -864,36 +858,36 @@ a Transformer is a sequence of transformer blocks
 
 can be used for transfer learning
 
-* pretraining
+* **pretraining**
 
   download a lot of text from the internet
 
   train a giant transformer model for language modeling
 
-* finetuning
+* **finetuning**
 
   fine-tune the transformer on your own NLP task
 
 ## Object Detection
 
-* Input:
+* **Input**:
 
   Single RGB Image
 
-* Output: 
+* **Output**:
 
   A set of detected objects, for each object predict:
 
   * Category label (from fixed,known set of categories)
   * Bounding box (four numbers: x,y,width,height)
 
-* challenges
+* **challenges**
   * multiple outputs
   * multiple types of output
   * large images
-* method
+* **method**
   * sliding window : too many boxes
-  * region proposals:
+  * **region proposals**:
     * find a small set of boxes that are likely to cover all objects
     * often based on heuristics
     * relatively fast to run
@@ -915,7 +909,7 @@ $$
 ### Evaluating: Mean Average Precision (mAP)
 
 * run object detector on all test images
-* for each category, compute average precision(AP)=area under Precision vs Recall Curve 
+* for each category, compute average precision(AP)=area under Precision vs Recall Curve
   * for each detection( highest score to lowest score)
     * if it matches some GT box with $IoU\gt 0.5$, mark it as positive and eliminate the GT
     * otherwise mark it as negetive
@@ -1002,13 +996,13 @@ Many non-Deep Learning methods alive and well in 3D
 
 ### 3D Shape Representations
 
-* Depth Map
+* **Depth Map**
 
   Problem: Scale/Depth Ambiguity
 
   Scale invariant loss
 
-* Voxel Grid
+* **Voxel Grid**
 
   for each pixel, surface normals give a vector giving the normal vector to the object in the world for that pixel
 
@@ -1017,7 +1011,7 @@ Many non-Deep Learning methods alive and well in 3D
 
   Problem: Memory Usage
 
-* Implicit Surface
+* **Implicit Surface**
 
   learn a function to classify arbitrary 3D points as inside/outside the shape
 
@@ -1025,7 +1019,7 @@ Many non-Deep Learning methods alive and well in 3D
 
   The surface of the 3D object is the level set $\{x:o(x)=\frac{1}{2}\}$
 
-* PointCloud
+* **PointCloud**
 
   represent shape as a set of P points in 3D space
 
@@ -1033,7 +1027,7 @@ Many non-Deep Learning methods alive and well in 3D
   * requires new architectures, losses, etc
   * doesn't explicitly represent the surface of the shape: extracting a mesh for rendering or other applications requires post-processing
 
-* Mesh
+* **Mesh**
 
   represent a 3D shape as a set of triangles
 
@@ -1053,38 +1047,38 @@ $$
 
 * Chamfer Distance
 
-* F1 Score
+* **F1 Score**
   $$
   F1@t=2*\frac{Precision@t*Recall@t}{Precision@t+Reca}
   $$
 
 ## Generative Model
 
-* Discriminative model
+* **Discriminative model**
   * learn a probability distribution p(y|x)
-  * used to:
+  * **used to**:
     * assign labels to data
     * feature learning (with labels)
-* Generative Model
+* **Generative Model**
   * distribution p(x)
-  * used to:
+  * **used to**:
     * detect outliers
     * feature learning (without label)
     * sample to generate new data
-* Conditional Generative Model
+* **Conditional Generative Model**
   * learn p(x|y)
-  * used to:
+  * **used to**:
     * assign labels, while rejecting outliers. generate new data conditioned on input labels
 
 ![image-20221005141347631](https://i.ibb.co/8dXfpmR/image-20221005141347631.png)
 
 ### Taxonomy
 
-* explicit density
+* **explicit density**
 
   model can compute $p(x)$
 
-  * Tractable density
+  * **Tractable density**
 
     Autoregressive
 
@@ -1096,25 +1090,25 @@ $$
 
     Ffjord
 
-  * Approximate density
+  * **Approximate density**
 
-    * Variational
+    * **Variational**
 
       Variational Autoencoder
 
-    * Markov Chain
+    * **Markov Chain**
 
       Boltzmann Machine
 
-* implicit density
+* **implicit density**
 
   does not explicitly compute $p(x)$, but can sample from $p(x)$
 
-  * Markov Chain
+  * **Markov Chain**
 
     GSN
 
-  * Direct
+  * **Direct**
 
     Generative Adversarial Networks (GANs)
 
@@ -1171,11 +1165,11 @@ dependency on previous pixels now modeled using a CNN over context region
 
 #### Pros and Cons
 
-* Pros
+* **Pros**
   * can explicitly compute likelihood $p(x)$
   * explicit likelihood of training data gives good evaluation metric
   * good samples
-* Cons
+* **Cons**
   * sequential generation => slow
 
 ### Variational Autoencoder
@@ -1208,7 +1202,7 @@ after training, throw away decoder and use encoder for a downstream task
 
 * represent $p(x|z)$ with a neural network (similar to decoder from autoencoder)
 
-* decoder must be probabilistic:
+* **decoder must be probabilistic**:
 
   Decoder input $z$, output mean $\mu_{x|z}$ and (diagonal) covariance $\sum_{x|z}$
 
@@ -1248,10 +1242,10 @@ jointly train encoder q and decoder p to maximize the variational lower bound on
 
 #### Pros and Cons
 
-* Pros
+* **Pros**
   * principled approach to generative models
   * allows inference of $q(z|x)$, can be useful feature representation for other tasks
-* Cons
+* **Cons**
   * maximizes lower bound of likelihood: okay, but not as good evaluation as PixelRNN/PixelCNN
   * samples blurrier and lower quality compared to state-of-the-art (GANs)
 
@@ -1312,11 +1306,11 @@ Accessing an element from a PyTorch tensor returns a PyTorch scalar; we can conv
 
 #### tensor indexing
 
-* slice indexing
+* **slice indexing**
 
   Slicing a tensor returns a **view** into the same data, so modifying it will also modify the original tensor. To avoid this, you can use the `clone()` method to make a copy of a tensor.
 
-* integer indexing
+* **integer indexing**
 
   We can also use **index arrays** to index tensors; this lets us construct new tensors with a lot more flexibility than using slices.
 
@@ -1333,7 +1327,7 @@ Accessing an element from a PyTorch tensor returns a PyTorch scalar; we can conv
   
   A one-hot vector for an integer n is a vector that has a one in its nth slot, and zeros in all other slots. One-hot vectors are commonly used to represent categorical variables in machine learning models.
 
-* boolean indexing
+* **boolean indexing**
 
   Boolean tensor indexing lets you pick out arbitrary elements of a tensor according to a boolean mask. Frequently this type of indexing is used to select or modify the elements of a tensor that satisfy some condition.
 

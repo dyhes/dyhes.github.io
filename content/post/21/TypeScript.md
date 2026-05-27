@@ -2,8 +2,8 @@
 title: 【TS】Basics
 date: 2021-05-01 00:00:00+0000
 categories: 
--  nutrition
--  temple
+- nutrition
+- temple
 tags:
     - TS
 ---
@@ -53,7 +53,7 @@ Objec types are **functions, arrays, classes**, etc. Later, you’ll learn how t
 
 ### detail
 
-* number
+* **number**
 
   All numbers in TypeScript are either **floating-point values** that get the number type or big integers that get the `bigint` type.
 
@@ -62,21 +62,21 @@ Objec types are **functions, arrays, classes**, etc. Later, you’ll learn how t
   let big: bigint = 9007199254740991n;
   ```
 
-* string
+* **string**
 
   In TypeScript, all strings get the `string` type. Like JavaScript, TypeScript uses double quotes (`"`), single quotes (`'`), and backtick (`) to surround string literals.
 
-* Object and object
+* **Object and object**
 
   The `object` type represents **all non-primitive values** while the `Object` type describes **the functionality of all objects**.
 
-* empty type {}
+* **empty type {}**
 
   TypeScript has another type called empty type denoted by `{}` , which is quite similar to the object type.
 
   The empty type `{}` describes an object that has no property on its own. If you try to access a property on such object, TypeScript will issue a compile-time error
 
-* Tuple
+* **Tuple**
 
   A tuple works like an [array](https://www.typescripttutorial.net/typescript-tutorial/typescript-array-type/) with some additional considerations:
 
@@ -91,7 +91,7 @@ Objec types are **functions, arrays, classes**, etc. Later, you’ll learn how t
   headerColor = [0, 255, 255];
   ```
 
-* Enum
+* **Enum**
 
   An enum is **a group of named constant values**. Enum stands for enumerated type.
 
@@ -132,7 +132,7 @@ Objec types are **functions, arrays, classes**, etc. Later, you’ll learn how t
   - Have a small set of fixed values that are closely related
   - And these values are known at compile time.
 
-* any
+* **any**
 
   The `any` type allows you to assign a value of any type to a variable.
 
@@ -146,7 +146,7 @@ Objec types are **functions, arrays, classes**, etc. Later, you’ll learn how t
 
   However, you **cannot call a method** on it even the method actually exists.
 
-* void
+* **void**
 
   The `void` type denotes the absence of having any type at all. It is a little like the opposite of the [`any` type](https://www.typescripttutorial.net/typescript-tutorial/typescript-any-type/).
 
@@ -165,7 +165,7 @@ Objec types are **functions, arrays, classes**, etc. Later, you’ll learn how t
 
   Notice that if you use the `void` type for a variable, you can only assign `undefined` to that variable. In this case, the `void` type is not useful.
 
-* never
+* **never**
 
   The `never` type is a type that contains no values. Because of this, you cannot assign any value to a variable with a `never` type.
 
@@ -209,8 +209,7 @@ Objec types are **functions, arrays, classes**, etc. Later, you’ll learn how t
   }
   ```
 
-* union
-
+* **union**
    The union type allows you to **combine** multiple types into one type.
 
   ```ts
@@ -220,8 +219,7 @@ Objec types are **functions, arrays, classes**, etc. Later, you’ll learn how t
   result = false; // a boolean value, not OK
   ```
   
-* function
-
+* **function**
    A function type has two parts: parameters and return type. When declaring a function type, you need to specify both parts with the following syntax:
 
    ```ts
@@ -238,8 +236,7 @@ Objec types are **functions, arrays, classes**, etc. Later, you’ll learn how t
 
    ![img](https://www.typescripttutorial.net/wp-content/uploads/2020/06/TypeScript-Function-Type-Example.png)
 
-* String Literal Type
-
+* **String Literal Type**
    The string literal types allow you to define a type that accepts only one specified string literal.
 
    ```ts
@@ -345,7 +342,7 @@ function add(a: alphanumeric, b: alphanumeric) {
 
 ```
 
-* instanceof
+* **instanceof**
 
   ```ts
   class Customer {
@@ -378,7 +375,7 @@ function add(a: alphanumeric, b: alphanumeric) {
   }
   ```
 
-* in
+* **in**
 
   The `in` operator carries a safe check for the existence of a property on an object. You can also use it as a type guard. 
 
@@ -395,7 +392,7 @@ function add(a: alphanumeric, b: alphanumeric) {
   }
   ```
 
-* User-Defined Type Guard
+* **User-Defined Type Guard**
 
   User-defined type guards allow you to define a type guard or help TypeScript infer a type when you **use a function**.
 
@@ -556,7 +553,7 @@ When you intersect types, the order of the types doesn’t matter.
 
 ## Function
 
-* Optional Parameters
+* **Optional Parameters**
 
   Because the compiler thoroughly checks the passing arguments, you need to annotate optional parameters to instruct the compiler not to issue an error when you omit the arguments.
 
@@ -574,7 +571,7 @@ When you intersect types, the order of the types doesn’t matter.
 
   The optional parameters must appear **after** the required parameters in the parameter list.
 
-* Default Parameters
+* **Default Parameters**
 
   ```ts
   function name(parameter1:type=defaultvalue1, parameter2:type=defaultvalue2,...) {
@@ -609,7 +606,7 @@ When you intersect types, the order of the types doesn’t matter.
 
   When a default parameter appears before a required parameter, you need to explicitly pass `undefined` to get the default initialized value.
 
-* Rest Parameters
+* **Rest Parameters**
 
   To declare a rest parameter, you prefix the parameter name with three dots and use the array type as the type annotation:
 
@@ -619,7 +616,7 @@ When you intersect types, the order of the types doesn’t matter.
   }
   ```
 
-* function overloadings
+* **function overloadings**
 
   ```ts
   function add(a: number | string, b: number | string): number | string {
@@ -715,7 +712,7 @@ class Person {
 
 Access modifiers change the visibility of the properties and methods of a [class](https://www.typescripttutorial.net/typescript-tutorial/typescript-class/). TypeScript provides three access modifiers:
 
-- private
+- **private**
 
   The `private` modifier limits the visibility **to the same-class only**. When you add the `private` modifier to a property or method, you can access that property or method within the same class. Any attempt to access private properties or methods outside the class will result in an error at compile time.
 
@@ -728,7 +725,7 @@ Access modifiers change the visibility of the properties and methods of a [class
   }
   ```
 
-- protected
+- **protected**
 
   The `protected` modifier allows properties and methods of a class to be accessible **within same class and within subclasses**.
 
@@ -748,7 +745,7 @@ Access modifiers change the visibility of the properties and methods of a [class
   }
   ```
 
-- public
+- **public**
 
   The public modifier allows class properties and methods **to be accessible from all locations**. If you don’t specify any access modifier for properties and methods, they will **take the public modifier by default**.
 

@@ -2,8 +2,8 @@
 title: 【Java】Basics
 date: 2020-12-20 00:00:00+0000
 categories: 
--  nutrition
--  temple
+- nutrition
+- temple
 tags:
     - Java
 ---
@@ -123,9 +123,9 @@ Note that the constructor name must **match the class name**, and it cannot have
 
 #### Access Modifiers
 
-* **public: **accessible for all classes
+* **public: **：accessible for all classes
 * **protected:** accessible in the same package and **subclasses**
-* **default: **accessible in the same package
+* **default: **：accessible in the same package
 * **private:** only accessible within the declared class
 
 #### Non-Access Modifiers

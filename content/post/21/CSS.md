@@ -2,10 +2,10 @@
 title: 【CSS】Basics
 date: 2021-04-17 00:00:00+0000
 categories: 
--  nutrition
--  temple
+- nutrition
+- temple
 tags:
--  CSS
+- CSS
 ---
 
 
@@ -113,7 +113,7 @@ selector:pseudo-class {
 
 * :link (unvisited)
 * :visited
-* :hover 
+* :hover
 * :active (clicked)
 
 #### :first-child
@@ -222,7 +222,7 @@ The following properties apply to the `::first-line` pseudo-element:
 The following properties apply to the ::first-letter pseudo- element: 
 
 - font properties
-- color properties 
+- color properties
 - background properties
 - margin properties
 - padding properties
@@ -405,13 +405,13 @@ The only way to override an `!important` rule is to include another `!important`
 
 ### type
 
-* background color
+* **background color**
   * `background-color`
   * `background`
 
-* text color
+* **text color**
   * `color`
-* border color
+* **border color**
   * `border`
 
 ### value
@@ -462,7 +462,7 @@ The alpha parameter is a number between 0.0 (fully transparent) and 1.0 (not tra
 
 equal to rgba(0,0,0,0)
 
-* `currentcolor`
+* **`currentcolor`**
 
  is like a variable that holds the current value of the color property of an element.
 
@@ -680,7 +680,7 @@ The `color` property is used to set the color of the text.
 
 ###  Text Alignment
 
-- `text-align  `    
+- `text-align  `
 
 set the **horizontal** alignment of a text. 
 
@@ -745,7 +745,7 @@ specifies how overflowed content that is not displayed should be signaled to the
 
 allows long words to be able to be broken and wrap onto the next line.
 
-- `word-break`
+- **`word-break`**
 
  specifies line breaking rules.
 
@@ -761,7 +761,7 @@ In CSS there are five generic font families:
 
 1. **Serif** fonts have a small stroke at the edges of each letter. They create a sense of formality and elegance.
 2. **Sans-serif** fonts have clean lines (no small strokes attached). They create a modern and minimalistic look.
-3. **Monospace** fonts - here all the letters have the same fixed width. They create a mechanical look. 
+3. **Monospace** fonts - here all the letters have the same fixed width. They create a mechanical look.
 4. **Cursive** fonts imitate human handwriting.
 5. **Fantasy** fonts are decorative/playful fonts.
 
@@ -1265,7 +1265,7 @@ With the CSS `transform` property you can use the following 2D transformation me
 
 moves an element from its current position (according to the parameters given for the X-axis and the Y-axis).
 
-- `rotate()`
+- **`rotate()`**
 
  rotates an element clockwise(positive deg) or counter-clockwise (negative deg) according to a given degree.
 
@@ -1384,14 +1384,14 @@ The `animation-duration` property defines how long an animation should take to c
 Negative values are also allowed. If using negative values, the animation will start as if it had already been playing for *N* seconds.
 
 - `animation-iteration-count`
-- `animation-direction`
+- **`animation-direction`**
   * `normal` - The animation is played as normal (forwards). This is default
   * `reverse` - The animation is played in reverse direction (backwards)
   * `alternate `- The animation is played forwards first, then backwards
   * `alternate-reverse` - The animation is played backwards first, then forwards
 
 - `animation-timing-function`
-- `animation-fill-mode`
+- **`animation-fill-mode`**
   * `none` - Default value. Animation will not apply any styles to the element before or after it is executing
   * `forwards` - The element will retain the style values that is set by the last keyframe (depends on animation-direction and animation-iteration-count)
   * `backwards` - The element will get the style values that is set by the first keyframe (depends on animation-direction), and retain this during the animation-delay period

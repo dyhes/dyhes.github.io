@@ -92,7 +92,7 @@ Oracle has moved to a new release model since Java 9:
 * Virtual Threads (finalized)
 * Pattern Matching for Switch (finalized)
 * Record Patterns (finalized)
-* Sequenced Collections 
+* Sequenced Collections
 * String Templates (preview)
 * Unnamed Classes and Instance Main Methods (preview)
 * Unnamed Patterns and Variables (preview)

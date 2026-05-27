@@ -13,10 +13,10 @@ tags:
 ---
 
 ### **默认行为与原理**
-1. **直接运行脚本**：  
+1. **直接运行脚本**：
    若通过 `python script.py` 直接运行，脚本会绑定到当前 SSH 会话。**断开连接后进程会被终止**。
    
-2. **原因**：  
+2. **原因**：
    SSH 会话关闭时，系统会向所有关联进程发送 `SIGHUP` 信号，导致进程树被终止。
 
 ---
@@ -61,7 +61,7 @@ nohup python3 script.py > output.log 2>&1 &
      [Install]
      WantedBy=multi-user.target
      ```
-  2. 启用并启动服务：
+  2. **启用并启动服务**：
      ```bash
      sudo systemctl daemon-reload
      sudo systemctl start my_script
@@ -131,7 +131,7 @@ ps aux | grep python | grep -v grep
   ```
   user   1234  0.5  0.1 123456 7890 pts/0  S+   10:00   python my_script.py
   ```
-  - **PID**是第二列的数字（例如`1234`）。
+  - **PID**：是第二列的数字（例如`1234`）。
 
 #### **发送终止信号**
 通过PID向进程发送终止信号：
@@ -201,7 +201,7 @@ done
 2. **优先使用SIGTERM**：
    - 强制终止（`kill -9`）可能导致数据损坏，仅作为最后手段。
 3. **程序内优雅退出**：
-   - 在Python代码中捕获`SIGTERM`信号，实现资源清理：
+   - **在Python代码中捕获`SIGTERM`信号，实现资源清理**：
      ```python
      import signal, sys
      def cleanup(sig, frame):

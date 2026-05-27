@@ -2,7 +2,7 @@
 title: 【Software Testing】Concepts
 date: 2022-03-25 00:00:00+0000
 categories: 
--  nutrition
+- nutrition
 ---
 
 **Software testing** is a process, to evaluate the functionality of a software application with an intent to find whether the developed software met the specified requirements or not and to identify the defects to ensure that the product is defect-free in order to produce a quality product.
@@ -23,7 +23,7 @@ categories:
 
     In simple words, **what the system actually does** is functional testing. To verify that each function of the software application behaves as specified in the requirement document. Testing all the functionalities by providing appropriate input to verify whether the actual output is matching the expected output or not. It falls within the scope of black-box testing and the testers need not concern about the source code of the application.
 
-  * **Non-functional** Testing 
+  * **Non-functional** Testing
 
     In simple words, **how well the system performs** is non-functionality testing. Non-functional testing refers to various aspects of the software such as **performance, load, stress, scalability, security, compatibility**, etc., The Main focus is to improve the **user experience** on how fast the system responds to a request.
 
@@ -45,11 +45,11 @@ categories:
 
   This process is carried out by using **dummy programs** called **Stubs** and **Drivers**. Stubs and Drivers do not implement the entire programming logic of the software module but just **simulate data communication** with the calling module.
 
-  * Big Bang Approach
+  * **Big Bang Approach**
 
     Combining all the modules once and verifying the functionality after completion of individual module testing. In Big Bang Integration Testing, the individual modules are not integrated until all the modules are ready. Then they will run to check whether it is performing well. In this type of testing, some disadvantages might occur like, defects can be found at the later stage. It would be difficult to find out whether the defect arouse in interface or in module.
 
-  * Top-Down Approach
+  * **Top-Down Approach**
 
     ![](https://www.softwaretestingmaterial.com/wp-content/uploads/2018/08/Top-Down-Approach.png?ezimgfmt=rs:781x439/rscb5/ng:webp/ngcb5)
 
@@ -57,7 +57,7 @@ categories:
 
     In this type of testing, **Stubs** are used as **temporary module** if a module is not ready for integration testing.
 
-  * Bottom-Up Approach
+  * **Bottom-Up Approach**
 
     ![Bottom Up Approach](https://www.softwaretestingmaterial.com/wp-content/uploads/2018/08/Bottom-Up-Approach.png?ezimgfmt=rs:781x439/rscb5/ng:webp/ngcb5)
 
@@ -73,15 +73,15 @@ categories:
 
   To obtain customer sign-off so that software can be delivered and payments received. Types of Acceptance Testing are **Alpha, Beta & Gamma Testing**. Acceptance tests are formal tests executed to verify if a system satisfies its business requirements. They require the entire application to be up and running and focus on replicating user behaviors. But they can also go further and measure the performance of the system and reject changes if certain goals are not met.
 
-  * Alpha Testing
+  * **Alpha Testing**
 
     Alpha testing is mostly like performing **usability testing** which is done by the **in-house developers** who developed the software. Sometimes this alpha testing is done by the **client or outsiders** with the presence of developers or testers.
 
-  * Beta Testing
+  * **Beta Testing**
 
     Beta testing is done by **a limited number of end users** before delivery, the change request would be fixed if the user gives feedback or reports defect.
 
-  * Gamma Testing
+  * **Gamma Testing**
 
     Gamma testing is done when the software is **ready for release** with specified requirements; this testing is done directly by skipping all the in-house testing activities.
 

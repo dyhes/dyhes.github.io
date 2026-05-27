@@ -15,13 +15,13 @@ tags:
 ---
 
 ### 核心特性
-1. **异构性**  
+1. **异构性**
    可存储不同类型元素（如 `int`、`std::string`、自定义类等），且元素类型在编译时确定。
-2. **固定大小**  
+2. **固定大小**
    元素数量和类型在初始化后不可修改，但支持通过 `std::tuple_cat` 拼接多个元组。
-3. **灵活访问**  
+3. **灵活访问**
    通过索引或类型（若类型唯一）访问元素，支持编译时类型检查。
-4. **与 `std::pair` 对比**  
+4. **与 `std::pair` 对比**
 | **特性** | **std::tuple** | **std::pair** |
 |:-:|:-:|:-:|
 | 元素数量 | 任意数量（0 个或多个） | 固定 2 个元素 |
@@ -29,22 +29,20 @@ tags:
 | 应用场景 | 多返回值、复杂数据聚合 | 简单键值对或双元素关系 |
 
 ### 创建与初始化
-1. **直接构造**  
+1. **直接构造**
    ```cpp
    std::tuple<int, std::string, double> t1(42, "Hello", 3.14);  // 显式指定类型
    std::tuple t2(1, 2.5, "C++");                               // C++17 自动类型推导（CTAD）
    ```
-2. **使用 `std::make_tuple`**  
-   自动推导类型，适合泛型编程：
+2. **使用 `std::make_tuple`** 自动推导类型，适合泛型编程：
    ```cpp
    auto t3 = std::make_tuple(10, 3.14f, "Hello");  // 类型为 tuple<int, float, const char*>
    ```
-3. **结构化绑定（C++17+）**  
-   解构元组到变量，提升代码可读性：
+3. **结构化绑定（C++17+）** 解构元组到变量，提升代码可读性：
    ```cpp
    auto [id, name, score] = getData();  // 假设 getData() 返回 tuple<int, string, double>
    ```
-4. **引用绑定**  
+4. **引用绑定**
    - `std::tie`：绑定到已有变量的引用，用于批量赋值或解包返回值：
      ```cpp
      int a; std::string b;
@@ -58,60 +56,53 @@ tags:
 ---
 
 ### 元素访问
-1. **通过索引访问**  
-   使用 `std::get<N>(tuple)`，索引从 0 开始：
+1. **通过索引访问** 使用 `std::get<N>(tuple)`，索引从 0 开始：
    ```cpp
    int num = std::get<0>(t1);  // 获取第一个元素
    std::get<1>(t1) = "Hi";     // 修改第二个元素
    ```
-2. **通过类型访问（需类型唯一）**  
+2. **通过类型访问（需类型唯一）**
    ```cpp
    double val = std::get<double>(t1);  // 若存在多个 double 类型元素会报错
    ```
-3. **编译时元信息查询**  
+3. **编译时元信息查询**
    - `std::tuple_size<decltype(tuple)>::value`：获取元素数量。
    - `std::tuple_element<N, decltype(tuple)>::type`：获取第 N 个元素的类型。
 
 ---
 
 ### 应用场景
-1. **函数返回多值**  
-   替代 `struct` 或指针参数，简化接口设计：
+1. **函数返回多值** 替代 `struct` 或指针参数，简化接口设计：
    ```cpp
    std::tuple<int, std::string, bool> processData() {
        return {42, "success", true};
    }
    ```
-2. **异构数据聚合**  
-   存储复杂数据组合，如数据库查询结果或配置项：
+2. **异构数据聚合** 存储复杂数据组合，如数据库查询结果或配置项：
    ```cpp
    std::tuple<std::string, int, std::vector<float>> record("ProductA", 100, {1.2f, 3.4f});
    ```
-3. **结合 `std::apply` 调用函数**  
-   将元组元素解包为函数参数：
+3. **结合 `std::apply` 调用函数** 将元组元素解包为函数参数：
    ```cpp
    void print(int a, const std::string& b) { /*...*/ }
    std::tuple args(10, "Test");
    std::apply(print, args);  // 输出：10 - Test
    ```
-4. **泛型编程与元编程**  
+4. **泛型编程与元编程**
    用于模板参数展开、类型操作（如拼接、删除元素）。
 
 ---
 
 ### 高级特性（C++17+）
-1. **结构化绑定增强**  
-   直接解包元组到新变量，无需提前声明：
+1. **结构化绑定增强** 直接解包元组到新变量，无需提前声明：
    ```cpp
    auto [x, y, z] = std::make_tuple(1, 2.5, "Hi");
    ```
-2. **推导指南（CTAD）**  
-   简化构造语法，自动推导元素类型：
+2. **推导指南（CTAD）** 简化构造语法，自动推导元素类型：
    ```cpp
    std::tuple t(1, "Hello");  // 类型为 tuple<int, const char*>
    ```
-3. **`std::make_from_tuple`**  
-   使用元组元素构造对象：
+3. **`std::make_from_tuple`** 使用元组元素构造对象：
    ```cpp
    auto vec = std::make_from_tuple<std::vector<int>>(std::tuple(5, 42));  // {42, 42, 42, 42, 42}
    ```
@@ -119,14 +110,14 @@ tags:
 ---
 
 ### 注意事项
-1. **索引越界**  
+1. **索引越界**
    访问不存在的索引会导致编译错误，可用 `static_assert` 检查范围：
    ```cpp
    static_assert(std::tuple_size_v<decltype(t1)> > 2, "Index out of range");
    ```
-2. **类型歧义**  
+2. **类型歧义**
    通过类型访问元素时，若类型重复需改用索引访问。
-3. **引用生命周期**  
+3. **引用生命周期**
    使用 `std::tie` 或 `std::forward_as_tuple` 时需确保绑定对象的有效性。
 
 ---
@@ -140,7 +131,7 @@ tags:
 ---
 
 ### `std::get` 的适用范围
-1. **`std::tuple`（元组）**  
+1. **`std::tuple`（元组）**
    这是 `std::get` 最典型的应用场景。通过索引或类型（C++14+）访问元组中的元素：  
    ```cpp
    std::tuple<int, std::string, double> t(42, "Hello", 3.14);
@@ -149,7 +140,7 @@ tags:
    double d = std::get<double>(t); // 通过类型访问（需唯一）
    ```
 
-2. **`std::pair`（键值对）**  
+2. **`std::pair`（键值对）**
    虽然 `std::pair` 有 `.first` 和 `.second` 成员，但 `std::get` 同样支持通过索引访问：  
    ```cpp
    std::pair<int, double> p(10, 2.5);
@@ -157,14 +148,13 @@ tags:
    double value = std::get<1>(p); // 等价于 p.second
    ```
 
-3. **`std::array`（静态数组）**  
-   支持通过索引访问数组元素，与常规数组的 `[]` 操作符类似：  
+3. **`std::array`（静态数组）** 支持通过索引访问数组元素，与常规数组的 `[]` 操作符类似：
    ```cpp
    std::array<int, 5> arr{1, 2, 3, 4, 5};
    int third = std::get<2>(arr); // 值为 3
    ```
 
-4. **`std::variant`（类型安全联合）**  
+4. **`std::variant`（类型安全联合）**
    用于访问 `std::variant` 中当前存储的值，需确保类型匹配，否则抛出 `std::bad_variant_access` 异常：  
    ```cpp
    std::variant<int, std::string> v = "Hello";
@@ -175,7 +165,7 @@ tags:
    }
    ```
 
-5. **自定义类型**  
+5. **自定义类型**
    通过为自定义类型实现 `std::get` 的特化版本，可扩展其功能。例如：  
    ```cpp
    struct Foo { int a; double b; std::string c; };
@@ -195,16 +185,15 @@ tags:
 ---
 
 ### `std::get` 的核心特性
-1. **编译时类型检查**  
+1. **编译时类型检查**
    • 索引有效性在编译时验证，避免运行时越界错误。
    • 类型匹配错误（如 `std::variant`）在运行时抛出异常。
 
-2. **灵活访问方式**  
+2. **灵活访问方式**
    • **索引访问**：适用于所有支持 `std::get` 的容器。
    • **类型访问**（C++14+）：仅适用于 `std::tuple` 和 `std::variant`，且类型需唯一。
 
-3. **引用语义**  
-   返回元素的引用，可直接修改容器内的值：  
+3. **引用语义** 返回元素的引用，可直接修改容器内的值：
    ```cpp
    std::get<0>(t) = 100; // 修改元组的第一个元素
    ```
@@ -222,13 +211,13 @@ tags:
 ---
 
 ### 注意事项
-1. **索引越界**  
+1. **索引越界**
    使用超出范围的索引会导致编译错误（如 `std::get<5>` 访问仅有3个元素的元组）。
 
-2. **类型匹配**  
+2. **类型匹配**
    对 `std::variant` 使用 `std::get` 时需确保当前存储的类型与请求的类型一致，否则触发异常。
 
-3. **自定义类型支持**  
+3. **自定义类型支持**
    需手动实现特化版本的 `std::get`，并遵循标准库的引用和移动语义规则。
 
 ---
@@ -245,16 +234,16 @@ tags:
 ---
 
 #### 核心特性
-1. **类型安全**  
+1. **类型安全**
    与传统的 C 风格 `union` 不同，`std::variant` 在编译时严格检查类型有效性。若尝试访问非当前存储的类型，会抛出 `std::bad_variant_access` 异常，避免未定义行为。
    
-2. **多类型存储**  
+2. **多类型存储**
    可存储预定义类型集合中的任意一种值，例如 `std::variant<int, double, std::string>` 可容纳整数、浮点数或字符串。
 
-3. **自动生命周期管理**  
+3. **自动生命周期管理**
    自动处理值的构造、析构和赋值，无需手动管理内存。
 
-4. **丰富的访问接口**  
+4. **丰富的访问接口**
    支持通过类型、索引或访问者模式（Visitor Pattern）操作存储的值，如 `std::get`、`std::visit` 和 `std::holds_alternative`。
 
 ---
@@ -359,13 +348,13 @@ std::visit(Visitor{}, v);
 ---
 
 #### 注意事项
-1. **性能考量**  
+1. **性能考量**
    `std::variant` 的内存占用为所有可能类型中最大的一个，外加类型标签开销。
 
-2. **默认构造限制**  
+2. **默认构造限制**
    若第一个类型不可默认构造，需显式初始化或使用 `std::monostate` 占位。
 
-3. **类型唯一性**  
+3. **类型唯一性**
    若多个类型相同（如 `std::variant<int, int>`），需通过索引访问。
 
 ---
@@ -379,12 +368,12 @@ std::visit(Visitor{}, v);
 ---
 
 ### 核心功能与定义
-1. **核心功能**  
+1. **核心功能**
    - **类型安全访问**：根据 `std::variant` 当前存储的类型，自动调用匹配的处理逻辑，避免未定义行为。
    - **多态分派**：支持单参数或多参数 `std::variant` 的联合访问，适用于复杂数据类型组合的场景。
    - **泛型兼容性**：可调用对象（如 Lambda、函数对象）需覆盖所有可能的类型分支，否则会触发编译错误。
 
-2. **函数原型**  
+2. **函数原型**
    ```cpp
    template <class Visitor, class... Variants>
    constexpr decltype(auto) visit(Visitor&& vis, Variants&&... vars);
@@ -467,31 +456,31 @@ auto result = std::visit([](auto&& arg) -> int {
 ---
 
 ### 注意事项
-1. **未初始化 `std::variant`**  
+1. **未初始化 `std::variant`**
    若 `std::variant` 未存储有效值（如处于 `valueless_by_exception` 状态），调用 `std::visit` 会抛出 `std::bad_variant_access` 异常。
 
-2. **类型覆盖完整性**  
+2. **类型覆盖完整性**
    访问者必须覆盖所有可能的类型分支，否则编译失败。例如，若 `std::variant` 包含 `int` 和 `std::string`，访问者必须为这两种类型提供处理逻辑。
 
-3. **性能优化**  
+3. **性能优化**
    `std::visit` 的分派逻辑在编译时生成，无运行时类型检查开销，适合高性能场景。
 
 ---
 
 ### 实际应用场景
-1. **数据解析**  
+1. **数据解析**
    处理 JSON、XML 等格式时，动态访问不同类型的数据节点。
 
-2. **状态机实现**  
+2. **状态机实现**
    根据当前状态类型执行对应的状态转移逻辑。
 
-3. **GUI 事件处理**  
+3. **GUI 事件处理**
    分发鼠标点击、键盘输入等不同类型的事件。
 
 ---
 
 ### C++20 新特性
-- **`overload` 辅助模板**（需手动实现或使用第三方库）：  
+- **`overload` 辅助模板**（需手动实现或使用第三方库）：
   简化多类型访问者的定义：
   ```cpp
   template<typename... Ts> struct overloaded : Ts... { using Ts::operator()...; };

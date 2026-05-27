@@ -93,7 +93,7 @@ data: {"message": "Event 2"}
 ---
 
 ### 关键配置与注意事项
-1. **依赖配置**  
+1. **依赖配置**
    需添加`spring-boot-starter-web`和`OkHttp`相关依赖：
    ```xml
    <dependency>
@@ -103,31 +103,31 @@ data: {"message": "Event 2"}
    </dependency>
    ```
 
-2. **超时管理**  
+2. **超时管理**
    - 若外部SSE服务中断，需通过`SseEmitter.onError()`通知客户端。
    - 使用`SseEmitter(-1L)`禁用默认超时，避免因长时间无数据触发`AsyncRequestTimeoutException`。
 
-3. **多客户端支持**  
+3. **多客户端支持**
    通过`ConcurrentHashMap`管理多个`SseEmitter`实例，确保线程安全。
 
-4. **错误处理**  
+4. **错误处理**
    - 外部SSE连接失败时，调用`emitter.completeWithError()`终止客户端连接。
    - 客户端主动断开时，触发`onCompletion()`清理资源。
 
 ---
 
 ### 完整流程示例
-1. **客户端发起请求**  
+1. **客户端发起请求**
    ```bash
    curl http://localhost:8080/stream
    ```
 
-2. **服务端行为**  
+2. **服务端行为**
    - 创建`SseEmitter`并注册到管理器。
    - 启动`OkHttp`订阅外部SSE服务（如大模型API）。
    - 将外部事件实时转发至客户端。
 
-3. **数据流传递**  
+3. **数据流传递**
    ```
    外部服务 -> Spring Boot服务端 -> 客户端
    ```
@@ -148,7 +148,7 @@ data: {"message": "Event 2"}
 ---
 
 ####  **底层技术与编程模型**
-- **WebFlux**  
+- **WebFlux**
   基于Reactor响应式编程模型，采用**非阻塞I/O**（如Netty或Reactor-Netty），通过`Flux<ServerSentEvent>`处理数据流。开发者通过声明式代码组合流操作（如`map`、`filter`），无需手动管理线程，天然支持背压（Backpressure）机制，避免数据过载。  
   ```java
   @GetMapping("/sse-flux")
@@ -158,7 +158,7 @@ data: {"message": "Event 2"}
   }
   ```
 
-- **SseEmitter**  
+- **SseEmitter**
   属于Spring MVC框架，依赖**Servlet的异步处理机制**（阻塞I/O模型），需手动创建线程池或异步任务推送数据。编程模型为同步模式，开发者需自行处理线程调度与资源释放。  
   ```java
   @GetMapping("/sse-mvc")
@@ -180,42 +180,42 @@ data: {"message": "Event 2"}
 ---
 
 ####  **并发能力与资源消耗**
-- **WebFlux**  
-  - **高并发**：基于EventLoop线程模型，单线程可处理数万连接，适合IoT、实时聊天等高并发场景。  
+- **WebFlux**
+  - **高并发**：基于EventLoop线程模型，单线程可处理数万连接，适合IoT、实时聊天等高并发场景。
   - **低资源消耗**：占用少量线程（如CPU核心数），减少上下文切换开销。
 
-- **SseEmitter**  
-  - **低并发**：每个连接占用一个线程，线程池容量限制导致并发上限低（通常数百至数千）。  
+- **SseEmitter**
+  - **低并发**：每个连接占用一个线程，线程池容量限制导致并发上限低（通常数百至数千）。
   - **高资源消耗**：线程数随连接数线性增长，易引发资源耗尽问题。
 
 ---
 
 ####  **协议支持与扩展性**
-- **WebFlux**  
+- **WebFlux**
   支持多种协议：**SSE**、**WebSocket**、HTTP/2等，可灵活适配不同实时通信需求。此外，无缝集成响应式生态组件（如R2DBC、WebClient）。
 
-- **SseEmitter**  
+- **SseEmitter**
   仅支持SSE协议，功能单一，扩展性受限。
 
 ---
 
 ####  **错误处理与背压机制**
-- **WebFlux**  
-  - **背压支持**：通过`Flux`自动调节数据流速，防止客户端过载。  
+- **WebFlux**
+  - **背压支持**：通过`Flux`自动调节数据流速，防止客户端过载。
   - **健壮的错误处理**：提供`onErrorResume`等操作符，可链式定义异常恢复逻辑。
 
-- **SseEmitter**  
-  - **无背压控制**：需开发者自行实现流量限制逻辑。  
+- **SseEmitter**
+  - **无背压控制**：需开发者自行实现流量限制逻辑。
   - **手动错误处理**：依赖`try-catch`捕获异常并通过`emitter.completeWithError()`通知客户端。
 
 ---
 
 ####  **适用场景**
-- **WebFlux**  
-  - 高并发实时应用（如股票行情、AI对话）。  
+- **WebFlux**
+  - 高并发实时应用（如股票行情、AI对话）。
   - 微服务架构下的流式数据处理（如日志推送、实时监控）。
 
-- **SseEmitter**  
+- **SseEmitter**
   - 传统Spring MVC项目中的简单推送需求（如低频率通知、小型应用）。
 
 ---
@@ -234,7 +234,7 @@ data: {"message": "Event 2"}
 ---
 
 ### 选择建议
-- **优先WebFlux**：若项目需要高并发、低延迟，或已采用响应式架构（如Spring Cloud Gateway）。  
+- **优先WebFlux**：若项目需要高并发、低延迟，或已采用响应式架构（如Spring Cloud Gateway）。
 - **使用SseEmitter**：仅需简单SSE功能且无法迁移至WebFlux的传统Spring MVC项目。
 
 通过以上对比，开发者可根据具体需求选择合适技术方案，优化系统性能与开发效率。
@@ -358,8 +358,8 @@ public void summary(Sink<String> sink, Long postId) {
 ### **使用RestTemplate（同步请求）**
 **适用场景**：传统同步HTTP请求，适合简单接口调用。  
 **步骤**：  
-1. **添加依赖**：确保`spring-boot-starter-web`已引入（默认包含）。  
-2. **配置Bean**：在配置类中定义`RestTemplate`的Bean：  
+1. **添加依赖**：确保`spring-boot-starter-web`已引入（默认包含）。
+2. **配置Bean**：在配置类中定义`RestTemplate`的Bean：
    ```java
    @Configuration
    public class RestTemplateConfig {
@@ -369,8 +369,8 @@ public void summary(Sink<String> sink, Long postId) {
        }
    }
    ```  
-3. **发送请求**：  
-   - **GET请求**：  
+3. **发送请求**：
+   - **GET请求**：
      ```java
      @Autowired
      private RestTemplate restTemplate;
@@ -380,7 +380,7 @@ public void summary(Sink<String> sink, Long postId) {
          return restTemplate.getForObject(url, String.class);
      }
      ```  
-   - **POST请求**：  
+   - **POST请求**：
      ```java
      public String postData() {
          String url = "https://api.example.com/post";
@@ -396,14 +396,14 @@ public void summary(Sink<String> sink, Long postId) {
 ### **使用WebClient（异步/响应式请求）**
 **适用场景**：非阻塞、响应式编程，支持同步/异步调用。  
 **步骤**：  
-1. **添加依赖**：引入`spring-boot-starter-webflux`：  
+1. **添加依赖**：引入`spring-boot-starter-webflux`：
    ```xml
    <dependency>
        <groupId>org.springframework.boot</groupId>
        <artifactId>spring-boot-starter-webflux</artifactId>
    </dependency>
    ```  
-2. **配置Bean**：通过Builder自定义超时、连接池等：  
+2. **配置Bean**：通过Builder自定义超时、连接池等：
    ```java
    @Bean
    public WebClient webClient() {
@@ -413,8 +413,8 @@ public void summary(Sink<String> sink, Long postId) {
            .build();
    }
    ```  
-3. **发送请求**：  
-   - **同步调用**：  
+3. **发送请求**：
+   - **同步调用**：
      ```java
      public String syncGet() {
          return webClient.get()
@@ -424,7 +424,7 @@ public void summary(Sink<String> sink, Long postId) {
              .block();
      }
      ```  
-   - **异步调用**：  
+   - **异步调用**：
      ```java
      public Mono<String> asyncGet() {
          return webClient.get()
@@ -439,15 +439,15 @@ public void summary(Sink<String> sink, Long postId) {
 ### **使用Feign（声明式HTTP客户端）**
 **适用场景**：简化RESTful服务调用，适合微服务架构。  
 **步骤**：  
-1. **添加依赖**：引入OpenFeign：  
+1. **添加依赖**：引入OpenFeign：
    ```xml
    <dependency>
        <groupId>org.springframework.cloud</groupId>
        <artifactId>spring-cloud-starter-openfeign</artifactId>
    </dependency>
    ```  
-2. **启用Feign**：在启动类添加`@EnableFeignClients`。  
-3. **定义接口**：声明式调用外部API：  
+2. **启用Feign**：在启动类添加`@EnableFeignClients`。
+3. **定义接口**：声明式调用外部API：
    ```java
    @FeignClient(name = "externalApi", url = "https://api.example.com")
    public interface ExternalApiClient {
@@ -455,7 +455,7 @@ public void summary(Sink<String> sink, Long postId) {
        String getData();
    }
    ```  
-4. **注入使用**：  
+4. **注入使用**：
    ```java
    @Autowired
    private ExternalApiClient client;
@@ -497,9 +497,9 @@ client.newCall(request).enqueue(new Callback() {
 ---
 
 ### **选择建议**
-- **同步场景**：优先使用WebClient或RestTemplate。  
-- **响应式/高并发**：WebClient（支持非阻塞）。  
-- **微服务调用**：Feign（声明式简化）。  
+- **同步场景**：优先使用WebClient或RestTemplate。
+- **响应式/高并发**：WebClient（支持非阻塞）。
+- **微服务调用**：Feign（声明式简化）。
 - **复杂配置需求**：Apache HttpClient或OkHttp。
 
 更多配置细节（如超时设置、拦截器）可参考官方文档或相关搜索来源。
@@ -515,7 +515,7 @@ client.newCall(request).enqueue(new Callback() {
 如果将配置文件放在**外部目录**（如与Jar包同级目录的`config`文件夹或自定义路径），并在启动时通过`--spring.config.location`参数指定其位置，则修改后只需**重启应用**即可生效，无需重新编译打包。  
 **操作步骤**：
 1. 将`application.yaml`移动到Jar包外部（如`/opt/app/config/`）。
-2. 启动命令中添加参数：  
+2. **启动命令中添加参数**：
    ```bash
    java -jar your-app.jar --spring.config.location=file:/opt/app/config/
    ```
@@ -526,9 +526,9 @@ client.newCall(request).enqueue(new Callback() {
 ### **动态刷新配置（无需重启）**
 通过集成**Spring Cloud Config**或**Spring Boot Actuator**，可实现配置的**动态刷新**，无需重启应用。  
 **实现方式**：
-- **Spring Cloud Config**：  
+- **Spring Cloud Config**：
   将配置集中存储在Git等版本库中，通过`@RefreshScope`注解刷新Bean，调用`/actuator/refresh`接口触发更新。
-- **手动刷新**：  
+- **手动刷新**：
   使用`ContextRefresher`类主动刷新配置（需引入`spring-cloud-context`依赖）：  
   ```java
   @Autowired
@@ -544,7 +544,7 @@ client.newCall(request).enqueue(new Callback() {
 
 ### **开发环境热部署（自动重启）**
 在开发阶段，使用`spring-boot-devtools`工具可实现**修改后自动重启**（非生产环境适用）：  
-1. 添加依赖：
+1. **添加依赖**：
    ```xml
    <dependency>
        <groupId>org.springframework.boot</groupId>
@@ -557,9 +557,9 @@ client.newCall(request).enqueue(new Callback() {
 ---
 
 ### **总结**
-- **是否需要重新编译**：  
+- **是否需要重新编译**：
   **不需要**。无论采用外部配置还是动态刷新，均无需重新编译代码。
-- **是否需要重启**：  
+- **是否需要重启**：
   - 若使用外部配置文件但未集成动态刷新，需**手动重启应用**。
   - 若通过动态刷新或热部署工具，则**无需重启**。
 

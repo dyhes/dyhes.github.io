@@ -2,8 +2,8 @@
 title: 【React】Basics
 date: 2021-05-01 00:00:00+0000
 categories: 
--  nutrition
--  temple
+- nutrition
+- temple
 tags:
     - React
 ---
@@ -33,7 +33,7 @@ const element = React.createElement(
 
 ### In-depth
 
-* Choosing the Type at Runtime
+* **Choosing the Type at Runtime**
 
   You cannot use a general expression as the React element type. If you do want to use a general expression to indicate the type of the element, just assign it to a capitalized variable first. This often comes up when you want to render a different component based on a prop:
 
@@ -51,7 +51,7 @@ const element = React.createElement(
   }
   ```
   
-* Props default to 'true'
+* **Props default to 'true'**
 
   ```jsx
   <MyTextBox autocomplete />
@@ -61,7 +61,7 @@ const element = React.createElement(
 
   In general, we don’t recommend *not* passing a value for a prop, because it can be confused with the [ES6 object shorthand](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Object_initializer#New_notations_in_ECMAScript_2015) `{foo}` which is short for `{foo: foo}` rather than `{foo: true}`. This behavior is just there so that it matches the behavior of HTML.
 
-* Spread Attributes
+* **Spread Attributes**
 
   In general, we don’t recommend *not* passing a value for a prop, because it can be confused with the [ES6 object shorthand](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Object_initializer#New_notations_in_ECMAScript_2015) `{foo}` which is short for `{foo: foo}` rather than `{foo: true}`. This behavior is just there so that it matches the behavior of HTML.
 
@@ -82,7 +82,7 @@ const element = React.createElement(
   };
   ```
   
-* Children
+* **Children**
 
   In JSX expressions that contain both an opening tag and a closing tag, the content between those tags is passed as a special prop: `props.children`.
 
@@ -140,7 +140,7 @@ Conceptually, components are like JavaScript functions. They accept arbitrary in
 
 > **Note:** **Always start component names with a capital letter.**
 
-* Function Component
+* **Function Component**
 
   ```js
   function Welcome(props) {
@@ -154,7 +154,7 @@ Conceptually, components are like JavaScript functions. They accept arbitrary in
   );
   ```
 
-* Class Component
+* **Class Component**
 
   ```jsx
   class Welcome extends React.Component {
@@ -770,7 +770,7 @@ By default, **you may not use the `ref` attribute on function components** becau
 
 If you want to allow people to take a `ref` to your function component, you can 
 
-* use [`forwardRef`](https://reactjs.org/docs/forwarding-refs.html) (possibly in conjunction with [`useImperativeHandle`](https://reactjs.org/docs/hooks-reference.html#useimperativehandle)), 
+* use [`forwardRef`](https://reactjs.org/docs/forwarding-refs.html) (possibly in conjunction with [`useImperativeHandle`](https://reactjs.org/docs/hooks-reference.html#useimperativehandle)),
 * or convert the component to a class.
 
 You can, however, **use the `ref` attribute inside a function component** as long as you refer to a DOM element or a class component
@@ -1066,7 +1066,7 @@ And that’s it! The wrapped component receives all the props of the container, 
   }
   ```
 
-* Refs Aren’t Passed Through
+* **Refs Aren’t Passed Through**
 
   While the convention for higher-order components is to pass through all props to the wrapped component, this does not work for **refs**. That’s because `ref` is not really a prop — like `key`, it’s **handled specially** by React. If you add a ref to an element whose component is the result of a HOC, the ref refers to an instance of the **outermost container component**, not the wrapped component.
 

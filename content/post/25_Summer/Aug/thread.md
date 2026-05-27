@@ -116,7 +116,6 @@ buffer.computeIfAbsent(EdgeType.class, k -> new ArrayList<>())
 ### **一、线程安全列表（List）**
 
 1. **`Vector`**
-
    - **原理**：所有方法使用`synchronized`修饰，整体加锁。
 
    - **缺点**：性能差（锁粒度粗），已过时，仅用于兼容旧代码。
@@ -129,7 +128,6 @@ buffer.computeIfAbsent(EdgeType.class, k -> new ArrayList<>())
      ```
 
 2. **`Collections.synchronizedList()`**
-
    - **原理**：通过同步块包装任意`List`，所有操作加锁（锁对象为包装后的List）。
 
    - **适用场景**：读写操作频率均衡的简单场景。
@@ -146,7 +144,6 @@ buffer.computeIfAbsent(EdgeType.class, k -> new ArrayList<>())
      ```
 
 3. **`CopyOnWriteArrayList`**
-
    - **原理**：写时复制（写操作复制新数组，替换引用），读操作无锁。
 
    - **优点**：读性能极高，适合**读多写少**（如配置、缓存）。
@@ -168,7 +165,6 @@ buffer.computeIfAbsent(EdgeType.class, k -> new ArrayList<>())
 #### **非阻塞队列**
 
 1. **`ConcurrentLinkedQueue`**
-
    - **原理**：基于CAS（无锁算法）的链表队列，支持高并发读写。
 
    - **特点**：无界、FIFO，适用于高吞吐场景（如任务分发）。
@@ -183,7 +179,6 @@ buffer.computeIfAbsent(EdgeType.class, k -> new ArrayList<>())
 #### **阻塞队列（实现`BlockingQueue`接口）**
 
 1. **`LinkedBlockingQueue`**
-
    - **原理**：基于链表的可选有界队列，生产者和消费者使用分离锁。
 
    - **特点**：默认无界（`Integer.MAX_VALUE`），可指定容量。`put()`和`take()`在队列满/空时阻塞。
@@ -199,17 +194,14 @@ buffer.computeIfAbsent(EdgeType.class, k -> new ArrayList<>())
      ```
 
 2. **`ArrayBlockingQueue`**
-
    - **原理**：基于数组的有界队列，全局一把锁。
    - **特点**：固定容量，支持公平锁策略（减少线程饥饿）。
 
 3. **`PriorityBlockingQueue`**
-
    - **原理**：基于堆的无界优先级队列，元素需实现`Comparable`。
    - **适用场景**：按优先级处理任务（如紧急任务优先）。
 
 4. **`SynchronousQueue`**
-
    - **原理**：无内部容量，插入操作必须等待移除操作。
    - **特点**：直接传递任务，适用于低延迟线程协作（如`Executors.newCachedThreadPool()`）。
 
@@ -232,8 +224,7 @@ buffer.computeIfAbsent(EdgeType.class, k -> new ArrayList<>())
 ### **四、注意事项**
 
 1. **复合操作原子性**：
-
-   - 即使使用线程安全集合，复合操作（如“检查-更新”）仍需额外同步：
+   - **即使使用线程安全集合，复合操作（如“检查-更新”）仍需额外同步**：
 
      ```
      synchronized (list) {
@@ -242,11 +233,9 @@ buffer.computeIfAbsent(EdgeType.class, k -> new ArrayList<>())
      ```
 
 2. **迭代器安全**：
-
    - `synchronizedList`迭代时需手动同步；`CopyOnWriteArrayList`迭代器为快照，不支持修改。
 
 3. **队列阻塞控制**：
-
    - 阻塞队列的`put()`/`take()`会永久阻塞，可使用`offer(e, timeout)`/`poll(timeout)`设置超时。
 
 通过合理选择线程安全集合，可显著提升多线程程序的性能和可靠性。实际开发中需根据读写频率、数据实时性要求及容量需求综合权衡。
@@ -260,7 +249,6 @@ buffer.computeIfAbsent(EdgeType.class, k -> new ArrayList<>())
 ### ⚠️ **ConcurrentLinkedQueue 的局限性**
 
 1. **写多读少的性能瓶颈**
-
    - **内存占用高**：
 
      每个写入操作需创建 `Node`对象（含数据和指针），大量写入时可能触发频繁 GC，影响吞吐量 。
@@ -270,7 +258,6 @@ buffer.computeIfAbsent(EdgeType.class, k -> new ArrayList<>())
      写操作依赖 CAS 更新尾节点。若写入线程过多，CAS 失败重试概率增加，导致 CPU 空转，反而降低性能 。
 
 2. **批量插入的适配性问题**
-
    - **无阻塞机制**：
 
      `ConcurrentLinkedQueue`不支持阻塞式批量消费。消费者需主动轮询（`poll`），在队列空时造成 CPU 浪费 。
@@ -280,7 +267,6 @@ buffer.computeIfAbsent(EdgeType.class, k -> new ArrayList<>())
      `size()`和 `isEmpty()`结果不准确，难以精确触发批量插入（例如每积累 100 条数据写入一次）。
 
 3. **与数据库批量写入的协同效率低**
-
    - **读操作成本**：
 
      批量插入需遍历队列取出多条数据（如循环 `poll`），而 `ConcurrentLinkedQueue`的遍历效率较低（需处理并发修改的弱一致性）。
@@ -372,17 +358,14 @@ buffer.computeIfAbsent(EdgeType.class, k -> new ArrayList<>())
 ### 💎 **结论与建议**
 
 1. **避免使用 `ConcurrentLinkedQueue`**：
-
    在**写多读少**的数据库批量插入中，其无界特性、内存开销和弱一致性会拖累性能，且无法直接支持高效批量消费。
 
 2. **首选 `LinkedBlockingQueue`**：
-
    - 通过 **有界容量** 防止内存溢出；
    - 结合 **`drainTo`** 实现零拷贝批量转移；
    - 消费者线程 **阻塞等待** 节省 CPU 。
 
 3. **超高性能场景考虑手动实现**：
-
    若吞吐量要求极高（如百万级/秒），可基于环形缓冲区和分段锁定制队列，最大化写入效率 。
 
 > **附加优化建议**：

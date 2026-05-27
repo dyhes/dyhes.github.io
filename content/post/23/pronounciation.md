@@ -2,7 +2,7 @@
 title: 【IPA】Pronounciation
 date: 2023-04-26 00:00:00+0000
 categories: 
--  deer
+- deer
 ---
 
 ## IPA
@@ -91,29 +91,24 @@ always connected with words before and after it
 
 ### rules
 
-1. Rule1
-
+1. **Rule1**
    * Falling tone= end of sentence
 
    * Rising tone= sentence not finished
 
-2. Rule2
-
+2. **Rule2**
    * Falling tone = 'new' information
    * Rising tone = 'old' infomation
 
-3. Rule3(Questions)
-
+3. **Rule3(Questions)**
    * Falling tone= you don't know the answer
-   *  Rising tone = you think you know the answer
+   * Rising tone = you think you know the answer
 
-4. Rule4
-
+4. **Rule4**
    * Falling tone = make a comment
    * Rising tone = criticizing someone
 
-5. Rule5
-
+5. **Rule5**
    * Falling tone= make a suggestion
    * Rising tone = make a indirect suggestion
 
@@ -135,23 +130,23 @@ always connected with words before and after it
 
 * am 'm
 
-* are 're
+* **are 're**
 
   before vowel /shewa
 
-* is 's  has 's
+* **is 's  has 's**
 
   most sound 's /z/
 
   /t/ /p/ /k/ /f/ /theta/  's  /s/
 
-* would 'd had 'd
+* **would 'd had 'd**
 
   vowel+'d /d/
 
   name vowel or consonant+'d /schwa d/
 
-* have 've 
+* **have 've**
 
   vowel+'ve /v/
 
@@ -159,11 +154,11 @@ always connected with words before and after it
 
 * not n't  /nt/
 
-* unwritten
+* **unwritten**
 
-  * did-> ‘d 
+  * did-> ‘d
 
-  * several continuous contraction
+  * **several continuous contraction**
 
     they'll've
 

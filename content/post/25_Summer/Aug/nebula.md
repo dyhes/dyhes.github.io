@@ -46,9 +46,9 @@ In graph theory, a path in a graph is a finite or infinite sequence of edges whi
 Paths can be categorized into 3 types: `walk`, `trail`, and `path`. 
 
 * A `walk` is a finite or infinite sequence of edges. **Both vertices and edges** can be repeatedly visited in graph traversal.
-* A `trail` is a finite sequence of edges. **Only vertices** can be repeatedly visited in graph traversal. 
-  * A `cycle` refers to a closed `trail`. Only the terminal vertices can be repeatedly visited. 
-  * A `circuit` refers to a closed `trail`. Edges cannot be repeatedly visited in graph traversal. Apart from the terminal vertices, other vertices can also be repeatedly visited. 
+* A `trail` is a finite sequence of edges. **Only vertices** can be repeatedly visited in graph traversal.
+  * A `cycle` refers to a closed `trail`. Only the terminal vertices can be repeatedly visited.
+  * A `circuit` refers to a closed `trail`. Edges cannot be repeatedly visited in graph traversal. Apart from the terminal vertices, other vertices can also be repeatedly visited.
 * A `path` is a finite sequence of edges. Neither vertices nor edges can be repeatedly visited in graph traversal.
 
 ## Architecture
@@ -69,7 +69,7 @@ NebulaGraph consists of three services: the Graph Service, the Storage Service, 
 
 * Manages schema information
 
-* Manages jobs
+* **Manages jobs**
 
   The Job Management module in the Meta Service is responsible for the creation, queuing, querying, and deletion of jobs.
 

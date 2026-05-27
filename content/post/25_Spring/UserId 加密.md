@@ -239,14 +239,14 @@ Flux.from(body).map(dataBuffer -> {
 ---
 
 ### 实现原理
-1. **参数获取**  
+1. **参数获取**
    `@RequestParam` 参数会以 **查询字符串（Query String）** 的形式出现在 URL 中（例如 `?userId=123&userId=456`），可以通过 `ServerHttpRequest#getQueryParams()` 方法获取参数列表。
    
-2. **加解密流程**  
+2. **加解密流程**
    - **解密请求**：拦截请求参数，识别加密字段（如 `encryptedUserId`），解密后替换原始参数。
    - **加密响应**：修改下游服务返回的响应数据，对 `userId` 字段加密后再返回客户端。
 
-3. **支持列表参数**  
+3. **支持列表参数**
    通过 `MultiValueMap<String, String>` 处理重复键名（如多个 `userId` 值），确保每个值都能被单独加解密。
 
 ---
@@ -321,15 +321,15 @@ UriComponentsBuilder.fromUri(request.getURI())
 ---
 
 ### 注意事项
-1. **性能优化**  
+1. **性能优化**
    - 使用缓存（如 Caffeine）存储已处理的 `nonce`，避免重复解密。
    - 避免在网关层处理超大参数列表。
 
-2. **兼容性**  
+2. **兼容性**
    - 客户端需使用相同的加密算法和密钥版本。
    - 通过请求头（如 `X-Encrypt-Version`）标识加密协议版本。
 
-3. **异常处理**  
+3. **异常处理**
    - 捕获加解密异常，返回 `HTTP 400 Bad Request`。
    - 日志中需脱敏敏感参数。
 
@@ -386,7 +386,7 @@ private void handlePagination(ObjectNode responseNode) {
 ```
 
 ### 性能优化
-1. **响应体缓存优化**  
+1. **响应体缓存优化**
 使用`CachedBodyOutputMessage`避免重复解析（参考网页2响应式编程注意事项）：
 ```java
 CachedBodyOutputMessage cachedBody = new CachedBodyOutputMessage(exchange, exchange.getResponse().getHeaders());
@@ -399,7 +399,7 @@ return chain.filter(exchange)
     }));
 ```
 
-2. **ObjectMapper复用配置**  
+2. **ObjectMapper复用配置**
 通过预配置提升序列化性能（参考网页7、8的Jackson优化建议）：
 ```java
 // 在构造函数中添加配置
@@ -410,7 +410,7 @@ this.mapper = mapper.copy()
 ```
 
 ### 代码可维护性优化
-1. **异常处理改进**  
+1. **异常处理改进**
 增加更完善的错误处理机制（参考网页6的异常处理实践）：
 ```java
 try {
@@ -425,7 +425,7 @@ try {
 }
 ```
 
-2. **响应式编程优化**  
+2. **响应式编程优化**
 采用响应式操作符重构处理链（参考网页2的异步处理建议）：
 ```java
 return super.writeWith(fluxBody
@@ -485,8 +485,8 @@ Counter.builder("gateway.userid_filter_processed")
 ```
 
 **优化效果**：  
-1. 内存消耗降低约60%（流式处理减少内存占用）  
-2. 吞吐量提升约30%（异步处理+缓存优化）  
+1. 内存消耗降低约60%（流式处理减少内存占用）
+2. 吞吐量提升约30%（异步处理+缓存优化）
 3. 异常处理覆盖率从70%提升至95%
 
 建议通过JMeter等工具进行压测验证，重点观察P99响应时间和堆内存使用情况。对于分页数据等特殊场景，可考虑增加单元测试用例验证边界条件（参考网页6的测试实践）。

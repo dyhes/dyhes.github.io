@@ -2,10 +2,10 @@
 title: 【Node】Basics
 date: 2021-05-16 00:00:00+0000
 categories: 
--  nutrition
--  temple
+- nutrition
+- temple
 tags:
--  Node
+- Node
 ---
 
 ## Introduction
@@ -48,7 +48,7 @@ JavaScript is generally considered an interpreted language, but modern JavaScrip
 
 ## Run and Exit 
 
-* RUN
+* **RUN**
 
   The usual way to run a Node.js program is to run the `node` globally available command (once you install Node.js) and pass the name of the file you want to execute.
 
@@ -60,7 +60,7 @@ JavaScript is generally considered an interpreted language, but modern JavaScrip
 nodemon app.js
 ```
 
-* EXIT
+* **EXIT**
 
   * When running a program in the console you can close it with `ctrl-C`
 
@@ -164,15 +164,15 @@ node
 
 > Note: REPL stands for Read Evaluate Print Loop, and it is a programming language environment (basically a console window) that takes single expression as user input and returns the result back to the console after execution. The REPL session provides a convenient way to quickly test simple JavaScript code.
 
-* JavaScript objects
+* **JavaScript objects**
 
   Try entering the name of a JavaScript class, like `Number`, add a dot and press `tab`. The REPL will print all the properties and methods you can access on that class
 
-* global objects
+* **global objects**
 
   You can inspect the globals you have access to by typing `global.` and pressing `tab`.
 
-* Special commands
+* **Special commands**
 
   The REPL has some special commands, all starting with a dot `.`:
 
@@ -237,7 +237,7 @@ Node.js provides a [`console` module](https://nodejs.org/api/console.html) which
 
 It is basically the same as the `console` object you find in the browser.
 
-* `console.log()`
+* **`console.log()`**
 
   The most basic and most used method is `console.log()`, which prints the string you pass to it to the console.
 
@@ -245,19 +245,19 @@ It is basically the same as the `console` object you find in the browser.
 
   You can also pass multiple variables to `console.log()`
 
-* `console.clear()`
+* **`console.clear()`**
 
   ``console.clear()` clears the console (the behavior might depend on the console used)
 
-* `console.count()`
+* **`console.count()`**
 
   What happens is that `console.count()` will count the number of times a string is printed, and print the count next to it.
 
-* `console.countReset()` 
+* **`console.countReset()`**
 
   The `console.countReset()` method resets counter used with `console.count()`.
 
-* `console.trace()`
+* **`console.trace()`**
 
   There might be cases where it's useful to print the call stack trace of a function, maybe to answer the question how did you reach that part of the code
 
@@ -298,7 +298,7 @@ const measureDoingSomething = () => {
 measureDoingSomething()
 ```
 
-* `console.error()`
+* **`console.error()`**
 
   As we saw `console.log` is great for printing messages in the Console. This is what's called the standard output, or `stdout`.
 
@@ -367,7 +367,7 @@ const { car } = require('./items')
 
 The difference between `module.exports` and `exports`:
 
-* `module.exports` : exposes **the object** it points to. 
+* `module.exports` : exposes **the object** it points to.
 * `exports`: exposes ***the properties*** of the object it points to.
 
 ## Production
@@ -497,20 +497,20 @@ The `package.json` file is kind of a **manifest** for your project. It can do a 
 
 There are no fixed requirements of what should be in a `package.json` file, for an application. The only requirement is that it **respects the JSON format**, otherwise it cannot be read by programs that try to access its properties programmatically.
 
-* main
+* **main**
 
   Sets the **entry point** for the package. When you import this package in an application, that's where the application will search for the module exports.
 
 
-* private
+* **private**
 
   if set to `true` prevents the app/package to be accidentally published on `npm`
 
-* engines
+* **engines**
 
   Sets which **versions of Node.js and other commands** this package/app work on
 
-* browserslist
+* **browserslist**
 
   Is used to tell **which browsers (and their versions)** you want to support. It's referenced by Babel, Autoprefixer, and other tools, to only add the polyfills and fallbacks needed to the browsers you target.
 
@@ -945,7 +945,7 @@ try {
 
 * Use `fs.readdir()` or `fs.readdirSync()` to read the contents of a directory.
 
-* Use `fs.rename()` or `fs.renameSync()` to rename folder. 
+* Use `fs.rename()` or `fs.renameSync()` to rename folder.
 
 * Use `fs.rmdir()` or `fs.rmdirSync()` to remove a folder.
 

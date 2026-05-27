@@ -238,7 +238,6 @@ public class CustomApplicationContextInitializer implements ApplicationContextIn
 让 Spring Boot 识别到你的 `ApplicationContextInitializer`有三种主要方式，它们的**加载优先级**从高到低如下 ：
 
 1. **配置文件注册（优先级最高）**
-
    在 `application.properties`或 `application.yml`中配置：
 
    ```
@@ -254,7 +253,6 @@ public class CustomApplicationContextInitializer implements ApplicationContextIn
    ```
 
 2. **Spring Factories 机制注册**
-
    在项目的 `src/main/resources/META-INF/`目录下创建 `spring.factories`文件：
 
    ```
@@ -262,7 +260,6 @@ public class CustomApplicationContextInitializer implements ApplicationContextIn
    ```
 
 3. **编程方式注册（优先级最低）**
-
    在启动类的 `main`方法中，通过 `SpringApplication`实例添加：
 
    ```
@@ -506,19 +503,15 @@ public class OrderService {
 ### ⚙️ 高级特性与最佳实践
 
 1. **异步事件处理**
-
    默认情况下，事件监听是同步的。如果一个监听器执行缓慢，会阻塞发布线程和后续监听器。使用 `@Async`注解可以实现异步处理，这对于发送邮件、记录日志等非核心或耗时操作非常有用。
 
 2. **监听器执行顺序控制**
-
    当多个监听器监听同一事件时，可以使用 `@Order`注解来控制它们的执行顺序。数值越小，优先级越高，越先执行。
 
 3. **事务绑定事件**
-
    Spring 提供了 `@TransactionalEventListener`注解，它允许你将监听器的执行与事务的特定阶段（如 AFTER_COMMIT）绑定，确保事件处理只在事务成功提交后发生。
 
 4. **最佳实践建议**
-
    - **保持监听器轻量级**：避免在监听器中执行耗时操作，若无法避免，务必使用异步处理。
    - **保持无状态**：监听器应是单例且无状态的，避免在监听器内部维护易变的状态。
    - **做好异常处理**：在监听器内部妥善处理异常，防止异常扩散影响事件发布者或其他监听器。
@@ -1676,19 +1669,15 @@ flowchart TD
 这一阶段主要完成容器启动前的“基建”工作，为后续的 Bean 加载和实例化搭建舞台。
 
 1. **`prepareRefresh()`- 准备刷新**
-
    此方法是刷新过程的起点，主要负责初始化上下文环境。它会设置容器的启动时间戳和活跃状态，初始化 **`Environment`** 对象（该对象管理着系统属性、环境变量和自定义配置文件等属性源），并对必要的属性进行验证，确保后续流程能在一个定义良好的环境下进行 。
 
 2. **`obtainFreshBeanFactory()`- 获取 BeanFactory**
-
    在此步骤中，容器会**创建或刷新其内部的 `BeanFactory`**（通常是 `DefaultListableBeanFactory`）。这个 `BeanFactory`是 Spring 容器真正管理 Bean 的“工作台”。核心任务是加载配置源（如 XML 文件或注解配置类），将其解析为一个个 **`BeanDefinition`** 对象，并将这些 Bean 的“蓝图”注册到 `BeanFactory`中 。你可以将其理解为将所有零件的设计图纸录入工厂的数据库。
 
 3. **`prepareBeanFactory()`- 配置 BeanFactory**
-
    获取到基础的 `BeanFactory`后，此步骤会对其进行“精装修”。它配置了类加载器、**SPEL表达式解析器**、属性编辑器等必要组件。同时，它会注册一些关键的**内置 `BeanPostProcessor`**，例如用于处理 `Aware`接口的 `ApplicationContextAwareProcessor`，为容器的高级功能打下基础 。
 
 4. **`postProcessBeanFactory()`- BeanFactory 后置处理**
-
    这是一个**预留的模板方法**，允许具体的 `ApplicationContext`子类（如用于 Web 环境的实现）根据自身需求，对 `BeanFactory`进行进一步的定制，例如注册新的作用域（Scope）如 `request`或 `session`。
 
 ### 🔧 第二阶段：扩展点调用与功能组件初始化
@@ -1696,19 +1685,15 @@ flowchart TD
 在 Bean 实例化之前，Spring 提供了强大的扩展机制，允许开发者介入容器的配置过程。
 
 1. **`invokeBeanFactoryPostProcessors()`- 调用 BeanFactory 后处理器**
-
    这是 Spring 框架中一个**极其重要的扩展点**。此步骤会实例化并调用所有 `BeanFactoryPostProcessor`的实现。这些处理器有权在 Bean 实例化**之前**，**修改**已注册的 `BeanDefinition`。最典型的例子是 `ConfigurationClassPostProcessor`，它负责解析 `@Configuration`、`@Bean`等注解；以及 `PropertySourcesPlaceholderConfigurer`，用于解析 `${...}`占位符 。
 
 2. **`registerBeanPostProcessors()`- 注册 Bean 后处理器**
-
    此步骤负责从 `BeanFactory`中查找所有 `BeanPostProcessor`的实现，并将它们注册到容器中。需要注意的是，这里只是**注册**，真正的调用发生在后续 Bean 的实例化过程中。`BeanPostProcessor`是影响 Bean 生命周期的另一个关键扩展点，常用于处理依赖注入（如 `@Autowired`）、AOP 代理创建等 。
 
 3. **`initMessageSource()`- 初始化国际化消息源**
-
    此步骤为容器提供**国际化（i18n）** 支持。它会查找名为 `messageSource`的 Bean，如果存在则使用它，否则会初始化一个默认的实现，用于解析不同语言环境的消息 。
 
 4. **`initApplicationEventMulticaster()`- 初始化应用事件广播器**
-
    此步骤初始化了 Spring **事件驱动模型**的核心组件——事件广播器。同样，它会尝试查找名为 `applicationEventMulticaster`的 Bean，若未找到则使用默认的 `SimpleApplicationEventMulticaster`。这个广播器负责将发布的事件通知给所有相关的监听器 。
 
 ### 🚀 第三阶段：容器刷新与 Bean 实例化
@@ -1716,19 +1701,15 @@ flowchart TD
 这是启动流程的冲刺阶段，容器将完成所有准备工作并正式启动。
 
 1. **`onRefresh()`- 模板方法：子容器刷新**
-
    这是另一个**模板方法**，允许特定的 `ApplicationContext`子类在此时机执行特殊逻辑。例如，**Spring Boot 的 `ServletWebServerApplicationContext`就在此方法中创建并启动了内嵌的 Web 服务器（如 Tomcat）** 。
 
 2. **`registerListeners()`- 注册应用监听器**
-
    此步骤会注册所有实现了 `ApplicationListener`接口的监听器 Bean，并将它们添加到之前初始化的事件广播器中。同时，它会发布在刷新过程中可能积压的“早期应用事件” 。
 
 3. **`finishBeanFactoryInitialization()`- 完成 BeanFactory 的初始化**
-
    这是 `refresh()`方法中**最重量级的一步**。在此步骤中，Spring 容器会**实例化所有非延迟加载的单例 Bean**。它遍历所有已注册的 `BeanDefinition`，调用 `getBean()`方法，触发 Bean 的创建、依赖注入和初始化（如调用 `@PostConstruct`方法）。至此，所有单例 Bean 都已创建完毕并放入单例池中，应用程序的核心组件就绪 。
 
 4. **`finishRefresh()`- 完成刷新**
-
    这是整个启动流程的收官之作。它会清空资源缓存，初始化生命周期处理器，并最终发布 **`ContextRefreshedEvent`** 事件，正式宣告容器刷新完成。此后，`ApplicationContext`便处于完全活动状态，可以对外提供服务了 。
 
 ### 💎 总结

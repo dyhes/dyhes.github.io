@@ -2,7 +2,7 @@
 title: 【Android】Jetpack Compose
 date: 2021-11-18 00:00:00+0000
 categories: 
--  nutrition
+- nutrition
 tags:
     - Android
 ---
@@ -778,15 +778,15 @@ NavHost(navController, startDestination = "home") {
 
 ### Layout
 
-* Column
+* **Column**
 
   Use [`Column`](https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/package-summary#Column(androidx.compose.ui.Modifier,androidx.compose.foundation.layout.Arrangement.Vertical,androidx.compose.ui.Alignment.Horizontal,kotlin.Function1)(androidx.compose.ui.Modifier,androidx.compose.foundation.layout.Arrangement.Vertical,androidx.compose.ui.Alignment.Horizontal,kotlin.Function1)) to place items vertically on the screen.
 
-* Row
+* **Row**
 
   Similarly, use [`Row`](https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/package-summary#Row(androidx.compose.ui.Modifier,androidx.compose.foundation.layout.Arrangement.Horizontal,androidx.compose.ui.Alignment.Vertical,kotlin.Function1)(androidx.compose.ui.Modifier,androidx.compose.foundation.layout.Arrangement.Horizontal,androidx.compose.ui.Alignment.Vertical,kotlin.Function1)) to place items horizontally on the screen. Both `Column` and `Row` support configuring the alignment of the elements they contain.
 
-* Box
+* **Box**
 
   Use [`Box`](https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/package-summary#Box(androidx.compose.ui.Modifier,androidx.compose.ui.Alignment,kotlin.Boolean,kotlin.Function1)) to put elements on top of another. `Box` also supports configuring specific alignment of the elements it contains.
 
