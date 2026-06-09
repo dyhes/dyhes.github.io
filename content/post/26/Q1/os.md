@@ -1,5 +1,5 @@
 ---
-title: 【ByteDance】OS 1
+title: 【OS】 Feb
 date: 2026-02-14 00:00:00+0000
 categories: [arts]
 tags: [OS]

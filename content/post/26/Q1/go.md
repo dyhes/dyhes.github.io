@@ -1,7 +1,8 @@
 ---
-title: 【ByteDance】Go 1
+title: 【Go】 Feb
 date: 2026-02-16 00:00:00+0000
 categories:  [temple, arts]
+tags: [Go]
 ---
 
 ## make

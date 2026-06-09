@@ -1,5 +1,5 @@
 ---
-title: 【LeetCode-C】26 Q1 Knowledges
+title: 【LeetCode-C】 Knowledges Feb
 date: 2026-02-16 00:00:00+0000
 categories: 
 - pearl
