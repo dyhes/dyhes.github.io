@@ -43,7 +43,7 @@ The data type specifies the size and type of information the variable will store
 
 A `string` variable contains a collection of characters surrounded by double quotes
 
-o use strings, you must include an additional header file in the source code, the `<string>` library
+To use strings, you must include an additional header file in the source code, the `<string>` library
 
 It is possible to use the extraction operator `>>` on `cin` to display a string entered by a user. However, `cin` considers a space (whitespace, tabs, etc) as a terminating character, which means that it can only display a single word . That's why, when working with strings, we often use the `getline()` function to read a line of text. It takes `cin` as the first parameter, and the string variable as second.
 

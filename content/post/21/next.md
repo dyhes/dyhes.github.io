@@ -225,8 +225,6 @@ If you **do not** need to pre-render the data, you can also use the following st
 
 If you need to fetch data at **request time** instead of at build time, you can try [**Server-side Rendering**](https://nextjs.org/docs/basic-features/pages#server-side-rendering):
 
-![Server-side Rendering](https://nextjs.org/static/images/learn/data-fetching/server-side-rendering-with-data.png)
-
 To use [Server-side Rendering](https://nextjs.org/docs/basic-features/pages#server-side-rendering), you need to export [`getServerSideProps`](https://nextjs.org/docs/basic-features/data-fetching#getserversideprops-server-side-rendering) instead of [`getStaticProps`](https://nextjs.org/docs/basic-features/data-fetching#getstaticprops-static-generation) from your page.
 
 #### Using `getServerSideProps`
@@ -253,8 +251,6 @@ If you **do not** need to pre-render the data, you can also use the following st
 
 - Statically generate (pre-render) parts of the page that do not require external data.
 - When the page loads, fetch external data from the client using JavaScript and populate the remaining parts.
-
-![Client-side Rendering](https://nextjs.org/static/images/learn/data-fetching/client-side-rendering.png)
 
 This approach works well for user dashboard pages, for example. Because a dashboard is a private, user-specific page, SEO is not relevant, and the page doesn’t need to be [pre-rendered](https://nextjs.org/docs/basic-features/pages#pre-rendering). The data is frequently updated, which requires request-time data fetching.
 

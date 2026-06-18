@@ -33,7 +33,6 @@ Some ccTLDs, such as .tv (for the island nation of Tuvalu) and .io (the British 
 
 The Domain Name System (DNS) is the **hierarchical and decentralized naming system** used to identify computers, services, and other resoures reachable through the Internet or other Internet Protocol (IP) networks. 
 
-![image-20220324153500031](C:\Users\dyhes\AppData\Roaming\Typora\typora-user-images\image-20220324153500031.png)
 
 The domain name system is administered by the **Internet Corporation for Assigned Names and Numbers(ICANN)**, a non-profit organization based in California founded in **1998**.
 
@@ -51,17 +50,14 @@ The DNS recursor is a server designed to **receive queries from client machines 
 
 
 
-![image-20220324154414911](C:\Users\dyhes\AppData\Roaming\Typora\typora-user-images\image-20220324154414911.png)
 
 ### Chache
 
 caching is a data persistence process that helps short-circuit the necessary requests by serving the requested resource record earlier in the DNS lookup.
 
-![image-20220120142648564](C:\Users\dyhes\AppData\Roaming\Typora\typora-user-images\image-20220120142648564.png)
 
 ## Subdomain
 
 It’s worth mentioning that in instances where the query is for a subdomain such as foo.example.com or blog.cloudflare.com an **additional nameserver** will be added to the sequence **after the authoritative nameserver**, which is responsible for storing the subdomain’s **CNAME record**.
 
-![image-20220324154954437](C:\Users\dyhes\AppData\Roaming\Typora\typora-user-images\image-20220324154954437.png)
 

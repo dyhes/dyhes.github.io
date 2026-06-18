@@ -656,9 +656,7 @@ baz
 bar
 ```
 
-![image-20220130164512101](C:\Users\dyhes\AppData\Roaming\Typora\typora-user-images\image-20220130164512101.png)
 
-![image-20220130171105441](C:\Users\dyhes\AppData\Roaming\Typora\typora-user-images\image-20220130171105441.png)
 
 ### The Message Queue
 

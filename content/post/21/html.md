@@ -65,23 +65,19 @@ There are four different techniques to create multicolumn layouts. Each techniqu
 
 In HTML there are some semantic elements that can be used to define different parts of a web page:  
 
-- <article>
-- <aside>
-- <details>
-- <figcaption>
-- <figure>
-- <footer>
-- <header>
-- <main>
-- <mark>
-- <nav>
-- <section>
-- <summary>
-- <time>
-
-
-
-![image-20220128132450001](C:\Users\dyhes\AppData\Roaming\Typora\typora-user-images\image-20220128132450001.png)
+- \<article>
+- \<aside>
+- \<details>
+- \<figcaption>
+- \<figure>
+- \<footer>
+- \<header>
+- \<main>
+- \<mark>
+- \<nav>
+- \<section>
+- \<summary>
+- \<time>
 
 ## Form
 

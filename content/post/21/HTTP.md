@@ -9,7 +9,6 @@ categories:
 
 HTTP stands for Hyper Text Transfer Protocol
 
-![image-20220120200019157](C:\Users\dyhes\AppData\Roaming\Typora\typora-user-images\image-20220120200019157.png)
 
 HTTP is generally designed to be simple and human readable, even with the added complexity introduced in HTTP/2 by encapsulating HTTP messages into frames.
 
@@ -22,7 +21,6 @@ HTTP is generally designed to be simple and human readable, even with the added 
 - HTTP **method**
 - HTTP **request header**
 
-![image-20220120170645475](C:\Users\dyhes\AppData\Roaming\Typora\typora-user-images\image-20220120170645475.png)
 
 - **Optional** HTTP body.
 
@@ -50,7 +48,6 @@ HTTP is a **client-server** protocol: **requests** are sent by one entity, the u
 
 Between the client and the server there are numerous entities, collectively called proxies, which perform different operations and act as **gateways or caches**. Proxies are those  numerous computers and machines which  operate at the application layers and relay the HTTP messages between the Web browser and the server.
 
-![image-20220120200604043](C:\Users\dyhes\AppData\Roaming\Typora\typora-user-images\image-20220120200604043.png)
 
 In reality, there are more computers between a browser and the server handling the request: there are **routers, modems, and more**.
 

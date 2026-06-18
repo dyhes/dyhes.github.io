@@ -74,7 +74,6 @@ print(mean_absolute_error(val_y, val_predictions))
 
 Since we care about accuracy on new data, which we estimate from our validation data, we want to find the sweet spot between underfitting and overfitting. Visually, we want the low point of the (red) validation curve in the figure below.
 
-![image-20220201221001169](C:\Users\dyhes\AppData\Roaming\Typora\typora-user-images\image-20220201221001169.png)
 
 ## pipeline
 
@@ -84,7 +83,6 @@ Since we care about accuracy on new data, which we estimate from our validation 
 
 In **cross-validation**, we run our modeling process on different subsets of the data to get multiple measures of model quality.
 
-![image-20220207221137378](C:\Users\dyhes\AppData\Roaming\Typora\typora-user-images\image-20220207221137378.png)
 
 ## Deep Learning
 

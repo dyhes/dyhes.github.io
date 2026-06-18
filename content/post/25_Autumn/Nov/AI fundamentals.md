@@ -1,4 +1,10 @@
-# AI fundamentals
+---
+title: AI Fundamentals
+date: 2025-11-15 00:00:00+0000
+categories: [temple, nutrition]
+tags: [AI]
+---
+
 ## Token
 Token 是文本经分词（Tokenization）后生成的**最小语义单元**，可以是单词（如“apple”）、子词（如“un”+“happy”）、字符（如“A”）、标点符号（如“!”）或特殊符号（如“[CLS]”），以**整数ID序列（词表索引）**表示
 **分词策略：**

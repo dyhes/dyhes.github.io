@@ -27,7 +27,6 @@ Microsoft released its **Edge browser** in **2015** as part of the Windows 10 re
 
 ## Components
 
-![image-20220120165610428](C:\Users\dyhes\AppData\Roaming\Typora\typora-user-images\image-20220120165610428.png)
 
 
 
@@ -45,7 +44,6 @@ Microsoft released its **Edge browser** in **2015** as part of the Windows 10 re
 
 #### TCP Handshake
 
-![image-20220120001242662](C:\Users\dyhes\AppData\Roaming\Typora\typora-user-images\image-20220120001242662.png)
 
 TCP (Transmission Control Protocol) uses a **three-way handshake** to set up a TCP/IP connection over an IP based network.
 
@@ -69,7 +67,6 @@ This handshake step happens after a **DNS lookup** and before the **TLS handshak
 
 This step determines which **cipher** will be used to encrypt the communication, verifies the server, and **establishes that a secure connection** is in place before beginning the actual transfer of data. This requires three more round trips to the server before the request for content is actually sent.
 
-![image-20220120160737102](C:\Users\dyhes\AppData\Roaming\Typora\typora-user-images\image-20220120160737102.png)
 
 (The DNS lookup, the TCP handshake, and 5 steps of the TLS handshake including clienthello, serverhello and certificate, clientkey and finished for both server and client)
 
@@ -89,7 +86,6 @@ TTFB  refers to the **time** between the browser requesting a page and when it r
 
 The first response packet will be 14Kb. This is part of **TCP slow start**, an **algorithm** which balances the speed of a network connection. Slow start gradually increases the amount of data transmitted until the network's **maximum bandwidth** can be determined.
 
-![image-20220120161834945](C:\Users\dyhes\AppData\Roaming\Typora\typora-user-images\image-20220120161834945.png)
 
 As the server sends data in TCP packets, the user's client confirms delivery by returning acknowledgements, or ACKs. If the server sends too many packets too quickly, they will be dropped. Meaning, there will be no acknowledgement. 
 

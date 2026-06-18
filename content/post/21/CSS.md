@@ -353,8 +353,6 @@ The universal selector (*) selects all HTML elements on the page.
 
 #### Grouping Selector
 
-The universal selector (*) selects all HTML elements on the page.
-
 ```css
 h1, h2, p {
   text-align: center;
@@ -370,7 +368,7 @@ Every CSS selector has its place in the specificity hierarchy.
 
 There are four categories which define the specificity level of a selector:
 
-- **Inline styles** (1000)- Example: <h1 style="color: pink;">
+- **Inline styles** (1000)- Example: \<h1 style="color: pink;">
 - **IDs** (100) - Example: #navbar
 - **Classes, pseudo-classes, attribute selectors** (10) - Example: .test, :hover, [href]
 - **Elements and pseudo-elements** (1 ) - Example: h1, ::before

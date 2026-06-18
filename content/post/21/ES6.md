@@ -33,7 +33,7 @@ function add(x = 1, y = x, z = x + y) {
 console.log(add());
 ```
 
-；‘’、》The value of **the `arguments` object** inside the function is the number of actual arguments that you pass to the function. For example:
+The value of **the `arguments` object** inside the function is the number of actual arguments that you pass to the function. For example:
 
 ```js
 function add(x, y = 1, z = 2) {
@@ -48,7 +48,7 @@ add(10, 20, 30); // 3
 
 ### Rest Parameter
 
-ES6 provides a new kind of parameter so-called rest parameter that has a prefix of three dots `(...)`. A rest parameter **allows you to **represent an indefinite number of arguments as an array**. See the following syntax:
+ES6 provides a new kind of parameter so-called rest parameter that has a prefix of three dots `(...)`. A rest parameter allows you to **represent an indefinite number of arguments as an array**. See the following syntax:
 
 ```js
 function fn(a,b,...args) {
@@ -679,7 +679,6 @@ const handler = {
 const proxyUser = new Proxy(user, handler);
 ```
 
-![image-20220125133602732](C:\Users\dyhes\AppData\Roaming\Typora\typora-user-images\image-20220125133602732.png)
 
 The following are more traps:
 
@@ -824,8 +823,6 @@ Unlike the most global objects, the `Reflect` **is not a constructor**. It means
     The `===` operator considers `NaN` and `NaN` are different values. The `NaN` is the only number that does not equal itself. 
 
     However, `Object.is()` treats `NaN` as the same value
-
-  ![image-20220125135715368](C:\Users\dyhes\AppData\Roaming\Typora\typora-user-images\image-20220125135715368.png)
 
   The `startsWith()` returns `true` if a [string](https://www.javascripttutorial.net/javascript-string/) begins with the characters of a specified string; otherwise `false`.
 

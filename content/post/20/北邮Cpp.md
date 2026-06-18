@@ -43,10 +43,10 @@ tags:
 
   典型的调试器通常能够在程序运行时拥有以下这些功能，例如单步运行（single-stepping）、利用中断点（breakpoint）使程序遇到各种种类的事件（event）时停止（breaking）（一般用于使程序停止在想要检查的状态）、以及追踪某些变量的变化。有些调试器也有能力在想要调试的程序在运行状态时，去改变它的状态，而不仅仅只是用来观察而己。
 
-* 解释器（interpreter）
+* **解释器（interpreter）**
 * 解释器是一种计算机程序，能够把高级编程语言一行一行解释运行。解释器像是一位“中间人”，每次运行程序时都要先转成另一种语言再作运行，因此解释器的程序运行速度比较缓慢。它不会一次把整个程序翻译出来，而是每翻译一行程序就立刻运行，然后再翻译下一行，再运行，如此不停地进行下去。
 
-* 集成开发环境（Integrated Development Environment，简称IDE）
+* **集成开发环境（Integrated Development Environment，简称IDE）**
 
   集成开发环境是一种辅助程序开发人员开发软件的应用软件，在开发工具内部就可以辅助编写源代码文本、并编译打包成为可用的程序，有些甚至可以设计图形接口。
 
@@ -85,11 +85,7 @@ std::cout<<"ha"<<std::endl;//recomended
 
 ## 编译
 
-![img](https://edu-image.nosdn.127.net/9B0617ED4BF4641BC9997B166B655E9E.jpg?imageView&thumbnail=890x0&quality=100)
-
-## 输入输出流
-
-![image-20220425141514427](C:\Users\dyhes\AppData\Roaming\Typora\typora-user-images\image-20220425141514427.png)
+<img src="https://edu-image.nosdn.127.net/9B0617ED4BF4641BC9997B166B655E9E.jpg?imageView&thumbnail=890x0&quality=100" alt="img" referrerpolicy="no-referrer">
 
 ## 引用（Reference）
 
@@ -123,8 +119,6 @@ delete   <pointerName>;    //删除一个变量/对象
 delete []  <pointerName>;     //删除数组空间
 ```
 
-![aefd454d5d165b890c300704b3c34817.png](https://img.gejiba.com/images/aefd454d5d165b890c300704b3c34817.png)
-
 ## 数据类型
 
 ### bool
@@ -136,8 +130,6 @@ delete []  <pointerName>;     //删除数组空间
 * 任意非0整数转化为布尔true
 
 ## 列表初始化（C++11）
-
-![705cbabcbd800e2a6ab273005950b425.png](https://img.gejiba.com/images/705cbabcbd800e2a6ab273005950b425.png)
 
 List initialization is a new feature for C++11 (列表初始化是C++11的一个新特性)
 
@@ -311,10 +303,6 @@ int main(){
 
   内容不可修改
 
-![cd4f439f2e8ce127e9faa68307263fc5.png](https://img.gejiba.com/images/cd4f439f2e8ce127e9faa68307263fc5.png)
-
-![026ffeeb969e36bbacbd4febcec14441.png](https://img.gejiba.com/images/026ffeeb969e36bbacbd4febcec14441.png)
-
 ## 常量与指针
 
 * **Pointer to Constant(常量指针、常指针)**
@@ -350,8 +338,6 @@ int main(){
   ```
 
 
-![9ac2198c912b3e54745e4267064f25dc.png](https://img.gejiba.com/images/9ac2198c912b3e54745e4267064f25dc.md.png)
-
 ## using, typedef, and #define
 
 * **typedef**
@@ -377,7 +363,7 @@ int main(){
 
 ## 作用域
 
-* 全局作用域
+* **全局作用域**
 * **局部作用域**
   * 文件作用域
   * 函数作用域
@@ -478,7 +464,7 @@ In general, if the programmer does not provide a copy ctor, the compiler will ge
 
 The generated copy ctor is called " implicitly-declared/defined copy ctor " (自动生成的拷贝构造函数叫做“隐式声明/定义的拷贝构造函数”
 
-In general, the implicitly-declared/defined copy ctor simply copies each data field in one object to its counterpart in the other object. (一般情况下，隐式声明的copy ctor简单地将作为参数的对象中的每个数据域复制到新对象中)
+In general, the implicitly-declared/defined copy constructor simply copies each data field in one object to its counterpart in the other object. (一般情况下，隐式声明的拷贝构造函数简单地将作为参数的对象中的每个数据域复制到新对象中)
 
 #### 析构函数
 
@@ -946,7 +932,7 @@ C++11 was to allow a non-static data member to be initialized where it is declar
 ```cpp
 在构造函数中用初始化列表初始化数据域
 
-**ClassName (parameterList)**：dataField1{value1}, dataField2{value2}
+ClassName (parameterList)：dataField1{value1}, dataField2{value2}
 
 {
 
@@ -1753,18 +1739,21 @@ inline double A::f1() { // f1是内联函数
 
 ## 避免头文件被多次包含
 
-* **```cpp**
+ ```cpp
   #ifndef MY_HEADER_FILE_H
   #define MY_HEADER_FILE_H
   //CONTENT
   #endif
   ```
 
-* ```cpp
+
+ ```cpp
   #pragma once //c++03,c90
   ```
 
-* **```cpp**
+
+
+ ```cpp
   _Pragma("once")//c++11,c99
   ```
 
@@ -1988,7 +1977,7 @@ fs::path p3(R"(d:\cpp\hi.txt)");// 使用原始字符串字面量
 
 ####  Hierarchy of C++ I/O Stream Classes(C++ I/O流类层次)
 
-![img](https://edu-image.nosdn.127.net/8C0A3ED498876420B3B389880C16AB06.jpg?imageView&thumbnail=890x0&quality=100)
+<img src="https://edu-image.nosdn.127.net/8C0A3ED498876420B3B389880C16AB06.jpg?imageView&thumbnail=890x0&quality=100" alt="img" referrerpolicy="no-referrer">
 
 C++的流类主要有五类：
 
@@ -2008,11 +1997,11 @@ C++的流类主要有五类：
 
 #### **输出至文件**
 
-![img](https://edu-image.nosdn.127.net/25E9455E1328577B96EF36ED9E09C3E7.jpg?imageView&thumbnail=890x0&quality=100)
+<img src="https://edu-image.nosdn.127.net/25E9455E1328577B96EF36ED9E09C3E7.jpg?imageView&thumbnail=890x0&quality=100" alt="img" referrerpolicy="no-referrer">
 
 #### 自文件读入
 
-![img](https://edu-image.nosdn.127.net/A08D7DA2B4D44442E89724B4256254CB.jpg?imageView&thumbnail=890x0&quality=100)
+<img src="https://edu-image.nosdn.127.net/A08D7DA2B4D44442E89724B4256254CB.jpg?imageView&thumbnail=890x0&quality=100" alt="img" referrerpolicy="no-referrer">
 
 To read data correctly, you need to know exactly how data is stored.(若想正确读出数据，必须确切了解数据的存储格式)
 
@@ -2507,7 +2496,7 @@ int main() {
 
 重载的运算符的参数至少应有一个是类对象(或类对象的引用)
 
-![img](https://edu-image.nosdn.127.net/26D6D0D7CCEA9856BC70B29511F82886.jpg?imageView&thumbnail=890x0&quality=100)
+<img src="https://edu-image.nosdn.127.net/26D6D0D7CCEA9856BC70B29511F82886.jpg?imageView&thumbnail=890x0&quality=100" alt="img" referrerpolicy="no-referrer">
 
 ### 运算符函数的调用形式  
 
@@ -2738,7 +2727,7 @@ virtual const char* what(); //返回解释性字符串
 
 what()返回的指针指向拥有解释信息的空终止字符串的指针。该指针保证在获取它的异常对象被销毁前，或在调用该异常对象的非静态成员函数前合法
 
-![img](https://edu-image.nosdn.127.net/FC0524938D6AAFD2AA605AA2137C8880.jpg?imageView&thumbnail=890x0&quality=100)
+<img src="https://edu-image.nosdn.127.net/FC0524938D6AAFD2AA605AA2137C8880.jpg?imageView&thumbnail=890x0&quality=100" alt="img" referrerpolicy="no-referrer">
 
 #### c++11 noexcept
 
@@ -2798,7 +2787,7 @@ catch (TheException &ex) {
 
   模板
 
-![img](https://edu-image.nosdn.127.net/6624DA8B3BC36817154DD38DF7F70F44.jpg?imageView&thumbnail=890x0&quality=100)
+<img src="https://edu-image.nosdn.127.net/6624DA8B3BC36817154DD38DF7F70F44.jpg?imageView&thumbnail=890x0&quality=100" alt="img" referrerpolicy="no-referrer">
 
 
 
@@ -2984,9 +2973,6 @@ class C;
 
 ### Iterator
 
-![449192c22ffba9b55343590c5b4513de.png](https://img.gejiba.com/images/449192c22ffba9b55343590c5b4513de.png)
-![e3ed25cd470f85a4102057c2da9eb05c.png](https://img.gejiba.com/images/e3ed25cd470f85a4102057c2da9eb05c.png)
-![403cc08a2b568f5d4a751ada9c918696.png](https://img.gejiba.com/images/403cc08a2b568f5d4a751ada9c918696.png)
 
 ## 规范
 

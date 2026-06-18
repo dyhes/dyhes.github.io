@@ -1,5 +1,11 @@
 ---
-
+title: 【LeetCode-C】LRU & LFU
+date: 2025-10-15 00:00:00+0000
+categories:
+- pearl
+- temple
+tags:
+- LeetCode-C
 ---
 
 ## LRU & LFU

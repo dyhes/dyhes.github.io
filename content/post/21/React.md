@@ -224,11 +224,9 @@ Conceptually, components are like JavaScript functions. They accept arbitrary in
 
 ## Lifecycle Methods
 
-![image-20220329184734485](C:\Users\dyhes\AppData\Roaming\Typora\typora-user-images\image-20220329184734485.png)
 
 include less used method
 
-![image-20220330145339086](C:\Users\dyhes\AppData\Roaming\Typora\typora-user-images\image-20220330145339086.png)
 
 [more detail...]([React lifecycle methods diagram (wojtekmaj.pl)](https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/))
 

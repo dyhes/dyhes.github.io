@@ -33,7 +33,6 @@ categories:
 
 ### By Levels
 
-![image-20220122200442042](C:\Users\dyhes\AppData\Roaming\Typora\typora-user-images\image-20220122200442042.png)
 
 - **Unit** Testing
 
