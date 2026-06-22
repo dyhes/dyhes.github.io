@@ -1,7 +1,7 @@
 ---
 title: 【CPP】Review
 date: 2025-10-04 00:00:00+0000
-categories: [temple, nutrtion, arts]
+categories: [temple, nutrition, arts]
 ---
 
 ## class & struct
