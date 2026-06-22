@@ -41,6 +41,7 @@ let guess: u32 = "42".parse().expect("Not a number!");
 | 64-bit | i64 | u64 |
 | 128-bit | i128 | u128 |
 | arch | isize | usize |
+
 > isize 和 usize 类型依赖运行程序的计算机架构：64 位架构上它们是 64 位的，32 位架构上它们是 32 位的。
 
 数字字面值允许使用类型后缀 ( 如57u8 )，同时也允许使用 _ 做为分隔符以方便读数
@@ -51,6 +52,7 @@ let guess: u32 = "42".parse().expect("Not a number!");
 | Octal (八进制) | 0o77 |
 | Binary (二进制) | 0b1111_0000 |
 | Byte (单字节字符)(仅限于u8) | b'A' |
+
 数字类型默认是 i32。isize 或 usize 主要作为某些集合的索引。
 
 Rust 有两个原生的 **浮点数**（*floating-point numbers*）类型，它们是带小数点的数字。Rust 的浮点数类型是 f32 和 f64，分别占 32 位和 64 位。默认类型是 f64，因为在现代 CPU 中，它与 f32 速度几乎一样，不过精度更高。所有的浮点型都是有符号的。

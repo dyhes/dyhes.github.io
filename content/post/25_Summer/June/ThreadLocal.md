@@ -60,12 +60,7 @@ ThreadLocal 是 Java 多线程编程中的核心类，用于实现**线程级别
    - **未清理条目**：`ThreadLocalMap` 中 `null` 键的值对象因强引用无法回收。
 2. **规避策略**
    - **强制调用remove()**：
-     使用
-     
-     ```
-     try-finally
-     ```
-    确保清理，尤其在池化线程中：
+     使用`try-finally`确保清理，尤其在池化线程中：
      ```
      try {
          threadLocal.set(data); // 设置值
@@ -121,21 +116,21 @@ ThreadLocal变量与普通变量（包括线程内部定义的普通变量）的
      - 存储位置：线程栈帧的工作内存中，随方法调用结束而销毁。
      - 作用域：方法级别，线程安全（每个线程有独立栈帧）。
      - 示例：
-   ```
-  public void run() {
-           int localVar = 10; // 每个线程的run()方法中有自己的localVar副本
-  }
-       ```
+     ```
+     public void run() {
+         int localVar = 10; // 每个线程的run()方法中有自己的localVar副本
+     }
+     ```
    - **成员变量（线程类内部定义）**：
      - 存储位置：堆内存中，被所有线程共享。
      - 作用域：对象实例级别，若多个线程操作同一对象实例，则成员变量被共享（非线程安全）。
      - **示例**：
        ```
-    class MyRunnable implements Runnable {
+       class MyRunnable implements Runnable {
            private int sharedVar; // 被所有线程共享
-        public void run() { sharedVar++; } // 需加锁保证安全
-         }
-  ```
+           public void run() { sharedVar++; } // 需加锁保证安全
+       }
+       ```
 
 
 ------
@@ -146,6 +141,7 @@ ThreadLocal变量与普通变量（包括线程内部定义的普通变量）的
 | ThreadLocal变量 | ✅ 完全隔离       | 线程内跨方法共享           | 存储结构隔离（无需锁）       |
 | 普通局部变量    | ✅ 完全隔离       | 仅限同一方法内             | 栈帧隔离（自动销毁）         |
 | 普通成员变量    | ❌ 不隔离         | 同一对象实例的所有线程共享 | 需同步机制（如synchronized） |
+
 > **关键区别**：
 >
 > - ThreadLocal实现的是**线程级全局变量**（线程内任何方法可访问），而局部变量仅限于**方法内部**。
@@ -172,11 +168,7 @@ ThreadLocal变量与普通变量（包括线程内部定义的普通变量）的
 - **原因**：
   ThreadLocalMap的Key（ThreadLocal）是弱引用，Value是强引用。若ThreadLocal未被强引用且未调用`remove()`，GC会回收Key，导致Entry变为`(null, Value)`，而Value因线程存活无法回收（尤其线程池中）。
 - **解决方案**：
-  使用后必须调用
-  ```
-  remove()
-  ```
-  清理：
+  使用后必须调用`remove()`清理：
   ```
   try {
       userHolder.set(currentUser); // 设置值
@@ -196,6 +188,7 @@ ThreadLocal变量与普通变量（包括线程内部定义的普通变量）的
 | 方法内部临时计算                     | ❌               | ✅                | ❌                |
 | 线程安全工具类（如SimpleDateFormat） | ✅               | ❌（需每次创建）  | ❌（非线程安全）  |
 | 多线程共享对象状态                   | ❌               | ❌                | ✅（需同步）      |
+
 > **ThreadLocal典型用例**：
 >
 > 1. 替换非线程安全的 SimpleDateFormat：
@@ -283,11 +276,7 @@ D --> E[删除键为null的Entry并释放Value]
 
 #### **强制调用`remove()`清理**
 
-- **使用**
-  ```
-  try-finally
-  ```
-  确保清理，尤其在线程池中：
+- **使用**`try-finally`确保清理，尤其在线程池中：
   ```
   try {
       threadLocal.set(data);

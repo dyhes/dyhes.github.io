@@ -3251,25 +3251,8 @@ fetch(url, { credentials: 'include' });
 1. **配置逻辑无冲突**
    - `Access-Control-Allow-Credentials: false` 表示**禁止跨域请求携带用户凭证**（如 Cookie、HTTP 认证信息），但 **`Authorization` 头本身不是浏览器自动管理的凭证**，而是由客户端显式添加的鉴权信息（如 JWT、API Key）[1,6](@ref)。
    - `Authorization` 头属于**自定义请求头**，其允许与否由 `Access-Control-Allow-Headers` 控制，与 `allowCredentials` 无直接关联[1,6](@ref)。
-2. **通配符 `\*` 的支持**
-   - 当
-```
-     allowCredentials=false
-```
-时，
-     ```
-     Access-Control-Allow-Headers
-     ```
-可安全使用通配符
-```
-     *
-```
-     （允许所有头），包括
-```
-     Authorization
-```
-     1,6
-     。
+2. **通配符 `*` 的支持**
+   - 当 `allowCredentials=false` 时，`Access-Control-Allow-Headers` 可安全使用通配符 `*`（允许所有头），包括 `Authorization`[1,6](@ref)。
      ```
      # Nginx 配置示例（允许所有头 + 无凭证）
      add_header 'Access-Control-Allow-Headers' '*';

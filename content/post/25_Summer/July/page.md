@@ -13,23 +13,11 @@ tags:
 ------
 ### ⚙️ **默认机制：基于Offset的分页**
 
-- **实现原理通过**
-  ```
-PageRequest.of(page, size)
-  ```
-  创建
-  ```
-  Pageable
-  ```
-  对象时，生成的SQL会使用
+- **实现原理通过**`PageRequest.of(page, size)`创建`Pageable`对象时，生成的SQL会使用
   ```
   LIMIT size OFFSET (page * size)
   ```
-  （MySQL）或类似语法（如Oracle的
-  ```
-  ROWNUM
-  ```
-  ）。例如：
+  （MySQL）或类似语法（如Oracle的`ROWNUM`）。例如：
   ```
   SELECT * FROM users ORDER BY id LIMIT 10 OFFSET 10000; -- 查询第1001页（每页10条）
   ```
@@ -46,17 +34,13 @@ PageRequest.of(page, size)
 - **核心思想**
   不再依赖页码，而是基于最后一条记录的标识（如主键ID、时间戳）定位下一页数据：
   ```
-SELECT * FROM users WHERE id > last_id ORDER BY id LIMIT 10; -- 游标分页示例
+  SELECT * FROM users WHERE id > last_id ORDER BY id LIMIT 10; -- 游标分页示例
   ```
 - **优势**
   - **常数级性能**：无论深度如何，查询时间仅与`LIMIT size`相关，避免`OFFSET`的全表扫描[6](@ref)。
   - **数据一致性**：避免因分页期间数据增删导致的重复或遗漏（如使用自增ID或时间戳排序）[6](@ref)。
 - **Spring Data JPA实现步骤**
-  1. **Repository层：使用**
-     ```
-     @Query
-     ```
-     定义游标查询：
+  1. **Repository层：使用**`@Query`定义游标查询：
      ```
      @Query("SELECT u FROM User u WHERE u.id > :cursorId ORDER BY u.id")
      List<User> findNextPage(@Param("cursorId") Long cursorId, Pageable pageable);

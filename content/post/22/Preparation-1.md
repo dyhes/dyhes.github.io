@@ -53,9 +53,7 @@ const prototype = Object.prototype
 
 - 深拷贝: 完全拷贝一个新对象，**修改时原对象不再受到任何影响**
 
-  - **```js**
-    JSON.parse(JSON.stringify(obj))
-   ** ```**：性能最快
+  - **`JSON.parse(JSON.stringify(obj))`**：性能最快
 
     - 具有循环引用的对象时，报错
     - 当值为函数、`undefined`、或`symbol`时，无法拷贝

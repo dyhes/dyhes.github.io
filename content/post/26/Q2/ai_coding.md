@@ -29,6 +29,7 @@ tags:
 | Hook 外置 | 超限的 hook 结果写到临时文件，模型只看到预览 + 文件路径 |
 | 历史清洗 | 修复 call/output 配对、移除孤儿输出、剥离不支持的图片 |
 | 上下文差分 | 只追加与上一轮的设置差异，不重复注入全部系统上下文 |
+
 这些卡口的共同特点是：截掉就没了——不像后面会讲到的 Claude Code 的"外置到 sidecar 文件"策略，Codex 的入口截断是不可逆的。但好处是简单高效，大多数情况下这些截断足以控制上下文增长速度。
 而且这些"关卡"还有一个隐藏的优势：截断发生在内容进入历史的那一刻——也就是被 prompt cache 记住之前——所以它们不会破坏已有的缓存命中。
 当这些都不够时，就到上下文压缩了。
@@ -63,6 +64,7 @@ Codex 的自动 compact 编排在 session/turn.rs，有三个触发时机：
 | Pre-turn | 模型采样前 | token limit reached | DoNotInject——清空 baseline，下一轮完整 reinject |
 | Model-downshift | 切换到更小窗口的模型 | 当前 tokens 超出新窗口 | 同上 |
 | Mid-turn | 模型输出后仍需 follow-up | token limit reached 且需要继续 | BeforeLastUserMessage——注入到 replacement history 中 |
+
 其中 mid-turn compact 是一个值得注意的设计：模型在执行一个任务时可能需要多次工具调用（follow-up），如果中途超限了，Codex 不会终止任务，而是在 turn 内部做一次压缩然后继续。这保证了任务的连续性。
 
 > "The harness becomes the product, not the model. The model is the engine; the harness is the car. Customers buy the car."

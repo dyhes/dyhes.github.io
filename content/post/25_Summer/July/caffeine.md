@@ -336,6 +336,7 @@ public class ProductService {
 | 高频读（如商品详情） | 多级缓存     | QPS 从 5.8万 → 120万 [4](@ref) |
 | 低频写高一致性       | 纯Redis      | 数据一致但延迟较高             |
 | 静态数据（如配置）   | 纯Caffeine   | 零网络延迟                     |
+
 > **注**：完整代码需根据业务调整以下配置：
 >
 > - Caffeine 的 `refreshAfterWrite`（搭配 `CacheLoader` 异步刷新）[8](@ref)
@@ -643,6 +644,7 @@ public Order getOrder(String orderId) {
 | 自定义CacheManager | Redis环境，需快速集成 | 代码侵入小，配置灵活         | 需规范cacheNames格式 |
 | 自定义注解+AOP     | 需要方法级精细控制    | 语义清晰，扩展性强           | AOP增加复杂度        |
 | 缓存提供者原生配置 | TTL分组或全局统一     | 无需代码改动，依赖中间件能力 | 灵活性低             |
+
 > 💡 **推荐选择**：
 >
 > - 简单场景 → **自定义CacheManager**（快速生效）[1,2](@ref)；
@@ -1060,6 +1062,7 @@ public class CustomAspect {
 | 主动查询事务状态                            | 中     | 低     | 简单状态检测             |
 | 事务同步回调 (`TransactionSynchronization`) | 高     | 中     | 需精准监听事务生命周期   |
 | 直接获取 `TransactionStatus`                | 高     | 高     | 切面优先级低于事务切面时 |
+
 > **推荐实践**：优先使用 **事务同步回调** 方案，可靠性最高且与事务生命周期解耦。
 
 

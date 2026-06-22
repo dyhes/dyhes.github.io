@@ -830,11 +830,11 @@ Unlike the most global objects, the `Reflect` **is not a constructor**. It means
 
   The following shows the syntax of the `startsWith()` method:
 
-    ```
+  ```
   String.startsWith(searchString(pattern) [,position])
-    ```
+  ```
 
-    * `searchString` is the characters to be searched for at the start of this string.
+  * `searchString` is the characters to be searched for at the start of this string.
     * `position` is an optional parameter that determines the start position to search for the `searchString`. It defaults to 0.
 
 * **`endsWith()`**

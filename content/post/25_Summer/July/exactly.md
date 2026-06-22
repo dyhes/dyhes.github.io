@@ -137,6 +137,7 @@ Kafka 的 Exactly Once 语义包含两个层面：
 | **状态机校验**   | 业务状态机检查消息是否已处理（如订单状态从“未支付”到“已支付”不可逆） | 状态驱动型业务（如支付、库存扣减） |
 | **去重表**       | 消费前查询去重表，若消息ID存在则跳过处理                     | 高频消息且去重表读写性能高         |
 | **幂等写入接口** | 下游服务暴露幂等接口（如HTTP PUT），相同请求多次调用结果一致 | 调用第三方服务                     |
+
 #### 💡 代码示例（消费端去重伪代码）
 
 ```
@@ -242,11 +243,7 @@ for (ConsumerRecord record : records) {
 1. **唯一标识符（Request ID）**
    为每条消息生成全局唯一标识（如 UUID、业务主键），作为 Redis 的 Key，用于标记消息是否已处理[1,3,7](@ref)。
 2. **原子性操作**
-   通过 Redis 的
-```
-   SETNX
-```
-   （Set If Not Exists）命令实现原子性检查：
+   通过 Redis 的`SETNX`（Set If Not Exists）命令实现原子性检查：
    - 若 Key 不存在 → 设置成功（返回 1）→ 执行业务逻辑。
    - 若 Key 已存在 → 设置失败（返回 0）→ 跳过处理[5,7](@ref)。
 
@@ -441,6 +438,7 @@ redisClient.pipeline(pipe -> {
 | 强事务场景（如支付）     | 数据库唯一约束 + 幂等设计           | 避免外部依赖，保证 ACID [2,5](@ref)               |
 | 全链路精确一次（金融级） | Kafka 事务消息                      | 原生支持端到端一致性 [3,7](@ref)                  |
 | 海量数据 + 容忍微量重复  | Bloom Filter + 本地缓存             | 内存占用低，吞吐量极高（需评估误判率）[3,8](@ref) |
+
 > **终极原则**：
 > ​**业务幂等性 > 外部去重 > 依赖消息队列语义**。无论采用何种方案，业务逻辑的幂等设计（如状态机、版本号）是不可或缺的兜底手段[2,7](@ref)。
 ## 幂等性方案
@@ -660,11 +658,7 @@ try {
 2. **提交偏移量的值**
    - 提交值应为`最后消费消息的offset + 1`，表示下一条待消费消息的位置[8](@ref)。
 3. **Rebalance监听器**
-   - **注册**
-     ```
-     ConsumerRebalanceListener
-     ```
-     ，在分区被回收时提交偏移量，避免再均衡导致重复消费：
+   - **注册**`ConsumerRebalanceListener`，在分区被回收时提交偏移量，避免再均衡导致重复消费：
      ```
      consumer.subscribe(Arrays.asList("topic"), new ConsumerRebalanceListener() {
          public void onPartitionsRevoked(Collection<TopicPartition> partitions) {
@@ -683,6 +677,7 @@ try {
 | 强一致性要求          | 同步提交 + 分区粒度提交          | 确保每条消息偏移量精确更新                                  |
 | 消费者优雅退出        | `finally`块内同步提交            | 防止退出时偏移量未提交[6](@ref)                             |
 | 跨系统事务            | 结合本地事务表 + 偏移量绑定存储  | 将业务数据与偏移量存入同数据库，通过事务保证一致性[1](@ref) |
+
 > **终极原则**：
 >
 > - **手动提交偏移量 + 业务幂等性 = 端到端精准一次**。
@@ -693,11 +688,7 @@ try {
 ### ⚙️ **默认值：`true`**
 
 - Spring Boot 的 Kafka 消费者配置中，**`enable.auto.commit` 的默认值为 `true`**，即**自动提交偏移量**。消费者会按照 `auto.commit.interval.ms` 配置的时间间隔（默认 5 秒）自动向 Kafka 提交消费进度[2,4,6](@ref)。
-- 例如，在
-```
-  KafkaProperties.Consumer
-```
-的源码中，该属性默认值为 true
+- 例如，在`KafkaProperties.Consumer`的源码中，该属性默认值为 true
 
 ```
   spring.kafka.consumer.enable-auto-commit: true
@@ -731,6 +722,7 @@ spring:
 | -------------------- | ---------- | --------------------------- | ------------------------------------------------------------ |
 | `enable.auto.commit` | `true`     | **设为 `false`**            | 避免自动提交导致的丢失/重复问题，业务与偏移量提交强绑定[3,5,7](@ref) |
 | `listener.ack-mode`  | `BATCH`    | `manual`/`manual_immediate` | 通过 `Acknowledgment.acknowledge()` 手动控制提交时机[6,7](@ref) |
+
 > **最佳实践**：
 > 始终显式配置 `enable.auto.commit=false` + 合适的 `ack-mode`，并在消费逻辑中调用 `acknowledge()`提交偏移量，确保消息处理的可靠性[5,7](@ref)。
 ## @KafkaListener
@@ -815,7 +807,7 @@ public void listen(String message, Acknowledgment ack) {
    - 配置 `ack-mode: manual_immediate`[1,8](@ref)。
 2. **高吞吐场景（容忍少量重复）**
    ```
-@KafkaListener(topics = "log-topic", concurrency = "3")
+   @KafkaListener(topics = "log-topic", concurrency = "3")
    public void batchListen(List<String> messages, Acknowledgment ack) {
        logService.batchInsert(messages);  // 批量写入数据库
        ack.acknowledge();                 // 批量提交位移

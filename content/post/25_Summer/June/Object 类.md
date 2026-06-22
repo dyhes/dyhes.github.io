@@ -152,6 +152,7 @@ Object 类中的 `wait()`、`notify()`、`notifyAll()` 以及 Thread 类的 `sle
 | **唤醒机制** | 需显式调用 `notify()`/`notifyAll()` | 超时自动唤醒                  |
 | **异常处理** | 需处理 `InterruptedException`       | 需处理 `InterruptedException` |
 | **用途**     | 线程间协作（如条件等待）            | 单纯延迟执行                  |
+
 > 示例：
 >
 > ```
@@ -201,11 +202,7 @@ Object 类中的 `wait()`、`notify()`、`notifyAll()` 以及 Thread 类的 `sle
       // 任务完成后继续执行
   }
   ```
-  线程 B 完成后调用
-  ```
-  taskLock.notify()
-  ```
-   唤醒 A。
+  线程 B 完成后调用`taskLock.notify()`唤醒 A。
 
 
 ------

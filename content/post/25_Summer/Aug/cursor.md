@@ -74,17 +74,7 @@ tags: [AI]
 3. **调用 Java 编译器（javac）**
    - 使用 JDK 中的 `javac` 工具编译源码。
 
-   - **编译参数通过**
-
-      
-
-     ```
-     javaCompile.options
-     ```
-
-      
-
-     配置（如源码/目标版本、编码格式）：
+   - **编译参数通过**`javaCompile.options`配置（如源码/目标版本、编码格式）：
 
      ```
      compileJava {

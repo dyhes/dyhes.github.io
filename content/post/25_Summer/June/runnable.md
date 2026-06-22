@@ -141,6 +141,7 @@ Integer result = futureCallable.get(); // 返回100
 | `boolean isDone()`                              | 检查任务是否完成（含正常结束、异常终止或取消）。             |
 | `V get()`                                       | **阻塞**直到任务完成并返回结果，若任务抛出异常则封装为 `ExecutionException`。 |
 | `V get(long timeout, TimeUnit unit)`            | 带超时的结果获取，超时抛出 `TimeoutException`。              |
+
 > ⚠️ **关键行为说明**：
 >
 > - **阻塞性**：`get()` 方法会阻塞调用线程，直至任务完成或超时。
@@ -205,6 +206,7 @@ private static final int INTERRUPTED = 6;  // 已中断
 | **`FutureTask`**        | 同时实现 `Runnable` 和 `Future`，可直接提交给 `Thread` 或线程池执行。 | 需手动管理任务执行与结果获取的简单场景。   |
 | **`CompletableFuture`** | Java 8+ 引入，支持链式调用、组合任务、异常回调（非阻塞）。   | 复杂异步流程（如多个任务依赖、结果转换）。 |
 | **`ScheduledFuture`**   | 扩展延迟/周期性任务调度能力（需配合 `ScheduledExecutorService`）。 | 定时任务（如心跳检测、周期数据同步）。     |
+
 > 🌰 **`FutureTask` 使用示例**：
 >
 > ```java
@@ -221,15 +223,7 @@ private static final int INTERRUPTED = 6;  // 已中断
 1. **线程池关闭**
    务必调用 `executor.shutdown()`，避免线程泄漏。
 2. 异常处理
-3. **任务内部异常不会自动传播，必须通过**
-   ```
-   Future.get() 
-   ```
-   捕获 
-   ```
-   ExecutionException 
-   ```
-   并解析：
+3. **任务内部异常不会自动传播，必须通过**`Future.get()`捕获`ExecutionException`并解析：
    ```
    try {
        future.get();
@@ -307,19 +301,7 @@ thread.start();
 - ✅ **`Callable` 字段**：源码中声明了 `private Callable<V> callable` 字段，用于存储传入的任务。
 - **✅ 支持两种任务类型**：
   - 若通过构造函数传入 `Callable` 对象，则直接赋值给 `callable` 字段。
-  - **若传入**
-    ```
-    Runnable
-    ```
-    对象，会通过
-    ```
-    Executors.callable()
-    ```
-    将其适配为
-    ```
-    Callable
-    ```
-    类型再存储。
+  - **若传入**`Runnable`对象，会通过`Executors.callable()`将其适配为`Callable`类型再存储。
     ```
     // Runnable 适配为 Callable 的源码逻辑
     public FutureTask(Runnable runnable, V result) {
@@ -446,11 +428,7 @@ stage.exceptionally(ex -> "Fallback")
 2. **批量并行计算**
    分治任务并行执行（如 MapReduce 模型），通过 `allOf` 聚合结果。
 3. **竞速查询优化**
-   同时请求多个数据源，取首个返回结果（
-   ```
-   anyOf 
-   ```
-   \+ 超时控制）：
+   同时请求多个数据源，取首个返回结果（`anyOf`\+ 超时控制）：
    ```
    CompletableFuture.anyOf(dbQuery, cacheQuery)  
        .orTimeout(500, TimeUnit.MILLISECONDS);
@@ -713,15 +691,7 @@ if (!executorService.awaitTermination(60, TimeUnit.SECONDS)) {
 ------
 ### ⚠️ **生产实践注意事项**
 
-1. **避免无界队列**
-   ```
-   Executors.newFixedThreadPool() 
-   ```
-   使用无界队列可能导致 
-   ```
-   OOM
-   ```
-   ，建议自定义 
+1. **避免无界队列**`Executors.newFixedThreadPool()`使用无界队列可能导致`OOM`，建议自定义 
    ```
    ThreadPoolExecutor
    ```：
@@ -744,6 +714,7 @@ if (!executorService.awaitTermination(60, TimeUnit.SECONDS)) {
 | **结果获取**     | 不支持            | 通过 `Future` 跟踪结果        |
 | **生命周期管理** | 无内置方法        | 提供关闭、状态检查等方法      |
 | **适用复杂度**   | 简单异步场景      | 生产级高并发管理              |
+
 > 💡 **实际建议**：
 > 除非极简场景（如单次异步日志），​**优先使用 `ExecutorService`**。其完备的任务管理、结果跟踪和资源控制能力，更符合生产环境需求。对于定时任务，可进一步使用其子接口 `ScheduledExecutorService`。
 ## Executors
@@ -776,6 +747,7 @@ Executors 是 Java 并发编程中用于**简化线程池创建和管理**的核
 | `newScheduledThreadPool(int n)`      | 定时任务线程池            | 固定核心线程；支持延迟/周期性任务（`DelayedWorkQueue`）      | 心跳检测、定时数据同步             |
 | `newSingleThreadScheduledExecutor()` | 单线程定时任务池          | 单线程版 `ScheduledThreadPool`                               | 需顺序执行的定时任务               |
 | `newWorkStealingPool(int n)`         | 工作窃取线程池（Java 8+） | 基于 `ForkJoinPool`；并行处理任务；默认使用 CPU 核心数       | 分治任务或并行计算                 |
+
 > ⚠️ **注意**：`FixedThreadPool` 和 `SingleThreadExecutor` 使用**无界队列**，可能导致内存溢出（OOM），生产环境建议自定义 `ThreadPoolExecutor`。
 
 

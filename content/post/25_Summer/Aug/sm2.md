@@ -44,12 +44,7 @@ tags: [Cryptography]
    # 应包含 bin、lib、include、jmods 等目录
    ```
 
-2. **若路径错误，**
-   ```
-   configure
-   ```
-
-    脚本会报错：
+2. **若路径错误，**`configure`脚本会报错：
 
    ```
    Error: Bootstrap JDK is not a valid JDK directory.

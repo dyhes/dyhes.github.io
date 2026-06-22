@@ -20,6 +20,7 @@ OpenHarmony提供了一套UI开发框架，即**方舟开发框架（ArkUI框架
 |---|---|---|---|---|
 | 声明式开发范式 | ArkTS语言 | 数据驱动更新 | 复杂度较大、团队合作度较高的程序 | 移动系统应用开发人员、系统应用开发人员 |
 | 类Web开发范式 | JS语言 | 数据驱动更新 | 界面较为简单的程序应用和卡片 | Web前端开发人员 |
+
 ### 应用模型
 应用模型是OpenHarmony为开发者提供的应用程序所需能力的抽象提炼，它提供了应用程序必备的**组件和运行机制**。有了应用模型，开发者可以基于一套统一的模型进行应用开发，使应用开发更简单、高效。请见[应用模型的构成要素](https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/application-models/application-models.md#%E5%BA%94%E7%94%A8%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%9E%84%E6%88%90%E8%A6%81%E7%B4%A0)。
 随着系统的演进发展，OpenHarmony先后提供了两种应用模型：
@@ -71,6 +72,7 @@ HAR与HSP两种共享包的主要区别体现在：
 |---|---|---|
 | HAR | HAR中的代码和资源跟随使用方编译，如果有多个使用方，它们的编译产物中会存在多份相同拷贝。<br>注意：[编译HAR](https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/quick-start/har-package.md#%E7%BC%96%E8%AF%91)时，建议开启混淆能力，保护代码资产。 | HAR除了支持应用内引用，还可以独立打包发布，供其他应用引用。 |
 | HSP | HSP中的代码和资源可以独立编译，运行时在一个进程中代码也只会存在一份。 | HSP一般随应用进行打包，当前支持应用内和[集成态HSP](https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/quick-start/integrated-hsp.md)。应用内HSP只支持应用内引用，集成态HSP支持发布到ohpm私仓和跨应用引用。 |
+
 ![](OpenHarmony/in-app-hsp-har.png)
 ### ⠀Stage模型包结构
 分别对开发态、编译态、发布态的应用程序结构展开介绍。
@@ -85,6 +87,7 @@ HAR与HSP两种共享包的主要区别体现在：
 | ArkTS源码文件 | **Module_name > src > main > ets**：用于存放Module的ArkTS源码文件（.ets文件）。 |
 | 资源文件 | 包括应用级资源文件、以及Module级资源文件，支持图形、多媒体、字符串、布局文件等，详见[资源分类与访问](https://docs.openharmony.cn/pages/v5.0/zh-cn/application-dev/quick-start/resource-categories-and-access.md)。<br>- **AppScope > resources** ：用于存放应用需要用到的资源文件。<br>- **Module_name > src > main > resources** ：用于存放该Module需要用到的资源文件。 |
 | 其他配置文件 | 用于编译构建，包括构建配置文件、编译构建任务脚本、混淆规则文件、依赖的共享包信息等。<br>- **build-profile.json5**：工程级或Module级的构建配置文件，包括应用签名、产品配置等。<br>- **hvigorfile.ts**：应用级或Module级的编译构建任务脚本，开发者可以自定义编译构建工具版本、控制构建行为的配置参数。<br>- **obfuscation-rules.txt**：混淆规则文件。混淆开启后，在使用Release模式进行编译时，会对代码进行编译、混淆及压缩处理，保护代码资产。<br>- **oh-package.json5**：用于存放依赖库的信息，包括所依赖的三方库和共享包。 |
+
 #### 编译态
 ![](OpenHarmony/image.png)
 从开发态到编译态，Module中的文件会发生如下变更：

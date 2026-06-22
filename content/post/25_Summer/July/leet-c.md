@@ -15,23 +15,7 @@ tags:
 ------
 ### 🔧 **传统方法：`rand()`与`srand()`**
 
-- **基本原理**
-  ```
-  rand()
-  ```
-   生成
-  ```
-  0
-  ```
-  到
-  ```
-  RAND_MAX
-  ```
-  （通常为32767）的伪随机整数。需配合 
-  ```
-  srand(seed) 
-  ```
-  设置种子，否则每次运行序列相同。
+- **基本原理**`rand()`生成`0`到`RAND_MAX`（通常为32767）的伪随机整数。需配合`srand(seed)`设置种子，否则每次运行序列相同。
   ```
   #include <cstdlib>
   #include <ctime>
@@ -58,6 +42,7 @@ tags:
 | **随机数分布器** | `uniform_int_distribution`    | 均匀整数分布                                       |
 |                  | `normal_distribution`         | 正态分布                                           |
 | **种子源**       | `std::random_device`          | 基于硬件的真随机数（可能回退为伪随机）[3,9](@ref)  |
+
 #### **代码示例**
 
 ```
@@ -160,6 +145,7 @@ int main() {
 | GCC    | ✅ 完全支持    | 4.8+     |
 | Clang  | ⚠️ 需GNU C++库 | 3.4+     |
 | MSVC   | ❌ 不支持      | -        |
+
 [1,4](@ref)
 
 
@@ -173,6 +159,7 @@ int main() {
 | 大型工程项目      | ❌ 避免   | Chromium、LLVM等生产代码[1](@ref) |
 | 跨平台开发        | ❌ 避免   | Windows/Linux混合编译             |
 | 严格编译时效要求  | ❌ 避免   | CI/CD流水线                       |
+
 [1,8](@ref)
 
 
@@ -267,17 +254,7 @@ swap(arr[begin], arr[right]);    // 基准值归位
 #### **快慢指针法步骤**
 
 1. 选择基准值（如`arr[0]`），`slow`指向起始位置。
-2. **```**
-   fast
-   ```
-
-   从
-
-   ```
-   slow+1
-   ```
-
-   开始遍历：
+2. **`fast`** 从 `slow+1` 开始遍历：
 
    - 若`arr[fast] < key`，则`slow++`并交换`arr[slow]`与`arr[fast]`。
 
@@ -371,13 +348,7 @@ swap(arr[begin], arr[slow])  // 基准值归位
 
 #### **分区步骤**
 
-- 遍历规则（
-
-  ```
-  current ≤ gt
-  ```
-
-  时循环）：
+- 遍历规则（`current ≤ gt`时循环）：
 
   1. **`arr[current] < pivot`**：交换`arr[current]`与`arr[lt]`，`lt++`，`current++`。
   2. **`arr[current] > pivot`**：交换`arr[current]`与`arr[gt]`，`gt--`（`current`不动，需检查新元素）。
@@ -1044,13 +1015,7 @@ int __builtin_popcountll(unsigned long long x); // 64位整数
 
 3. **数学计算替代**
 
-   - 避免浮点运算开销，用整数指令替代
-
-```
-     log2(x)
-```
-
-     ：
+   - 避免浮点运算开销，用整数指令替代`log2(x)`：
     
      ```
      int bits_required = __lg(n) + 1;  // 计算表示 n 所需的最小比特数
@@ -1069,13 +1034,7 @@ int __builtin_popcountll(unsigned long long x); // 64位整数
 
 2. **输入合法性检查**
 
-   - 必须确保
-
-```
-     x > 0
-```
-
-     ：
+   - 必须确保`x > 0`：
     
      ```
      if (x == 0) return -1;  // 显式处理 x=0
@@ -1172,13 +1131,7 @@ Vec<int> numbers;            // 直接使用
 
 - 简化泛型编程，避免嵌套结构[3,11](@ref)；
 
-- 支持复杂模板（如
-
-```
-  std::enable_if
-```
-
-  ）：
+- 支持复杂模板（如`std::enable_if`）：
 
   ```
   template <typename T>
@@ -1294,13 +1247,7 @@ Derived d(42);        // 调用 Base(int)[4,9](@ref)
 
 - **不会自动外提作用域**：编译器不会将块内变量提升到块外作用域，否则会破坏封装性并可能导致命名冲突。
 
-- 可能优化存储位置：在开启优化（如
-
-  ```
-  -O2
-  ```
-
-  ）时，编译器可能将块内变量的存储位置调整到函数栈帧的更高地址（即“外提存储地址”），但
+- 可能优化存储位置：在开启优化（如`-O2`）时，编译器可能将块内变量的存储位置调整到函数栈帧的更高地址（即“外提存储地址”），但
 
   不改变其作用域
 
@@ -1442,13 +1389,7 @@ Derived d(42);        // 调用 Base(int)[4,9](@ref)
 
 - 
 
-  **UTF-8示例**：汉字占3字节（C++11起支持
-
-  ```
-  u8
-  ```
-
-  前缀）：
+  **UTF-8示例**：汉字占3字节（C++11起支持`u8`前缀）：
 
   ```
   const char* utf8_str = u8"你好";  // 内存：E4 BD A0（你） + E5 A5 BD（好）
@@ -1470,13 +1411,7 @@ Derived d(42);        // 调用 Base(int)[4,9](@ref)
 
 #### **现代字符串类型（C++11起）**
 
-- **
-
-  ```
-  std::u16string
-  ```
-
-  **：UTF-16编码，适用于Windows：
+- **`std::u16string`**：UTF-16编码，适用于Windows：
 
   ```
   std::u16string u16_str = u"你好";  
@@ -1484,13 +1419,7 @@ Derived d(42);        // 调用 Base(int)[4,9](@ref)
 
 - **`std::u32string`**：UTF-32编码，平台无关但空间大。
 
-- **
-
-  ```
-  std::string
-  ```
-
-  （UTF-8）**：需显式指定编码，推荐跨平台使用：
+- **`std::string`（UTF-8）**：需显式指定编码，推荐跨平台使用：
 
   ```
   std::string utf8_str = u8"你好";
@@ -1506,13 +1435,7 @@ Derived d(42);        // 调用 Base(int)[4,9](@ref)
 
    - API双版本：`CreateFileA`（ANSI/GBK） vs. `CreateFileW`（UTF-16）。
 
-   - 编码转换：用
-
-     ```
-     MultiByteToWideChar
-     ```
-
-     （GBK/UTF-8 → UTF-16）：
+   - 编码转换：用`MultiByteToWideChar`（GBK/UTF-8 → UTF-16）：
 
      ```
      std::string utf8_str = u8"你好";
@@ -1702,13 +1625,7 @@ bool ignoreSpaceCompare(const std::string& a, const std::string& b) {
 
 - 
 
-  **快速失败**：先比较长度，长度不等直接返回
-
-  ```
-  false
-  ```
-
-  ，避免逐字符比较：
+  **快速失败**：先比较长度，长度不等直接返回`false`，避免逐字符比较：
 
   ```
   bool efficientCompare(const std::string& a, const std::string& b) {
@@ -1922,13 +1839,7 @@ bool ignoreSpaceCompare(const std::string& a, const std::string& b) {
 
 1. **容器操作优化**
 
-   - 向容器插入大对象时，用
-
-```
-     std::move
-     ```
-
-避免拷贝：
+   - 向容器插入大对象时，用`std::move`避免拷贝：
 
      ```
      std::vector<std::string> vec;
@@ -1938,13 +1849,7 @@ bool ignoreSpaceCompare(const std::string& a, const std::string& b) {
 
 2. **资源所有权转移**
 
-   - 适用于独占型资源管理类（如
-
-```
-     std::unique_ptr
-     ```
-
-     ）：
+   - 适用于独占型资源管理类（如`std::unique_ptr`）：
 
      ```
      auto ptr1 = std::make_unique<int>(42);
@@ -1953,13 +1858,7 @@ bool ignoreSpaceCompare(const std::string& a, const std::string& b) {
 
 3. **函数返回值优化**
 
-   - 返回局部对象时，编译器可能自动使用移动语义（RVO/NRVO），显式用
-
-```
-     std::move
-     ```
-
-可确保移动：
+   - 返回局部对象时，编译器可能自动使用移动语义（RVO/NRVO），显式用`std::move`可确保移动：
 
      ```
      std::vector<int> createVector() {
@@ -1995,13 +1894,7 @@ bool ignoreSpaceCompare(const std::string& a, const std::string& b) {
 
 3. **禁用场景**
 
-   - **
-
-     ```
-     const
-     ```
-
-对象**：无法移动（移动操作需修改原对象）：
+   - **`const`对象**：无法移动（移动操作需修改原对象）：
 
      ```
      const std::string s = "immutable";
@@ -2160,25 +2053,13 @@ auto construct = init_value * 2; // ✅ 依赖已定义的 init_value
 
 ### ⚙️ **使用 `auto` 声明变量**
 
-- 因闭包类型名称不可知，通常用
-
-```
-  auto
-  ```
-
-声明Lambda的变量：
+- 因闭包类型名称不可知，通常用`auto`声明Lambda的变量：
 
   ```
   auto lambda = [](int a, int b) { return a + b; };
   ```
 
-  此处
-
-```
-  lambda
-  ```
-
-的类型即为编译器生成的闭包类型。
+  此处`lambda`的类型即为编译器生成的闭包类型。
 
 ### 🔄 **隐式转换为函数指针（无捕获时）**
 
@@ -2186,13 +2067,7 @@ auto construct = init_value * 2; // ✅ 依赖已定义的 init_value
 
   未捕获任何外部变量
 
-  （即捕获列表为
-
-  ```
-  []
-  ```
-
-  ），它可隐式转换为
+  （即捕获列表为`[]`），它可隐式转换为
 
   **普通函数指针**：
 
@@ -2200,13 +2075,7 @@ auto construct = init_value * 2; // ✅ 依赖已定义的 init_value
   int (*funcPtr)(int, int) = [](int a, int b) { return a + b; };
   ```
 
-  此时类型为
-
-  ```
-  int (*)(int, int)
-  ```
-
-  。
+  此时类型为`int (*)(int, int)`。
 
 ### 📦 **`std::function` 包装器**
 
@@ -2231,27 +2100,13 @@ auto construct = init_value * 2; // ✅ 依赖已定义的 init_value
 
 ### 🧩 **C++14 的泛型Lambda**
 
-- C++14 支持泛型Lambda，参数类型可为
-
-```
-  auto
- ** ```**：
+- C++14 支持泛型Lambda，参数类型可为 `auto`：
 
   ```
   auto generic = [](auto x, auto y) { return x + y; };
   ```
 
-  此时闭包类型的
-
-```
-  operator()
-  ```
-
-是
-
-  模板函数
-
-  ，类型仍唯一但支持多类型参数。
+  此时闭包类型的 `operator()` 是**模板函数**，类型仍唯一但支持多类型参数。
 
 
 
@@ -2307,32 +2162,14 @@ auto construct = init_value * 2; // ✅ 依赖已定义的 init_value
 
   **：
 
-  值捕获的变量默认是
-
-  ```
-  const
-  ```
-
-  ，修改需加
-
-  ```
-  mutable
-  ```
-
-  ，且修改仅影响Lambda内部的副本：
+  值捕获的变量默认是`const`，修改需加`mutable`，且修改仅影响Lambda内部的副本：
 
   ```
   int x = 10;
   auto lambda = [=]() mutable { x++; };  // 修改内部副本，外部x仍为10
   ```
 
-- **
-
-  ```
-  [&]
-  ```
-
-  **：
+- **`[&]`**：
 
   引用捕获可直接修改原变量：
 
@@ -2354,13 +2191,7 @@ auto construct = init_value * 2; // ✅ 依赖已定义的 init_value
 
 #### **(2) 生命周期与悬空引用**
 
-- **
-
-  ```
-  [&]
-  ```
-
-  的高风险场景**：
+- **`[&]`的高风险场景**：
 
   若Lambda被传递到外部（如异步线程），而捕获的局部变量已销毁，会导致未定义行为：
 
@@ -2381,13 +2212,7 @@ auto construct = init_value * 2; // ✅ 依赖已定义的 init_value
 
   和明确指定捕获**：
 
-  值捕获的变量不依赖原对象生命周期，但若捕获指针（如
-
-  ```
-  this
-  ```
-
-  或指针变量），仍可能悬空：
+  值捕获的变量不依赖原对象生命周期，但若捕获指针（如`this`或指针变量），仍可能悬空：
 
   ```
   class Widget {
@@ -2444,13 +2269,7 @@ auto construct = init_value * 2; // ✅ 依赖已定义的 init_value
 
    - 小型内置类型（如`int`、`double`）。
 
-   - 需要快照数据（如循环计数器
-
-     ```
-     i
-     ```
-
-     ）：
+   - 需要快照数据（如循环计数器`i`）：
 
      ```
      for (int i = 0; i < 5; i++) {
@@ -2513,13 +2332,7 @@ std::string substr(size_t pos = 0, size_t len = npos) const;
 
 - 
 
-  **正确做法**：调用前检查
-
-```
-  pos
-  ```
-
-范围：
+  **正确做法**：调用前检查 `pos` 范围：
 
   ```
   if (pos <= s.size()) {

@@ -104,7 +104,7 @@ Data types are divided into different groups:
   println(result)
   ```
 
-- **```for...in```**
+- **`for...in`**
 
   With the [`for` loop](https://www.w3schools.com/kotlin/kotlin_for_loop.php), you can also create **ranges** of values with "`..`":
 

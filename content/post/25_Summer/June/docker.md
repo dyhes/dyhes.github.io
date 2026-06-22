@@ -964,13 +964,7 @@ RUN npm install
 COPY . .
 RUN npm run build      # 生成静态文件
 FROM nginx:alpine
-COPY --from=build /app/build /usr/share/nginx/html  # 仅复制构建结果
-```
-
-#### **Java Spring Boot**
-
-```
-FROM maven:3.8-openjdk-17 AS builder
+COPY --from=build /app/build /usr/share/nginx/html  # 仅复制构建结果`#### **Java Spring Boot**`FROM maven:3.8-openjdk-17 AS builder
 WORKDIR /app
 COPY pom.xml .
 RUN mvn dependency:go-offline

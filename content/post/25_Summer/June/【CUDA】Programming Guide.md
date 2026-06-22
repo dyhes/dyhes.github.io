@@ -112,6 +112,7 @@ These synchronization objects can be used at **different thread scopes**. A scop
 | cuda::thread_scope::thread_scope_block | All or any CUDA threads within the same thread block as the initiating thread synchronizes. |
 | cuda::thread_scope::thread_scope_device | All or any CUDA threads in the same GPU device as the initiating thread synchronizes. |
 | cuda::thread_scope::thread_scope_system | All or any CUDA or CPU threads in the same system as the initiating thread synchronizes. |
+
 These thread scopes are implemented as extensions to standard C++ in the [CUDA Standard C++](https://nvidia.github.io/libcudacxx/extended_api/memory_model.html#thread-scopes) library.
 ## Programming Interface
 CUDA C++ provides a simple path for users familiar with the C++ programming language to easily write programs for execution by the device.

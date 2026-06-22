@@ -64,25 +64,9 @@ tags: [Shopee]
 - **`execute(Runnable task)`**
   提交无返回值的任务（无法获取状态或结果）。
 
-- **
+- **`submit(Callable<T> task)`**
 
-  ```
-  submit(Callable<T> task)
-  ```
-
-  **
-
-  返回
-
-   
-
-  ```
-  Future
-  ```
-
-   
-
-  对象，支持：
+  返回`Future`对象，支持：
 
   - `future.get()`：阻塞获取结果（或捕获异常）。
   - `future.get(timeout, unit)`：设置超时时间（超时抛出 `TimeoutException`）。
