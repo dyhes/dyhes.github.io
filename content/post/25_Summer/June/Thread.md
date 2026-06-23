@@ -652,13 +652,7 @@ try {
 
 - **典型场景**：
 
-  在捕获
-
-  ```
-  InterruptedException
-  ```
-
-  后恢复中断状态，确保上层逻辑感知中断请求：
+ 在捕获 `InterruptedException` 后恢复中断状态，确保上层逻辑感知中断请求：
 
   ```
   try {

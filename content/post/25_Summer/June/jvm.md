@@ -2076,13 +2076,7 @@ JVM 通过分层策略提升方法调用效率：
   class ClassB implements InterfaceB, InterfaceA { ... }
   ```
 
-  此时，
-
-  ```
-  InterfaceA.method1()
-  ```
-
-  在`ClassA`和`ClassB`的itable中位于不同分组，导致索引位置无法统一。
+ 此时， `InterfaceA.method1()` 在`ClassA`和`ClassB`的itable中位于不同分组，导致索引位置无法统一。
 
 #### 桥接方法的干扰
 

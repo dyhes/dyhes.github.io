@@ -1428,13 +1428,7 @@ Derived d(42);        // 调用 Base(int)[4,9](@ref)
 
 #### 宽字符类型（`wchar_t`）
 
-- Windows：
-
-  ```
-  wchar_t
-  ```
-
-  为2字节（UTF-16），Linux为4字节（UTF-32）：
+- Windows： `wchar_t` 为2字节（UTF-16），Linux为4字节（UTF-32）：
 
   ```
   wchar_t wide_str[] = L"你好";  // Windows内存：4F60（你） + 597D（好）
@@ -2110,13 +2104,7 @@ auto construct = init_value * 2; // ✅ 依赖已定义的 init_value
 
 ### 📦 `std::function` 包装器
 
-- 为统一处理不同类型的Lambda，可使用
-
-```
-  std::function
-  ```
-
-包装：
+- 为统一处理不同类型的Lambda，可使用 `std::function` 包装：
 
   ```
   #include <functional>

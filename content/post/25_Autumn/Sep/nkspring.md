@@ -2878,13 +2878,7 @@ public class MyStarterAutoConfiguration {
 在项目的 `src/main/resources`目录下创建文件：
 
 - **文件路径**：`META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports`
-- **文件内容**：
-
-```
-com.example.mystarter.MyStarterAutoConfiguration
-```
-
-完成以上两步并打包后，其他项目只需引入这个 Jar 包依赖，Spring Boot 就会自动完成 `MyService`Bean 的配置（如果满足条件的话）。
+- **文件内容**： `com.example.mystarter.MyStarterAutoConfiguration` 完成以上两步并打包后，其他项目只需引入这个 Jar 包依赖，Spring Boot 就会自动完成 `MyService`Bean 的配置（如果满足条件的话）。
 
 ### ⚠️ 注意事项
 

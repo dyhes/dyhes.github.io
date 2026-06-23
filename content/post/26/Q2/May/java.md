@@ -3462,12 +3462,7 @@ SPI 将“定义”与“实现”分离，涉及三个核心角色：
 以 JDBC 为例，经典 SPI 流程如下：
 
 1.  **定义接口**：JDK 定义了 `java.sql.Driver` 接口。
-2.  **提供实现**：MySQL 驱动包中，`com.mysql.cj.jdbc.Driver` 实现了该接口，并在其 JAR 包里提供 `META-INF/services/java.sql.Driver` 文件，内容为：
-
-    ```
-    com.mysql.cj.jdbc.Driver
-    ```
-
+2. **提供实现**：MySQL 驱动包中，`com.mysql.cj.jdbc.Driver` 实现了该接口，并在其 JAR 包里提供 `META-INF/services/java.sql.Driver` 文件，内容为： `com.mysql.cj.jdbc.Driver`
 3.  **加载与实例化**：应用通过 `ServiceLoader` 加载服务：
 
     ```java

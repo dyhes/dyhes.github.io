@@ -44,12 +44,7 @@ GGUF 文件包含三个核心部分：
 GGUF 文件名遵循结构化规则，便于快速识别模型属性：
 ​**`<BaseName>-<SizeLabel>-<FineTune>-<Version>-<Encoding>-<Type>-<Shard>.gguf`**​
 
-- **示例**：
-
-  ```
-  Mixtral-8x7B-v0.1-Q4_K_M.gguf
-  ```
-
+- **示例**： `Mixtral-8x7B-v0.1-Q4_K_M.gguf`
   - `Mixtral`：基础模型架构
   - `8x7B`：8 个专家模块，共 70 亿参数
   - `Q4_K_M`：4-bit 量化 + 分块优化 + 中等精度。

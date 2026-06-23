@@ -3402,13 +3402,12 @@ add_header 'Access-Control-Expose-Headers' 'X-Token, Content-Range' always;
 2. 
    CURL 命令验证
 
-```
-   curl -I -X OPTIONS http://api.example.com
-```
+   ```
+      curl -I -X OPTIONS http://api.example.com
+   ```
 
-   检查返回的 HTTP 头部是否符合预期
-   2
-   。
+   检查返回的 HTTP 头部是否符合预期。
+
 3. **错误日志排查**
    Nginx 错误日志路径：`/var/log/nginx/error.log`，检查语法错误或配置冲突。
 
