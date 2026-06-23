@@ -1227,7 +1227,7 @@ FROM <tableOrViewName>[， <tableOrViewName> ] …
   SELECT Sno,Cno
   FROM SC
   WHERE Grade IS NOT NULL;
-  ```
+```
 
 * **ORDER BY**
 

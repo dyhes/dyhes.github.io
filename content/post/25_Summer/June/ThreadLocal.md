@@ -166,7 +166,7 @@ ThreadLocal变量与普通变量（包括线程内部定义的普通变量）的
 1. **ThreadLocal的隔离机制**
    - 每个`Thread`持有`ThreadLocalMap`，通过ThreadLocal对象的哈希值定位数据（Key为弱引用，Value为强引用）。
    - 同一ThreadLocal对象在不同线程中通过不同Map存储，实现隔离（见下图）：
-  ```
+   ```
 
      线程A：ThreadLocalMap → Entry(ThreadLocalA弱引用, ValueA)  
      线程B：ThreadLocalMap → Entry(ThreadLocalA弱引用, ValueB)

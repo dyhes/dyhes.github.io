@@ -1,0 +1,1 @@
+- Redis 示例：通过 `RedisCacheManager` 为不同分区指定过期时间。

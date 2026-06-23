@@ -53,6 +53,7 @@ tags: [Computer Network]
 | **fix-sublist-indent**（自定义） | 有序列表项下的子列表必须对齐缩进（自动补足） | ✅ |
 | **fence-as-inline-code**（自定义） | 检测被误写为 ` ``` ` 围栏的行内 `code`（仅 warn） | ❌（需手动） |
 | **no-paragraph-immediately-after-table**（自定义） | 表格后若直接跟普通文本段落，自动补一个空行 | ✅ |
+| **fence-inline-sandwich**（自定义） | 句子中夹着的单标识符 fenced code 自动折叠为 inline code | ✅ |
 
 > 自定义规则源码在 [`markdownlint-rules/`](markdownlint-rules/)，配置入口 [`.markdownlint-cli2.cjs`](.markdownlint-cli2.cjs)。
 

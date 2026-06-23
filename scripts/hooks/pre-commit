@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 # pre-commit: 对 staged 的 Markdown 文件运行 markdownlint --fix
-# 如果有自动修复发生，把修复后的内容重新加入 staging，并提示用户复核
+# 对需要多轮收敛的自定义规则，循环执行：
+#   --fix -> lint 校验 -> 若仍有错误则继续
+# 收敛后把修复后的内容重新加入 staging，并提示用户复核
 
 set -e
+
+MAX_PASSES=5
 
 # 1. 找出本次提交里被修改的 .md 文件（去掉已删除的）
 #    用 while read 而非 mapfile，兼容 macOS 自带的 bash 3.2
@@ -27,13 +31,29 @@ for f in "${md_files[@]}"; do
   pre_hashes+=("$(git hash-object "$f" 2>/dev/null || true)")
 done
 
-# 3. 跑 --fix
-if ! npx --yes markdownlint-cli2 --fix "${md_files[@]}"; then
-  echo
-  echo "[pre-commit] ❌ markdownlint 有无法自动修复的错误，提交被阻断。"
-  echo "[pre-commit] 请手动处理上面列出的问题后重新 git add && git commit。"
-  exit 1
-fi
+# 3. 跑收敛循环：--fix 后立即复核，直到 0 error(s) 或达到上限
+pass=0
+while true; do
+  pass=$((pass + 1))
+
+  if ! npx --yes markdownlint-cli2 --fix "${md_files[@]}"; then
+    echo
+    echo "[pre-commit] ❌ markdownlint 在第 $pass 轮 --fix 时失败，提交被阻断。"
+    echo "[pre-commit] 请手动处理上面列出的问题后重新 git add && git commit。"
+    exit 1
+  fi
+
+  if npx --yes markdownlint-cli2 "${md_files[@]}"; then
+    break
+  fi
+
+  if [ "$pass" -ge "$MAX_PASSES" ]; then
+    echo
+    echo "[pre-commit] ❌ markdownlint 迭代 $pass 轮后仍未收敛，提交被阻断。"
+    echo "[pre-commit] 请手动处理剩余问题后重新 git add && git commit。"
+    exit 1
+  fi
+done
 
 # 4. 检查哪些文件被自动修复了，自动 re-add
 changed=()
@@ -54,6 +74,10 @@ if [ ${#changed[@]} -gt 0 ]; then
     echo "  - $f"
   done
   echo "[pre-commit] 修复后的版本已纳入本次提交。"
+fi
+
+if [ "$pass" -gt 1 ]; then
+  echo "[pre-commit] 收敛完成，共执行 $pass 轮。"
 fi
 
 exit 0

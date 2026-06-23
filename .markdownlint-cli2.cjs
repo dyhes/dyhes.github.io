@@ -13,6 +13,8 @@
 //   - fence-as-inline-code  围栏代码块被误用为行内 `code`（仅 warn，需手动修）
 //   - no-paragraph-immediately-after-table
 //                          表格后若直接跟普通文本段落，要求补空行
+//   - fence-inline-sandwich 句子中夹着的单标识符 fenced code 自动塌缩为 inline
+//   - fence-indent-alignment 围栏代码块 opening/closing fence 缩进必须一致
 
 const noBoldInHeading = require("./markdownlint-rules/no-bold-in-heading.js");
 const noFakeOrderedList = require("./markdownlint-rules/no-fake-ordered-list.js");
@@ -20,6 +22,8 @@ const noBrailleBlank = require("./markdownlint-rules/no-braille-blank.js");
 const fixSublistIndent = require("./markdownlint-rules/fix-sublist-indent.js");
 const fenceAsInlineCode = require("./markdownlint-rules/fence-as-inline-code.js");
 const noParagraphImmediatelyAfterTable = require("./markdownlint-rules/no-paragraph-immediately-after-table.js");
+const fenceInlineSandwich = require("./markdownlint-rules/fence-inline-sandwich.js");
+const fenceIndentAlignment = require("./markdownlint-rules/fence-indent-alignment.js");
 
 module.exports = {
   config: {
@@ -35,6 +39,8 @@ module.exports = {
     "fix-sublist-indent": true,
     "fence-as-inline-code": true,
     "no-paragraph-immediately-after-table": true,
+    "fence-inline-sandwich": true,
+    "fence-indent-alignment": true,
   },
   customRules: [
     noBoldInHeading,
@@ -43,5 +49,7 @@ module.exports = {
     fixSublistIndent,
     fenceAsInlineCode,
     noParagraphImmediatelyAfterTable,
+    fenceInlineSandwich,
+    fenceIndentAlignment,
   ],
 };
