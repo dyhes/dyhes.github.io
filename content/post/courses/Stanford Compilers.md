@@ -16,7 +16,7 @@ partition the strings into tokens
 
 **Token Class**: Identifier, Keyword ...
 
-### **Regular Languages**
+### Regular Languages
 
 Def. The regular expressions over $\sum$ are the smallest set of expressions including
 
@@ -24,7 +24,7 @@ Def. The regular expressions over $\sum$ are the smallest set of expressions inc
 * Concatenation
 * Iteration
 
-### **Formal Languages**
+### Formal Languages
 
 Def. Let $\sum$ be a set of characters (an alphabet). A language over $\sum$ is **a set of strings of characters** drawn from $\sum$
 
@@ -32,7 +32,7 @@ Def. Let $\sum$ be a set of characters (an alphabet). A language over $\sum$ is 
 
 >   meaning(mapping from syntax to semantics) is many to one rather than one to many.
 
-### **Lexical Specification**
+### Lexical Specification
 
 * maximal match
 
@@ -42,7 +42,7 @@ Def. Let $\sum$ be a set of characters (an alphabet). A language over $\sum$ is 
 
   Error = {all strings not in the lexical specification}
 
-### **Finite Automata**
+### Finite Automata
 
 * regular expressions = specification
 * finite automata = implementation
@@ -55,12 +55,12 @@ a finite automaton consists of
 * A set of accepting states $F\subseteq S$
 * A set of transitions $state \rightarrow^{input} state$
 
-####  **Deterministic Finite Automata(DFA)**
+####  Deterministic Finite Automata(DFA)
 
 * one transition per input per state
 * No $\epsilon-$moves
 
-#### **Nondeterministic Finite Automata(NFA)**
+#### Nondeterministic Finite Automata(NFA)
 
 * can have multiple transitions for one input in a given state
 * can have $\epsilon-$moves
@@ -69,16 +69,16 @@ DFAs are faster to execute
 
 ![image-20230310211302078](https://i.ibb.co/VQvZzgS/image-20230310211302078.png)
 
-##### **Subset Method for NFA Determinization**
+##### Subset Method for NFA Determinization
 
 * $\epsilon-closure$
 * transition
 
-##### **Partition Method for DFA Minimization**
+##### Partition Method for DFA Minimization
 
 ## Syntactic Analysis (Parsing)
 
-### **CFG**
+### CFG
 
 CFG (context-free grammars) are a natural notation for the recursive structure of programming languages.
 
@@ -235,7 +235,7 @@ top of stack: leftmost pending terminal or non-terminal
     * in this case only option is to get rid of $A$ (by deriving $\epsilon$) : can work only if $t$ can follow $A$ in at least one derivation
     * We say that $t\in Follow(A)$
 
-#### **First Set** 
+#### First Set 
 
 Def. 
 $$
@@ -303,7 +303,7 @@ Bottom-up parsing algorithms are based on recognizing handles
 
 #### viable prefix
 
-Def. 	$\alpha$ is a viable prefix if there is an $\omega$ such that $\alpha|\omega$ is a state of a shift-reduce parser
+Def.  $\alpha$ is a viable prefix if there is an $\omega$ such that $\alpha|\omega$ is a state of a shift-reduce parser
 
 * a viable prefix does not extend past the right end of the handle
 * viable prefix is a prefix of the handle

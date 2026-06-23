@@ -1288,7 +1288,7 @@ class EvilHttpService(override val original: HttpService) : Proxy {
 
 fun demo() {
     val httpService = EvilHttpService(HttpService())
-	httpService.action()
+ httpService.action()
 }
 ```
 
@@ -1610,7 +1610,7 @@ class Church(override val map: HashMap<FlyWeightEnum, Deity> = HashMap()) : FlyW
 
 ## Software architecture
 
-### **管道过滤器风格**
+### 管道过滤器风格
 
 pipes and filters
 
@@ -1626,7 +1626,7 @@ pipes and filters
 
 ![image-20221126110332719](https://i.ibb.co/gzssXnZ/image-20221126110332719.png)
 
-### **主程序/子程序风格**
+### 主程序/子程序风格
 
 Main program and subroutine
 
@@ -1637,7 +1637,7 @@ Main program and subroutine
 * **Single thread of control**
   Supported directly by programming languages
 
-### **面向对象风格**
+### 面向对象风格
 
 Object-Oriented Organization
 
@@ -1661,7 +1661,7 @@ Object-Oriented Organization
 
     take over (or inherit) attributes and behavior of the pre-existing classes
 
-### **分层的风格**
+### 分层的风格
 
 Call and return systems
 
@@ -1669,7 +1669,7 @@ Call and return systems
 * OO Systems
 * Hierarchical layer
 
-### **基于共享数据的事件风格**
+### 基于共享数据的事件风格
 
 * Individual components announce event to communicate with others (Publish)
 * Other components may register an interest in the kind of events (subscribe). They are invoked when the event appear

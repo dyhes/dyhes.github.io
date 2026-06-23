@@ -11,6 +11,7 @@ math: true
 [Link](https://reader-service.fcdn.sk/?source=3c6b6838ceb712e38b66a0ca2cde230f44274dac2f09fba71ffdc61842816357&download_location=https%3A%2F%2Fsinglelogin.re%2Fdl%2F21754907%2F994075)
 
 ## Spring boot
+
 Spring Boot is an open source extension of the Spring Framework designed to simplify the Spring application development.
 
 Spring Boot was introduced as a subproject under the Spring Framework to empower developers with a fast startup experience and exempt them from most of the configuration hazards.
@@ -20,6 +21,7 @@ It provides an additional layer between the Spring Framework for the user to sim
 A Spring Boot web application can be either Servlet-based or reactive type.
 
 ### Components
+
 * **spring-boot**
 
   This is the **primary** Spring Boot component that provides support to other components. For example, it contains the **SpringApplication class**, which contains several static methods to create a standalone Spring Boot application. It also provides support for embedded web servers (e.g., Tomcat) and supports externalized application configurations (e.g., database details of your application), etc. 
@@ -39,41 +41,48 @@ A Spring Boot web application can be either Servlet-based or reactive type.
 [Lombok](https://projectlombok.org/) is a Java library that automatically generates the constructors, getter, setter, toString, and others based on the presence of a few annotations in the plain old Java object (POJO) class. 
 
 ### POJO
+
 A Plain Old Java Object (POJO) is a simple Java object that does not adhere to any special rules or conventions beyond those required by the Java Language Specification. The term is used to emphasize that these objects are free from the constraints typically imposed by more complex frameworks or libraries.
 
 ### Record 
+
 Java 14 has introduced the concept of records in the Java language. Records are immutable data classes that require you to specify only the type and name of the fields. The Java compiler can then generate the equals, hashCode, and toString methods. It also generates the private final fields, getter methods, and public constructor. 
 
 ### pom.xml file
+
 The pom.xml file is a fundamental component of a Maven-based Java project. Maven is a build automation tool used primarily for Java projects, and pom.xml (Project Object Model) is the configuration file that defines the project’s dependencies, build configuration, and other project-specific settings.
 
 ### application.properties file
+
 The application.properties file is a key configuration file used in Spring Boot applications. It allows developers to define various settings and configurations for the application in a simple and readable format. 
 
 ### WAR vs EAR
+
 In general, to run a web application, you build and package the application components in a WAR or EAR archive file and deploy it into a web (e.g., Apache Tomcat) or application server (e.g., Red Hat JBoss). Spring Boot simplifies this process to a certain degree. It does not enforce you to build a WAR or EAR file of your application. Instead, it lets you run the Spring Boot application like a regular Java application using a conventional main() method.
 
 ### Java Bean
+
 A JavaBean is a reusable software component that follows **specific conventions** defined by the JavaBeans specification. JavaBeans are used for **encapsulating many objects into a single object** (the bean), so they can be passed around as a single bean object. 
 
 **1 Default Constructor:**
 
  A JavaBean must have a no-argument (default) constructor. This allows the bean to be easily instantiated.
 
-**2** **Properties:**
+2. **Properties:**
 
 Properties are private fields that are accessed and modified through public getter and setter methods.
 
-**3** **Serializable:**
+3. **Serializable:**
 
 A JavaBean should implement the Serializable interface to allow its state to be saved and restored.
 
-**4** **Accessor Methods:**
+4. **Accessor Methods:**
 
 Getter and setter methods follow a specific naming convention (getPropertyName for getters and setPropertyName for setters).
 The “Bean” part of the term is a metaphor borrowed from the agricultural sense of the word, implying something small, lightweight, and reusable.
 
 ### @SpringBootApplication
+
 @SpringBootApplication annotation is a convenient annotation that consists of three annotations: 
 
 * **@EnableAutoConfiguration**
@@ -86,20 +95,23 @@ The “Bean” part of the term is a metaphor borrowed from the agricultural sen
   Provides support to scan the packages for Spring components in the application. 
   
 ### Spring Component
+
   **A component in Spring is a Java bean that is managed by Spring** and annotated with the **@Component, @Bean, or specialized component annotations**. With the presence of @ComponentScan annotation, the Spring Boot application scans for all components present in the **root package and sub-packages** under it to manage their lifecycle. The key point to remember with ComponentScan is that the scan starts from a root package and continues to all child packages. Thus, if you have packages that are not in the root or its sub-package, none of those components will be scanned by the component scan.
+
 * **@SpringBootConfiguration**
   This annotation indicates that **the annotated class provides the Spring Boot application configuration**. It is meta-annotated with Spring @Configuration annotation so that the configurations in the annotated class can be found automatically by Spring Boot. Thus, the beans defined in this main class can be autodetected and loaded by Spring. 
 
 ### run() method
+
 Most of the time, you’ll use the static run() method of SpringApplication to bootstrap and launch your application. Spring Boot performs several activities while it executes the run() method:
 
-**1** **Creates an instance of an** **ApplicationContext** based on the libraries present in the classpath.
+1. **Creates an instance of an** **ApplicationContext** based on the libraries present in the classpath.
 
-**2** **Registers a** **CommandLinePropertySource** to expose command line arguments as Spring properties.
+2. **Registers a** **CommandLinePropertySource** to expose command line arguments as Spring properties.
 
-**3** **Refreshes the** **ApplicationContext** created at step 1 to load all singleton beans.
+3. **Refreshes the** **ApplicationContext** created at step 1 to load all singleton beans.
 
-**4** **Triggers the** **ApplicationRunners** **and** **CommandRunners** configured in the application.
+4. **Triggers the** **ApplicationRunners** **and** **CommandRunners** configured in the application.
 
 Most Java applications you develop consist of objects. These objects interact with each other, and there are dependencies among them. To effectively manage object creation and interdependencies, Spring uses the principles of **dependency injection (DI)**.
 This dependency injection or the **inversion of control (IoC)** approach lets Spring create the objects (or, more appropriately, the **beans** in Spring parlance) and inject the dependencies externally.
@@ -190,6 +202,7 @@ In addition to the CrudRepository, Spring Data also provides a PagingAndSortin
 @Repository marks  a class as a spring repository 
 
 ## Spring Security 
+
 The following part comes from spring security official website
 Spring Security provides comprehensive support for [authentication](https://en.wikipedia.org/wiki/Authentication). Authentication is how we **verify the identity** of who is trying to access a particular resource.
 
@@ -207,6 +220,7 @@ PasswordEncoder passwordEncoder =
 ```
 
 DelegatingPasswordEncoder Storage Format
+
 ```text
 {id}encodedPassword
 e.g. 
@@ -226,6 +240,7 @@ System.out.println(user.getPassword());
 Spring Security provides comprehensive support for [authorization](https://en.wikipedia.org/wiki/Authorization). Authorization is **determining who is allowed** to access a particular resource. Spring Security provides [defense in depth](https://en.wikipedia.org/wiki/Defense_in_depth_%28computing%29) by allowing for request based authorization and method based authorization.
 
 Prevent CSRF (cross site request forgery)
+
 * Synchronizer token request
 * Samesite attribute
 Spring Security does not directly control the creation of the session cookie, so it does not provide support for the SameSite attribute. [Spring Session](https://spring.io/projects/spring-session) provides support for the SameSite attribute in servlet-based applications. 
@@ -233,6 +248,7 @@ Spring Security does not directly control the creation of the session cookie, so
 For [either protection](https://docs.spring.io/spring-security/reference/features/exploits/csrf.html#csrf-protection) against CSRF to work, the application must ensure that ["safe" HTTP methods are read-only](https://tools.ietf.org/html/rfc7231#section-4.2.1). This means that requests with the HTTP GET, HEAD, OPTIONS, and TRACE methods should not change the state of the application.
 
 Default Security Headers
+
 ```http
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
@@ -248,6 +264,7 @@ Spring Security provides **Spring Data integration** that allows referring to th
 In most environments, Security is stored on a per Thread basis. This means that when work is done on a new Thread, the SecurityContext is lost. Spring Security provides some infrastructure to help make this much easier for users. Spring Security provides low level abstractions for working with Spring Security in multi-threaded environments. 
 
 The default arrangement of Spring Boot and Spring Security affords the following behaviors at runtime:
+
 * Requires an authenticated user [for any endpoint](https://docs.spring.io/spring-security/reference/servlet/authorization/authorize-http-requests.html) (including Boot’s /error endpoint)
 * [Registers a default user](https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/user-details-service.html) with a generated password at startup (the password is logged to the console; in the preceding example, the password is 8e557245-73e2-4286-969a-ff57fe326336)
 * Protects [password storage with BCrypt](https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/password-encoder.html) as well as others
@@ -269,12 +286,13 @@ Spring Security’s Servlet support is based on **Servlet Filters**. The followi
 The client sends a request to the application, and the container creates a FilterChain, which contains the Filter **instances** and Servlet that should process the HttpServletRequest, based on the path of the request URI. In a Spring MVC application, the Servlet is an instance of [DispatcherServlet](https://docs.spring.io/spring-framework/docs/6.1.9/reference/html/web.html#mvc-servlet). 
 At most, one Servlet can handle a single HttpServletRequest and HttpServletResponse. 
 more than one Filter can be used to:
+
 * Prevent downstream Filter instances or the Servlet from being invoked. In this case, the Filter typically writes the HttpServletResponse.
 * Modify the HttpServletRequest or HttpServletResponse used by the downstream Filter instances and the Servlet.
 
 ```java
 public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) {
-	// do something before the rest of the application
+ // do something before the rest of the application
     chain.doFilter(request, response); // invoke the rest of the application
     // do something after the rest of the application
 }
@@ -332,7 +350,7 @@ public class SecurityConfig {
             )
             .httpBasic(Customizer.withDefaults())
             .formLogin(Customizer.withDefaults());
-			.addFilterBefore(new TenantFilter(), AuthorizationFilter.class); 
+   .addFilterBefore(new TenantFilter(), AuthorizationFilter.class); 
         return http.build();
     }
 
@@ -344,6 +362,7 @@ Be careful when you declare your filter as a Spring bean, either by annotating i
 ExceptionTranslationFilter is inserted into the [FilterChainProxy](https://docs.spring.io/spring-security/reference/servlet/architecture.html#servlet-filterchainproxy) as one of the [Security Filters](https://docs.spring.io/spring-security/reference/servlet/architecture.html#servlet-security-filters).
 The [ExceptionTranslationFilter](https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/web/access/ExceptionTranslationFilter.html) allows translation of [AccessDeniedException](https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/access/AccessDeniedException.html) and [AuthenticationException](https://docs.spring.io/spring-security/site/docs/6.3.1/api//org/springframework/security/core/AuthenticationException.html) into HTTP responses.
 ![](image%208.png)
+
 * If the user is **not authenticated** or it is an AuthenticationException, then *Start Authentication*.
   * The [SecurityContextHolder](https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html#servlet-authentication-securitycontextholder) is cleared out.
   * The HttpServletRequest is [saved](https://docs.spring.io/spring-security/reference/servlet/architecture.html#savedrequests) so that it can be used to replay the original request once authentication is successful.
@@ -353,11 +372,13 @@ The [ExceptionTranslationFilter](https://docs.spring.io/spring-security/site/do
 > If the application does not throw an AccessDeniedException or an AuthenticationException, then ExceptionTranslationFilter does not do anything.
 
 ### Authentication
+
 At the heart of Spring Security’s **authentication model** is the SecurityContextHolder. It contains the [SecurityContext](https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html#servlet-authentication-securitycontext).
 ![](securitycontextholder.png)
 The SecurityContextHolder is where Spring Security stores the details of who is [authenticated](https://docs.spring.io/spring-security/reference/features/authentication/index.html#authentication). Spring Security does not care how the SecurityContextHolder is populated. If it contains a value, it is used as the currently authenticated user.
 
 Get currently authenticated user
+
 ```java
 SecurityContext context = SecurityContextHolder.getContext();
 Authentication authentication = context.getAuthentication();
@@ -368,7 +389,8 @@ Collection<? extends GrantedAuthority> authorities = authentication.getAuthoriti
 
 By default, SecurityContextHolder uses a ThreadLocal to store these details, which means that **the SecurityContext is always available to methods in the same thread**, even if the SecurityContext is not explicitly passed around as an argument to those methods.  Using a ThreadLocal in this way is quite safe if you take care to clear the thread after the present principal’s request is processed. Spring Security’s [FilterChainProxy](https://docs.spring.io/spring-security/reference/servlet/architecture.html#servlet-filterchainproxy) ensures that the SecurityContext is always cleared.
  **Authentication**
-⠀The Authentication contains:
+The Authentication contains:
+
 * **principal**: Identifies the user. When authenticating with a username/password this is often an instance of [UserDetails](https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/user-details.html#servlet-authentication-userdetails).
 * **credentials**: Often a password. In many cases, this is cleared after the user is authenticated, to ensure that it is not leaked.
 * **authorities**: The [GrantedAuthority](https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html#servlet-authentication-granted-authority) instances are high-level permissions the user is granted. Two examples are roles and scopes.
@@ -390,6 +412,7 @@ When a client makes an unauthenticated request to a resource that they are not a
 When the user submits their credentials, the AbstractAuthenticationProcessingFilter creates an [Authentication](https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html#servlet-authentication-authentication) from the HttpServletRequest to be authenticated. The type of Authentication created depends on the subclass of AbstractAuthenticationProcessingFilter. For example, [UsernamePasswordAuthenticationFilter](https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/form.html#servlet-authentication-usernamepasswordauthenticationfilter) creates a UsernamePasswordAuthenticationToken from a *username* and *password* that are submitted in the HttpServletRequest.
 Next, the [Authentication](https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html#servlet-authentication-authentication) is passed into the [AuthenticationManager](https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html#servlet-authentication-authenticationmanager) to be authenticated.
 If authentication fails, then *Failure*.
+
 * The [SecurityContextHolder](https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html#servlet-authentication-securitycontextholder) is cleared out.
 * RememberMeServices.loginFail is invoked. If remember me is not configured, this is a no-op. See the [rememberme](https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/web/authentication/rememberme/package-frame.html) package.
 * AuthenticationFailureHandler is invoked. See the [AuthenticationFailureHandler](https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/web/authentication/AuthenticationFailureHandler.html) interface.
@@ -401,77 +424,80 @@ If authentication is successful, then *Success*.
 * AuthenticationSuccessHandler is invoked. See the [AuthenticationSuccessHandler](https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/web/authentication/AuthenticationSuccessHandler.html) interface.
 
 #### ⠀Username/Password Authentication 
+
 authenticate users via a REST API 
+
 ```java
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http
-			.authorizeHttpRequests((authorize) -> authorize
-				.requestMatchers("/login").permitAll()
-				.anyRequest().authenticated()
-			);
+ @Bean
+ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+  http
+   .authorizeHttpRequests((authorize) -> authorize
+    .requestMatchers("/login").permitAll()
+    .anyRequest().authenticated()
+   );
 
-		return http.build();
-	}
+  return http.build();
+ }
 
-	@Bean
-	public AuthenticationManager authenticationManager(
-			UserDetailsService userDetailsService,
-			PasswordEncoder passwordEncoder) {
-		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-		authenticationProvider.setUserDetailsService(userDetailsService);
-		authenticationProvider.setPasswordEncoder(passwordEncoder);
+ @Bean
+ public AuthenticationManager authenticationManager(
+   UserDetailsService userDetailsService,
+   PasswordEncoder passwordEncoder) {
+  DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+  authenticationProvider.setUserDetailsService(userDetailsService);
+  authenticationProvider.setPasswordEncoder(passwordEncoder);
 
-		return new ProviderManager(authenticationProvider);
-	}
+  return new ProviderManager(authenticationProvider);
+ }
 
-	@Bean
-	public UserDetailsService userDetailsService() {
-		UserDetails userDetails = User.withDefaultPasswordEncoder()
-			.username("user")
-			.password("password")
-			.roles("USER")
-			.build();
+ @Bean
+ public UserDetailsService userDetailsService() {
+  UserDetails userDetails = User.withDefaultPasswordEncoder()
+   .username("user")
+   .password("password")
+   .roles("USER")
+   .build();
 
-		return new InMemoryUserDetailsManager(userDetails);
-	}
+  return new InMemoryUserDetailsManager(userDetails);
+ }
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-	}
+ @Bean
+ public PasswordEncoder passwordEncoder() {
+  return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+ }
 
 }
 
 @RestController
 public class LoginController {
 
-	private final AuthenticationManager authenticationManager;
+ private final AuthenticationManager authenticationManager;
 
-	public LoginController(AuthenticationManager authenticationManager) {
-		this.authenticationManager = authenticationManager;
-	}
+ public LoginController(AuthenticationManager authenticationManager) {
+  this.authenticationManager = authenticationManager;
+ }
 
-	@PostMapping("/login")
-	public ResponseEntity<Void> login(@RequestBody LoginRequest loginRequest) {
-		Authentication authenticationRequest =
-			UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.username(), loginRequest.password());
-		Authentication authenticationResponse =
-			this.authenticationManager.authenticate(authenticationRequest);
-		// ...
-	}
+ @PostMapping("/login")
+ public ResponseEntity<Void> login(@RequestBody LoginRequest loginRequest) {
+  Authentication authenticationRequest =
+   UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.username(), loginRequest.password());
+  Authentication authenticationResponse =
+   this.authenticationManager.authenticate(authenticationRequest);
+  // ...
+ }
 
-	public record LoginRequest(String username, String password) {
-	}
+ public record LoginRequest(String username, String password) {
+ }
 
 }
 ```
 
 Built-in mechanism for reading a username:
+
 * [Form](https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/form.html)
 * [Basic](https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/basic.html)
   WWW-Authenticate header
@@ -482,8 +508,11 @@ Built-in mechanism for reading a username:
 
 [DaoAuthenticationProvider](https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/authentication/dao/DaoAuthenticationProvider.html) is an [AuthenticationProvider](https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html#servlet-authentication-authenticationprovider) implementation that uses a [UserDetailsService](https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/user-details-service.html#servlet-authentication-userdetailsservice) and [PasswordEncoder](https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/password-encoder.html#servlet-authentication-password-storage) to authenticate a username and password.
 ![](image%2012.png)
-#### **Persistence**
+
+#### Persistence
+
 in Spring Security the association of the user to future requests is made using [SecurityContextRepository](https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/web/context/SecurityContextRepository.html). The default implementation of SecurityContextRepository is [DelegatingSecurityContextRepository](https://docs.spring.io/spring-security/site/docs/6.3.1/api/org/springframework/security/web/context/DelegatingSecurityContextRepository.html) which delegates to the following:
+
 * [HttpSessionSecurityContextRepository](https://docs.spring.io/spring-security/reference/servlet/authentication/persistence.html#httpsecuritycontextrepository)
 * [RequestAttributeSecurityContextRepository](https://docs.spring.io/spring-security/reference/servlet/authentication/persistence.html#requestattributesecuritycontextrepository)
 
@@ -499,6 +528,7 @@ Unlike,[SecurityContextPersistenceFilter](https://docs.spring.io/spring-security
 
 
 ## Restful API
+
 @RestController
 
 @Service

@@ -11,7 +11,7 @@ tags: [Shopee]
 
 ------
 
-### ⚙️ **1. 核心实现类**
+### ⚙️ 1. 核心实现类
 
 - **`ThreadPoolExecutor`**
   是 `ExecutorService` 的主要实现，用于管理线程池。其构造函数支持配置核心参数：
@@ -42,7 +42,7 @@ tags: [Shopee]
 
 ------
 
-### 🛠️ **2. 创建 `ExecutorService` 的工厂方法**
+### 🛠️ 2. 创建 `ExecutorService` 的工厂方法
 
 通过 `Executors` 工具类快速创建线程池（底层仍调用 `ThreadPoolExecutor`）：
 
@@ -59,7 +59,7 @@ tags: [Shopee]
 
 ------
 
-### 📨 **3. 任务提交与监控**
+### 📨 3. 任务提交与监控
 
 - **`execute(Runnable task)`**
   提交无返回值的任务（无法获取状态或结果）。
@@ -81,7 +81,7 @@ tags: [Shopee]
 
 ------
 
-### 🔚 **4. 关闭线程池**
+### 🔚 4. 关闭线程池
 
 - **`shutdown()`**
   停止接受新任务，等待已提交任务完成。
@@ -104,7 +104,7 @@ tags: [Shopee]
 
 ------
 
-### ⚠️ **5. 注意事项**
+### ⚠️ 5. 注意事项
 
 1. **中断响应**
    任务需检测 `Thread.interrupted()` 或处理 `InterruptedException`，否则无法及时取消。
@@ -118,7 +118,7 @@ tags: [Shopee]
 
 ------
 
-### 💎 **总结**
+### 💎 总结
 
 - **Java 5–7 的 `ExecutorService` 实现已成熟**，核心功能（线程池、任务调度、异步结果）通过 `ThreadPoolExecutor` 和 `ScheduledThreadPoolExecutor` 提供。
 - **Java 8 新增的 `CompletableFuture` 优化了异步编程**，但底层仍依赖上述实现。
@@ -274,7 +274,7 @@ try {
 
 ------
 
-### ⚙️ 1. **使用不可变对象（Immutable Objects）**
+### ⚙️ 1. 使用不可变对象（Immutable Objects）
 
 **核心思路**：通过设计类本身为不可变，确保所有返回值天然只读。
 
@@ -312,7 +312,7 @@ public final class ImmutablePerson {
 
 ------
 
-### 📦 2. **返回不可变集合（Unmodifiable Collections）**
+### 📦 2. 返回不可变集合（Unmodifiable Collections）
 
 **适用场景**：方法返回集合类型（如 `List`、`Map`）时，防止调用方修改原始集合。
 
@@ -336,7 +336,7 @@ public class DataService {
 
 ------
 
-### 📑 3. **返回副本（Defensive Copying）**
+### 📑 3. 返回副本（Defensive Copying）
 
 **适用场景**：需完全隔离返回对象与原始数据，避免任何关联性修改。
 
@@ -359,7 +359,7 @@ public class DataHolder {
 
 ------
 
-### 🧩 4. **使用只读接口（Read-Only Interface）**
+### 🧩 4. 使用只读接口（Read-Only Interface）
 
 **核心思路**：定义仅包含 getter 方法的接口，返回接口类型而非具体类。
 
@@ -386,7 +386,7 @@ ReadOnlyPerson person = new Person("Alice").asReadOnly();
 
 ------
 
-### ⚡ 5. **代理模式（Proxy Pattern）**
+### ⚡ 5. 代理模式（Proxy Pattern）
 
 **适用场景**：动态拦截修改操作，适用于复杂对象或需运行时控制的情况。
 
@@ -414,7 +414,7 @@ public ReadOnlyPerson createReadOnlyProxy(Person person) {
 
 ------
 
-### 🔍 **方案对比与选型建议**
+### 🔍 方案对比与选型建议
 
 | **方法**   | **适用场景**               | **性能影响**     | **安全性**       |
 | ---------- | -------------------------- | ---------------- | ---------------- |

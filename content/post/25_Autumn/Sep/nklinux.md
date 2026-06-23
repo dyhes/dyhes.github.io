@@ -71,26 +71,31 @@ tcpdump 的威力在于其灵活的过滤表达式：
 ### 💡 实用场景与示例
 
 1. **捕获特定主机的 ICMP 包 (如 Ping)**
+
    ```
    sudo tcpdump -i any -nn icmp and host 192.168.1.1
    ```
 
 2. **捕获 HTTP 流量并显示内容**
+
    ```
    sudo tcpdump -i any -A -s0 port 80
    ```
 
 3. **捕获特定端口的流量并保存到文件**
+
    ```
    sudo tcpdump -i eth0 -w web_traffic.pcap port 80 or port 443
    ```
 
 4. **从保存的文件中读取数据包**
+
    ```
    sudo tcpdump -r web_traffic.pcap
    ```
 
 5. **捕获 TCP 三次握手 (SYN, SYN-ACK, ACK)**
+
    ```
    sudo tcpdump -nn 'tcp[tcpflags] & (tcp-syn|tcp-ack) != 0'
    ```

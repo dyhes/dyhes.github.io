@@ -9,11 +9,13 @@ tags:
 - Postopia
 ---
 ## Flux vs. Mono
+
 Flux 和 Mono 是 Reactor 框架中实现响应式编程的核心类型，用于处理异步数据流。它们基于 Reactive Streams 规范，支持非阻塞、背压（Backpressure）等特性，适用于高并发场景。以下是两者的对比与解析：
 
 ---
 
-### **核心概念**
+### 核心概念
+
 1. **Flux**
    - **定义**：表示一个 **0到N个元素的异步序列**，支持无限数据流（如实时事件流）或有限数据集（如数据库查询结果集）。
    - **信号类型**：通过 `onNext` 发送多个元素，最终以 `onComplete` 或 `onError` 终止流。
@@ -26,7 +28,8 @@ Flux 和 Mono 是 Reactor 框架中实现响应式编程的核心类型，用于
 
 ---
 
-### **核心特性对比**
+### 核心特性对比
+
 | 特性                | Flux                                      | Mono                                      |
 |---------------------|-------------------------------------------|------------------------------------------|
 | **元素数量**        | 0-N 个，支持无限流                   | 0或1个                           |
@@ -36,46 +39,61 @@ Flux 和 Mono 是 Reactor 框架中实现响应式编程的核心类型，用于
 
 ---
 
-### **使用场景**
-#### **Flux 的典型应用**
+### 使用场景
+
+#### Flux 的典型应用
+
 1. **批量数据查询**
+
    ```java
    Flux<User> users = userRepository.findAll();  // 查询所有用户
    ```
+
 2. **实时事件流处理**
+
    ```java
    Flux<Event> events = Flux.interval(Duration.ofSeconds(1))
                             .map(tick -> generateEvent());  // 每秒生成事件
    ```
+
 3. **数据转换与聚合**
    使用 `flatMap` 和 `groupBy` 对多个数据流进行合并或拆分。
 
-#### **Mono 的典型应用**
+#### Mono 的典型应用
+
 1. **单次数据库查询**
+
    ```java
    Mono<User> user = userRepository.findById(id);  // 根据ID查询用户
    ```
+
 2. **HTTP 请求响应**
+
    ```java
    @GetMapping("/user/{id}")
    public Mono<User> getUser(@PathVariable String id) {
        return userService.findUserById(id);
    }
    ```
+
 3. **异步操作结果封装**
+
    ```java
    Mono<Void> saveOperation = userRepository.save(user).then();  // 保存后返回空
    ```
 
 ---
 
-### **操作符与功能**
-#### **共有操作符**
+### 操作符与功能
+
+#### 共有操作符
+
 - **转换类**：`map`（元素转换）、`flatMap`（异步转换）。
 - **过滤类**：`filter`（条件过滤）、`take`（限制元素数量）。
 - **错误处理**：`onErrorResume`（错误降级）、`retry`（重试机制）。
 
-#### **特有操作符**
+#### 特有操作符
+
 | 类型  | 操作符               | 功能                                 |
 |-------|----------------------|--------------------------------------|
 | Flux  | `buffer(10)`         | 将元素按批次收集（如每10个一组） |
@@ -85,8 +103,10 @@ Flux 和 Mono 是 Reactor 框架中实现响应式编程的核心类型，用于
 
 ---
 
-### **代码示例**
-#### **Flux 示例**
+### 代码示例
+
+#### Flux 示例
+
 ```java
 // 创建包含多个元素的流并转换
 Flux<Integer> numbers = Flux.just(1, 2, 3)
@@ -95,7 +115,8 @@ Flux<Integer> numbers = Flux.just(1, 2, 3)
 numbers.subscribe(System.out::println);
 ```
 
-#### **Mono 示例**
+#### Mono 示例
+
 ```java
 // 模拟异步查询用户并处理结果
 Mono<User> userMono = userRepository.findById("123")
@@ -109,21 +130,26 @@ userMono.subscribe();
 
 ---
 
-### **如何选择 Flux 或 Mono？**
+### 如何选择 Flux 或 Mono？
+
 1. **数据量**：需要处理多个元素时选 Flux，单个或无结果时选 Mono。
 2. **性能**：Mono 更轻量，适合高频单次操作；Flux 适合批量或流式处理。
 3. **语义明确性**：使用 Mono 可增强代码可读性（如明确表示“可能有或没有结果”）。
 
 ---
 
-### **总结**
+### 总结
+
 Flux 和 Mono 是响应式编程的基石，分别解决多元素和单元素异步流处理的问题。Flux 擅长复杂的数据流操作（如合并、批处理），而 Mono 在单结果场景中更高效直观。实际开发中需根据业务需求选择，例如在 Spring WebFlux 中，Controller 方法通常返回 Mono（单结果）或 Flux（列表或流）。
+
 ## ServerHttpRequestDecorator
+
 ServerHttpRequestDecorator 是 Spring WebFlux 框架中用于增强或修改 HTTP 请求的核心工具类，基于装饰器模式实现对请求的拦截和动态处理。以下是其核心特性、使用场景及示例的详细解析：
 
 ---
 
-### **核心功能与作用**
+### 核心功能与作用
+
 - **请求信息拦截与修改**
   继承自 `ServerHttpRequest`，通过重写 `getHeaders()`、`getBody()` 等方法，开发者可以修改请求头、请求体等关键信息。例如，动态添加请求头、解密请求内容或统一请求格式。
 
@@ -132,16 +158,20 @@ ServerHttpRequestDecorator 是 Spring WebFlux 框架中用于增强或修改 HTT
 
 ---
 
-### **关键方法与使用示例**
-#### **常用方法**
+### 关键方法与使用示例
+
+#### 常用方法
+
 - **`getHeaders()`**
   重写此方法可动态修改请求头信息（如强制设置 `Content-Type`）。
   
 - **`getBody()`**
   拦截请求体数据流（`Flux<DataBuffer>`），允许对原始数据进行转换（如解密、日志记录）。
 
-#### **代码示例**
+#### 代码示例
+
 **场景：强制设置请求头的 Content-Type**
+
 ```java
 public class ContentRequestDecorator extends ServerHttpRequestDecorator {
     public ContentRequestDecorator(ServerHttpRequest delegate) {
@@ -156,8 +186,10 @@ public class ContentRequestDecorator extends ServerHttpRequestDecorator {
     }
 }
 ```
+
 **应用方式**  
 在过滤器中包装原始请求：
+
 ```java
 public class CustomFilter implements WebFilter {
     @Override
@@ -169,6 +201,7 @@ public class CustomFilter implements WebFilter {
 ```
 
 **场景：解密请求体内容**  
+
 ```java
 public class DecryptRequestDecorator extends ServerHttpRequestDecorator {
     @Override
@@ -185,7 +218,8 @@ public class DecryptRequestDecorator extends ServerHttpRequestDecorator {
 
 ---
 
-### **典型应用场景**
+### 典型应用场景
+
 1. **请求头动态处理**
    例如统一添加认证头（如 `Authorization`）或修复客户端缺失的 `Content-Type`。
 
@@ -200,7 +234,8 @@ public class DecryptRequestDecorator extends ServerHttpRequestDecorator {
 
 ---
 
-### **注意事项**
+### 注意事项
+
 - **避免重复提交**
   若直接操作请求体数据流，需确保数据仅被消费一次，否则会触发 `IllegalStateException`。可通过缓存（如 `Flux.cache()`）解决。
 
@@ -212,7 +247,8 @@ public class DecryptRequestDecorator extends ServerHttpRequestDecorator {
 
 ---
 
-### **相关类对比**
+### 相关类对比
+
 - **ServerHttpRequest**
   原始请求接口，提供基础请求信息访问能力。
 
@@ -220,12 +256,15 @@ public class DecryptRequestDecorator extends ServerHttpRequestDecorator {
   针对 Servlet 容器的适配器，将 `HttpServletRequest` 转换为响应式请求对象，通常与 `ServerHttpRequestDecorator` 配合使用。
 
 通过合理应用 `ServerHttpRequestDecorator`，开发者能够灵活控制请求处理流程，满足复杂的业务需求。
+
 ## ServerHttpResponseDecorator
+
 在 Spring Cloud Gateway 中，`ServerHttpResponseDecorator` 是一个用于包装并增强 `ServerHttpResponse` 功能的工具类，主要用于拦截和修改网关的响应内容。以下是其核心特性和应用场景的详细介绍：
 
 ---
 
-### **核心功能与作用**
+### 核心功能与作用
+
 - **响应内容拦截与修改**
   `ServerHttpResponseDecorator` 继承自 `ServerHttpResponse`，通过重写 `writeWith()` 方法，开发者可以在响应体写入前或写入后对数据进行修改。例如，可以动态添加响应头、加密响应内容或记录日志。
   
@@ -234,15 +273,18 @@ public class DecryptRequestDecorator extends ServerHttpRequestDecorator {
 
 ---
 
-### **核心方法与使用示例**
-#### **关键方法**
+### 核心方法与使用示例
+
+#### 关键方法
+
 - `writeWith(Publisher<DataBuffer> body)`
   重写此方法以拦截原始响应体的数据流，允许对 `DataBuffer` 进行自定义处理（如字符串转换、JSON 序列化等）。
   
 - **`getDelegate()`**
   获取被装饰的原始 `ServerHttpResponse` 实例，便于直接操作底层属性（如状态码、Cookie 等）。
 
-#### **代码示例**
+#### 代码示例
+
 ```java
 public class CustomResponseDecorator extends ServerHttpResponseDecorator {
     public CustomResponseDecorator(ServerHttpResponse delegate) {
@@ -261,7 +303,9 @@ public class CustomResponseDecorator extends ServerHttpResponseDecorator {
     }
 }
 ```
+
 在过滤器中应用该装饰器：
+
 ```java
 public class CustomFilter implements GlobalFilter {
     @Override
@@ -274,7 +318,8 @@ public class CustomFilter implements GlobalFilter {
 
 ---
 
-### **典型应用场景**
+### 典型应用场景
+
 1. **动态修改响应头**
    例如添加安全相关的 `Content-Security-Policy` 或自定义业务标识头。
    
@@ -289,7 +334,8 @@ public class CustomFilter implements GlobalFilter {
 
 ---
 
-### **注意事项**
+### 注意事项
+
 - **响应提交状态**
   需通过 `isCommitted()` 方法判断响应是否已提交，避免重复操作导致异常。
   
@@ -298,7 +344,8 @@ public class CustomFilter implements GlobalFilter {
 
 ---
 
-### **相关类与上下文**
+### 相关类与上下文
+
 - **`ServerWebExchange`**
   网关请求的上下文对象，持有 `ServerHttpRequest` 和 `ServerHttpResponse`，是操作请求和响应的入口。
   

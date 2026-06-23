@@ -7,6 +7,7 @@ categories:
 ---
 
 ## How to read faster
+
 * **Cut the Inner Monologue**
   try reading without sounding out the words in your head
 * **Read With Your Finger**
@@ -18,6 +19,7 @@ categories:
 * Read more than one book simultaneously
 
 ## How to remember What you read
+
 * Highlighting and note-taking is basically **worthless**.
 * **We remember what’s **：useful****
   * find ways to implement ideas you read into your life

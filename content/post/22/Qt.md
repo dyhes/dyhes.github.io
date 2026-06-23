@@ -26,7 +26,7 @@ All classes that inherit from QObject or one of its subclasses (e.g., QWidget) c
 
  Just as an object does not know if anything receives its signals, a slot does not know if it has any signals connected to it. This ensures that truly independent components can be created with Qt.  You can connect as many signals as you want to a single slot, and a signal can be connected to as many slots as you need. 
 
-## **Q_OBJECT Macro**
+## Q_OBJECT Macro
 
 The Q_OBJECT macro must appear in the private section of a class definition that declares its own signals and slots or that uses other services provided by Qt's meta-object system.
 

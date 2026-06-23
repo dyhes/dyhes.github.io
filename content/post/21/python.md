@@ -300,7 +300,7 @@ A Class is like an object constructor, or a "blueprint" for creating objects.
 
 To create a class, use the keyword `class` 
 
-### ___init__()_ Function
+### _init()_ Function
 
 All classes have a function called __init__(), which is always executed when the class is being initiated. Use the __init__() function to assign values to object properties, or other operations that are necessary to do when the object is being created
 

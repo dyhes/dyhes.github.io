@@ -21,11 +21,15 @@ cmake .. \
 -DCMAKE_BUILD_TYPE=Release
 
 ## 下载源码
+
 下载 kokkos 和 kokkos-kernels 的 releaze 版本源码
+
 ```bash
 chmod 755 /home/bingxing2/home/scx6625/wbx/models/kokkos/kokkos/bin/nvcc_wrapper
 ```
+
 ## 编译 kokkos
+
 ```bash
 mkdir build && cd build
 
@@ -39,7 +43,9 @@ cmake .. \
 
 make -j8 && make install
 ```
+
 ## 编译 kokkos-kernels
+
 ```bash
 mkdir build && cd build
 
@@ -57,8 +63,11 @@ make
 
 make -j8 && make install
 ```
+
 ### 编写程序
+
 Makefile
+
 ```makefile
 # Example Makefile for compiling a Kokkos/KokkosKernels SpGEMM example
 

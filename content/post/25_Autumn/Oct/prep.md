@@ -919,6 +919,7 @@ flowchart TD
    - 如果不需要考虑中断，使用 `lock()`即可。
 
 3. **标准范式**：使用 `Condition`的标准代码结构几乎总是下面这样：
+
    ```
    lock.lockInterruptibly(); // 或 lock.lock()
    try {
@@ -1067,6 +1068,7 @@ end
 在 Java 生态中，**Redisson** 客户端提供了开箱即用的红锁实现，大大简化了使用难度 。
 
 1. **添加依赖**：
+
    ```
    <dependency>
        <groupId>org.redisson</groupId>
@@ -1076,6 +1078,7 @@ end
    ```
 
 2. **配置与使用**：
+
    ```
    Config config1 = new Config();
    config1.useSingleServer().setAddress("redis://127.0.0.1:6379");
@@ -1343,6 +1346,7 @@ flowchart TD
 3. **中断响应**：`awaitNanos`方法可响应中断。如果在等待过程中线程被中断，通常会抛出`InterruptedException`。
 
 4. **虚假唤醒**：Java允许发生虚假唤醒（Spurious Wakeup），即线程可能在没有被signal、中断或超时的情况下被唤醒。因此，`awaitNanos`的调用**必须放在循环条件检查中**。
+
    ```
    long nanosTimeout = unit.toNanos(timeout);
    lock.lock();

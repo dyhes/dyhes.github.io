@@ -9,22 +9,30 @@ tags:
 ---
 
 ## Types
+
 * ALL: Applies all cascade types
 * PERSIST: Cascades the persist (**create**) operation
 * MERGE: Cascades the merge (**update**) operation
 * REMOVE: Cascades the remove (**delete**) operation
 * REFRESH: Cascades the refresh operation
 * DETACH: Cascades the detach operation
+
 ## Common use cases
+
 * CascadeType.PERSIST: When you **save** a parent entity, all its child entities are also saved.
 * CascadeType.REMOVE: When you **delete** a parent entity, all its child entities are also deleted.
 * CascadeType.ALL: Applies all cascade types, useful when you want full propagation of operations.
+
 ## Benefits
+
 * Simplifies entity management by automating related entity operations
 * Helps maintain data integrity and consistency
 * **Reduces boilerplate code** for handling related entities
+
 ## Best practices
+
 **Avoid using CascadeType.ALL by default**
+
 * Don't automatically apply CascadeType.ALL to every @OneToMany relationship
 * Can lead to unexpected behavior and potential issues
 **Use specific cascade types**
@@ -41,7 +49,9 @@ tags:
 **Consider performance implications**
 * Cascading operations can impact performance, especially with large datasets
 * Use judiciously and test thoroughly
+
 ## Conversation with Claude 3.5
+
 Can i understand cascade operations like this: it is only necessary when i need to update entity from the non-owning part (namely the collection field holder, the one part in a @OneToMany relationship)?
 > Your understanding is on the right track, but it's not entirely accurate.
 > 

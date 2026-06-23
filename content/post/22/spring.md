@@ -21,19 +21,19 @@ These are the design patterns that are used to **remove dependency** from the pr
 ```java
 //bad
 class Employee{  
-	Address address;  
-	Employee(){  
-		address=new Address();  
-	}  
+ Address address;  
+ Employee(){  
+  address=new Address();  
+ }  
 }  
 //In such case, there is dependency between the Employee and Address (tight coupling).
 
 //good
 class Employee{
 Address address;  
-	Employee(Address address){  
-		this.address=address;  
-	}  
+ Employee(Address address){  
+  this.address=address;  
+ }  
 }  
 
 ```
@@ -115,8 +115,8 @@ Resource
 
 ```xml
 <bean id="e" class="com.javatpoint.Employee">  
-	<constructor-arg value="10" type="int" ></constructor-arg>  
-	<constructor-arg value="Sonoo"></constructor-arg>
+ <constructor-arg value="10" type="int" ></constructor-arg>  
+ <constructor-arg value="Sonoo"></constructor-arg>
 </bean>  
 ```
 
@@ -580,15 +580,16 @@ A method that returns instance of a class is called **factory method**.
 
 ```java
 public class A {  
-	public static A getA(){//factory method  
-    	return new A();  
-	}  
+ public static A getA(){//factory method  
+     return new A();  
+ }  
 }  
 ```
 
 here can be three types of factory method:
 
 \1) A **static factory method** that returns instance of **its own** class. It is used in singleton design pattern.
+
  ```java
  <bean id="a" class="com.javatpoint.A" factory-method="getA"></bean>  
  ```

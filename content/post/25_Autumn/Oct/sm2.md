@@ -101,6 +101,7 @@ public class SampleTest {
 2. **编写测试**：在OpenJDK源码树的`test`目录下创建Java测试文件，并使用上述标签进行标注。
 
 3. **创建运行脚本**：创建一个shell脚本，设置环境变量（如`JT_JAVA`，指定运行测试的JDK）并执行jtreg命令。
+
    ```
    #!/bin/sh
    export JT_JAVA=/path/to/your/jdk

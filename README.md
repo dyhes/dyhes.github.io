@@ -1,57 +1,127 @@
-<img align="right" width="150" alt="logo" src="https://user-images.githubusercontent.com/5889006/190859553-5b229b4f-c476-4cbd-928f-890f5265ca4c.png">
+# dyhes.github.io
 
-# Hugo Theme Stack Starter Template
+个人博客（[dyhes.github.io](https://dyhes.github.io)）的源码与内容，基于 [Hugo](https://gohugo.io/) + [Hugo Theme Stack](https://github.com/CaiJimmy/hugo-theme-stack) 构建，通过 GitHub Pages 自动部署。
 
-This is a quick start template for [Hugo theme Stack](https://github.com/CaiJimmy/hugo-theme-stack). It uses [Hugo modules](https://gohugo.io/hugo-modules/) feature to load the theme.
+## 目录结构
 
-It comes with a basic theme structure and configuration. GitHub action has been set up to deploy the theme to a public GitHub page automatically. Also, there's a cron job to update the theme automatically everyday.
+```
+content/post/      所有博文（Markdown）
+config/            Hugo 配置
+assets/            自定义样式、JS、图片资源
+scripts/
+├── setup.sh       一键配置本地开发环境
+└── hooks/         git 钩子（提交前自动 lint）
+markdownlint-rules/
+└── no-bold-in-heading.js   自定义 markdownlint 规则
+.markdownlint-cli2.cjs      lint 配置入口
+```
 
-## Get started
+## 快速开始
 
-1. Click *Use this template*, and create your repository on GitHub.
-![Step 1](https://user-images.githubusercontent.com/5889006/156916624-20b2a784-f3a9-4718-aa5f-ce2a436b241f.png)
+```bash
+# 1. 克隆后，初始化开发环境（启用 git hooks、自检 node/hugo）
+bash scripts/setup.sh
 
-2. Once the repository is created, create a GitHub codespace associated with it.
-![Create codespace](https://user-images.githubusercontent.com/5889006/156916672-43b7b6e9-4ffb-4704-b4ba-d5ca40ffcae7.png)
+# 2. 本地预览
+hugo server
+```
 
-3. And voila! You're ready to go. The codespace has been configured with the latest version of Hugo extended, just run `hugo server` in the terminal and see your new site in action.
+## 写作规范
 
-4. Check `config` folder for the configuration files. You can edit them to suit your needs. Make sure to update the `baseurl` property in `config/_default/config.toml` to your site's URL.
+博文统一放在 `content/post/<目录>/<文章名>.md`，frontmatter 模板：
 
-5. Once you're done editing the site, just commit it and push it. GitHub action will deploy the site automatically to GitHub page associated with the repository.
-![GitHub action](https://user-images.githubusercontent.com/5889006/156916881-90b8bb9b-1925-4e60-9d7a-8026cda729bf.png)
-
+```yaml
 ---
+title: 文章标题
+date: 2026-06-22 00:00:00+0000   # 必填，否则 Hugo 渲染为 Jan 01, 0001
+categories: [nutrition]
+tags: [Computer Network]
+---
+```
 
-In case you don't want to use GitHub codespace, you can also run this template in your local machine. **You need to install Git, Go and Hugo extended locally.**
+### Markdown 风格约束
 
-## Update theme manually
+仓库通过 `markdownlint-cli2` 强制以下规则：
 
-Run:
+| 规则 | 说明 | 自动修复 |
+|------|------|---------|
+| **MD010** | 禁止 hard tab（自动转空格） | ✅ |
+| **MD058** | 表格上下必须有空行 | ✅ |
+| **no-bold-in-heading**（自定义） | 标题内禁止使用 `**...**` / `__...__` | ✅ |
+| **no-fake-ordered-list**（自定义） | 禁止 `**1**` 或 `1 **xxx**`（漏点号）等伪有序列表 | ✅ |
+| **no-braille-blank**（自定义） | 禁止用 U+2800 盲文空白当伪空行或行首伪缩进 | ✅ |
+| **fix-sublist-indent**（自定义） | 有序列表项下的子列表必须对齐缩进（自动补足） | ✅ |
+| **fence-as-inline-code**（自定义） | 检测被误写为 ` ``` ` 围栏的行内 `code`（仅 warn） | ❌（需手动） |
+| **no-paragraph-immediately-after-table**（自定义） | 表格后若直接跟普通文本段落，自动补一个空行 | ✅ |
+
+> 自定义规则源码在 [`markdownlint-rules/`](markdownlint-rules/)，配置入口 [`.markdownlint-cli2.cjs`](.markdownlint-cli2.cjs)。
+
+#### 手动检查 / 自动修复
+
+```bash
+# 检查全部博文
+npx markdownlint-cli2 "content/post/**/*.md"
+
+# 自动修复
+npx markdownlint-cli2 --fix "content/post/**/*.md"
+```
+
+#### 提交时自动修复
+
+`scripts/setup.sh` 已配置 git `pre-commit` 钩子：
+
+- 提交时自动对 staged 的 `.md` 跑 `markdownlint --fix`
+- 自动修复的内容会重新加入本次提交
+- 存在无法自动修复的错误时**阻止提交**
+
+如需紧急绕过：`git commit --no-verify`
+
+### 图片防盗链注意事项
+
+- **网易云课堂** (`edu-image.nosdn.127.net`)、**百度** (`RefererWhite` 保护) 等启用 Referer 白名单的图床，必须用 HTML 标签绕过：
+
+  ```html
+  <img src="..." referrerpolicy="no-referrer">
+  ```
+
+- **知乎图床** (`pic*.zhimg.com`) 无需特殊处理，Markdown 语法即可
+- 定期清理失效链接：返回 404 的外部资源、SSL 过期的图床（如 `img.gejiba.com`）、Typora 本地路径（`C:\Users\...`）
+
+## 部署
+
+`master` 分支推送后由 GitHub Actions 自动构建并发布到 GitHub Pages，无需手动操作。
+
+## 主题升级
 
 ```bash
 hugo mod get -u github.com/CaiJimmy/hugo-theme-stack/v3
 hugo mod tidy
 ```
 
-> This starter template has been configured with `v3` version of theme. Due to the limitation of Go module, once the `v4` or up version of theme is released, you need to update the theme manually. (Modifying `config/module.toml` file)
+> 当前锁定 v3 主版本，升级到 v4+ 需要手动修改 `config/module.toml`。
 
-## Deploy to another static page hostings
-
-If you want to build this site using another static page hosting, you need to make sure they have Go installed in the machine. 
+## 附录：原始模板说明
 
 <details>
-  <summary>Vercel</summary>
-  
-You need to overwrite build command to install manually Go:
+<summary>Hugo Theme Stack Starter Template (原 README)</summary>
+
+This repository was bootstrapped from [Hugo theme Stack starter template](https://github.com/CaiJimmy/hugo-theme-stack-starter), which uses [Hugo modules](https://gohugo.io/hugo-modules/) to load the theme.
+
+### Deploy to other static hosting
+
+If you want to build this site on Vercel / Netlify etc., make sure Go is available in the build environment.
+
+<details>
+<summary>Vercel</summary>
+
+Override build command to install Go manually:
 
 ```
 amazon-linux-extras install golang1.11 && hugo --gc --minify
 ```
 
-![](https://user-images.githubusercontent.com/5889006/156917172-01e4d418-3469-4ffb-97e4-a905d28b8424.png)
+Set `HUGO_VERSION` env var to the latest Hugo extended version.
 
-Make sure also to specify Hugo version in the environment variable `HUGO_VERSION` (Use the latest version of Hugo extended):
+</details>
 
-![Environment variable](https://user-images.githubusercontent.com/5889006/156917212-afb7c70d-ab85-480f-8288-b15781a462c0.png)
 </details>

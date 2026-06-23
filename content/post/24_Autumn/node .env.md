@@ -26,11 +26,13 @@ process.env.IMGBB_API_KEY
 Now, let's go through the changes and additional steps to set up the `.env` file:
 
 1. First, install the `dotenv` package:
+
    ```
    npm install dotenv @types/dotenv
    ```
 
 2. Create a `.env` file in the root of your project with the following content:
+
    ```
    IMGBB_API_KEY=your_actual_api_key_here
    MARKDOWN_DIRECTORY=./path/to/your/markdown/files
@@ -44,6 +46,7 @@ Now, let's go through the changes and additional steps to set up the `.env` file
    - Used `process.env.MARKDOWN_DIRECTORY` for the directory path, with a fallback.
 
 4. Make sure to add `.env` to your `.gitignore` file to prevent committing sensitive information:
+
    ```
    echo ".env" >> .gitignore
    ```

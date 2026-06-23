@@ -10,6 +10,7 @@ tags:
     - Spring Boot
 ---
 A one-to-one relationship means that each instance of an entity is associated with precisely one instance of another entity. This relationship is bidirectional or unidirectional:
+
 * **Unidirectional One-to-One**: One entity has a reference to another entity, but not vice versa.
 * **Bidirectional One-to-One**: Both entities have references to each other.
 In the context of object-relational mapping (ORM) in Java, specifically when using Java Persistence API (JPA) or Hibernate, the @OneToOne annotation is used to define a one-to-one relationship between two entities.

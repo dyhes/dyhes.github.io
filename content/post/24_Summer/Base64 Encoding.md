@@ -152,11 +152,13 @@ Data URLs are a way to embed small files directly into web pages or CSS, and Bas
    - For larger files, conventional URLs are usually more efficient
 
 8. **Example usage in HTML**:
+
    ```html
    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==" alt="Small dot">
    ```
 
 9. **Example usage in CSS**:
+
    ```css
    .icon {
      background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==');

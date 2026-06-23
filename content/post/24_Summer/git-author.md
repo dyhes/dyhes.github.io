@@ -22,7 +22,9 @@ then
 fi
 ' --tag-name-filter cat -- --branches --tags
 ```
+
 然后执行
+
 ```bash
 git push --force --tags origin 'refs/heads/*'
 ```

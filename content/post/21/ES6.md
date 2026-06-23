@@ -156,10 +156,10 @@ console.log(machine['machine hours']); // 10000
 ```JS
 //ES5
 let server = {
-	name: "Server",
-	restart: function () {
-		console.log("The" + this.name + " is restarting...");
-	}
+ name: "Server",
+ restart: function () {
+  console.log("The" + this.name + " is restarting...");
+ }
 };
 //ES6
 let server = {
@@ -838,6 +838,7 @@ Unlike the most global objects, the `Reflect` **is not a constructor**. It means
     * `position` is an optional parameter that determines the start position to search for the `searchString`. It defaults to 0.
 
 * **`endsWith()`**
+
     ```js
     String.startsWith(searchString(pattern) [,position])
     ```
@@ -964,16 +965,16 @@ class Person {
 
   ```js
   class Person {
-  	constructor(name) {
-  		this.name = name;
-  	}
-  	getName() {
-  		return this.name;
-  	}
-  	static createAnonymous(gender) {
-  		let name = gender == "male" ? "John Doe" : "Jane Doe";
-  		return new Person(name);
-  	}
+   constructor(name) {
+    this.name = name;
+   }
+   getName() {
+    return this.name;
+   }
+   static createAnonymous(gender) {
+    let name = gender == "male" ? "John Doe" : "Jane Doe";
+    return new Person(name);
+   }
   }
   ```
 
@@ -992,7 +993,7 @@ class Person {
 
     ```
     class Item {
-    	static count = 0;
+     static count = 0;
     }
     Code language: JavaScript (javascript)
     ```

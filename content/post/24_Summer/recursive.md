@@ -28,13 +28,17 @@ public class Comment {
 
 }
 ```
+
 ## FetchType.EAGER
+
 ```java
 public Comment getCommentWithChildren(Long commentId) {
     return commentRepository.findById(commentId).orElse(null);
 }
 ```
+
 ## Derived Method
+
 ```java
 public List<Comment> findSubcomments(Long commentId) {
         Comment rootComment = commentRepository.findById(commentId).orElse(null);
@@ -54,8 +58,11 @@ public List<Comment> findSubcomments(Long commentId) {
     }
 
 ```
+
 ## Common Table Expressions (CTEs)
+
 Spring Data JPA does not support recursive queries out-of-the-box, but you can use native queries to achieve this. Below is an example of how you can perform a recursive query using a native query in Spring Data JPA.
+
 ```java
 
 @Query(value = "WITH RECURSIVE Subcomments AS (" +
@@ -70,13 +77,20 @@ Spring Data JPA does not support recursive queries out-of-the-box, but you can u
                "SELECT * FROM Subcomments", nativeQuery = true)
 List<Comment> findSubcomments(@Param("commentId") Long commentId);
 ```
+
 The fetched result is a flatten list of Comment.
+
 ## Performance Considerations
+
 ### CTEs
+
 #### Pros:
+
 - **Efficiency**: Fetching the entire hierarchy in a single query is efficient and reduces the number of database round-trips.
 - **Control**: You have fine-grained control over how the data is processed and structured in the application layer.
+
 #### Cons:
+
 - **Complexity**: The reconstruction of the recursive structure in the application layer can be complex and error-prone.
 - **Memory Usage**: Depending on the size of the dataset, holding the entire hierarchy in memory for reconstruction can be memory-intensive.
 - **Performance Overhead**: The reconstruction process itself can introduce performance overhead, especially if the hierarchy is deep or has many nodes.

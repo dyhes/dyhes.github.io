@@ -39,6 +39,7 @@ tags: [Cryptography]
 **验证方法：**
 
 1. **检查路径是否包含 JDK 标准子目录**：
+
    ```
    ls /opt/homebrew/opt/openjdk@17
    # 应包含 bin、lib、include、jmods 等目录
@@ -115,7 +116,7 @@ build/macosx-aarch64-server-release/jdk/bin/java --version
 
 # 运行 jreg:SM2CipherTest 测试
 make test TEST="jtreg:test/jdk/sm/crypto/SM2/SM2CipherTest.java" \
-		JTREG="VM_OPTIONS=-Djdk.openssl.cryptoLibPath=/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib"
+  JTREG="VM_OPTIONS=-Djdk.openssl.cryptoLibPath=/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib"
 
 # 构建 JMH 测试
 make build-microbenchmark
@@ -126,14 +127,14 @@ make test TEST="micro:org.openjdk.bench.java.security.SM2ComparisonBenchmark" \
 
 # 基于 java 运行 JMH 测试
 make test TEST="micro:org.openjdk.bench.java.security.SM2ComparisonBenchmark" \
-		MICRO="OPTIONS=-prof gc"
+  MICRO="OPTIONS=-prof gc"
 ```
 
 ### Jtreg 测试
 
 ```bash
 make test TEST="jtreg:test/jdk/sm/crypto/SM2/SM2CipherTest.java" \
-		JTREG="VM_OPTIONS=-Djdk.openssl.cryptoLibPath=/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib"
+  JTREG="VM_OPTIONS=-Djdk.openssl.cryptoLibPath=/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib"
 
 Building target 'test' in configuration 'macosx-aarch64-server-release'
 

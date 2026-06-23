@@ -196,11 +196,11 @@ D1 X D2 X D3 ... X Dn 的子集称为在域D1, D2, ... , Dn上的关系，表示
 
 * **元组集合的结构**
 
-  ​	属性构成
+  ​ 属性构成
 
-  ​	属性来自的域
+  ​ 属性来自的域
 
-  ​	属性与域之间的映象关系
+  ​ 属性与域之间的映象关系
 
 * 元组语义以及完整性约束条件
 
@@ -1030,6 +1030,7 @@ ALTER TABLE Student ADD S_entrance DATE；
   ALTER TABLE Student ADD S_entrance DATE；
   
   ALTER TABLE Course ADD UNIQUE（Cname）；
+
   ```
 
 ### 视图 （外模式）
@@ -1070,11 +1071,11 @@ ALTER TABLE Student ADD S_entrance DATE；
 
 **类别**：唯一索引、非唯一索引、聚簇索引
 
-​	在最经常查询的列上建立聚簇索引以提高查询效率
+​ 在最经常查询的列上建立聚簇索引以提高查询效率
 
-​	一个基本表上最多只能建立**一个**聚簇索引
+​ 一个基本表上最多只能建立**一个**聚簇索引
 
-​	**经常更新**的列**不宜**建立聚簇索引
+​ **经常更新**的列**不宜**建立聚簇索引
 
 * **创建索引**
 
@@ -1157,7 +1158,7 @@ FROM <tableOrViewName>[， <tableOrViewName> ] …
 
   ```sql
   SELECT Sno FROM SC; 
-  =	SELECT ALL Sno FROM SC;
+  = SELECT ALL Sno FROM SC;
   
   SELECT DISTINCT Sno FROM SC;#去掉重复行
   
@@ -2069,6 +2070,7 @@ CREATE TABLE Student
   DROP CONSTRAINT C3；
   ALTER TABLE Student
   ADD CONSTRAINT C3 CHECK （Sage < 40）;
+
   ```
 
 * 函数依赖约束

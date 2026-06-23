@@ -331,7 +331,7 @@ struct TreeNode {
   - `randIndex == leftSize`→ 返回当前节点
   - `randIndex > leftSize`→ 进入右子树
 
-## **Bit Manipulation**
+## Bit Manipulation
 
 Bit manipulation is used in a variety of problems. Sometimes, the question explicitly calls for bit manipulation. Other times, it's simply a useful technique to **optimize** your code. 
 
@@ -371,7 +371,7 @@ n & ( n - 1 ) 去除最后一个 1
 
 
 
-## **Math and Logic Puzzles**
+## Math and Logic Puzzles
 
 The good news is that if you are asked a puzzle or brainteaser, it's likely to be a reasonably fair one. It probably won't rely on a trick of wording, and it can almost always be logically deduced. Many have their foundations in mathematics or computer science, and almost all have solutions that can be logically deduced.
 
@@ -404,14 +404,14 @@ The good news is that if you are asked a puzzle or brainteaser, it's likely to b
 
 > Blue-Eyed Island: A bunch of people are living on an island, when a visitor comes with a strange order: all blue-eyed people must leave the island as soon as possible. There will be a flight out at 8:00 pm every evening. Each person can see everyone else's eye color, but they do not know their own (nor is anyone allowed to tell them). Additionally, they do not know how many people have blue eyes, although they do know that at least one person does. How many days will it take the blue-eyed people to leave?
 
-### **推理过程（归纳法）**
+### 推理过程（归纳法）
 
-#### **情形1：只有1个蓝眼睛的人**
+#### 情形1：只有1个蓝眼睛的人
 
 - **第1天**：此人看到岛上无人有蓝眼睛，但访客说“至少有一人是蓝眼睛”，因此立即推断自己是蓝眼睛。
 - **结果**：第1天晚上离开。
 
-#### **情形2：有2个蓝眼睛的人（A和B）**
+#### 情形2：有2个蓝眼睛的人（A和B）
 
 - **第1天**：
   - A看到B是蓝眼睛，心想：“如果我不是蓝眼睛，B今晚会离开（因为B会看到岛上只有他自己是蓝眼睛）”。
@@ -421,7 +421,7 @@ The good news is that if you are asked a puzzle or brainteaser, it's likely to b
   - B同步推理出相同结论。
 - **结果**：第2天晚上两人同时离开。
 
-#### **情形3：有3个蓝眼睛的人（A、B、C）**
+#### 情形3：有3个蓝眼睛的人（A、B、C）
 
 - **第1天**：每人看到两个蓝眼睛的人，均认为“如果我不是蓝眼睛，另外两人会在第2天离开”（参考情形2）。
 - **第2天**：无人离开 → 每人意识到：“如果我不是蓝眼睛，其他两人应已离开。但事实未发生，说明我也一定是蓝眼睛”。
@@ -429,7 +429,7 @@ The good news is that if you are asked a puzzle or brainteaser, it's likely to b
 
 ------
 
-### **通用规律：若有 n个蓝眼睛的人**
+### 通用规律：若有 n个蓝眼睛的人
 
 - **离开时间**：所有人会在第 n天晚上同时离开。
 - **推理逻辑**：

@@ -13,7 +13,9 @@ tags:
 
 
 Java enums are a special type of class used to define collections of constants. They provide a way to represent a fixed set of values, which can be useful for categorizing data and ensuring type safety.
+
 ## Key Points
+
 * Implicitly final and static: Enum constants are implicitly public, static, and final.
 * values() method: Every enum has a static values() method that returns an array of all enum constants.
 * valueOf(String) method: This static method returns the **enum constant** with the specified name.
@@ -25,7 +27,9 @@ Java enums are a special type of class used to define collections of constants. 
 * EnumSet and EnumMap: These are specialized Set and Map implementations for use with enum types, offering **better performance** than their general-purpose counterparts.
 * Constant-specific method implementation: You can **override methods for specific enum** constants, allowing for different behavior per constant.
 * Abstract methods in enums: You can define abstract methods in an enum, forcing each constant to provide its own implementation.
+
 ## example
+
 ```java
 // Basic enum definition
 public enum Day {
@@ -93,6 +97,7 @@ public class EnumExample {
 ```
 
 ## Usage with Pageable
+
 ```java
 public enum UserSortField {
     ID("id"),
@@ -141,7 +146,9 @@ public class UserService {
     }
 }
 ```
+
 ## Usage with Spring Data JPA
+
 ```java
 public enum Status {
     ACTIVE, INACTIVE, PENDING
@@ -163,6 +170,7 @@ public class User {
     // getters and setters
 }
 ```
+
 The @Enumerated annotation is used to specify how the Enum should be persisted in the database. There are two options:
 
 EnumType.ORDINAL: Stores the Enum as an integer (the ordinal value of the Enum constant).
@@ -175,10 +183,13 @@ EnumType.STRING: Stores the Enum as a string (the name of the Enum constant).
 * **Database efficiency**: Stores enums as integers, which typically use less storage space than strings.
 * **Potentially faster queries**: Integer comparisons are generally faster than string comparisons.
 * **Simpler database representation**: The database column is a simple integer type.
+
 #### Cons
+
 * **Fragility to enum order changes**: If you add, remove, or reorder enum constants, the ordinal values change, which can corrupt existing data.
 * **Less readable in raw database queries**: You see numbers instead of meaningful names.
 * **Potential for invalid states**: If the database contains an integer that doesn’t correspond to any enum constant, it can lead to runtime errors.
+
 ### EnumType.STRING
 
 #### Pros
@@ -187,12 +198,15 @@ EnumType.STRING: Stores the Enum as a string (the name of the Enum constant).
 * **Resilience to enum order changes**: Adding or reordering enum constants doesn’t affect existing data.
 * **Self-documenting**: The database schema itself documents the possible enum values.
 * **Safety**: It’s harder to accidentally introduce invalid states, as any string not matching an enum constant will be rejected.
+
 #### Cons
 
 * **Less efficient storage**: Strings typically use more storage space than integers.
 * **Potentially slower queries**: String comparisons can be slower than integer comparisons, especially for large datasets.
 * **Case sensitivity**: By default, the comparison is case-sensitive, which might lead to issues if not handled carefully.
+
 ### Recommendation
+
 In most cases, EnumType.STRING is the safer and more maintainable choice, despite the slight performance trade-off. The benefits of readability, safety, and resilience to changes **usually outweigh** the minor efficiency gains of EnumType.ORDINAL.
 
 However, if you’re dealing with a very large dataset where performance and storage efficiency are critical, and you can guarantee that the enum order will never change, EnumType.ORDINAL might be considered.

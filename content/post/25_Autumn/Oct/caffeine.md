@@ -811,6 +811,7 @@ Caffeine 的 **W-TinyLFU** 淘汰策略的核心是**频率素描（Count-Min Sk
 选择哪种更新方式，取决于你的业务需求和对数据一致性、实时性的要求。
 
 1. **追求数据自动保鲜且不影响热度排名**：优先使用 **`refreshAfterWrite`**。例如，用于缓存系统配置、商品分类等允许短暂延迟但需要定期更新的数据 。
+
    ```
    LoadingCache<String, Config> cache = Caffeine.newBuilder()
        .maximumSize(1000)
@@ -819,6 +820,7 @@ Caffeine 的 **W-TinyLFU** 淘汰策略的核心是**频率素描（Count-Min Sk
    ```
 
 2. **按需加载，且加载行为即代表热度**：使用 **`get`配合 `mappingFunction`** 或 **`LoadingCache`**。这是最通用的模式，适合大部分业务数据缓存，如用户信息、商品详情等 。
+
    ```
    // 方式一：使用get with mappingFunction
    Object value = cache.get("key", k -> expensiveDatabaseQuery(k));
@@ -830,6 +832,7 @@ Caffeine 的 **W-TinyLFU** 淘汰策略的核心是**频率素描（Count-Min Sk
    ```
 
 3. **明确知晓数据变更，需要强制立即更新**：使用 **`put`**。例如，在管理员后台修改了某商品价格后，可以立即调用 `put`更新缓存。
+
    ```
    cache.put("product:123", updatedProduct);
    ```

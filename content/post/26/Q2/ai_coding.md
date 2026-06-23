@@ -22,6 +22,7 @@ tags:
 很多人以为 Codex 的上下文管理就等于"快满了就 compact 一下"。但追查源码会发现，在走到全量压缩之前，有好几道关卡在默默控制上下文增长。
 
 做了什么
+
 | 策略 | 说明 |
 |------|------|
 | 工具输出截断 | 每项工具结果进入历史时即被 middle-truncation（保留头尾，切掉中间）默认 ~10KB tokens，+20% 序列化余量 |
@@ -35,8 +36,10 @@ tags:
 当这些都不够时，就到上下文压缩了。
 
 ### Local Compact：让模型自己写交接摘要
+
 Local Compact 的机制很朴素——它就是让当前模型写一份 handoff summary。
 核心流程（codex-rs/core/src/compact.rs）：
+
 1. 把一段压缩提示词（prompt.md）作为 user input 追加到历史中
 2. 用普通的 ModelClientSession::stream() 发起模型请求
 3. 如果超出上下文窗口，从最旧的 item 开始删，然后重试
@@ -47,7 +50,9 @@ Local Compact 的机制很朴素——它就是让当前模型写一份 handoff 
 8. 发送一条 warning："Heads up: Long threads and multiple compactions can cause the model to be less accurate."
 
 ### Remote Compact V1：服务端专用端点与 opaque state
+
 Remote V1 的机制完全不同（codex-rs/core/src/compact_remote.rs）：
+
 1. clone 当前 history
 2. 如果超过上下文窗口，从尾部删除 Codex 生成的 item（注意：方向跟 Local 相反！）
 3. 构造完整的 Prompt，包括 input、tools、instructions、reasoning 控制等
@@ -58,7 +63,9 @@ Remote V1 的机制完全不同（codex-rs/core/src/compact_remote.rs）：
 注意这里的 Compaction { encrypted_content } —— 这是一段客户端完全无法解读的加密 payload。它不是给人读的摘要，而是一段 opaque 的服务端状态，会在后续请求中继续携带。
 
 ### Codex 的三个触发时机
+
 Codex 的自动 compact 编排在 session/turn.rs，有三个触发时机：
+
 | 触发路径 | 时机 | 条件 | 初始上下文处理 |
 |----------|------|------|----------------|
 | Pre-turn | 模型采样前 | token limit reached | DoNotInject——清空 baseline，下一轮完整 reinject |

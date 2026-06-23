@@ -10,8 +10,10 @@ tags:
 ---
 
 可以使用 umi 微生成器
+
 ```bash
 npx umi g tailwindcss
 ```
+
 快速下载tailwind
 

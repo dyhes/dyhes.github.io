@@ -39,29 +39,29 @@ Each time a container is created from a Docker image, yet another new layer call
 
 This iterative image-creation process enables increased **overall efficiency** since multiple live container instances can run from just a single base image, and when they do so, they leverage a common stack.
 
-### **Docker containers**
+### Docker containers
 
 Docker containers are the **live, running instances** of Docker images. While Docker images are **read-only** files, containers are live, ephemeral, executable content. Users can interact with them, and administrators can adjust their settings and conditions using docker commands.
 
-### **Docker Hub**
+### Docker Hub
 
 Docker Hub is the **public repository of Docker images** It includes images that have been produced by Docker, Inc., certified images belonging to the Docker Trusted Registry, and many thousands of other images.
 
 All Docker Hub users can share their images at will. They can also download predefined base images from the Docker filesystem to use as a starting point for any containerization project.
 
-### **Docker daemon**
+### Docker daemon
 
 Docker daemon is a **service** running on your operating system This service creates and manages your Docker images for you using the commands from the client, acting as the **control center** of your Docker implementation.
 
-### **Docker registry**
+### Docker registry
 
 A Docker registry is a scalable open-source **storage and distribution system** for docker images. The registry enables you to track image versions in repositories, using tagging for identification. This is accomplished using git, a version control tool.
 
-### **Docker Compose**
+### Docker Compose
 
 If you’re **building an application out of processes in multiple containers** that all reside on the same host, you can use *Docker Compose* to manage the application’s architecture. Docker Compose creates a YAML file that specifies which services are included in the application and can deploy and run containers with a single command. Using Docker Compose, you can also define persistent volumes for storage, specify base nodes, and document and configure service dependencies.
 
-### **Kubernetes**
+### Kubernetes
 
 To monitor and manage container lifecycles in more complex environments, you’ll need to turn to a **container orchestration tool.** While Docker includes its own orchestration tool (called Docker Swarm), most developers choose Kubernetes instead.
 

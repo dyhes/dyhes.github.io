@@ -59,9 +59,9 @@ There was not a single line of XML? There is no `web.xml` file, either. This web
 @RestController
 public class LearnApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(LearnApplication.class, args);
-	}
+ public static void main(String[] args) {
+  SpringApplication.run(LearnApplication.class, args);
+ }
 }
 ```
 

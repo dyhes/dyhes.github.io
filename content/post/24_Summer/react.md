@@ -9,6 +9,7 @@ tags:
     - TypeScript
 ---
 ## ReactElement
+
 * A ReactElement is a plain object describing a component instance or DOM node and its desired properties.
 * It’s the **return type** of React.createElement().
 * It’s always an **object** with a type and props.
@@ -17,7 +18,9 @@ tags:
 ```tsx
 const element: React.ReactElement = <div>Hello</div>;
 ```
+
 ## ReactNode
+
 * ReactNode is a **more general** type that can represent a React element, a string, a number, a boolean, null, undefined, or **an array of ReactNodes**.
 * It’s a **union** type that includes ReactElement.
 * It’s more **flexible** and can represent **any valid value** that can be rendered in React.
@@ -28,7 +31,9 @@ const node2: React.ReactNode = 42;
 const node3: React.ReactNode = <div>World</div>;
 const node4: React.ReactNode = [node1, node2, node3];
 ```
+
 ## Key Differences
+
 * **Specificity**:
   * ReactElement is more specific and always represents a single React element.
   * ReactNode is more general and can represent various types that React can render.
@@ -41,6 +46,7 @@ const node4: React.ReactNode = [node1, node2, node3];
 * **Common Use Cases**:
   * ReactElement: When you’re working with specific React components or elements.
   * ReactNode: When defining props that can accept various types of content, like children.
+
 ```tsx
 import React, { ReactElement, ReactNode } from 'react';
 

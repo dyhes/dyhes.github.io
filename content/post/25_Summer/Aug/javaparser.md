@@ -11,15 +11,15 @@ tags: [Shopee]
 
 ------
 
-### **1. 基本解析流程**
+### 1. 基本解析流程
 
-#### **步骤概述**
+#### 步骤概述
 
 1. **解析源代码**：将 Java 文件或字符串解析为 `CompilationUnit`（AST 的根节点）。
 2. **定位目标元素**：遍历 AST 找到需要检查的类、方法或字段。
 3. **检查注解**：遍历元素的注解列表，匹配目标注解的名称或参数。
 
-#### **代码示例**
+#### 代码示例
 
 ```
 import com.github.javaparser.StaticJavaParser;
@@ -47,13 +47,13 @@ public class AnnotationParser {
 
 ------
 
-### **2. 解析注解的细节**
+### 2. 解析注解的细节
 
-#### **注解名称匹配**
+#### 注解名称匹配
 
 - 注解名称需与源代码中的写法一致（如 `"RestController"`而非全限定名 `org.springframework.web.bind.annotation.RestController`）。若需处理全限定名，需检查注解的 `QualifiedName`。
 
-#### **获取注解参数**
+#### 获取注解参数
 
 若注解带参数（如 `@RequestMapping("/path")`），可提取参数值：
 
@@ -70,7 +70,7 @@ clazz.getAnnotations().forEach(annotation -> {
 
 此处 `ifSingleMemberValueExpr`适用于单参数注解（如 `@RequestMapping`）。多参数注解需遍历键值对 。
 
-#### **获取注解位置**
+#### 获取注解位置
 
 通过 `getRange()`获取注解在源代码中的行号：
 
@@ -83,9 +83,9 @@ annotation.getRange().ifPresent(range -> {
 
 ------
 
-### **3. 扩展应用场景**
+### 3. 扩展应用场景
 
-#### **方法/字段级注解**
+#### 方法/字段级注解
 
 类似地，可检查方法或字段的注解：
 
@@ -97,7 +97,7 @@ cu.findAll(MethodDeclaration.class).forEach(method -> {
 });
 ```
 
-#### **依赖配置**
+#### 依赖配置
 
 需在项目中添加 JavaParser 依赖（Maven）：
 
@@ -111,7 +111,7 @@ cu.findAll(MethodDeclaration.class).forEach(method -> {
 
 ------
 
-### **4. 注意事项**
+### 4. 注意事项
 
 - **注解名称匹配**：需考虑导入语句（如 `import org.springframework.web.bind.annotation.*;`），否则需检查全限定名。
 - **嵌套注解**：若注解嵌套在组合注解中（如 `@SpringBootApplication`包含 `@RestController`），需递归解析 。
@@ -125,9 +125,9 @@ cu.findAll(MethodDeclaration.class).forEach(method -> {
 
 ------
 
-### **1. 重构为访问者模式**
+### 1. 重构为访问者模式
 
-#### **步骤说明**
+#### 步骤说明
 
 1. **定义注解访问者类**
    继承`VoidVisitorAdapter`，重写`visit`方法处理特定节点（如类声明）的注解检查。
@@ -138,7 +138,7 @@ cu.findAll(MethodDeclaration.class).forEach(method -> {
 3. **优化遍历过程**
    通过访问者模式自动递归遍历AST，无需手动调用`findAll`。
 
-#### **重构代码**
+#### 重构代码
 
 ```
 import com.github.javaparser.StaticJavaParser;
@@ -168,7 +168,7 @@ public class AnnotationParser {
 }
 ```
 
-#### **关键改进**
+#### 关键改进
 
 - **关注点分离**：注解检查逻辑独立封装在`RestControllerVisitor`中。
 - **隐式递归遍历**：访问者自动处理AST的递归遍历，避免手动迭代。
@@ -176,9 +176,9 @@ public class AnnotationParser {
 
 ------
 
-### **2. 访问者模式的效率分析**
+### 2. 访问者模式的效率分析
 
-#### **优势场景**
+#### 优势场景
 
 1. **复杂操作优化**
    - 当需对AST进行**多种操作**（如同时检查注解、统计方法数）时，访问者模式避免重复遍历，效率更高。
@@ -190,14 +190,14 @@ public class AnnotationParser {
 3. **缓存优化**
    JavaParser内置的访问者实现（如`VoidVisitorAdapter`）已优化遍历算法，减少AST解析开销。
 
-#### **潜在开销**
+#### 潜在开销
 
 - **小规模文件**：若仅检查单个注解，**过程式代码（原代码）更轻量**，因访问者模式需创建额外类及调用栈。
 - **简单操作**：单一操作（如仅检查类注解）时，访问者模式因双分派机制（`accept-visit`调用链）略有性能损耗。
 
 ------
 
-### **3. 何时使用访问者模式？**
+### 3. 何时使用访问者模式？
 
 | **场景**                       | **推荐方案**   | **原因**                                            |
 | ------------------------------ | -------------- | --------------------------------------------------- |
@@ -207,7 +207,7 @@ public class AnnotationParser {
 
 ------
 
-### **4. 性能对比结论**
+### 4. 性能对比结论
 
 ✅ **访问者模式更高效的情况**：
 
@@ -228,15 +228,15 @@ public class AnnotationParser {
 
 ------
 
-### 🔧 **一、多注解检查的访问者模式实现**
+### 🔧 一、多注解检查的访问者模式实现
 
-#### **1. 核心设计思路**
+#### 1. 核心设计思路
 
 - **统一访问接口**：定义 `AnnotationVisitor`接口，声明对不同注解的访问方法。
 - **具体访问者实现**：为每类注解创建独立访问者（如 `RestControllerVisitor`、`GetMappingVisitor`），实现注解检查逻辑。
 - **AST 节点分派**：在类/方法节点中调用访问者的对应方法，实现双重分派（节点类型 + 注解类型）。
 
-#### **2. 代码实现示例**
+#### 2. 代码实现示例
 
 ```
 import com.github.javaparser.ast.CompilationUnit;
@@ -312,14 +312,14 @@ public class Main {
 
 ------
 
-### ⚙️ **二、关键技术点解析**
+### ⚙️ 二、关键技术点解析
 
-#### **1. 双重分派机制**
+#### 1. 双重分派机制
 
 - **第一次分派**：AST 节点（如 `ClassOrInterfaceDeclaration`）的 `accept()`方法调用访问者的 `visit()`。
 - **第二次分派**：访问者的 `visitRestController()`或 `visitGetMapping()`处理具体注解逻辑。
 
-#### **2. 注解参数提取**
+#### 2. 注解参数提取
 
 若需检查注解参数（如 `@GetMapping("/path")`），在具体访问者中解析 `AnnotationExpr`：
 
@@ -338,7 +338,7 @@ public void visitGetMapping(MethodDeclaration method) {
 }
 ```
 
-#### **3. 支持嵌套注解**
+#### 3. 支持嵌套注解
 
 若注解嵌套（如 `@RequestMapping(method = RequestMethod.GET)`），需递归解析：
 
@@ -351,28 +351,28 @@ anno.getChildNodes().stream()
 
 ------
 
-### 🚀 **三、性能与扩展性优化**
+### 🚀 三、性能与扩展性优化
 
-#### **1. 避免重复遍历**
+#### 1. 避免重复遍历
 
 - **单次遍历多检查**：通过组合模式，在单次 AST 遍历中执行所有注解检查，减少 I/O 和解析开销。
 - **局部解析控制**：在访问者中跳过无关节点（如字段声明），仅遍历类和方法节点。
 
-#### **2. 动态扩展新注解**
+#### 2. 动态扩展新注解
 
 新增注解检查只需两步：
 
 1. 在 `AnnotationVisitor`接口添加新方法（如 `visitPostMapping()`）。
 2. 实现新的具体访问者类（如 `PostMappingVisitorImpl`），无需修改现有代码。
 
-#### **3. 缓存优化**
+#### 3. 缓存优化
 
 - **注解名称缓存**：预加载常用注解名（如 `RestController`、`GetMapping`），避免重复字符串比较。
 - **AST 缓存**：对同一文件多次检查时，复用 `CompilationUnit`对象。
 
 ------
 
-### ✅ **四、对比过程式代码的优势**
+### ✅ 四、对比过程式代码的优势
 
 | **场景**       | **访问者模式**               | **过程式代码**             |
 | -------------- | ---------------------------- | -------------------------- |
@@ -383,7 +383,7 @@ anno.getChildNodes().stream()
 
 ------
 
-### 💎 **五、总结**
+### 💎 五、总结
 
 在访问者模式中实现多注解检查的核心是：
 
@@ -399,9 +399,9 @@ anno.getChildNodes().stream()
 
 ------
 
-### 🔧 **一、优化方案：组合访问者与状态共享**
+### 🔧 一、优化方案：组合访问者与状态共享
 
-#### 1. **单次遍历多操作（核心优化）**
+#### 1. 单次遍历多操作（核心优化）
 
 **问题**：原代码对每个访问者独立遍历 AST，导致多次解析开销。
 
@@ -447,7 +447,7 @@ public static void main(String[] args) {
 
 ------
 
-#### 2. **节点访问优化**
+#### 2. 节点访问优化
 
 **问题**：`AnnotationCheckVisitor`对每个节点无差别分派检查。
 
@@ -479,7 +479,7 @@ class AnnotationCheckVisitor extends VoidVisitorAdapter<AnnotationVisitor> {
 
 ------
 
-#### 3. **状态共享与结果聚合**
+#### 3. 状态共享与结果聚合
 
 **问题**：各访问者独立输出结果，难以统一处理。
 
@@ -521,7 +521,7 @@ composite.addVisitor(new GetMappingVisitorImpl(context));
 
 ------
 
-### ⚙️ **二、性能对比与适用场景**
+### ⚙️ 二、性能对比与适用场景
 
 | **方案**               | 时间复杂度                     | 适用场景               | 优势                   |
 | ---------------------- | ------------------------------ | ---------------------- | ---------------------- |
@@ -531,7 +531,7 @@ composite.addVisitor(new GetMappingVisitorImpl(context));
 
 ------
 
-### 🚀 **三、扩展优化建议**
+### 🚀 三、扩展优化建议
 
 1. **并行处理** 对独立类声明启用多线程检查（线程安全前提下）：
 
@@ -565,7 +565,7 @@ composite.addVisitor(new GetMappingVisitorImpl(context));
 
 ------
 
-### 💎 **总结**
+### 💎 总结
 
 高效组合多类与方法声明的核心策略：
 

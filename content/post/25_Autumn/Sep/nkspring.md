@@ -1691,12 +1691,14 @@ Spring 的 `@Transactional`注解对**运行时异常（RuntimeException）和 E
 虽然 Spring 设置了默认行为，但你完全可以按需定制：
 
 1. **让受检异常触发回滚**：使用 `rollbackFor`属性。
+
    ```
    @Transactional(rollbackFor = Exception.class) // 所有异常都回滚
    @Transactional(rollbackFor = IOException.class) // 特定受检异常回滚
    ```
 
 2. **让运行时异常不触发回滚**：使用 `noRollbackFor`属性。
+
    ```
    @Transactional(noRollbackFor = NullPointerException.class) // 空指针异常不回滚
    ```
@@ -2117,7 +2119,7 @@ Spring Boot 的条件注解中，确实有少数几个通常建议或**仅限于
 
 SpringFactoriesLoader 是 Spring 框架内部一个非常核心的工具类，它实现了一种增强的 SPI（Service Provider Interface）机制，是 Spring Boot 自动配置的基石。下面我们来详细了解它。
 
-### **一、核心概念与角色**
+### 一、核心概念与角色
 
 简单来说，`SpringFactoriesLoader`的核心工作是**扫描整个类路径（Classpath）中所有 JAR 包内的 `META-INF/spring.factories`文件**，解析其中的配置，并根据接口类型加载并实例化对应的实现类。它是一种约定优于配置的工厂加载机制。
 
@@ -2143,15 +2145,15 @@ org.springframework.context.ApplicationContextInitializer=\
 com.example.MyInitializer
 ```
 
-### **二、工作机制与源码解析**
+### 二、工作机制与源码解析
 
 `SpringFactoriesLoader`的工作流程可以清晰地分为**资源定位、配置解析、缓存机制和实例化**四个阶段。
 
-#### **1. 资源定位**
+#### 1. 资源定位
 
 通过当前线程的上下文类加载器（`ClassLoader`），调用其 `getResources("META-INF/spring.factories")`方法，获取类路径下所有 JAR 包中该文件的 URL 枚举。这确保了能够发现所有依赖包中声明的扩展点。
 
-#### **2. 配置解析与缓存**
+#### 2. 配置解析与缓存
 
 这是性能优化的关键步骤。
 
@@ -2159,7 +2161,7 @@ com.example.MyInitializer
 - **解析文件**：如果缓存未命中，则遍历第一步获取的所有 URL，使用 `PropertiesLoaderUtils`将每个 `spring.factories`文件内容加载为 `Properties`对象。然后，将键值对解析到一个 `MultiValueMap<String, String>`中（例如，一个接口名对应一个实现类名的列表）。
 - **写入缓存**：将最终的解析结果放入缓存，供下次使用。
 
-#### **3. 实例化**
+#### 3. 实例化
 
 核心方法是 `loadFactories(Class<T> factoryType, ClassLoader classLoader)`，其流程如下：
 
@@ -2167,7 +2169,7 @@ com.example.MyInitializer
 2. **反射创建实例**：遍历类名列表，通过反射（`ClassUtils.forName`和 `ReflectionUtils.accessibleConstructor`）实例化每个类。
 3. **排序**：最后，使用 `AnnotationAwareOrderComparator.sort(result)`对实例化后的对象列表进行排序。这使得实现类可以通过 `@Order`注解或实现 `Ordered`接口来定义执行顺序，非常有用。
 
-### **三、主要方法**
+### 三、主要方法
 
 `SpringFactoriesLoader`提供了两个最常用的静态方法：
 
@@ -2176,7 +2178,7 @@ com.example.MyInitializer
 | `List<String> loadFactoryNames(Class<?> factoryType, ClassLoader classLoader)` | 根据接口类型，获取所有实现类的**全限定名**（字符串形式）。此过程**不会实例化**这些类。 |
 | `<T> List<T> loadFactories(Class<T> factoryType, ClassLoader classLoader)` | 根据接口类型，**加载、实例化并返回**所有实现类的对象列表。这是最常用的方法。 |
 
-### **四、在 Spring Boot 中的关键应用**
+### 四、在 Spring Boot 中的关键应用
 
 `SpringFactoriesLoader`在 Spring Boot 的启动过程中扮演着至关重要的角色，是自动配置的灵魂。在 `SpringApplication`的构造方法中，可以看到以下关键调用：
 
@@ -2198,7 +2200,7 @@ public SpringApplication(ResourceLoader resourceLoader, Class<?>... primarySourc
 - **监听器（`ApplicationListener`）**：监听 Spring Boot 启动过程中的各种事件。
 - **其他扩展点**：如 `EnvironmentPostProcessor`（用于自定义环境变量处理）、`FailureAnalyzer`（用于启动失败分析）等。
 
-### **五、与 Java SPI 的对比**
+### 五、与 Java SPI 的对比
 
 理解 Spring SPI 与 Java 原生 SPI 的差异，能更好地体会其设计优势。
 
@@ -2210,7 +2212,7 @@ public SpringApplication(ResourceLoader resourceLoader, Class<?>... primarySourc
 | **排序支持** | 不支持，加载顺序不确定                                    | 支持，使用 `AnnotationAwareOrderComparator`进行排序         |
 | **应用场景** | Java 标准服务发现（如 JDBC 驱动加载）                     | Spring 框架及 Spring Boot 的扩展和自动配置                  |
 
-### **六、注意事项**
+### 六、注意事项
 
 - **内部工具类**：尽管功能强大，但 `SpringFactoriesLoader`在官方文档中被标记为“框架内部使用”的工具类。在应用程序中直接使用它的情况相对较少，更常见的做法是通过 Spring 提供的更高级的扩展点（如 `@Configuration`、`BeanPostProcessor`等）。
 - **从 Spring Boot 2.4 开始**：支持在 `spring.factories`中使用 **`org.springframework.boot.autoconfigure.EnableAutoConfiguration`** 作为 key，同时也支持在新的 `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports`文件中直接列出自动配置类（每行一个），后者更为简洁。
@@ -2221,7 +2223,7 @@ public SpringApplication(ResourceLoader resourceLoader, Class<?>... primarySourc
 
 `@EnableAutoConfiguration`是 Spring Boot 自动配置机制的核心注解，它使得 Spring Boot 能够根据你添加的依赖自动配置应用程序。下面我们来看看它是如何工作的。
 
-### **一、核心机制一览**
+### 一、核心机制一览
 
 为了让你快速把握全局，我们先通过一个表格来梳理 `@EnableAutoConfiguration`自动配置的核心机制：
 
@@ -2232,7 +2234,7 @@ public SpringApplication(ResourceLoader resourceLoader, Class<?>... primarySourc
 | **条件过滤** | `@ConditionalOnClass`, `@ConditionalOnMissingBean`等         | 根据当前环境（依赖、配置、已存在的Bean）筛选出最终生效的配置类。 |
 | **配置加载** | 条件注解匹配成功的配置类                                     | 将符合条件的配置类加载到Spring容器，创建所需的Bean。         |
 
-### **二、注解定义与元注解**
+### 二、注解定义与元注解
 
 `@EnableAutoConfiguration`本身是一个组合注解，它的定义揭示了其工作原理：
 
@@ -2255,11 +2257,11 @@ public @interface EnableAutoConfiguration {
 - **`@AutoConfigurationPackage`**：它的作用是**记录主配置类（即标注了`@EnableAutoConfiguration`的类）所在的包路径**。这个信息主要用于后续的组件扫描（如JPA实体扫描），默认会扫描该包及其子包。
 - **`@Import(AutoConfigurationImportSelector.class)`**：这是自动配置的**灵魂**。它通过Spring的`@Import`机制，导入了`AutoConfigurationImportSelector`这个类，由它来负责决定具体哪些配置类应该被加载到Spring容器中。
 
-### **三、自动配置的加载流程**
+### 三、自动配置的加载流程
 
 `AutoConfigurationImportSelector`是实现自动配置的核心类，其加载流程的精髓在于 **“候选”** 与 **“条件”** 这两个概念。
 
-#### **1. 获取候选配置类**
+#### 1. 获取候选配置类
 
 这个过程就像是先准备一份所有可能的“菜单”。
 
@@ -2267,7 +2269,7 @@ public @interface EnableAutoConfiguration {
 - 在 `selectImports`方法中，它会通过 `SpringFactoriesLoader`机制，**扫描整个类路径下所有JAR包中的 `META-INF/spring.factories`文件（Spring Boot 2.x）或 `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports`文件（Spring Boot 3.x）**。
 - 在这些文件中，查找 **`org.springframework.boot.autoconfigure.EnableAutoConfiguration`** 这个键（key）对应的所有配置类的全限定名。这些类就是“候选”的自动配置类。
 
-#### **2. 条件化筛选**
+#### 2. 条件化筛选
 
 有了“候选菜单”，接下来就要根据“食客”的实际情况（当前应用的环境、依赖等）来决定最终上哪些菜。这是通过一系列 **`@ConditionalOn...`** 注解完成的：
 
@@ -2280,7 +2282,7 @@ public @interface EnableAutoConfiguration {
 
 这个过程确保了**自动配置是“按需”加载的**。例如，只有在你的pom.xml中引入了`spring-boot-starter-web`（意味着类路径下有Spring MVC的相关类），Spring Boot才会自动配置内嵌Tomcat和Spring MVC的核心组件。
 
-### **四、`@EnableAutoConfiguration`与 `@SpringBootApplication`**
+### 四、`@EnableAutoConfiguration`与 `@SpringBootApplication`
 
 你可能会注意到，在大多数Spring Boot项目中，我们并没有直接使用`@EnableAutoConfiguration`，而是使用了`@SpringBootApplication`注解。这是因为`@SpringBootApplication`是一个**复合注解**，它已经包含了`@EnableAutoConfiguration`的功能。
 
@@ -2299,9 +2301,9 @@ public @interface SpringBootApplication {
 
 因此，使用`@SpringBootApplication`就等价于同时使用了`@Configuration`, `@EnableAutoConfiguration`和`@ComponentScan`，这是Spring Boot推荐的标准用法。
 
-### **五、实际应用与配置控制**
+### 五、实际应用与配置控制
 
-#### **1. 排除特定的自动配置**
+#### 1. 排除特定的自动配置
 
 如果某些自动配置不符合你的需求，或者你想完全手动控制，可以轻松地排除它们：
 
@@ -2320,7 +2322,7 @@ public @interface SpringBootApplication {
   spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   ```
 
-#### **2. 调试自动配置**
+#### 2. 调试自动配置
 
 如果想知道哪些自动配置类生效了，哪些没有生效以及原因，可以开启调试模式。在`application.properties`中设置：
 
@@ -2330,7 +2332,7 @@ debug=true
 
 启动应用后，控制台会打印一份详细的自动配置报告，分为“Positive Matches”（匹配成功的配置）和“Negative Matches”（未匹配的配置及原因）。
 
-### **六、总结**
+### 六、总结
 
 `@EnableAutoConfiguration`是Spring Boot“约定优于配置”理念的核心体现。其工作流程可以概括为：
 
@@ -2522,6 +2524,7 @@ public interface ImportSelector {
 以下是一个模拟功能开关的简单示例：
 
 1. **定义功能开关注解**
+
    ```
    @Retention(RetentionPolicy.RUNTIME)
    @Target(ElementType.TYPE)
@@ -2532,6 +2535,7 @@ public interface ImportSelector {
    ```
 
 2. **实现 ImportSelector**
+
    ```
    public class MyFeatureSelector implements ImportSelector {
        @Override
@@ -2550,6 +2554,7 @@ public interface ImportSelector {
    ```
 
 3. **在配置类上使用**
+
    ```
    @Configuration
    @EnableMyFeature(cacheEnabled = true) // 开启缓存功能
@@ -2732,7 +2737,7 @@ public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, B
 
 `BeanDefinitionRegistry`本身是一个接口，它的具体实现决定了其内部运作机制。
 
-#### **1. 底层数据结构**
+#### 1. 底层数据结构
 
 最关键的实现类是 `DefaultListableBeanFactory`。其内部使用一个 **`ConcurrentHashMap`** 来存储 Bean 定义，键是 Bean 的名称（`beanName`），值就是 `BeanDefinition`对象。这种结构确保了高效的查找和存储 。
 
@@ -2741,7 +2746,7 @@ public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, B
 private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
 ```
 
-#### **2. 注册流程详解**
+#### 2. 注册流程详解
 
 以 `DefaultListableBeanFactory.registerBeanDefinition()`方法为例，注册一个 Bean 定义并非简单放入 Map，还包含一系列严谨的步骤 ：
 
@@ -2750,7 +2755,7 @@ private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHash
 3. **并发安全处理**：如果 Bean 的创建过程已经开始，注册操作会进行同步控制（加锁），以确保线程安全。
 4. **更新缓存**：将新的 Bean 定义放入 `beanDefinitionMap`，并更新相关的辅助列表（如 `beanDefinitionNames`）。如果存在同名的单例 Bean，会重置相关缓存。
 
-#### **3. 主要实现类**
+#### 3. 主要实现类
 
 Spring 提供了几个重要的实现类，用于不同场景 ：
 
@@ -2762,7 +2767,7 @@ Spring 提供了几个重要的实现类，用于不同场景 ：
 
 `BeanDefinitionRegistry`的强大之处在于它支持 Spring 的多种高级特性。
 
-#### **1. 动态注册 Bean**
+#### 1. 动态注册 Bean
 
 这是最经典的应用。你可以在运行时根据条件编程式地向 Spring 容器中添加 Bean。这通常通过实现 **`ImportBeanDefinitionRegistrar`** 接口来完成，该接口的回调方法会传入一个 `BeanDefinitionRegistry`实例 。
 
@@ -2782,7 +2787,7 @@ public class MyDynamicRegistrar implements ImportBeanDefinitionRegistrar {
 
 **应用场景**：框架集成（如 MyBatis 的 Mapper 接口扫描）、根据配置信息动态开启某些功能模块。
 
-#### **2. 与 `BeanDefinitionRegistryPostProcessor`集成**
+#### 2. 与 `BeanDefinitionRegistryPostProcessor`集成
 
 这是 Spring 容器扩展的一个关键接口。它允许在**所有常规的 Bean 定义被加载之后、但尚未实例化任何 Bean 之前**，对 `BeanDefinitionRegistry`进行修改。你可以添加、移除甚至修改已有的 Bean 定义 。
 

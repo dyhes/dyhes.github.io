@@ -378,7 +378,7 @@ Node.js assumes it's always running in a development environment. You can signal
 NODE_ENV=production node app.js
 ```
 
-## **Npm**
+## Npm
 
 ### Install
 

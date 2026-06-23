@@ -60,7 +60,7 @@ sudo systemctl enable nginx
 
   ```nginx
   events {
-  	...
+   ...
   }
   ```
 

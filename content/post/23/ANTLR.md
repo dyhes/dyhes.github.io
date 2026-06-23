@@ -5,7 +5,7 @@ categories:
 - snow
 ---
 
-## **left recursive grammar**
+## left recursive grammar
 
 The biggest thing is the new adaptive parsing strategy, which lets us accept any grammar we care to write. That gives us a huge productivity boost because we can now write much more natural expression rules (which occur in almost every grammar). 
 
@@ -13,7 +13,7 @@ ANTLR v4 will also take **left recursive grammar** now, translating it secretly 
 
 ## Grammar Lexicon
 
-### **identifier**
+### identifier
 
 Token names always start with a capital letter and so do lexer rules. 
 
@@ -26,7 +26,7 @@ ID, LPAREN, RIGHT_CURLY // token names/lexer rules
 expr, simpleDeclarator, d2, header_file // parser rule names
 ```
 
-### **literal**
+### literal
 
 ANTLR **does not distinguish** between character and string literals as most languages do. All literal strings one or more characters in length are enclosed **in single quotes** such as `';'`, `'if'`, `'>='`, and `'\''` (refers to the one-character string containing the single quote character). 
 
@@ -58,7 +58,7 @@ The **only interpretation** ANTLR does inside actions relates to grammar attribu
 
 Actions embedded within lexer rules are emitted without any interpretation or translation into generated lexers.
 
-### **Keywords**
+### Keywords
 
 Here’s a list of the reserved words in ANTLR grammars:
 
@@ -78,11 +78,11 @@ A grammar is essentially a grammar declaration followed by a list of rules, but 
 grammar Name;
 options {...}
 import ... ;
- 	
+  
 tokens {...}
 channels {...} // lexer only
 @actionName {...}
- 	 
+   
 rule1 // parser and lexer rules, possibly intermingled
 ...
 ruleN
@@ -131,9 +131,9 @@ tokens { BEGIN, END, IF, THEN, WHILE }
  
 @lexer::members { // keywords map used in lexer to assign token types
 Map<String,Integer> keywords = new HashMap<String,Integer>() {{
-	put("begin", KeywordsParser.BEGIN);
-	put("end", KeywordsParser.END);
-	...
+ put("begin", KeywordsParser.BEGIN);
+ put("end", KeywordsParser.END);
+ ...
 }};
 }
 ```
@@ -166,18 +166,18 @@ Rules can also have alternatives separated by the |
 
 ```
 operator:
- 	stat: retstat
- 	| 'break' ';'
- 	| 'continue' ';'
- 	;
+  stat: retstat
+  | 'break' ';'
+  | 'continue' ';'
+  ;
 ```
 
 Alternatives are either **a list of rule elements or empty**. For example, here’s a rule with an empty alternative that makes the entire rule optional:
 
 ```
 **superClass**：'extends' ID
- 	| // empty
- 	;
+  | // empty
+  ;
 ```
 
 ### Alternative labels
@@ -189,8 +189,8 @@ Here are two rules with labeled alternatives.
 ```
 grammar T;
 stat: 'return' e ';' ## Return
- 	| 'break' ';' ## Break
- 	;
+  | 'break' ';' ## Break
+  ;
 e   : e '*' e ## Mult
     | e '+' e ## Add
     | INT ## Int
@@ -203,16 +203,16 @@ ANTLR generates a **rule context class definition** for each label. For example,
 
 ```
 public interface AListener extends ParseTreeListener {
- 	void enterReturn(AParser.ReturnContext ctx);
- 	void exitReturn(AParser.ReturnContext ctx);
- 	void enterBreak(AParser.BreakContext ctx);
- 	void exitBreak(AParser.BreakContext ctx);
- 	void enterMult(AParser.MultContext ctx);
- 	void exitMult(AParser.MultContext ctx);
- 	void enterAdd(AParser.AddContext ctx);
- 	void exitAdd(AParser.AddContext ctx);
- 	void enterInt(AParser.IntContext ctx);
- 	void exitInt(AParser.IntContext ctx);
+  void enterReturn(AParser.ReturnContext ctx);
+  void exitReturn(AParser.ReturnContext ctx);
+  void enterBreak(AParser.BreakContext ctx);
+  void exitBreak(AParser.BreakContext ctx);
+  void enterMult(AParser.MultContext ctx);
+  void exitMult(AParser.MultContext ctx);
+  void enterAdd(AParser.AddContext ctx);
+  void exitAdd(AParser.AddContext ctx);
+  void enterInt(AParser.IntContext ctx);
+  void exitInt(AParser.IntContext ctx);
 }
 ```
 
@@ -232,15 +232,15 @@ e : e '*' e ## BinaryOp
 ANTLR generates methods to access the **rule context objects (parse tree nodes)** associated with each rule reference. For rules with a single rule reference, ANTLR generates a method with no arguments. Consider the following rule.
 
 ```
- 	inc : e '++' ;
+  inc : e '++' ;
 ```
 
 ANTLR generates this context class:
 
 ```
 public static class IncContext extends ParserRuleContext {
- 	public EContext e() { ... } // return context object associated with e
- 	...
+  public EContext e() { ... } // return context object associated with e
+  ...
 }
 ```
 
@@ -254,9 +254,9 @@ ANTLR generates a method with an index to access the ith element as well as a me
 
 ```
 public static class FieldContext extends ParserRuleContext {
- 	public EContext e(int i) { ... } // get ith e context
- 	public List<EContext> e() { ... } // return ALL e contexts
- 	...
+  public EContext e(int i) { ... } // get ith e context
+  public List<EContext> e() { ... } // return ALL e contexts
+  ...
 }
 ```
 
@@ -264,10 +264,10 @@ If we had another rule, s, that references field, an embedded action **could acc
 
 ```
 s : field
- 	{
- 	List<EContext> x = $field.ctx.e();
- 	...
- 	}
+  {
+  List<EContext> x = $field.ctx.e();
+  ...
+  }
 ;
 ```
 
@@ -279,8 +279,8 @@ You can label rule elements using the **= operator** to add fields to the rule c
 
 ```
 stat: 'return' value=e ';' ## Return
- 	| 'break' ';' ## Break
- 	;
+  | 'break' ';' ## Break
+  ;
 ```
 
 Here value is the label for the return value of rule e, which is defined elsewhere. Labels become fields in the appropriate parse tree node class.
@@ -289,8 +289,8 @@ In this case, label value becomes a field in ReturnContext because of the Return
 
 ```
 public static class ReturnContext extends StatContext {
- 	public EContext value;
- 	...
+  public EContext value;
+  ...
 }
 ```
 
@@ -299,31 +299,31 @@ public static class ReturnContext extends StatContext {
 It’s often handy to **track a number of tokens**, which you can do with the **+= “list label” operator**. For example, the following rule creates a list of the Token objects matched for a simple array construct:
 
 ```
- 	array : '{' el+=INT (',' el+=INT)* '}' ;
+  array : '{' el+=INT (',' el+=INT)* '}' ;
 ```
 
 ANTLR generates a List field in the appropriate rule context class:
 
 ```
- 	public static class ArrayContext extends ParserRuleContext {
- 	public List<Token> el = new ArrayList<Token>();
- 	...
- 	}
+  public static class ArrayContext extends ParserRuleContext {
+  public List<Token> el = new ArrayList<Token>();
+  ...
+  }
 ```
 
 These list labels also work for rule references:
 
 ```
- 	elist : exprs+=e (',' exprs+=e)* ;
+  elist : exprs+=e (',' exprs+=e)* ;
 ```
 
 ANTLR generates a field holding the list of context objects:
 
 ```
- 	public static class ElistContext extends ParserRuleContext {
- 	public List<EContext> exprs = new ArrayList<EContext>();
- 	...
- 	}
+  public static class ElistContext extends ParserRuleContext {
+  public List<EContext> exprs = new ArrayList<EContext>();
+  ...
+  }
 ```
 
 ### Rule Elements
@@ -349,7 +349,7 @@ A rule can contain alternative blocks called subrules (as allowed in Extended BN
 | Syntax                                                       | Description                                                  |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | [![img](https://github.com/antlr/antlr4/raw/master/doc/images/xyz.png)](https://github.com/antlr/antlr4/blob/master/doc/images/xyz.png) | (x\|y\|z). Match any alternative within the subrule exactly once. Example: ` returnType : (type | 'void') ; ` |
-| [![img](https://github.com/antlr/antlr4/raw/master/doc/images/xyz_opt.png)](https://github.com/antlr/antlr4/blob/master/doc/images/xyz_opt.png) | (x\|y\|z)? Match nothing or any alternative within subrule. Example: `	 classDeclaration    : 'class' ID (typeParameters)? ('extends' type)?      ('implements' typeList)? 	   classBody    ; ` |
+| [![img](https://github.com/antlr/antlr4/raw/master/doc/images/xyz_opt.png)](https://github.com/antlr/antlr4/blob/master/doc/images/xyz_opt.png) | (x\|y\|z)? Match nothing or any alternative within subrule. Example: `  classDeclaration    : 'class' ID (typeParameters)? ('extends' type)?      ('implements' typeList)?     classBody    ; ` |
 | [![img](https://github.com/antlr/antlr4/raw/master/doc/images/xyz_star.png)](https://github.com/antlr/antlr4/blob/master/doc/images/xyz_star.png) | (x\|y\|z)* Match an alternative within subrule zero or more times. Example: ` annotationName : ID ('.' ID)* ; ` |
 | [![img](https://github.com/antlr/antlr4/raw/master/doc/images/xyz_plus.png)](https://github.com/antlr/antlr4/blob/master/doc/images/xyz_plus.png) | (x\|y\|z)+ Match an alternative within subrule one or more times. Example: ` annotations : (annotation)+ ; ` |
 
@@ -363,16 +363,16 @@ When a syntax error occurs within a rule, ANTLR catches the exception, reports t
 
 ```
 void r() throws RecognitionException {
- 	try {
- 		rule-body
- 	}
- 	catch (RecognitionException re) {
-	 	_errHandler.reportError(this, re);
-	 	_errHandler.recover(this, re);
- 	}
- 	finally {
-		exitRule();
- 	}
+  try {
+   rule-body
+  }
+  catch (RecognitionException re) {
+   _errHandler.reportError(this, re);
+   _errHandler.recover(this, re);
+  }
+  finally {
+  exitRule();
+  }
 }
 ```
 
@@ -448,34 +448,34 @@ The actions come after any argument, return value, or local attribute definition
 row[String[] columns]
    returns [Map<String,String> values]
    locals [int col=0]
-	@init {
-	$values = new HashMap<String,String>();
-	}
-	@after {
-	if ($values!=null && $values.size()>0) {
-	System.out.println("values = "+$values);
-	}
-	**}**：...
-	;
+ @init {
+ $values = new HashMap<String,String>();
+ }
+ @after {
+ if ($values!=null && $values.size()>0) {
+ System.out.println("values = "+$values);
+ }
+ **}**：...
+ ;
 ```
 
 Rule row takes argument columns, returns values, and defines local variable col. The “actions” in square brackets are copied directly into the generated code. The generated rule functions also specify the rule arguments as function arguments, but they are quickly copied into the local RowContext object:
 
 ```
 public class CSVParser extends Parser {
-	...
-	public static class RowContext extends ParserRuleContext {
-		public String [] columns;
-		public Map<String,String> values;
-		public int col=0;
-		...
-		public final RowContext row(String [] columns) throws RecognitionException {
-	 	RowContext _localctx = new RowContext(_ctx, 4, columns);
-	 	enterRule(_localctx, RULE_row);
-	 	...
- 		}
-	}
-	...
+ ...
+ public static class RowContext extends ParserRuleContext {
+  public String [] columns;
+  public Map<String,String> values;
+  public int col=0;
+  ...
+  public final RowContext row(String [] columns) throws RecognitionException {
+   RowContext _localctx = new RowContext(_ctx, 4, columns);
+   enterRule(_localctx, RULE_row);
+   ...
+   }
+ }
+ ...
 }
 ```
 
@@ -491,11 +491,11 @@ ANTLR interprets that action to define two arguments, x and y:
 
 ```
 public final AContext a(Map<String,String> x, int y)
-	throws RecognitionException
+ throws RecognitionException
 {
-	AContext _localctx = new AContext(_ctx, 0, x, y);
-	enterRule(_localctx, RULE_a);
-	...
+ AContext _localctx = new AContext(_ctx, 0, x, y);
+ enterRule(_localctx, RULE_a);
+ ...
 }
 ```
 
@@ -615,24 +615,24 @@ Because there are two references to the `FLOAT` token, a reference to `$FLOAT` i
 Token references within different alternatives are unique because only one of them can be matched for any invocation of the rule. For example, in the following rule, actions in both alternatives can reference `$ID` directly without using a label:
 
 ```
- 	r : ... ID {System.out.println($ID.text);}
- 	| ... ID {System.out.println($ID.text);}
- 	;
+  r : ... ID {System.out.println($ID.text);}
+  | ... ID {System.out.println($ID.text);}
+  ;
 ```
 
 To access the tokens matched for literals, you must use a label:
 
 ```
- 	stat: r='return' expr ';' {System.out.println("line="+$r.line);} ;
+  stat: r='return' expr ';' {System.out.println("line="+$r.line);} ;
 ```
 
 Most of the time you access the attributes of the token, but sometimes it is useful to access the Token object itself because it aggregates all the attributes. Further, you can use it to test whether an optional subrule matched a token:
 
 ```
- 	stat: 'if' expr 'then' stat (el='else' stat)?
- 	{if ( $el!=null ) System.out.println("found an else");}
- 	| ...
- 	;
+  stat: 'if' expr 'then' stat (el='else' stat)?
+  {if ( $el!=null ) System.out.println("found an else");}
+  | ...
+  ;
 ```
 
 `$T` and `$L` evaluate to `Token` objects for token name `T` and token label `L`. `$ll` evaluates to `List<Token>` for list label `ll`. `$T.attr` evaluates to the type and value specified in the following table for attribute `attr`:
@@ -683,14 +683,14 @@ You can pass information to and from rules using parameters and return values, j
 
 ```
 void f() {
-	int x = 0;
-	g();
+ int x = 0;
+ g();
 }
 void g() {
-	h();
+ h();
 }
 void h() {
-	int y = x; // INVALID reference to f's local variable x
+ int y = x; // INVALID reference to f's local variable x
 }
 ```
 
@@ -706,14 +706,14 @@ grammar DynScope;
 prog: block ;
  
 block
-	/* List of symbols defined within this block */
-	locals [
-	List<String> symbols = new ArrayList<String>()
-	**]**：'{' decl* stat+ '}'
-	// print out all symbols found in block
-	// $block::symbols evaluates to a List as defined in scope
-	{System.out.println("symbols="+$symbols);}
-	;
+ /* List of symbols defined within this block */
+ locals [
+ List<String> symbols = new ArrayList<String>()
+ **]**：'{' decl* stat+ '}'
+ // print out all symbols found in block
+ // $block::symbols evaluates to a List as defined in scope
+ {System.out.println("symbols="+$symbols);}
+ ;
  
 /** Match a declaration and add identifier name to list of symbols */
 decl: 'int' ID {$block::symbols.add($ID.text);} ';' ;
@@ -724,13 +724,13 @@ decl: 'int' ID {$block::symbols.add($ID.text);} ';' ;
  * is a List.
  */
 stat: ID '=' INT ';'
-	{
-	if ( !$block::symbols.contains($ID.text) ) {
-	System.err.println("undefined variable: "+$ID.text);
-	}
-	}
-	| block
-	;
+ {
+ if ( !$block::symbols.contains($ID.text) ) {
+ System.err.println("undefined variable: "+$ID.text);
+ }
+ }
+ | block
+ ;
  
 ID : [a-z]+ ;
 INT : [0-9]+ ;
@@ -743,29 +743,29 @@ Here’s a simple build and test sequence:
 $ antlr4 DynScope.g4
 $ javac DynScope*.java
 $ grun DynScope prog
-=> 	{
-=> 	int i;
-=> 	i = 0;
-=> 	j = 3;
-=> 	}
-=> 	EOF
-<= 	undefined variable: j
- 	symbols=[i]
+=>  {
+=>  int i;
+=>  i = 0;
+=>  j = 3;
+=>  }
+=>  EOF
+<=  undefined variable: j
+  symbols=[i]
 ```
 
 There’s an important difference between a simple field declaration in a `@members` action and dynamic scoping. symbols is a local variable and so there is a copy for each invocation of rule `block`. That’s exactly what we want for nested blocks so that we can reuse the same input variable name in an inner block. For example, the following nested code block redefines `i` in the inner scope. This new definition must hide the definition in the outer scope.
 
 ```
 {
-	int i;
-	int j;
-	i = 0;
-	{
-		int i;
-		int x;
-		x = 5;
-	}
-	x = 3;
+ int i;
+ int j;
+ i = 0;
+ {
+  int i;
+  int x;
+  x = 5;
+ }
+ x = 3;
 }
 ```
 
@@ -832,7 +832,7 @@ grammar CalcNoLR;
 
 s : expr EOF ;
 
-expr:	add ((MUL | DIV) add)* ;
+expr: add ((MUL | DIV) add)* ;
 
 add :   atom ((ADD | SUB) atom)* ;
 
@@ -850,18 +850,18 @@ We can create a listener that executes during the parse by implementing the list
 
 ```
 class CountListener extends CalcNoLRBaseListener {
-	public int nums = 0;
-	public boolean execExitS = false;
+ public int nums = 0;
+ public boolean execExitS = false;
 
-	@Override
-	public void exitS(CalcNoLRParser.SContext ctx) {
-		execExitS = true;
-	}
+ @Override
+ public void exitS(CalcNoLRParser.SContext ctx) {
+  execExitS = true;
+ }
 
-	@Override
-	public void exitAtom(CalcNoLRParser.AtomContext ctx) {
-		nums++;
-	}
+ @Override
+ public void exitAtom(CalcNoLRParser.AtomContext ctx) {
+  nums++;
+ }
 }
 ```
 
@@ -894,23 +894,23 @@ protected boolean listenerExceptionOccurred = false;
  */
 @override
 protected void triggerExitRuleEvent() {
-	if ( listenerExceptionOccurred ) return;
-	try {
-		// reverse order walk of listeners
-		for (int i = _parseListeners.size() - 1; i >= 0; i--) {
-			ParseTreeListener listener = _parseListeners.get(i);
-			_ctx.exitRule(listener);
-			listener.exitEveryRule(_ctx);
-		}
-	}
-	catch (Throwable e) {
-		// If an exception is thrown in the user's listener code, we need to bail out
-		// completely out of the parser, without executing anymore user code. We
-		// must also stop the parse otherwise other listener actions will attempt to execute
-		// almost certainly with invalid results. So, record the fact an exception occurred
-		listenerExceptionOccurred = true;
-		throw e;
-	}
+ if ( listenerExceptionOccurred ) return;
+ try {
+  // reverse order walk of listeners
+  for (int i = _parseListeners.size() - 1; i >= 0; i--) {
+   ParseTreeListener listener = _parseListeners.get(i);
+   _ctx.exitRule(listener);
+   listener.exitEveryRule(_ctx);
+  }
+ }
+ catch (Throwable e) {
+  // If an exception is thrown in the user's listener code, we need to bail out
+  // completely out of the parser, without executing anymore user code. We
+  // must also stop the parse otherwise other listener actions will attempt to execute
+  // almost certainly with invalid results. So, record the fact an exception occurred
+  listenerExceptionOccurred = true;
+  throw e;
+ }
 }
 ```
 
@@ -919,19 +919,19 @@ Now, if you throw an exception inside one of the listener methods:
 ```
 // Now throw an exception in the listener
 class ErrorListener extends CalcNoLRBaseListener {
-	public boolean execExitS = false;
-	public boolean execExitAtom = false;
+ public boolean execExitS = false;
+ public boolean execExitAtom = false;
 
-	@Override
-	public void exitS(CalcNoLRParser.SContext ctx) {
-		execExitS = true;
-	}
+ @Override
+ public void exitS(CalcNoLRParser.SContext ctx) {
+  execExitS = true;
+ }
 
-	@Override
-	public void exitAtom(CalcNoLRParser.AtomContext ctx) {
-		execExitAtom = true;
-		throw new NullPointerException("bail out");
-	}
+ @Override
+ public void exitAtom(CalcNoLRParser.AtomContext ctx) {
+  execExitAtom = true;
+  throw new NullPointerException("bail out");
+ }
 }
 ```
 
@@ -940,14 +940,14 @@ then the exception will properly cause the parser to bailout and the exception w
 ```
 java.lang.NullPointerException: bail out
 
-	at org.antlr.v4.test.runtime.java.api.TestParseListener$2ErrorListener.exitAtom(TestParseListener.java:102)
-	at org.antlr.v4.test.runtime.java.api.CalcNoLRParser$AtomContext.exitRule(CalcNoLRParser.java:311)
-	at org.antlr.v4.runtime.Parser.triggerExitRuleEvent(Parser.java:412)
-	at org.antlr.v4.runtime.Parser.exitRule(Parser.java:654)
-	at org.antlr.v4.test.runtime.java.api.CalcNoLRParser.atom(CalcNoLRParser.java:336)
-	at org.antlr.v4.test.runtime.java.api.CalcNoLRParser.add(CalcNoLRParser.java:261)
-	at org.antlr.v4.test.runtime.java.api.CalcNoLRParser.expr(CalcNoLRParser.java:181)
-	at org.antlr.v4.test.runtime.java.api.CalcNoLRParser.s(CalcNoLRParser.java:123)
+ at org.antlr.v4.test.runtime.java.api.TestParseListener$2ErrorListener.exitAtom(TestParseListener.java:102)
+ at org.antlr.v4.test.runtime.java.api.CalcNoLRParser$AtomContext.exitRule(CalcNoLRParser.java:311)
+ at org.antlr.v4.runtime.Parser.triggerExitRuleEvent(Parser.java:412)
+ at org.antlr.v4.runtime.Parser.exitRule(Parser.java:654)
+ at org.antlr.v4.test.runtime.java.api.CalcNoLRParser.atom(CalcNoLRParser.java:336)
+ at org.antlr.v4.test.runtime.java.api.CalcNoLRParser.add(CalcNoLRParser.java:261)
+ at org.antlr.v4.test.runtime.java.api.CalcNoLRParser.expr(CalcNoLRParser.java:181)
+ at org.antlr.v4.test.runtime.java.api.CalcNoLRParser.s(CalcNoLRParser.java:123)
 ```
 
 ## Semantic Predicates
@@ -962,9 +962,9 @@ Consider a variant of C++ where array references also use parentheses instead of
 
 ```
 expr: ID '(' expr ')' // array reference (ANTLR picks this one)
- 	| {istype()}? ID '(' expr ')' // ctor-style typecast
- 	| ID '(' expr ')' // function call
- 	;
+  | {istype()}? ID '(' expr ')' // ctor-style typecast
+  | ID '(' expr ')' // function call
+  ;
 ```
 
 In this case, all three alternatives are viable for input `x(i)`. When `x` is not a type name, the predicate evaluates to false, leaving only the first and third alternatives as possible matches for expr. ANTLR automatically chooses the first alternative matching the array reference to resolve the ambiguity. Leaving ANTLR with more than one viable alternative because of too few predicates is probably not a good idea. It's best to cover n viable alternatives with at least n-1 predicates. In other words, don't build rules like expr with too few predicates.
@@ -977,8 +977,8 @@ For example, the decision in rule `stat` joins the predicates from both alternat
 stat: decl | expr ;
 decl: ID ID ;
 expr: {istype()}? ID '(' expr ')' // ctor-style typecast
- 	| {isfunc()}? ID '(' expr ')' // function call
- 	;
+  | {isfunc()}? ID '(' expr ')' // function call
+  ;
 ```
 
 The parser will only predict an expr from stat when `istype()||isfunc()` evaluates to true. This makes sense because the parser should only choose to match an expression if the upcoming `ID` is a type name or function name. It wouldn't make sense to just test one of the predicates in this case. Note that, when the parser gets to `expr` itself, the parsing decision tests the predicates individually, one for each alternative.
@@ -1018,8 +1018,8 @@ More importantly, the parser can't execute actions until it has decided which al
 ```
 @members {boolean allowgoto=false;}
 stat: {System.out.println("goto"); allowgoto=true;} {java5}? 'goto' ID ';'
- 	| ...
- 	;
+  | ...
+  ;
 ```
 
 If we can't execute the action during prediction, we shouldn't evaluate the `{java5}?` predicate because it depends on that action.
@@ -1028,8 +1028,8 @@ The prediction process also can't see through token references. Token references
 
 ```
 stat: '{' decl '}'
- 	| '{' stat '}'
- 	;
+  | '{' stat '}'
+  ;
 decl: {istype(getCurrentToken().getText())}? ID ID ';' ;
 expr: {isvar(getCurrentToken().getText())}? ID ;
 ```
@@ -1046,11 +1046,11 @@ A predicate that depends on a parameter or local variable of the surrounding rul
 
 ```
 prog: vec5
- 	| ...
- 	;
+  | ...
+  ;
 vec5
 **locals [int i=1]**：( {$i<=5}? INT {$i++;} )* // match 5 INTs
- 	;
+  ;
 ```
 
 ANTLR ignores context-dependent predicates that it can't evaluate in the proper context. Normally the proper context is simply the rule defining the predicate, but sometimes the parser can't even evaluate a context-dependent predicate from within the same rule! Detecting these cases is done on-the-fly at runtime during adaptive LL(*) prediction.
@@ -1061,8 +1061,8 @@ For example, prediction for the optional branch of the else subrule in stat belo
 prog: stat+ ; // stat can follow stat
 stat
 **locals [int i=0]**：{$i==0}? 'if' expr 'then' stat {$i=5;} ('else' stat)?
- 	| 'break' ';'
- 	;
+  | 'break' ';'
+  ;
 ```
 
 The prediction process is trying to figure out what can follow an if statement other than an else clause. Since the input can have multiple stats in a row, the prediction for the optional branch of the else subrule reenters stat. This time, of course, it gets a new copy of `$i` with a value of 0, not 5. ANTLR ignores context-dependent predicate `{$i==0}?` because it knows that the parser isn't in the original stat call. The predicate would test a different version of `$i` so the parser can't evaluate it.
@@ -1090,7 +1090,7 @@ Like parser predicates, lexer predicates can't depend on side effects from lexer
 
 ```
 ENUM: [a-z]+ {getText().equals("enum")}?
-	   {System.out.println("enum!");}
+    {System.out.println("enum!");}
     ;
 ID  : [a-z]+ {System.out.println("ID "+getText());} ;
 ```
@@ -1101,10 +1101,10 @@ The print action in `ENUM` appears last and executes only if the current input m
 $ antlr4 Enum3.g4
 $ javac Enum3.java
 $ grun Enum3 tokens
-=> 	enum abc
-=> 	EOF
-<= 	enum!
- 	ID abc
+=>  enum abc
+=>  EOF
+<=  enum!
+  ID abc
 ```
 
 That works great, but it's really just for instructional purposes. It's easier to understand and more efficient to match enum keywords with a simple rule like this:

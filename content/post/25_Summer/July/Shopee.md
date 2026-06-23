@@ -90,6 +90,7 @@ SSH Key（Secure Shell Key）是一种基于非对称加密技术的身份验证
 ### 🛠️ 三、生成与配置步骤
 
 1. **生成密钥对**（以Linux/macOS为例）：
+
    ```
    ssh-keygen -t ed25519 -C "your_email@example.com"  # 推荐ED25519算法
    ssh-keygen -t rsa -b 4096 -C "your_email@example.com"  # 或使用4096位RSA
@@ -99,6 +100,7 @@ SSH Key（Secure Shell Key）是一种基于非对称加密技术的身份验证
    - 生成文件默认路径：`~/.ssh/id_ed25519`（私钥）和`~/.ssh/id_ed25519.pub`（公钥）。
 
 2. **部署公钥到服务器**：
+
    ```
    ssh-copy-id user@remote_host  # 自动追加公钥至远程服务器的authorized_keys
    ```

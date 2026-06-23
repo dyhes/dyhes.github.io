@@ -9,6 +9,7 @@ tags:
 ---
 
 ## Composite key
+
 ```java
 @Entity
 public class BookAuthor {
@@ -34,16 +35,22 @@ public class BookAuthorId implements Serializable {
     // Constructors, equals, hashCode...
 }
 ```
+
 ### Pros
+
 * Naturally represents the relationship between entities.
 * Ensures data integrity at the database level.
 * Can be more **space-efficient** in some cases.
 * Useful when the combination of fields has a natural, real-world uniqueness.
+
 ### Cons
+
 * Can be **more complex to work with in queries and code**.
 * May lead to longer primary keys, which can impact performance in large tables.
 * Less flexible if the relationship structure changes.
+
 ## Separate primary key
+
 ```java
 @Entity
 public class BookAuthor {
@@ -60,27 +67,38 @@ public class BookAuthor {
     // Other fields, getters, setters...
 }
 ```
+
 ### Pros
+
 * Simpler to work with in code and queries.
 * More flexible if relationships change.
 * Can **improve performance** in some scenarios, especially with large datasets.
 * Easier to reference from other tables.
+
 ### Cons
+
 * Requires an additional column in the table.
 * May not represent the natural relationship as clearly.
+
 ## Consideration
+
 ### Consider using a Composite Key
+
 * The combination of foreign keys naturally and uniquely identifies the relationship.
 * You want to enforce referential integrity at the database level.
 * The relationship is **stable** and unlikely to change.
 * You’re working with a **relatively small** dataset.
+
 ### Consider using a Separate Primary Key
+
 * 1 You need more flexibility in your data model.
 * 2 You’re working with **large datasets** where query performance is crucial.
 * 3 You anticipate changes in the relationship structure.
 * 4 You want to simplify your code and queries.
 * 5 You need to **reference this join table from other entities**.
+
 ### Additional Considerations
+
 * Database Performance: Test both approaches with your expected data volume to see which performs better.
 * ORM Tool: Some ORM tools work better with one approach over the other.
 * Team Preference: Consider what your team is more comfortable working with.

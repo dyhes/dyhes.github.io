@@ -11,7 +11,7 @@ tags: [Shopee]
 
 ------
 
-### 1. **`ConcurrentHashMap`的线程安全性范围**
+### 1. `ConcurrentHashMap`的线程安全性范围
 
 - **`ConcurrentHashMap`的线程安全机制**：
 
@@ -23,7 +23,7 @@ tags: [Shopee]
 
 ------
 
-### 2. **`List<BaseEdge>`的线程风险场景**
+### 2. `List<BaseEdge>`的线程风险场景
 
 假设以下操作可能发生：
 
@@ -44,7 +44,7 @@ buffer.get(EdgeType.class).remove(0);
 
 ------
 
-### 3. **解决方案：确保 `List`的线程安全**
+### 3. 解决方案：确保 `List`的线程安全
 
 #### 方案1：使用线程安全的 `List`实现
 
@@ -83,7 +83,7 @@ buffer.computeIfAbsent(EdgeType.class, k -> new ArrayList<>())
 
 ------
 
-### 4. **最佳实践总结**
+### 4. 最佳实践总结
 
 | **方案**                       | **适用场景**       | **优点**                 | **缺点**                 |
 | ------------------------------ | ------------------ | ------------------------ | ------------------------ |
@@ -113,7 +113,7 @@ buffer.computeIfAbsent(EdgeType.class, k -> new ArrayList<>())
 
 ------
 
-### **一、线程安全列表（List）**
+### 一、线程安全列表（List）
 
 1. **`Vector`**
    - **原理**：所有方法使用`synchronized`修饰，整体加锁。
@@ -160,9 +160,9 @@ buffer.computeIfAbsent(EdgeType.class, k -> new ArrayList<>())
 
 ------
 
-### **二、线程安全队列（Queue）**
+### 二、线程安全队列（Queue）
 
-#### **非阻塞队列**
+#### 非阻塞队列
 
 1. **`ConcurrentLinkedQueue`**
    - **原理**：基于CAS（无锁算法）的链表队列，支持高并发读写。
@@ -176,7 +176,7 @@ buffer.computeIfAbsent(EdgeType.class, k -> new ArrayList<>())
      queue.offer(1);  // 无阻塞
      ```
 
-#### **阻塞队列（实现`BlockingQueue`接口）**
+#### 阻塞队列（实现`BlockingQueue`接口）
 
 1. **`LinkedBlockingQueue`**
    - **原理**：基于链表的可选有界队列，生产者和消费者使用分离锁。
@@ -207,7 +207,7 @@ buffer.computeIfAbsent(EdgeType.class, k -> new ArrayList<>())
 
 ------
 
-### **三、选择建议**
+### 三、选择建议
 
 | **类型**       | **实现类**                     | **适用场景**             | **性能特点**         |
 | -------------- | ------------------------------ | ------------------------ | -------------------- |
@@ -221,7 +221,7 @@ buffer.computeIfAbsent(EdgeType.class, k -> new ArrayList<>())
 
 ------
 
-### **四、注意事项**
+### 四、注意事项
 
 1. **复合操作原子性**：
    - **即使使用线程安全集合，复合操作（如“检查-更新”）仍需额外同步**：
@@ -246,7 +246,7 @@ buffer.computeIfAbsent(EdgeType.class, k -> new ArrayList<>())
 
 ------
 
-### ⚠️ **ConcurrentLinkedQueue 的局限性**
+### ⚠️ ConcurrentLinkedQueue 的局限性
 
 1. **写多读少的性能瓶颈**
    - **内存占用高**：
@@ -277,9 +277,9 @@ buffer.computeIfAbsent(EdgeType.class, k -> new ArrayList<>())
 
 ------
 
-### ✅ **更优替代方案**
+### ✅ 更优替代方案
 
-#### 1. **`LinkedBlockingQueue`+ 批量消费者线程**
+#### 1. `LinkedBlockingQueue`+ 批量消费者线程
 
 - **设计原理**：
 
@@ -306,7 +306,7 @@ buffer.computeIfAbsent(EdgeType.class, k -> new ArrayList<>())
   - 通过 `drainTo`批量转移数据，减少锁竞争 。
   - 结合事务提升插入效率（单事务插入多条）。
 
-#### 2. **手动队列 + 锁同步**
+#### 2. 手动队列 + 锁同步
 
 - **适用场景**：
 
@@ -343,7 +343,7 @@ buffer.computeIfAbsent(EdgeType.class, k -> new ArrayList<>())
 
 ------
 
-### ⚖️ **方案对比**
+### ⚖️ 方案对比
 
 | **特性**         | `ConcurrentLinkedQueue`   | `LinkedBlockingQueue`+ 批量消费 | 手动队列 + 锁        |
 | ---------------- | ------------------------- | ------------------------------- | -------------------- |
@@ -355,7 +355,7 @@ buffer.computeIfAbsent(EdgeType.class, k -> new ArrayList<>())
 
 ------
 
-### 💎 **结论与建议**
+### 💎 结论与建议
 
 1. **避免使用 `ConcurrentLinkedQueue`**：
    在**写多读少**的数据库批量插入中，其无界特性、内存开销和弱一致性会拖累性能，且无法直接支持高效批量消费。
