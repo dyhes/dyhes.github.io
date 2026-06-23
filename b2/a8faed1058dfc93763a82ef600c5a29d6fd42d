@@ -1,0 +1,233 @@
+tests/markdownlint/fence-inline-sandwich/enumeration-continuation-tail-expected-fixed.md
+  s_dc2c4107347439::t_d365de2144b371 1
+tests/markdownlint/fence-inline-sandwich/bad.md
+  s_dc2c4107347439::t_c7909dbbe254a4 1 gitai:{"mixed_line_ranges":[{"Single":1}],"operations":[]}
+tests/markdownlint/fence-inline-sandwich/heading-next-expected-fixed.md
+  s_dc2c4107347439::t_9e651375e5c3bb 1-3
+tests/markdownlint/fence-inline-sandwich/enumeration-comma-expected-fixed.md
+  s_dc2c4107347439::t_2dbc14aa443970 1
+tests/markdownlint/fence-inline-sandwich/list-next-bad.md
+  s_dc2c4107347439::t_621ea04de53dc3 1-2 gitai:{"mixed_line_ranges":[{"Single":1}],"operations":[]}
+tests/markdownlint/fence-inline-sandwich/table-next-expected-fixed.md
+  s_dc2c4107347439::t_229271dbd85575 1-4
+scripts/test-fence-inline-sandwich.sh
+  s_dc2c4107347439::t_c0516755b34f33 8,13-17,19-39,67-69,74-75
+  s_dc2c4107347439::t_d7e46496e0420b 18,44
+  s_dc2c4107347439::t_f28f7f6b912d85 40-43,45-66
+  s_dc2c4107347439::t_845b86a7438946 72
+  s_dc2c4107347439::t_ed554da29dad19 73
+  s_dc2c4107347439::t_b510f92a756c52 70
+  s_dc2c4107347439::t_81ba70eee3da8d 71
+  s_dc2c4107347439::t_fd6c68e6edbc45 1-7,9-12,76-77
+tests/markdownlint/fence-indent-alignment/bad.md
+  s_dc2c4107347439::t_eea71313439574 1-5
+tests/markdownlint/fence-inline-sandwich/quote-next-bad.md
+  s_dc2c4107347439::t_89f274e1f116ec 1-3 gitai:{"mixed_line_ranges":[{"Single":1}],"operations":[]}
+markdownlint-rules/fence-inline-sandwich.js
+  s_dc2c4107347439::t_daa510a7aafdd2 33,157,172-176
+  s_dc2c4107347439::t_d11cd96208965b 110,115
+  s_dc2c4107347439::t_1f651dfbe0410f 273,277,281-289
+  s_dc2c4107347439::t_c5ab340073db26 1-23,34-43,180-183,186-202,237-244,247-259,265-272,274-276,290-294
+  s_dc2c4107347439::t_040e1df4a6ec95 24
+  s_dc2c4107347439::t_35587d3b12d9af 32,48-76,144-149
+  s_dc2c4107347439::t_45d8f078d8e344 25,27-31,44-47,77-90,168-170,178-179,245-246,260-264,278-280
+  s_dc2c4107347439::t_f5a6ad23a13261 26,91-109,111-114,116-143,150-156,158-167,203-236
+  s_dc2c4107347439::t_bde9dd42918741 171,177,184-185
+tests/markdownlint/fence-inline-sandwich/math-prime-bad.md
+  s_dc2c4107347439::t_4892b5385850a9 1 gitai:{"mixed_line_ranges":[{"Single":1}],"operations":[]}
+tests/markdownlint/fence-inline-sandwich/enumeration-continuation-tail-bad.md
+  s_dc2c4107347439::t_1e0dd4042d8bf7 1 gitai:{"mixed_line_ranges":[{"Single":1}],"operations":[]}
+tests/markdownlint/fence-inline-sandwich/expected-fixed.md
+  s_dc2c4107347439::t_d974799ab45757 1
+tests/markdownlint/fence-indent-alignment/good.md
+  s_dc2c4107347439::t_3ee35481e2d78f 1-5
+tests/markdownlint/fence-inline-sandwich/heading-next-bad.md
+  s_dc2c4107347439::t_2f0fe6c4294168 1-3 gitai:{"mixed_line_ranges":[{"Single":1}],"operations":[]}
+.markdownlint-cli2.cjs
+  s_dc2c4107347439::t_c735de12e04929 16,25,42,52
+  s_dc2c4107347439::t_d7a9dc0932c7fc 17,26,43,53
+README.md
+  s_dc2c4107347439::t_26f038aa830983 56
+tests/markdownlint/fence-inline-sandwich/math-prime-expected-fixed.md
+  s_dc2c4107347439::t_616eaa513b5372 1
+markdownlint-rules/fence-indent-alignment.js
+  s_dc2c4107347439::t_050619df20553b 1-71
+tests/markdownlint/fence-inline-sandwich/enumeration-comma-bad.md
+  s_dc2c4107347439::t_2c3640022d1345 1 gitai:{"mixed_line_ranges":[{"Single":1}],"operations":[]}
+scripts/test-pre-commit-convergence.sh
+  s_dc2c4107347439::t_831c402cde716c 1-92
+tests/markdownlint/fence-inline-sandwich/table-next-bad.md
+  s_dc2c4107347439::t_7576b38c7d2349 1-4 gitai:{"mixed_line_ranges":[{"Single":1}],"operations":[]}
+tests/markdownlint/fence-inline-sandwich/quote-next-expected-fixed.md
+  s_dc2c4107347439::t_a2a5ec445ed21b 1-3
+scripts/hooks/pre-commit
+  s_dc2c4107347439::t_8baa6ee6847b7e 3-5,9-10,34-56,79-80
+  s_dc2c4107347439::t_ce47061bda45d5 81-82
+tests/markdownlint/fence-indent-alignment/expected-fixed.md
+  s_dc2c4107347439::t_98e7f9364c00d6 1-5
+tests/markdownlint/fence-inline-sandwich/list-next-expected-fixed.md
+  s_dc2c4107347439::t_d669e3ce8b532b 1-2
+scripts/test-fence-indent-alignment.sh
+  s_dc2c4107347439::t_0174fa85a9aec9 1-35
+tests/markdownlint/fence-inline-sandwich/good.md
+  s_dc2c4107347439::t_e0978c6e2814c9 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "b2a8faed1058dfc93763a82ef600c5a29d6fd42d",
+  "prompts": {},
+  "sessions": {
+    "s_dc2c4107347439": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a38de9efdf4f394558eafe8",
+        "model": "gpt-5.4__dev"
+      },
+      "human_author": "dyhes <1325574784@qq.com>"
+    }
+  },
+  "attestation_metadata": {
+    "tests/markdownlint/fence-inline-sandwich/bad.md": [
+      {
+        "hash": "s_dc2c4107347439::t_c7909dbbe254a4",
+        "line_ranges": [
+          {
+            "Single": 1
+          }
+        ],
+        "mixed_line_ranges": [
+          {
+            "Single": 1
+          }
+        ],
+        "operations": []
+      }
+    ],
+    "tests/markdownlint/fence-inline-sandwich/enumeration-comma-bad.md": [
+      {
+        "hash": "s_dc2c4107347439::t_2c3640022d1345",
+        "line_ranges": [
+          {
+            "Single": 1
+          }
+        ],
+        "mixed_line_ranges": [
+          {
+            "Single": 1
+          }
+        ],
+        "operations": []
+      }
+    ],
+    "tests/markdownlint/fence-inline-sandwich/enumeration-continuation-tail-bad.md": [
+      {
+        "hash": "s_dc2c4107347439::t_1e0dd4042d8bf7",
+        "line_ranges": [
+          {
+            "Single": 1
+          }
+        ],
+        "mixed_line_ranges": [
+          {
+            "Single": 1
+          }
+        ],
+        "operations": []
+      }
+    ],
+    "tests/markdownlint/fence-inline-sandwich/heading-next-bad.md": [
+      {
+        "hash": "s_dc2c4107347439::t_2f0fe6c4294168",
+        "line_ranges": [
+          {
+            "Range": [
+              1,
+              3
+            ]
+          }
+        ],
+        "mixed_line_ranges": [
+          {
+            "Single": 1
+          }
+        ],
+        "operations": []
+      }
+    ],
+    "tests/markdownlint/fence-inline-sandwich/list-next-bad.md": [
+      {
+        "hash": "s_dc2c4107347439::t_621ea04de53dc3",
+        "line_ranges": [
+          {
+            "Range": [
+              1,
+              2
+            ]
+          }
+        ],
+        "mixed_line_ranges": [
+          {
+            "Single": 1
+          }
+        ],
+        "operations": []
+      }
+    ],
+    "tests/markdownlint/fence-inline-sandwich/math-prime-bad.md": [
+      {
+        "hash": "s_dc2c4107347439::t_4892b5385850a9",
+        "line_ranges": [
+          {
+            "Single": 1
+          }
+        ],
+        "mixed_line_ranges": [
+          {
+            "Single": 1
+          }
+        ],
+        "operations": []
+      }
+    ],
+    "tests/markdownlint/fence-inline-sandwich/quote-next-bad.md": [
+      {
+        "hash": "s_dc2c4107347439::t_89f274e1f116ec",
+        "line_ranges": [
+          {
+            "Range": [
+              1,
+              3
+            ]
+          }
+        ],
+        "mixed_line_ranges": [
+          {
+            "Single": 1
+          }
+        ],
+        "operations": []
+      }
+    ],
+    "tests/markdownlint/fence-inline-sandwich/table-next-bad.md": [
+      {
+        "hash": "s_dc2c4107347439::t_7576b38c7d2349",
+        "line_ranges": [
+          {
+            "Range": [
+              1,
+              4
+            ]
+          }
+        ],
+        "mixed_line_ranges": [
+          {
+            "Single": 1
+          }
+        ],
+        "operations": []
+      }
+    ]
+  },
+  "remote_transcripts": {}
+}
