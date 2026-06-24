@@ -20,7 +20,7 @@ tags: [Shopee]
   - `maximumPoolSize`：最大线程数（当任务队列满时创建新线程）。
   - `keepAliveTime`：非核心线程的空闲存活时间。
   - `workQueue`：任务队列（如 `LinkedBlockingQueue`）。
-    ​**示例**​：
+    **示例**：
 
   ```
   ExecutorService executor = new ThreadPoolExecutor(
@@ -33,7 +33,7 @@ tags: [Shopee]
   - `schedule()`：延迟执行单次任务。
   - `scheduleAtFixedRate()`：固定频率执行任务（忽略任务执行时间）。
   - `scheduleWithFixedDelay()`：固定延迟执行任务（任务结束到下一次开始的时间间隔）。
-    ​**示例**​：
+    **示例**：
 
   ```
   ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
@@ -133,7 +133,7 @@ tags: [Shopee]
 ### ⏳ 方案一：使用 `Future.get()` 设置超时（推荐）
 
 **原理**：提交任务后，通过 `Future.get(timeout, unit)` 阻塞等待结果。若超时则抛出 `TimeoutException`，触发任务取消。
-​**步骤**​：
+**步骤**：
 
 1. 创建线程池（如 `FixedThreadPool`）。
 2. 提交任务（`Callable` 或 `Runnable`），获取 `Future` 对象。
@@ -173,7 +173,7 @@ try {
 ### 🔁 方案二：使用 `CompletableFuture`（Java 8+）
 
 **原理**：通过 `CompletableFuture.supplyAsync()` 提交任务，用 `orTimeout()` 或 `completeOnTimeout()` 设置超时策略。
-​**示例**​：
+**示例**：
 
 ```
 CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
@@ -199,8 +199,8 @@ future.thenAccept(System.out::println); // 输出结果或超时提示
 ### ⏱️ 方案三：结合 `ScheduledExecutorService` 监控超时
 
 **原理**：启动一个定时任务监控线程，超时后主动取消原任务。
-​**适用场景**​：需更精细控制超时逻辑（如批量任务独立超时）。
-​**示例**​：
+**适用场景**：需更精细控制超时逻辑（如批量任务独立超时）。
+**示例**：
 
 ```
 ExecutorService taskExecutor = Executors.newFixedThreadPool(4);

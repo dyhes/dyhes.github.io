@@ -271,7 +271,7 @@ int main() {
 2. `right`左移直至找到小于基准值的元素；`left`右移直至找到大于基准值的元素。
 3. 交换`arr[left]`和`arr[right]`，重复直至`left >= right`。
 4. 交换基准值与`arr[right]`，完成分区[6,7](@ref)。
-   ​**代码片段**​：
+   **代码片段**：
 
 ```
 while (left < right) {
@@ -290,7 +290,7 @@ swap(arr[begin], arr[right]);    // 基准值归位
    - 若`arr[fast] < key`，则`slow++`并交换`arr[slow]`与`arr[fast]`。
 
 3. 遍历结束后，交换`arr[0]`与`arr[slow]`，分区完成[9](@ref)。
-   ​**代码片段**​：
+   **代码片段**：
 
 ```
 slow = begin
@@ -977,7 +977,7 @@ int __builtin_popcountll(unsigned long long x); // 64位整数
 
    - 若 CPU 支持 `CLZ`（Count Leading Zeros）指令（如 x86 的 `BSR` 指令），编译器直接生成该指令：
      `\text{\_\_lg}(x) = 31 - \text{\_\_builtin\_clz}(x) \quad \text{(32 位整数)}`
-     时间复杂度为 ​**O(1)​**​[1](@ref)。
+     时间复杂度为 **O(1)**[1](@ref)。
 
 2. **软件算法回退**：
 
@@ -1410,17 +1410,13 @@ Derived d(42);        // 调用 Base(int)[4,9](@ref)
 
 #### 使用`char`数组（多字节编码）
 
-- 
-
-  **GBK示例**：每个汉字占2字节，英文字符1字节。
+- **GBK示例**：每个汉字占2字节，英文字符1字节。
 
   ```
   char gbk_str[] = "你好";  // 内存：D6 D0（你） + B9 FA（好）
   ```
 
-- 
-
-  **UTF-8示例**：汉字占3字节（C++11起支持`u8`前缀）：
+- **UTF-8示例**：汉字占3字节（C++11起支持`u8`前缀）：
 
   ```
   const char* utf8_str = u8"你好";  // 内存：E4 BD A0（你） + E5 A5 BD（好）
@@ -1648,9 +1644,7 @@ bool ignoreSpaceCompare(const std::string& a, const std::string& b) {
 
 - **避免拷贝**：使用`const std::string&`传递参数，减少临时对象。
 
-- 
-
-  **快速失败**：先比较长度，长度不等直接返回`false`，避免逐字符比较：
+- **快速失败**：先比较长度，长度不等直接返回`false`，避免逐字符比较：
 
   ```
   bool efficientCompare(const std::string& a, const std::string& b) {
@@ -1714,7 +1708,7 @@ bool ignoreSpaceCompare(const std::string& a, const std::string& b) {
    - 若当前字符不同，编码值较小的字符串更小。例如 `"apple" < "banana"`（`'a'`（97） < `'b'`（98））。
    - 若字符相同，则继续比较下一个字符。
 2. **长度影响结果**
-   若两字符串前缀完全相同，​**较短字符串更小**。例如：
+   若两字符串前缀完全相同，**较短字符串更小**。例如：
    - `"app" < "apple"`（长度 3 < 5）。
    - 空字符串 `""` 被视为小于任何非空字符串。
 3. **大小写敏感性**
@@ -1843,9 +1837,7 @@ bool ignoreSpaceCompare(const std::string& a, const std::string& b) {
 
 2. **移动语义的核心**
 
-   - 
-
-     **资源窃取**：移动构造函数或赋值运算符直接接管原对象的资源（如动态内存、文件句柄），避免深拷贝。
+   - **资源窃取**：移动构造函数或赋值运算符直接接管原对象的资源（如动态内存、文件句柄），避免深拷贝。
 
      ```
      // 移动构造函数示例
@@ -1902,9 +1894,7 @@ bool ignoreSpaceCompare(const std::string& a, const std::string& b) {
 
    - 被移动后的对象处于**有效但未定义状态**（如 `std::vector` 的 `size()` 可能为 0）。
 
-   - 
-
-     **禁止再访问资源**：
+   - **禁止再访问资源**：
 
      ```
      std::string s1 = "text";
@@ -2197,9 +2187,7 @@ auto construct = init_value * 2; // ✅ 依赖已定义的 init_value
   auto lambda = [&]() { y++; };  // 修改外部y为21
   ```
 
-- 
-
-  **明确指定捕获**：
+- **明确指定捕获**：
 
   可自由组合值/引用捕获，灵活性高：
 
@@ -2310,9 +2298,9 @@ auto construct = init_value * 2; // ✅ 依赖已定义的 init_value
 | 异步或长生命周期Lambda | 值捕获或`shared_ptr`                  | 避免悬空引用             |
 
 > **黄金准则**：
-> ✅ ​**显式 > 隐式**​：明确列出捕获变量，避免`[=]`/`[&]`的模糊性。
-> ✅ ​**生命周期 > 性能**​：引用捕获前，100%确认对象生命周期覆盖Lambda。
-> ✅ ​**C++14+优先用初始化捕获**​：灵活且安全，尤其适合资源管理场景。
+> ✅ **显式 > 隐式**：明确列出捕获变量，避免`[=]`/`[&]`的模糊性。
+> ✅ **生命周期 > 性能**：引用捕获前，100%确认对象生命周期覆盖Lambda。
+> ✅ **C++14+优先用初始化捕获**：灵活且安全，尤其适合资源管理场景。
 
 ## substr
 
@@ -2328,9 +2316,7 @@ auto construct = init_value * 2; // ✅ 依赖已定义的 init_value
 std::string substr(size_t pos = 0, size_t len = npos) const;
 ```
 
-- 
-
-  **参数**：
+- **参数**：
 
   - `pos`：子字符串的起始位置（从0开始索引）。默认值为 `0`（字符串开头）。
   - `len`：要提取的字符数量。默认值为 `npos`（特殊常量，表示截取到字符串末尾）。
@@ -2349,9 +2335,7 @@ std::string substr(size_t pos = 0, size_t len = npos) const;
 
 - 若 `pos > 字符串长度`：抛出 `std::out_of_range` 异常。
 
-- 
-
-  **正确做法**：调用前检查 `pos` 范围：
+- **正确做法**：调用前检查 `pos` 范围：
 
   ```
   if (pos <= s.size()) {
@@ -2367,9 +2351,7 @@ std::string substr(size_t pos = 0, size_t len = npos) const;
 
 - 若 `len = 0`：返回空字符串。
 
-- 
-
-  **示例**：
+- **示例**：
 
   ```
   string s = "Hello";
@@ -2455,27 +2437,19 @@ if (pos != string::npos) {
 
 ### ⚠️ 关键注意事项
 
-1. 
-
-   **异常安全**：
+1. **异常安全**：
 
    - 始终检查 `pos` 是否越界，避免未捕获的 `std::out_of_range` 异常。
 
-2. 
-
-   **性能开销**：
+2. **性能开销**：
 
    - 返回新字符串对象，可能涉及内存复制（小字符串通常优化）。
 
-3. 
-
-   **空字符串处理**：
+3. **空字符串处理**：
 
    - 原字符串为空时，`substr()` 返回空字符串。
 
-4. 
-
-   **与 `[]` 操作符区别**：
+4. **与 `[]` 操作符区别**：
 
    - `s[i]` 返回单个字符的引用，`substr()` 返回新字符串对象。
 
@@ -2499,9 +2473,7 @@ if (pos != string::npos) {
 
 - **核心作用**：安全、灵活地提取子字符串，支持动态截取范围。
 
-- 
-
-  **最佳实践**：
+- **最佳实践**：
 
   - 始终校验 `pos` 合法性，避免异常。
   - 结合 `find()` 实现动态定位。

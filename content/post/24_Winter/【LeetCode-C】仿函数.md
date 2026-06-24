@@ -195,10 +195,11 @@ std::set<Student> students; // 自动使用 operator<
 
 std::less 是 C++ 标准库中定义的一个**仿函数（Functor）** ，用于实现通用的“小于”比较操作。
 
-```
 
 ### **`std::less` 的仿函数特性**
+
 `std::less` 是标准库提供的模板类，定义在 `<functional>` 头文件中：
+
 ```cpp
 template<typename T>
 struct less {

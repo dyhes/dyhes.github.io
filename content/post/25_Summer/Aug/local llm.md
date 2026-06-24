@@ -42,7 +42,7 @@ GGUF 文件包含三个核心部分：
 ### 📛 三、命名规范
 
 GGUF 文件名遵循结构化规则，便于快速识别模型属性：
-​**`<BaseName>-<SizeLabel>-<FineTune>-<Version>-<Encoding>-<Type>-<Shard>.gguf`**​
+**`<BaseName>-<SizeLabel>-<FineTune>-<Version>-<Encoding>-<Type>-<Shard>.gguf`**
 
 - **示例**： `Mixtral-8x7B-v0.1-Q4_K_M.gguf`
   - `Mixtral`：基础模型架构

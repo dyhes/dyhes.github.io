@@ -15,6 +15,14 @@
 //                          表格后若直接跟普通文本段落，要求补空行
 //   - fence-inline-sandwich 句子中夹着的单标识符 fenced code 自动塌缩为 inline
 //   - fence-indent-alignment 围栏代码块 opening/closing fence 缩进必须一致
+//
+// 已移除：
+//   - fence-closing-indent-too-deep
+//     该规则想修"closing fence 缩进 >=4 失效"，但按 CommonMark，失效的 closing 会被
+//     解析为代码内容，与"列表内合法 fence（indent>=4，按列表基线 dedent 后 <=3）"在
+//     文本和 token 层面均不可区分；markdownlint(markdown-it) 与渲染器(Goldmark)对列表
+//     内 fence 的解析还存在差异。自动 --fix 会大面积误改列表内合法 fence（实测会破坏
+//     docker.md 等）。真正的"代码块未闭合"应通过渲染检查发现，而非此规则。
 
 const noBoldInHeading = require("./markdownlint-rules/no-bold-in-heading.js");
 const noFakeOrderedList = require("./markdownlint-rules/no-fake-ordered-list.js");
@@ -33,14 +41,14 @@ module.exports = {
     MD031: true,
     MD032: true,
     MD058: true,
-    "no-bold-in-heading": true,
-    "no-fake-ordered-list": true,
-    "no-braille-blank": true,
-    "fix-sublist-indent": true,
-    "fence-as-inline-code": true,
-    "no-paragraph-immediately-after-table": true,
-    "fence-inline-sandwich": true,
-    "fence-indent-alignment": true,
+    "no-bold-in-heading": false,
+    "no-fake-ordered-list": false,
+    "no-braille-blank": false,
+    "fix-sublist-indent": false,
+    "fence-as-inline-code": false,
+    "no-paragraph-immediately-after-table": false,
+    "fence-inline-sandwich": false,
+    "fence-indent-alignment": false,
   },
   customRules: [
     noBoldInHeading,

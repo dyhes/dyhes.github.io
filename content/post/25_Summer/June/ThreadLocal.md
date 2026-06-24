@@ -78,11 +78,13 @@ ThreadLocal 是 Java 多线程编程中的核心类，用于实现**线程级别
          threadLocal.remove();  // 必须清理！
      }
 
-  ```
+     ```
+
 - **避免存储大对象**：减少因泄漏导致的内存压力。
 
 
 ------
+
 ### ⚖️ 与 `synchronized` 的对比
 
 | **维度**       | **ThreadLocal**                | **synchronized**           |
@@ -94,6 +96,7 @@ ThreadLocal 是 Java 多线程编程中的核心类，用于实现**线程级别
 
 
 ------
+
 ### 💎 最佳实践总结
 
 1. **声明为 `static final`**：
@@ -104,39 +107,47 @@ ThreadLocal 是 Java 多线程编程中的核心类，用于实现**线程级别
    结合 `try-finally` 或拦截器机制调用 `remove()`。
 4. **避免长生命周期数据**：
    尤其在线程池中，及时清理无用数据。
+
 > 💡 **ThreadLocal 的核心价值在于实现线程安全的数据隔离，而非替代同步机制。合理使用可提升代码简洁性与并发性能，但需严格遵循清理规范以防内存泄漏。**
+>
 ## vs. 普通变量
 
 ThreadLocal变量与普通变量（包括线程内部定义的普通变量）的核心区别在于**存储机制、作用域和数据隔离级别**，这直接决定了它们在多线程环境下的行为和安全性。下面从五个维度详细解析：
 
 
 ------
+
 ### 🧠 存储位置与作用域
 
 1. **ThreadLocal变量**
    - **存储位置**：每个线程内部的`ThreadLocalMap`中，Key为ThreadLocal实例（弱引用），Value为线程私有数据。
    - **作用域**：线程级别，跨方法共享（例如在Controller、Service、Dao层均可访问同一线程的ThreadLocal值）。
    - 示例：
+
   ```
 
    private static final ThreadLocal<User> userHolder = ThreadLocal.withInitial(() -> new User());
      // 线程A和线程B通过userHolder.get()获取各自独立的User对象
 
-   ```
+  ```
+
 2. **普通变量**
    - **局部变量** （方法内定义）：
      - 存储位置：线程栈帧的工作内存中，随方法调用结束而销毁。
      - 作用域：方法级别，线程安全（每个线程有独立栈帧）。
      - 示例：
+
      ```
      public void run() {
          int localVar = 10; // 每个线程的run()方法中有自己的localVar副本
      }
      ```
+
    - **成员变量（线程类内部定义）**：
      - 存储位置：堆内存中，被所有线程共享。
      - 作用域：对象实例级别，若多个线程操作同一对象实例，则成员变量被共享（非线程安全）。
      - **示例**：
+
        ```
        class MyRunnable implements Runnable {
            private int sharedVar; // 被所有线程共享
@@ -146,6 +157,7 @@ ThreadLocal变量与普通变量（包括线程内部定义的普通变量）的
 
 
 ------
+
 ### 🔒 数据隔离性对比
 
 | **变量类型**    | **是否线程隔离** | **共享范围**               | **线程安全机制**             |
@@ -161,16 +173,19 @@ ThreadLocal变量与普通变量（包括线程内部定义的普通变量）的
 
 
 ------
+
 ### ⚙️ 实现原理差异
 
 1. **ThreadLocal的隔离机制**
    - 每个`Thread`持有`ThreadLocalMap`，通过ThreadLocal对象的哈希值定位数据（Key为弱引用，Value为强引用）。
    - 同一ThreadLocal对象在不同线程中通过不同Map存储，实现隔离（见下图）：
+
    ```
 
      线程A：ThreadLocalMap → Entry(ThreadLocalA弱引用, ValueA)  
      线程B：ThreadLocalMap → Entry(ThreadLocalA弱引用, ValueB)
-     ```
+   ```
+
 2. **普通成员变量的共享性**
 
    - 成员变量存储在堆中，线程通过对象引用访问。若多个线程持有同一对象引用，则直接操作共享内存。
@@ -213,6 +228,8 @@ ThreadLocal变量与普通变量（包括线程内部定义的普通变量）的
 >    ```
 >    private static final ThreadLocal<DateFormat> dateFormatHolder = 
 >        ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
+>    ```
+>
 > 2. Spring的`RequestContextHolder`、事务管理器（跨层传递请求上下文）。
 
 

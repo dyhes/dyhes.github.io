@@ -139,5 +139,3 @@ curl -X POST http://localhost:8080/api/test/ask \
 ---
 
 ## ☑️ To-do (Next Steps)
-
--

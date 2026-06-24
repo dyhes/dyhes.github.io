@@ -11,3 +11,5 @@ md-img-uploader
 log/app.log
 # Added by CJADK
 .codex/
+# Added by CJADK
+.claude/

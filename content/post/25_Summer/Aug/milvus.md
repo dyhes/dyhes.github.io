@@ -309,7 +309,7 @@ HNSW（Hierarchical Navigable Small World）和IVF-Flat（Inverted File with Fla
 #### 1. HNSW：分层导航小世界图
 
 - **核心思想**
-  结合**跳表（Skip List）​**​ 和 ​**可导航小世界图（NSW）​**，构建多层图结构实现高效搜索：
+  结合**跳表（Skip List）** 和 **可导航小世界图（NSW）**，构建多层图结构实现高效搜索：
   - **分层设计**：底层（Layer 0）包含所有节点，层级越高节点越稀疏，形成“高速公路式”快速路径。
   - **贪心路由**：从顶层入口点开始，每层选择距离查询向量最近的邻居节点，逐层向下精细化搜索。
   - **动态更新**：新数据插入时随机分配层级，仅需局部调整连接边（参数 `M` 控制每层邻居数）。
@@ -385,7 +385,7 @@ Milvus 依赖 FastJSON 但不会自动导入该依赖，这主要源于其依赖
 ### 🔧 1. 依赖作用域（Scope）设计
 
 - **显式依赖原则**
-  Milvus SDK 或相关模块（如 `spring-ai-milvus-store`）在设计时通常将 FastJSON 标记为 ​**`provided` 作用域**​（Maven）或 ​**`compileOnly`**​（Gradle）。这意味着：
+  Milvus SDK 或相关模块（如 `spring-ai-milvus-store`）在设计时通常将 FastJSON 标记为 **`provided` 作用域**（Maven）或 **`compileOnly`**（Gradle）。这意味着：
 
   - FastJSON 是**运行时必需**的，但 SDK **不强制绑定其版本**。
   - 用户需根据自身项目环境**显式引入 FastJSON**，以避免版本冲突。
