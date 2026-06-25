@@ -1383,7 +1383,9 @@ spec:
     app: mysql
   ports:
     - port: 3306
+
 ---
+
 # StatefulSet
 apiVersion: apps/v1
 kind: StatefulSet
@@ -4888,7 +4890,7 @@ ENTRYPOINT ["new-entry"]
 
 ### 💎 总结：决策流程图
 
-```
+```mermaid
 graph TD
     A[需固定容器主命令？] -- Yes --> B[设置 ENTRYPOINT]
     A -- No --> C[仅用 CMD 提供默认命令]

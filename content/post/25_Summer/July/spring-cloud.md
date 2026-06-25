@@ -864,7 +864,7 @@ spring:
 
 #### 选型决策树
 
-```
+```mermaid
 graph TD
     A[项目技术栈] -->|Spring Boot 2.x+/Cloud 2020+| B(选择 OpenFeign)
     A -->|遗留系统/非 Spring 项目| C(考虑 Feign)
@@ -1888,7 +1888,7 @@ Seata 通过 `GlobalTransactionScanner` 扫描所有标注 `@GlobalTransactional
 
 #### 核心执行步骤
 
-```
+```mermaid
 graph TD
     A[调用@GlobalTransactional方法] --> B[GlobalTransactionalInterceptor拦截]
     B --> C{事务传播策略检查}

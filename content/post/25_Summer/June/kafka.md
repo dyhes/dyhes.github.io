@@ -360,7 +360,7 @@ Kafka的ISR（In-Sync Replicas）机制是其实现**高可靠性和高可用性
 
 2. **故障排查步骤**
 
-   ```
+   ```mermaid
    graph TD
    A[ISR异常] --> B[检查Broker进程与端口]
    B --> C[分析Kafka日志 server.log]

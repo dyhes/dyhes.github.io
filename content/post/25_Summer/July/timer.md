@@ -163,7 +163,7 @@ public class TaskRegistry {
   2. **ZooKeeper 锁**：创建临时有序节点，最小节点获得锁[8](@ref)。
 - **执行流程**：
 
-  ```
+  ```mermaid
   graph TD
     A[任务触发] --> B{尝试获取分布式锁}
     B -->|成功| C[执行业务逻辑]

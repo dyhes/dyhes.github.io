@@ -201,6 +201,7 @@ for (int i = 0; i < 1000; ++i) {
 ## `resize`
 
 `std::string` 的 `resize` 函数可能改变容量（capacity），但具体是否改变取决于操作类型：
+
 ---
 
 ###  当 `resize` 扩大字符串时：
