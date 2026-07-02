@@ -1,0 +1,259 @@
+<!doctype html><html lang=en-us dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='JavaParser 注解 要使用 com.github.javaparser.JavaParser解析特定注解（如 @RestController），需通过解析 Java 源代码的抽象语法树（AST）并遍历目标元素（类、方法、字段）的注解列表。以下是具体步骤和代码示例：\n1. 基本解析流程 步骤概述 解析源代码：将 Java 文件或字符串解析为 CompilationUnit（AST 的根节点）。 定位目标元素：遍历 AST 找到需要检查的类、方法或字段。 检查注解：遍历元素的注解列表，匹配目标注解的名称或参数。 代码示例 import com.github.javaparser.StaticJavaParser; import com.github.javaparser.ast.CompilationUnit; import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration; import java.io.File; public class AnnotationParser { public static void main(String[] args) throws Exception { // 1. 解析Java文件 CompilationUnit cu = StaticJavaParser.parse(new File("YourClass.java")); // 2. 遍历所有类声明 cu.findAll(ClassOrInterfaceDeclaration.class).forEach(clazz -> { // 3. 检查类是否包含@RestController注解 boolean hasRestController = clazz.getAnnotations().stream() .anyMatch(annotation -> annotation.getNameAsString().equals("RestController") ); System.out.println("Class has @RestController: " + hasRestController); }); } } 2. 解析注解的细节 注解名称匹配 注解名称需与源代码中的写法一致（如 "RestController"而非全限定名 org.springframework.web.bind.annotation.RestController）。若需处理全限定名，需检查注解的 QualifiedName。 获取注解参数 若注解带参数（如 @RequestMapping("/path")），可提取参数值：\n'><title>【Shopee】Java Parser</title><link rel=canonical href=https://dyhes.github.io/p/shopeejava-parser/><link rel=stylesheet href=/scss/style.min.f7091bff8043bd3e53b22be6c05dd86b506e8dec4d0d75d249d2dfb0fe074a46.css><meta property='og:title' content="【Shopee】Java Parser"><meta property='og:description' content='JavaParser 注解 要使用 com.github.javaparser.JavaParser解析特定注解（如 @RestController），需通过解析 Java 源代码的抽象语法树（AST）并遍历目标元素（类、方法、字段）的注解列表。以下是具体步骤和代码示例：\n1. 基本解析流程 步骤概述 解析源代码：将 Java 文件或字符串解析为 CompilationUnit（AST 的根节点）。 定位目标元素：遍历 AST 找到需要检查的类、方法或字段。 检查注解：遍历元素的注解列表，匹配目标注解的名称或参数。 代码示例 import com.github.javaparser.StaticJavaParser; import com.github.javaparser.ast.CompilationUnit; import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration; import java.io.File; public class AnnotationParser { public static void main(String[] args) throws Exception { // 1. 解析Java文件 CompilationUnit cu = StaticJavaParser.parse(new File("YourClass.java")); // 2. 遍历所有类声明 cu.findAll(ClassOrInterfaceDeclaration.class).forEach(clazz -> { // 3. 检查类是否包含@RestController注解 boolean hasRestController = clazz.getAnnotations().stream() .anyMatch(annotation -> annotation.getNameAsString().equals("RestController") ); System.out.println("Class has @RestController: " + hasRestController); }); } } 2. 解析注解的细节 注解名称匹配 注解名称需与源代码中的写法一致（如 "RestController"而非全限定名 org.springframework.web.bind.annotation.RestController）。若需处理全限定名，需检查注解的 QualifiedName。 获取注解参数 若注解带参数（如 @RequestMapping("/path")），可提取参数值：\n'><meta property='og:url' content='https://dyhes.github.io/p/shopeejava-parser/'><meta property='og:site_name' content='飞鸿踏雪泥'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='Shopee'><meta property='article:published_time' content='2025-08-18T00:00:00+00:00'><meta property='article:modified_time' content='2026-06-23T14:55:01+08:00'><meta name=twitter:title content="【Shopee】Java Parser"><meta name=twitter:description content='JavaParser 注解 要使用 com.github.javaparser.JavaParser解析特定注解（如 @RestController），需通过解析 Java 源代码的抽象语法树（AST）并遍历目标元素（类、方法、字段）的注解列表。以下是具体步骤和代码示例：\n1. 基本解析流程 步骤概述 解析源代码：将 Java 文件或字符串解析为 CompilationUnit（AST 的根节点）。 定位目标元素：遍历 AST 找到需要检查的类、方法或字段。 检查注解：遍历元素的注解列表，匹配目标注解的名称或参数。 代码示例 import com.github.javaparser.StaticJavaParser; import com.github.javaparser.ast.CompilationUnit; import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration; import java.io.File; public class AnnotationParser { public static void main(String[] args) throws Exception { // 1. 解析Java文件 CompilationUnit cu = StaticJavaParser.parse(new File("YourClass.java")); // 2. 遍历所有类声明 cu.findAll(ClassOrInterfaceDeclaration.class).forEach(clazz -> { // 3. 检查类是否包含@RestController注解 boolean hasRestController = clazz.getAnnotations().stream() .anyMatch(annotation -> annotation.getNameAsString().equals("RestController") ); System.out.println("Class has @RestController: " + hasRestController); }); } } 2. 解析注解的细节 注解名称匹配 注解名称需与源代码中的写法一致（如 "RestController"而非全限定名 org.springframework.web.bind.annotation.RestController）。若需处理全限定名，需检查注解的 QualifiedName。 获取注解参数 若注解带参数（如 @RequestMapping("/path")），可提取参数值：\n'><link rel="shortcut icon" href=/github.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label="Toggle Menu">
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu_24626920ee18669e.png width=300 height=300 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>飞鸿踏雪泥</a></h1><h2 class=site-description>没有记录，就没有发生</h2></div></header><ol class=menu-social><li><a href=https://leetcode.cn/u/dyhes/ target=_blank title=LeetCode rel=me><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 13h7.5"/><path d="M9.424 7.268l4.999-4.999"/><path d="M16.633 16.644l-2.402 2.415a3.189 3.189.0 01-4.524.0l-3.77-3.787a3.223 3.223.0 010-4.544l3.77-3.787a3.189 3.189.0 014.524.0l2.302 2.313"/></svg></a></li><li><a href=https://github.com/dyhes target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=mailto:dyheslin@gmail.com target=_blank title=Gmail rel=me><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-gmail"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16 20h3a1 1 0 001-1V5a1 1 0 00-1-1h-3v16z"/><path d="M5 20h3V4H5A1 1 0 004 5v14a1 1 0 001 1z"/><path d="M16 4l-4 4-4-4"/><path d="M4 6.5l8 7.5 8-7.5"/></svg></a></li><li><a href=mailto:1325574784@qq.com target=_blank title=Mail rel=me><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 19H5a2 2 0 01-2-2V7a2 2 0 012-2h14a2 2 0 012 2v5.5"/><path d="M3 7l9 6 9-6"/><path d="M19 16l-2 3h4l-2 3"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/about/><svg class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>About</span></a></li><li><a href=/categories/><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+<span>Categories</span></a></li><li><a href=/tags/><svg class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11 3l9 9a1.5 1.5.0 010 2l-6 6a1.5 1.5.0 01-2 0L3 11V7a4 4 0 014-4h4"/><circle cx="9" cy="9" r="2"/></svg>
+<span>Tags</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>Dark Mode</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">Table of contents</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#javaparser-注解>JavaParser 注解</a><ol><li><a href=#1-基本解析流程>1. 基本解析流程</a><ol><li><a href=#步骤概述>步骤概述</a></li><li><a href=#代码示例>代码示例</a></li></ol></li><li><a href=#2-解析注解的细节>2. 解析注解的细节</a><ol><li><a href=#注解名称匹配>注解名称匹配</a></li><li><a href=#获取注解参数>获取注解参数</a></li><li><a href=#获取注解位置>获取注解位置</a></li></ol></li><li><a href=#3-扩展应用场景>3. 扩展应用场景</a><ol><li><a href=#方法字段级注解>方法/字段级注解</a></li><li><a href=#依赖配置>依赖配置</a></li></ol></li><li><a href=#4-注意事项>4. 注意事项</a></li></ol></li><li><a href=#visitor>Visitor</a><ol><li><a href=#1-重构为访问者模式>1. 重构为访问者模式</a><ol><li><a href=#步骤说明>步骤说明</a></li><li><a href=#重构代码>重构代码</a></li><li><a href=#关键改进>关键改进</a></li></ol></li><li><a href=#2-访问者模式的效率分析>2. 访问者模式的效率分析</a><ol><li><a href=#优势场景>优势场景</a></li><li><a href=#潜在开销>潜在开销</a></li></ol></li><li><a href=#3-何时使用访问者模式>3. 何时使用访问者模式？</a></li><li><a href=#4-性能对比结论>4. 性能对比结论</a></li></ol></li><li><a href=#统合>统合</a><ol><li><a href=#-一多注解检查的访问者模式实现>🔧 一、多注解检查的访问者模式实现</a><ol><li><a href=#1-核心设计思路>1. 核心设计思路</a></li><li><a href=#2-代码实现示例>2. 代码实现示例</a></li></ol></li><li><a href=#-二关键技术点解析>⚙️ 二、关键技术点解析</a><ol><li><a href=#1-双重分派机制>1. 双重分派机制</a></li><li><a href=#2-注解参数提取>2. 注解参数提取</a></li><li><a href=#3-支持嵌套注解>3. 支持嵌套注解</a></li></ol></li><li><a href=#-三性能与扩展性优化>🚀 三、性能与扩展性优化</a><ol><li><a href=#1-避免重复遍历>1. 避免重复遍历</a></li><li><a href=#2-动态扩展新注解>2. 动态扩展新注解</a></li><li><a href=#3-缓存优化>3. 缓存优化</a></li></ol></li><li><a href=#-四对比过程式代码的优势>✅ 四、对比过程式代码的优势</a></li><li><a href=#-五总结>💎 五、总结</a></li></ol></li><li><a href=#高效>高效</a><ol><li><a href=#-一优化方案组合访问者与状态共享>🔧 一、优化方案：组合访问者与状态共享</a><ol><li><a href=#1-单次遍历多操作核心优化>1. 单次遍历多操作（核心优化）</a></li><li><a href=#2-节点访问优化>2. 节点访问优化</a></li><li><a href=#3-状态共享与结果聚合>3. 状态共享与结果聚合</a></li></ol></li><li><a href=#-二性能对比与适用场景>⚙️ 二、性能对比与适用场景</a></li><li><a href=#-三扩展优化建议>🚀 三、扩展优化建议</a></li><li><a href=#-总结>💎 总结</a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/snow/ style=background-color:#aa6a4c;color:>踏雪泥
+</a><a href=/categories/willow/ style=background-color:#dc9123;color:>满城风絮</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/shopeejava-parser/>【Shopee】Java Parser</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Aug 18, 2025</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>5 minute read</time></div></footer></div></header><section class=article-content><h2 id=javaparser-注解>JavaParser 注解</h2><p>要使用 <code>com.github.javaparser.JavaParser</code>解析特定注解（如 <code>@RestController</code>），需通过解析 Java 源代码的抽象语法树（AST）并遍历目标元素（类、方法、字段）的注解列表。以下是具体步骤和代码示例：</p><hr><h3 id=1-基本解析流程>1. 基本解析流程</h3><h4 id=步骤概述>步骤概述</h4><ol><li><strong>解析源代码</strong>：将 Java 文件或字符串解析为 <code>CompilationUnit</code>（AST 的根节点）。</li><li><strong>定位目标元素</strong>：遍历 AST 找到需要检查的类、方法或字段。</li><li><strong>检查注解</strong>：遍历元素的注解列表，匹配目标注解的名称或参数。</li></ol><h4 id=代码示例>代码示例</h4><pre tabindex=0><code>import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import java.io.File;
+
+public class AnnotationParser {
+    public static void main(String[] args) throws Exception {
+        // 1. 解析Java文件
+        CompilationUnit cu = StaticJavaParser.parse(new File(&#34;YourClass.java&#34;));
+        
+        // 2. 遍历所有类声明
+        cu.findAll(ClassOrInterfaceDeclaration.class).forEach(clazz -&gt; {
+            // 3. 检查类是否包含@RestController注解
+            boolean hasRestController = clazz.getAnnotations().stream()
+                .anyMatch(annotation -&gt; 
+                    annotation.getNameAsString().equals(&#34;RestController&#34;)
+                );
+            System.out.println(&#34;Class has @RestController: &#34; + hasRestController);
+        });
+    }
+}
+</code></pre><hr><h3 id=2-解析注解的细节>2. 解析注解的细节</h3><h4 id=注解名称匹配>注解名称匹配</h4><ul><li>注解名称需与源代码中的写法一致（如 <code>"RestController"</code>而非全限定名 <code>org.springframework.web.bind.annotation.RestController</code>）。若需处理全限定名，需检查注解的 <code>QualifiedName</code>。</li></ul><h4 id=获取注解参数>获取注解参数</h4><p>若注解带参数（如 <code>@RequestMapping("/path")</code>），可提取参数值：</p><pre tabindex=0><code>clazz.getAnnotations().forEach(annotation -&gt; {
+    if (annotation.getNameAsString().equals(&#34;RequestMapping&#34;)) {
+        annotation.ifSingleMemberValueExpr(expr -&gt; {
+            String path = expr.toString(); // 例如：获取 &#34;/path&#34;
+            System.out.println(&#34;Path: &#34; + path);
+        });
+    }
+});
+</code></pre><p>此处 <code>ifSingleMemberValueExpr</code>适用于单参数注解（如 <code>@RequestMapping</code>）。多参数注解需遍历键值对 。</p><h4 id=获取注解位置>获取注解位置</h4><p>通过 <code>getRange()</code>获取注解在源代码中的行号：</p><pre tabindex=0><code>annotation.getRange().ifPresent(range -&gt; {
+    int startLine = range.begin.line;
+    System.out.println(&#34;Annotation at line: &#34; + startLine);
+});
+</code></pre><hr><h3 id=3-扩展应用场景>3. 扩展应用场景</h3><h4 id=方法字段级注解>方法/字段级注解</h4><p>类似地，可检查方法或字段的注解：</p><pre tabindex=0><code>cu.findAll(MethodDeclaration.class).forEach(method -&gt; {
+    boolean hasMapping = method.getAnnotations().stream()
+        .anyMatch(anno -&gt; anno.getNameAsString().equals(&#34;GetMapping&#34;));
+    System.out.println(&#34;Method has @GetMapping: &#34; + hasMapping);
+});
+</code></pre><h4 id=依赖配置>依赖配置</h4><p>需在项目中添加 JavaParser 依赖（Maven）：</p><pre tabindex=0><code>&lt;dependency&gt;
+    &lt;groupId&gt;com.github.javaparser&lt;/groupId&gt;
+    &lt;artifactId&gt;javaparser-core&lt;/artifactId&gt;
+    &lt;version&gt;3.28.0&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre><hr><h3 id=4-注意事项>4. 注意事项</h3><ul><li><strong>注解名称匹配</strong>：需考虑导入语句（如 <code>import org.springframework.web.bind.annotation.*;</code>），否则需检查全限定名。</li><li><strong>嵌套注解</strong>：若注解嵌套在组合注解中（如 <code>@SpringBootApplication</code>包含 <code>@RestController</code>），需递归解析 。</li><li><strong>参数类型处理</strong>：注解参数可能是字符串、数组或枚举，需调用 <code>asStringLiteralExpr()</code>、<code>asArrayInitializerExpr()</code>等方法转换 。</li></ul><p>通过上述方法，可灵活解析任意注解及其属性，适用于代码审计、文档生成等场景。</p><h2 id=visitor>Visitor</h2><p>要将给定的JavaParser代码转换为访问者模式（Visitor Pattern）形式，需通过定义自定义访问者类来解耦AST遍历与注解检查逻辑。以下为重构后的代码及效率分析：</p><hr><h3 id=1-重构为访问者模式>1. 重构为访问者模式</h3><h4 id=步骤说明>步骤说明</h4><ol><li><p><strong>定义注解访问者类</strong>
+继承<code>VoidVisitorAdapter</code>，重写<code>visit</code>方法处理特定节点（如类声明）的注解检查。</p></li><li><p><strong>解耦遍历与操作</strong>
+将注解检查逻辑封装在访问者内部，避免在<code>main</code>方法中混合遍历与业务逻辑。</p></li><li><p><strong>优化遍历过程</strong>
+通过访问者模式自动递归遍历AST，无需手动调用<code>findAll</code>。</p></li></ol><h4 id=重构代码>重构代码</h4><pre tabindex=0><code>import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import java.io.File;
+
+// 自定义访问者：检查@RestController注解
+class RestControllerVisitor extends VoidVisitorAdapter&lt;Void&gt; {
+    @Override
+    public void visit(ClassOrInterfaceDeclaration clazz, Void arg) {
+        super.visit(clazz, arg);
+        boolean hasRestController = clazz.getAnnotations().stream()
+            .anyMatch(anno -&gt; anno.getNameAsString().equals(&#34;RestController&#34;));
+        System.out.println(&#34;Class &#34; + clazz.getName() + &#34; has @RestController: &#34; + hasRestController);
+    }
+}
+
+public class AnnotationParser {
+    public static void main(String[] args) throws Exception {
+        CompilationUnit cu = StaticJavaParser.parse(new File(&#34;YourClass.java&#34;));
+        // 使用访问者遍历AST
+        RestControllerVisitor visitor = new RestControllerVisitor();
+        visitor.visit(cu, null);
+    }
+}
+</code></pre><h4 id=关键改进>关键改进</h4><ul><li><strong>关注点分离</strong>：注解检查逻辑独立封装在<code>RestControllerVisitor</code>中。</li><li><strong>隐式递归遍历</strong>：访问者自动处理AST的递归遍历，避免手动迭代。</li><li><strong>扩展性</strong>：新增操作（如方法/字段注解检查）只需添加新访问者，无需修改原有代码。</li></ul><hr><h3 id=2-访问者模式的效率分析>2. 访问者模式的效率分析</h3><h4 id=优势场景>优势场景</h4><ol><li><p><strong>复杂操作优化</strong></p><ul><li>当需对AST进行<strong>多种操作</strong>（如同时检查注解、统计方法数）时，访问者模式避免重复遍历，效率更高。</li><li>例如：在单次遍历中，多个访问者可协同处理不同任务（通过<code>CompositeVisitor</code>组合）。</li></ul></li><li><p><strong>局部遍历控制</strong>
+访问者可跳过无关节点（如忽略方法内部代码），减少不必要的子树解析。</p></li><li><p><strong>缓存优化</strong>
+JavaParser内置的访问者实现（如<code>VoidVisitorAdapter</code>）已优化遍历算法，减少AST解析开销。</p></li></ol><h4 id=潜在开销>潜在开销</h4><ul><li><strong>小规模文件</strong>：若仅检查单个注解，<strong>过程式代码（原代码）更轻量</strong>，因访问者模式需创建额外类及调用栈。</li><li><strong>简单操作</strong>：单一操作（如仅检查类注解）时，访问者模式因双分派机制（<code>accept-visit</code>调用链）略有性能损耗。</li></ul><hr><h3 id=3-何时使用访问者模式>3. 何时使用访问者模式？</h3><div class=table-wrapper><table><thead><tr><th><strong>场景</strong></th><th><strong>推荐方案</strong></th><th><strong>原因</strong></th></tr></thead><tbody><tr><td>单一简单操作（如检查单个注解）</td><td><strong>过程式遍历</strong></td><td>代码简洁，无额外类开销。</td></tr><tr><td>复杂/多操作（如代码审查工具）</td><td><strong>访问者模式</strong></td><td>避免重复遍历，逻辑解耦，扩展性强。</td></tr><tr><td>需深度定制遍历逻辑</td><td><strong>访问者模式</strong></td><td>可覆盖<code>visit</code>方法控制节点访问顺序（如跳过子节点）。</td></tr></tbody></table></div><hr><h3 id=4-性能对比结论>4. 性能对比结论</h3><p>✅ <strong>访问者模式更高效的情况</strong>：</p><ul><li>需执行<strong>多个操作</strong>（如同时检查注解+生成文档）。</li><li>项目<strong>持续扩展</strong>（需新增AST操作）。</li><li>需<strong>精细控制遍历路径</strong>（如忽略某些节点）。</li></ul><p>❌ <strong>原过程式代码更高效的情况</strong>：</p><ul><li>仅需<strong>一次性简单查询</strong>（如单注解检查）。</li><li>目标文件<strong>规模极小</strong>（&lt;100行代码）。</li></ul><blockquote><p><strong>建议</strong>：大型项目或复杂工具（如代码分析器）优先使用访问者模式；小型脚本可保留过程式代码。</p></blockquote><h2 id=统合>统合</h2><p>在访问者模式中实现对多种不同类型注解（如 <code>@RestController</code>和 <code>@GetMapping</code>）的检查，需通过 <strong>分层访问者设计</strong> 和 <strong>类型分派机制</strong> 实现高效且解耦的代码结构。以下是具体实现方案和优化建议：</p><hr><h3 id=-一多注解检查的访问者模式实现>🔧 一、多注解检查的访问者模式实现</h3><h4 id=1-核心设计思路>1. 核心设计思路</h4><ul><li><strong>统一访问接口</strong>：定义 <code>AnnotationVisitor</code>接口，声明对不同注解的访问方法。</li><li><strong>具体访问者实现</strong>：为每类注解创建独立访问者（如 <code>RestControllerVisitor</code>、<code>GetMappingVisitor</code>），实现注解检查逻辑。</li><li><strong>AST 节点分派</strong>：在类/方法节点中调用访问者的对应方法，实现双重分派（节点类型 + 注解类型）。</li></ul><h4 id=2-代码实现示例>2. 代码实现示例</h4><pre tabindex=0><code>import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+
+// 1. 定义注解访问者接口
+interface AnnotationVisitor {
+    void visitRestController(ClassOrInterfaceDeclaration clazz);
+    void visitGetMapping(MethodDeclaration method);
+}
+
+// 2. 实现具体访问者（检查 @RestController）
+class RestControllerVisitorImpl implements AnnotationVisitor {
+    @Override
+    public void visitRestController(ClassOrInterfaceDeclaration clazz) {
+        boolean hasAnnotation = clazz.getAnnotations().stream()
+            .anyMatch(anno -&gt; anno.getNameAsString().equals(&#34;RestController&#34;));
+        System.out.println(&#34;Class has @RestController: &#34; + hasAnnotation);
+    }
+
+    @Override
+    public void visitGetMapping(MethodDeclaration method) {} // 无需实现
+}
+
+// 3. 实现具体访问者（检查 @GetMapping）
+class GetMappingVisitorImpl implements AnnotationVisitor {
+    @Override
+    public void visitRestController(ClassOrInterfaceDeclaration clazz) {} // 无需实现
+
+    @Override
+    public void visitGetMapping(MethodDeclaration method) {
+        boolean hasAnnotation = method.getAnnotations().stream()
+            .anyMatch(anno -&gt; anno.getNameAsString().equals(&#34;GetMapping&#34;));
+        System.out.println(&#34;Method has @GetMapping: &#34; + hasAnnotation);
+    }
+}
+
+// 4. AST 节点访问者（分派注解检查）
+class AnnotationCheckVisitor extends VoidVisitorAdapter&lt;AnnotationVisitor&gt; {
+    @Override
+    public void visit(ClassOrInterfaceDeclaration clazz, AnnotationVisitor visitor) {
+        super.visit(clazz, visitor);
+        visitor.visitRestController(clazz); // 分派到具体注解检查
+    }
+
+    @Override
+    public void visit(MethodDeclaration method, AnnotationVisitor visitor) {
+        super.visit(method, visitor);
+        visitor.visitGetMapping(method); // 分派到具体注解检查
+    }
+}
+
+// 5. 客户端调用
+public class Main {
+    public static void main(String[] args) {
+        CompilationUnit cu = StaticJavaParser.parse(&#34;/* 源代码 */&#34;);
+        AnnotationCheckVisitor dispatcher = new AnnotationCheckVisitor();
+
+        // 组合多个注解检查
+        AnnotationVisitor[] visitors = {
+            new RestControllerVisitorImpl(),
+            new GetMappingVisitorImpl()
+        };
+
+        // 单次遍历执行所有检查
+        for (AnnotationVisitor visitor : visitors) {
+            cu.accept(dispatcher, visitor);
+        }
+    }
+}
+</code></pre><hr><h3 id=-二关键技术点解析>⚙️ 二、关键技术点解析</h3><h4 id=1-双重分派机制>1. 双重分派机制</h4><ul><li><strong>第一次分派</strong>：AST 节点（如 <code>ClassOrInterfaceDeclaration</code>）的 <code>accept()</code>方法调用访问者的 <code>visit()</code>。</li><li><strong>第二次分派</strong>：访问者的 <code>visitRestController()</code>或 <code>visitGetMapping()</code>处理具体注解逻辑。</li></ul><h4 id=2-注解参数提取>2. 注解参数提取</h4><p>若需检查注解参数（如 <code>@GetMapping("/path")</code>），在具体访问者中解析 <code>AnnotationExpr</code>：</p><pre tabindex=0><code>// 在 GetMappingVisitorImpl 中
+@Override
+public void visitGetMapping(MethodDeclaration method) {
+    method.getAnnotations().forEach(anno -&gt; {
+        if (&#34;GetMapping&#34;.equals(anno.getNameAsString())) {
+            anno.ifSingleMemberValueExpr(expr -&gt; {
+                String path = expr.asStringLiteralExpr().asString();
+                System.out.println(&#34;Path: &#34; + path);
+            });
+        }
+    });
+}
+</code></pre><h4 id=3-支持嵌套注解>3. 支持嵌套注解</h4><p>若注解嵌套（如 <code>@RequestMapping(method = RequestMethod.GET)</code>），需递归解析：</p><pre tabindex=0><code>anno.getChildNodes().stream()
+    .filter(node -&gt; node instanceof AnnotationExpr)
+    .map(node -&gt; (AnnotationExpr) node)
+    .forEach(nestedAnno -&gt; { /* 处理嵌套 */ });
+</code></pre><hr><h3 id=-三性能与扩展性优化>🚀 三、性能与扩展性优化</h3><h4 id=1-避免重复遍历>1. 避免重复遍历</h4><ul><li><strong>单次遍历多检查</strong>：通过组合模式，在单次 AST 遍历中执行所有注解检查，减少 I/O 和解析开销。</li><li><strong>局部解析控制</strong>：在访问者中跳过无关节点（如字段声明），仅遍历类和方法节点。</li></ul><h4 id=2-动态扩展新注解>2. 动态扩展新注解</h4><p>新增注解检查只需两步：</p><ol><li>在 <code>AnnotationVisitor</code>接口添加新方法（如 <code>visitPostMapping()</code>）。</li><li>实现新的具体访问者类（如 <code>PostMappingVisitorImpl</code>），无需修改现有代码。</li></ol><h4 id=3-缓存优化>3. 缓存优化</h4><ul><li><strong>注解名称缓存</strong>：预加载常用注解名（如 <code>RestController</code>、<code>GetMapping</code>），避免重复字符串比较。</li><li><strong>AST 缓存</strong>：对同一文件多次检查时，复用 <code>CompilationUnit</code>对象。</li></ul><hr><h3 id=-四对比过程式代码的优势>✅ 四、对比过程式代码的优势</h3><div class=table-wrapper><table><thead><tr><th><strong>场景</strong></th><th><strong>访问者模式</strong></th><th><strong>过程式代码</strong></th></tr></thead><tbody><tr><td>多注解检查</td><td>✅ 单次遍历完成所有检查</td><td>❌ 需多次遍历或复杂条件嵌套</td></tr><tr><td>新增注解类型</td><td>✅ 扩展新类即可，符合开闭原则</td><td>❌ 需修改原有逻辑</td></tr><tr><td>复杂代码结构</td><td>✅ 自动处理嵌套类、匿名类</td><td>❌ 需手动递归遍历</td></tr><tr><td>性能（大文件）</td><td>✅ 通过组合访问者优化</td><td>❌ 多次解析开销大</td></tr></tbody></table></div><hr><h3 id=-五总结>💎 五、总结</h3><p>在访问者模式中实现多注解检查的核心是：</p><ol><li><strong>分层设计</strong>：通过 <code>AnnotationVisitor</code>接口解耦注解类型与检查逻辑。</li><li><strong>双重分派</strong>：利用 AST 节点的 <code>accept()</code>方法动态调用具体注解处理器。</li><li><strong>组合优化</strong>：在单次遍历中组合多个访问者，避免重复解析。</li></ol><p>此方案适用于静态代码分析、API 路由扫描等场景，兼具<strong>高扩展性</strong>与<strong>高性能</strong>，尤其适合大型项目中的注解自动化处理。</p><h2 id=高效>高效</h2><p>针对代码中多个 <code>ClassOrInterfaceDeclaration</code>和 <code>MethodDeclaration</code>的高效组合问题，可通过以下优化策略提升性能与可维护性：</p><hr><h3 id=-一优化方案组合访问者与状态共享>🔧 一、优化方案：组合访问者与状态共享</h3><h4 id=1-单次遍历多操作核心优化>1. 单次遍历多操作（核心优化）</h4><p><strong>问题</strong>：原代码对每个访问者独立遍历 AST，导致多次解析开销。</p><p><strong>解决</strong>：创建 <strong>复合访问者</strong>，在单次遍历中执行所有检查：</p><pre tabindex=0><code>public class CompositeAnnotationVisitor implements AnnotationVisitor {
+    private final List&lt;AnnotationVisitor&gt; visitors = new ArrayList&lt;&gt;();
+    
+    public void addVisitor(AnnotationVisitor visitor) {
+        visitors.add(visitor);
+    }
+
+    @Override
+    public void visitRestController(ClassOrInterfaceDeclaration clazz) {
+        visitors.forEach(v -&gt; v.visitRestController(clazz));
+    }
+
+    @Override
+    public void visitGetMapping(MethodDeclaration method) {
+        visitors.forEach(v -&gt; v.visitGetMapping(method));
+    }
+}
+
+// 客户端调用
+public static void main(String[] args) {
+    CompilationUnit cu = StaticJavaParser.parse(&#34;/* 源代码 */&#34;);
+    AnnotationCheckVisitor dispatcher = new AnnotationCheckVisitor();
+    
+    CompositeAnnotationVisitor composite = new CompositeAnnotationVisitor();
+    composite.addVisitor(new RestControllerVisitorImpl());
+    composite.addVisitor(new GetMappingVisitorImpl());
+    
+    // 仅需单次遍历
+    cu.accept(dispatcher, composite);
+}
+</code></pre><p><strong>优势</strong>：</p><ul><li>✅ <strong>避免重复遍历</strong>：AST 仅解析一次，性能提升显著；</li><li>✅ <strong>逻辑解耦</strong>：新增检查只需添加访问者，无需修改遍历逻辑。</li></ul><hr><h4 id=2-节点访问优化>2. 节点访问优化</h4><p><strong>问题</strong>：<code>AnnotationCheckVisitor</code>对每个节点无差别分派检查。</p><p><strong>解决</strong>：<strong>按需分派</strong>，仅对目标节点触发操作：</p><pre tabindex=0><code>class AnnotationCheckVisitor extends VoidVisitorAdapter&lt;AnnotationVisitor&gt; {
+    @Override
+    public void visit(ClassOrInterfaceDeclaration clazz, AnnotationVisitor visitor) {
+        super.visit(clazz, visitor);
+        if (visitor instanceof RestControllerVisitorImpl) { // 仅触发相关检查
+            visitor.visitRestController(clazz);
+        }
+    }
+
+    @Override
+    public void visit(MethodDeclaration method, AnnotationVisitor visitor) {
+        super.visit(method, visitor);
+        if (visitor instanceof GetMappingVisitorImpl) {
+            visitor.visitGetMapping(method);
+        }
+    }
+}
+</code></pre><p><strong>优势</strong>：</p><ul><li>⚡️ <strong>减少冗余调用</strong>：避免对非目标访问者执行空方法。</li></ul><hr><h4 id=3-状态共享与结果聚合>3. 状态共享与结果聚合</h4><p><strong>问题</strong>：各访问者独立输出结果，难以统一处理。</p><p><strong>解决</strong>：引入 <strong>共享上下文对象</strong> 聚合结果：</p><pre tabindex=0><code>class AnnotationContext {
+    public Map&lt;String, Boolean&gt; restControllerResults = new HashMap&lt;&gt;();
+    public Map&lt;String, Boolean&gt; getMappingResults = new HashMap&lt;&gt;();
+}
+
+class RestControllerVisitorImpl implements AnnotationVisitor {
+    private AnnotationContext context;
+    
+    public RestControllerVisitorImpl(AnnotationContext context) {
+        this.context = context;
+    }
+    
+    @Override
+    public void visitRestController(ClassOrInterfaceDeclaration clazz) {
+        boolean hasAnnotation = ...; // 检查逻辑
+        context.restControllerResults.put(clazz.getNameAsString(), hasAnnotation);
+    }
+}
+</code></pre><p><strong>使用方式</strong>：</p><pre tabindex=0><code>AnnotationContext context = new AnnotationContext();
+CompositeAnnotationVisitor composite = new CompositeAnnotationVisitor();
+composite.addVisitor(new RestControllerVisitorImpl(context));
+composite.addVisitor(new GetMappingVisitorImpl(context));
+</code></pre><p><strong>优势</strong>：</p><ul><li>💡 <strong>集中管理结果</strong>：便于后续生成报告或批量处理。</li></ul><hr><h3 id=-二性能对比与适用场景>⚙️ 二、性能对比与适用场景</h3><div class=table-wrapper><table><thead><tr><th><strong>方案</strong></th><th>时间复杂度</th><th>适用场景</th><th>优势</th></tr></thead><tbody><tr><td><strong>原方案（多次遍历）</strong></td><td>O(n×m)（n=节点数, m=访问者数）</td><td>简单检查，节点数少</td><td>实现简单</td></tr><tr><td><strong>复合访问者</strong></td><td>O(n)</td><td>多类型节点、大规模代码</td><td>避免重复遍历，性能最优</td></tr><tr><td><strong>按需分派</strong></td><td>O(n)（减少空调用）</td><td>访问者逻辑复杂且差异大</td><td>减少冗余操作</td></tr></tbody></table></div><hr><h3 id=-三扩展优化建议>🚀 三、扩展优化建议</h3><ol><li><p><strong>并行处理</strong> 对独立类声明启用多线程检查（线程安全前提下）：</p><pre tabindex=0><code>cu.findAll(ClassOrInterfaceDeclaration.class).parallelStream()
+   .forEach(clazz -&gt; composite.visitRestController(clazz));
+</code></pre><p><strong>适用场景</strong>：超大型项目（类数量 > 1000）。</p></li><li><p><strong>增量解析</strong> 仅解析含注解的节点（需结合符号解析）：</p><pre tabindex=0><code>cu.getTypes().stream()
+  .filter(type -&gt; type.getAnnotations().isNonEmpty())
+  .forEach(type -&gt; type.accept(dispatcher, composite));
+</code></pre><p><strong>优势</strong>：跳过无注解节点，减少 AST 遍历深度。</p></li><li><p><strong>缓存机制</strong> 复用已解析的 AST 结构：</p><pre tabindex=0><code>// 全局缓存 CompilationUnit
+private static Map&lt;String, CompilationUnit&gt; astCache = new ConcurrentHashMap&lt;&gt;();
+CompilationUnit cu = astCache.computeIfAbsent(filePath, 
+                    path -&gt; StaticJavaParser.parse(new File(path)));
+</code></pre><p><strong>适用场景</strong>：多次分析同一文件（如持续集成环境）。</p></li></ol><hr><h3 id=-总结>💎 总结</h3><p>高效组合多类与方法声明的核心策略：</p><ol><li><p><strong>复合访问者模式</strong> → 单次遍历完成多检查；</p></li><li><p><strong>按需分派</strong> → 避免对非目标访问者触发空操作；</p></li><li><p><strong>共享上下文</strong> → 统一管理检查结果。
+针对超大规模代码，可结合 <strong>并行处理</strong>、<strong>增量解析</strong> 和 <strong>AST缓存</strong> 进一步优化性能。此方案适用于静态分析工具、API 路由扫描等场景，兼顾效率与扩展性。</p></li></ol></section><footer class=article-footer><section class=article-tags><a href=/tags/shopee/>Shopee</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section><section class=article-lastmod><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<span>Last updated on Jun 23, 2026 14:55 CST</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>Related content</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/shopeeconcurrent-java/><div class=article-details><h2 class=article-title>【Shopee】Concurrent Java</h2></div></a></article><article><a href=/p/postopiamicro-services/><div class=article-details><h2 class=article-title>【Postopia】Micro-services</h2></div></a></article><article><a href=/p/shopeeannotations/><div class=article-details><h2 class=article-title>【Shopee】Annotations</h2></div></a></article><article><a href=/p/shopeethread/><div class=article-details><h2 class=article-title>【Shopee】Thread</h2></div></a></article><article><a href=/p/shopeeinsight-hub/><div class=article-details><h2 class=article-title>【Shopee】Insight Hub</h2></div></a></article></div></div></aside><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//hugo-theme-stack.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2026 飞鸿踏雪泥</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.30.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

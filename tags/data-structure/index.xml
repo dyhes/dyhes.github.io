@@ -1,0 +1,1463 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Data Structure on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/data-structure/</link><description>Recent content in Data Structure on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 23 Jun 2026 14:55:01 +0800</lastBuildDate><atom:link href="https://dyhes.github.io/tags/data-structure/index.xml" rel="self" type="application/rss+xml"/><item><title>【Data Structure】May</title><link>https://dyhes.github.io/p/data-structuremay/</link><pubDate>Sat, 30 May 2026 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/data-structuremay/</guid><description>&lt;h2 id="红黑树"&gt;红黑树
+&lt;/h2&gt;&lt;p&gt;红黑树是一种自平衡的二叉查找树，它在计算机科学中应用广泛，能保证在最坏情况下基本动态集合操作的时间复杂度为 O(log n)。下面从定义与性质、旋转操作、插入与修复、删除与修复、复杂度分析、以及实际应用等几个方面详细介绍。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="1-定义与基本性质"&gt;1. 定义与基本性质
+&lt;/h3&gt;&lt;p&gt;红黑树的每个节点除了包含关键字、左右孩子、父节点指针外，还带有一个&lt;strong&gt;颜色&lt;/strong&gt;属性，取值为红色（RED）或黑色（BLACK）。&lt;br&gt;
+它必须满足以下五条&lt;strong&gt;红黑树性质&lt;/strong&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;节点是红色或黑色&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;根节点是黑色&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;每个叶子节点（NIL）是黑色&lt;/strong&gt;。&lt;br&gt;
+这里的叶子节点是指表示空的孩子节点，通常用一个黑色的哨兵节点 &lt;code&gt;T.nil&lt;/code&gt; 代替，所有原本指向 &lt;code&gt;NULL&lt;/code&gt; 的指针都指向它。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;如果一个节点是红色，则它的两个子节点都是黑色&lt;/strong&gt;。&lt;br&gt;
+也就是说，不允许出现两个连续的红色节点（即“红—红”父子关系）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;从任一节点到其每个叶子的所有简单路径上，包含相同数目的黑色节点&lt;/strong&gt;。&lt;br&gt;
+该数目称为该节点的&lt;strong&gt;黑高&lt;/strong&gt;（black-height），记为 &lt;code&gt;bh(x)&lt;/code&gt;。整棵树的根节点的黑高定义为树的黑高。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这些性质保证了树的近似平衡：&lt;strong&gt;从根到最远叶子的最长可能路径长度不会超过最短可能路径长度的两倍&lt;/strong&gt;。&lt;br&gt;
+证明思路：最短路径全为黑节点（长度 &lt;code&gt;bh(root)&lt;/code&gt;），最长路径红黑相间（长度至多 &lt;code&gt;2 * bh(root)&lt;/code&gt;），从而高度上限为 &lt;code&gt;2 log₂(n+1)&lt;/code&gt;。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="2-红黑树的节点与结构"&gt;2. 红黑树的节点与结构
+&lt;/h3&gt;&lt;p&gt;典型实现中定义一个哨兵节点 &lt;code&gt;nil&lt;/code&gt;，颜色为黑，它的左右孩子和父指针可以指向自身或任意节点。所有原本是 &lt;code&gt;NULL&lt;/code&gt; 的指针都指向 &lt;code&gt;nil&lt;/code&gt;。根节点的父节点也是 &lt;code&gt;nil&lt;/code&gt;。这样可以在处理边界时简化代码。&lt;/p&gt;
+&lt;p&gt;每个节点的属性通常包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;key&lt;/code&gt;：关键字&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;color&lt;/code&gt;：RED 或 BLACK&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;left&lt;/code&gt;, &lt;code&gt;right&lt;/code&gt;, &lt;code&gt;p&lt;/code&gt;：指向左孩子、右孩子、父节点的指针&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="3-旋转操作"&gt;3. 旋转操作
+&lt;/h3&gt;&lt;p&gt;为了维护红黑性质，插入和删除时会用到&lt;strong&gt;左旋&lt;/strong&gt;和&lt;strong&gt;右旋&lt;/strong&gt;，它们可以在 O(1) 时间内改变树的结构而不破坏二叉查找树性质。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;左旋 (Left Rotate)&lt;/strong&gt;：对节点 &lt;code&gt;x&lt;/code&gt; 做左旋，假设其右孩子 &lt;code&gt;y&lt;/code&gt; 不是 &lt;code&gt;nil&lt;/code&gt;。&lt;br&gt;
+让 &lt;code&gt;y&lt;/code&gt; 成为子树的新根，&lt;code&gt;x&lt;/code&gt; 成为 &lt;code&gt;y&lt;/code&gt; 的左孩子，&lt;code&gt;y&lt;/code&gt; 原来的左子树变成 &lt;code&gt;x&lt;/code&gt; 的右子树。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;右旋 (Right Rotate)&lt;/strong&gt;：对节点 &lt;code&gt;y&lt;/code&gt; 做右旋，假设其左孩子 &lt;code&gt;x&lt;/code&gt; 不是 &lt;code&gt;nil&lt;/code&gt;。&lt;br&gt;
+让 &lt;code&gt;x&lt;/code&gt; 成为子树的新根，&lt;code&gt;y&lt;/code&gt; 成为 &lt;code&gt;x&lt;/code&gt; 的右孩子，&lt;code&gt;x&lt;/code&gt; 原来的右子树变成 &lt;code&gt;y&lt;/code&gt; 的左子树。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;旋转操作维持了中序遍历的顺序，是自平衡调整的基础。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="4-插入操作"&gt;4. 插入操作
+&lt;/h3&gt;&lt;p&gt;红黑树的插入首先按照普通二叉查找树的插入方法，将新节点 &lt;code&gt;z&lt;/code&gt; 插入并染成&lt;strong&gt;红色&lt;/strong&gt;，然后调用 &lt;strong&gt;插入修复&lt;/strong&gt; 过程 &lt;code&gt;RB-Insert-Fixup(T, z)&lt;/code&gt; 以恢复红黑性质。&lt;/p&gt;
+&lt;p&gt;插入后可能违反的性质只有两条：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;性质2：根节点必须是黑色（若 &lt;code&gt;z&lt;/code&gt; 是根且染成红色则违反）；&lt;/li&gt;
+&lt;li&gt;性质4：红色节点的孩子必须是黑色（若 &lt;code&gt;z&lt;/code&gt; 的父节点是红色则违反）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;修复过程的核心思想是不断向上移动冲突，主要通过考察 &lt;code&gt;z&lt;/code&gt; 的叔节点 &lt;code&gt;y&lt;/code&gt;（父节点的兄弟）的颜色进行分类处理：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;循环条件&lt;/strong&gt;：&lt;code&gt;z.p.color == RED&lt;/code&gt;&lt;br&gt;
+在循环中设 &lt;code&gt;z.p&lt;/code&gt; 是 &lt;code&gt;z.p.p&lt;/code&gt; 的左孩子或右孩子，两种情形对称。以父节点是左孩子为例：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;情况1&lt;/strong&gt;：叔节点 &lt;code&gt;y&lt;/code&gt; 是红色。&lt;br&gt;
+将父节点和叔节点都染黑，祖父节点染红，然后将 &lt;code&gt;z&lt;/code&gt; 指向祖父节点继续向上修复。&lt;br&gt;
+这相当于把黑高度向下“推”了一层。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;情况2&lt;/strong&gt;：叔节点 &lt;code&gt;y&lt;/code&gt; 是黑色，且 &lt;code&gt;z&lt;/code&gt; 是父节点的右孩子。&lt;br&gt;
+将 &lt;code&gt;z&lt;/code&gt; 指向父节点，并对新的 &lt;code&gt;z&lt;/code&gt; 做左旋，转化为情况3。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;情况3&lt;/strong&gt;：叔节点 &lt;code&gt;y&lt;/code&gt; 是黑色，且 &lt;code&gt;z&lt;/code&gt; 是父节点的左孩子。&lt;br&gt;
+将父节点染黑，祖父节点染红，并对祖父节点做右旋。此时修复完成，循环终止。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;循环结束后将根节点强制染黑，保证性质2。&lt;/p&gt;
+&lt;p&gt;插入时间复杂度：查找插入位置 O(log n)，修复过程每轮要么向上移动两层（情况1），要么最多执行两次旋转后终止（情况2+3），总共 O(log n)。因此&lt;strong&gt;插入为 O(log n)&lt;/strong&gt;。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="5-删除操作"&gt;5. 删除操作
+&lt;/h3&gt;&lt;p&gt;删除比插入更复杂。首先按二叉查找树的方式删除节点 &lt;code&gt;z&lt;/code&gt;，记录被实际删除或移动的节点 &lt;code&gt;y&lt;/code&gt; 及其颜色，并记录一个“替身”节点 &lt;code&gt;x&lt;/code&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;若 &lt;code&gt;z&lt;/code&gt; 只有一个孩子或没有孩子，则 &lt;code&gt;y = z&lt;/code&gt;；否则 &lt;code&gt;y&lt;/code&gt; 是 &lt;code&gt;z&lt;/code&gt; 的后继，&lt;code&gt;y&lt;/code&gt; 的原始颜色被保存。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;x&lt;/code&gt; 是 &lt;code&gt;y&lt;/code&gt; 唯一的孩子（如果 &lt;code&gt;y&lt;/code&gt; 有非 &lt;code&gt;nil&lt;/code&gt; 孩子）或者是 &lt;code&gt;nil&lt;/code&gt;（如果 &lt;code&gt;y&lt;/code&gt; 没有孩子）。&lt;/li&gt;
+&lt;li&gt;若 &lt;code&gt;y&lt;/code&gt; 的原始颜色为&lt;strong&gt;黑色&lt;/strong&gt;，则删除或移动 &lt;code&gt;y&lt;/code&gt; 会导致经过原来 &lt;code&gt;y&lt;/code&gt; 的路径上黑节点数减少1，可能违反红黑性质，需要调用 &lt;strong&gt;删除修复&lt;/strong&gt; 过程 &lt;code&gt;RB-Delete-Fixup(T, x)&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;删除修复的核心是通过 &lt;code&gt;x&lt;/code&gt; 节点（它目前占据 &lt;code&gt;y&lt;/code&gt; 原来的位置）“额外附带一层黑色”，即看作双黑色或红黑色，使路径黑高暂时得到补偿。修复过程逐步将这层额外黑色向上推移，或者通过旋转和变色消除它。&lt;/p&gt;
+&lt;p&gt;修复循环条件：&lt;code&gt;x&lt;/code&gt; 不是根且 &lt;code&gt;x.color == BLACK&lt;/code&gt;。在循环中根据 &lt;code&gt;x&lt;/code&gt; 是其父节点的左/右孩子分对称情况，以 &lt;code&gt;x&lt;/code&gt; 是左孩子为例：&lt;/p&gt;
+&lt;p&gt;设兄弟节点 &lt;code&gt;w = x.p.right&lt;/code&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;情况1&lt;/strong&gt;：&lt;code&gt;w&lt;/code&gt; 是红色。&lt;br&gt;
+将 &lt;code&gt;w&lt;/code&gt; 染黑，&lt;code&gt;x.p&lt;/code&gt; 染红，对 &lt;code&gt;x.p&lt;/code&gt; 左旋，更新 &lt;code&gt;w&lt;/code&gt; 为新的兄弟节点。转化为情况2、3或4。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;情况2&lt;/strong&gt;：&lt;code&gt;w&lt;/code&gt; 是黑色，且 &lt;code&gt;w&lt;/code&gt; 的两个孩子都是黑色。&lt;br&gt;
+将 &lt;code&gt;w&lt;/code&gt; 染红，让 &lt;code&gt;x&lt;/code&gt; 指向 &lt;code&gt;x.p&lt;/code&gt;，把额外黑色向上一层。循环继续。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;情况3&lt;/strong&gt;：&lt;code&gt;w&lt;/code&gt; 是黑色，&lt;code&gt;w&lt;/code&gt; 的左孩子红色、右孩子黑色。&lt;br&gt;
+将 &lt;code&gt;w.left&lt;/code&gt; 染黑，&lt;code&gt;w&lt;/code&gt; 染红，对 &lt;code&gt;w&lt;/code&gt; 右旋，更新 &lt;code&gt;w&lt;/code&gt;。转化为情况4。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;情况4&lt;/strong&gt;：&lt;code&gt;w&lt;/code&gt; 是黑色，&lt;code&gt;w&lt;/code&gt; 的右孩子是红色。&lt;br&gt;
+将 &lt;code&gt;w&lt;/code&gt; 的颜色设为 &lt;code&gt;x.p&lt;/code&gt; 的颜色，&lt;code&gt;x.p&lt;/code&gt; 染黑，&lt;code&gt;w.right&lt;/code&gt; 染黑，对 &lt;code&gt;x.p&lt;/code&gt; 左旋。此时额外黑色被完全消除，将 &lt;code&gt;x&lt;/code&gt; 设为根以终止循环。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;循环结束后将 &lt;code&gt;x&lt;/code&gt; 强制染黑。&lt;/p&gt;
+&lt;p&gt;删除时间复杂度：查找后继等 O(log n)，修复最多进行三次旋转（情况1+情况4组合），循环最多 O(log n) 次（情况2上移），总体 &lt;strong&gt;O(log n)&lt;/strong&gt;。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="6-复杂度分析与比较"&gt;6. 复杂度分析与比较
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;空间复杂度&lt;/strong&gt;：O(n)，每个节点存储颜色等常数额外信息。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;查找、插入、删除&lt;/strong&gt;：均为 O(log n) 最坏情况时间。&lt;/li&gt;
+&lt;li&gt;与 AVL 树相比：红黑树的平衡条件更弱（最长路径≤2倍最短路径），因此插入和删除时旋转次数通常更少（插入最多2次旋转，删除最多3次旋转），更适合写操作频繁的场景；AVL 树更严格平衡，查找稍快，但旋转开销较大。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="7-常见应用"&gt;7. 常见应用
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;标准库中的有序关联容器&lt;/strong&gt;：&lt;br&gt;
+C++ STL 的 &lt;code&gt;std::map&lt;/code&gt;、&lt;code&gt;std::set&lt;/code&gt;、&lt;code&gt;std::multimap&lt;/code&gt;、&lt;code&gt;std::multiset&lt;/code&gt; 通常用红黑树实现；&lt;br&gt;
+Java 的 &lt;code&gt;TreeMap&lt;/code&gt;、&lt;code&gt;TreeSet&lt;/code&gt; 同样基于红黑树。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Linux 内核&lt;/strong&gt;：完全公平调度器（CFS）用红黑树管理进程的虚拟运行时间；&lt;code&gt;epoll&lt;/code&gt; 事件管理中也使用红黑树来快速查找文件描述符。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;其他&lt;/strong&gt;：实现定时器管理、区间树、一致性哈希中虚拟节点的组织等，凡需要动态维护有序数据且要求稳定 O(log n) 性能的场景，红黑树都是常用选择。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="8-总结"&gt;8. 总结
+&lt;/h3&gt;&lt;p&gt;红黑树通过在二叉查找树上附加颜色属性并强制五条性质，用较少的旋转代价维持了近似平衡，保证了查找、插入、删除的最坏情况 O(log n) 性能。其设计巧妙地利用颜色约束和局部旋转，将破坏性质的影响控制在常数级调整范围内，是现代计算机系统中实现有序字典和有序集合的首选数据结构之一。&lt;/p&gt;
+&lt;h2 id="同构二叉树"&gt;同构二叉树
+&lt;/h2&gt;&lt;p&gt;在数据结构中，&lt;strong&gt;同构的二叉树&lt;/strong&gt;（Isomorphic Binary Trees）是指：两棵二叉树可以通过&lt;strong&gt;交换某些节点的左右子树&lt;/strong&gt;，最终变得&lt;strong&gt;结构和节点值完全相同&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;简单来说，它们本质上是“镜像可互换”的等价树。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id="递归定义判断标准"&gt;递归定义（判断标准）
+&lt;/h4&gt;&lt;p&gt;两棵二叉树 (T_1) 和 (T_2) 同构，当且仅当满足以下&lt;strong&gt;任一&lt;/strong&gt;条件：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;均为空树&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;根节点值相等&lt;/strong&gt;，并且满足以下&lt;strong&gt;两种情况之一&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;(T_1) 的左子树与 (T_2) 的左子树同构，且 (T_1) 的右子树与 (T_2) 的右子树同构（不发生交换）。&lt;/li&gt;
+&lt;li&gt;(T_1) 的左子树与 (T_2) 的右子树同构，且 (T_1) 的右子树与 (T_2) 的左子树同构（发生交换）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;注意：如果只要求&lt;strong&gt;结构&lt;/strong&gt;相同而忽略节点值，则称为“结构同构”，上面说的是包含值的同构，是最常见的定义。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h4 id="举例说明"&gt;举例说明
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;树 A&lt;/strong&gt;&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; 1
+/ \
+2 3
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;树 B&lt;/strong&gt;&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; 1
+/ \
+3 2
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这两棵树&lt;strong&gt;是同构的&lt;/strong&gt;：根节点都是1，A的左(2)与B的右(2)同构，A的右(3)与B的左(3)同构——相当于交换了一次左右孩子就完全相同了。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;树 C&lt;/strong&gt;&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; 1
+/
+2
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;树 D&lt;/strong&gt;&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; 1
+\
+2
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;它们也&lt;strong&gt;同构&lt;/strong&gt;：根同值，C的左与D的右对应，空与空对应。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;不同构的例子&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; 1 1
+/ \ / \
+2 3 2 4
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;根值相同，但子树中3和4不等价，无论交不交换左右，都无法完全匹配，因此不同构。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id="与相同相等二叉树的区别"&gt;与“相同/相等”二叉树的区别
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;相同（Identical）&lt;/strong&gt;：不允许交换左右，结构必须完全一致，对应位置值相等。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;同构（Isomorphic）&lt;/strong&gt;：允许在任意节点处交换左右子树，使得最终能重合。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所以，同构的条件比相同更宽松。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id="常见应用"&gt;常见应用
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;用于判断&lt;strong&gt;表达式树&lt;/strong&gt;在满足交换律（如加法、乘法）时的等价性。&lt;/li&gt;
+&lt;li&gt;在某些编译优化或树匹配算法中，允许“无关顺序”的比较。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如果需要，我可以再展开讲&lt;strong&gt;判断同构的递归算法&lt;/strong&gt;或&lt;strong&gt;时间复杂度的优化&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id="堆"&gt;堆
+&lt;/h2&gt;&lt;p&gt;堆是一种特殊的完全二叉树，常用数组存储。以&lt;strong&gt;最大堆&lt;/strong&gt;为例，每个节点的值都大于或等于其子节点的值（最小堆则相反）。构建一个堆通常有两种方法：&lt;strong&gt;逐个插入法&lt;/strong&gt;和&lt;strong&gt;从数组直接建堆（堆化）&lt;/strong&gt;。下面分别详细介绍。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="准备知识堆的数组表示"&gt;准备知识：堆的数组表示
+&lt;/h3&gt;&lt;p&gt;假设数组下标从 &lt;strong&gt;1&lt;/strong&gt; 开始（也可从0开始，以下均以1为例），节点 &lt;code&gt;i&lt;/code&gt; 的：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;父节点：&lt;code&gt;⌊i/2⌋&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;左孩子：&lt;code&gt;2i&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;右孩子：&lt;code&gt;2i+1&lt;/code&gt;
+堆要求除了最底层，其他层完全满，最底层节点靠左填充，因此数组中没有“空洞”。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="方法一逐个插入法自顶向下构建"&gt;方法一：逐个插入法（自顶向下构建）
+&lt;/h3&gt;&lt;p&gt;这种方法从&lt;strong&gt;空堆&lt;/strong&gt;开始，每次读入一个新元素，将它放到堆的末尾，然后通过**上浮（sift-up）**操作，让新元素不断与父节点比较并交换，直到满足堆的性质。&lt;/p&gt;
+&lt;h4 id="步骤"&gt;步骤
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;初始化空堆（数组为空或仅有哨兵）。&lt;/li&gt;
+&lt;li&gt;对于每个待插入的元素 &lt;code&gt;val&lt;/code&gt;：
+&lt;ul&gt;
+&lt;li&gt;将 &lt;code&gt;val&lt;/code&gt; 添加到数组末尾，&lt;code&gt;size&lt;/code&gt; 加1，设当前位置 &lt;code&gt;i = size&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;上浮循环&lt;/strong&gt;：当 &lt;code&gt;i &amp;gt; 1&lt;/code&gt; 且 &lt;code&gt;A[i] &amp;gt; A[i/2]&lt;/code&gt;（父节点）时，交换 &lt;code&gt;A[i]&lt;/code&gt; 与 &lt;code&gt;A[i/2]&lt;/code&gt;，然后 &lt;code&gt;i = i/2&lt;/code&gt;，继续向上比较。&lt;/li&gt;
+&lt;li&gt;直到 &lt;code&gt;A[i] ≤ A[i/2]&lt;/code&gt; 或 &lt;code&gt;i == 1&lt;/code&gt; 时停止。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="伪代码最大堆"&gt;伪代码（最大堆）
+&lt;/h4&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;Insert(A, val, size):
+size = size + 1
+A[size] = val
+i = size
+while i &amp;gt; 1 and A[i] &amp;gt; A[i/2]:
+swap(A[i], A[i/2])
+i = i / 2
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="时间复杂度"&gt;时间复杂度
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;每次插入最坏要沿着树高走到底，树高 ⌊log₂n⌋，单次插入 O(log n)。&lt;/li&gt;
+&lt;li&gt;构建含有 n 个元素的堆，要进行 n 次插入，总时间 &lt;strong&gt;O(n log n)&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;实际上，后期插入时堆已经较高，整体消耗近似为 n log n。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="适用场景"&gt;适用场景
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;数据流持续到来，无法事先知道全部元素，只能一个个加入。&lt;/li&gt;
+&lt;li&gt;在线算法、优先队列的动态增长。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="方法二从数组建堆自底向上堆化floyd-建堆法"&gt;方法二：从数组建堆（自底向上堆化，Floyd 建堆法）
+&lt;/h3&gt;&lt;p&gt;如果&lt;strong&gt;事先已经拿到了所有元素&lt;/strong&gt;，可以直接将整个数组当作一个未调整的完全二叉树，然后从最后一个非叶子节点开始，&lt;strong&gt;自底向上&lt;/strong&gt;依次对每个节点执行**下沉（sift-down）**操作，一次性调整成堆。&lt;/p&gt;
+&lt;h4 id="步骤-1"&gt;步骤
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;将所有元素依次放入数组 &lt;code&gt;A[1..n]&lt;/code&gt;（无须额外内存，就是原数组）。&lt;/li&gt;
+&lt;li&gt;找到最后一个非叶子节点的下标：&lt;code&gt;start = ⌊n/2⌋&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;对 &lt;code&gt;i&lt;/code&gt; 从 &lt;code&gt;start&lt;/code&gt; 下降到 &lt;code&gt;1&lt;/code&gt;，依次调用 &lt;code&gt;SiftDown(A, i, n)&lt;/code&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;下沉操作&lt;/strong&gt;：在 &lt;code&gt;i&lt;/code&gt; 及其左右孩子中找出最大值，若最大值不是 &lt;code&gt;i&lt;/code&gt;，则交换 &lt;code&gt;i&lt;/code&gt; 与最大孩子，然后递归地对被交换的孩子继续下沉，直到满足堆性质或到达叶子。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="伪代码最大堆-1"&gt;伪代码（最大堆）
+&lt;/h4&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;BuildHeap(A, n):
+for i = n/2 down to 1:
+SiftDown(A, i, n)
+SiftDown(A, i, n):
+while 2*i &amp;lt;= n: // 有左孩子
+maxIndex = i
+if A[2*i] &amp;gt; A[maxIndex]: maxIndex = 2*i
+if 2*i+1 &amp;lt;= n and A[2*i+1] &amp;gt; A[maxIndex]: maxIndex = 2*i+1
+if maxIndex == i:
+break // 已满足堆性质
+swap(A[i], A[maxIndex])
+i = maxIndex // 继续向下调整
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="为什么正确"&gt;为什么正确？
+&lt;/h4&gt;&lt;p&gt;当对节点 &lt;code&gt;i&lt;/code&gt; 执行下沉时，它的左右子树都已经是合法的堆（因为我们从下往上处理，先保证了子树是堆）。下沉操作相当于将 &lt;code&gt;i&lt;/code&gt; 逐步下放到合适位置，之后以 &lt;code&gt;i&lt;/code&gt; 为根的整个子树就变成了堆。处理完所有非叶子节点，整棵树就成了堆。&lt;/p&gt;
+&lt;h4 id="时间复杂度on"&gt;时间复杂度：O(n)
+&lt;/h4&gt;&lt;p&gt;直观上可能会觉得每个节点最多下沉 O(log n) 次，总复杂度 O(n log n)，但精确分析发现是线性的。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;高度为 h 的节点最多有 ⌈n/2^{h+1}⌉ 个，下沉的代价与高度 h 成正比。&lt;/li&gt;
+&lt;li&gt;总代价 ≈ Σ_{h=1}^{⌊log₂n⌋} h × (n / 2^{h+1}) = n/2 × Σ h / 2^h ≤ n/2 × 2 = n。
+所以总操作次数不超过 n 这个量级，因此建堆只需 &lt;strong&gt;O(n)&lt;/strong&gt; 时间。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;通俗理解：大部分节点都位于树的下层，它们下沉的距离很短；少量高层节点下沉距离长，但数量极少，总和有限。&lt;/p&gt;
+&lt;h4 id="适用场景-1"&gt;适用场景
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;一次性拿到全部数据，需要快速构建堆。&lt;/li&gt;
+&lt;li&gt;堆排序的第一步（直接对数组建堆，再依次取出最值）。&lt;/li&gt;
+&lt;li&gt;批量加载数据到优先队列。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="两种方法的对比"&gt;两种方法的对比
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;方法&lt;/th&gt;
+&lt;th&gt;逐个插入法&lt;/th&gt;
+&lt;th&gt;从数组建堆法（堆化）&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;方式&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;自顶向下，每次插入后上浮&lt;/td&gt;
+&lt;td&gt;自底向上，对非叶子节点下沉&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;时间复杂度&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;O(n log n)&lt;/td&gt;
+&lt;td&gt;O(n)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;空间&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;需要动态扩容或预分配数组&lt;/td&gt;
+&lt;td&gt;原数组就地调整&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;使用条件&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;数据按顺序到达，未知总数&lt;/td&gt;
+&lt;td&gt;数据已全部给出，可随机访问&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;旋转次数&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;后期插入可能较多上浮交换&lt;/td&gt;
+&lt;td&gt;总体下沉交换次数更少&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="总结"&gt;总结
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;逐个插入&lt;/strong&gt;：灵活，适合动态场景，但构建效率较低，总时间 O(n log n)。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数组建堆&lt;/strong&gt;：高效，利用完全二叉树的性质自底向上调整，时间复杂度仅为 O(n)，是批量构建堆的首选。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;两种方法得到的堆可能不是同一个，但都满足堆的性质。理解了这两种构建方式，就能在实际开发中根据数据特点做出恰当选择。&lt;/p&gt;
+&lt;h2 id="哈夫曼树"&gt;哈夫曼树
+&lt;/h2&gt;&lt;p&gt;哈夫曼树（Huffman Tree），也叫最优二叉树，是一种带权路径长度最短的二叉树。它由 David Huffman 在 1952 年提出，主要用于数据压缩，是哈夫曼编码的基础。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="1-核心概念"&gt;1. 核心概念
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;路径长度&lt;/strong&gt;：从根到某节点所经过的边的数量。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;带权路径长度&lt;/strong&gt;（Weighted Path Length）：叶子节点的权值 (w_i) 乘以其路径长度 (l_i) 的总和。&lt;br&gt;
+整棵树的带权路径长度 (WPL = \sum_{i=1}^{n} w_i \times l_i)。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;哈夫曼树&lt;/strong&gt;：在叶子节点权值给定、内部节点不带权的情况下，&lt;strong&gt;WPL 最小的二叉树&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;直观理解&lt;/strong&gt;：权值越大的叶子，离根越近，这样乘出来的总和最小，就像用最“短”的路径去存储最“常用”的东西。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="2-构造算法贪心策略"&gt;2. 构造算法（贪心策略）
+&lt;/h3&gt;&lt;p&gt;哈夫曼树的构建使用自底向上的贪心算法，每次选择当前权值最小的两棵树合并。&lt;/p&gt;
+&lt;h4 id="步骤-2"&gt;步骤
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;将每个带权节点都看作一棵仅含根节点的二叉树，将它们放入一个集合（通常是最小堆/优先队列）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;重复&lt;/strong&gt;以下过程，直到集合中只剩一棵树：
+&lt;ul&gt;
+&lt;li&gt;取出权值最小的两棵树 (T_1) 和 (T_2)。&lt;/li&gt;
+&lt;li&gt;创建一棵新树，新树的根节点权值为 (T_1.root.weight + T_2.root.weight)，左右孩子分别为 (T_1) 和 (T_2)。&lt;/li&gt;
+&lt;li&gt;将新树放入集合。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;最后剩下的那棵树就是&lt;strong&gt;哈夫曼树&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="实例演示"&gt;实例演示
+&lt;/h4&gt;&lt;p&gt;假设有 4 个叶子节点，权值分别为 {2, 3, 5, 7}。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;初始：{2, 3, 5, 7}&lt;/li&gt;
+&lt;li&gt;取出 2 和 3，合并成权值 5 的新树，集合变为 {5, 5, 7}（注意有两个5）。&lt;/li&gt;
+&lt;li&gt;取出两个 5，合并成权值 10 的新树，集合变为 {7, 10}&lt;/li&gt;
+&lt;li&gt;取出 7 和 10，合并成权值 17 的新树，集合变 {17} —— 结束。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;计算 WPL：&lt;br&gt;
+叶子 7 深度 1，叶子 5 深度 2，叶子 2 和 3 深度 3。&lt;br&gt;
+WPL = 7×1 + 5×2 + 2×3 + 3×3 = 7 + 10 + 6 + 9 = 32。&lt;br&gt;
+可以验证，任何其他结构的 WPL 都不小于 32。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="3-哈夫曼编码前缀编码"&gt;3. 哈夫曼编码（前缀编码）
+&lt;/h3&gt;&lt;p&gt;哈夫曼树最经典的应用是&lt;strong&gt;哈夫曼编码&lt;/strong&gt;，用于无损数据压缩。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;编码规则&lt;/strong&gt;：从根出发，向左为 0，向右为 1，到达叶子时记录的 0/1 序列即为该叶子对应字符的编码。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;特性&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;每个字符的编码都是&lt;strong&gt;前缀码&lt;/strong&gt;（任何一个编码都不是另一个编码的前缀），解码时不会出现歧义。&lt;/li&gt;
+&lt;li&gt;权值通常是字符出现频率，频率越高，编码越短，总编码长度接近理论最小值。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;解码过程&lt;/strong&gt;：从根开始，按比特流依次走 0/1，到达叶子即输出字符并回到根，继续解码。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="4-算法正确性证明思路"&gt;4. 算法正确性证明思路
+&lt;/h3&gt;&lt;p&gt;哈夫曼算法的正确性依赖于&lt;strong&gt;贪心选择性质&lt;/strong&gt;和&lt;strong&gt;最优子结构&lt;/strong&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;贪心选择性质&lt;/strong&gt;：权值最小的两个节点必定会作为深度最大的叶子被选中，可以互换不影响最优解，所以将它们合并不丢最优解。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;最优子结构&lt;/strong&gt;：合并两个最小节点得到的新频率，在剩下的问题中继续构建最优树，原问题的最优解包含子问题的最优解。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;由此可证，按此贪心过程构造的树必定是 WPL 最小的二叉树。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="5-哈夫曼树的基本性质"&gt;5. 哈夫曼树的基本性质
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;共有 (n) 个叶子节点，则总节点数为 (2n - 1)。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;没有度为 1 的节点&lt;/strong&gt;，节点的度要么是 0（叶子），要么是 2（内部节点）。&lt;/li&gt;
+&lt;li&gt;叶子节点数 = 内部节点数 + 1。&lt;/li&gt;
+&lt;li&gt;同一组权值可能构造出结构不同但 WPL 相同的哈夫曼树（合并时若有平局，不同的选择可导致不同结构，但最优 WPL 唯一）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="6-复杂度分析"&gt;6. 复杂度分析
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;使用&lt;strong&gt;最小堆&lt;/strong&gt;（优先队列）实现：
+&lt;ul&gt;
+&lt;li&gt;初始建堆：(O(n))。&lt;/li&gt;
+&lt;li&gt;每次取最小两个元素和插入新元素：(O(\log n))，共进行 (n-1) 次合并。&lt;/li&gt;
+&lt;li&gt;总时间复杂度：(O(n \log n))。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;空间复杂度：存储 (2n-1) 个节点的树，(O(n))。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="7-扩展m-叉哈夫曼树"&gt;7. 扩展：m 叉哈夫曼树
+&lt;/h3&gt;&lt;p&gt;当需要构建 m 叉哈夫曼树（最优 m 叉树）时，需确保内部节点都能恰好有 m 个孩子，否则最后一轮合并可能缺少节点。解决方法：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;当 ((n - 1) \bmod (m - 1) \neq 0) 时，补充若干个权值为 0 的虚拟叶子节点，使得上述余数为 0。&lt;/li&gt;
+&lt;li&gt;之后仍用类似贪心算法，每次合并最小的 m 个节点。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这种树常用于外排序中的多路归并、决策树优化等场景。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="8-应用场景"&gt;8. 应用场景
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;数据压缩&lt;/strong&gt;：ZIP、JPEG、PNG 等格式底层都使用了哈夫曼编码。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;通信编码&lt;/strong&gt;：用最短的码字表示最常出现的消息。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;文件合并与归并&lt;/strong&gt;：最优 m 叉哈夫曼树用于确定多路归并的最佳合并顺序，减少 I/O 次数。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;决策树&lt;/strong&gt;：将概率作为权值，构造最优判定流程。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="9-总结"&gt;9. 总结
+&lt;/h3&gt;&lt;p&gt;哈夫曼树是贪心算法在树形结构上的经典体现，通过反复合并最小权值节点，构造出带权路径长度最短的二叉树。它不仅理论优美，工程上更是数据压缩的核心组件。掌握哈夫曼树，也就掌握了“如何用最少的比特表达信息”的基本思想。&lt;/p&gt;
+&lt;h2 id="树"&gt;树
+&lt;/h2&gt;&lt;p&gt;树（任意无环连通图）中，节点数 (n) 和边数 (e) 满足 (e = n - 1)，因此&lt;strong&gt;节点永远比边多 1&lt;/strong&gt;。这是树最核心的性质之一，可以从两个角度来理解。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id="1-直观理解像不断分叉的连线"&gt;1. 直观理解：像“不断分叉的连线”
+&lt;/h4&gt;&lt;p&gt;一棵树可以从&lt;strong&gt;单个节点&lt;/strong&gt;开始“生长”出来：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;只有 1 个节点时，0 条边，点比边多 1。&lt;/li&gt;
+&lt;li&gt;每次添加一个新节点，必须&lt;strong&gt;恰好连出一条边&lt;/strong&gt;连接到已有树上的某个节点。&lt;br&gt;
+如果连出 0 条边，就不连通，不是树；如果连出 2 条或更多边，会形成环，也不符合树的定义。&lt;/li&gt;
+&lt;li&gt;因此，节点数每增加 1，边数也恰好增加 1。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;整个过程始终保持 &lt;strong&gt;节点数 - 边数 = 1&lt;/strong&gt; 的差额不变。当有 (n) 个节点时，边数自然就是 (n-1)。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id="2-严谨证明归纳法或剥叶子"&gt;2. 严谨证明：归纳法或“剥叶子”
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;数学归纳法&lt;/strong&gt;：&lt;br&gt;
+设树有 (n) 个节点，边数为 (e(n))。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;当 (n=1)，边数 0，满足 (e(1) = 1-1 = 0)。&lt;/li&gt;
+&lt;li&gt;假设任何 (n=k) 的树都有 (e=k-1)。&lt;br&gt;
+对一棵 (n=k+1) 的树，它至少有一片叶子（度数为1的节点）。删除这片叶子及其相连的边，剩下 (k) 个节点的树，由假设它有 (k-1) 条边。再把叶子加回来，节点数+1，边数+1，因此边数变成 (k)，仍然满足 (e = (k+1)-1)。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;或者用&lt;strong&gt;连通+无环的约束&lt;/strong&gt;来证明：&lt;br&gt;
+一棵连通图至少要有 (n-1) 条边才能把所有节点连起来。而如果无环，边数就不能再多于 (n-1)，否则任意额外一条边都会在两个已连通的节点间产生第二条路径，形成环。所以边数只能恰好是 (n-1)。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id="3-在常见树结构中的应用"&gt;3. 在常见树结构中的应用
+&lt;/h4&gt;&lt;p&gt;这个性质不仅适用于图论中的抽象树，也适用你之前了解的各种树形数据结构：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;二叉树 / 红黑树 / 哈夫曼树&lt;/strong&gt;：有 (n) 个节点的树，一定恰好有 (n-1) 条“父子边”。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;堆的数组表示&lt;/strong&gt;：索引从 1 开始，父子关系通过下标乘 2 定位，虽然没有显式存储边，但隐含的父子关系数量仍然是 (n-1)。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;森林&lt;/strong&gt;：(t) 棵树的森林则有 (n - t) 条边，每棵树内部依然各自满足点比边多 1。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;简单一句话：&lt;strong&gt;树必须连通又无环，连通“最低消费”是 n-1 条边，无环“最多只能”是 n-1 条边，两者夹逼，边数只能是 n-1。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id="kmp"&gt;KMP
+&lt;/h2&gt;&lt;p&gt;KMP（Knuth-Morris-Pratt）算法是一种高效的字符串匹配算法，它能在 &lt;strong&gt;O(n + m)&lt;/strong&gt; 的时间内，在一个长度为 n 的文本串 S 中找出所有长度为 m 的模式串 P 的出现位置。其核心思想是：&lt;strong&gt;利用已经部分匹配的信息，保持主串指针不回溯，通过模式串自身的规律滑动模式串，从而减少重复比较&lt;/strong&gt;。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="1-暴力匹配brute-force的痛点"&gt;1. 暴力匹配（Brute-Force）的痛点
+&lt;/h3&gt;&lt;p&gt;暴力算法中，当 &lt;code&gt;S[i]&lt;/code&gt; 与 &lt;code&gt;P[j]&lt;/code&gt; 失配时，会将 &lt;code&gt;i&lt;/code&gt; 回溯到 &lt;code&gt;i - j + 2&lt;/code&gt;，&lt;code&gt;j&lt;/code&gt; 重置为 1，重新开始比较。这导致最坏情况时间复杂度为 O(n*m)。例如 S = &amp;ldquo;AAAAA&amp;hellip;B&amp;rdquo;，P = &amp;ldquo;AAAB&amp;rdquo;，每次都要比较到最后一个字符才知道不匹配，然后回溯大量位置。&lt;/p&gt;
+&lt;p&gt;KMP 要解决的问题就是：&lt;strong&gt;当失配发生时，如何在不回溯主串指针 i 的前提下，让模式串向右滑动尽可能远的距离&lt;/strong&gt;。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="2-kmp-的核心部分匹配表next-数组"&gt;2. KMP 的核心：部分匹配表（next 数组）
+&lt;/h3&gt;&lt;p&gt;KMP 的精髓是一个被称为 &lt;strong&gt;next 数组&lt;/strong&gt;（或前缀函数 π）的预处理表。对于模式串 P，&lt;code&gt;next[j]&lt;/code&gt; 表示：在模式串的第 j 个字符发生失配时，&lt;strong&gt;模式串应该向右滑动多少位&lt;/strong&gt;，或者说，接下来应该用模式串中的哪个字符继续与主串当前字符 &lt;code&gt;S[i]&lt;/code&gt; 比较。&lt;/p&gt;
+&lt;p&gt;更精确的定义是：&lt;code&gt;next[j]&lt;/code&gt; 等于 &lt;code&gt;P[1..j-1]&lt;/code&gt; 这个子串中，&lt;strong&gt;既是真前缀又是真后缀的最长子串的长度&lt;/strong&gt;。这个长度就是模式串在失配后可以“复用”的比较次数。&lt;/p&gt;
+&lt;p&gt;设模式串索引从 1 开始（便于叙述，编程中常用 0 起点），即 &lt;code&gt;P = p1 p2 ... pm&lt;/code&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;真前缀&lt;/strong&gt;：不包含自身的前缀。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;真后缀&lt;/strong&gt;：不包含自身的后缀。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;定义&lt;/strong&gt;：对于 &lt;code&gt;1 ≤ j ≤ m&lt;/code&gt;，&lt;code&gt;next[j]&lt;/code&gt; = max{ k | 0 ≤ k &amp;lt; j-1 且 &lt;code&gt;P[1..k]&lt;/code&gt; = &lt;code&gt;P[j-k..j-1]&lt;/code&gt; }。当不存在这样的 k 时，&lt;code&gt;next[j] = 0&lt;/code&gt;（若索引从 1 开始）或 -1（若索引从 0 开始）。我们用从 1 开始的版本讨论，并规定 &lt;code&gt;next[1] = 0&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;物理意义&lt;/strong&gt;：若 &lt;code&gt;p_j&lt;/code&gt; 失配，说明 &lt;code&gt;p_1..p_{j-1}&lt;/code&gt; 与主串中 &lt;code&gt;s_{i-j+1}..s_{i-1}&lt;/code&gt; 完全匹配。此时，&lt;code&gt;p_1..p_{j-1}&lt;/code&gt; 的最长相等前后缀长度 k，就意味着模式串的前 k 个字符可以直接与主串的 &lt;code&gt;s_{i-k}..s_{i-1}&lt;/code&gt; 对齐，而无需重新比较。于是下一次比较就是 &lt;code&gt;p_{k+1}&lt;/code&gt; 与 &lt;code&gt;s_i&lt;/code&gt;。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="3-构建-next-数组递推法"&gt;3. 构建 next 数组（递推法）
+&lt;/h3&gt;&lt;p&gt;求 next 数组本身就是一个&lt;strong&gt;模式串自匹配&lt;/strong&gt;的过程，时间复杂度 O(m)。采用双指针递推，非常巧妙。&lt;/p&gt;
+&lt;p&gt;设模式串 &lt;code&gt;P[1..m]&lt;/code&gt;，next 数组定义同上。我们已知 &lt;code&gt;next[1] = 0&lt;/code&gt;。假设已经计算出 &lt;code&gt;next[1], next[2], ..., next[j]&lt;/code&gt;，现求 &lt;code&gt;next[j+1]&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;核心思想：考察 &lt;code&gt;p_j&lt;/code&gt; 与 &lt;code&gt;p_{next[j] + 1}&lt;/code&gt;（即当前最长相等前后缀的下一个字符）。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;令 &lt;code&gt;k = next[j]&lt;/code&gt;，表示 &lt;code&gt;P[1..k]&lt;/code&gt; 是 &lt;code&gt;P[1..j]&lt;/code&gt; 的最长相等前后缀。&lt;/li&gt;
+&lt;li&gt;比较 &lt;code&gt;p_{k+1}&lt;/code&gt; 与 &lt;code&gt;p_{j+1}&lt;/code&gt;：
+&lt;ul&gt;
+&lt;li&gt;若相等：则 &lt;code&gt;next[j+1] = k + 1&lt;/code&gt;，因为前后缀都加长了一个字符。&lt;/li&gt;
+&lt;li&gt;若不相等：说明无法简单扩展，需要退而求其次，在更短的前缀中寻找。即令 &lt;code&gt;k' = next[k]&lt;/code&gt;，再比较 &lt;code&gt;p_{k'+1}&lt;/code&gt; 与 &lt;code&gt;p_{j+1}&lt;/code&gt;，重复此过程，直到找到相等的字符或 k 退到 0。当 k=0 时，若 &lt;code&gt;p_1&lt;/code&gt; 仍不等于 &lt;code&gt;p_{j+1}&lt;/code&gt;，则 &lt;code&gt;next[j+1] = 0&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这个回溯过程实际上是在利用已求的 next 值加速比较，保证整体 O(m)。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;伪代码（索引从 1 开始，next[1]=0）&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;getNext(P, m):
+next[1] = 0
+k = 0
+for j = 1 to m-1: // 已知next[j]，求next[j+1]
+while k &amp;gt; 0 and P[k+1] != P[j+1]:
+k = next[k] // 失配，回溯
+if P[k+1] == P[j+1]:
+k = k + 1
+next[j+1] = k
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;如果习惯编程时从 0 开始索引，通常让 next[0] = -1，模式串索引 0..m-1，定义略有差异，但本质相同。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="4-kmp-匹配过程"&gt;4. KMP 匹配过程
+&lt;/h3&gt;&lt;p&gt;有了 next 数组，就可以进行匹配。&lt;/p&gt;
+&lt;p&gt;设置主串指针 &lt;code&gt;i = 1&lt;/code&gt;，模式串指针 &lt;code&gt;j = 1&lt;/code&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;当 &lt;code&gt;j == 0&lt;/code&gt; 或 &lt;code&gt;S[i] == P[j]&lt;/code&gt; 时，i 和 j 同时后移；&lt;/li&gt;
+&lt;li&gt;否则，&lt;code&gt;j = next[j]&lt;/code&gt;，即保持 i 不动，模式串右移。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;当 &lt;code&gt;j == m+1&lt;/code&gt; 时，说明匹配成功，位置为 &lt;code&gt;i - m&lt;/code&gt;。然后通常令 &lt;code&gt;j = next[m]&lt;/code&gt;（如果还有 next[m+1] 则用 next[m+1]）继续寻找下一个匹配。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;伪代码&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;i = 1, j = 1
+while i &amp;lt;= n:
+while j &amp;gt; 0 and S[i] != P[j]:
+j = next[j]
+if j == 0 or S[i] == P[j]:
+i++, j++
+if j == m+1:
+输出 i - m
+j = next[m] // 或直接 j = next[j-1]? 实际处理：令 j = next[m] 继续
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;注意处理边界：为了方便，可设 next[1]=0，且当 j=0 时，表示模式串第一个字符就对不上，此时 i++，j=1（即下次比较 P[1] 与下一个字符），这与上面流程一致。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="5-举例演示"&gt;5. 举例演示
+&lt;/h3&gt;&lt;p&gt;文本 S = &amp;ldquo;ABC ABCDAB ABCDABCDABDE&amp;rdquo;，模式 P = &amp;ldquo;ABCDABD&amp;rdquo;（长度为7）。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第一步：计算 next 数组&lt;/strong&gt;（索引1~7）&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;next[1] = 0&lt;/li&gt;
+&lt;li&gt;j=1 (k=0): 比较 P[2]=&amp;lsquo;B&amp;rsquo; 与 P[1]=&amp;lsquo;A&amp;rsquo;? 不等，且 k=0 =&amp;gt; next[2]=0&lt;/li&gt;
+&lt;li&gt;j=2 (k=0): 比较 P[3]=&amp;lsquo;C&amp;rsquo; 与 P[1]=&amp;lsquo;A&amp;rsquo;? 不等 =&amp;gt; next[3]=0&lt;/li&gt;
+&lt;li&gt;j=3 (k=0): 比较 P[4]=&amp;lsquo;D&amp;rsquo; 与 P[1]=&amp;lsquo;A&amp;rsquo;? 不等 =&amp;gt; next[4]=0&lt;/li&gt;
+&lt;li&gt;j=4 (k=0): 比较 P[5]=&amp;lsquo;A&amp;rsquo; 与 P[1]=&amp;lsquo;A&amp;rsquo;? 相等 =&amp;gt; k=1, next[5]=1&lt;/li&gt;
+&lt;li&gt;j=5 (k=1): 比较 P[6]=&amp;lsquo;B&amp;rsquo; 与 P[2]=&amp;lsquo;B&amp;rsquo;? 相等 =&amp;gt; k=2, next[6]=2&lt;/li&gt;
+&lt;li&gt;j=6 (k=2): 比较 P[7]=&amp;lsquo;D&amp;rsquo; 与 P[3]=&amp;lsquo;C&amp;rsquo;? 不等，k=next[2]=0；再比较 P[7]=&amp;lsquo;D&amp;rsquo; 与 P[1]=&amp;lsquo;A&amp;rsquo;? 不等且k=0 =&amp;gt; next[7]=0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所以 next = [0,0,0,0,1,2,0] (索引1~7)&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第二步：匹配过程&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;i=1,j=1 开始比较：
+S[1]=&amp;lsquo;A&amp;rsquo; = P[1] =&amp;gt; i=2,j=2
+S[2]=&amp;lsquo;B&amp;rsquo; = P[2] =&amp;gt; i=3,j=3
+&amp;hellip;
+直到 i=4,j=4: S[4]=&amp;rsquo; &amp;rsquo; != P[4]=&amp;lsquo;D&amp;rsquo;，失配，j=next[4]=0。然后 i++, j=1（因为 j=0 时相当于 j=1，i 已经指向下一字符）&lt;/li&gt;
+&lt;li&gt;i 走到文本中的第一个 &amp;ldquo;ABCDAB&amp;rdquo; 处，会匹配到 j=6 (字符&amp;rsquo;B&amp;rsquo;匹配)，然后 i 前进到后面的空格 &amp;rsquo; &amp;lsquo;，模式串 j=7 应为 &amp;lsquo;D&amp;rsquo;，失配。j = next[7]=0，i 跳过空格。&lt;/li&gt;
+&lt;li&gt;最终 i 走到 &amp;ldquo;ABCDABD&amp;rdquo; 位置，完全匹配，输出位置。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这里展现了 next 数组如何帮助跳过无用的比较。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="6-时间复杂度分析"&gt;6. 时间复杂度分析
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;预处理 next 数组&lt;/strong&gt;：循环 j 从 1 到 m-1，每次循环中 while 循环内 k 的值至少减小 1，而 k 总共增加次数不超过 m（每次 &lt;code&gt;if&lt;/code&gt; 增加1），所以 while 总执行次数 O(m)。因此预处理 O(m)。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;匹配过程&lt;/strong&gt;：同理，i 从 1 到 n，指针 j 增加次数不超过 n，while 中 &lt;code&gt;j = next[j]&lt;/code&gt; 每次至少减少 1，所以总比较次数 O(n)。&lt;/li&gt;
+&lt;li&gt;总时间复杂度 &lt;strong&gt;O(n + m)&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;空间复杂度 O(m)（存储 next 数组）。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="7-next-数组的优化kmp-的改进"&gt;7. next 数组的优化（KMP 的改进）
+&lt;/h3&gt;&lt;p&gt;标准 next 数组有时仍会有多余比较。例如模式串 &amp;ldquo;AAAB&amp;rdquo;，当 &lt;code&gt;P[j]&lt;/code&gt; 失配且 &lt;code&gt;P[next[j]]&lt;/code&gt; 与 &lt;code&gt;P[j]&lt;/code&gt; 相同时，用 &lt;code&gt;next[j]&lt;/code&gt; 去匹配必然再次失配。可引入 &lt;strong&gt;nextval 数组&lt;/strong&gt;：如果 &lt;code&gt;P[j] == P[next[j]]&lt;/code&gt;，则 &lt;code&gt;nextval[j] = nextval[next[j]]&lt;/code&gt;，否则 &lt;code&gt;nextval[j] = next[j]&lt;/code&gt;。这样进一步加快失配时的跳转。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="8-应用与扩展"&gt;8. 应用与扩展
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;字符串查找&lt;/strong&gt;：文本编辑器的“查找”功能。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;生物信息学&lt;/strong&gt;：基因序列比对。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;网络入侵检测&lt;/strong&gt;：模式匹配过滤。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;扩展算法&lt;/strong&gt;：AC 自动机（KMP 的多模式版本）、BM 算法（从右向左匹配）等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;KMP 算法将“记忆”引入字符串匹配，是算法设计中利用已有信息避免重复计算的经典范例。理解了 next 数组的构建原理，也就掌握了 KMP 的灵魂。&lt;/p&gt;
+&lt;h2 id="bm"&gt;BM
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;BM（Boyer-Moore）算法&lt;/strong&gt;是一种高效的字符串匹配算法，由 Boyer 和 Moore 于 1977 年提出。它打破了“从左向右逐个比较”的惯性，采用&lt;strong&gt;从模式串末尾向前匹配&lt;/strong&gt;的方式，并借助&lt;strong&gt;坏字符规则&lt;/strong&gt;和&lt;strong&gt;好后缀规则&lt;/strong&gt;两种启发式策略，使模式串能够以更大的步幅跳跃，避免了大量无意义的比较。在实际应用中（尤其是长模式和大字符集），BM 算法往往比 KMP 算法快得多，许多文本编辑器、搜索引擎的查找功能底层都曾使用它。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="1-核心思想从右向左--双重跳跃"&gt;1. 核心思想：从右向左 + 双重跳跃
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;匹配方向&lt;/strong&gt;：将模式串 (P) 与文本串 (T) 对齐后，从 (P) 的&lt;strong&gt;最后一个字符&lt;/strong&gt;开始向前比较。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;失配处理&lt;/strong&gt;：当在某个位置发生字符不匹配时，根据失配处得到的两个信息计算模式串可以向右滑动的距离：
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;坏字符规则&lt;/strong&gt;：看文本中那个“对不上的字符”在模式串中出现的最后位置。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;好后缀规则&lt;/strong&gt;：看已经匹配成功的那部分后缀在模式串中有没有别的出现位置。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;取两种规则给出的滑动距离的&lt;strong&gt;最大值&lt;/strong&gt;，让模式串一次性向右移动多位，主串指针从不回溯。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="2-坏字符规则bad-character-rule"&gt;2. 坏字符规则（Bad Character Rule）
+&lt;/h3&gt;&lt;p&gt;当比较时发现 (T[i] \neq P[j])，即 (P[j]) 与 (T[i]) 失配，此时称 (T[i]) 为&lt;strong&gt;坏字符&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;规则&lt;/strong&gt;：在模式串 (P) 中，找到坏字符 (T[i]) &lt;strong&gt;从右往左最后一次出现的位置&lt;/strong&gt; (k)（且 (k &amp;lt; j)，即只能在当前失配位置的左侧寻找），然后将模式串向右移动 (j - k) 个位置，让 (P[k]) 与 (T[i]) 对齐。如果坏字符在 (P[0..j-1]) 中没有出现，则 (k = -1)，移动 (j + 1) 位，使整个模式串跳过这个坏字符。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;预处理&lt;/strong&gt;：构建“坏字符表”&lt;code&gt;bc[字符]&lt;/code&gt;，记录每个字符在模式串中的&lt;strong&gt;最右位置&lt;/strong&gt;（若字符不在模式串中则为 -1）。该表大小与字符集有关（如 ASCII 256、Unicode 可使用哈希表）。构建只需扫描一遍模式串，时间 (O(m+|\Sigma|))。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;例子&lt;/strong&gt;：
+模式串 &lt;code&gt;P = &amp;quot;EXAMPLE&amp;quot;&lt;/code&gt;，文本 &lt;code&gt;T = &amp;quot;HERE IS A SIMPLE EXAMPLE&amp;quot;&lt;/code&gt;。&lt;br&gt;
+当对齐到某位置，从后往前比较到 &lt;code&gt;P[6]='L'&lt;/code&gt; 与 &lt;code&gt;T&lt;/code&gt; 中的某个字符失配，假设坏字符是 &lt;code&gt;'P'&lt;/code&gt;（在文本中）。查表 &lt;code&gt;bc['P']&lt;/code&gt; 在模式串中位置为 4（&lt;code&gt;'P'&lt;/code&gt; 在 &lt;code&gt;P[4]&lt;/code&gt;）。失配位置 &lt;code&gt;j = 6&lt;/code&gt;，移动距离 &lt;code&gt;6 - 4 = 2&lt;/code&gt;，让 &lt;code&gt;P[4]&lt;/code&gt; 的 &lt;code&gt;'P'&lt;/code&gt; 与文本的 &lt;code&gt;'P'&lt;/code&gt; 对齐。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="3-好后缀规则good-suffix-rule"&gt;3. 好后缀规则（Good Suffix Rule）
+&lt;/h3&gt;&lt;p&gt;失配发生时，已经成功匹配的部分（即 (P[j+1..m-1])）被称为&lt;strong&gt;好后缀&lt;/strong&gt;，记作 &lt;code&gt;suffix&lt;/code&gt;。好后缀规则利用了这个后缀的重复出现信息，进一步增大跳跃。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;规则&lt;/strong&gt;：将模式串向右滑动，使得：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;情况1&lt;/strong&gt;：好后缀 &lt;code&gt;suffix&lt;/code&gt; 在模式串中&lt;strong&gt;再次出现&lt;/strong&gt;（且不是当前位置）。即找到一个最大的 (k &amp;lt; m-1)，使得子串 (P[k - |suffix| + 1 .. k]) 与 &lt;code&gt;suffix&lt;/code&gt; 完全相同，并且这个子串的左侧字符（(P[k - |suffix|])）不与失配字符相同（避免不必要的重新比较）。此时移动距离为 ( (m - 1) - k )（让找到的后缀对齐）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;情况2&lt;/strong&gt;：如果好后缀在模式串中没有再次出现，则寻找&lt;strong&gt;好后缀的某一个后缀&lt;/strong&gt;，使它等于模式串的&lt;strong&gt;某个前缀&lt;/strong&gt;（最长匹配）。移动距离为 ( m - \text{该前缀长度} )，让模式串前缀与文本中已匹配的后缀部分对齐。&lt;/li&gt;
+&lt;li&gt;如果都不满足，则移动整个模式串长度 (m)。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;预处理&lt;/strong&gt;：好后缀的移动表通常记为 &lt;code&gt;bmGs&lt;/code&gt;，长度为 (m+1)（对应好后缀长度从 0 到 m）。计算过程需要两个辅助数组：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;suffix[i]&lt;/code&gt;：以 &lt;code&gt;i&lt;/code&gt; 为结尾的子串与模式串后缀匹配的最大长度。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;prefix[i]&lt;/code&gt;：布尔值，表示长度为 &lt;code&gt;i&lt;/code&gt; 的模式串后缀是否也是模式串的前缀。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;构建这两个数组只需 (O(m)) 时间。之后填充 &lt;code&gt;bmGs&lt;/code&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;先全部用 (m) 填充（默认移动整个模式串）。&lt;/li&gt;
+&lt;li&gt;根据 &lt;code&gt;suffix&lt;/code&gt; 处理“好后缀再次出现”的情况，设置对应移动距离。&lt;/li&gt;
+&lt;li&gt;再处理“好后缀的部分与模式串前缀匹配”的情况，从后向前更新。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;最终，当失配发生在位置 &lt;code&gt;j&lt;/code&gt;，好后缀长度为 &lt;code&gt;good_len = m - 1 - j&lt;/code&gt;，则移动距离 = &lt;code&gt;bmGs[good_len]&lt;/code&gt;。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="4-完整匹配流程"&gt;4. 完整匹配流程
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;预处理：计算坏字符表 &lt;code&gt;bc&lt;/code&gt; 和好后缀表 &lt;code&gt;bmGs&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;开始匹配，&lt;code&gt;i = m - 1&lt;/code&gt;（文本窗口右侧对齐），&lt;code&gt;j = m - 1&lt;/code&gt;（模式串末尾）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;从右向左比较&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;若 &lt;code&gt;j &amp;gt;= 0&lt;/code&gt; 且 &lt;code&gt;T[i] == P[j]&lt;/code&gt;：&lt;code&gt;i--&lt;/code&gt;, &lt;code&gt;j--&lt;/code&gt;，继续比较前一个字符。&lt;/li&gt;
+&lt;li&gt;若 &lt;code&gt;j &amp;lt; 0&lt;/code&gt;：匹配成功，记录位置，并按 &lt;code&gt;bmGs[0]&lt;/code&gt;（好后缀长度为 0 时的移动值）移动模式串。&lt;/li&gt;
+&lt;li&gt;否则（失配）：
+&lt;ul&gt;
+&lt;li&gt;坏字符移动距离：&lt;code&gt;bc[T[i]]&lt;/code&gt; 为坏字符最右位置，&lt;code&gt;bad_move = j - bc[T[i]]&lt;/code&gt;（若 &lt;code&gt;bc&lt;/code&gt; 返回 -1 则 &lt;code&gt;bad_move = j + 1&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;好后缀移动距离：&lt;code&gt;good_move = bmGs[m - 1 - j]&lt;/code&gt;（失配位置 j 对应的好后缀长度）。&lt;/li&gt;
+&lt;li&gt;取 &lt;code&gt;max(bad_move, good_move)&lt;/code&gt; 作为模式串右移量，并相应更新 &lt;code&gt;i&lt;/code&gt; 和 &lt;code&gt;j&lt;/code&gt;（通常 &lt;code&gt;i&lt;/code&gt; 增加移动量，&lt;code&gt;j = m - 1&lt;/code&gt; 重新从末尾开始比较）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="5-实例演示"&gt;5. 实例演示
+&lt;/h3&gt;&lt;p&gt;文本：&lt;code&gt;HERE IS A SIMPLE EXAMPLE&lt;/code&gt;&lt;br&gt;
+模式串：&lt;code&gt;EXAMPLE&lt;/code&gt; (长度 m=7, 索引 0..6)&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;坏字符表&lt;/strong&gt;（部分）：&lt;code&gt;E:6, X:1, A:2, M:3, P:4, L:5&lt;/code&gt;，其他字符为 -1。&lt;br&gt;
+&lt;strong&gt;好后缀表&lt;/strong&gt;（示例省略详细构建，直接给出）：&lt;br&gt;
+&lt;code&gt;bmGs[0]=1&lt;/code&gt;（匹配成功后移动1，也可以按坏字符移动等），&lt;code&gt;bmGs[1]=7, bmGs[2]=7, ...&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;匹配过程&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;首次对齐：模式串从文本第0个字符开始，末尾 &lt;code&gt;P[6]='E'&lt;/code&gt; 与文本第6个字符 &lt;code&gt;' '&lt;/code&gt; 比较，失配。
+&lt;ul&gt;
+&lt;li&gt;坏字符 &lt;code&gt;' '&lt;/code&gt; 不在模式串，&lt;code&gt;bad_move = 6 - (-1) = 7&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;好后缀长度为0，&lt;code&gt;good_move = bmGs[0]=1&lt;/code&gt;（通常好后缀长度为0时移动1，但取 max 还是7）。&lt;br&gt;
+模式串右移7位，跳过整个“HERE IS”。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;继续比较，略过中间步骤，最终会在 &lt;code&gt;... SIMPLE EXAMPLE&lt;/code&gt; 处对齐：&lt;br&gt;
+模式串末尾 &lt;code&gt;E&lt;/code&gt; 与文本中 &lt;code&gt;E&lt;/code&gt; 匹配，然后向前依次匹配 &lt;code&gt;L-P-M-A-X-E&lt;/code&gt;，全部成功，输出匹配位置。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;整个过程中，许多比较被成段跳过，远远少于暴力法。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="6-复杂度分析-1"&gt;6. 复杂度分析
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;预处理&lt;/strong&gt;：坏字符表 (O(m+|\Sigma|))，好后缀表 (O(m))，总 (O(m+|\Sigma|))。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;匹配阶段&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;最好情况&lt;/strong&gt;：每次失配都发生在模式串最后一个字符，且坏字符不在模式串中，每次移动 (m) 位，比较次数为 (O(n/m))。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;最坏情况&lt;/strong&gt;：理论最坏 (O(n \cdot m))（例如文本 &lt;code&gt;&amp;quot;aaaaa...&amp;quot;&lt;/code&gt;，模式 &lt;code&gt;&amp;quot;baaa&amp;quot;&lt;/code&gt; 时会退化），但通过好后缀与坏字符的结合，实际工程中极少出现；一些改进版本（如 BMH、BMHS）可避免此退化。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;平均情况&lt;/strong&gt;：通常认为是亚线性的，实际运行极快。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;对比 KMP：KMP 保证 (O(n+m)) 线性时间且与字符集大小无关，从左向右匹配；BM 一般更快，但需要额外空间存储字符集表，最坏时间无理论保证（原始版本）。现代混合算法常结合两者优势。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="7-常见变体与应用"&gt;7. 常见变体与应用
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Boyer-Moore-Horspool (BMH)&lt;/strong&gt;：简化版，仅使用坏字符规则的一个变体（以文本窗口最后一个字符作为坏字符），实现简单且在实际中非常高效，是许多函数库（如 Python 的 &lt;code&gt;find&lt;/code&gt; 曾用）的默认选择。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Boyer-Moore-Sunday&lt;/strong&gt;：进一步优化，检查窗口右侧下一个字符决定移动。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;应用&lt;/strong&gt;：GNU grep、各种文本编辑器的查找替换、网络入侵检测系统（如 Snort）的模式匹配引擎。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="8-总结-1"&gt;8. 总结
+&lt;/h3&gt;&lt;p&gt;BM 算法通过“向后看”的独特视角和两条强有力的跳跃规则，将字符串匹配的效率推向了极致。它启示我们：在看似必须逐个推进的问题中，充分利用已比较信息并摆脱固定扫描方向，往往能发现巨大的优化空间。掌握 BM 算法，不仅是学习了一种匹配技巧，更是对如何设计智能启发式跳跃以达成亚线性计算的一次深刻认知。&lt;/p&gt;
+&lt;h2 id="sunday"&gt;Sunday
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Sunday 算法&lt;/strong&gt;是 Daniel M. Sunday 在 1990 年提出的一种字符串匹配算法。它属于 Boyer-Moore 算法家族，可以看作是 &lt;strong&gt;Boyer-Moore-Horspool&lt;/strong&gt; 的改进版，核心区别在于：Sunday 算法在发现不匹配时，&lt;strong&gt;关注当前对齐窗口的下一个字符&lt;/strong&gt;（而不是窗口内的失配字符或末尾字符），并以此决定模式串的移动距离。这一策略往往能获得更大的跳跃步长，且实现极为简洁，在多数实际场景中效率极高。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="1-核心思想"&gt;1. 核心思想
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;将模式串 &lt;code&gt;P&lt;/code&gt;（长度为 &lt;code&gt;m&lt;/code&gt;）与文本串 &lt;code&gt;T&lt;/code&gt;（长度为 &lt;code&gt;n&lt;/code&gt;）的某个位置对齐，假设窗口起始索引为 &lt;code&gt;i&lt;/code&gt;，即对齐 &lt;code&gt;T[i … i+m-1]&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;从&lt;strong&gt;左向右&lt;/strong&gt;逐个字符比较 &lt;code&gt;T[i+j]&lt;/code&gt; 与 &lt;code&gt;P[j]&lt;/code&gt;（&lt;code&gt;j = 0,1,…,m-1&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;若完全匹配，则记录位置；若发生失配，则&lt;strong&gt;立即查看文本中紧接着当前窗口的下一个字符&lt;/strong&gt; &lt;code&gt;ch = T[i+m]&lt;/code&gt;（即窗口外右侧第一个字符）。&lt;/li&gt;
+&lt;li&gt;根据该字符在模式串中&lt;strong&gt;最后一次出现的位置&lt;/strong&gt;，计算出模式串向右滑动的距离，使得这个字符能够与模式串中对应的位置对齐。&lt;/li&gt;
+&lt;li&gt;然后从新的窗口重新开始比较。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;因为每次失配后直接利用 &lt;code&gt;T[i+m]&lt;/code&gt; 来决定位移，不需要维护类似 BM 算法中的“好后缀”规则，也不关心窗口内已匹配了哪些字符，所以算法逻辑非常简单。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="2-预处理构建偏移表-shift"&gt;2. 预处理：构建偏移表 &lt;code&gt;shift&lt;/code&gt;
+&lt;/h3&gt;&lt;p&gt;需要事先计算一个偏移表 &lt;code&gt;shift&lt;/code&gt;，存储规则是：对于字符集中的所有字符 &lt;code&gt;c&lt;/code&gt;，定义：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果 &lt;code&gt;c&lt;/code&gt; 在模式串 &lt;code&gt;P&lt;/code&gt; 中出现，则 &lt;code&gt;shift[c] = m - max{k | P[k] == c}&lt;/code&gt;（即 &lt;code&gt;c&lt;/code&gt; 在 &lt;code&gt;P&lt;/code&gt; 中最右边出现位置到末尾的距离）；&lt;/li&gt;
+&lt;li&gt;如果 &lt;code&gt;c&lt;/code&gt; 未在 &lt;code&gt;P&lt;/code&gt; 中出现，则 &lt;code&gt;shift[c] = m + 1&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;使用伪代码描述如下（假设字符集大小为 256，索引从 0 开始）：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;// 初始化所有字符的移动距离为 m+1
+for c in 字符集:
+shift[c] = m + 1
+// 扫描模式串，用较短的移动距离覆盖
+for k from 0 to m-1:
+shift[P[k]] = m - k
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;因为从左向右扫描，后面的相同字符会覆盖前面的值，所以最终 &lt;code&gt;shift[c]&lt;/code&gt; 保留的是最右侧出现对应的最小移动距离。这个表只需要构建一次，时间复杂度 (O(m + |\Sigma|))。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="3-匹配过程"&gt;3. 匹配过程
+&lt;/h3&gt;&lt;p&gt;主串指针 &lt;code&gt;i&lt;/code&gt; 从 0 开始，不断尝试将模式串放在 &lt;code&gt;i&lt;/code&gt; 处进行比较。&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;i = 0
+while i &amp;lt;= n - m:
+j = 0
+// 从左向右比较
+while j &amp;lt; m and T[i+j] == P[j]:
+j++
+if j == m:
+记录匹配位置 i
+// 匹配成功后如何移动？可以继续用 shift 表
+// 一般看窗口后一个字符决定下一跳
+if i + m &amp;lt; n:
+i += shift[T[i+m]]
+else:
+break
+else:
+// 失配：查看窗口后的字符
+if i + m &amp;lt; n:
+i += shift[T[i+m]]
+else:
+break // 已超出文本范围，无法继续
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;注意边界&lt;/strong&gt;：当 &lt;code&gt;i + m == n&lt;/code&gt; 时，窗口已顶到文本末尾，不存在“下一个字符”，此时如果发生失配或完成匹配，可直接结束循环。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="4-实例演示"&gt;4. 实例演示
+&lt;/h3&gt;&lt;p&gt;文本 &lt;code&gt;T = &amp;quot;substring searching&amp;quot;&lt;/code&gt;&lt;br&gt;
+模式串 &lt;code&gt;P = &amp;quot;search&amp;quot;&lt;/code&gt;，长度 &lt;code&gt;m = 6&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;首先计算偏移表（为简洁，只列出模式串中出现的字符）：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;s&lt;/code&gt;：最右出现位置 0 → &lt;code&gt;shift['s'] = 6 - 0 = 6&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;e&lt;/code&gt;：位置 1 → &lt;code&gt;6 - 1 = 5&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;a&lt;/code&gt;：位置 2 → &lt;code&gt;6 - 2 = 4&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;r&lt;/code&gt;：位置 3 → &lt;code&gt;6 - 3 = 3&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;c&lt;/code&gt;：位置 4 → &lt;code&gt;6 - 4 = 2&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;h&lt;/code&gt;：位置 5 → &lt;code&gt;6 - 5 = 1&lt;/code&gt;
+其他字符（如空格、&lt;code&gt;u&lt;/code&gt;, &lt;code&gt;b&lt;/code&gt; 等）未出现，&lt;code&gt;shift = 7&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;匹配步骤&lt;/strong&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;i = 0&lt;/code&gt;，窗口 &lt;code&gt;T[0..5] = &amp;quot;substr&amp;quot;&lt;/code&gt;，与 &lt;code&gt;&amp;quot;search&amp;quot;&lt;/code&gt; 比较。&lt;br&gt;
+&lt;code&gt;j=0&lt;/code&gt;，&lt;code&gt;'s' == 's'&lt;/code&gt;；&lt;code&gt;j=1&lt;/code&gt;，&lt;code&gt;'u' != 'e'&lt;/code&gt; → 失配。&lt;br&gt;
+窗口后字符 &lt;code&gt;T[6] = 'i'&lt;/code&gt;，&lt;code&gt;shift['i'] = 7&lt;/code&gt;，&lt;code&gt;i = 0 + 7 = 7&lt;/code&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;i = 7&lt;/code&gt;，窗口 &lt;code&gt;T[7..12] = &amp;quot;ing se&amp;quot;&lt;/code&gt;，与 &lt;code&gt;&amp;quot;search&amp;quot;&lt;/code&gt; 比较。&lt;br&gt;
+&lt;code&gt;j=0&lt;/code&gt;，&lt;code&gt;'i' != 's'&lt;/code&gt; → 失配。&lt;br&gt;
+窗口后字符 &lt;code&gt;T[13] = 'a'&lt;/code&gt;，&lt;code&gt;shift['a'] = 4&lt;/code&gt;，&lt;code&gt;i = 7 + 4 = 11&lt;/code&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;i = 11&lt;/code&gt;，窗口 &lt;code&gt;T[11..16] = &amp;quot; search&amp;quot;&lt;/code&gt; （注意前面有个空格，&lt;code&gt;T[11]&lt;/code&gt; 是空格，&lt;code&gt;T[12]='s'&lt;/code&gt;&amp;hellip;实际上 &lt;code&gt;T = &amp;quot;substring searching&amp;quot;&lt;/code&gt;，索引从0：s u b s t r i n g s e a r c h i n g。&lt;br&gt;
+&lt;code&gt;T[11]&lt;/code&gt; 是空格，&lt;code&gt;T[12]&lt;/code&gt; 是 &lt;code&gt;s&lt;/code&gt;，&lt;code&gt;T[13]&lt;/code&gt; 是 &lt;code&gt;e&lt;/code&gt;&amp;hellip; 等等。窗口为 &lt;code&gt;&amp;quot; searc&amp;quot;&lt;/code&gt;，而模式串是 &lt;code&gt;&amp;quot;search&amp;quot;&lt;/code&gt;。&lt;br&gt;
+比较：&lt;code&gt;j=0&lt;/code&gt;，空格 ≠ &lt;code&gt;'s'&lt;/code&gt; → 失配。&lt;br&gt;
+窗口后字符 &lt;code&gt;T[17] = 'h'&lt;/code&gt;，&lt;code&gt;shift['h'] = 1&lt;/code&gt;，&lt;code&gt;i = 11 + 1 = 12&lt;/code&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;i = 12&lt;/code&gt;，窗口 &lt;code&gt;T[12..17] = &amp;quot;search&amp;quot;&lt;/code&gt;，与模式串完全匹配！记录位置 12。&lt;br&gt;
+匹配后，查看下一个字符 &lt;code&gt;T[18] = 'i'&lt;/code&gt;，&lt;code&gt;shift['i'] = 7&lt;/code&gt;，&lt;code&gt;i = 12 + 7 = 19&lt;/code&gt;。&lt;br&gt;
+此时 &lt;code&gt;19 &amp;gt; 17&lt;/code&gt;（&lt;code&gt;n - m = 23 - 6 = 17&lt;/code&gt;），循环结束。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;整个过程仅跳跃了 4 次，比较次数很少，窗口后的字符帮助大幅跳过了不可能匹配的区域。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="5-复杂度分析"&gt;5. 复杂度分析
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;预处理&lt;/strong&gt;：遍历模式串和字符集，时间复杂度 (O(m + |\Sigma|))，空间复杂度 (O(|\Sigma|))（可存储完整字符集或仅用哈希表记录出现过的字符）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;匹配阶段&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;最好情况&lt;/strong&gt;：每次失配发生在模式串第一个字符，且 &lt;code&gt;T[i+m]&lt;/code&gt; 不在模式串中，每次直接移动 &lt;code&gt;m+1&lt;/code&gt; 位，时间复杂度 (O(n / m))。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;最坏情况&lt;/strong&gt;：与 BM 类似，某些特定模式串和文本组合（如 &lt;code&gt;P = &amp;quot;baaa&amp;quot;&lt;/code&gt;, &lt;code&gt;T = &amp;quot;aaaaaa...&amp;quot;&lt;/code&gt;）可能导致多次仅移动 1 步，复杂度退化至 (O(n \cdot m))。但在实际自然语言文本中极罕见。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;平均情况&lt;/strong&gt;：通常认为 Sunday 算法具有亚线性平均性能，往往比 BM 和 KMP 更快，尤其在大字符集（如 Unicode）下优势明显。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="6-与-horspoolboyer-moore-的区别"&gt;6. 与 Horspool、Boyer-Moore 的区别
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;算法&lt;/th&gt;
+&lt;th&gt;失配后关注的字符&lt;/th&gt;
+&lt;th&gt;移动依据&lt;/th&gt;
+&lt;th&gt;预处理复杂度&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;BM&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;窗口内失配的字符 + 好后缀&lt;/td&gt;
+&lt;td&gt;坏字符规则与好后缀规则取最大值&lt;/td&gt;
+&lt;td&gt;(O(m+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Horspool&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;当前窗口的最后一个字符 &lt;code&gt;T[i+m-1]&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;该字符在模式串中的最右位置&lt;/td&gt;
+&lt;td&gt;(O(m+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Sunday&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;窗口后的下一个字符 &lt;code&gt;T[i+m]&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;该字符在模式串中的最右位置&lt;/td&gt;
+&lt;td&gt;(O(m+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Sunday 算法关注的是&lt;strong&gt;尚未参与比较的那个字符&lt;/strong&gt;，这使得它经常能比 Horspool 移动得更远。例如当窗口内所有字符都匹配成功，但窗口后字符恰好不在模式串中时，Sunday 可以直接移动 &lt;code&gt;m+1&lt;/code&gt; 位，而 Horspool 只能利用窗口末尾字符，可能移动距离较小。此外，Sunday 不需要像 BM 那样维护复杂的好后缀表，代码量显著减少。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="7-实际应用与变种"&gt;7. 实际应用与变种
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;快速文本搜索&lt;/strong&gt;：许多软件和库（如某些语言运行时的 &lt;code&gt;indexOf&lt;/code&gt; / &lt;code&gt;find&lt;/code&gt; 函数）会采用 Sunday 算法或类似变体。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;网络入侵检测&lt;/strong&gt;：在 Snort 等系统中，多模式匹配引擎也会借鉴 Sunday 的快速跳跃思想。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;变种&lt;/strong&gt;：由于 Sunday 算法极其简洁，很容易扩展为忽略大小写、多模式匹配等版本。有论文提出结合 KMP 的 next 数组优化最坏情况，但通常工程上更倾向接受其极佳的平均性能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="8-总结-2"&gt;8. 总结
+&lt;/h3&gt;&lt;p&gt;Sunday 算法用极简的规则——“失配时看窗口后一个字符”——实现了字符串匹配的快速跳跃。它避免了复杂的回溯和好后缀计算，将预处理压缩为一维数组，匹配过程流畅且高度可优化。正因为这种简单与高效，Sunday 算法成为字符串搜索领域最实用的算法之一，也是理解 BM 算法族思想的一个绝佳切入点。&lt;/p&gt;
+&lt;h2 id="选择排序"&gt;选择排序
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;选择排序（Selection Sort）&lt;/strong&gt; 是一种简单直观的比较排序算法。它的基本思路是：将数组分为已排序和未排序两部分，每轮从未排序部分选择最小的元素，放到已排序部分的末尾，直至整个数组有序。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="1-核心思想-1"&gt;1. 核心思想
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;划分区间&lt;/strong&gt;：整个数组被分为 &lt;code&gt;[0, i-1]&lt;/code&gt;（已排序）和 &lt;code&gt;[i, n-1]&lt;/code&gt;（未排序）两段。初始时 &lt;code&gt;i=0&lt;/code&gt;，已排序部分为空。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;选择最小&lt;/strong&gt;：在第 &lt;code&gt;i&lt;/code&gt; 轮（&lt;code&gt;i&lt;/code&gt; 从 0 到 &lt;code&gt;n-2&lt;/code&gt;），遍历未排序区间 &lt;code&gt;[i, n-1]&lt;/code&gt;，找出最小元素。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;交换到位&lt;/strong&gt;：将这个最小元素与位置 &lt;code&gt;i&lt;/code&gt; 的元素交换。此时位置 &lt;code&gt;i&lt;/code&gt; 上的元素归位，已排序区间扩大到 &lt;code&gt;[0, i]&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;重复这个过程，直到 &lt;code&gt;i&lt;/code&gt; 到达 &lt;code&gt;n-1&lt;/code&gt;（最后一个元素自然就位）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="2-算法步骤升序为例"&gt;2. 算法步骤（升序为例）
+&lt;/h3&gt;&lt;p&gt;对于长度为 &lt;code&gt;n&lt;/code&gt; 的数组 &lt;code&gt;arr&lt;/code&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;从 &lt;code&gt;i = 0&lt;/code&gt; 开始，直到 &lt;code&gt;i = n-2&lt;/code&gt;：
+&lt;ul&gt;
+&lt;li&gt;设置 &lt;code&gt;minIndex = i&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;对于 &lt;code&gt;j&lt;/code&gt; 从 &lt;code&gt;i+1&lt;/code&gt; 到 &lt;code&gt;n-1&lt;/code&gt;：
+&lt;ul&gt;
+&lt;li&gt;如果 &lt;code&gt;arr[j] &amp;lt; arr[minIndex]&lt;/code&gt;，则更新 &lt;code&gt;minIndex = j&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;如果 &lt;code&gt;minIndex != i&lt;/code&gt;，交换 &lt;code&gt;arr[i]&lt;/code&gt; 与 &lt;code&gt;arr[minIndex]&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;结束。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;示例&lt;/strong&gt;：数组 &lt;code&gt;[64, 25, 12, 22, 11]&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;第1轮：找到最小元素 11，与 64 交换 → &lt;code&gt;[11, 25, 12, 22, 64]&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;第2轮：在 &lt;code&gt;[25,12,22,64]&lt;/code&gt; 中找到最小 12，与 25 交换 → &lt;code&gt;[11, 12, 25, 22, 64]&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;第3轮：找到最小 22，与 25 交换 → &lt;code&gt;[11, 12, 22, 25, 64]&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;第4轮：找到最小 25，已在正确位置，不交换。&lt;/li&gt;
+&lt;li&gt;结束，数组有序。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="3-代码实现"&gt;3. 代码实现
+&lt;/h3&gt;&lt;h4 id="python"&gt;Python
+&lt;/h4&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;selection_sort&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;min_idx&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;min_idx&lt;/span&gt;&lt;span class="p"&gt;]:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;min_idx&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;min_idx&lt;/span&gt; &lt;span class="o"&gt;!=&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;min_idx&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;min_idx&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;arr&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="c"&gt;C++
+&lt;/h4&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;selectionSort&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;vector&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="o"&gt;++&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;minIndex&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="o"&gt;++&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;minIndex&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;minIndex&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;swap&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;minIndex&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h3 id="4-复杂度分析"&gt;4. 复杂度分析
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;项目&lt;/th&gt;
+&lt;th&gt;情况&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;时间复杂度&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;最好情况&lt;/td&gt;
+&lt;td&gt;(O(n^2))&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;最坏情况&lt;/td&gt;
+&lt;td&gt;(O(n^2))&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;平均情况&lt;/td&gt;
+&lt;td&gt;(O(n^2))&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;空间复杂度&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;(O(1))（原地排序）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;无论输入数据是否接近有序，比较次数固定为 (\frac{n(n-1)}{2})，因此时间复杂度恒为 (O(n^2))。&lt;/li&gt;
+&lt;li&gt;交换次数：最坏需要 (n-1) 次交换，最好为 0 次（已排序且无相等时）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="5-稳定性"&gt;5. 稳定性
+&lt;/h3&gt;&lt;p&gt;选择排序是&lt;strong&gt;不稳定&lt;/strong&gt;的排序算法。&lt;br&gt;
+因为交换操作可能会跨越相等的元素，破坏原有的相对顺序。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;示例&lt;/strong&gt;：数组 &lt;code&gt;[5, 8, 5, 2, 9]&lt;/code&gt;，稳定排序应保持两个 &lt;code&gt;5&lt;/code&gt; 的先后。&lt;br&gt;
+第1轮找到最小值 2，与 &lt;code&gt;arr[0]=5&lt;/code&gt; 交换，数组变为 &lt;code&gt;[2, 8, 5, 5, 9]&lt;/code&gt;，第一个 &lt;code&gt;5&lt;/code&gt; 被换到了相对靠后的位置，改变了两个 &lt;code&gt;5&lt;/code&gt; 的原始顺序。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="6-特点与适用场景"&gt;6. 特点与适用场景
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;优点&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;实现极其简单，易于理解。&lt;/li&gt;
+&lt;li&gt;无需额外内存（原地排序）。&lt;/li&gt;
+&lt;li&gt;交换次数少（最多 (n-1) 次），适用于&lt;strong&gt;写操作成本很高&lt;/strong&gt;的场景（如 Flash 存储）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;缺点&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;时间复杂度高，不论输入如何都是 (O(n^2))，数据量大时效率极低。&lt;/li&gt;
+&lt;li&gt;不稳定。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;适用场景&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;数据规模很小（如几十个元素）且对性能要求不高的场合。&lt;/li&gt;
+&lt;li&gt;对交换次数有严格限制的存储介质。&lt;/li&gt;
+&lt;li&gt;作为其他复杂算法（如堆排序、快速排序）的退化处理或教学演示。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="7-与其他简单排序的对比"&gt;7. 与其他简单排序的对比
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;算法&lt;/th&gt;
+&lt;th&gt;时间复杂度&lt;/th&gt;
+&lt;th&gt;空间复杂度&lt;/th&gt;
+&lt;th&gt;稳定性&lt;/th&gt;
+&lt;th&gt;特点&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;选择排序&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;(O(n^2))&lt;/td&gt;
+&lt;td&gt;(O(1))&lt;/td&gt;
+&lt;td&gt;不稳定&lt;/td&gt;
+&lt;td&gt;交换次数最少&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;冒泡排序&lt;/td&gt;
+&lt;td&gt;(O(n^2))&lt;/td&gt;
+&lt;td&gt;(O(1))&lt;/td&gt;
+&lt;td&gt;稳定&lt;/td&gt;
+&lt;td&gt;可通过检测提前终止，适合基本有序&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;插入排序&lt;/td&gt;
+&lt;td&gt;(O(n^2))&lt;/td&gt;
+&lt;td&gt;(O(1))&lt;/td&gt;
+&lt;td&gt;稳定&lt;/td&gt;
+&lt;td&gt;对于部分有序数据效率很高&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;选择排序的优势在于思路直观和极少的数据移动次数，但由于时间复杂度的根本限制，它很少用于大型数据集。不过，理解选择排序是学习更高效排序算法（如堆排序，其本质是选择排序的优化）的重要基石。&lt;/p&gt;
+&lt;h2 id="广义表"&gt;广义表
+&lt;/h2&gt;&lt;p&gt;广义表（Generalized List），也称列表，是线性表的一种推广。它的特殊之处在于：&lt;strong&gt;表中的元素既可以是单个数据元素（原子），也可以是一个广义表（子表）&lt;/strong&gt;。这种递归定义使得广义表能灵活地表达层次化、嵌套的数据结构。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id="1-定义"&gt;1. 定义
+&lt;/h4&gt;&lt;p&gt;广义表是 n (n≥0) 个元素的有穷序列，记为：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;LS = (d₁, d₂, …, dₙ)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;其中：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;原子&lt;/strong&gt;：当 dᵢ 是单个不可再分的数据元素时，称 dᵢ 为原子，通常用小写字母表示。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;子表&lt;/strong&gt;：当 dᵢ 本身又是一个广义表时，称它为 LS 的子表，通常用大写字母表示。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;n 为表长&lt;/strong&gt;。 n=0 时称为空表。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;递归定义&lt;/strong&gt;：广义表可以由原子和已经定义好的广义表构造而成。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;例子&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;A = ()&lt;/code&gt; —— 空表，长度 0。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;B = (a, (b, c))&lt;/code&gt; —— 长度为 2，第一个元素是原子 a，第二个元素是子表 (b, c)。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C = (a, B, (c, d))&lt;/code&gt; —— 长度为 3，原子 a、子表 B、子表 (c, d)。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;D = (A, B, C)&lt;/code&gt; —— 长度为 3，三个元素都是子表。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;E = (a, E)&lt;/code&gt; —— 长度为 2 的递归表，第二个元素是表自身（无穷深）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h4 id="2-重要术语"&gt;2. 重要术语
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;长度&lt;/strong&gt;：广义表第一层元素的个数（原子和子表都算一个元素）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;深度&lt;/strong&gt;：广义表括号嵌套的最大层数。原子的深度为 0，空表的深度为 1。例如：
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;(a, (b, c))&lt;/code&gt; 的深度为 2。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;(a, (b, (c, d)))&lt;/code&gt; 的深度为 3。&lt;/li&gt;
+&lt;li&gt;递归表 &lt;code&gt;(a, E)&lt;/code&gt; 的深度为无穷大。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;表头（Head）&lt;/strong&gt;：广义表非空时的第一个元素，可以是原子或子表。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;表尾（Tail）&lt;/strong&gt;：去掉表头之后，由其余元素组成的广义表（注意：表尾一定是个广义表，哪怕只剩一个元素也要加括号）。
+&lt;ul&gt;
+&lt;li&gt;例如 &lt;code&gt;LS = (a, (b, c), d)&lt;/code&gt;，&lt;code&gt;Head(LS) = a&lt;/code&gt;，&lt;code&gt;Tail(LS) = ((b, c), d)&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;递归表&lt;/strong&gt;：广义表在定义时直接或间接地包含自身。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h4 id="3-存储结构"&gt;3. 存储结构
+&lt;/h4&gt;&lt;p&gt;由于元素类型不统一、大小不固定，广义表无法用简单的顺序结构存储，&lt;strong&gt;普遍采用链式存储&lt;/strong&gt;。有两种典型表示法：&lt;/p&gt;
+&lt;h4 id="-头尾链表表示法"&gt;① 头尾链表表示法
+&lt;/h4&gt;&lt;p&gt;每个结点对应一个元素，结点包含：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;tag 标志位&lt;/strong&gt;：0 表示原子，1 表示子表。&lt;/li&gt;
+&lt;li&gt;如果 tag=0，结点存储原子值和一个指向下一个元素的指针。&lt;/li&gt;
+&lt;li&gt;如果 tag=1，结点存储两个指针：&lt;strong&gt;指向子表表头&lt;/strong&gt;的指针 (hp) 和&lt;strong&gt;指向同一层下一个元素&lt;/strong&gt;的指针 (tp)。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这种结构自然地表示了表头、表尾的分解关系。&lt;/p&gt;
+&lt;h4 id="-扩展线性链表表示法"&gt;② 扩展线性链表表示法
+&lt;/h4&gt;&lt;p&gt;结点结构类似，但把同层元素用单链表串联起来：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;tag=0：原子结点，含数据和 next 指针。&lt;/li&gt;
+&lt;li&gt;tag=1：子表结点，含一个指向子表的指针和 next 指针。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这种方式更适合需要方便遍历同一层全部元素的场景。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id="4-基本操作"&gt;4. 基本操作
+&lt;/h4&gt;&lt;p&gt;广义表支持的操作通常有：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Head(L)&lt;/strong&gt;：取表头。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tail(L)&lt;/strong&gt;：取表尾。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Length(L)&lt;/strong&gt;：求长度。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Depth(L)&lt;/strong&gt;：求深度。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Copy(L)&lt;/strong&gt;：复制广义表。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Create/Insert/Delete&lt;/strong&gt;：构造、插入、删除元素（涉及内存管理）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所有操作几乎都是递归定义的，例如求深度的递归算法：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;若表为空，深度=1；若为原子，深度=0；
+否则，深度 = 1 + max{各子表的深度}。
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h4 id="5-与线性表的区别"&gt;5. 与线性表的区别
+&lt;/h4&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;线性表&lt;/th&gt;
+&lt;th&gt;广义表&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;所有元素类型相同，都是原子&lt;/td&gt;
+&lt;td&gt;元素可以是原子或广义表&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;结构是线性的&lt;/td&gt;
+&lt;td&gt;结构是分层的、递归的&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;长度是直接元素个数&lt;/td&gt;
+&lt;td&gt;长度是最外层元素个数，另有深度概念&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;顺序或链表存储&lt;/td&gt;
+&lt;td&gt;通常只能用链式结构&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h4 id="6-应用场景"&gt;6. 应用场景
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;LISP / Scheme 语言&lt;/strong&gt;：其核心数据结构就是广义表，用 S-表达式表示程序和数据。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;多元多项式表示&lt;/strong&gt;：例如 &lt;code&gt;P(x,y) = 3x²y + 5xy³&lt;/code&gt; 可以表示为广义表 &lt;code&gt;((3,2,1), (5,1,3))&lt;/code&gt;，每个子表表示系数和指数对。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;稀疏矩阵&lt;/strong&gt;：每一行的非零元素构成一个子表，各行再组成广义表，节省空间。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;人工智能与符号处理&lt;/strong&gt;：知识表示、树和图结构的通用描述。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h4 id="7-总结"&gt;7. 总结
+&lt;/h4&gt;&lt;p&gt;广义表是一类极其灵活的数据结构，它打破了线性表元素必须为原子的限制，通过递归定义实现了嵌套。它以链式存储为基础，通过“表头-表尾”的分解方式统一处理原子和子表，在程序语言设计和复杂结构化数据的存储中扮演着重要角色。理解广义表，是理解递归数据结构、掌握 Lisp 系语言和进行复杂符号运算的关键一步。&lt;/p&gt;
+&lt;h2 id="贪心--动态规划"&gt;贪心 &amp;amp; 动态规划
+&lt;/h2&gt;&lt;p&gt;贪心算法和动态规划的核心区别，确实可以形象地概括为：&lt;strong&gt;贪心“绝不回头看”，动态规划“需要反复权衡过去和未来的所有可能”&lt;/strong&gt;。这个说法抓住了两种算法哲学的根本不同。&lt;/p&gt;
+&lt;p&gt;下面详细拆解这个核心区别，并给出具体实例。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="1-决策方式的本质差异"&gt;1. 决策方式的本质差异
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;维度&lt;/th&gt;
+&lt;th&gt;贪心算法 (Greedy)&lt;/th&gt;
+&lt;th&gt;动态规划 (Dynamic Programming)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;决策视角&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;只看&lt;strong&gt;当前&lt;/strong&gt;，选择眼下最优的局部解&lt;/td&gt;
+&lt;td&gt;统筹&lt;strong&gt;全局&lt;/strong&gt;，考虑所有可能的划分和组合&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;状态依赖&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;不依赖未来信息，也不比较不同选择的历史&lt;/td&gt;
+&lt;td&gt;依赖于子问题的解，将大问题分解为重叠的子问题，并记录每个子问题的最优解&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;是否“回头看”&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;否&lt;/strong&gt;。一旦做出选择，就永久固化，不再回溯或修改&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;是&lt;/strong&gt;。通过记录每个状态的解，实际上是在“回顾”之前决策的后果，并在多个选项中选出真正最优的路径。它不是单步决策，而是多阶段决策的最优组合&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;正确性保证&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;需要严格的数学证明（如贪心选择性质、最优子结构）&lt;/td&gt;
+&lt;td&gt;满足最优子结构和重叠子问题即可，通过状态转移方程穷举所有可能&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;形象比喻&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;贪心就像走一条&lt;strong&gt;单行道&lt;/strong&gt;，在每个岔路口只凭当前路牌选择最宽的路，走了就不回头，哪怕后来发现走进了死胡同。&lt;/li&gt;
+&lt;li&gt;动态规划则像带着&lt;strong&gt;地图和记事本&lt;/strong&gt;，走之前先研究所有可能的路线，或者边走边记下“从某个路口到终点的最短耗时”，最终选出一条真正最短的路。它的“回头看”体现在：&lt;strong&gt;回头审视之前记录的所有子问题的最优解&lt;/strong&gt;，从而做出此刻最正确的选择。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h3 id="2-实例对比找零钱问题"&gt;2. 实例对比：找零钱问题
+&lt;/h3&gt;&lt;p&gt;假设硬币面值有 &lt;code&gt;{1, 5, 11}&lt;/code&gt; 三种，要凑出总金额 &lt;code&gt;15&lt;/code&gt;，要求硬币数量最少。&lt;/p&gt;
+&lt;h4 id="贪心策略绝不回头看"&gt;贪心策略（“绝不回头看”）
+&lt;/h4&gt;&lt;p&gt;每一步就选面值最大且不超过余额的硬币。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;第一步：15 元，可选 11，剩下 4。&lt;/li&gt;
+&lt;li&gt;第二步：4 元，最大可选 1，选 1，剩下 3。&lt;/li&gt;
+&lt;li&gt;第三步：3 元，选 1，剩下 2。&lt;/li&gt;
+&lt;li&gt;第四步：2 元，选 1，剩下 1。&lt;/li&gt;
+&lt;li&gt;第五步：1 元，选 1，结束。
+结果：&lt;code&gt;11 + 1 + 1 + 1 + 1 = 5 枚硬币&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;贪心没有回头，首次选了 11 就再也无法改变，尽管这个选择导致了全局不是最优。&lt;/p&gt;
+&lt;h4 id="动态规划反复权衡过去"&gt;动态规划（“反复权衡过去”）
+&lt;/h4&gt;&lt;p&gt;定义 &lt;code&gt;dp[i]&lt;/code&gt; 为凑出金额 &lt;code&gt;i&lt;/code&gt; 的最少硬币数。考虑递推式：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;dp[i] = min( dp[i - coin] + 1 ) 对于每个面值 coin ≤ i
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;计算 &lt;code&gt;dp[15]&lt;/code&gt; 时，会参考 &lt;code&gt;dp[14]&lt;/code&gt;, &lt;code&gt;dp[10]&lt;/code&gt;, &lt;code&gt;dp[4]&lt;/code&gt; 等所有已记录的子问题解：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;若用 1 元：&lt;code&gt;dp[15] = dp[14] + 1 = 4 + 1 = 5&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;若用 5 元：&lt;code&gt;dp[15] = dp[10] + 1 = 2 + 1 = 3&lt;/code&gt; （&lt;code&gt;dp[10]&lt;/code&gt; 最优是 5+5）&lt;/li&gt;
+&lt;li&gt;若用 11 元：&lt;code&gt;dp[15] = dp[4] + 1 = 4 + 1 = 5&lt;/code&gt;
+DP 发现选 5 元可以得到全局最优，于是记录 &lt;code&gt;dp[15]=3&lt;/code&gt;（即 5+5+5）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;这就是“回头看”的体现&lt;/strong&gt;：&lt;code&gt;dp[15]&lt;/code&gt; 在做决定时，并不是只看眼下的“补 4 元、补 10 元、补 4 元”哪个更小，而是调用了 &lt;code&gt;dp[10]&lt;/code&gt; 等&lt;strong&gt;过去已经记录好的最优结果&lt;/strong&gt;，综合比较后才做出选择。实际上它把曾经“选 10 元怎么选最优”的整个历史都考虑进来了，相当于反复权衡了所有可能的路径。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="3-再例0-1-背包问题"&gt;3. 再例：0-1 背包问题
+&lt;/h3&gt;&lt;p&gt;有 3 件物品：①重量 1，价值 6；②重量 2，价值 10；③重量 3，价值 12。背包容量 5。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;贪心（按单位价值排序，绝不回头）&lt;/strong&gt;：&lt;br&gt;
+单位价值：①=6，②=5，③=4。&lt;br&gt;
+先拿①（剩余容量4），再拿②（剩余容量2），再拿③时放不下了。总价值 = 6+10 = &lt;strong&gt;16&lt;/strong&gt;。&lt;br&gt;
+贪心一旦选了 ① 和 ②，就不会回头重新考虑“是不是不拿 ② 而拿 ③ 更好”。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;动态规划（记录所有子问题）&lt;/strong&gt;：&lt;br&gt;
+状态 &lt;code&gt;dp[i][w]&lt;/code&gt; 为前 &lt;code&gt;i&lt;/code&gt; 件物品在容量 &lt;code&gt;w&lt;/code&gt; 下的最大价值。计算时，它会考虑拿或不拿每件物品，并回顾之前的 &lt;code&gt;dp&lt;/code&gt; 值。&lt;br&gt;
+&lt;code&gt;dp[3][5]&lt;/code&gt; 会比较：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;不拿 ③：&lt;code&gt;dp[2][5] = 16&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;拿 ③：&lt;code&gt;dp[2][2] + 12 = (6 + 10? 等等，dp[2][2] 实际是只拿 ① 可得 6，所以是 6+12 = 18&lt;/code&gt;&lt;br&gt;
+结果 &lt;code&gt;dp[3][5] = 18&lt;/code&gt;（拿 ① 和 ③）。&lt;br&gt;
+动态规划通过回顾 &lt;code&gt;dp[2][2]&lt;/code&gt; 这个过去的记录，发现了放弃物品 ② 反而更好的方案。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="4-为什么动态规划不是真正撤销决策"&gt;4. 为什么动态规划不是真正“撤销”决策？
+&lt;/h3&gt;&lt;p&gt;需要澄清一点：动态规划并不会去改变已经写入表格的数值，它&lt;strong&gt;没有修改历史决策&lt;/strong&gt;，而是&lt;strong&gt;在作出当前决策时，已经预见了未来的影响&lt;/strong&gt;，或者说把历史当作参考。它通过 &lt;strong&gt;“状态”&lt;/strong&gt; 保留了所有可能决策分支的后果，最后通过回溯/填表得到最优路径。&lt;/p&gt;
+&lt;p&gt;所以说“回头看”是指它&lt;strong&gt;反复利用过去计算出的子问题最优解来推导当前最优解&lt;/strong&gt;，这是一种“向后看”的过程，而非后悔并重新选择。贪心则完全不利用那些没走过的路的信息。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="5-总结一张表看懂是否回头看"&gt;5. 总结：一张表看懂“是否回头看”
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;特性&lt;/th&gt;
+&lt;th&gt;贪心&lt;/th&gt;
+&lt;th&gt;动态规划&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;做决策时是否回顾以前的方案？&lt;/td&gt;
+&lt;td&gt;从不&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;不断回顾&lt;/strong&gt;（子问题的解）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;是否在多种可能中做选择？&lt;/td&gt;
+&lt;td&gt;只选当前局部最优，不比较&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;全局比较所有可能划分&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;发现当前选择不好能否反悔？&lt;/td&gt;
+&lt;td&gt;不能&lt;/td&gt;
+&lt;td&gt;实际通过记录所有状态，&lt;strong&gt;隐式地“反悔”&lt;/strong&gt;（选择另一条分支）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;需要存储过去的信息吗？&lt;/td&gt;
+&lt;td&gt;只需记住上一个决策&lt;/td&gt;
+&lt;td&gt;需要&lt;strong&gt;表或备忘录&lt;/strong&gt;存储子问题解&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;适用问题的特征&lt;/td&gt;
+&lt;td&gt;贪心选择性质（局部最优→全局最优）&lt;/td&gt;
+&lt;td&gt;重叠子问题 + 最优子结构&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;因此，&lt;strong&gt;“贪心不回头，动态规划反复权衡历史并综合决策”&lt;/strong&gt; 是对两者核心区别既准确又通俗的概括。理解这一点，就能很快判断一个新问题该用哪种策略求解。&lt;/p&gt;
+&lt;h2 id="贪心选择性质"&gt;贪心选择性质
+&lt;/h2&gt;&lt;p&gt;贪心选择性质是贪心算法得以成立的核心条件，也是区分一个优化问题能否用贪心策略求解的关键标志。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id="1-定义什么是贪心选择性质"&gt;1. 定义：什么是贪心选择性质？
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;贪心选择性质（Greedy-choice property）&lt;/strong&gt; 是指：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;一个问题的&lt;strong&gt;全局最优解&lt;/strong&gt;，可以通过一系列&lt;strong&gt;局部最优选择&lt;/strong&gt;来达到。换句话说，每次我们做出在当前看来最好的选择（贪心选择），然后对产生的子问题继续进行贪心选择，最终就能得到整个问题的最优解。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;更形式化地：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;设原问题为 (P)，贪心选择某个局部最优项 (x) 后，原问题规约为一个&lt;strong&gt;子问题&lt;/strong&gt; (P&amp;rsquo;)。&lt;/li&gt;
+&lt;li&gt;如果 (x) 加上 (P&amp;rsquo;) 的最优解就是 (P) 的最优解，则称该问题具有贪心选择性质。&lt;/li&gt;
+&lt;li&gt;关键在于：&lt;strong&gt;我们无需考虑除 (x) 以外的任何选择&lt;/strong&gt;，也无需知道 (x) 是如何影响子问题的——它一旦被选中，就永远属于最优解。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;贪心选择的“无后效性”&lt;/strong&gt;：贪心选择一旦做出，之后的过程就完全“忘记”这个选择，只关心剩下的子问题。这也就是为什么贪心算法“绝不回头看”——它不是不想回头，而是性质保证了不需要回头。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h4 id="2-为什么贪心选择性质如此重要"&gt;2. 为什么贪心选择性质如此重要？
+&lt;/h4&gt;&lt;p&gt;它是贪心算法&lt;strong&gt;正确性的基石&lt;/strong&gt;。如果不具备该性质，贪心策略可能给出错误答案（比如在 0-1 背包问题中按单位价值贪心会失败）。&lt;/p&gt;
+&lt;p&gt;同时，贪心选择性质与&lt;strong&gt;最优子结构&lt;/strong&gt;一起，构成了使用贪心算法的两个必要条件：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;最优子结构&lt;/strong&gt;：问题的最优解包含其子问题的最优解。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;贪心选择性质&lt;/strong&gt;：全局最优解可以通过局部最优选择得到。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;通常我们先证明贪心选择性质，再证明最优子结构（虽然有时最优子结构更显而易见）。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id="3-如何证明贪心选择性质"&gt;3. 如何证明贪心选择性质？
+&lt;/h4&gt;&lt;p&gt;最常用的方法是**“交换论证法”（Exchange Argument）**，其一般步骤为：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;假设存在某个全局最优解 (OPT)&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;如果 (OPT) 已经包含我们做出的贪心选择&lt;/strong&gt;，则性质直接成立。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;如果 (OPT) 不包含该贪心选择&lt;/strong&gt;，我们就&lt;strong&gt;修改 (OPT)&lt;/strong&gt;：用贪心选择去替换 (OPT) 中的某个成分，得到一个新解 (OPT&amp;rsquo;)。&lt;/li&gt;
+&lt;li&gt;证明 (OPT&amp;rsquo;) 仍然是可行解，且不会比 (OPT) 差（价值不减少、长度不增加等）。&lt;/li&gt;
+&lt;li&gt;因此，包含贪心选择的解 (OPT&amp;rsquo;) 也是最优解，贪心选择性质得证。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这个过程说明：&lt;strong&gt;贪心选择总是可以“挤进”某个最优解中，且不会破坏最优性&lt;/strong&gt;。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id="4-经典案例活动选择问题"&gt;4. 经典案例：活动选择问题
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;问题&lt;/strong&gt;：给定 (n) 个活动，每个活动有开始时间 (s_i) 和结束时间 (f_i)，同一时间只能参加一个活动，求最多能参加多少个活动？&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;贪心策略&lt;/strong&gt;：每次都选&lt;strong&gt;结束时间最早&lt;/strong&gt;的活动，然后排除与该活动冲突的其他活动，重复此过程。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;证明贪心选择性质&lt;/strong&gt;（使用交换论证）：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;设活动按结束时间递增排序：(f_1 \le f_2 \le \cdots \le f_n)。&lt;/li&gt;
+&lt;li&gt;贪心选择是活动 (1)（最早结束的活动）。&lt;/li&gt;
+&lt;li&gt;设 (S) 是原问题的一个最优解集合，其活动也按结束时间排序。若 (S) 的第一个活动是 (1)，则性质得证。&lt;/li&gt;
+&lt;li&gt;若 (S) 的第一个活动是 (k)（(k \ne 1)），则由于 (f_1 \le f_k)，我们可以&lt;strong&gt;用活动 (1) 替换 (k)&lt;/strong&gt;，得到新集合 (S&amp;rsquo; = (S \setminus {k}) \cup {1})。&lt;/li&gt;
+&lt;li&gt;因为 (f_1 \le f_k)，活动 (1) 比活动 (k) 结束得更早（或同时），因此不会与 (S) 中后续活动冲突，(S&amp;rsquo;) 仍是可行解。&lt;/li&gt;
+&lt;li&gt;(S&amp;rsquo;) 的活动数量与 (S) 相等，所以也是最优解，且包含了贪心选择 (1)。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;至此，证明完&lt;strong&gt;任何最优解都可以通过替换变成包含贪心选择的最优解&lt;/strong&gt;，贪心选择性质成立。之后只需要对剩下的相容子问题递归应用此贪心选择即可。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id="5-与动态规划的决策方式对比"&gt;5. 与动态规划的决策方式对比
+&lt;/h4&gt;&lt;p&gt;回顾你之前问过的“贪心与动态规划的核心区别”，贪心选择性质正是二者分道扬镳的根源：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;对比维度&lt;/th&gt;
+&lt;th&gt;贪心算法&lt;/th&gt;
+&lt;th&gt;动态规划&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;决策方式&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;每次只做一个局部最优选择，然后进入一个子问题&lt;/td&gt;
+&lt;td&gt;考虑&lt;strong&gt;所有可能的选择&lt;/strong&gt;，比较它们对应的子问题最优解，再决定当前最优选择&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;依赖的子问题&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;只需求解&lt;strong&gt;一个&lt;/strong&gt;子问题（例如选了活动1后，剩下的活动集）&lt;/td&gt;
+&lt;td&gt;通常需求解&lt;strong&gt;多个&lt;/strong&gt;子问题（例如选不选第 (i) 件物品，需要 (dp[i-1][w]) 和 (dp[i-1][w-w_i]) 两个子问题）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;是否需要“回头看”&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;否。选择固定，绝不修正&lt;/td&gt;
+&lt;td&gt;是。通过记录每个状态的解，实际上综合了历史信息，可以看作在多种可能中反复权衡&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;贪心选择性质的意义&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;保证那“唯一”的子问题路径就是全局最优&lt;/td&gt;
+&lt;td&gt;不适用（或不存在贪心选择性质），必须枚举所有可能才能得到全局最优&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;例子&lt;/strong&gt;：在找零钱问题中，硬币面值 &lt;code&gt;{1,5,11}&lt;/code&gt; 凑 &lt;code&gt;15&lt;/code&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;贪心（每次选最大不超过余额的硬币）不满足贪心选择性质 → 错误。&lt;/li&gt;
+&lt;li&gt;动态规划需要计算 &lt;code&gt;dp[14]&lt;/code&gt;、&lt;code&gt;dp[10]&lt;/code&gt;、&lt;code&gt;dp[4]&lt;/code&gt; 等多个子问题，比较后得出最优。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h4 id="6-反例贪心选择性质不成立的问题"&gt;6. 反例：贪心选择性质不成立的问题
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;0-1 背包问题&lt;/strong&gt;：物品重量和价值不同，背包容量有限，每件物品只能选一次。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;贪心策略：按单位价值排序，优先拿单位价值高的。&lt;/li&gt;
+&lt;li&gt;为什么贪心选择性质不成立？因为选了单位价值高的物品，可能占用了容量，导致后面无法放入某些组合价值更高的物品。&lt;strong&gt;局部最优无法保证全局最优&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;用交换论证尝试证明会失败：假设最优解不包含贪心选择的物品，试图用贪心物品替换它，但贪心物品可能太重，替换后破坏了容量约束，无法得到可行解。所以交换论证走不通，贪心选择性质不成立。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这恰恰说明，贪心算法不是万能的，&lt;strong&gt;只有具备贪心选择性质的问题才能放心地“不回头看”&lt;/strong&gt;。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id="7-总结-1"&gt;7. 总结
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;定义&lt;/strong&gt;：全局最优解可以通过一系列局部最优选择构造出来。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;证明武器&lt;/strong&gt;：交换论证法（任意最优解都可转化为包含贪心选择的最优解）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;算法设计启示&lt;/strong&gt;：面对一个优化问题，可以先尝试贪心，然后用交换论证检验其正确性；若无法证明，则往往需要动态规划或回溯搜索。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;本质&lt;/strong&gt;：贪心选择性质为算法决策赋予了 &lt;strong&gt;“无后悔性”&lt;/strong&gt;——我们可以坚定地走一条路，因为数学上已担保这条路通向全局最优。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;理解了贪心选择性质，你就真正懂得了为什么贪心算法可以那么“莽撞”却又那么高效。&lt;/p&gt;
+&lt;h2 id="重叠子问题--最优子结构"&gt;重叠子问题 &amp;amp; 最优子结构
+&lt;/h2&gt;&lt;p&gt;在动态规划（Dynamic Programming）中，&lt;strong&gt;最优子结构&lt;/strong&gt;和&lt;strong&gt;重叠子问题&lt;/strong&gt;是判定一个问题能否用动态规划高效求解的两个核心性质，缺一不可。它们共同构成了动态规划的数学基础，也解释了为什么动态规划能够“以空间换时间”，把指数级的朴素递归降为多项式时间。&lt;/p&gt;
+&lt;p&gt;下面分别详细解释这两个性质，并结合经典实例说明它们的意义。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="一最优子结构optimal-substructure"&gt;一、最优子结构（Optimal Substructure）
+&lt;/h3&gt;&lt;h4 id="1-定义-1"&gt;1. 定义
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;最优子结构&lt;/strong&gt;是指：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;一个问题的&lt;strong&gt;整体最优解&lt;/strong&gt;，必然由&lt;strong&gt;它的若干子问题的最优解&lt;/strong&gt;组合而成。换句话说，若要得到原问题的最优解，就必须先（或以某种顺序）求得相关子问题的最优解。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;更形式化：设原问题为 (P)，其最优解为 (S)。(P) 可分解为若干子问题 (P_1, P_2, \ldots, P_k)，那么 (S) 中对应于子问题 (P_i) 的那部分解 (S_i)，一定也是子问题 (P_i) 的最优解。&lt;/p&gt;
+&lt;h4 id="2-为什么需要最优子结构"&gt;2. 为什么需要最优子结构？
+&lt;/h4&gt;&lt;p&gt;它是动态规划能“分而治之”的前提。如果原问题的最优解不需要依赖于子问题的最优解，那我们就无法通过求解小问题来构建大问题的答案，自底向上的递推就失去了依据。&lt;/p&gt;
+&lt;h4 id="3-经典实例"&gt;3. 经典实例
+&lt;/h4&gt;&lt;h4 id="-满足最优子结构最短路径问题"&gt;✅ 满足最优子结构：最短路径问题
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;问题：求图中顶点 (u) 到 (v) 的最短路径。&lt;/li&gt;
+&lt;li&gt;最优子结构：如果 (u \rightarrow w \rightarrow v) 是 (u) 到 (v) 的一条最短路径，那么 (u \rightarrow w) 一定是 (u) 到 (w) 的最短路径，(w \rightarrow v) 也一定是 (w) 到 (v) 的最短路径。&lt;/li&gt;
+&lt;li&gt;证明（反证）：假设 (u \rightarrow w) 不是最短的，存在更短的路径 (u \rightarrow w)，那么用它替换原路径中的该段，就能得到一条更短的 (u \rightarrow v) 路径，与原路径为最短矛盾。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="-不满足最优子结构最长简单路径问题"&gt;❌ 不满足最优子结构：最长简单路径问题
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;问题：求图中两个顶点之间的最长简单路径（无重复顶点）。&lt;/li&gt;
+&lt;li&gt;反例：考虑一个图，顶点 (A, B, C, D)，边 (A-B, B-C, C-D, A-D, B-D)。最长简单路径 (A \rightarrow C) 可能是 (A-D-B-C) 吗？实际上最优子结构可能不成立：假设原问题的最长路径 (A \rightarrow C) 是 (A-B-C)，但它不包含子问题 (A \rightarrow B) 的最长路径（(A \rightarrow B) 最长可能是 (A-D-C-B)，但用上这个会导致重复顶点 (C)，违反简单路径约束）。因此子问题的最优解组合后可能得不到原问题的可行解，更不用说最优解。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="4-如何识别"&gt;4. 如何识别？
+&lt;/h4&gt;&lt;p&gt;证明一个问题的子结构不是最优的，通常只需举出一个反例即可；证明它具有最优子结构，一般用&lt;strong&gt;反证法&lt;/strong&gt;或&lt;strong&gt;剪切-粘贴法&lt;/strong&gt;：假设子问题解不是最优，就能“剪切”掉它并“粘贴”更优的子问题解，从而改进原问题的解，产生矛盾。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="二重叠子问题overlapping-subproblems"&gt;二、重叠子问题（Overlapping Subproblems）
+&lt;/h3&gt;&lt;h4 id="1-定义-2"&gt;1. 定义
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;重叠子问题&lt;/strong&gt;是指：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;在递归求解原问题的过程中，&lt;strong&gt;同一个子问题会被反复求解多次&lt;/strong&gt;，而不是每次遇到都是全新的、独立的子问题。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;也就是说，问题的递归树中存在大量相同的子树，这些子问题的解若被重复计算，将导致指数级的时间膨胀。&lt;/p&gt;
+&lt;h4 id="2-为什么需要重叠子问题"&gt;2. 为什么需要重叠子问题？
+&lt;/h4&gt;&lt;p&gt;如果子问题彼此独立，从不重叠，那就是&lt;strong&gt;分治算法&lt;/strong&gt;（如归并排序、快速排序）的典型特征——虽然也有最优子结构，但每个子问题只求解一次，不需要存储历史结果。动态规划的优势恰恰体现在通过&lt;strong&gt;记忆化&lt;/strong&gt;（Memoization）或&lt;strong&gt;自底向上填表&lt;/strong&gt;（Tabulation）来避免重复计算，将时间复杂性从指数级降到多项式级。&lt;/p&gt;
+&lt;h4 id="3-经典实例-1"&gt;3. 经典实例
+&lt;/h4&gt;&lt;h4 id="斐波那契数列"&gt;斐波那契数列
+&lt;/h4&gt;&lt;p&gt;递归式：(F(n) = F(n-1) + F(n-2))&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;计算 (F(5)) 的递归树中，(F(3)) 计算了 2 次，(F(2)) 计算了 3 次，(F(1)) 计算了 5 次……大量重复。&lt;/li&gt;
+&lt;li&gt;使用动态规划，只需一个数组顺序计算，每个子问题计算一次，时间从 (O(2^n)) 降为 (O(n))。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="钢条切割问题"&gt;钢条切割问题
+&lt;/h4&gt;&lt;p&gt;长度为 (n) 的钢条，切割方案的最优收益依赖于不同长度子段的收益，递归过程中相同长度段的最优收益会被多次查询，若不记录就会重复计算。&lt;/p&gt;
+&lt;h4 id="0-1-背包问题"&gt;0-1 背包问题
+&lt;/h4&gt;&lt;p&gt;状态 &lt;code&gt;dp[i][w]&lt;/code&gt; 可能由 &lt;code&gt;dp[i-1][w]&lt;/code&gt; 和 &lt;code&gt;dp[i-1][w-w_i]&lt;/code&gt; 得来，这两个子问题在求解其他 &lt;code&gt;i&lt;/code&gt; 时又会遇到，大量重叠。&lt;/p&gt;
+&lt;h4 id="4-与分治算法的区别"&gt;4. 与分治算法的区别
+&lt;/h4&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;特性&lt;/th&gt;
+&lt;th&gt;分治算法（如归并排序）&lt;/th&gt;
+&lt;th&gt;动态规划&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;子问题关系&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;不重叠&lt;/strong&gt;，每个子问题都是全新的&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;高度重叠&lt;/strong&gt;，同个子问题多次出现&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;求解方式&lt;/td&gt;
+&lt;td&gt;递归，每个子问题独立计算&lt;/td&gt;
+&lt;td&gt;利用记忆化或递推，共享子问题解&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;最优子结构&lt;/td&gt;
+&lt;td&gt;通常具备，但无需“最优”组合&lt;/td&gt;
+&lt;td&gt;必须具备，且子问题解需要是“最优”的&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="三两者在动态规划中的作用关系"&gt;三、两者在动态规划中的作用关系
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;最优子结构&lt;/strong&gt;提供了&lt;strong&gt;递推关系&lt;/strong&gt;（状态转移方程）的理论保证：我们可以用子问题的最优解来定义原问题的最优解。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;重叠子问题&lt;/strong&gt;提供了&lt;strong&gt;优化动机&lt;/strong&gt;：如果每个子问题只需求解一次并存储下来，后续遇到可以直接查表，从而大幅降低时间复杂度。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;动态规划的经典套路：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;分析问题是否具有最优子结构，找出状态定义和状态转移方程。&lt;/li&gt;
+&lt;li&gt;发现递归过程中存在大量重叠子问题，于是决定采用&lt;strong&gt;备忘录递归&lt;/strong&gt;（自顶向下）或&lt;strong&gt;自底向上填表&lt;/strong&gt;来消除重复计算。&lt;/li&gt;
+&lt;li&gt;最终得到多项式时间算法。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;注意：一个问题可能同时具有最优子结构和重叠子问题，但最优子结构是能用 DP 的&lt;strong&gt;必要条件&lt;/strong&gt;，而重叠子问题是 DP 相比于朴素递归真正“高效”的&lt;strong&gt;充分条件&lt;/strong&gt;。若没有重叠子问题，DP 的复杂度与分治相同，并无特别优势（例如二叉树的最优二叉搜索树问题，虽有最优子结构，但子问题很少重叠，DP 仍然多项式，因为状态空间就那么多，只是没有重叠也能用 DP）。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h3 id="四综合实例0-1-背包问题再次展示"&gt;四、综合实例：0-1 背包问题（再次展示）
+&lt;/h3&gt;&lt;p&gt;有 (n) 件物品，重量 (w_i)，价值 (v_i)，背包容量 (W)，每件物品只能选一次，求最大价值。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;最优子结构&lt;/strong&gt;：定义 (dp[i][c]) 为前 (i) 件物品在容量 (c) 下的最大价值。&lt;br&gt;
+对于第 (i) 件物品，我们有两种选择：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;不选：(dp[i][c] = dp[i-1][c])&lt;/li&gt;
+&lt;li&gt;选（若可行）：(dp[i][c] = v_i + dp[i-1][c-w_i])&lt;br&gt;
+最终 (dp[i][c] = \max(\text{不选}, \text{选}))。&lt;br&gt;
+这里原问题的最优解直接依赖于子问题 (dp[i-1][c]) 和 (dp[i-1][c-w_i]) 的最优解，满足最优子结构。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;重叠子问题&lt;/strong&gt;：在计算过程中，对于固定的 (c)，(dp[i-1][c]) 会在多个不同的 (i) 和容量组合中被反复引用。如果使用纯递归，每个状态只计算一次会引出大量重复分支；用二维表格自底向上填表，每个状态只计算一次，时间 (O(nW))。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="五与贪心选择性质的关联"&gt;五、与贪心选择性质的关联
+&lt;/h3&gt;&lt;p&gt;在前一问中，我们详细探讨了贪心选择性质。这里强调一下区别：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;贪心算法也要求问题具有&lt;strong&gt;最优子结构&lt;/strong&gt;，但它还额外要求&lt;strong&gt;贪心选择性质&lt;/strong&gt;：局部最优选择直接导向全局最优，不需要再“回头”比较多个子问题。&lt;/li&gt;
+&lt;li&gt;动态规划仍然需要最优子结构，但它&lt;strong&gt;不依赖贪心选择性质&lt;/strong&gt;，而是通过遍历所有可能的选择，比较各个子问题的最优解，综合得出全局最优。这也就是为什么动态规划要“回头看”之前保存的子问题解，因为它没有贪心那种“只看眼前”的底气。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;可以说：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;最优子结构是贪心和动态规划的&lt;strong&gt;共同前提&lt;/strong&gt;；而是否具备贪心选择性质，决定了能否用贪心；若不满足，则可能需要动态规划（若同时满足重叠子问题）。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h3 id="六总结"&gt;六、总结
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;性质&lt;/th&gt;
+&lt;th&gt;最优子结构&lt;/th&gt;
+&lt;th&gt;重叠子问题&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;核心要义&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;整体最优依赖于局部最优&lt;/td&gt;
+&lt;td&gt;子问题被反复求解&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;作用&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;确定递推关系（状态转移方程）&lt;/td&gt;
+&lt;td&gt;提供优化空间（用空间换时间）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;识别方法&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;反证法/剪切粘贴法&lt;/td&gt;
+&lt;td&gt;画递归树，看是否有相同子问题&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;典型反例&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;最长简单路径&lt;/td&gt;
+&lt;td&gt;分治算法（如归并）没有重叠子问题&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;DP中的角色&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;必要条件&lt;/td&gt;
+&lt;td&gt;充分条件（使 DP 高效）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;理解透彻这两个性质，就能准确地判断一个问题是否适合用动态规划，以及为什么动态规划能如此巧妙地化繁为简。&lt;/p&gt;</description></item></channel></rss>

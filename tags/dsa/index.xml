@@ -1,0 +1,3291 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>DSA on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/dsa/</link><description>Recent content in DSA on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 02 Jul 2026 11:44:42 +0800</lastBuildDate><atom:link href="https://dyhes.github.io/tags/dsa/index.xml" rel="self" type="application/rss+xml"/><item><title>【NowCoder】DSA</title><link>https://dyhes.github.io/p/nowcoderdsa/</link><pubDate>Mon, 08 Sep 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/nowcoderdsa/</guid><description>&lt;h2 id="kmp主串从不后退调整子串位置"&gt;KMP：主串从不后退，调整子串位置
+&lt;/h2&gt;&lt;p&gt;KMP算法（Knuth-Morris-Pratt算法）是一种高效的字符串匹配算法，由 Donald Knuth、Vaughan Pratt 和 James H. Morris 于 1977 年联合发表，它能在主文本字符串中快速查找模式字符串的所有出现位置，其核心优势在于通过预处理模式串来避免主串指针的回溯，将时间复杂度优化至线性级别 💡。&lt;/p&gt;
+&lt;h3 id="-1-核心思想"&gt;📊 1. 核心思想
+&lt;/h3&gt;&lt;p&gt;KMP 算法的核心在于利用匹配失败时已经获得的信息，通过一个称为 &lt;strong&gt;next 数组&lt;/strong&gt;（也称为部分匹配表或失败函数）的辅助数据结构，记录模式串自身的部分匹配信息。当发生不匹配时，算法能根据 next 数组知道模式串可以向右滑动多远，从而避免重复比较主串中已匹配的字符。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;next 数组的含义&lt;/strong&gt;：对于模式串 &lt;code&gt;P&lt;/code&gt;的每个位置 &lt;code&gt;i&lt;/code&gt;，&lt;code&gt;next[i]&lt;/code&gt;表示子串 &lt;code&gt;P[0:i]&lt;/code&gt;中 &lt;strong&gt;最长相等真前缀和真后缀的长度&lt;/strong&gt;（即不包括字符串本身的最长相同前后缀）。&lt;/p&gt;
+&lt;h3 id="-2-next-数组的构建"&gt;🔧 2. Next 数组的构建
+&lt;/h3&gt;&lt;p&gt;构建 next 数组是 KMP 算法的预处理步骤，其过程本身也运用了类似 KMP 的思想。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;算法步骤（以模式串 P 下标从 0 开始为例）&lt;/strong&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;初始化&lt;/strong&gt;：&lt;code&gt;next[0] = 0&lt;/code&gt;（或 &lt;code&gt;-1&lt;/code&gt;，实现有差异，但思想相通）。设两个指针 &lt;code&gt;i&lt;/code&gt;（后缀末尾）和 &lt;code&gt;j&lt;/code&gt;（前缀末尾，也代表当前最长相等前后缀的长度）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;遍历 &lt;code&gt;i&lt;/code&gt;从 1 到 &lt;code&gt;len(P)-1&lt;/code&gt;&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;若 &lt;code&gt;P[i] == P[j]&lt;/code&gt;，则 &lt;code&gt;j++&lt;/code&gt;，&lt;code&gt;next[i] = j&lt;/code&gt;，&lt;code&gt;i++&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;若 &lt;code&gt;P[i] != P[j]&lt;/code&gt;，则令 &lt;code&gt;j = next[j-1]&lt;/code&gt;（或 &lt;code&gt;j = next[j]&lt;/code&gt;，取决于实现）进行回溯，直到 &lt;code&gt;j&lt;/code&gt;回溯到 0 或匹配成功。&lt;/li&gt;
+&lt;li&gt;若 &lt;code&gt;j&lt;/code&gt;已回溯到 0 且仍不匹配，则 &lt;code&gt;next[i] = 0&lt;/code&gt;，&lt;code&gt;i++&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;示例：模式串 P = &amp;ldquo;ABABCABAB&amp;rdquo; 的 next 数组&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;索引 i&lt;/th&gt;
+&lt;th&gt;0&lt;/th&gt;
+&lt;th&gt;1&lt;/th&gt;
+&lt;th&gt;2&lt;/th&gt;
+&lt;th&gt;3&lt;/th&gt;
+&lt;th&gt;4&lt;/th&gt;
+&lt;th&gt;5&lt;/th&gt;
+&lt;th&gt;6&lt;/th&gt;
+&lt;th&gt;7&lt;/th&gt;
+&lt;th&gt;8&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;字符 P[i]&lt;/td&gt;
+&lt;td&gt;A&lt;/td&gt;
+&lt;td&gt;B&lt;/td&gt;
+&lt;td&gt;A&lt;/td&gt;
+&lt;td&gt;B&lt;/td&gt;
+&lt;td&gt;C&lt;/td&gt;
+&lt;td&gt;A&lt;/td&gt;
+&lt;td&gt;B&lt;/td&gt;
+&lt;td&gt;A&lt;/td&gt;
+&lt;td&gt;B&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;next[i]&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;next 数组的构建代码（Python）&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;def build_next(pattern):
+next_arr = [0] * len(pattern)
+j = 0
+for i in range(1, len(pattern)):
+while j &amp;gt; 0 and pattern[i] != pattern[j]:
+j = next_arr[j-1]
+if pattern[i] == pattern[j]:
+j += 1
+next_arr[i] = j
+return next_arr
+print(build_next(&amp;#34;ABABCABAB&amp;#34;)) # 输出: [0, 0, 1, 2, 0, 1, 2, 3, 4]
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="-3-kmp-匹配过程"&gt;🔍 3. KMP 匹配过程
+&lt;/h3&gt;&lt;p&gt;有了 next 数组后，就可以进行主串 &lt;code&gt;S&lt;/code&gt;和模式串 &lt;code&gt;P&lt;/code&gt;的匹配。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;算法步骤&lt;/strong&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;初始化&lt;/strong&gt;：主串指针 &lt;code&gt;i=0&lt;/code&gt;，模式串指针 &lt;code&gt;j=0&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;遍历主串 &lt;code&gt;S&lt;/code&gt;&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;若 &lt;code&gt;S[i] == P[j]&lt;/code&gt;，则 &lt;code&gt;i++&lt;/code&gt;, &lt;code&gt;j++&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;若 &lt;code&gt;j == len(P)&lt;/code&gt;，表示匹配成功，记录起始位置 &lt;code&gt;i - j&lt;/code&gt;。然后根据 next 数组调整 &lt;code&gt;j = next[j-1]&lt;/code&gt;以继续寻找下一个匹配。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;若 &lt;code&gt;S[i] != P[j]&lt;/code&gt;&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;若 &lt;code&gt;j &amp;gt; 0&lt;/code&gt;，则利用 next 数组回溯模式串指针 &lt;code&gt;j = next[j-1]&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;若 &lt;code&gt;j == 0&lt;/code&gt;，则无法回溯，主串指针 &lt;code&gt;i++&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;KMP 搜索代码（Python）&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;def kmp_search(text, pattern):
+next_arr = build_next(pattern)
+j = 0
+for i in range(len(text)):
+while j &amp;gt; 0 and text[i] != pattern[j]:
+j = next_arr[j-1]
+if text[i] == pattern[j]:
+j += 1
+if j == len(pattern):
+return i - j + 1 # 返回首次匹配的起始位置
+return -1
+text = &amp;#34;ABABABCABABABD&amp;#34;
+pattern = &amp;#34;ABABCABAB&amp;#34;
+print(kmp_search(text, pattern)) # 输出: 2
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="-4-时间复杂度与优势"&gt;⚙️ 4. 时间复杂度与优势
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;时间复杂度&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;构建 next 数组：&lt;code&gt;O(m)&lt;/code&gt;，其中 &lt;code&gt;m&lt;/code&gt;为模式串长度。&lt;/li&gt;
+&lt;li&gt;匹配过程：&lt;code&gt;O(n)&lt;/code&gt;，其中 &lt;code&gt;n&lt;/code&gt;为主串长度。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;总时间复杂度为 &lt;code&gt;O(n + m)&lt;/code&gt;&lt;/strong&gt;，是线性的。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;优势&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;避免了主串指针的回溯&lt;/strong&gt;：这是与暴力匹配（时间复杂度 &lt;code&gt;O(n*m)&lt;/code&gt;）最根本的区别，KMP 算法的主串指针 &lt;code&gt;i&lt;/code&gt;只会前进或不变（当 &lt;code&gt;j&amp;gt;0&lt;/code&gt;且不匹配时 &lt;code&gt;i&lt;/code&gt;不变，&lt;code&gt;j&lt;/code&gt;回溯），不会后退。&lt;/li&gt;
+&lt;li&gt;特别适合处理&lt;strong&gt;大文本流&lt;/strong&gt;或&lt;strong&gt;实时数据&lt;/strong&gt;，因为不需要回溯主串，可以边读入边匹配。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="-5-应用场景"&gt;🚀 5. 应用场景
+&lt;/h3&gt;&lt;p&gt;KMP 算法的高效性使其在许多领域有广泛应用：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;文本编辑器中的查找功能&lt;/strong&gt;（如 Ctrl+F）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;搜索引擎&lt;/strong&gt;：中的关键词定位和网页索引&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;生物信息学&lt;/strong&gt;：中的 DNA/RNA 序列匹配（基因序列通常很长）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据压缩&lt;/strong&gt;、&lt;strong&gt;网络入侵检测&lt;/strong&gt;、&lt;strong&gt;拼写检查&lt;/strong&gt;等&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="-6-与其他算法的简要对比"&gt;📝 6. 与其他算法的简要对比
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;算法&lt;/th&gt;
+&lt;th&gt;时间复杂度 (最坏)&lt;/th&gt;
+&lt;th&gt;特点&lt;/th&gt;
+&lt;th&gt;适用场景&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;暴力匹配&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;O(n*m)&lt;/td&gt;
+&lt;td&gt;实现简单，但效率低&lt;/td&gt;
+&lt;td&gt;小规模数据&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;KMP&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;O(n+m)&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;避免主串回溯&lt;/strong&gt;，稳定高效&lt;/td&gt;
+&lt;td&gt;通用，尤其是大规模文本&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Boyer-Moore&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;O(n/m) (平均)&lt;/td&gt;
+&lt;td&gt;坏字符规则，跳跃式匹配&lt;/td&gt;
+&lt;td&gt;模式串较长，字符集较大&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Rabin-Karp&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;O(n+m)&lt;/td&gt;
+&lt;td&gt;基于哈希，可同时检测多个模式&lt;/td&gt;
+&lt;td&gt;多模式匹配， plagiarism检测&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="-总结"&gt;💎 总结
+&lt;/h3&gt;&lt;p&gt;KMP 算法通过巧妙地构建 next 数组，记录了模式串自身的“记忆”，在匹配失败时能智能地滑动模式串，避免了主串指针的回溯，从而实现了高效的字符串匹配。虽然理解和实现起来比暴力匹配稍复杂，但其线性时间复杂度的优势在处理大规模字符串时非常显著。&lt;/p&gt;
+&lt;p&gt;希望以上介绍能帮助你透彻理解 KMP 算法。&lt;/p&gt;
+&lt;h2 id="bm-坏字符和好后缀模式串从右向左匹配"&gt;BM: 坏字符和好后缀，模式串从右向左匹配
+&lt;/h2&gt;&lt;p&gt;BM算法（Boyer-Moore算法）是一种非常高效的单模式字符串匹配算法，由Robert S. Boyer和J Strother Moore于1977年提出。它采用从右向左的比较方式和独特的启发式规则，能在许多情况下实现亚线性的匹配速度，平均性能优异，通常比KMP算法快3-5倍。&lt;/p&gt;
+&lt;h3 id="bm算法的核心思想"&gt;BM算法的核心思想
+&lt;/h3&gt;&lt;p&gt;BM算法的核心在于&lt;strong&gt;利用预处理信息在匹配失败时跳过尽可能多的无效位置&lt;/strong&gt;。它通过 &lt;strong&gt;“坏字符规则”&lt;/strong&gt; (Bad Character Rule) 和 &lt;strong&gt;“好后缀规则”&lt;/strong&gt; (Good Suffix Rule) 来计算模式串的安全移动距离，并且&lt;strong&gt;匹配时从模式串的末尾开始向前比较&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id="1-坏字符规则-bad-character-rule"&gt;1. 坏字符规则 (Bad Character Rule)
+&lt;/h3&gt;&lt;p&gt;当发现文本串 &lt;code&gt;T&lt;/code&gt;中的某个字符与模式串 &lt;code&gt;P&lt;/code&gt;不匹配时，该文本串中的字符被称为 &lt;strong&gt;“坏字符”&lt;/strong&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;情况1：坏字符在模式串中存在&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;将模式串&lt;strong&gt;向右移动&lt;/strong&gt;，使其&lt;strong&gt;最右边出现&lt;/strong&gt;的这个坏字符与文本串中的坏字符对齐。&lt;/li&gt;
+&lt;li&gt;移动位数 = &lt;strong&gt;坏字符在模式串中的失配位置索引&lt;/strong&gt; - &lt;strong&gt;该坏字符在模式串中最后一次出现的位置索引&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;若计算值为负，则可能产生回退，因此实际中会取该规则与好后缀规则计算值的最大值。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;情况2：坏字符在模式串中不存在&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;直接将整个模式串&lt;strong&gt;向右移动&lt;/strong&gt;到&lt;strong&gt;坏字符的下一位&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;移动位数 = 坏字符在模式串中的失配位置索引 + 1 (通常可理解为模式串长度，但需根据具体位置计算)。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;坏字符表预处理&lt;/strong&gt;：创建一个数组 &lt;code&gt;bc_table&lt;/code&gt;（大小依字符集而定，如256 for ASCII），记录&lt;strong&gt;每个字符在模式串中最后一次出现的位置（索引）&lt;/strong&gt;。如果字符不在模式串中，则记为 &lt;code&gt;-1&lt;/code&gt;。&lt;/p&gt;
+&lt;h3 id="2-好后缀规则-good-suffix-rule"&gt;2. 好后缀规则 (Good Suffix Rule)
+&lt;/h3&gt;&lt;p&gt;当发生失配时，模式串末尾已经匹配成功的部分子串称为 &lt;strong&gt;“好后缀”&lt;/strong&gt; 。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;情况1：模式串的前面部分存在与好后缀完全匹配的子串&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;将模式串&lt;strong&gt;向右移动&lt;/strong&gt;，使&lt;strong&gt;前面最靠右&lt;/strong&gt;的那个匹配子串与文本串中的好后缀对齐。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;情况2：模式串中不存在与好后缀完全匹配的子串，但存在一个最长前缀与好后缀的某个后缀相匹配&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;将模式串&lt;strong&gt;向右移动&lt;/strong&gt;，使这个&lt;strong&gt;最长前缀&lt;/strong&gt;与文本串中好后缀的相应后缀对齐。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;情况3：模式串中既不存在与好后缀匹配的子串，也不存在与其后缀匹配的前缀&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;将整个模式串&lt;strong&gt;向右移动&lt;/strong&gt;模式串的长度。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;好后缀表预处理&lt;/strong&gt;：构建一个数组 &lt;code&gt;gs_table&lt;/code&gt;，其计算通常借助一个后缀数组 &lt;code&gt;suffix&lt;/code&gt;，&lt;code&gt;suffix[i]&lt;/code&gt;表示模式串中以 &lt;code&gt;i&lt;/code&gt;位置结尾的子串与模式串后缀的最大匹配长度。根据 &lt;code&gt;suffix&lt;/code&gt;数组的信息来填充 &lt;code&gt;gs_table&lt;/code&gt;，以确定在各种失配位置下根据好后缀规则应移动的距离。&lt;/p&gt;
+&lt;h3 id="bm算法的工作流程"&gt;BM算法的工作流程
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;预处理阶段&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;根据模式串 &lt;code&gt;P&lt;/code&gt;构建&lt;strong&gt;坏字符表&lt;/strong&gt; &lt;code&gt;bc_table&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;根据模式串 &lt;code&gt;P&lt;/code&gt;构建&lt;strong&gt;好后缀表&lt;/strong&gt; &lt;code&gt;gs_table&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;匹配阶段&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;将模式串 &lt;code&gt;P&lt;/code&gt;与文本串 &lt;code&gt;T&lt;/code&gt;对齐，初始时 &lt;code&gt;i = 0&lt;/code&gt;（&lt;code&gt;i&lt;/code&gt;表示文本串中与模式串首字符对齐的位置）。&lt;/li&gt;
+&lt;li&gt;从模式串的&lt;strong&gt;末尾开始&lt;/strong&gt;（即从右向左）比较字符。&lt;/li&gt;
+&lt;li&gt;若所有字符都匹配，则找到一个有效匹配，输出位置 &lt;code&gt;i&lt;/code&gt;。随后，通常根据好后缀规则移动模式串以继续寻找下一个匹配。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;若遇到坏字符，设其在模式串中的位置为 &lt;code&gt;j&lt;/code&gt;&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;根据坏字符规则计算移动距离 &lt;code&gt;bad_shift = j - bc_table[T[i+j]]&lt;/code&gt;(需注意边界和不存在的情况)。&lt;/li&gt;
+&lt;li&gt;根据好后缀规则计算移动距离 &lt;code&gt;good_shift = gs_table[j]&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;模式串的&lt;strong&gt;实际移动距离&lt;/strong&gt;为 &lt;code&gt;max(bad_shift, good_shift)&lt;/code&gt;。取最大值是为了保证不漏过可能的匹配，同时实现最大的跳跃。&lt;/li&gt;
+&lt;li&gt;令 &lt;code&gt;i = i + max(bad_shift, good_shift)&lt;/code&gt;，重新开始下一轮从右向左的比较。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;重复直到模式串移出文本串的末尾。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="bm算法示例"&gt;BM算法示例
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;文本串 T&lt;/strong&gt;: &amp;ldquo;ABABABCABABABD&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;模式串 P&lt;/strong&gt;: &amp;ldquo;ABABCABAB&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;（此示例可结合前述规则逐步推演，由于篇幅限制，此处不展开逐步过程，但概念上遵循上述流程。）一个常见的匹配结果是模式串在文本串的索引位置 2 处找到（0-based索引）。&lt;/p&gt;
+&lt;h3 id="bm算法的性能分析"&gt;BM算法的性能分析
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;时间复杂度&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;预处理阶段：构建坏字符表 &lt;code&gt;O(m + |Σ|)&lt;/code&gt;(|Σ| 为字符集大小)，构建好后缀表最高可达 &lt;code&gt;O(m)&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;匹配阶段&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;最坏情况&lt;/strong&gt;：为 &lt;code&gt;O(n * m)&lt;/code&gt;，例如文本串和模式串都是相同字符时。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;最佳情况&lt;/strong&gt;：可达到 &lt;code&gt;O(n / m)&lt;/code&gt;，当模式串始终不在文本中出现时，每次都能跳跃整个模式串长度。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;平均性能&lt;/strong&gt;：非常优异，尤其在实际应用和字符集较大时，远超朴素算法，也通常优于KMP算法。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;空间复杂度&lt;/strong&gt;：主要来自存储 &lt;code&gt;bc_table&lt;/code&gt;(O(|Σ|)) 和 &lt;code&gt;gs_table&lt;/code&gt;(O(m))。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="bm算法的优缺点"&gt;BM算法的优缺点
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;优点&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;实际应用中&lt;strong&gt;效率高&lt;/strong&gt;，尤其适合模式串较长、字符集较大的场景。&lt;/li&gt;
+&lt;li&gt;采用了从右向左比较和启发式跳跃，&lt;strong&gt;跳过大量不可能匹配的位置&lt;/strong&gt;，减少了比较次数。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;缺点&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;预处理好后缀表相对&lt;strong&gt;复杂&lt;/strong&gt;，实现起来比KMP等算法稍麻烦。&lt;/li&gt;
+&lt;li&gt;最坏时间复杂度不如KMP算法稳定（KMP最坏为 &lt;code&gt;O(n+m)&lt;/code&gt;）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="bm算法的应用"&gt;BM算法的应用
+&lt;/h3&gt;&lt;p&gt;BM算法因其高效性被广泛应用于：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;文本编辑器&lt;/strong&gt;：中的查找功能（Ctrl+F）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;搜索引擎&lt;/strong&gt;：和&lt;strong&gt;数据过滤&lt;/strong&gt;中的关键词匹配。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;网络安全&lt;/strong&gt;：领域，如入侵检测系统（IDS）中的特征码匹配。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;生物信息学&lt;/strong&gt;：中DNA序列匹配等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="总结"&gt;总结
+&lt;/h3&gt;&lt;p&gt;BM算法通过巧妙的&lt;strong&gt;坏字符规则&lt;/strong&gt;和&lt;strong&gt;好后缀规则&lt;/strong&gt;，以及&lt;strong&gt;从右向左&lt;/strong&gt;的比较顺序，实现了在大多数情况下的高效字符串匹配。它虽然预处理阶段稍显复杂，且最坏时间复杂度理论不佳，但其&lt;strong&gt;优异的平均性能&lt;/strong&gt;使其成为实践中非常受欢迎的字符串匹配算法之一。理解并掌握BM算法，对于深入理解字符串匹配问题的优化思路具有重要意义。&lt;/p&gt;
+&lt;h2 id="rp-算法"&gt;RP 算法
+&lt;/h2&gt;&lt;p&gt;RK 算法通常指 &lt;strong&gt;Rabin-Karp 字符串匹配算法&lt;/strong&gt;。它是一种使用哈希技术来高效查找主串中模式串出现位置的算法。以下是其核心原理、步骤和特点的总结：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;特性维度&lt;/th&gt;
+&lt;th&gt;Rabin-Karp 算法 (RK算法)&lt;/th&gt;
+&lt;th&gt;暴力匹配算法 (BF算法)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;核心思想&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;利用&lt;strong&gt;哈希值&lt;/strong&gt;快速比较主串子串和模式串，避免逐个字符对比&lt;/td&gt;
+&lt;td&gt;逐个字符比较主串和模式串&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;关键操作&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;滚动哈希 (Rolling Hash)&lt;/td&gt;
+&lt;td&gt;无特殊操作，简单遍历&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;平均时间复杂度&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;O(n + m)&lt;/strong&gt; (n为主串长度, m为模式串长度)&lt;/td&gt;
+&lt;td&gt;O(n * m)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;最坏时间复杂度&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;O(n * m) (当哈希冲突频繁时退化)&lt;/td&gt;
+&lt;td&gt;O(n * m)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;空间复杂度&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;O(1) (通常只需存储哈希值等少量变量)&lt;/td&gt;
+&lt;td&gt;O(1)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;优势&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;平均情况下比BF算法快得多，尤其适用于多模式匹配&lt;/td&gt;
+&lt;td&gt;实现简单，无需额外预处理，小规模字符串或模式串短时可能更快&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;劣势&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;需要处理哈希冲突（可能需二次验证），最坏情况下效率不如优化算法&lt;/td&gt;
+&lt;td&gt;效率低下，尤其当主串和模式串很长时&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;🧠 &lt;strong&gt;RK 算法核心思想&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;RK 算法通过比较&lt;strong&gt;哈希值&lt;/strong&gt;来快速判断主串中的子串是否与模式串匹配，从而避免每次都进行昂贵的逐个字符比较。其核心在于“&lt;strong&gt;滚动哈希&lt;/strong&gt;”（Rolling Hash）技术，它允许在常数时间内计算下一个子串的哈希值，而不是每次都重新计算整个子串的哈希值。&lt;/p&gt;
+&lt;p&gt;🔄 &lt;strong&gt;RK 算法的工作步骤&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;计算模式串哈希值&lt;/strong&gt;：首先计算模式串的哈希值，例如 &lt;code&gt;hash_pat&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;计算主串前 m 个字符的哈希值&lt;/strong&gt;：计算主串前 &lt;code&gt;m&lt;/code&gt;（模式串长度）个字符的子串哈希值，例如 &lt;code&gt;hash_sub&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;比较哈希值并滑动窗口&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;如果 &lt;code&gt;hash_sub == hash_pat&lt;/code&gt;，则&lt;strong&gt;逐个字符比较&lt;/strong&gt;该子串与模式串（以防止哈希冲突）。&lt;/li&gt;
+&lt;li&gt;如果匹配，返回当前起始位置。&lt;/li&gt;
+&lt;li&gt;无论是否匹配，算法都会使用滚动哈希技巧，根据当前子串的哈希值 &lt;code&gt;hash_sub&lt;/code&gt;快速计算下一个子串（窗口向右滑动一位）的哈希值。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;重复直到遍历完成&lt;/strong&gt;：重复步骤 3，直到主串中所有可能的子串都被检查过。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;🔢 &lt;strong&gt;哈希函数设计&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;RK 算法通常将字符串视为一个 &lt;strong&gt;&lt;code&gt;d&lt;/code&gt;进制数&lt;/strong&gt;（&lt;code&gt;d&lt;/code&gt;是字符集的大小，例如 ASCII 256 或小写字母 26）。一个常见的滚动哈希函数是：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;hash(s[i+1:i+m+1]) = d * (hash(s[i:i+m]) - d^(m-1) * s[i]) + s[i+m]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;然后，为了防止数值过大，常对一个大素数 &lt;code&gt;q&lt;/code&gt;取模：&lt;code&gt;hash_value = hash_value % q&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;📊 &lt;strong&gt;复杂度分析&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;时间复杂度&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;平均情况&lt;/strong&gt;：&lt;strong&gt;O(n + m)&lt;/strong&gt;。预处理模式串哈希和主串前 m 个字符的哈希需要 O(m)，主串滑动窗口处理需要 O(n)。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;最坏情况&lt;/strong&gt;：O(n * m)。当哈希冲突频繁发生时，每次哈希值相等都需要进行逐个字符比较。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;空间复杂度&lt;/strong&gt;：&lt;strong&gt;O(1)&lt;/strong&gt;。仅需存储几个变量（如哈希值、进制数、模数等）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;⚠️ &lt;strong&gt;注意事项&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;哈希冲突&lt;/strong&gt;：不同的字符串可能产生相同的哈希值。因此，当哈希值匹配时，&lt;strong&gt;必须进行逐个字符的验证&lt;/strong&gt;以确保不是误报。选择一个好的哈希函数（大进制数 &lt;code&gt;d&lt;/code&gt;和大素数 &lt;code&gt;q&lt;/code&gt;）对于减少冲突至关重要。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;模数选择&lt;/strong&gt;：模数 &lt;code&gt;q&lt;/code&gt;应足够大，以尽量减少冲突，但也要考虑计算效率，避免溢出。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;🌐 &lt;strong&gt;主要应用&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;RK 算法适用于需要快速进行&lt;strong&gt;多模式匹配&lt;/strong&gt;（稍加修改）或&lt;strong&gt;在多个输入中查找重复子串&lt;/strong&gt;的场景，例如：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;文本编辑器中的查找功能（虽不常见，因有更优算法如KMP）&lt;/li&gt;
+&lt;li&gt;检测文档中的抄袭（查找长字符串中的重复片段）&lt;/li&gt;
+&lt;li&gt;DNA序列匹配（生物信息学）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;🔍 &lt;strong&gt;简单例子&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;假设主串 &lt;code&gt;txt = &amp;quot;123456&amp;quot;&lt;/code&gt;，模式串 &lt;code&gt;pat = &amp;quot;34&amp;quot;&lt;/code&gt;，字符集为数字 0-9（&lt;code&gt;d=10&lt;/code&gt;）。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;计算 &lt;code&gt;pat&lt;/code&gt;的哈希值：&lt;code&gt;hash_pat = '3'*10 + '4' = 30+4=34&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;计算 &lt;code&gt;txt&lt;/code&gt;前 2 个字符 &amp;ldquo;12&amp;rdquo; 的哈希值：&lt;code&gt;hash_sub = '1'*10 + '2' = 10+2=12&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;12 != 34&lt;/code&gt;，不匹配。&lt;/li&gt;
+&lt;li&gt;使用滚动哈希计算下一个子串 &amp;ldquo;23&amp;rdquo;：&lt;code&gt;hash_sub_new = 10 * (12 - 10^(2-1)*'1') + '3' = 10*(12-10 * 1) + 3 = 10*(2) + 3 = 23&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;23 != 34&lt;/code&gt;，不匹配。&lt;/li&gt;
+&lt;li&gt;计算下一个子串 &amp;ldquo;34&amp;rdquo;：&lt;code&gt;hash_sub_new = 10 * (23 - 10^(2-1)*'2') + '4' = 10*(23-10 * 2) + 4 = 10*(3) + 4 = 34&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;34 == 34&lt;/code&gt;，哈希匹配，再逐个字符验证，&amp;ldquo;34&amp;rdquo; 确实等于 &amp;ldquo;34&amp;rdquo;，匹配成功。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;💡 &lt;strong&gt;总结&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Rabin-Karp 算法通过巧妙的滚动哈希技术，将字符串匹配的平均时间复杂度优化到了线性级别。虽然最坏情况下的性能并不理想，但其思路清晰，实现相对简单，并且在处理多模式匹配等特定问题时非常有用。理解其原理和哈希函数的设计是掌握该算法的关键。&lt;/p&gt;
+&lt;h2 id="广义表"&gt;广义表
+&lt;/h2&gt;&lt;p&gt;广义表（Generalized List），也称为列表（Lists），是一种非常灵活的数据结构，它可以很好地表示层次性和递归性的数据。下面我将为你详细介绍广义表的核心概念、特性、存储表示、基本操作以及应用场景。&lt;/p&gt;
+&lt;p&gt;📚 广义表详解&lt;/p&gt;
+&lt;h2 id="1-核心概念与定义"&gt;1 核心概念与定义
+&lt;/h2&gt;&lt;p&gt;广义表是线性表的一种推广，是一种&lt;strong&gt;非线性的数据结构&lt;/strong&gt;。它可以存储多种类型的数据，并且支持嵌套结构。广义表是 &lt;code&gt;n(n≥0)&lt;/code&gt;个元素 &lt;code&gt;a₁, a₂, ..., aᵢ, ..., aₙ&lt;/code&gt;的有限序列。广义表通常记作 &lt;code&gt;Ls = (a₁, a₂, ..., aᵢ, ..., aₙ)&lt;/code&gt;。其中：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Ls&lt;/strong&gt; 是广义表的名字。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;n&lt;/strong&gt; 是它的长度。&lt;/li&gt;
+&lt;li&gt;每个元素 &lt;code&gt;aᵢ&lt;/code&gt;&lt;strong&gt;可以是原子&lt;/strong&gt;（一个不可再分的单个数据项，用小写字母表示），&lt;strong&gt;也可以是另一个广义表&lt;/strong&gt;（称为子表，用大写字母表示）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;广义表通过&lt;strong&gt;递归&lt;/strong&gt;进行定义，这使得它可以表示非常复杂的数据结构。&lt;/p&gt;
+&lt;h3 id="11-表头与表尾"&gt;1.1 表头与表尾
+&lt;/h3&gt;&lt;p&gt;任何&lt;strong&gt;非空广义表&lt;/strong&gt;（n ≥ 1）都可以分解为&lt;strong&gt;表头（Head）&lt;/strong&gt; 和&lt;strong&gt;表尾（Tail）&lt;/strong&gt; 两部分：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;表头 Head(Ls)&lt;/strong&gt;：非空广义表的&lt;strong&gt;第一个元素&lt;/strong&gt; &lt;code&gt;a₁&lt;/code&gt;。它可以是原子，也可以是子表。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;表尾 Tail(Ls)&lt;/strong&gt;：非空广义表&lt;strong&gt;除去表头后&lt;/strong&gt;，由&lt;strong&gt;其余所有元素&lt;/strong&gt;构成的&lt;strong&gt;子表&lt;/strong&gt; &lt;code&gt;(a₂, a₃, ..., aₙ)&lt;/code&gt;。&lt;strong&gt;关键的是，表尾本身必然是一个广义表&lt;/strong&gt;（即使只剩一个元素）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;例如，对于广义表 &lt;code&gt;L = (a, b, c)&lt;/code&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Head(L) = a&lt;/code&gt;（原子）&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Tail(L) = (b, c)&lt;/code&gt;（子表）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="12-重要示例与概念辨析"&gt;1.2 重要示例与概念辨析
+&lt;/h3&gt;&lt;p&gt;以下是一些帮助理解广义表的例子：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;广义表表示&lt;/th&gt;
+&lt;th&gt;表名&lt;/th&gt;
+&lt;th&gt;长度&lt;/th&gt;
+&lt;th&gt;深度&lt;/th&gt;
+&lt;th&gt;表头&lt;/th&gt;
+&lt;th&gt;表尾&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;E = ()&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;空表&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;L = (a, b)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;L&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;a&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;(b)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;元素均为原子，等价于线性表&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;A = (x, L) = (x, (a, b))&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;A&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;x&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;((a, b))&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;第二个元素是子表L&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;B = (A, y) = ((x, (a, b)), y)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;B&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;A&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;(y)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;第一个元素是子表A&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;C = (A, B)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;C&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;A&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;(B)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;两个元素都是子表&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;D = (a, D) = (a, (a, (a, ...)))&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;D&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;∞&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;a&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;(D)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;递归表&lt;/strong&gt;，深度无穷&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;特别注意&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;(())&lt;/code&gt;不是空表&lt;/strong&gt;：它是一个长度为1的非空广义表，其唯一的元素是空表 &lt;code&gt;()&lt;/code&gt;。对其取表头和表尾都会得到空表 &lt;code&gt;()&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;表尾永远是子表&lt;/strong&gt;：&lt;code&gt;Tail(L) = (b, c)&lt;/code&gt;是一个子表，而不是单个元素 &lt;code&gt;b&lt;/code&gt;或 &lt;code&gt;c&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="13-长度与深度"&gt;1.3 长度与深度
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;长度&lt;/strong&gt;：指广义表&lt;strong&gt;最外层&lt;/strong&gt;的元素个数。例如，&lt;code&gt;A = (x, (a, b))&lt;/code&gt;的长度是2。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;深度&lt;/strong&gt;：指广义表&lt;strong&gt;展开后所含括号的最大层数&lt;/strong&gt;（递归定义的最大嵌套次数）。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;原子&lt;/strong&gt;：的深度为 &lt;strong&gt;0&lt;/strong&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;空表 &lt;code&gt;()&lt;/code&gt;&lt;/strong&gt; 的深度为 &lt;strong&gt;1&lt;/strong&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;非空广义表的深度是其所有&lt;strong&gt;元素深度的最大值加 1&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;例如：&lt;code&gt;B = ((x, (a, b)), y)&lt;/code&gt;的深度计算过程如下：&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;元素1是子表 &lt;code&gt;(x, (a, b))&lt;/code&gt;&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;元素1.1是原子 &lt;code&gt;x&lt;/code&gt;（深度0）&lt;/li&gt;
+&lt;li&gt;元素1.2是子表 &lt;code&gt;(a, b)&lt;/code&gt;（深度1）&lt;/li&gt;
+&lt;li&gt;所以子表 &lt;code&gt;(x, (a, b))&lt;/code&gt;的深度为 &lt;code&gt;max(0, 1) + 1 = 2&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;元素2是原子 &lt;code&gt;y&lt;/code&gt;（深度0）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;因此，B的深度为 &lt;code&gt;max(2, 0) + 1 = 3&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="2-广义表的性质"&gt;2 广义表的性质
+&lt;/h2&gt;&lt;p&gt;广义表具有以下几个重要性质：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;有序性&lt;/strong&gt;：广义表中的数据元素有相对次序。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;层次性与多层次结构&lt;/strong&gt;：广义表中的元素可以是子表，子表的元素还可以是子表，形成一种多层次的结构。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;共享性&lt;/strong&gt;：一个广义表可以被其他多个广义表共享。例如，表 &lt;code&gt;A&lt;/code&gt;可以同时是表 &lt;code&gt;B&lt;/code&gt;和表 &lt;code&gt;C&lt;/code&gt;的元素。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;递归性&lt;/strong&gt;：广义表可以是&lt;strong&gt;递归表&lt;/strong&gt;，即广义表本身可以作为自己的一个子表（如上面的例子 &lt;code&gt;D = (a, D)&lt;/code&gt;）。递归表的&lt;strong&gt;深度是无穷的&lt;/strong&gt;，但其&lt;strong&gt;长度是有限的&lt;/strong&gt;（如 &lt;code&gt;D&lt;/code&gt;的长度为2）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;通用性&lt;/strong&gt;：广义表可以兼容和表示其他多种数据结构。
+&lt;ul&gt;
+&lt;li&gt;当所有元素都是原子时，它就是&lt;strong&gt;线性表&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;可以表示&lt;strong&gt;树形结构&lt;/strong&gt;（如 &lt;code&gt;(A, B, C)&lt;/code&gt;可表示一棵树，其中 &lt;code&gt;A&lt;/code&gt;, &lt;code&gt;B&lt;/code&gt;, &lt;code&gt;C&lt;/code&gt;是子树）。&lt;/li&gt;
+&lt;li&gt;可以表示&lt;strong&gt;图形结构&lt;/strong&gt;（尤其是递归表可以表示有环图）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="3-存储表示"&gt;3 存储表示
+&lt;/h2&gt;&lt;p&gt;由于广义表的元素可以是原子或子表，类型不统一，并且长度和深度经常变化，因此&lt;strong&gt;顺序存储结构难以实现&lt;/strong&gt;，通常采用&lt;strong&gt;链式存储结构&lt;/strong&gt;。主要有两种存储方式：&lt;/p&gt;
+&lt;h3 id="31-头尾链表存储结构"&gt;3.1 头尾链表存储结构
+&lt;/h3&gt;&lt;p&gt;这种结构中，每个结点使用一个&lt;strong&gt;标志位（tag）&lt;/strong&gt; 来区分原子结点和表结点。&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;typedef enum { ATOM, LIST } ElemTag; // ATOM=0:原子, LIST=1:子表
+typedef struct GLNode {
+ElemTag tag; // 标志域，用于区分原子结点和表结点
+union {
+AtomType atom; // 原子结点的值域
+struct {
+struct GLNode* hp; // 指向表头的指针
+struct GLNode* tp; // 指向表尾的指针
+} ptr;
+};
+} *GList;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这种存储方式能清晰地反映广义表的&lt;strong&gt;层次结构&lt;/strong&gt;，表头指针 &lt;code&gt;hp&lt;/code&gt;和表尾指针 &lt;code&gt;tp&lt;/code&gt;构成了一个递归的结构。&lt;/p&gt;
+&lt;h3 id="32-扩展线性链表存储结构"&gt;3.2 扩展线性链表存储结构
+&lt;/h3&gt;&lt;p&gt;这种结构也更常用，每个结点也包含一个标志位 &lt;code&gt;tag&lt;/code&gt;，但用不同的指针域来组织：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;typedef enum { ATOM, LIST } ElemTag;
+typedef struct GLNode {
+ElemTag tag; // 标志域
+union {
+AtomType atom; // 原子结点的值域
+struct GLNode* hp; // 指向子表的指针
+};
+struct GLNode* next; // 指向下一个元素的指针
+} *GList;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这种结构更像一个普通的链表，&lt;code&gt;hp&lt;/code&gt;指向该元素代表的子表（如果该元素是子表），&lt;code&gt;next&lt;/code&gt;指向同级的下一个元素。这种表示法在遍历时可能更直观。&lt;/p&gt;
+&lt;h2 id="4-基本操作"&gt;4 基本操作
+&lt;/h2&gt;&lt;p&gt;广义表的基本操作大多需要&lt;strong&gt;递归&lt;/strong&gt;实现。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;操作名&lt;/th&gt;
+&lt;th&gt;功能描述&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;InitGList(&amp;amp;L)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;初始化一个空的广义表L。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;CreateGList(&amp;amp;L, S)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;根据字符串S所描述的广义表结构（如 &lt;code&gt;“(a, (b, c))”&lt;/code&gt;）创建广义表L。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;DestroyGList(&amp;amp;L)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;销毁广义表L，释放其占用的存储空间。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;CopyGList(&amp;amp;T, L)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;复制广义表L，得到广义表T。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;GListLength(L)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;返回广义表L的长度（最外层元素个数）。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;GListDepth(L)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;返回广义表L的深度。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;GListEmpty(L)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;判断广义表L是否为空表（长度是否为0）。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;GetHead(L)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;返回广义表L的表头。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;GetTail(L)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;返回广义表L的表尾。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;TraverseGList(L, Visit())&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;遍历广义表L，对每个元素调用函数&lt;code&gt;Visit&lt;/code&gt;进行操作。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;操作示例&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;对于广义表 &lt;code&gt;L = ((a, b), c, d)&lt;/code&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;GetHead(L) = (a, b)&lt;/code&gt;（子表）&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;GetTail(L) = (c, d)&lt;/code&gt;（子表）&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;GetHead(GetTail(L)) = c&lt;/code&gt;（原子）&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;GetTail(GetTail(L)) = (d)&lt;/code&gt;（子表）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="5-广义表与线性表的对比"&gt;5 广义表与线性表的对比
+&lt;/h2&gt;&lt;p&gt;广义表是线性表的推广，两者有显著区别：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;特性&lt;/th&gt;
+&lt;th&gt;线性表&lt;/th&gt;
+&lt;th&gt;广义表&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;元素类型&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;必须是同一类型的&lt;strong&gt;原子&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;可以是&lt;strong&gt;原子&lt;/strong&gt;，也可以是&lt;strong&gt;子表&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;结构&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;严格的&lt;strong&gt;线性顺序&lt;/strong&gt;结构&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;递归、嵌套&lt;/strong&gt;的非线性结构&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;操作复杂度&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;插入、删除等操作复杂度通常为O(n)&lt;/td&gt;
+&lt;td&gt;操作多需&lt;strong&gt;递归&lt;/strong&gt;实现，复杂度通常更高&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;灵活性&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;相对固定，难以直接表示复杂层次关系&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;高度灵活&lt;/strong&gt;，能表示树、图等复杂结构&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;表头/表尾&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;无此特定概念或概念不同&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;核心概念&lt;/strong&gt;，且&lt;strong&gt;表尾必定是一个子表&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="6-应用场景"&gt;6 应用场景
+&lt;/h2&gt;&lt;p&gt;广义表的递归和层次特性使其在多个领域有广泛应用：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;表示多层次、递归的数据结构&lt;/strong&gt;：如文件目录结构（目录中包含文件和子目录）、HTML/XML文档的嵌套标签、组织结构图等。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;表示数学表达式&lt;/strong&gt;：例如，多项式 &lt;code&gt;P(x, y) = x² + 2xy + y²&lt;/code&gt;可以用广义表表示为 &lt;code&gt;( +, (^, x, 2), ( *, ( *, 2, x), y), (^, y, 2) )&lt;/code&gt;，这种表示便于递归求值。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;人工智能与符号处理&lt;/strong&gt;：LISP等函数式编程语言将程序和数据都表示为广义表（称为S-表达式），极大地简化了符号处理和元编程。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据库系统&lt;/strong&gt;：用于表示复杂的关系模式或对象关系映射。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;作为其他数据结构的基础&lt;/strong&gt;：由于其通用性，可用于实现树、图等更复杂的数据结构。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;希望以上详细的介绍能帮助你全面理解广义表这一重要的数据结构。&lt;/p&gt;
+&lt;h2 id="线性表存储"&gt;线性表存储
+&lt;/h2&gt;&lt;p&gt;线性表是最常用且最基本的数据结构之一，其存取方式直接影响了操作的效率。下面我将为你详细介绍线性表的几种主要存取方式，包括顺序存储和链式存储，以及它们的各种变体和特点。&lt;/p&gt;
+&lt;p&gt;📊 线性表存取方式详解&lt;/p&gt;
+&lt;h2 id="1-线性表的基本概念"&gt;1️⃣ 线性表的基本概念
+&lt;/h2&gt;&lt;p&gt;线性表（Linear List）是由 n（n≥0）个具有相同类型的数据元素组成的有限序列。若线性表非空，则：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;存在唯一的一个被称为&amp;quot;第一个&amp;quot;的元素（表头元素）&lt;/li&gt;
+&lt;li&gt;存在唯一的一个被称为&amp;quot;最后一个&amp;quot;的元素（表尾元素）&lt;/li&gt;
+&lt;li&gt;除第一个元素外，每个元素都有且仅有一个&lt;strong&gt;直接前驱&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;除最后一个元素外，每个元素都有且仅有一个&lt;strong&gt;直接后继&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;数据元素之间的关系是线性的，逻辑结构可以表示为：(a₁, a₂, a₃, &amp;hellip;, aₙ)&lt;/p&gt;
+&lt;h2 id="2-顺序存储结构顺序表"&gt;2️⃣ 顺序存储结构（顺序表）
+&lt;/h2&gt;&lt;p&gt;顺序存储结构使用一段&lt;strong&gt;地址连续的存储单元&lt;/strong&gt;依次存储线性表中的数据元素，通常使用数组来实现。&lt;/p&gt;
+&lt;h3 id="存储特点"&gt;存储特点
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;逻辑相邻，物理也相邻&lt;/strong&gt;：逻辑上相邻的元素在物理存储位置上也相邻&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;随机存取&lt;/strong&gt;：可以通过首地址和元素序号直接计算出任一元素的存储位置，存取时间为O(1)&lt;/li&gt;
+&lt;li&gt;存储位置计算公式：&lt;code&gt;LOC(aᵢ) = LOC(a₁) + (i-1)×L&lt;/code&gt;，其中L是每个元素占用的存储单元数&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="基本操作效率"&gt;基本操作效率
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;按索引查找/取值&lt;/strong&gt;：O(1) - 直接通过数组下标访问&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;插入操作&lt;/strong&gt;：平均需要移动n/2个元素，时间复杂度O(n)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;删除操作&lt;/strong&gt;：平均需要移动(n-1)/2个元素，时间复杂度O(n)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="顺序存储的优缺点"&gt;顺序存储的优缺点
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;优点&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;存储密度高（100%），无需为表示逻辑关系增加额外空间&lt;/li&gt;
+&lt;li&gt;随机存取速度快，通过索引可直接访问任一元素&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;缺点&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;需要预先分配固定大小的存储空间，可能造成空间浪费或溢出&lt;/li&gt;
+&lt;li&gt;插入和删除操作需要移动大量元素，效率较低&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="3-链式存储结构链表"&gt;3️⃣ 链式存储结构（链表）
+&lt;/h2&gt;&lt;p&gt;链式存储结构使用一组&lt;strong&gt;任意的存储单元&lt;/strong&gt;存储线性表的数据元素，这些存储单元可以是连续的，也可以是不连续的。每个节点不仅包含数据本身，还包含表示逻辑关系的指针域。&lt;/p&gt;
+&lt;h3 id="单链表singly-linked-list"&gt;单链表（Singly Linked List）
+&lt;/h3&gt;&lt;p&gt;最基本的链表形式，每个节点包含：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;数据域&lt;/strong&gt;：存储数据元素&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;指针域&lt;/strong&gt;：存储指向下一个节点的指针&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;单链表又分为：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;带头节点的单链表&lt;/strong&gt;：头节点不存储数据，其指针域指向第一个实际数据节点&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;不带头节点的单链表&lt;/strong&gt;：头指针直接指向第一个数据节点&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="双向链表doubly-linked-list"&gt;双向链表（Doubly Linked List）
+&lt;/h3&gt;&lt;p&gt;每个节点包含两个指针域：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;指向直接前驱节点的指针（prior）&lt;/li&gt;
+&lt;li&gt;指向直接后继节点的指针（next）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这使得链表可以在两个方向上遍历，但每个节点需要更多的存储空间。&lt;/p&gt;
+&lt;h3 id="循环链表circular-linked-list"&gt;循环链表（Circular Linked List）
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;循环单链表&lt;/strong&gt;：表尾节点的指针指向头节点（或第一个数据节点），形成环状&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;循环双链表&lt;/strong&gt;：表尾节点的next指针指向头节点，头节点的prior指针指向表尾节点&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;循环链表可以从任意节点开始遍历整个链表。&lt;/p&gt;
+&lt;h3 id="静态链表static-linked-list"&gt;静态链表（Static Linked List）
+&lt;/h3&gt;&lt;p&gt;使用数组来描述链式存储结构，数组元素为结构体，包含：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;数据域&lt;/li&gt;
+&lt;li&gt;游标（cur） - 指示后继元素在数组中的下标&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;静态链表在不支持指针的程序设计语言中特别有用。&lt;/p&gt;
+&lt;h3 id="链式存储的操作特点"&gt;链式存储的操作特点
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;查找操作&lt;/strong&gt;：需要从头节点开始顺序查找，平均时间复杂度O(n)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;插入操作&lt;/strong&gt;：只需修改相关指针，时间复杂度O(1)（不考虑查找插入位置的时间）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;删除操作&lt;/strong&gt;：只需修改相关指针，时间复杂度O(1)（不考虑查找删除位置的时间）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="链式存储的优缺点"&gt;链式存储的优缺点
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;优点&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;不需要预先分配固定存储空间，可以动态扩展&lt;/li&gt;
+&lt;li&gt;插入和删除操作效率高，只需修改指针&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;缺点&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;存储密度较低，需要额外空间存储指针&lt;/li&gt;
+&lt;li&gt;不支持随机存取，必须顺序访问&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="4-两种主要存储方式的对比"&gt;4️⃣ 两种主要存储方式的对比
+&lt;/h2&gt;&lt;p&gt;下表总结了顺序存储和链式存储的主要特点对比：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;特性&lt;/th&gt;
+&lt;th&gt;顺序存储结构&lt;/th&gt;
+&lt;th&gt;链式存储结构&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;存储空间&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;预先分配，地址连续&lt;/td&gt;
+&lt;td&gt;动态分配，地址可不连续&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;存储密度&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;高（100%）&lt;/td&gt;
+&lt;td&gt;较低（需存储指针）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;存取方式&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;随机存取，O(1)时间&lt;/td&gt;
+&lt;td&gt;顺序存取，O(n)时间&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;查找操作&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;按索引快速，O(1)时间&lt;/td&gt;
+&lt;td&gt;需要遍历，平均O(n)时间&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;插入操作&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;平均需要移动n/2个元素，O(n)时间&lt;/td&gt;
+&lt;td&gt;只需修改指针，O(1)时间&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;删除操作&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;平均需要移动(n-1)/2个元素，O(n)时间&lt;/td&gt;
+&lt;td&gt;只需修改指针，O(1)时间&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;空间分配&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;固定大小，难以扩展&lt;/td&gt;
+&lt;td&gt;动态分配，灵活扩展&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="5-存取方式的选择策略"&gt;5️⃣ 存取方式的选择策略
+&lt;/h2&gt;&lt;p&gt;选择线性表的存取方式时，需要考虑以下因素：&lt;/p&gt;
+&lt;h3 id="适合顺序存储的场景"&gt;适合顺序存储的场景
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;数据量相对稳定，变化不大&lt;/li&gt;
+&lt;li&gt;需要频繁按索引访问元素&lt;/li&gt;
+&lt;li&gt;插入和删除操作较少&lt;/li&gt;
+&lt;li&gt;对存储密度要求较高&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="适合链式存储的场景"&gt;适合链式存储的场景
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;数据量变化较大，难以预估规模&lt;/li&gt;
+&lt;li&gt;需要频繁进行插入和删除操作&lt;/li&gt;
+&lt;li&gt;不需要频繁按索引随机访问元素&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="6-其他存储方式"&gt;6️⃣ 其他存储方式
+&lt;/h2&gt;&lt;p&gt;除了上述两种主要存储方式外，还有：&lt;/p&gt;
+&lt;h3 id="索引存储"&gt;索引存储
+&lt;/h3&gt;&lt;p&gt;在存储元素信息的同时，建立附加的索引表。索引项的一般形式是：（关键字，地址），通过索引可以快速定位元素。&lt;/p&gt;
+&lt;h3 id="散列存储"&gt;散列存储
+&lt;/h3&gt;&lt;p&gt;根据数据元素的关键字直接计算出该元素的存储地址，也称为哈希存储。&lt;/p&gt;
+&lt;h2 id="-总结-1"&gt;💎 总结
+&lt;/h2&gt;&lt;p&gt;线性表的存取方式主要分为顺序存储和链式存储两大类，它们各有优缺点和适用场景：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;顺序存储&lt;/strong&gt;（数组实现）适合数据量固定、需要频繁随机访问的场景&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;链式存储&lt;/strong&gt;（指针实现）适合数据量变化大、需要频繁插入删除的场景&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在实际应用中，需要根据具体需求、操作特点和性能要求选择合适的存储方式。有时还可以结合多种存储方式的优点，设计更复杂的数据结构以满足特定需求。&lt;/p&gt;
+&lt;h2 id="多叉树转-2-叉树"&gt;多叉树转 2 叉树
+&lt;/h2&gt;&lt;p&gt;。将多叉树转换为二叉树主要采用 &lt;strong&gt;“孩子兄弟表示法”&lt;/strong&gt;（Left-Child Right-Sibling Representation）。这种方法能保持树原有的层次结构，便于利用二叉树的算法进行处理。&lt;/p&gt;
+&lt;p&gt;下面的表格总结了多叉树节点与转换后二叉树节点间的核心关系，帮助你直观理解转换规则：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;多叉树中的关系&lt;/th&gt;
+&lt;th&gt;转换后二叉树中的关系&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;节点的第一个子节点&lt;/td&gt;
+&lt;td&gt;变为该节点对应的二叉树节点的&lt;strong&gt;左子节点&lt;/strong&gt; (left child)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;节点的下一个兄弟节点&lt;/td&gt;
+&lt;td&gt;变为该节点对应的二叉树节点的&lt;strong&gt;右子节点&lt;/strong&gt; (right child)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="-转换步骤"&gt;🔄 转换步骤
+&lt;/h3&gt;&lt;p&gt;转换过程遵循以下步骤，通常通过递归算法实现：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;处理根节点&lt;/strong&gt;：创建二叉树的根节点，其值与多叉树根节点相同。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;处理子节点&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;将多叉树节点的&lt;strong&gt;第一个子节点&lt;/strong&gt;递归转换为二叉树节点，并设为当前二叉树节点的&lt;strong&gt;左子节点&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;将多叉树节点的&lt;strong&gt;其他子节点&lt;/strong&gt;（兄弟节点）递归转换为二叉树节点，并依次设置为前一个兄弟节点对应的二叉树节点的&lt;strong&gt;右子节点&lt;/strong&gt;，从而形成一条右链。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;递归进行&lt;/strong&gt;：对每个子节点重复上述过程。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="-代码示例-c"&gt;📝 代码示例 (C++)
+&lt;/h3&gt;&lt;p&gt;以下是 C++ 的实现示例，参考了 C 语言的实现思路：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;vector&amp;gt;
+using namespace std;
+// 多叉树节点定义
+struct MultiTreeNode {
+int data;
+MultiTreeNode* firstChild; // 指向第一个子节点
+MultiTreeNode* nextSibling; // 指向下一个兄弟节点
+MultiTreeNode(int val) : data(val), firstChild(nullptr), nextSibling(nullptr) {}
+};
+// 二叉树节点定义
+struct BinaryTreeNode {
+int data;
+BinaryTreeNode* left; // 左孩子
+BinaryTreeNode* right; // 右孩子
+BinaryTreeNode(int val) : data(val), left(nullptr), right(nullptr) {}
+};
+// 转换函数
+BinaryTreeNode* convertToBinaryTree(MultiTreeNode* multiRoot) {
+if (multiRoot == nullptr) {
+return nullptr;
+}
+// 创建对应的二叉树根节点
+BinaryTreeNode* binaryRoot = new BinaryTreeNode(multiRoot-&amp;gt;data);
+// 递归转换第一个子节点作为左孩子
+if (multiRoot-&amp;gt;firstChild != nullptr) {
+binaryRoot-&amp;gt;left = convertToBinaryTree(multiRoot-&amp;gt;firstChild);
+}
+// 递归转换下一个兄弟节点作为右孩子
+if (multiRoot-&amp;gt;nextSibling != nullptr) {
+binaryRoot-&amp;gt;right = convertToBinaryTree(multiRoot-&amp;gt;nextSibling);
+}
+return binaryRoot;
+}
+// 示例：打印二叉树（先序遍历）
+void printBinaryTreePreOrder(BinaryTreeNode* root) {
+if (root == nullptr) return;
+cout &amp;lt;&amp;lt; root-&amp;gt;data &amp;lt;&amp;lt; &amp;#34; &amp;#34;;
+printBinaryTreePreOrder(root-&amp;gt;left);
+printBinaryTreePreOrder(root-&amp;gt;right);
+}
+// 示例：创建多叉树并进行转换
+int main() {
+/* 假设有多叉树结构：
+1
+/|\
+2 3 4
+|
+5
+*/
+MultiTreeNode* root = new MultiTreeNode(1);
+root-&amp;gt;firstChild = new MultiTreeNode(2);
+root-&amp;gt;firstChild-&amp;gt;nextSibling = new MultiTreeNode(3);
+root-&amp;gt;firstChild-&amp;gt;nextSibling-&amp;gt;nextSibling = new MultiTreeNode(4);
+root-&amp;gt;firstChild-&amp;gt;firstChild = new MultiTreeNode(5);
+BinaryTreeNode* binaryRoot = convertToBinaryTree(root);
+cout &amp;lt;&amp;lt; &amp;#34;转换后的二叉树先序遍历结果: &amp;#34;;
+printBinaryTreePreOrder(binaryRoot); // 输出：1 2 5 3 4
+cout &amp;lt;&amp;lt; endl;
+// ... (实际应用中需记得释放内存)
+return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="-注意事项"&gt;⚠️ 注意事项
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;节点结构定义&lt;/strong&gt;：多叉树节点需包含指向其&lt;strong&gt;第一个子节点&lt;/strong&gt; (&lt;code&gt;firstChild&lt;/code&gt;) 和&lt;strong&gt;下一个兄弟节点&lt;/strong&gt; (&lt;code&gt;nextSibling&lt;/code&gt;) 的指针。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;递归思想&lt;/strong&gt;：理解递归在转换过程中的作用，它负责深入到每个子树进行转换。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;内存管理&lt;/strong&gt;：在实际项目中，如果树节点是动态创建的，需要注意内存的释放，避免泄漏。示例代码省略了这部分。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;遍历顺序&lt;/strong&gt;：转换后对二叉树进行&lt;strong&gt;先序遍历&lt;/strong&gt;，可以访问到与原多叉树结构相对应的节点顺序。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;森林转换&lt;/strong&gt;：此方法也适用于将多棵树组成的&lt;strong&gt;森林&lt;/strong&gt;转换为二叉树，通常可将森林中各树的根节点视为兄弟节点进行转换。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="-深入理解"&gt;🧠 深入理解
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;优点&lt;/strong&gt;：孩子兄弟表示法保持了树的原始结构，并能利用二叉树的性质进行遍历和操作，在许多应用场景中非常有用，例如文件系统的目录结构表示。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;逆向转换&lt;/strong&gt;：从转换后的二叉树恢复多叉树也是可能的，过程基本上是上述转换的逆过程。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;希望这些信息能帮助你理解多叉树到二叉树的转换。&lt;/p&gt;
+&lt;h2 id="堆排序"&gt;堆排序
+&lt;/h2&gt;&lt;p&gt;堆排序是一种非常高效且值得掌握的排序算法。它利用“堆”这种数据结构来实现排序，兼具了时间效率和高空间效率。下面我会为你详细解析堆排序的原理、步骤、性能，并提供代码实现。&lt;/p&gt;
+&lt;p&gt;✨ 堆的基本概念&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;堆&lt;/strong&gt;（Heap）是一种特殊的&lt;strong&gt;完全二叉树&lt;/strong&gt;，它满足以下性质之一：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;大顶堆&lt;/strong&gt;：每个节点的值都&lt;strong&gt;大于或等于&lt;/strong&gt;其子节点的值。因此，堆顶（根节点）是整个堆中的&lt;strong&gt;最大值&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;小顶堆&lt;/strong&gt;：每个节点的值都&lt;strong&gt;小于或等于&lt;/strong&gt;其子节点的值。因此，堆顶是整个堆中的&lt;strong&gt;最小值&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;堆通常使用&lt;strong&gt;数组&lt;/strong&gt;来存储。对于数组中索引为 &lt;code&gt;i&lt;/code&gt;（从0开始计数）的元素：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;其&lt;strong&gt;左子节点&lt;/strong&gt;的索引为 &lt;code&gt;2*i + 1&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;其&lt;strong&gt;右子节点&lt;/strong&gt;的索引为 &lt;code&gt;2*i + 2&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;其&lt;strong&gt;父节点&lt;/strong&gt;的索引为 &lt;code&gt;floor((i-1)/2)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="-堆排序的工作原理"&gt;🔧 堆排序的工作原理
+&lt;/h2&gt;&lt;p&gt;堆排序（以升序排序为例）主要分为两个大的阶段：&lt;strong&gt;构建大顶堆&lt;/strong&gt;和&lt;strong&gt;反复提取最大值并调整&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id="1-构建大顶堆-build-max-heap"&gt;1. 构建大顶堆 (Build Max Heap)
+&lt;/h3&gt;&lt;p&gt;从一个无序的数组开始，我们需要将其调整为一个大顶堆。策略是从&lt;strong&gt;最后一个非叶子节点&lt;/strong&gt;开始，依次向前，对每个节点执行“下沉”操作（Heapify），确保以该节点为根的子树满足大顶堆的性质。最后一个非叶子节点的索引通常是 &lt;code&gt;n/2 - 1&lt;/code&gt;（n为数组长度）。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;“下沉”操作 (Heapify / Sift Down) 的核心步骤&lt;/strong&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;针对当前节点、其左子节点和右子节点，找出值最大的那个节点。&lt;/li&gt;
+&lt;li&gt;如果最大值不是当前节点，就将当前节点与这个最大值的子节点交换位置。&lt;/li&gt;
+&lt;li&gt;由于交换可能会破坏下一级子树的堆性质，因此需要&lt;strong&gt;递归地&lt;/strong&gt;或&lt;strong&gt;迭代地&lt;/strong&gt;对交换后的子树继续进行下沉操作，直到当前节点大于等于其所有子节点，或者到达了叶子节点。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="2-排序-extract-and-heapify"&gt;2. 排序 (Extract and Heapify)
+&lt;/h3&gt;&lt;p&gt;在将整个数组构造成大顶堆后，堆顶元素（数组的第一个元素）就是当前最大值。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;交换&lt;/strong&gt;：将堆顶元素与当前堆的&lt;strong&gt;最后一个元素&lt;/strong&gt;交换。此时，最大值就被放置到了数组的最终正确位置上。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;缩小堆&lt;/strong&gt;：将堆的大小减一（排除刚刚交换到末尾的最大值），最后一个元素不再视为堆的一部分。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;调整&lt;/strong&gt;：由于新的堆顶元素可能破坏堆的性质，因此需要对&lt;strong&gt;新的堆顶&lt;/strong&gt;执行下沉操作，使剩余元素重新构成一个大顶堆。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;重复&lt;/strong&gt;：重复上述步骤，直到堆中只剩一个元素。此时，数组就已经排好序了。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="-堆排序的步骤摘要"&gt;📊 堆排序的步骤摘要
+&lt;/h2&gt;&lt;p&gt;下表总结了堆排序算法的关键步骤，以升序排序为例：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;步骤&lt;/th&gt;
+&lt;th&gt;操作描述&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;构建大顶堆&lt;/strong&gt;：从最后一个非叶子节点开始，自底向上、自右向左地对每个节点执行下沉操作。&lt;/td&gt;
+&lt;td&gt;确保每个节点的值都大于或等于其子节点的值，堆顶元素为最大值。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;交换堆顶与堆尾&lt;/strong&gt;：将堆顶元素（当前最大值）与当前堆的最后一个元素交换。&lt;/td&gt;
+&lt;td&gt;将最大值放置到数组的末尾，这是其最终有序位置。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;缩小堆范围&lt;/strong&gt;：将堆的大小减一，排除已排序的最大值。&lt;/td&gt;
+&lt;td&gt;接下来只需对剩余未排序部分进行操作。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;调整堆&lt;/strong&gt;：对新的堆顶元素执行下沉操作，使剩余部分重新满足大顶堆性质。&lt;/td&gt;
+&lt;td&gt;为下一次提取最大值做准备。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;重复步骤2-4&lt;/strong&gt;：直到堆的大小变为1。&lt;/td&gt;
+&lt;td&gt;此时所有元素都已排好序。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="-复杂度分析"&gt;⚙️ 复杂度分析
+&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;指标&lt;/th&gt;
+&lt;th&gt;复杂度&lt;/th&gt;
+&lt;th&gt;解释&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;时间复杂度&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;O(n log n)&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;• &lt;strong&gt;建堆阶段&lt;/strong&gt;：直观上感觉需要O(n log n)，但通过更精细的分析可以得出其时间复杂度为&lt;strong&gt;O(n)&lt;/strong&gt;。 • &lt;strong&gt;排序阶段&lt;/strong&gt;：需要进行n-1次下沉操作，每次下沉的时间复杂度为O(log n)，因此为&lt;strong&gt;O(n log n)&lt;/strong&gt;。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;空间复杂度&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;O(1)&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;堆排序是&lt;strong&gt;原地排序&lt;/strong&gt;算法，只需要常数级别的额外空间用于交换元素等临时操作。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;稳定性&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;不稳定&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;在交换堆顶和堆尾元素的过程中，可能会改变相同值元素的相对顺序。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="-优点和缺点"&gt;👍 优点和缺点
+&lt;/h2&gt;&lt;h3 id="优点"&gt;优点：
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;高效的时间复杂度&lt;/strong&gt;：最坏、平均、最好情况下的时间复杂度均为 O(n log n)，性能稳定。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;空间效率高&lt;/strong&gt;：是原地排序算法，不需要额外的存储空间，空间复杂度为 O(1)。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="缺点"&gt;缺点：
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;不稳定&lt;/strong&gt;：对于相等键值的元素，排序后它们的相对位置可能会改变。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;缓存不友好&lt;/strong&gt;：堆排序的访问模式是跳跃式的（例如访问 &lt;code&gt;2*i+1&lt;/code&gt;, &lt;code&gt;2*i+2&lt;/code&gt;），而不是顺序访问，这对CPU缓存不友好，在某些实际应用中可能比同样时间复杂度但缓存友好的算法（如快速排序）稍慢。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="-应用场景"&gt;🚀 应用场景
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;需要保证最坏情况性能&lt;/strong&gt;：快速排序在最坏情况下会退化为O(n²)，而堆排序的O(n log n)最坏情况复杂度更有优势。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;内存空间受限&lt;/strong&gt;：当可用内存空间非常宝贵时，堆排序的原地排序特性使其成为一个很好的选择。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;获取前k个最大/最小元素&lt;/strong&gt;：例如，要从1亿个数字中找出前10个最大的数，可以维护一个大小为10的小顶堆，扫描完所有数据后，堆中的元素就是前10个最大的数。这种方法的时间复杂度是O(n log k)，非常高效。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="-代码实现"&gt;🖥️ 代码实现
+&lt;/h2&gt;&lt;p&gt;以下是使用不同编程语言实现堆排序（升序）的示例代码：&lt;/p&gt;
+&lt;h3 id="python-实现"&gt;Python 实现
+&lt;/h3&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;def heap_sort(arr):
+def heapify(n, i):
+largest = i
+left = 2 * i + 1
+right = 2 * i + 2
+if left &amp;lt; n and arr[left] &amp;gt; arr[largest]:
+largest = left
+if right &amp;lt; n and arr[right] &amp;gt; arr[largest]:
+largest = right
+if largest != i:
+arr[i], arr[largest] = arr[largest], arr[i]
+heapify(n, largest)
+n = len(arr)
+# 构建最大堆
+for i in range(n // 2 - 1, -1, -1):
+heapify(n, i)
+# 逐个提取元素
+for i in range(n - 1, 0, -1):
+arr[0], arr[i] = arr[i], arr[0] # 交换
+heapify(i, 0) # 调整剩余堆
+# 调用示例
+arr = [12, 11, 13, 5, 6, 7]
+heap_sort(arr)
+print(&amp;#34;Sorted array:&amp;#34;, arr) # 输出: [5, 6, 7, 11, 12, 13]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;em&gt;代码来源于，并进行了适当修改和注释。&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id="java-实现"&gt;Java 实现
+&lt;/h3&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;public class HeapSort {
+public static void heapSort(int[] arr) {
+int n = arr.length;
+// 构建最大堆
+for (int i = n / 2 - 1; i &amp;gt;= 0; i--) {
+heapify(arr, n, i);
+}
+// 逐个从堆中提取元素
+for (int i = n - 1; i &amp;gt; 0; i--) {
+// 将当前堆顶（最大值）移动到数组末尾
+int temp = arr[0];
+arr[0] = arr[i];
+arr[i] = temp;
+// 对减小后的堆调用heapify
+heapify(arr, i, 0);
+}
+}
+private static void heapify(int[] arr, int n, int i) {
+int largest = i; // 初始化最大值为根
+int left = 2 * i + 1;
+int right = 2 * i + 2;
+if (left &amp;lt; n &amp;amp;&amp;amp; arr[left] &amp;gt; arr[largest]) {
+largest = left;
+}
+if (right &amp;lt; n &amp;amp;&amp;amp; arr[right] &amp;gt; arr[largest]) {
+largest = right;
+}
+if (largest != i) {
+int swap = arr[i];
+arr[i] = arr[largest];
+arr[largest] = swap;
+// 递归地堆化受影响的子树
+heapify(arr, n, largest);
+}
+}
+// 测试
+public static void main(String[] args) {
+int[] arr = {12, 11, 13, 5, 6, 7};
+heapSort(arr);
+System.out.print(&amp;#34;Sorted array: &amp;#34;);
+for (int num : arr) {
+System.out.print(num + &amp;#34; &amp;#34;); // 输出: 5 6 7 11 12 13
+}
+}
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;em&gt;代码来源于，并进行了适当修改和注释。&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id="c-实现"&gt;C++ 实现
+&lt;/h3&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;vector&amp;gt;
+using namespace std;
+void heapify(vector&amp;lt;int&amp;gt;&amp;amp; arr, int n, int i) {
+int largest = i;
+int left = 2 * i + 1;
+int right = 2 * i + 2;
+if (left &amp;lt; n &amp;amp;&amp;amp; arr[left] &amp;gt; arr[largest])
+largest = left;
+if (right &amp;lt; n &amp;amp;&amp;amp; arr[right] &amp;gt; arr[largest])
+largest = right;
+if (largest != i) {
+swap(arr[i], arr[largest]);
+heapify(arr, n, largest);
+}
+}
+void heapSort(vector&amp;lt;int&amp;gt;&amp;amp; arr) {
+int n = arr.size();
+// 构建最大堆
+for (int i = n / 2 - 1; i &amp;gt;= 0; i--)
+heapify(arr, n, i);
+// 从堆中逐个提取元素
+for (int i = n - 1; i &amp;gt; 0; i--) {
+swap(arr[0], arr[i]);
+heapify(arr, i, 0);
+}
+}
+int main() {
+vector&amp;lt;int&amp;gt; arr = {12, 11, 13, 5, 6, 7};
+heapSort(arr);
+cout &amp;lt;&amp;lt; &amp;#34;Sorted array: &amp;#34;;
+for (int num : arr) {
+cout &amp;lt;&amp;lt; num &amp;lt;&amp;lt; &amp;#34; &amp;#34;; // 输出: 5 6 7 11 12 13
+}
+return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;em&gt;代码来源于，并进行了适当修改和注释。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;希望这份详细的介绍能帮助你彻底理解堆排序！如果你有任何疑问，欢迎随时提出。&lt;/p&gt;
+&lt;h2 id="建堆"&gt;建堆
+&lt;/h2&gt;&lt;p&gt;堆排序是一种非常高效且值得掌握的排序算法。它利用“堆”这种数据结构来实现排序，兼具了时间效率和高空间效率。下面我会为你详细解析堆排序的原理、步骤、性能，并提供代码实现。&lt;/p&gt;
+&lt;h1 id="-堆排序算法详解"&gt;🧠 堆排序算法详解
+&lt;/h1&gt;&lt;h2 id="-堆的基本概念"&gt;✨ 堆的基本概念
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;堆&lt;/strong&gt;（Heap）是一种特殊的&lt;strong&gt;完全二叉树&lt;/strong&gt;，它满足以下性质之一：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;大顶堆&lt;/strong&gt;：每个节点的值都&lt;strong&gt;大于或等于&lt;/strong&gt;其子节点的值。因此，堆顶（根节点）是整个堆中的&lt;strong&gt;最大值&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;小顶堆&lt;/strong&gt;：每个节点的值都&lt;strong&gt;小于或等于&lt;/strong&gt;其子节点的值。因此，堆顶是整个堆中的&lt;strong&gt;最小值&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;堆通常使用&lt;strong&gt;数组&lt;/strong&gt;来存储。对于数组中索引为 &lt;code&gt;i&lt;/code&gt;（从0开始计数）的元素：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;其&lt;strong&gt;左子节点&lt;/strong&gt;的索引为 &lt;code&gt;2*i + 1&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;其&lt;strong&gt;右子节点&lt;/strong&gt;的索引为 &lt;code&gt;2*i + 2&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;其&lt;strong&gt;父节点&lt;/strong&gt;的索引为 &lt;code&gt;floor((i-1)/2)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="-堆排序的工作原理-1"&gt;🔧 堆排序的工作原理
+&lt;/h2&gt;&lt;p&gt;堆排序（以升序排序为例）主要分为两个大的阶段：&lt;strong&gt;构建大顶堆&lt;/strong&gt;和&lt;strong&gt;反复提取最大值并调整&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id="1-构建大顶堆-build-max-heap-1"&gt;1. 构建大顶堆 (Build Max Heap)
+&lt;/h3&gt;&lt;p&gt;从一个无序的数组开始，我们需要将其调整为一个大顶堆。策略是从&lt;strong&gt;最后一个非叶子节点&lt;/strong&gt;开始，依次向前，对每个节点执行“下沉”操作（Heapify），确保以该节点为根的子树满足大顶堆的性质。最后一个非叶子节点的索引通常是 &lt;code&gt;n/2 - 1&lt;/code&gt;（n为数组长度）。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;“下沉”操作 (Heapify / Sift Down) 的核心步骤&lt;/strong&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;针对当前节点、其左子节点和右子节点，找出值最大的那个节点。&lt;/li&gt;
+&lt;li&gt;如果最大值不是当前节点，就将当前节点与这个最大值的子节点交换位置。&lt;/li&gt;
+&lt;li&gt;由于交换可能会破坏下一级子树的堆性质，因此需要&lt;strong&gt;递归地&lt;/strong&gt;或&lt;strong&gt;迭代地&lt;/strong&gt;对交换后的子树继续进行下沉操作，直到当前节点大于等于其所有子节点，或者到达了叶子节点。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="2-排序-extract-and-heapify-1"&gt;2. 排序 (Extract and Heapify)
+&lt;/h3&gt;&lt;p&gt;在将整个数组构造成大顶堆后，堆顶元素（数组的第一个元素）就是当前最大值。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;交换&lt;/strong&gt;：将堆顶元素与当前堆的&lt;strong&gt;最后一个元素&lt;/strong&gt;交换。此时，最大值就被放置到了数组的最终正确位置上。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;缩小堆&lt;/strong&gt;：将堆的大小减一（排除刚刚交换到末尾的最大值），最后一个元素不再视为堆的一部分。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;调整&lt;/strong&gt;：由于新的堆顶元素可能破坏堆的性质，因此需要对&lt;strong&gt;新的堆顶&lt;/strong&gt;执行下沉操作，使剩余元素重新构成一个大顶堆。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;重复&lt;/strong&gt;：重复上述步骤，直到堆中只剩一个元素。此时，数组就已经排好序了。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="-堆排序的步骤摘要-1"&gt;📊 堆排序的步骤摘要
+&lt;/h2&gt;&lt;p&gt;下表总结了堆排序算法的关键步骤，以升序排序为例：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;步骤&lt;/th&gt;
+&lt;th&gt;操作描述&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;构建大顶堆&lt;/strong&gt;：从最后一个非叶子节点开始，自底向上、自右向左地对每个节点执行下沉操作。&lt;/td&gt;
+&lt;td&gt;确保每个节点的值都大于或等于其子节点的值，堆顶元素为最大值。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;交换堆顶与堆尾&lt;/strong&gt;：将堆顶元素（当前最大值）与当前堆的最后一个元素交换。&lt;/td&gt;
+&lt;td&gt;将最大值放置到数组的末尾，这是其最终有序位置。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;缩小堆范围&lt;/strong&gt;：将堆的大小减一，排除已排序的最大值。&lt;/td&gt;
+&lt;td&gt;接下来只需对剩余未排序部分进行操作。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;调整堆&lt;/strong&gt;：对新的堆顶元素执行下沉操作，使剩余部分重新满足大顶堆性质。&lt;/td&gt;
+&lt;td&gt;为下一次提取最大值做准备。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;重复步骤2-4&lt;/strong&gt;：直到堆的大小变为1。&lt;/td&gt;
+&lt;td&gt;此时所有元素都已排好序。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="-复杂度分析-1"&gt;⚙️ 复杂度分析
+&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;指标&lt;/th&gt;
+&lt;th&gt;复杂度&lt;/th&gt;
+&lt;th&gt;解释&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;时间复杂度&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;O(n log n)&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;• &lt;strong&gt;建堆阶段&lt;/strong&gt;：直观上感觉需要O(n log n)，但通过更精细的分析可以得出其时间复杂度为&lt;strong&gt;O(n)&lt;/strong&gt;。 • &lt;strong&gt;排序阶段&lt;/strong&gt;：需要进行n-1次下沉操作，每次下沉的时间复杂度为O(log n)，因此为&lt;strong&gt;O(n log n)&lt;/strong&gt;。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;空间复杂度&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;O(1)&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;堆排序是&lt;strong&gt;原地排序&lt;/strong&gt;算法，只需要常数级别的额外空间用于交换元素等临时操作。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;稳定性&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;不稳定&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;在交换堆顶和堆尾元素的过程中，可能会改变相同值元素的相对顺序。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="-优点和缺点-1"&gt;👍 优点和缺点
+&lt;/h2&gt;&lt;h3 id="优点-1"&gt;优点：
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;高效的时间复杂度&lt;/strong&gt;：最坏、平均、最好情况下的时间复杂度均为 O(n log n)，性能稳定。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;空间效率高&lt;/strong&gt;：是原地排序算法，不需要额外的存储空间，空间复杂度为 O(1)。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="缺点-1"&gt;缺点：
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;不稳定&lt;/strong&gt;：对于相等键值的元素，排序后它们的相对位置可能会改变。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;缓存不友好&lt;/strong&gt;：堆排序的访问模式是跳跃式的（例如访问 &lt;code&gt;2*i+1&lt;/code&gt;, &lt;code&gt;2*i+2&lt;/code&gt;），而不是顺序访问，这对CPU缓存不友好，在某些实际应用中可能比同样时间复杂度但缓存友好的算法（如快速排序）稍慢。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="-应用场景-1"&gt;🚀 应用场景
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;需要保证最坏情况性能&lt;/strong&gt;：快速排序在最坏情况下会退化为O(n²)，而堆排序的O(n log n)最坏情况复杂度更有优势。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;内存空间受限&lt;/strong&gt;：当可用内存空间非常宝贵时，堆排序的原地排序特性使其成为一个很好的选择。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;获取前k个最大/最小元素&lt;/strong&gt;：例如，要从1亿个数字中找出前10个最大的数，可以维护一个大小为10的小顶堆，扫描完所有数据后，堆中的元素就是前10个最大的数。这种方法的时间复杂度是O(n log k)，非常高效。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="-代码实现-1"&gt;🖥️ 代码实现
+&lt;/h2&gt;&lt;p&gt;以下是使用不同编程语言实现堆排序（升序）的示例代码：&lt;/p&gt;
+&lt;h3 id="python-实现-1"&gt;Python 实现
+&lt;/h3&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;def heap_sort(arr):
+def heapify(n, i):
+largest = i
+left = 2 * i + 1
+right = 2 * i + 2
+if left &amp;lt; n and arr[left] &amp;gt; arr[largest]:
+largest = left
+if right &amp;lt; n and arr[right] &amp;gt; arr[largest]:
+largest = right
+if largest != i:
+arr[i], arr[largest] = arr[largest], arr[i]
+heapify(n, largest)
+n = len(arr)
+# 构建最大堆
+for i in range(n // 2 - 1, -1, -1):
+heapify(n, i)
+# 逐个提取元素
+for i in range(n - 1, 0, -1):
+arr[0], arr[i] = arr[i], arr[0] # 交换
+heapify(i, 0) # 调整剩余堆
+# 调用示例
+arr = [12, 11, 13, 5, 6, 7]
+heap_sort(arr)
+print(&amp;#34;Sorted array:&amp;#34;, arr) # 输出: [5, 6, 7, 11, 12, 13]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;em&gt;代码来源于，并进行了适当修改和注释。&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id="java-实现-1"&gt;Java 实现
+&lt;/h3&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;public class HeapSort {
+public static void heapSort(int[] arr) {
+int n = arr.length;
+// 构建最大堆
+for (int i = n / 2 - 1; i &amp;gt;= 0; i--) {
+heapify(arr, n, i);
+}
+// 逐个从堆中提取元素
+for (int i = n - 1; i &amp;gt; 0; i--) {
+// 将当前堆顶（最大值）移动到数组末尾
+int temp = arr[0];
+arr[0] = arr[i];
+arr[i] = temp;
+// 对减小后的堆调用heapify
+heapify(arr, i, 0);
+}
+}
+private static void heapify(int[] arr, int n, int i) {
+int largest = i; // 初始化最大值为根
+int left = 2 * i + 1;
+int right = 2 * i + 2;
+if (left &amp;lt; n &amp;amp;&amp;amp; arr[left] &amp;gt; arr[largest]) {
+largest = left;
+}
+if (right &amp;lt; n &amp;amp;&amp;amp; arr[right] &amp;gt; arr[largest]) {
+largest = right;
+}
+if (largest != i) {
+int swap = arr[i];
+arr[i] = arr[largest];
+arr[largest] = swap;
+// 递归地堆化受影响的子树
+heapify(arr, n, largest);
+}
+}
+// 测试
+public static void main(String[] args) {
+int[] arr = {12, 11, 13, 5, 6, 7};
+heapSort(arr);
+System.out.print(&amp;#34;Sorted array: &amp;#34;);
+for (int num : arr) {
+System.out.print(num + &amp;#34; &amp;#34;); // 输出: 5 6 7 11 12 13
+}
+}
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;em&gt;代码来源于，并进行了适当修改和注释。&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id="c-实现-1"&gt;C++ 实现
+&lt;/h3&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;vector&amp;gt;
+using namespace std;
+void heapify(vector&amp;lt;int&amp;gt;&amp;amp; arr, int n, int i) {
+int largest = i;
+int left = 2 * i + 1;
+int right = 2 * i + 2;
+if (left &amp;lt; n &amp;amp;&amp;amp; arr[left] &amp;gt; arr[largest])
+largest = left;
+if (right &amp;lt; n &amp;amp;&amp;amp; arr[right] &amp;gt; arr[largest])
+largest = right;
+if (largest != i) {
+swap(arr[i], arr[largest]);
+heapify(arr, n, largest);
+}
+}
+void heapSort(vector&amp;lt;int&amp;gt;&amp;amp; arr) {
+int n = arr.size();
+// 构建最大堆
+for (int i = n / 2 - 1; i &amp;gt;= 0; i--)
+heapify(arr, n, i);
+// 从堆中逐个提取元素
+for (int i = n - 1; i &amp;gt; 0; i--) {
+swap(arr[0], arr[i]);
+heapify(arr, i, 0);
+}
+}
+int main() {
+vector&amp;lt;int&amp;gt; arr = {12, 11, 13, 5, 6, 7};
+heapSort(arr);
+cout &amp;lt;&amp;lt; &amp;#34;Sorted array: &amp;#34;;
+for (int num : arr) {
+cout &amp;lt;&amp;lt; num &amp;lt;&amp;lt; &amp;#34; &amp;#34;; // 输出: 5 6 7 11 12 13
+}
+return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;em&gt;代码来源于，并进行了适当修改和注释。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;希望这份详细的介绍能帮助你彻底理解堆排序！如果你有任何疑问，欢迎随时提出。&lt;/p&gt;
+&lt;h2 id="自下而上复杂度"&gt;自下而上复杂度
+&lt;/h2&gt;&lt;p&gt;自下而上建堆（Heapify）的时间复杂度确实是 &lt;strong&gt;O(n)&lt;/strong&gt;。这是一个非常重要且可能有些反直觉的结论，因为单个元素的调整操作（下沉，Sift-Down）在最坏情况下是 O(log n)，但整体建堆过程却能达到线性复杂度。&lt;/p&gt;
+&lt;p&gt;为了帮助你快速理解这两种建堆方式的本质区别，我先用一个表格来总结它们的核心特性：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;特性&lt;/th&gt;
+&lt;th&gt;自下而上建堆 (Heapify)&lt;/th&gt;
+&lt;th&gt;自上而下建堆 (逐个插入)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;核心过程&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;从&lt;strong&gt;最后一个非叶节点&lt;/strong&gt;开始，&lt;strong&gt;向前&lt;/strong&gt;遍历并对每个节点执行&lt;strong&gt;下沉&lt;/strong&gt;操作&lt;/td&gt;
+&lt;td&gt;从&lt;strong&gt;空堆&lt;/strong&gt;开始，&lt;strong&gt;逐个&lt;/strong&gt;将元素插入堆尾并执行&lt;strong&gt;上浮&lt;/strong&gt;操作&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;起始点&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;最后一个非叶节点 (索引 ≈ n/2)&lt;/td&gt;
+&lt;td&gt;第一个元素&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;核心操作&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;下沉 (Sift-Down)&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;上浮 (Sift-Up)&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;时间复杂度&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;O(n)&lt;/strong&gt; (线性)&lt;/td&gt;
+&lt;td&gt;O(n log n) (线性对数)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;适用场景&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;批量建堆&lt;/strong&gt;，所有元素已知且一次性给定时，&lt;strong&gt;效率更高&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;动态插入&lt;/strong&gt;，元素逐个到达时需要维持堆结构时使用&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;🧠 &lt;strong&gt;为什么自下而上建堆是 O(n)？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;关键在于&lt;strong&gt;大部分需要调整的节点都位于树的底层&lt;/strong&gt;，它们需要下沉的步骤（代价）非常少；而需要较多调整步骤的节点数量非常少。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;数学推导（求和公式）&lt;/strong&gt;：
+假设一个包含 n 个节点的完全二叉树，高度为 h (h ≈ log₂n)。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;叶子节点（最底层）大约有 n/2 个，它们的高度为 0，不需要下沉操作。&lt;/li&gt;
+&lt;li&gt;高度为 1 的节点大约有 n/4 个，它们最多只需要下沉 1 步。&lt;/li&gt;
+&lt;li&gt;高度为 2 的节点大约有 n/8 个，它们最多只需要下沉 2 步。&lt;/li&gt;
+&lt;li&gt;&amp;hellip;&lt;/li&gt;
+&lt;li&gt;根节点（高度为 h）只有 1 个，它最多需要下沉 h 步。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;总时间代价 T(n) 可以表示为：&lt;/p&gt;
+&lt;p&gt;T(n) = n/4 * 1 + n/8 * 2 + n/16 * 3 + &amp;hellip; + 1 * h&lt;/p&gt;
+&lt;p&gt;这是一个&lt;strong&gt;等差数列和等比数列的乘积&lt;/strong&gt;，通过&lt;strong&gt;错位相减法&lt;/strong&gt;等数学方法求解后，可以证明 T(n) &amp;lt; 2n。因此，时间复杂度是 &lt;strong&gt;O(n)&lt;/strong&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;直观理解&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;工作量分布&lt;/strong&gt;：树中需要调整的节点数量大约是 n/2（非叶节点），但&lt;strong&gt;大部分工作量是由很少量的高层节点贡献的&lt;/strong&gt;。大量的底层节点几乎不贡献工作量（因为调整的步数少）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;与自上而下对比&lt;/strong&gt;：自上而下建堆时，每个新插入的元素都可能从最底层一路上浮到根节点，路径很长。而自下而上建堆时，一个节点的下沉操作只会发生在它的子树中，&lt;strong&gt;不会波及到整个树&lt;/strong&gt;，且越底层的节点涉及的子树越小，调整得越快。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;⚡ &lt;strong&gt;重要提示&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;虽然自下而上建堆的&lt;strong&gt;整体&lt;/strong&gt;时间复杂度是 O(n)，但这并不意味着每个节点的调整操作都是 O(1)。根节点的调整仍然需要 O(log n) 的时间，只是由于这种节点数量极少，在求和时被“均摊”掉了。&lt;/p&gt;
+&lt;p&gt;💡 &lt;strong&gt;如何选择&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;当你&lt;strong&gt;已经拥有一个完整的无序数组&lt;/strong&gt;，并希望将其构建成一个堆时（例如堆排序的第一步），&lt;strong&gt;应优先选择自下而上建堆&lt;/strong&gt;，因为其效率更高 (O(n))。&lt;/li&gt;
+&lt;li&gt;当你需要&lt;strong&gt;动态维护一个堆&lt;/strong&gt;，即元素是一个一个到来并需要随时保证堆结构时，则使用自上而下（插入）的方法，尽管其建堆复杂度是 O(n log n)，但这是唯一的选择。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;希望以上的解释能帮助你理解自下而上建堆的时间复杂度。这是一个非常精妙的算法设计案例，展示了如何通过优化整体流程来降低复杂度。&lt;/p&gt;
+&lt;h2 id="交换数字"&gt;交换数字
+&lt;/h2&gt;&lt;h2 id="交换数字-1"&gt;交换数字
+&lt;/h2&gt;&lt;p&gt;交换数字是编程中的常见操作，有多种实现方法，各有其适用场景和特点。下面我用一个表格为你汇总主要方法，然后详细解释，最后给你一些选择建议。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;方法&lt;/th&gt;
+&lt;th&gt;核心思路&lt;/th&gt;
+&lt;th&gt;优点&lt;/th&gt;
+&lt;th&gt;缺点&lt;/th&gt;
+&lt;th&gt;典型应用场景&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;临时变量法&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;引入第三个变量暂存值&lt;/td&gt;
+&lt;td&gt;直观易懂，可读性强，稳定可靠&lt;/td&gt;
+&lt;td&gt;需要额外的内存空间&lt;/td&gt;
+&lt;td&gt;通用场景，教学示例，可读性要求高的代码&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;算术运算法&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;通过加法减法或乘法除法操作交换值&lt;/td&gt;
+&lt;td&gt;无需额外变量&lt;/td&gt;
+&lt;td&gt;有溢出风险（加减），除数不能为零（乘除）&lt;/td&gt;
+&lt;td&gt;内存受限环境，&lt;strong&gt;不推荐常规使用&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;位异或运算法&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;利用异或运算的性质交换值&lt;/td&gt;
+&lt;td&gt;无需额外变量，效率通常比算术法高&lt;/td&gt;
+&lt;td&gt;代码可读性稍差&lt;/td&gt;
+&lt;td&gt;嵌入式开发，内存极度受限或追求极致性能&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;函数封装法&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;将交换操作封装成函数&lt;/td&gt;
+&lt;td&gt;代码复用，模块化，减少重复代码&lt;/td&gt;
+&lt;td&gt;引入函数调用开销（通常可忽略）&lt;/td&gt;
+&lt;td&gt;需要多次交换操作的项目&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;宏定义法&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;使用预处理器宏进行文本替换&lt;/td&gt;
+&lt;td&gt;免去函数调用开销，灵活&lt;/td&gt;
+&lt;td&gt;可能产生副作用（如对重复求值），调试稍复杂&lt;/td&gt;
+&lt;td&gt;C语言中追求性能的频繁交换操作&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;下面是这些方法的详细说明和代码示例（以C语言为例）。&lt;/p&gt;
+&lt;h3 id="-详细方法说明与代码示例"&gt;📝 详细方法说明与代码示例
+&lt;/h3&gt;&lt;h4 id="1-使用临时变量"&gt;1. 使用临时变量
+&lt;/h4&gt;&lt;p&gt;这是&lt;strong&gt;最直接、最常用&lt;/strong&gt;的方法。思路是引入一个临时变量 (&lt;code&gt;temp&lt;/code&gt;) 来暂时保存其中一个变量的值。&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;#include &amp;lt;stdio.h&amp;gt;
+int main() {
+int a = 5, b = 10, temp;
+printf(&amp;#34;交换前: a = %d, b = %d\n&amp;#34;, a, b);
+temp = a; // 将 a 的值暂存到 temp
+a = b; // 将 b 的值赋给 a
+b = temp; // 将 temp (原a的值) 赋给 b
+printf(&amp;#34;交换后: a = %d, b = %d\n&amp;#34;, a, b);
+return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;优点&lt;/strong&gt;：逻辑清晰，易于理解和维护，适用于所有数据类型。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;缺点&lt;/strong&gt;：需要消耗一个额外变量的内存空间（通常这微不足道）。&lt;/p&gt;
+&lt;h4 id="2-使用算术运算"&gt;2. 使用算术运算
+&lt;/h4&gt;&lt;p&gt;这种方法通过加法和减法来实现交换，&lt;strong&gt;不需要临时变量&lt;/strong&gt;。&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;#include &amp;lt;stdio.h&amp;gt;
+int main() {
+int a = 5, b = 10;
+printf(&amp;#34;交换前: a = %d, b = %d\n&amp;#34;, a, b);
+a = a + b; // a 变为 a 与 b 的和
+b = a - b; // b 的值变为原来的 a (因为 (a+b)-b = a)
+a = a - b; // a 的值变为原来的 b (因为 (a+b)-a = b)
+printf(&amp;#34;交换后: a = %d, b = %d\n&amp;#34;, a, b);
+return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;你也可以使用乘除法，但&lt;strong&gt;务必注意除数不能为零&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;a = a * b;
+b = a / b;
+a = a / b;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;优点&lt;/strong&gt;：节省了一个临时变量。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;缺点&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;加减法&lt;/strong&gt;：当 &lt;code&gt;a&lt;/code&gt;和 &lt;code&gt;b&lt;/code&gt;的值非常大时，&lt;code&gt;a + b&lt;/code&gt;可能会超出整型数据的表示范围，导致&lt;strong&gt;溢出&lt;/strong&gt;，这是潜在的风险。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;乘除法&lt;/strong&gt;：同样有溢出风险，并且如果 &lt;code&gt;b&lt;/code&gt;为0，除法会导致运行时错误。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;不推荐在重要项目或通用场景中使用&lt;/strong&gt;，除非你能确保不会溢出且除数非零。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="3-使用位异或运算"&gt;3. 使用位异或运算
+&lt;/h4&gt;&lt;p&gt;利用&lt;strong&gt;异或操作符 &lt;code&gt;^&lt;/code&gt;&lt;/strong&gt; 的性质（相同为0，不同为1；一个数与自己异或结果为0；一个数与0异或结果为自己）来交换值，也无需临时变量。&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;#include &amp;lt;stdio.h&amp;gt;
+int main() {
+int a = 5, b = 10; // 5: 0101, 10: 1010
+printf(&amp;#34;交换前: a = %d, b = %d\n&amp;#34;, a, b);
+a = a ^ b; // a 现在是一个&amp;#34;中间值&amp;#34;，不同位为1
+b = a ^ b; // 相当于 (a^b)^b = a，b 得到了原 a 的值
+a = a ^ b; // 相当于 (a^b)^a = b，a 得到了原 b 的值
+printf(&amp;#34;交换后: a = %d, b = %d\n&amp;#34;, a, b);
+return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;优点&lt;/strong&gt;：避免了算术运算的溢出问题，在某些底层系统或对性能有极致要求的场合效率较高。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;缺点&lt;/strong&gt;：代码可读性较差，不了解位操作的人可能难以理解。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：操作数必须是整数类型。&lt;/p&gt;
+&lt;h4 id="4-函数封装"&gt;4. 函数封装
+&lt;/h4&gt;&lt;p&gt;当程序中需要多次进行交换操作时，将其封装成函数是&lt;strong&gt;非常好的实践&lt;/strong&gt;，能提高代码的复用性和整洁度。&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;#include &amp;lt;stdio.h&amp;gt;
+// 通过指针来修改主函数中变量的值
+void swap(int *x, int *y) {
+int temp = *x;
+*x = *y;
+*y = temp;
+}
+int main() {
+int a = 5, b = 10;
+printf(&amp;#34;交换前: a = %d, b = %d\n&amp;#34;, a, b);
+swap(&amp;amp;a, &amp;amp;b); // 传递变量的地址
+printf(&amp;#34;交换后: a = %d, b = %d\n&amp;#34;, a, b);
+return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;优点&lt;/strong&gt;：&lt;strong&gt;模块化&lt;/strong&gt;，一次编写多处使用，使主逻辑更清晰。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;缺点&lt;/strong&gt;：有极小的函数调用开销（现代编译器优化下通常可忽略）。&lt;/p&gt;
+&lt;h4 id="5-宏定义"&gt;5. 宏定义
+&lt;/h4&gt;&lt;p&gt;使用预处理器宏来“定义”一个交换操作，它在编译前进行文本替换。&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;#include &amp;lt;stdio.h&amp;gt;
+// 定义交换宏
+#define SWAP(x, y) { int temp = (x); (x) = (y); (y) = temp; }
+int main() {
+int a = 5, b = 10;
+printf(&amp;#34;交换前: a = %d, b = %d\n&amp;#34;, a, b);
+SWAP(a, b); // 编译器预处理时会替换为 { int temp = a; a = b; b = temp; }
+printf(&amp;#34;交换后: a = %d, b = %d\n&amp;#34;, a, b);
+return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;优点&lt;/strong&gt;：&lt;strong&gt;免去了函数调用的开销&lt;/strong&gt;（虽然通常很小），更灵活（不限于int类型，但需小心）。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;缺点&lt;/strong&gt;：宏只是简单替换，如果参数是复杂表达式（如 &lt;code&gt;SWAP(i++, j--)&lt;/code&gt;），可能会产生&lt;strong&gt;不可预期的副作用&lt;/strong&gt;（多次求值）。调试时也可能更复杂。&lt;/p&gt;
+&lt;h3 id="-在其他编程语言中"&gt;🔄 在其他编程语言中
+&lt;/h3&gt;&lt;p&gt;许多现代高级语言提供了更简便的交换方式，通常基于元组（Tuple）解包或包装类：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Python&lt;/strong&gt;:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;a, b = 5, 10
+a, b = b, a # 直接交换，最简洁
+print(a, b) # 输出: 10 5
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Java&lt;/strong&gt; (使用临时变量或封装方法，因为基本类型是值传递):&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;// 常用方式还是临时变量
+int temp = a;
+a = b;
+b = temp;
+// 如果是包装类(Integer等)或对象，可通过方法封装
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;JavaScript&lt;/strong&gt;:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;let a = 5, b = 10;
+[a, b] = [b, a]; // 使用解构赋值
+console.log(a, b); // 输出: 10, 5
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="-如何选择方法"&gt;💡 如何选择方法？
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;通用首选&lt;/strong&gt;：对于绝大多数情况，尤其是初学者和注重代码可读性、可维护性的场景，&lt;strong&gt;使用临时变量&lt;/strong&gt;是最安全、最清晰的选择。那一点额外的内存开销几乎总是值得的。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;面试与炫技&lt;/strong&gt;：位异或运算常被用作面试题考察对位运算的理解，但在实际项目中使用时需加上注释说明意图。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;极端限制&lt;/strong&gt;：只有在内存极度受限的嵌入式环境或确知数据范围不可能溢出时，才考虑算术法或位运算法。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;模块化与复用&lt;/strong&gt;：如果代码中需要多次交换，&lt;strong&gt;封装成函数&lt;/strong&gt;是专业的表现。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;性能临界&lt;/strong&gt;：在C/C++中，如果处在性能关键的循环内部，且编译器优化后仍希望避免函数调用开销，可以考虑使用&lt;strong&gt;宏&lt;/strong&gt;，但必须确保传入的宏参数没有副作用。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;希望这些详细解释能帮助你全面理解交换数字的各种方法！&lt;/p&gt;
+&lt;h2 id="堆"&gt;堆
+&lt;/h2&gt;&lt;p&gt;堆是计算机科学中一种非常重要且高效的数据结构，它巧妙地通过数组来模拟一棵&lt;strong&gt;完全二叉树&lt;/strong&gt;，并满足特定的&lt;strong&gt;堆序性质&lt;/strong&gt;。下面我们通过一个核心性质表格和详细解释来帮助你全面理解它。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;性质类别&lt;/th&gt;
+&lt;th&gt;核心要点&lt;/th&gt;
+&lt;th&gt;详细说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;🧱 结构性质&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;完全二叉树&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;堆总是一棵&lt;strong&gt;完全二叉树&lt;/strong&gt;。这意味着除了最后一层外，其他层都是满的，并且最后一层的节点都&lt;strong&gt;靠左排列&lt;/strong&gt;。这个特性决定了它可以用&lt;strong&gt;数组&lt;/strong&gt;来紧凑、高效地存储，无需指针。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;📊 堆序性质&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;父节点主导&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;在&lt;strong&gt;大顶堆&lt;/strong&gt;中，每个节点的值都&lt;strong&gt;大于或等于&lt;/strong&gt;其子节点的值，根节点（堆顶）是最大值。在&lt;strong&gt;小顶堆&lt;/strong&gt;中，每个节点的值都&lt;strong&gt;小于或等于&lt;/strong&gt;其子节点的值，根节点（堆顶）是最小值。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;🧮 数组表示&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;索引关系&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;若数组下标从 &lt;code&gt;0&lt;/code&gt;开始，对于下标为 &lt;code&gt;i&lt;/code&gt;的节点： - 其&lt;strong&gt;父节点&lt;/strong&gt;下标为 &lt;code&gt;(i-1)/2&lt;/code&gt;(向下取整)。 - 其&lt;strong&gt;左孩子&lt;/strong&gt;下标为 &lt;code&gt;2*i+1&lt;/code&gt;。 - 其&lt;strong&gt;右孩子&lt;/strong&gt;下标为 &lt;code&gt;2*i+2&lt;/code&gt;。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;⚡ 操作复杂度&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;高效&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;- &lt;strong&gt;插入元素&lt;/strong&gt; (&lt;code&gt;heappush&lt;/code&gt;): &lt;code&gt;O(log n)&lt;/code&gt; - &lt;strong&gt;删除堆顶&lt;/strong&gt; (&lt;code&gt;heappop&lt;/code&gt;): &lt;code&gt;O(log n)&lt;/code&gt; - &lt;strong&gt;构建堆&lt;/strong&gt; (&lt;code&gt;heapify&lt;/code&gt;): &lt;code&gt;O(n)&lt;/code&gt; - &lt;strong&gt;获取极值&lt;/strong&gt; (&lt;code&gt;peek&lt;/code&gt;): &lt;code&gt;O(1)&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;🎯 核心应用&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;依赖极值&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;- &lt;strong&gt;优先队列&lt;/strong&gt; - &lt;strong&gt;堆排序&lt;/strong&gt; (升序用大顶堆，降序用小顶堆) - &lt;strong&gt;求 Top K&lt;/strong&gt; 问题 - &lt;strong&gt;图算法&lt;/strong&gt; (如Dijkstra算法、Prim算法)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-堆序性质的深入理解"&gt;📌 堆序性质的深入理解
+&lt;/h3&gt;&lt;p&gt;堆序性质是堆的灵魂，但它只规定了&lt;strong&gt;父子节点之间&lt;/strong&gt;的大小关系，而&lt;strong&gt;并不要求兄弟节点之间或不同分支的节点之间&lt;/strong&gt;有任何大小关系。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;大顶堆示例&lt;/strong&gt;：在一个包含 &lt;code&gt;[16, 14, 10, 8, 7, 9, 3, 2, 4, 1]&lt;/code&gt;的大顶堆中，根节点16是最大的。节点14和10是兄弟，14&amp;gt;10；但节点8（14的左孩子）和节点9（10的左孩子）之间没有大小要求，此处8&amp;lt;9。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;小顶堆示例&lt;/strong&gt;：小顶堆则相反，根节点最小，且每个节点都比它的子节点小。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="-维护堆性质的操作"&gt;🛠️ 维护堆性质的操作
+&lt;/h3&gt;&lt;p&gt;当插入或删除元素后，堆的性质可能被破坏，需要通过&lt;strong&gt;上浮（Sift Up）&lt;/strong&gt; 或&lt;strong&gt;下沉（Sift Down/Heapify）&lt;/strong&gt; 操作来修复。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;插入与上浮（Sift Up）&lt;/strong&gt;：新元素被添加到数组末尾，然后与其父节点比较。如果违反堆序（在大顶堆中比父大，在小顶堆中比父小），就与父节点交换，并重复此过程直至满足条件。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;删除与下沉（Sift Down）&lt;/strong&gt;：通常指删除堆顶元素。方法是将其与数组末尾元素交换并移除，然后新的堆顶元素与其&lt;strong&gt;最大的孩子（大顶堆）&lt;/strong&gt; 或&lt;strong&gt;最小的孩子（小顶堆）&lt;/strong&gt; 比较，如果违反堆序就交换，并重复此过程直至满足条件。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="-构建堆heapify"&gt;🧩 构建堆（Heapify）
+&lt;/h3&gt;&lt;p&gt;将一个无序数组构建成堆，有两种方式：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;自底向上（Down-top）&lt;/strong&gt;：从&lt;strong&gt;最后一个非叶子节点&lt;/strong&gt;（下标为 &lt;code&gt;n/2 - 1&lt;/code&gt;）开始，&lt;strong&gt;向前遍历&lt;/strong&gt;并对每个节点执行&lt;strong&gt;下沉（Sift Down）&lt;/strong&gt; 操作。这是一种高效的方法，&lt;strong&gt;时间复杂度为O(n)&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;自顶向下（Top-down）&lt;/strong&gt;：将数组视为空堆，然后逐个&lt;strong&gt;插入（Push）&lt;/strong&gt; 元素。每次插入都伴随一次上浮，&lt;strong&gt;时间复杂度为O(n log n)&lt;/strong&gt;，效率较低，通常不推荐。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="-堆的典型应用"&gt;💡 堆的典型应用
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;优先队列（Priority Queue）&lt;/strong&gt;：这是堆最直接的应用。无论是操作系统中的进程调度，还是网络中的数据包管理，都需要快速处理优先级最高的元素，堆的O(1)取极值和O(log n)插入删除特性完美契合此需求。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;堆排序（Heap Sort）&lt;/strong&gt;：算法分为两步：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;建堆&lt;/strong&gt;：将无序数组构建成大顶堆（升序）或小顶堆（降序）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;排序&lt;/strong&gt;：反复将堆顶元素（当前极值）与当前无序区末尾元素交换，然后对新的堆顶执行下沉操作以重新使无序区满足堆性质。堆排序的&lt;strong&gt;时间复杂度为O(n log n)&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Top-K 问题&lt;/strong&gt;：在海量数据中找出最大（或最小）的K个元素。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;求前K个最大元素&lt;/strong&gt;：维护一个大小为K的&lt;strong&gt;小顶堆&lt;/strong&gt;。新元素若比堆顶大，则替换堆顶并下沉。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;求前K个最小元素&lt;/strong&gt;：维护一个大小为K的&lt;strong&gt;大顶堆&lt;/strong&gt;。新元素若比堆顶小，则替换堆顶并下沉。&lt;/p&gt;
+&lt;p&gt;此方法的时间复杂度约为O(n log K)，非常高效。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="-重要注意事项"&gt;⚠️ 重要注意事项
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;内存管理中的“堆”&lt;/strong&gt;：请注意，数据结构中的“堆”与&lt;strong&gt;内存管理中的“堆”是两个完全不同的概念&lt;/strong&gt;，切勿混淆。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;相同值的处理&lt;/strong&gt;：堆&lt;strong&gt;不保证&lt;/strong&gt;具有相同值的元素之间的任何顺序（稳定性）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;多线程环境&lt;/strong&gt;：标准的堆操作&lt;strong&gt;不是线程安全的&lt;/strong&gt;，在多线程环境下使用需要额外的同步机制。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;希望以上解释能帮助你建立起对堆的全面认识。&lt;/p&gt;</description></item><item><title>【DSA】KMP &amp; BM &amp; Sunday</title><link>https://dyhes.github.io/p/dsakmp-bm-sunday/</link><pubDate>Sun, 29 Jun 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/dsakmp-bm-sunday/</guid><description>&lt;h2 id="字符串匹配"&gt;字符串匹配
+&lt;/h2&gt;&lt;p&gt;以下是主流字符串匹配算法的系统梳理，涵盖核心思想、时间复杂度、适用场景及优缺点，结合技术原理与工程实践综合呈现：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-算法分类与概览"&gt;📊 算法分类与概览
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;算法类型&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;代表算法&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;时间复杂度&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;核心思想&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;适用场景&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;基本算法&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;暴力匹配 (Brute Force)&lt;/td&gt;
+&lt;td&gt;O(m*n)&lt;/td&gt;
+&lt;td&gt;逐字符比较&lt;/td&gt;
+&lt;td&gt;短文本、简单场景&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;单模式匹配&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;KMP&lt;/td&gt;
+&lt;td&gt;O(m+n)&lt;/td&gt;
+&lt;td&gt;失效函数避免回溯&lt;/td&gt;
+&lt;td&gt;通用场景、理论教学&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;Boyer-Moore (BM)&lt;/td&gt;
+&lt;td&gt;O(n/m) ~ O(m*n)&lt;/td&gt;
+&lt;td&gt;反向匹配+双启发规则&lt;/td&gt;
+&lt;td&gt;长模式串、实际应用&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;Sunday&lt;/td&gt;
+&lt;td&gt;O(n/m) 平均&lt;/td&gt;
+&lt;td&gt;BM改进+关注下一字符&lt;/td&gt;
+&lt;td&gt;快速匹配、中长文本&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;Rabin-Karp&lt;/td&gt;
+&lt;td&gt;O(n+m) 平均&lt;/td&gt;
+&lt;td&gt;哈希值比较&lt;/td&gt;
+&lt;td&gt;多模式匹配基础&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;多模式匹配&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Trie树&lt;/td&gt;
+&lt;td&gt;O(m) 建树, O(n) 匹配&lt;/td&gt;
+&lt;td&gt;前缀树结构&lt;/td&gt;
+&lt;td&gt;词典匹配、单词查询&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;Aho-Corasick (AC自动机)&lt;/td&gt;
+&lt;td&gt;O(n+m+k)&lt;/td&gt;
+&lt;td&gt;Trie+KMP思想&lt;/td&gt;
+&lt;td&gt;敏感词过滤、病毒检测&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-基本匹配算法暴力法-brute-force"&gt;🔍 基本匹配算法：暴力法 (Brute Force)
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;原理&lt;/strong&gt;：主串从每个字符开始与模式串逐位比较，失败后主串回溯到下一位置重新匹配&lt;a class="link" href="@ref" &gt;1,3&lt;/a&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;时间复杂度&lt;/strong&gt;：最坏 O(m*n)（m, n为模式串和主串长度）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;优点&lt;/strong&gt;：实现简单，短文本效率高。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;缺点&lt;/strong&gt;：长文本效率低，回溯冗余。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;代码示例（Java）&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;for (int i = 0; i &amp;lt;= n - m; i++) {
+int j = 0;
+while (j &amp;lt; m &amp;amp;&amp;amp; text[i+j] == pattern[j]) j++;
+if (j == m) return i; // 匹配成功
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-经典单模式匹配算法"&gt;⚙️ 经典单模式匹配算法
+&lt;/h3&gt;&lt;h4 id="kmp算法-knuth-morris-pratt"&gt;KMP算法 (Knuth-Morris-Pratt)
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;核心思想&lt;/strong&gt;：利用&lt;strong&gt;部分匹配表&lt;/strong&gt;（next数组）记录模式串前缀后缀的最长公共长度。匹配失败时，模式串右移位数 = 已匹配字符数 - next[j]，避免主串回溯&lt;a class="link" href="@ref" &gt;6,7,8&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;关键步骤&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;预处理&lt;/strong&gt;：计算next数组（O(m)）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;匹配&lt;/strong&gt;：主串指针不回溯，模式串按next数组跳跃（O(n)）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;时间复杂度&lt;/strong&gt;：O(m+n)。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;优势&lt;/strong&gt;：理论高效，适合模式串较长场景。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;局限性&lt;/strong&gt;：实现复杂，实际性能常低于BM&lt;a class="link" href="@ref" &gt;3&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="boyer-moore-bm算法"&gt;Boyer-Moore (BM)算法
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;核心思想&lt;/strong&gt;： 反向匹配（从模式串末尾开始） + 双启发规则：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;坏字符规则 (Bad Character)&lt;/strong&gt;：主串中不匹配的字符若不在模式串中，则跳过整个模式串；若存在，则对齐模式串中最右出现位置。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;好后缀规则 (Good Suffix)&lt;/strong&gt;：已匹配的后缀子串在模式串中再次出现时，对齐其最右位置。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;移动策略&lt;/strong&gt;：取两规则计算值的最大值。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;时间复杂度&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;最坏 O(m*n)（如全相同字符）。&lt;/li&gt;
+&lt;li&gt;平均 O(n/m)（跳跃性强）&lt;a class="link" href="@ref" &gt;9,10&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;优势&lt;/strong&gt;：工业级高效（如&lt;code&gt;grep&lt;/code&gt;工具），长模式串优势显著。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;缺点&lt;/strong&gt;：预处理开销大。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="rabin-karp算法"&gt;Rabin-Karp算法
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;核心思想&lt;/strong&gt;：将模式串哈希值 H(p) 与主串中每个长度为m的子串哈希值比较。若哈希值相等，则进一步验证字符匹配&lt;a class="link" href="@ref" &gt;2,4&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;优化&lt;/strong&gt;：滚动哈希（如多项式哈希），使相邻子串哈希值计算 O(1)。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;时间复杂度&lt;/strong&gt;：平均 O(n+m)，最坏 O(m*n)（哈希冲突时）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;适用场景&lt;/strong&gt;：多模式匹配基础（如AC自动机预处理）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-高效单模式变种"&gt;⚡ 高效单模式变种
+&lt;/h3&gt;&lt;h4 id="sunday算法"&gt;Sunday算法
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;改进点：BM的简化版，匹配失败时关注主串中下一字符&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;若该字符不在模式串中，跳过模式串长度+1。&lt;/li&gt;
+&lt;li&gt;若存在，对齐模式串中最右出现位置&lt;a class="link" href="@ref" &gt;3,10&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;优势&lt;/strong&gt;：实现简单，平均性能优于BM（尤其英文文本）&lt;a class="link" href="@ref" &gt;3&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="horspool算法"&gt;Horspool算法
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;简化BM&lt;/strong&gt;：仅用坏字符规则，且对齐模式串中最右字符（非任意字符）&lt;a class="link" href="@ref" &gt;1,10&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;适用场景&lt;/strong&gt;：中等长度模式串。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-多模式匹配算法"&gt;🌐 多模式匹配算法
+&lt;/h3&gt;&lt;h4 id="trie树-字典树"&gt;Trie树 (字典树)
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;原理&lt;/strong&gt;：将模式集构建树结构，边为字符。匹配时沿树遍历主串，到达叶节点即匹配成功&lt;a class="link" href="@ref" &gt;4,5&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;时间复杂度&lt;/strong&gt;：建树 O(M)（M为模式集总长），匹配 O(n)。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;局限&lt;/strong&gt;：仅适用精确匹配，内存占用高。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="aho-corasick-ac自动机"&gt;Aho-Corasick (AC自动机)
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;核心思想：Trie + KMP的next数组&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Fail指针&lt;/strong&gt;：匹配失败时跳转到最长后缀前缀节点（类似KMP）&lt;a class="link" href="@ref" &gt;4,5&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;时间复杂度&lt;/strong&gt;：O(n + m + k)（k为匹配次数）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;应用&lt;/strong&gt;：敏感词过滤（如腾讯内容安全服务）&lt;a class="link" href="@ref" &gt;5&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-应用场景与选型建议"&gt;🛠️ 应用场景与选型建议
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;短文本/简单场景&lt;/strong&gt;：暴力法（如Java &lt;code&gt;String.indexOf()&lt;/code&gt;）&lt;a class="link" href="@ref" &gt;2&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;单模式长文本&lt;/strong&gt;：BM/Sunday（如文本编辑器搜索）&lt;a class="link" href="@ref" &gt;9,10&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;多模式匹配&lt;/strong&gt;：AC自动机（如敏感词过滤）&lt;a class="link" href="@ref" &gt;4,5&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;动态模式集&lt;/strong&gt;：Rabin-Karp（可扩展性高）&lt;a class="link" href="@ref" &gt;2&lt;/a&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;💡 &lt;strong&gt;性能提示&lt;/strong&gt;：实际效率受字符集分布（如DNA序列用BM跳跃强）、模式串长度、硬件缓存等因素影响。例如，短模式串时暴力法常优于KMP&lt;a class="link" href="@ref" &gt;1,3&lt;/a&gt;。
+如需特定算法代码实现（如BM的坏字符表构建、AC自动机的Fail指针生成），可进一步提供语言和场景说明。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="kmp"&gt;KMP
+&lt;/h2&gt;&lt;p&gt;KMP算法（Knuth-Morris-Pratt算法）是一种高效的&lt;strong&gt;单模式字符串匹配算法&lt;/strong&gt;，由Donald Knuth、Vaughan Pratt和James H. Morris于1977年联合提出。其核心思想是通过预处理模式串生成&lt;strong&gt;部分匹配表（next数组）&lt;/strong&gt;，在匹配失败时避免主串回溯，仅调整模式串的位置，将时间复杂度优化至&lt;strong&gt;O(n+m)&lt;/strong&gt;（n为主串长度，m为模式串长度）。以下是详细解析：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-算法核心思想"&gt;🔍 算法核心思想
+&lt;/h3&gt;&lt;h4 id="解决暴力匹配的缺陷"&gt;解决暴力匹配的缺陷
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;暴力匹配（Brute-Force）&lt;/strong&gt;：主串与模式串逐字符比较，失败时主串回溯至起始位置+1，模式串复位，时间复杂度 &lt;strong&gt;O(m×n)&lt;/strong&gt;&lt;a class="link" href="@ref" &gt;3,10&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;KMP优化&lt;/strong&gt;：匹配失败时，主串指针不回溯，模式串利用 &lt;strong&gt;next数组&lt;/strong&gt; 跳转到&lt;strong&gt;最长相同前后缀&lt;/strong&gt;的下一位置继续匹配，减少无效比较&lt;a class="link" href="@ref" &gt;1,8&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="关键概念最长相同前后缀"&gt;关键概念：最长相同前后缀
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;前缀&lt;/strong&gt;：不包含最后一个字符的子串（如&amp;quot;ABC&amp;quot;的前缀为&amp;quot;A&amp;quot;、&amp;ldquo;AB&amp;rdquo;）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;后缀&lt;/strong&gt;：不包含第一个字符的子串（如&amp;quot;ABC&amp;quot;的后缀为&amp;quot;BC&amp;quot;、&amp;ldquo;C&amp;rdquo;）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;最长相同前后缀&lt;/strong&gt;：如&amp;quot;ABABA&amp;quot;的最长相同前后缀为&amp;quot;ABA&amp;quot;（长度3）&lt;a class="link" href="@ref" &gt;3,10&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-next数组部分匹配表"&gt;⚙️ next数组（部分匹配表）
+&lt;/h3&gt;&lt;h4 id="next数组的定义"&gt;next数组的定义
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;next[j]&lt;/code&gt;表示：模式串下标&lt;code&gt;0~j&lt;/code&gt;的子串中，&lt;strong&gt;最长相同前后缀的长度&lt;/strong&gt;。
+&lt;strong&gt;示例&lt;/strong&gt;：模式串&lt;code&gt;&amp;quot;ABABC&amp;quot;&lt;/code&gt;的next数组为&lt;code&gt;[0,0,1,2,0]&lt;/code&gt;&lt;a class="link" href="@ref" &gt;2,8&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="next数组的构建步骤"&gt;next数组的构建步骤
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;初始化&lt;/strong&gt;：&lt;code&gt;next[0] = 0&lt;/code&gt;（单字符无前后缀），指针&lt;code&gt;i=1&lt;/code&gt;（后缀尾），&lt;code&gt;j=0&lt;/code&gt;（前缀尾）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;迭代计算&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;若&lt;code&gt;pattern[i] == pattern[j]&lt;/code&gt;，则&lt;code&gt;j++&lt;/code&gt;，&lt;code&gt;next[i] = j&lt;/code&gt;，&lt;code&gt;i++&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;若不等且&lt;code&gt;j &amp;gt; 0&lt;/code&gt;，则&lt;code&gt;j = next[j-1]&lt;/code&gt;（回退至上一匹配位置）。&lt;/li&gt;
+&lt;li&gt;若&lt;code&gt;j = 0&lt;/code&gt;，则&lt;code&gt;next[i] = 0&lt;/code&gt;，&lt;code&gt;i++&lt;/code&gt;&lt;a class="link" href="@ref" &gt;8,10&lt;/a&gt;。
+&lt;strong&gt;构建过程示例（模式串：&amp;ldquo;ABABA&amp;rdquo;）&lt;/strong&gt;：
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;字符索引&lt;/th&gt;
+&lt;th&gt;0&lt;/th&gt;
+&lt;th&gt;1&lt;/th&gt;
+&lt;th&gt;2&lt;/th&gt;
+&lt;th&gt;3&lt;/th&gt;
+&lt;th&gt;4&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;字符&lt;/td&gt;
+&lt;td&gt;A&lt;/td&gt;
+&lt;td&gt;B&lt;/td&gt;
+&lt;td&gt;A&lt;/td&gt;
+&lt;td&gt;B&lt;/td&gt;
+&lt;td&gt;A&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;next值&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-匹配流程"&gt;🔄 匹配流程
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;初始化指针&lt;/strong&gt;：主串指针&lt;code&gt;i=0&lt;/code&gt;，模式串指针&lt;code&gt;j=0&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;逐字符比较&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;若&lt;code&gt;text[i] == pattern[j]&lt;/code&gt;，则&lt;code&gt;i++&lt;/code&gt;, &lt;code&gt;j++&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;若&lt;code&gt;j = m&lt;/code&gt;（模式串完全匹配），记录位置，并令&lt;code&gt;j = next[j-1]&lt;/code&gt;继续搜索。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;若字符不等且&lt;code&gt;j &amp;gt; 0&lt;/code&gt;，则&lt;code&gt;j = next[j-1]&lt;/code&gt;（模式串跳转）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;若&lt;code&gt;j = 0&lt;/code&gt;，则&lt;code&gt;i++&lt;/code&gt;（主串后移）&lt;a class="link" href="@ref" &gt;4,8&lt;/a&gt;。
+&lt;strong&gt;匹配示例&lt;/strong&gt;：&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;主串&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;#34;ABABABCABAB&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;，模式串：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;#34;ABABC&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;匹配至&lt;code&gt;i=4&lt;/code&gt;（主串&amp;rsquo;C&amp;rsquo;≠模式串&amp;rsquo;B&amp;rsquo;）→ &lt;code&gt;j = next[3] = 2&lt;/code&gt; → 跳过&amp;quot;AB&amp;quot;比较，继续匹配&lt;a class="link" href="@ref" &gt;4&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-性能分析"&gt;📊 性能分析
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;指标&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;说明&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;时间复杂度&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;预处理：&lt;strong&gt;O(m)&lt;/strong&gt;，匹配：&lt;strong&gt;O(n)&lt;/strong&gt;，总计 &lt;strong&gt;O(n+m)&lt;/strong&gt;&lt;a class="link" href="@ref" &gt;1,8&lt;/a&gt;。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;空间复杂度&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;需存储&lt;code&gt;next&lt;/code&gt;数组：&lt;strong&gt;O(m)&lt;/strong&gt;&lt;a class="link" href="@ref" &gt;1&lt;/a&gt;。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;对比暴力匹配&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;避免主串回溯，尤其适合&lt;strong&gt;模式串重复度高&lt;/strong&gt;或&lt;strong&gt;主串极长&lt;/strong&gt;的场景&lt;a class="link" href="@ref" &gt;3&lt;/a&gt;。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h4 id="与bm算法对比"&gt;与BM算法对比：
+&lt;/h4&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;特性&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;KMP&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;BM（Boyer-Moore）&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;匹配方向&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;从左向右&lt;/td&gt;
+&lt;td&gt;从右向左&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;跳跃能力&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;依赖next数组，跳跃较保守&lt;/td&gt;
+&lt;td&gt;双启发规则（坏字符+好后缀），跳跃性强&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;适用场景&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;小字符集、模式串重复度高&lt;/td&gt;
+&lt;td&gt;大字符集（如英文、DNA序列）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-优缺点与应用场景"&gt;⚖️ 优缺点与应用场景
+&lt;/h3&gt;&lt;h4 id="-优点"&gt;✅ 优点：
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;理论高效&lt;/strong&gt;：最坏情况下仍保持线性时间复杂度。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;无回溯&lt;/strong&gt;：主串指针单向移动，适合流式数据处理&lt;a class="link" href="@ref" &gt;4&lt;/a&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="-缺点"&gt;❌ 缺点：
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;空间开销&lt;/strong&gt;：需存储&lt;code&gt;next&lt;/code&gt;数组，模式串极长时可能影响性能。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;实现复杂&lt;/strong&gt;：理解&lt;code&gt;next&lt;/code&gt;数组构建逻辑有一定门槛。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;特定场景低效&lt;/strong&gt;：模式串无重复时（如&amp;quot;ABCDE&amp;quot;），性能接近暴力匹配&lt;a class="link" href="@ref" &gt;1,3&lt;/a&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="-应用场景"&gt;🛠️ 应用场景：
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;文本编辑器&lt;/strong&gt;：查找/替换功能（如VS Code）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;生物信息学&lt;/strong&gt;：DNA序列模式匹配（如&amp;quot;ATCG&amp;quot;重复片段检测）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;网络安全&lt;/strong&gt;：病毒特征码扫描&lt;a class="link" href="@ref" &gt;8,9&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-代码实现python示例"&gt;💻 代码实现（Python示例）
+&lt;/h3&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;def kmp_search(text, pattern):
+def build_next(p):
+next_arr = [0] * len(p)
+j = 0 # 前缀尾指针
+for i in range(1, len(p)): # i为后缀尾指针
+while j &amp;gt; 0 and p[i] != p[j]:
+j = next_arr[j-1] # 回退至上一匹配位置
+if p[i] == p[j]:
+j += 1
+next_arr[i] = j
+return next_arr
+next_arr = build_next(pattern)
+i, j = 0, 0 # 主串和模式串指针
+res = []
+while i &amp;lt; len(text):
+if text[i] == pattern[j]:
+i += 1
+j += 1
+elif j &amp;gt; 0:
+j = next_arr[j-1] # 模式串跳转
+else:
+i += 1 # 主串后移
+if j == len(pattern): # 完全匹配
+res.append(i - j)
+j = next_arr[j-1] # 继续搜索下一匹配
+return res
+# 测试
+text = &amp;#34;ABABABABCABAB&amp;#34;
+pattern = &amp;#34;ABABC&amp;#34;
+print(kmp_search(text, pattern)) # 输出: [2]（匹配起始位置）
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id="-总结"&gt;💎 总结
+&lt;/h3&gt;&lt;p&gt;KMP算法通过 &lt;strong&gt;预处理模式串&lt;/strong&gt; 生成&lt;code&gt;next&lt;/code&gt;数组，在匹配失败时&lt;strong&gt;智能跳转模式串位置&lt;/strong&gt;，避免主串回溯，实现了高效的字符串匹配。尽管在模式串无重复时优势减弱，但其理论完备性和线性时间复杂度使其在&lt;strong&gt;重复模式匹配&lt;/strong&gt;、&lt;strong&gt;流式数据处理&lt;/strong&gt;等场景中不可替代。理解&lt;code&gt;next&lt;/code&gt;数组的构建逻辑（即&lt;strong&gt;最长相同前后缀&lt;/strong&gt;）是掌握该算法的关键，而结合具体场景选择KMP或BM等算法，能进一步提升工程效率&lt;a class="link" href="@ref" &gt;1,8,9&lt;/a&gt;。&lt;/p&gt;
+&lt;h2 id="bm"&gt;BM
+&lt;/h2&gt;&lt;p&gt;以下是关于BM（Boyer-Moore）算法的详细解析，结合其核心原理、规则实现、复杂度分析及代码示例进行系统阐述：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-算法概述"&gt;🔍 算法概述
+&lt;/h3&gt;&lt;p&gt;BM算法由Bob Boyer和J Strother Moore于1977年提出，是一种&lt;strong&gt;高效的单模式字符串匹配算法&lt;/strong&gt;。其核心思想是通过&lt;strong&gt;反向匹配&lt;/strong&gt;（从模式串末尾向前比较）和&lt;strong&gt;启发式跳跃规则&lt;/strong&gt;，跳过不必要的字符比较，显著提升匹配效率。实际应用中（如文本编辑器、&lt;code&gt;grep&lt;/code&gt;工具），其性能通常优于KMP算法3-5倍&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/p&gt;
+&lt;h4 id="-核心特征"&gt;⚡ 核心特征：
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;反向匹配&lt;/strong&gt;：从模式串末尾向前比较字符。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;双启发规则&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;坏字符规则&lt;/strong&gt;（Bad Character Rule）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;好后缀规则&lt;/strong&gt;（Good Suffix Rule）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;跳跃式移动&lt;/strong&gt;：失败时根据规则计算最大跳跃距离，避免逐字符移动。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-核心规则详解"&gt;⚙️ 核心规则详解
+&lt;/h3&gt;&lt;h4 id="坏字符规则"&gt;坏字符规则
+&lt;/h4&gt;&lt;p&gt;当模式串与文本串字符不匹配时，文本串中的该字符称为&lt;strong&gt;坏字符&lt;/strong&gt;。规则通过预处理记录模式串中每个字符的最后出现位置，计算跳跃距离：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Case 1：坏字符在模式串中存在跳跃距离 = 坏字符在模式串中的当前位置 - 该字符在模式串中最后一次出现的位置。
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;示例&lt;/em&gt;：模式串&lt;code&gt;&amp;quot;EXAMPLE&amp;quot;&lt;/code&gt;，坏字符&lt;code&gt;'P'&lt;/code&gt;在位置6，其最后出现位置为4 → 跳跃距离 = 6-4=2&lt;a class="link" href="@ref" &gt;8&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Case 2&lt;/strong&gt;：坏字符不在模式串中
+直接跳跃整个模式串长度（&lt;code&gt;m&lt;/code&gt;位）&lt;a class="link" href="@ref" &gt;3&lt;/a&gt;。
+&lt;strong&gt;预处理&lt;/strong&gt;：构建坏字符表&lt;code&gt;bc[]&lt;/code&gt;（数组下标为字符ASCII值，值为最后出现位置）：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;def build_bc(pattern):
+bc = [-1] * 256 # 初始化所有字符位置为-1
+for i, char in enumerate(pattern):
+bc[ord(char)] = i # 更新字符最后出现位置
+return bc
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="好后缀规则"&gt;好后缀规则
+&lt;/h4&gt;&lt;p&gt;当模式串后缀与文本串匹配但前一个字符失配时，该后缀称为&lt;strong&gt;好后缀&lt;/strong&gt;。规则分三种情况处理：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Case 1&lt;/strong&gt;：好后缀在模式串前部再次出现
+将最靠右的匹配子串与好后缀对齐&lt;a class="link" href="@ref" &gt;4,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Case 2&lt;/strong&gt;：无完整匹配，但好后缀的后缀与模式串前缀匹配
+将最长匹配前缀对齐好后缀后缀&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Case 3&lt;/strong&gt;：无任何匹配
+直接跳跃整个模式串长度（&lt;code&gt;m&lt;/code&gt;位）&lt;a class="link" href="@ref" &gt;4&lt;/a&gt;。
+&lt;strong&gt;预处理&lt;/strong&gt;：构建好后缀表&lt;code&gt;gs[]&lt;/code&gt;（需先计算后缀数组&lt;code&gt;suff[i]&lt;/code&gt;，表示以&lt;code&gt;i&lt;/code&gt;结尾的子串与模式串后缀的最长匹配长度）：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;def build_gs(pattern):
+m = len(pattern)
+suff = [0] * m
+gs = [m] * m # 初始化为m（Case 3）
+# 计算suff数组
+suff[m-1] = m
+for i in range(m-2, -1, -1):
+k = 0
+while (i - k &amp;gt;= 0 and pattern[i - k] == pattern[m-1 - k]):
+k += 1
+suff[i] = k
+# 更新gs数组（Case 1 &amp;amp; 2）
+j = 0
+for i in range(m-1, -1, -1):
+if suff[i] == i+1: # 前缀=后缀
+while j &amp;lt; m-1-i:
+gs[j] = m-1-i
+j += 1
+for i in range(m-1):
+gs[m-1-suff[i]] = m-1-i # Case 1
+return gs
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="-规则应用优先级"&gt;📊 规则应用优先级：
+&lt;/h4&gt;&lt;p&gt;每次失配时，取两规则计算的跳跃距离&lt;strong&gt;最大值&lt;/strong&gt;：
+&lt;code&gt;jump = max(bc_shift, gs_shift)&lt;/code&gt;&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-算法执行流程"&gt;🔄 算法执行流程
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;预处理&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;构建坏字符表&lt;code&gt;bc[]&lt;/code&gt;（时间复杂度&lt;code&gt;O(m)&lt;/code&gt;）&lt;/li&gt;
+&lt;li&gt;构建好后缀表&lt;code&gt;gs[]&lt;/code&gt;（时间复杂度&lt;code&gt;O(m)&lt;/code&gt;）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;匹配阶段&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;模式串与文本串右对齐，从右向左比较字符。&lt;/li&gt;
+&lt;li&gt;若完全匹配，记录位置并右移继续搜索。&lt;/li&gt;
+&lt;li&gt;若失配，按&lt;code&gt;max(bc_shift, gs_shift)&lt;/code&gt;跳跃&lt;a class="link" href="@ref" &gt;5,6&lt;/a&gt;。
+&lt;strong&gt;伪代码&lt;/strong&gt;：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;def bm_search(text, pattern):
+bc = build_bc(pattern)
+gs = build_gs(pattern)
+n, m = len(text), len(pattern)
+i = 0 # 文本串当前对齐位置
+while i &amp;lt;= n - m:
+j = m - 1 # 从模式串末尾开始比较
+while j &amp;gt;= 0 and text[i+j] == pattern[j]:
+j -= 1
+if j &amp;lt; 0: # 完全匹配
+print(&amp;#34;Match at:&amp;#34;, i)
+i += gs[0] # 继续搜索下一位置
+else:
+# 计算坏字符跳跃距离
+bc_shift = j - bc.get(ord(text[i+j]), -1)
+# 计算好后缀跳跃距离
+gs_shift = gs[j]
+i += max(bc_shift, gs_shift, 1) # 至少移动1位
+return -1
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id="-复杂度分析"&gt;📈 复杂度分析
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;指标&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;说明&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;预处理时间&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;O(m + σ)&lt;/code&gt;（σ为字符集大小，如ASCII为256）&lt;a class="link" href="@ref" &gt;5&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;匹配时间&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;最好&lt;code&gt;O(n/m)&lt;/code&gt;（如全坏字符跳跃），最坏&lt;code&gt;O(mn)&lt;/code&gt;（如重复字符）&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;空间占用&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;O(m + σ)&lt;/code&gt;（存储&lt;code&gt;bc[]&lt;/code&gt;和&lt;code&gt;gs[]&lt;/code&gt;）&lt;a class="link" href="@ref" &gt;5&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;典型场景&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;高跳跃性&lt;/strong&gt;：模式串较长且字符分布分散时，性能接近&lt;code&gt;O(n/m)&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;低效场景&lt;/strong&gt;：模式串为重复字符（如&lt;code&gt;&amp;quot;AAAA&amp;quot;&lt;/code&gt;），退化至&lt;code&gt;O(mn)&lt;/code&gt;&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-优缺点与应用场景-1"&gt;⚖️ 优缺点与应用场景
+&lt;/h3&gt;&lt;h4 id="-优势"&gt;✅ 优势：
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;实际效率高&lt;/strong&gt;：长模式串下比KMP快3-5倍，尤其在英文文本中&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;跳跃能力强&lt;/strong&gt;：坏字符规则在字符集大时效果显著（如DNA序列）。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="-局限"&gt;❌ 局限：
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;预处理开销大，短模式串时不如暴力法。&lt;/li&gt;
+&lt;li&gt;实现复杂，需维护两个预处理数组。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="-适用场景"&gt;🛠️ 适用场景：
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;文本编辑器（如VS Code、Sublime的搜索功能）&lt;/li&gt;
+&lt;li&gt;病毒扫描（高效匹配特征码）&lt;/li&gt;
+&lt;li&gt;大字符集数据（如生物信息学中的基因序列匹配）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-完整python示例"&gt;💻 完整Python示例
+&lt;/h3&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;def boyer_moore(text, pattern):
+def build_bc(p):
+bc = [-1] * 256
+for i, c in enumerate(p):
+bc[ord(c)] = i
+return bc
+def build_gs(p):
+m = len(p)
+gs = [m] * m
+suff = [0] * m
+suff[m-1] = m
+# 计算suff数组
+for i in range(m-2, -1, -1):
+k = 0
+while (i - k &amp;gt;= 0 and p[i - k] == p[m-1 - k]):
+k += 1
+suff[i] = k
+# Case 1 &amp;amp; 2更新
+j = 0
+for i in range(m-1, -1, -1):
+if suff[i] == i + 1:
+while j &amp;lt; m-1-i:
+gs[j] = m-1-i
+j += 1
+for i in range(m-1):
+if suff[i] &amp;gt; 0:
+gs[m-1-suff[i]] = m-1-i
+return gs
+bc_table = build_bc(pattern)
+gs_table = build_gs(pattern)
+n, m = len(text), len(pattern)
+i = 0
+while i &amp;lt;= n - m:
+j = m-1
+while j &amp;gt;= 0 and text[i+j] == pattern[j]:
+j -= 1
+if j &amp;lt; 0:
+return i # 匹配成功
+else:
+bc_shift = j - bc_table[ord(text[i+j])]
+gs_shift = gs_table[j]
+i += max(bc_shift, gs_shift, 1)
+return -1 # 匹配失败
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id="-总结-1"&gt;💎 总结
+&lt;/h3&gt;&lt;p&gt;BM算法通过&lt;strong&gt;反向匹配&lt;/strong&gt;与&lt;strong&gt;双启发规则&lt;/strong&gt;的协同，实现了匹配过程中的大规模跳跃，成为工程实践中最高效的单模式匹配算法之一。其优势在长模式串和大字符集场景下尤为显著，但需注意预处理开销和边缘场景的性能波动。理解其规则设计与跳跃逻辑，对优化高频字符串操作（如日志分析、基因比对）至关重要&lt;a class="link" href="@ref" &gt;3,5,6&lt;/a&gt;。&lt;/p&gt;
+&lt;h2 id="sunday"&gt;Sunday
+&lt;/h2&gt;&lt;p&gt;以下是关于 &lt;strong&gt;SUNDAY算法&lt;/strong&gt; 的详细解析，涵盖核心思想、匹配规则、时间复杂度、代码实现及优化策略，结合技术原理与工程实践进行系统阐述：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-算法概述-1"&gt;🔍 算法概述
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;SUNDAY算法&lt;/strong&gt; 由 Daniel M.Sunday 于 1990 年提出，是一种 &lt;strong&gt;高效的单模式字符串匹配算法&lt;/strong&gt;。其核心思想是通过 &lt;strong&gt;跳跃式移动模式串&lt;/strong&gt;，在匹配失败时跳过尽可能多的无效字符，从而提升匹配效率。与 Boyer-Moore（BM）算法类似，但 SUNDAY 算法采用 &lt;strong&gt;从前往后匹配&lt;/strong&gt; 的顺序，且关注点不同&lt;a class="link" href="@ref" &gt;1,6&lt;/a&gt;。&lt;/p&gt;
+&lt;h4 id="-核心特征-1"&gt;⚡ 核心特征：
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;匹配方向&lt;/strong&gt;：从左向右匹配（与 BM 算法的从右向左相反）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;关键启发点&lt;/strong&gt;：匹配失败时，关注 &lt;strong&gt;文本串中参与匹配的最末字符的下一位字符&lt;/strong&gt;（称为 &lt;strong&gt;关注字符&lt;/strong&gt;）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;跳跃策略：根据关注字符是否在模式串中出现，决定移动步长&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;若未出现 → 移动步长 = 模式串长度 + 1。&lt;/li&gt;
+&lt;li&gt;若出现 → 移动步长 = 模式串长度 - 该字符在模式串中最右出现的位置&lt;a class="link" href="@ref" &gt;2,7&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-算法原理与匹配流程"&gt;⚙️ 算法原理与匹配流程
+&lt;/h3&gt;&lt;h4 id="预处理构建移动表shift-table"&gt;预处理：构建移动表（Shift Table）
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;目的&lt;/strong&gt;：记录模式串中每个字符 &lt;strong&gt;最右出现位置&lt;/strong&gt; 到模式串末尾的距离 + 1（即跳跃步长）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;步骤&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;初始化一个长度为 256（ASCII 字符集）的数组 &lt;code&gt;shift[]&lt;/code&gt;，默认值设为 &lt;code&gt;m + 1&lt;/code&gt;（&lt;code&gt;m&lt;/code&gt; 为模式串长度）。&lt;/li&gt;
+&lt;li&gt;遍历模式串，更新每个字符的跳跃步长：&lt;code&gt;shift[char] = m - i&lt;/code&gt;（&lt;code&gt;i&lt;/code&gt; 为字符位置）&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;示例&lt;/strong&gt;
+（模式串&lt;code&gt;&amp;quot;search&amp;quot;&lt;/code&gt;）：
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;字符&lt;/th&gt;
+&lt;th&gt;&lt;code&gt;s&lt;/code&gt;&lt;/th&gt;
+&lt;th&gt;&lt;code&gt;e&lt;/code&gt;&lt;/th&gt;
+&lt;th&gt;&lt;code&gt;a&lt;/code&gt;&lt;/th&gt;
+&lt;th&gt;&lt;code&gt;r&lt;/code&gt;&lt;/th&gt;
+&lt;th&gt;&lt;code&gt;c&lt;/code&gt;&lt;/th&gt;
+&lt;th&gt;&lt;code&gt;h&lt;/code&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;跳跃步长&lt;/td&gt;
+&lt;td&gt;6&lt;/td&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="匹配过程"&gt;匹配过程
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;对齐模式串&lt;/strong&gt;：将模式串与文本串左对齐，起始位置 &lt;code&gt;pos = 0&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;逐字符比较&lt;/strong&gt;：从左向右比较模式串与文本串对应字符。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;匹配失败处理&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;计算关注字符：&lt;code&gt;T[pos + m]&lt;/code&gt;（&lt;code&gt;m&lt;/code&gt; 为模式串长度）。&lt;/li&gt;
+&lt;li&gt;查移动表&lt;code&gt;shift[]&lt;/code&gt;：
+&lt;ul&gt;
+&lt;li&gt;若 &lt;code&gt;shift[T[pos + m]] = m + 1&lt;/code&gt; → 移动步长 = &lt;code&gt;m + 1&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;否则 → 移动步长 = &lt;code&gt;shift[T[pos + m]]&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;更新位置：&lt;code&gt;pos += shift[T[pos + m]]&lt;/code&gt;&lt;a class="link" href="@ref" &gt;3,7&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="匹配示例"&gt;匹配示例
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;文本串&lt;/strong&gt;：&lt;code&gt;&amp;quot;substring searching&amp;quot;&lt;/code&gt;
+&lt;strong&gt;模式串&lt;/strong&gt;：&lt;code&gt;&amp;quot;search&amp;quot;&lt;/code&gt;
+&lt;strong&gt;步骤&lt;/strong&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;初始对齐&lt;/strong&gt;：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+substring searching
+search ↑ 关注字符：&amp;#39;i&amp;#39;（不在模式串中）
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;移动步长 = 6 + 1 = 7 → 跳到 &lt;code&gt;'n'&lt;/code&gt; 处&lt;a class="link" href="@ref" &gt;2,5&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start="2"&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;二次对齐&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+substring searching
+search ↑ 关注字符：&amp;#39;r&amp;#39;（在模式串第 3 位）
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;移动步长 = 6 - 3 = 3 → 对齐两个 &lt;code&gt;'r'&lt;/code&gt;&lt;a class="link" href="@ref" &gt;5,7&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;匹配成功&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+substring searching
+search ✓
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-时间复杂度分析"&gt;📊 时间复杂度分析
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;场景&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;时间复杂度&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;说明&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;最佳情况&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;O(n/m)&lt;/td&gt;
+&lt;td&gt;每次匹配失败时关注字符均不在模式串中（如模式串无重复字符）&lt;a class="link" href="@ref" &gt;3&lt;/a&gt;。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;最坏情况&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;O(m*n)&lt;/td&gt;
+&lt;td&gt;模式串重复度高（如 &lt;code&gt;&amp;quot;aaaaa&amp;quot;&lt;/code&gt;），每次仅移动 1 位&lt;a class="link" href="@ref" &gt;5&lt;/a&gt;。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;平均情况&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;O(n)&lt;/td&gt;
+&lt;td&gt;实际应用中跳跃效率高（如英文文本）&lt;a class="link" href="@ref" &gt;3&lt;/a&gt;。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-优缺点与适用场景"&gt;⚖️ 优缺点与适用场景
+&lt;/h3&gt;&lt;h4 id="-优势-1"&gt;✅ 优势：
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;实现简单&lt;/strong&gt;：代码量少于 KMP/BM，预处理仅需构建移动表&lt;a class="link" href="@ref" &gt;6,7&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;跳跃能力强&lt;/strong&gt;：在大字符集（如英文、DNA序列）中平均跳跃步长大。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;匹配顺序灵活&lt;/strong&gt;：无需固定比较方向（可优化为优先比较低概率字符）&lt;a class="link" href="@ref" &gt;5&lt;/a&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="-局限-1"&gt;❌ 局限：
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;最坏情况效率低&lt;/strong&gt;：模式串重复度高时退化为暴力匹配。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;依赖字符集&lt;/strong&gt;：需预分配移动表空间（ASCII 为 256，Unicode 需优化）&lt;a class="link" href="@ref" &gt;3&lt;/a&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="-适用场景-1"&gt;🛠️ 适用场景：
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;文本编辑器&lt;/strong&gt;：快速查找/替换（如 Sublime Text）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;日志分析&lt;/strong&gt;：在大量日志中搜索关键词。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;生物信息学&lt;/strong&gt;：基因序列匹配（ATCG 字符集小，跳跃高效）&lt;a class="link" href="@ref" &gt;4,7&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-代码实现python"&gt;💻 代码实现（Python）
+&lt;/h3&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;
+def sunday_search(text, pattern):
+m, n = len(pattern), len(text)
+if m == 0:
+return 0
+# 构建移动表（默认步长 m+1）
+shift = [m + 1] * 256 # ASCII 字符集
+for i, char in enumerate(pattern):
+shift[ord(char)] = m - i # 更新字符步长
+pos = 0
+while pos &amp;lt;= n - m:
+# 尝试匹配
+j = 0
+while j &amp;lt; m and text[pos + j] == pattern[j]:
+j += 1
+if j == m: # 匹配成功
+return pos
+# 计算关注字符位置
+if pos + m &amp;gt;= n: # 边界检查
+break
+focus_char = text[pos + m]
+# 根据移动表跳跃
+pos += shift[ord(focus_char)]
+return -1 # 未找到
+# 测试
+text = &amp;#34;substring searching&amp;#34;
+pattern = &amp;#34;search&amp;#34;
+print(sunday_search(text, pattern)) # 输出: 10
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id="-优化策略"&gt;🧠 优化策略
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;避免最坏情况&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;检测模式串重复性，若重复度高则切换至 KMP 算法&lt;a class="link" href="@ref" &gt;5&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;动态字符集处理&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;Unicode 文本使用哈希表替代数组存储移动表，节省空间。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;多模式匹配扩展&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;结合 AC 自动机，实现高效多模式匹配（如敏感词过滤）&lt;a class="link" href="@ref" &gt;4&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-总结-2"&gt;💎 总结
+&lt;/h3&gt;&lt;p&gt;SUNDAY 算法以 &lt;strong&gt;简洁的实现&lt;/strong&gt; 和 &lt;strong&gt;高效的跳跃能力&lt;/strong&gt; 在字符串匹配领域占据独特地位。其核心在于 &lt;strong&gt;利用关注字符预判无效区域&lt;/strong&gt;，大幅减少比较次数。尽管在最坏情况下性能受限，但在大字符集、低重复模式的场景中（如自然语言、生物序列），其平均效率接近理论最优值。工程实践中，可结合场景特性动态选择匹配算法（如短模式用暴力法，长模式用 SUNDAY/BM），以达到最佳性能&lt;a class="link" href="@ref" &gt;3,7&lt;/a&gt;。&lt;/p&gt;</description></item><item><title>【DSA】Red-Black Tree</title><link>https://dyhes.github.io/p/dsared-black-tree/</link><pubDate>Sun, 29 Jun 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/dsared-black-tree/</guid><description>&lt;p&gt;&lt;img src="https://lizhicdn.search.qq.com/cdn/ybimages/1001/1001_184133/229830fe10d6d74a54f3a678629f8816.jpg"
+loading="lazy"
+alt="img"
+&gt;
+红黑树是一种&lt;strong&gt;自平衡二叉查找树&lt;/strong&gt;，通过颜色约束和旋转操作保证动态操作的高效性，在插入、删除等操作后仍能维持近似平衡，确保最坏情况下的时间复杂度为 &lt;code&gt;O(\log n)&lt;/code&gt;。以下从核心性质、操作原理、应用场景等维度系统解析：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="--核心性质与平衡原理"&gt;🔴 ⚫ 核心性质与平衡原理
+&lt;/h3&gt;&lt;p&gt;红黑树必须满足5条性质：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;节点颜色&lt;/strong&gt;：每个节点非红即黑。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;根节点黑色&lt;/strong&gt;：根节点必须是黑色。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;叶子节点黑色&lt;/strong&gt;：所有叶子节点（NIL哨兵节点）均为黑色&lt;a class="link" href="@ref" &gt;1,3&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;红色节点限制&lt;/strong&gt;：红色节点的子节点必须是黑色（不存在连续红色节点）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;黑高一致&lt;/strong&gt;：从任意节点到其后代叶子节点的路径包含相同数量的黑色节点（称为&lt;strong&gt;黑高&lt;/strong&gt;，Black Height）&lt;a class="link" href="@ref" &gt;1,6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;💡 &lt;strong&gt;平衡性保障&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;性质4和5确保最长路径长度不超过最短路径的2倍（最长路径黑红相间，最短路径全黑）&lt;a class="link" href="@ref" &gt;3&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;含 &lt;code&gt;n&lt;/code&gt; 个节点的红黑树高度满足 &lt;code&gt;h \leq 2\log_2(n+1)&lt;/code&gt;，避免退化为链表&lt;a class="link" href="@ref" &gt;1,6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h3 id="-核心操作旋转与修复"&gt;🔄 核心操作：旋转与修复
+&lt;/h3&gt;&lt;h4 id="-旋转操作调整结构"&gt;⚙️ 旋转操作（调整结构）
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;左旋&lt;/strong&gt;：以节点 &lt;code&gt;x&lt;/code&gt; 为支点，将其右子节点 &lt;code&gt;y&lt;/code&gt; 提升为父节点，&lt;code&gt;x&lt;/code&gt; 成为 &lt;code&gt;y&lt;/code&gt; 的左子树，并调整子树关系。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;右旋&lt;/strong&gt;：以节点 &lt;code&gt;y&lt;/code&gt; 为支点，将其左子节点 &lt;code&gt;x&lt;/code&gt; 提升为父节点，&lt;code&gt;y&lt;/code&gt; 成为 &lt;code&gt;x&lt;/code&gt; 的右子树&lt;a class="link" href="@ref" &gt;1,6&lt;/a&gt;。
+&lt;strong&gt;作用&lt;/strong&gt;：调整拓扑结构，不破坏二叉搜索树性质。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="-插入操作默认染红"&gt;➕ 插入操作（默认染红）
+&lt;/h4&gt;&lt;p&gt;插入新节点时&lt;strong&gt;初始设为红色&lt;/strong&gt;（避免破坏黑高），再根据父节点颜色修复：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Case 1&lt;/strong&gt;：父节点为黑 → 直接插入。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Case 2&lt;/strong&gt;：父节点和叔节点均为红 → 将父、叔染黑，祖父染红，递归修复祖父节点。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Case 3&lt;/strong&gt;：父节点红、叔节点黑 → 通过旋转调整：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;LL/RR型&lt;/strong&gt;：父节点与祖父节点互换颜色，右旋/左旋祖父。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;LR/RL型&lt;/strong&gt;：先旋转父节点转换为LL/RR型，再按上一步处理&lt;a class="link" href="@ref" &gt;1,5&lt;/a&gt;。
+&lt;strong&gt;插入修复策略总结&lt;/strong&gt;：
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;父节点&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;叔节点&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;操作&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;黑&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;直接插入&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;红&lt;/td&gt;
+&lt;td&gt;红&lt;/td&gt;
+&lt;td&gt;父、叔染黑，祖父染红，递归修复祖父&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;红&lt;/td&gt;
+&lt;td&gt;黑&lt;/td&gt;
+&lt;td&gt;旋转祖父节点并交换颜色（具体见Case 3）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="-删除操作双黑修复"&gt;✖️ 删除操作（双黑修复）
+&lt;/h4&gt;&lt;p&gt;删除黑色节点可能破坏黑高，需引入&lt;strong&gt;双黑节点&lt;/strong&gt;（逻辑标记，代表需补足一个黑色）：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Case 1&lt;/strong&gt;：被删节点为红 → 直接删除。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Case 2&lt;/strong&gt;：被删节点为黑，子节点为红 → 用子节点替代并染黑。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Case 3&lt;/strong&gt;：被删节点为黑，子节点为黑 → 删除后子节点标记为双黑，分情况修复：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;兄弟节点红&lt;/strong&gt;：旋转父节点，转换为兄弟节点黑的情况。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;兄弟节点黑&lt;/strong&gt;：根据兄弟子节点的颜色进行旋转和重染色&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;。
+&lt;strong&gt;双黑修复策略总结&lt;/strong&gt;：
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;兄弟节点颜色&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;兄弟子节点颜色&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;操作&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;红&lt;/td&gt;
+&lt;td&gt;任意&lt;/td&gt;
+&lt;td&gt;旋转父节点，转换为兄弟黑&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;黑&lt;/td&gt;
+&lt;td&gt;远侄节点红&lt;/td&gt;
+&lt;td&gt;旋转父节点，交换父与兄弟颜色，远侄染黑&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;黑&lt;/td&gt;
+&lt;td&gt;远侄黑、近侄红&lt;/td&gt;
+&lt;td&gt;旋转兄弟节点，交换兄弟与近侄颜色，转换为上一种情况&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;黑&lt;/td&gt;
+&lt;td&gt;兄弟子节点全黑&lt;/td&gt;
+&lt;td&gt;兄弟染红，父节点标记为双黑（若父原为红则染黑；若黑则递归修复父节点）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-红黑树-vs-avl树"&gt;⚖️ 红黑树 vs. AVL树
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;特性&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;红黑树&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;AVL树&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;平衡标准&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;黑高一致（非严格平衡）&lt;/td&gt;
+&lt;td&gt;左右子树高度差 ≤ 1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;插入/删除&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;旋转次数少，效率高&lt;/td&gt;
+&lt;td&gt;频繁旋转，效率较低&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;查找效率&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;略低于AVL（树高更高）&lt;/td&gt;
+&lt;td&gt;更高（树高更小）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;适用场景&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;频繁增删的动态数据集&lt;/td&gt;
+&lt;td&gt;查询为主的数据集&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;blockquote&gt;
+&lt;p&gt;💡 &lt;strong&gt;工程选择&lt;/strong&gt;：Java的&lt;code&gt;TreeMap&lt;/code&gt;、Linux内核调度器、数据库索引（如MongoDB）均采用红黑树，因其在动态操作中综合性能更优&lt;a class="link" href="@ref" &gt;1,4&lt;/a&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h3 id="-应用场景与工程实践"&gt;🛠️ 应用场景与工程实践
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;数据库索引&lt;/strong&gt;：MongoDB使用红黑树实现范围查询，兼顾插入与查询效率&lt;a class="link" href="@ref" &gt;1&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;语言标准库&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;Java的&lt;code&gt;TreeMap&lt;/code&gt;、&lt;code&gt;TreeSet&lt;/code&gt;基于红黑树，保证有序性操作高效&lt;a class="link" href="@ref" &gt;4&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;C++ STL的&lt;code&gt;map&lt;/code&gt;、&lt;code&gt;set&lt;/code&gt;同样采用红黑树实现&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;操作系统内核&lt;/strong&gt;：Linux内核用红黑树管理进程调度队列和内存区域&lt;a class="link" href="@ref" &gt;1&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;文件系统&lt;/strong&gt;：如Ext3文件系统使用红黑树跟踪目录项，加速文件查找&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-代码实现关键c示例"&gt;💻 代码实现关键（C++示例）
+&lt;/h3&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;enum Color { RED, BLACK };
+template&amp;lt;typename T&amp;gt;
+struct RBTreeNode {
+T key;
+Color color;
+RBTreeNode* left;
+RBTreeNode* right;
+RBTreeNode* parent;
+RBTreeNode(T k) : key(k), color(RED), left(nullptr), right(nullptr), parent(nullptr) {}
+};
+template&amp;lt;typename T&amp;gt;
+class RBTree {
+public:
+RBTree() : root(nullptr) {}
+void Insert(T key) {
+RBTreeNode&amp;lt;T&amp;gt;* node = new RBTreeNode&amp;lt;T&amp;gt;(key);
+// 1. 二叉查找树插入
+RBTreeNode&amp;lt;T&amp;gt;* parent = nullptr;
+RBTreeNode&amp;lt;T&amp;gt;* current = root;
+while (current) {
+parent = current;
+if (key &amp;lt; current-&amp;gt;key) current = current-&amp;gt;left;
+else current = current-&amp;gt;right;
+}
+node-&amp;gt;parent = parent;
+if (!parent) root = node;
+else if (key &amp;lt; parent-&amp;gt;key) parent-&amp;gt;left = node;
+else parent-&amp;gt;right = node;
+// 2. 修复红黑树性质
+InsertFixup(node);
+}
+private:
+void InsertFixup(RBTreeNode&amp;lt;T&amp;gt;* node) {
+while (node-&amp;gt;parent &amp;amp;&amp;amp; node-&amp;gt;parent-&amp;gt;color == RED) {
+if (node-&amp;gt;parent == node-&amp;gt;parent-&amp;gt;parent-&amp;gt;left) {
+RBTreeNode&amp;lt;T&amp;gt;* uncle = node-&amp;gt;parent-&amp;gt;parent-&amp;gt;right;
+if (uncle &amp;amp;&amp;amp; uncle-&amp;gt;color == RED) { // Case 2: 叔节点红
+node-&amp;gt;parent-&amp;gt;color = BLACK;
+uncle-&amp;gt;color = BLACK;
+node-&amp;gt;parent-&amp;gt;parent-&amp;gt;color = RED;
+node = node-&amp;gt;parent-&amp;gt;parent;
+} else { // Case 3: 叔节点黑
+if (node == node-&amp;gt;parent-&amp;gt;right) {
+node = node-&amp;gt;parent;
+LeftRotate(node);
+}
+node-&amp;gt;parent-&amp;gt;color = BLACK;
+node-&amp;gt;parent-&amp;gt;parent-&amp;gt;color = RED;
+RightRotate(node-&amp;gt;parent-&amp;gt;parent);
+}
+} else { // 对称处理
+// ...
+}
+}
+root-&amp;gt;color = BLACK; // 根节点始终为黑
+}
+void LeftRotate(RBTreeNode&amp;lt;T&amp;gt;* x) {
+RBTreeNode&amp;lt;T&amp;gt;* y = x-&amp;gt;right;
+x-&amp;gt;right = y-&amp;gt;left;
+if (y-&amp;gt;left) y-&amp;gt;left-&amp;gt;parent = x;
+y-&amp;gt;parent = x-&amp;gt;parent;
+if (!x-&amp;gt;parent) root = y;
+else if (x == x-&amp;gt;parent-&amp;gt;left) x-&amp;gt;parent-&amp;gt;left = y;
+else x-&amp;gt;parent-&amp;gt;right = y;
+y-&amp;gt;left = x;
+x-&amp;gt;parent = y;
+}
+RBTreeNode&amp;lt;T&amp;gt;* root;
+};
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id="-总结"&gt;💎 总结
+&lt;/h3&gt;&lt;p&gt;红黑树通过&lt;strong&gt;颜色约束&lt;/strong&gt;与&lt;strong&gt;旋转策略&lt;/strong&gt;在动态操作中维持近似平衡，其设计权衡了严格平衡（AVL树）与操作效率，成为工程实践中&lt;strong&gt;高频增删场景&lt;/strong&gt;的首选结构。核心在于：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;插入修复&lt;/strong&gt;：通过递归染色和旋转消除连续红节点；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;删除修复&lt;/strong&gt;：双黑节点标记与兄弟节点协同调整黑高；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;性能优势&lt;/strong&gt;：牺牲部分查找效率换取更高的插入/删除吞吐量&lt;a class="link" href="@ref" &gt;1,6&lt;/a&gt;。
+深入理解红黑树，可掌握数据结构的动态平衡本质，并为数据库、操作系统等底层系统开发奠定基础。&lt;/li&gt;
+&lt;/ol&gt;</description></item><item><title>【DSA】图算法</title><link>https://dyhes.github.io/p/dsa%E5%9B%BE%E7%AE%97%E6%B3%95/</link><pubDate>Thu, 26 Jun 2025 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/dsa%E5%9B%BE%E7%AE%97%E6%B3%95/</guid><description>&lt;h2 id="最小生成树"&gt;最小生成树
+&lt;/h2&gt;&lt;p&gt;以下是Kruskal与Prim算法的全面对比，从算法原理到应用场景的系统分析：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-基本思想与算法过程"&gt;⚙️ 基本思想与算法过程
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;维度&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Kruskal算法&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Prim算法&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;核心策略&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;边优先&lt;/strong&gt;：按权重升序选择边，避免成环&lt;a class="link" href="@ref" &gt;1,7&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;顶点优先&lt;/strong&gt;：从起点扩展，选择连接已选与未选顶点集的最小边&lt;a class="link" href="@ref" &gt;9,10&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;初始化&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;所有边排序，每个顶点独立为树&lt;a class="link" href="@ref" &gt;4&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;指定起点，初始化包含该顶点的生成树&lt;a class="link" href="@ref" &gt;1,10&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;迭代过程&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;逐边检查，用并查集合并子树&lt;a class="link" href="@ref" &gt;7&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;逐顶点加入，更新邻接边优先级&lt;a class="link" href="@ref" &gt;9&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;终止条件&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;选中 &lt;code&gt;V-1&lt;/code&gt; 条边（&lt;code&gt;V&lt;/code&gt;为顶点数）&lt;a class="link" href="@ref" &gt;4&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;所有顶点加入生成树&lt;a class="link" href="@ref" &gt;10&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-数据结构与实现差异"&gt;🧱 数据结构与实现差异
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;组件&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Kruskal算法&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Prim算法&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;关键数据结构&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;并查集 (Union-Find)&lt;/strong&gt;：检测环并合并连通分量&lt;a class="link" href="@ref" &gt;1,7&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;优先队列 (最小堆)&lt;/strong&gt;：高效选取当前最小边&lt;a class="link" href="@ref" &gt;1,10&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;存储依赖&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;需存储所有边，适合邻接表&lt;a class="link" href="@ref" &gt;2&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;需访问邻接点，适合邻接矩阵或邻接表&lt;a class="link" href="@ref" &gt;9&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;空间复杂度&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;O(E + V)&lt;/code&gt;（边与顶点存储）&lt;a class="link" href="@ref" &gt;2&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;O(V^2)&lt;/code&gt;（邻接矩阵）或 &lt;code&gt;O(E + V)&lt;/code&gt;（邻接表+堆）&lt;a class="link" href="@ref" &gt;3&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-时间复杂度对比"&gt;⏱️ 时间复杂度对比
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;场景&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Kruskal算法&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Prim算法&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;基础实现&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;O(E \log E)&lt;/code&gt;（排序主导）&lt;a class="link" href="@ref" &gt;3&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;O(V^2)&lt;/code&gt;（邻接矩阵遍历）&lt;a class="link" href="@ref" &gt;3&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;优化实现&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;O(E \alpha(V))&lt;/code&gt;（并查集路径压缩）&lt;a class="link" href="@ref" &gt;7&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;O(E \log V)&lt;/code&gt;（二叉堆优化）&lt;a class="link" href="@ref" &gt;9&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;稠密图（边数≈V²）&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;较慢（排序开销大）&lt;a class="link" href="@ref" &gt;1&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;更快&lt;/strong&gt;（顶点操作高效）&lt;a class="link" href="@ref" &gt;5&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;稀疏图（边数≪V²）&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;更快&lt;/strong&gt;（仅处理有效边）&lt;a class="link" href="@ref" &gt;2&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;较慢（堆操作频繁）&lt;a class="link" href="@ref" &gt;5&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-适用场景与优缺点"&gt;🌐 适用场景与优缺点
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;场景&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;推荐算法&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;原因&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;稀疏图（如社交网络）&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Kruskal&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;仅需排序有限边，并查集合并高效&lt;a class="link" href="@ref" &gt;2,8&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;稠密图（如电网）&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Prim&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;顶点扩展避免全局排序，邻接矩阵操作更直接&lt;a class="link" href="@ref" &gt;5,10&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;动态图（边权频繁更新）&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Kruskal&lt;/td&gt;
+&lt;td&gt;并查集动态维护连通性更灵活&lt;a class="link" href="@ref" &gt;7&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;不连通图&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Kruskal&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;天然支持生成最小生成森林（多棵树）&lt;a class="link" href="@ref" &gt;1&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;需记录树结构&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Prim&lt;/td&gt;
+&lt;td&gt;迭代过程直接记录父子关系&lt;a class="link" href="@ref" &gt;9&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-实际应用案例"&gt;🛠️ 实际应用案例
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Kruskal&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;通信网络设计&lt;/strong&gt;：低成本连接分散节点（如5G基站布局）&lt;a class="link" href="@ref" &gt;8&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;聚类分析&lt;/strong&gt;：合并相似数据点（如客户分群）&lt;a class="link" href="@ref" &gt;8&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;交通规划&lt;/strong&gt;：稀疏路网的最小成本联通（如乡村道路建设）&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Prim&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;电网拓扑优化&lt;/strong&gt;：稠密变电站的高效连接&lt;a class="link" href="@ref" &gt;10&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;图像分割&lt;/strong&gt;：像素相似性优先的区域合并&lt;a class="link" href="@ref" &gt;8&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;物流路径规划&lt;/strong&gt;：仓库密集区域的配送路线优化&lt;a class="link" href="@ref" &gt;8&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-总结选择策略"&gt;💎 总结选择策略
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;首选Kruskal&lt;/strong&gt;：边数远小于顶点数时（稀疏图），或需处理不连通图&lt;a class="link" href="@ref" &gt;1,7&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;首选Prim&lt;/strong&gt;：边数接近完全图时（稠密图），或需频繁查询邻接边&lt;a class="link" href="@ref" &gt;5,10&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;混合策略&lt;/strong&gt;：超大规模图可结合Boruvka算法（多子树并行合并）提升效率&lt;a class="link" href="@ref" &gt;8&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;两种算法均支持负权边，但要求无负环&lt;a class="link" href="@ref" &gt;1&lt;/a&gt;。实际选择需综合&lt;strong&gt;图结构特征&lt;/strong&gt;、&lt;strong&gt;性能需求&lt;/strong&gt;及&lt;strong&gt;实现复杂度&lt;/strong&gt;，例如社交网络推荐Kruskal，而芯片布线常用Prim。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="最短路径"&gt;最短路径
+&lt;/h2&gt;&lt;p&gt;以下是Dijkstra、Bellman-Ford和Floyd三种最短路径算法的综合对比，从核心原理到应用场景的系统分析：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-算法原理与策略对比"&gt;⚙️ 算法原理与策略对比
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;维度&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Dijkstra算法&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Bellman-Ford算法&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Floyd算法&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;核心思想&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;贪心策略：每次选择当前距离源点最近的顶点，逐步扩展最短路径树&lt;/td&gt;
+&lt;td&gt;动态规划：通过多次松弛操作逐步逼近最短路径&lt;/td&gt;
+&lt;td&gt;动态规划：插点法，通过中间点更新任意两点间最短路径&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;策略类型&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;单源最短路径&lt;/td&gt;
+&lt;td&gt;单源最短路径&lt;/td&gt;
+&lt;td&gt;多源最短路径&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;初始化&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;源点距离为0，其他顶点距离为∞&lt;/td&gt;
+&lt;td&gt;同Dijkstra&lt;/td&gt;
+&lt;td&gt;距离矩阵：对角线为0，直接边为权重，其他为∞&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;迭代过程&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;每次选择未访问顶点中距离最小的顶点，更新其邻接点&lt;/td&gt;
+&lt;td&gt;对所有边进行V-1轮松弛操作（V为顶点数）&lt;/td&gt;
+&lt;td&gt;三重循环：以每个顶点k为中间点，更新所有i→j路径&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;终止条件&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;所有顶点被访问或优先队列为空&lt;/td&gt;
+&lt;td&gt;完成V-1轮松弛，或某轮无更新&lt;/td&gt;
+&lt;td&gt;所有顶点均作为中间点被遍历一次&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-时间复杂度与空间复杂度"&gt;⏱️ 时间复杂度与空间复杂度
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;算法&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;时间复杂度&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;空间复杂度&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;优化方式&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Dijkstra&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;- 朴素实现：O(V²)（邻接矩阵） - 堆优化：O((V+E)logV)（二叉堆）&lt;/td&gt;
+&lt;td&gt;O(V)&lt;/td&gt;
+&lt;td&gt;优先队列（堆）减少查找最小值开销&lt;a class="link" href="@ref" &gt;6,7&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Bellman-Ford&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;O(V·E)&lt;/td&gt;
+&lt;td&gt;O(V)&lt;/td&gt;
+&lt;td&gt;SPFA优化：队列减少冗余松弛，平均O(E)，最坏O(VE)&lt;a class="link" href="@ref" &gt;10&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Floyd&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;O(V³)&lt;/td&gt;
+&lt;td&gt;O(V²)&lt;/td&gt;
+&lt;td&gt;无显著优化，动态规划状态压缩&lt;a class="link" href="@ref" &gt;1,4&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-适用场景与限制"&gt;🧩 适用场景与限制
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;特性&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Dijkstra&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Bellman-Ford&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Floyd&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;负权边处理&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;❌ 无法处理（贪心策略失效）&lt;/td&gt;
+&lt;td&gt;✅ 可处理，并能检测负权环&lt;/td&gt;
+&lt;td&gt;✅ 可处理，但不能有负权回路&lt;a class="link" href="@ref" &gt;4,9&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;负权环检测&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;不支持&lt;/td&gt;
+&lt;td&gt;✅ 第V轮松弛仍可更新则存在负权环&lt;/td&gt;
+&lt;td&gt;不支持&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;适用图类型&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;稠密图（朴素）或稀疏图（堆优化）&lt;/td&gt;
+&lt;td&gt;稀疏图（边较少时效率较高）&lt;/td&gt;
+&lt;td&gt;小规模图（V≤500）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;特殊场景&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;- 路由协议（OSPF） - 网络延迟优化&lt;/td&gt;
+&lt;td&gt;- 含负权的金融模型 - 运输成本计算&lt;/td&gt;
+&lt;td&gt;- 任意两点最短路径矩阵 - 传递闭包计算&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-实际应用案例-1"&gt;🌐 实际应用案例
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Dijkstra&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;5G网络路由&lt;/strong&gt;：基站间低延迟通信（边权非负）&lt;a class="link" href="@ref" &gt;4&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;物流配送&lt;/strong&gt;：城市间最短路径规划（无负权交通网）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Bellman-Ford/SPFA&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;金融风险分析&lt;/strong&gt;：信用链路径中存在负权（如债务抵消）&lt;a class="link" href="@ref" &gt;9&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;游戏AI寻路&lt;/strong&gt;：动态调整路径权重（如地形惩罚为负）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Floyd&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;社交网络分析&lt;/strong&gt;：计算任意用户间的最短关系链&lt;a class="link" href="@ref" &gt;1&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;交通枢纽规划&lt;/strong&gt;：机场/车站间全互通最短路径预计算&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-核心优缺点总结"&gt;⚖️ 核心优缺点总结
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;算法&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;优点&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;缺点&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Dijkstra&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;- 效率高（堆优化） - 易扩展（A*算法基础）&lt;/td&gt;
+&lt;td&gt;- 不支持负权边 - 堆优化实现复杂&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Bellman-Ford&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;- 支持负权边和环检测 - 实现简单&lt;/td&gt;
+&lt;td&gt;- 效率低（O(V·E)） - SPFA最坏不稳定&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Floyd&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;- 代码简洁（三重循环） - 全源最短路&lt;/td&gt;
+&lt;td&gt;- 立方级复杂度 - 仅适合小规模图&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="-选择策略"&gt;💎 选择策略
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;选Dijkstra&lt;/strong&gt;：边权非负且需高效单源路径（如导航系统）&lt;a class="link" href="@ref" &gt;4,7&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;选Bellman-Ford&lt;/strong&gt;：含负权边或需检测负环（如金融风控）&lt;a class="link" href="@ref" &gt;9,11&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;选Floyd&lt;/strong&gt;：小规模图且需任意两点最短路径（如网络中心性分析）&lt;a class="link" href="@ref" &gt;1,2&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;三种算法共同限制：&lt;strong&gt;负权回路&lt;/strong&gt;会导致无解（Bellman-Ford可检测但不可解）。实际选择需结合&lt;strong&gt;数据规模&lt;/strong&gt;、&lt;strong&gt;边权特性&lt;/strong&gt;及&lt;strong&gt;问题类型&lt;/strong&gt;，例如芯片布线常用Dijkstra，而物流成本优化倾向Bellman-Ford&lt;a class="link" href="@ref" &gt;5,10&lt;/a&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="关键路径"&gt;关键路径
+&lt;/h2&gt;&lt;p&gt;以下是关键路径算法（Critical Path Method, CPM）的全面解析，结合其核心原理、计算步骤、实现方式及应用场景，参考权威资料进行说明：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="-算法核心思想"&gt;📌 算法核心思想
+&lt;/h3&gt;&lt;p&gt;关键路径算法是一种&lt;strong&gt;项目管理工具&lt;/strong&gt;，用于确定项目中耗时最长的任务序列（即关键路径），该路径的时长决定了项目的最短完成时间。关键路径上的任务若有延迟，将直接导致整个项目延期&lt;a class="link" href="@ref" &gt;1,6,9&lt;/a&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;核心目标&lt;/strong&gt;：识别项目中的关键任务，优化资源分配，缩短总工期。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;理论基础：基于&lt;/strong&gt;
+有向无环图（DAG）
+的拓扑结构，其中：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;节点&lt;/strong&gt;：表示&lt;strong&gt;事件&lt;/strong&gt;（如任务开始/结束）&lt;a class="link" href="@ref" &gt;5&lt;/a&gt;；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;边&lt;/strong&gt;：表示&lt;strong&gt;活动&lt;/strong&gt;（任务），权重为活动持续时间&lt;a class="link" href="@ref" &gt;5,9&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-算法执行步骤"&gt;🔍 算法执行步骤
+&lt;/h3&gt;&lt;h4 id="构建项目网络图"&gt;构建项目网络图
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;活动定义&lt;/strong&gt;：列出所有任务及其持续时间（例如：设计需5天，编码需10天）&lt;a class="link" href="@ref" &gt;3,9&lt;/a&gt;；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;依赖关系&lt;/strong&gt;：明确任务间逻辑顺序（如“测试”必须在“编码”完成后）&lt;a class="link" href="@ref" &gt;9&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="正向计算最早时间forward-pass"&gt;正向计算最早时间（Forward Pass）
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;最早开始时间（ES）&lt;/strong&gt;：活动所有前置任务完成的最早时间；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;最早完成时间（EF）：ES + 活动持续时间&lt;/strong&gt;
+5,6
+。
+计算规则：从起点开始，按拓扑顺序迭代：
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;ES_B = max(EF_A)&lt;/code&gt; （A是B的前置任务）
+&lt;strong&gt;示例&lt;/strong&gt;：若任务A（ES=0，持续3天）→任务B（ES=3，持续4天），则B的EF=7&lt;a class="link" href="@ref" &gt;5&lt;/a&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;/blockquote&gt;
+&lt;h4 id="反向计算最晚时间backward-pass"&gt;反向计算最晚时间（Backward Pass）
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;最晚完成时间（LF）&lt;/strong&gt;：不延误项目的活动最晚完成时间；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;最晚开始时间（LS）：LF - 活动持续时间&lt;/strong&gt;
+6,9
+。
+计算规则：从终点（LF=EF）开始，逆拓扑顺序迭代：
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;LF_A = min(LS_B)&lt;/code&gt; （B是A的后继任务）
+&lt;strong&gt;示例&lt;/strong&gt;：若项目终点EF=16，任务C（需2天）的LF=16，则LS_C=14&lt;a class="link" href="@ref" &gt;5&lt;/a&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;/blockquote&gt;
+&lt;h4 id="确定关键路径"&gt;确定关键路径
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;总浮动时间（Slack）&lt;/strong&gt;：&lt;code&gt;Slack = LS - ES&lt;/code&gt;（或&lt;code&gt;LF - EF&lt;/code&gt;）；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;关键活动&lt;/strong&gt;：Slack = 0 的任务，其连接路径即为关键路径&lt;a class="link" href="@ref" &gt;5,9&lt;/a&gt;。
+&lt;strong&gt;示例&lt;/strong&gt;：下表中活动A、B、D的Slack=0，组成关键路径：
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;活动&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;ES&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;EF&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;LS&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;LF&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Slack&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;A&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;0 ✅&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;B&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;7&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;7&lt;/td&gt;
+&lt;td&gt;0 ✅&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;C&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;td&gt;7&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;D&lt;/td&gt;
+&lt;td&gt;7&lt;/td&gt;
+&lt;td&gt;10&lt;/td&gt;
+&lt;td&gt;7&lt;/td&gt;
+&lt;td&gt;10&lt;/td&gt;
+&lt;td&gt;0 ✅&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-数据结构与实现"&gt;⚙️ 数据结构与实现
+&lt;/h3&gt;&lt;h4 id="图存储结构"&gt;图存储结构
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;邻接表&lt;/strong&gt;：适合稀疏图，节省空间，便于遍历后继节点（常用C/Java实现）&lt;a class="link" href="@ref" &gt;3,6&lt;/a&gt;；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;邻接矩阵&lt;/strong&gt;：适合稠密图，快速查询边权重（C++常用）&lt;a class="link" href="@ref" &gt;7&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="关键算法步骤"&gt;关键算法步骤
+&lt;/h4&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;// 伪代码示例（邻接表实现）
+void criticalPath() {
+topologicalSort(); // 拓扑排序确定计算顺序
+forwardPass(); // 计算ES/EF
+backwardPass(); // 计算LS/LF
+for (活动 in 所有活动) {
+if (LS == ES)
+标记为关键活动; // 生成关键路径
+}
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;时间复杂度&lt;/strong&gt;：O(V+E)（V为事件数，E为活动数）&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-应用场景分析"&gt;🏗️ 应用场景分析
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;项目管理&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;建筑项目&lt;/strong&gt;：识别主体结构施工为关键路径，优先保障资源&lt;a class="link" href="@ref" &gt;9&lt;/a&gt;；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;软件开发&lt;/strong&gt;：优化测试与部署序列，缩短上线周期&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;人工智能与优化&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;任务调度&lt;/strong&gt;：在分布式系统中协调GPU计算任务，减少训练时间（如深度学习）&lt;a class="link" href="@ref" &gt;8&lt;/a&gt;；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;风险预测&lt;/strong&gt;：结合机器学习预测关键路径延误概率&lt;a class="link" href="@ref" &gt;8&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;制造业与物流&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;生产线优化&lt;/strong&gt;：识别装配流程瓶颈（如等待零件时间），调整资源分配&lt;a class="link" href="@ref" &gt;1,9&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id="-优缺点与挑战"&gt;⚖️ 优缺点与挑战
+&lt;/h3&gt;&lt;h4 id="优点"&gt;优点：
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;可视化依赖&lt;/strong&gt;：清晰展示任务逻辑关系&lt;a class="link" href="@ref" &gt;9&lt;/a&gt;；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;资源优化&lt;/strong&gt;：聚焦关键任务，避免资源浪费&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;进度监控&lt;/strong&gt;：实时预警延误风险&lt;a class="link" href="@ref" &gt;1&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="局限"&gt;局限：
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;依赖精确时间估计&lt;/strong&gt;：若任务时间预估不准，路径可能失效&lt;a class="link" href="@ref" &gt;9&lt;/a&gt;；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;动态调整需求&lt;/strong&gt;：新增任务需重新计算路径（可通过增量更新优化）&lt;a class="link" href="@ref" &gt;6&lt;/a&gt;；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;忽略资源约束&lt;/strong&gt;：未考虑资源冲突（需结合资源平衡技术）&lt;a class="link" href="@ref" &gt;1&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="-关键路径优化策略"&gt;💎 关键路径优化策略
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;策略&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;方法&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;适用场景&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;任务压缩&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;增加资源缩短关键任务时间（如加班/加人）&lt;/td&gt;
+&lt;td&gt;紧急项目期限&lt;a class="link" href="@ref" &gt;9&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;快速跟进&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;并行执行部分任务（如设计与采购同步）&lt;/td&gt;
+&lt;td&gt;依赖关系灵活的任务&lt;a class="link" href="@ref" &gt;2&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;资源平滑&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;从非关键任务抽调资源至关键路径&lt;/td&gt;
+&lt;td&gt;资源受限项目&lt;a class="link" href="@ref" &gt;1&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="总结"&gt;总结
+&lt;/h3&gt;&lt;p&gt;关键路径算法通过&lt;strong&gt;网络图建模&lt;/strong&gt;与&lt;strong&gt;动态时间计算&lt;/strong&gt;，精准定位项目核心瓶颈，是优化工期的核心工具。其应用已从传统工程延伸至AI调度、云计算等领域。实际使用时需注意：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;结合&lt;strong&gt;实时监控工具&lt;/strong&gt;（如板栗看板）动态更新路径&lt;a class="link" href="@ref" &gt;9&lt;/a&gt;；&lt;/li&gt;
+&lt;li&gt;在&lt;strong&gt;资源受限&lt;/strong&gt;或&lt;strong&gt;时间不确定性高&lt;/strong&gt;的项目中，需辅以风险缓冲设计（如关键链方法）&lt;a class="link" href="@ref" &gt;1&lt;/a&gt;。&lt;/li&gt;
+&lt;/ol&gt;</description></item></channel></rss>

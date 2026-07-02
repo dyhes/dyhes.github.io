@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>SQL on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/sql/</link><description>Recent content in SQL on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 26 Feb 2025 17:14:04 +0800</lastBuildDate><atom:link href="https://dyhes.github.io/tags/sql/index.xml" rel="self" type="application/rss+xml"/><item><title>【SQL】Definitions</title><link>https://dyhes.github.io/p/sqldefinitions/</link><pubDate>Mon, 18 Nov 2024 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/sqldefinitions/</guid><description>&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;数据定义语言（Data Definition Language, DDL）&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;DDL 是 SQL 中的一部分，用于定义或修改数据库结构，如创建、修改或删除表、索引、视图等数据库对象。常见的 DDL 命令包括 CREATE、ALTER 和 DROP。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据操纵语言（Data Manipulation Language, DML）&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;DML 主要用于对数据库中的数据进行查询和更新操作。这包括 SELECT（查询）、INSERT（插入）、UPDATE（更新）和 DELETE（删除）等命令。DML 是最常使用的 SQL 部分之一，它允许用户从数据库中检索数据或将数据添加到数据库中。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据控制语言（Data Control Language, DCL）&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;DCL 用于控制对数据库的访问权限，例如 GRANT 和 REVOKE 命令，它们分别用来授予和撤销用户对数据库对象的访问权限。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;事务控制语言（Transaction Control Language, TCL）&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;TCL 语句用于管理事务处理，确保数据的一致性和完整性。常见的 TCL 命令有 COMMIT（提交事务）、ROLLBACK（回滚事务）和 SAVEPOINT（设置保存点）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;</description></item></channel></rss>
