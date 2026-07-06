@@ -3,19 +3,19 @@ title: 【AI】 Agent 架构范式
 date: 2026-06-30 00:00:00+0000
 categories: [nutrition]
 tags: [AI, Agent]
-weight: 100
+weight: -1
 image: /covers/cover1.png
 ---
 
-## 1. Agent 架构范式
+## Agent 架构范式
 
 > 参考：LLM Powered Autonomous Agents. Lilian Weng, OpenAI.
 
 ![Agent 架构总览](image.png)
 
-### 1.1 规划（Planning）
+### 规划（Planning）
 
-#### 1.1.1 Chain-of-Thought
+#### Chain-of-Thought
 
 > 参考：Chain-of-Thought Prompting Elicits Reasoning in Large Language Models. Wei et al. 2022.
 
@@ -34,7 +34,7 @@ ToT 是对 CoT 的扩展，它将推理过程组织成一棵树状结构。在�
 
 ![Tree of Thoughts 示意图](i1.png)
 
-#### 1.1.2 ReAct
+#### ReAct
 
 > 参考：ReAct: Synergizing Reasoning and Acting in Language Models. Yao et al. 2023.
 
@@ -48,7 +48,7 @@ ReAct 极大地增强了 AI Agent 解决现实世界问题的能力，是当前�
 
 ![ReAct 示意图](i2.png)
 
-### 1.2 记忆（Memory）
+### 记忆（Memory）
 
 ![Agent Memory 示意图](i3.png)
 
@@ -64,7 +64,7 @@ ReAct 极大地增强了 AI Agent 解决现实世界问题的能力，是当前�
    - **内隐 / 程序性记忆（Implicit / Procedural Memory）**：无意识的记忆，涉及能自动执行的技能和惯例，例如骑自行车或在键盘上打字。
    - LLM Agent 类比：可视为 Agent 在查询时可访问的外部知识库，通过快速检索实现访问。
 
-#### 1.2.1 RAG
+#### RAG
 
 检索增强生成（Retrieval-Augmented Generation, RAG）通过引入外部知识库，有效缓解了大型语言模型（LLM）的幻觉问题和知识时效性瓶颈，成为构建知识密集型应用的事实标准。然而，一个基础的、被称为 Naive RAG 的架构，即遵循“索引 - 检索 - 生成”三步流程的简单实现，在生产环境中很快会遇到性能天花板。其核心痛点源于流程的刚性与信息处理的浅层次。
 
@@ -92,9 +92,9 @@ ReAct 极大地增强了 AI Agent 解决现实世界问题的能力，是当前�
 - 重排序（Re-ranking）：这是提升 RAG 性能最有效的手段之一。在初步召回（例如 `Top-K=20`）的文档后，使用一个更强大的交叉编码器（Cross-encoder）模型（如 `BGE-Reranker-large`）对“查询 - 文档”对进行打分，重新排序，筛选出最相关的 `Top-N`（例如 `N=3`）个文档送给 LLM。
 - 上下文压缩与管理：即使是重排后的文档，也可能存在冗余信息。通过 `LLMLingua` 或 `Recomp` 等技术，在不损失关键信息的前提下，对上下文进行压缩，使其更精简、更符合 LLM 的“注意力胃口”。
 
-### 1.3 工具（Tools）
+### 工具（Tools）
 
-#### 1.3.1 Function Calling / Tool Calling
+#### Function Calling / Tool Calling
 
 > 参考：Function calling - OpenAI Developers.
 
@@ -111,7 +111,7 @@ Function Calling 的本质是一个“三步走”的协同工作流，关键在
 
 ![Function Calling 示意图](i4.png)
 
-#### 1.3.2 MCP（Model Context Protocol）
+#### MCP（Model Context Protocol）
 
 > 参考：Introducing the Model Context Protocol. Anthropic.
 
@@ -140,7 +140,7 @@ MCP，全称为模型上下文协议（Model Context Protocol），是一种开�
 5. 结果注入与响应生成：Client 将结果递交给 Host，Host 再将其注入到 LLM 的上下文中。LLM 基于新的信息（工具执行结果）生成最终的自然语言答复，呈现给用户。
 6. 通知（Notification）：在整个生命周期中，Server 可以随时向 Client 发送异步通知，例如 `tools/list_changed`，告知其能力列表发生了变化（如新增或删除了一个工具），Client 收到后可以重新进行能力发现，以保持信息同步。
 
-#### 1.3.3 Agent Skills
+#### Agent Skills
 
 > 参考：Equipping agents for the real world with Agent Skills. Anthropic.
 
@@ -158,7 +158,7 @@ Skills 的运行逻辑紧密围绕“模型推理”与“工具调用”的循�
    - 调用代码执行工具，运行 `extract_fields.py` 脚本。
 5. 循环与完成：脚本的执行结果会返回给模型，模型根据这些结果（如表单域列表）和 `forms.md` 中的指令，继续与用户交互或直接生成填写后的内容，直至任务完成。
 
-#### 1.3.4 总结
+#### 总结
 
 Function Calling、MCP 和 Agent Skills 三者并非相互替代，而是在一个分层架构中扮演着互补的角色，共同构成一个强大而灵活的 Agent 系统。我们可以用一个比喻来阐释三者之间的关系：
 
@@ -166,11 +166,11 @@ Function Calling、MCP 和 Agent Skills 三者并非相互替代，而是在一�
 - **MCP** 是连接大脑与肌肉的“神经束”：它负责将“神经信号”（Function Calling 请求）快速、标准地传递到指定的“肌肉纤维”（MCP Server 上的工具），并将肌肉的反馈（比如调用一个 API、查询数据库或运行一段代码的执行结果）传回大脑。MCP 通过标准协议抹平了各种“肌肉”（工具）的接口差异和治理边界，确保整个系统协调高效。
 - **Skills** 是大脑中存储的“技能包”：它封装了为了完成一个复杂目标（如“投篮”），大脑该如何组合一系列“神经信号”（Function Calling），并通过特定的“神经通路”（MCP）去激活一系列“肌肉”（工具）的完整逻辑、顺序和策略。一个“投篮”的技能包，不仅包含调用“伸手”“屈膝”“跳跃”等肌肉动作的序列，还包含何时调用、如何协调，以及在不同情况下（如有人防守时）如何调整的策略。
 
-## 2. OpenClaw
+## OpenClaw
 
 OpenClaw 是一个以 Agent 形态呈现的框架。它提供了完整的 Agent 运行时环境，同时开放了所有扩展接口，让用户既能直接使用，也能深度定制。
 
-### 2.1 Architecture
+### Architecture
 
 与许多追求复杂规划与推理链条的学术性 AI Agent 不同，OpenClaw 的设计哲学回归到了一个更务实、更具工程美感的核心：事件驱动（Event-Driven）。其本质可以被理解为一个本地部署的、以消息为中心的个人 AI 运行时（Personal AI Runtime）。它像一个操作系统内核，为大型语言模型（LLM）这颗“大脑”连接了“五官”和“四肢”，使其能够感知并行动。
 
@@ -230,7 +230,7 @@ OpenClaw 在设计上保持了高度的模型中立性和渠道多样性。
 
 以网关和事件循环为中心的架构，使得 OpenClaw 具有极高的可扩展性和灵活性。添加一个新的聊天工具，只需实现一个新的通道模块；增加一项新能力，只需开发一个新的技能。整个系统松耦合、高内聚，展现了出色的工程设计。
 
-### 2.2 Memory
+### Memory
 
 OpenClaw 记忆系统的基石是一个极其简洁而深刻的理念：文件即真相（Files are the source of truth）。与依赖外部数据库（如向量数据库）作为记忆载体的传统 RAG 架构不同，OpenClaw 将所有记忆，无论是身份认知、长期知识还是每日的对话流水，全部以人类可读、可编辑的 Markdown 文件形式存储在本地工作区（`~/.openclaw/workspace/`）。
 
@@ -316,7 +316,7 @@ LLM 在决策写入时，还需要判断信息应该存放在哪里。OpenClaw �
 
 通过这个过程，`IDENTITY.md`（定义我是谁）、`MEMORY.md`（记录核心事实）和每日日志（追踪日常进展）随着使用不断丰富，Agent 对你的了解也越来越深入，真正实现了从“通用工具”到“专属伙伴”的进化。
 
-### 2.3 总结
+### 总结
 
 | 核心要素 | 架构范式（理论侧重） | OpenClaw 设计（工程落地） |
 | --- | --- | --- |
@@ -326,7 +326,7 @@ LLM 在决策写入时，还需要判断信息应该存放在哪里。OpenClaw �
 | 工具使用（Tool Use） | Agent 通过学习调用外部 API（如搜索、计算器、代码执行）来扩展能力，克服 LLM 的内在局限性。 | 发扬光大。通过 Skills 和 `SKILL.md` 规范，将工具使用的理念工程化、生态化。创建了一个标准化的“工具说明书”格式，使得 LLM 能更可靠地理解和使用工具。技能市场进一步加速了能力扩展。 |
 | 架构倾向 | 偏向深思熟虑型（Deliberative）和认知型（Cognitive）架构，强调内部建模、多步推理和从经验中学习。 | 偏向反应型（Reactive）架构，并带有深思熟虑的元素。系统首先对事件做出快速响应，复杂的“思考”过程则被封装在具体的技能执行中，而非在系统层面强制执行。 |
 
-#### 1. 关于“规划”的扬弃
+#### 关于“规划”的扬弃
 
 Lilian Weng 范式下的 Agent，其灵魂在于一个强大的 Planner。这个 Planner 像一个项目经理，接收一个宏大目标后，会反复进行任务分解、自我反思（“上一步做得对不对？”），甚至多路径探索（思维树），力求自主地、闭环地完成任务。这在理论上非常完美，但在工程实践中却面临巨大挑战：
 
@@ -341,7 +341,7 @@ OpenClaw 巧妙地回避了构建一个中心化、重量级 Planner 的路径�
 
 这种设计哲学是典型的“关注点分离”：系统层面只负责高效、可靠地响应事件，而复杂的业务逻辑则下沉到可独立开发和维护的技能中。
 
-#### 2. 关于“记忆”的创新
+#### 关于“记忆”的创新
 
 传统 Agent 范式通常采用向量数据库作为长期记忆，通过语义相似度搜索为 LLM 提供上下文。这种方式检索效率高，但存在“黑盒”问题：用户不知道 Agent 到底“记住”了什么，也难以直接纠正其错误记忆。
 
