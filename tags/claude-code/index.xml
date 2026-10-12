@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Claude Code on 飞鸿踏雪泥</title><link>https://dyhes.github.io/tags/claude-code/</link><description>Recent content in Claude Code on 飞鸿踏雪泥</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 06 Jul 2026 17:55:38 +0800</lastBuildDate><atom:link href="https://dyhes.github.io/tags/claude-code/index.xml" rel="self" type="application/rss+xml"/><item><title>【AI】Claude Code 架构拆解</title><link>https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/</link><pubDate>Fri, 03 Jul 2026 00:00:00 +0000</pubDate><guid>https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/</guid><description>&lt;img src="https://dyhes.github.io/covers/cover8.png" alt="Featured image of post 【AI】Claude Code 架构拆解" /&gt;&lt;h2 id="四层架构"&gt;四层架构
+&lt;/h2&gt;&lt;p&gt;一个能自主编程的 Agent 要处理的事情非常多：调大模型 API、执行 40 多种工具、管理权限、压缩上下文、维护记忆、支持多 Agent 协作……如果这些东西全部塞在一个文件里，代码会立刻变成一团乱麻。&lt;/p&gt;
+&lt;p&gt;那 Claude Code 是怎么组织这些子系统的？它采用了一个四层分层架构：&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image.png"
+width="1024"
+height="559"
+srcset="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image_hu_90a22b86e3077cfe.png 480w, https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image_hu_ef3ef8db7c2cdd9a.png 1024w"
+loading="lazy"
+alt="Claude Code 四层架构"
+class="gallery-image"
+data-flex-grow="183"
+data-flex-basis="439px"
+&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;引擎层&lt;/strong&gt;是 Agent 的「大脑」，负责思考和调度。它的关键设计原则是不包含任何业务逻辑：它不知道怎么读文件、怎么改代码、怎么搜索，这些全是工具层的事。引擎层只做三件事：第一，协调，把用户输入、系统指令、历史对话拼在一起，发给大模型；第二，分发，大模型说「我要用某个工具」时，找到对应的工具并执行；第三，决策，根据大模型的返回决定是继续循环还是结束对话。这种设计的好处是：新增能力只需要新增一个工具，引擎层完全不用改。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;工具层&lt;/strong&gt;是 Agent 的全部「能力」，40 多个工具都在这一层。每个工具就是 Agent 的一个能力：执行 Shell 命令、读写文件、搜索代码、生成子 Agent……这些工具不是随便写的，它们遵循一个统一的规范。这个规范不仅定义了「工具能做什么」，还强制定义了三个安全属性：这个工具是只读的还是会改东西的？它是否具有破坏性需要额外确认？它能不能和其他工具同时执行？这三个属性不是「建议加上」的，而是类型系统强制要求的，漏了任何一个，代码就编译不过。这意味着每一把刀都有刀鞘，从出厂就配好了安全机制。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;服务层&lt;/strong&gt;是所有层共享的「基础设施」。这一层包括三样东西：调大模型 API（不管是谁要调，主循环也好、子 Agent 也好，都走这一层）、上下文压缩（后面会详细讲的五步压缩策略）、MCP 协议（和外部工具服务器通信的标准接口）。你可以把它类比成大楼的水电煤，所有楼层都需要，但谁也不会自己去铺设管道。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;安全与治理层&lt;/strong&gt;有点特殊，它不像其他三层那样各管一块，而是像一张安全网罩在所有层上面。权限系统决定哪些操作需要用户确认、哪些可以自动执行；Hook 系统允许在工具执行前后插入自定义行为（比如「每次 &lt;code&gt;git push&lt;/code&gt; 前自动跑 lint」）；Bash 安全模块会对 Shell 命令做语法级别的分析，检测命令注入、路径逃逸等危险模式，而不是简单地用正则匹配关键词。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="react-与-tool-use-loop"&gt;ReAct 与 Tool Use Loop
+&lt;/h2&gt;&lt;p&gt;模型在每一轮都会先输出一段「思考」（Thought），比如「我需要先读取 &lt;code&gt;config.ts&lt;/code&gt; 文件来了解数据库连接配置」；然后选择一个工具调用（Action）；最后拿到工具结果（Observation）。这三步不断循环，直到模型认为任务完成。&lt;/p&gt;
+&lt;p&gt;这个模式在 2022 年非常流行，因为当时的大模型（GPT-3.5 时代）推理能力有限，需要用显式的「Thought」步骤来引导模型一步步思考。&lt;/p&gt;
+&lt;h3 id="react-的问题"&gt;ReAct 的问题
+&lt;/h3&gt;&lt;p&gt;但 ReAct 有几个问题：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Token 浪费&lt;/strong&gt;：每一轮都要输出一段 Thought 文本，这些文本要作为上下文的一部分发给 API，占用了宝贵的 Token 预算。对于编程 Agent 来说，一次任务可能循环 50 轮，每轮都写一段「我打算先读取……然后分析……」的思考过程，加起来就是好几万 Token 的浪费。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;应用层代码太复杂&lt;/strong&gt;：你需要解析模型的输出，区分「哪部分是 Thought、哪部分是 Action」，然后提取 Action 调用工具，再把 Observation 拼回去。这个解析过程写起来很麻烦，而且很容易出 bug，因为模型输出的格式不一定标准，一崩就全崩了。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;它是为弱模型设计的&lt;/strong&gt;：当大模型的推理能力不够强时，用显式的 Thought 来「强迫」它一步步思考是有意义的。但 Claude Opus 这种级别的模型，推理能力已经足够强了，它完全可以在内部完成推理，不需要在输出里显式写出每一步的思考过程。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Claude Code 没有采用 ReAct 的 Thought-Action-Observation 三步循环，而是用了一个更简洁的模式，我把它叫做 Tool Use Loop。&lt;/p&gt;
+&lt;h3 id="tool-use-loop"&gt;Tool Use Loop
+&lt;/h3&gt;&lt;p&gt;核心思路非常简单，就一个 &lt;code&gt;while (true)&lt;/code&gt; 循环：&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-1.png"
+width="1024"
+height="559"
+srcset="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-1_hu_bb5918087378536c.png 480w, https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-1_hu_422a9778a4ab3b86.png 1024w"
+loading="lazy"
+alt="Tool Use Loop 示意图"
+class="gallery-image"
+data-flex-grow="183"
+data-flex-basis="439px"
+&gt;&lt;/p&gt;
+&lt;p&gt;模型在内部完成推理（通过 &lt;code&gt;Extended Thinking&lt;/code&gt;，这是 Claude Opus 的一个能力，模型在生成回复前会在内部进行一段不可见的深度推理，不占用上下文空间），然后直接返回两种结果之一：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;tool_use&lt;/code&gt;：我要用某个工具。应用层执行工具，把结果拼入消息列表，继续循环。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;end_turn&lt;/code&gt;：我说完了。跳出循环，把最终结果返回给用户。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这个设计的核心哲学是：信任模型的推理能力，保持应用层框架尽可能简单。&lt;/p&gt;
+&lt;h3 id="三个关键优势"&gt;三个关键优势
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;Extended Thinking&lt;/code&gt; 让推理在模型内部完成&lt;/strong&gt;：Claude Opus 支持 &lt;code&gt;Extended Thinking&lt;/code&gt;，模型在生成最终回复之前，会在内部进行一段不可见的深度推理。这段推理发生在模型内部，不占用应用的上下文空间，也不需要应用层去解析。所以 ReAct 的 Thought 步骤在 Claude 的架构里是多余的，模型已经在内部「想好了」，不需要在外部输出中再写一遍。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;API 原生支持 &lt;code&gt;tool_use&lt;/code&gt;&lt;/strong&gt;：Claude 的 API 原生支持工具调用，模型可以直接返回 &lt;code&gt;tool_use&lt;/code&gt; 类型的响应，不需要用正则表达式从文本中提取「Action」。这消除了 ReAct 的格式解析问题，应用层代码变得极其简洁。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;end_turn&lt;/code&gt; 是天然的终止信号&lt;/strong&gt;：ReAct 需要一套额外的规则来判断「Agent 是否完成了」，比如检测输出中是否包含「Final Answer」。而 Tool Use Loop 用模型的 &lt;code&gt;end_turn&lt;/code&gt; 信号作为终止条件，这是 API 层面的原语，语义清晰，不需要任何解析。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Claude Code 的 Agent 工作模式可以总结为一句话：信任模型的推理能力，把应用层框架做得尽可能简单。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;ReAct 的设计哲学是「帮模型思考」，用显式的 Thought 步骤引导模型一步步推理。这在弱模型时代是必要的。&lt;/p&gt;
+&lt;p&gt;但 Claude Code 面对的是 Opus 级别的强模型，它的推理能力完全可以在内部完成，不需要应用层去「教」它怎么想。&lt;/p&gt;
+&lt;p&gt;所以 Claude Code 的 Tool Use Loop 只做最简单的事：调 API、执行工具、再调 API。推理交给模型，执行交给工具，编排交给最简单的 &lt;code&gt;while (true)&lt;/code&gt; 循环。&lt;/p&gt;
+&lt;h2 id="plan-mode"&gt;Plan Mode
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;Plan Mode&lt;/code&gt; 的核心思想是：复杂任务应该先规划再执行，避免方向跑偏、浪费精力。它并不是一个独立的框架，而是在同一个 Tool Use Loop 中通过 &lt;code&gt;EnterPlanMode&lt;/code&gt; 和 &lt;code&gt;ExitPlanMode&lt;/code&gt; 两个工具实现的：&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-2.png"
+width="1858"
+height="1510"
+srcset="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-2_hu_12fd45c3444c619.png 480w, https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-2_hu_54ab17a661e2a664.png 1024w"
+loading="lazy"
+alt="Plan Mode 流程"
+class="gallery-image"
+data-flex-grow="123"
+data-flex-basis="295px"
+&gt;&lt;/p&gt;
+&lt;p&gt;整个流程分三步：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;模型自主进入或用户手动触发&lt;/strong&gt;：当模型判断「这是一个复杂任务」时，它会调用 &lt;code&gt;EnterPlanMode&lt;/code&gt; 工具。对于简单任务（修 typo、加 &lt;code&gt;console.log&lt;/code&gt;），则明确不进入。用户也可以通过 &lt;code&gt;Shift+Tab&lt;/code&gt; 手动切换。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;只读探索 + 设计方案&lt;/strong&gt;：进入 &lt;code&gt;Plan Mode&lt;/code&gt; 后，权限降为只读，模型只能用 &lt;code&gt;Read&lt;/code&gt;、&lt;code&gt;Grep&lt;/code&gt;、&lt;code&gt;Glob&lt;/code&gt; 这些工具去探索代码库，不能写文件、不能改代码、不能跑命令。探索完后，把计划写入 &lt;code&gt;.claude/plans/&lt;/code&gt; 目录。每 5 轮对话，系统会偷偷给模型塞一张「小纸条」，提醒它「你现在还在 &lt;code&gt;Plan Mode&lt;/code&gt;，别手痒改代码」，防止模型在长对话中「走神」。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;用户审批后实施&lt;/strong&gt;：模型调用 &lt;code&gt;ExitPlanMode&lt;/code&gt;，此时需要用户确认。用户批准后，权限恢复为之前的模式，模型开始自由执行读写操作，按计划实施。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;code&gt;Plan Mode&lt;/code&gt; 最值得学习的设计是 &lt;strong&gt;「工具即能力」&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;对模型来说，&lt;code&gt;Plan Mode&lt;/code&gt; 不是一种特殊的「模式切换」，而只是调用了 &lt;code&gt;EnterPlanMode&lt;/code&gt; 和 &lt;code&gt;ExitPlanMode&lt;/code&gt; 这两个工具。&lt;/p&gt;
+&lt;p&gt;就像调用 &lt;code&gt;Read&lt;/code&gt; 工具读文件一样自然。整个过程不需要引擎层做任何特殊处理，&lt;code&gt;query()&lt;/code&gt; 仍然只是一个简单的 &lt;code&gt;while (true)&lt;/code&gt; 循环。&lt;/p&gt;
+&lt;h2 id="system-prompt"&gt;System Prompt
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;┌─────────────────────────────────────────────────┐
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│ [角色定义] 你是一个交互式代理，帮助用户完成... │ ← 所有用户完全一样
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│ [安全红线] 重要：允许协助已授权的安全测试... │ ← 所有用户完全一样
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│ [行为准则] 一般来说，不要对你没有阅读过的代码... │ ← 所有用户完全一样
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│ [操作安全] 仔细考虑操作的可逆性... │ ← 所有用户完全一样
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│ [工具使用] 当有专用工具可用时... │ ← 所有用户完全一样
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│ [Git 安全] 绝不修改 git config... │ ← 所有用户完全一样
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│ [输出风格] 直奔重点，要极度简洁... │ ← 所有用户完全一样
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├────── __SYSTEM_PROMPT_DYNAMIC_BOUNDARY__ ────────┤
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│ [环境信息] 主工作目录: /Users/you/my-project │ ← 每个用户不一样
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│ [CLAUDE.md] 本项目使用 TypeScript + Jest... │ ← 每个项目不一样
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│ [记忆指令] 你有一个持久记忆系统... │ ← 每次对话可能不一样
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│ [MCP 指令] 你已连接 GitHub MCP server... │ ← 每个用户不一样
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;└─────────────────────────────────────────────────┘
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Claude Code 在 &lt;code&gt;System Prompt&lt;/code&gt; 中插入了一个分割标记：&lt;code&gt;__SYSTEM_PROMPT_DYNAMIC_BOUNDARY__&lt;/code&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;分割线之上的内容，对所有用户都完全一样。不管你是北京的 Java 工程师还是纽约的 Python 开发者，你看到的「角色定义」「行为准则」「Git 安全协议」这些内容是一模一样的。&lt;/li&gt;
+&lt;li&gt;分割线之下的内容，每个用户都不同。你的工作目录、你的 &lt;code&gt;CLAUDE.md&lt;/code&gt;、你的记忆文件、你连接的 MCP 服务，这些是因人而异的。&lt;/li&gt;
+&lt;li&gt;分割线之上的内容对所有用户都一样，所以可以全球所有用户共享同一份缓存。你用的和东京开发者用的是同一份；而分割线之下的内容因人而异，没法共享，只能实时生成。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这就是 Claude Code 的三级缓存体系：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;全局缓存&lt;/strong&gt;：分割线之上，跨组织、跨用户共享。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;组织缓存&lt;/strong&gt;：同一组织内，跨会话共享。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;会话缓存&lt;/strong&gt;：同一个 Section 在一次会话内只计算一次。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="memory"&gt;Memory
+&lt;/h2&gt;&lt;p&gt;Claude Code 把记忆分成了四种明确的类型：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-ts" data-lang="ts"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;export&lt;/span&gt; &lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;MEMORY_TYPES&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;user&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="c1"&gt;// 用户画像：角色、偏好、知识水平
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;feedback&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="c1"&gt;// 行为反馈：该做什么、不该做什么
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;project&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="c1"&gt;// 项目动态：在做什么、截止日期、协作信息
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;reference&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="c1"&gt;// 外部指针：哪里能找到什么信息
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="kr"&gt;as&lt;/span&gt; &lt;span class="kr"&gt;const&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;限定四种类型，就是在逼 Agent 做分类决策。每存一条记忆，它必须想清楚「这到底属于哪一类」，而不是一股脑往里塞。&lt;/p&gt;
+&lt;h3 id="四种记忆类型"&gt;四种记忆类型
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;User（用户画像）&lt;/strong&gt;：记住用户是谁、擅长什么、知识水平如何。比如用户说「我是一个写了十年 Go 的后端工程师，第一次接触 React」，Agent 就应该在解释前端概念时用后端的类比，而不是从零讲起。这类记忆让 Agent 的回答因人而异，而不是千篇一律。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Feedback（行为反馈）&lt;/strong&gt;：记住用户说过「不要做什么」和「做得好继续保持」。这类记忆的关键在于，它不仅记规则本身，还要求记录 &lt;code&gt;Why&lt;/code&gt;（为什么）和 &lt;code&gt;How to apply&lt;/code&gt;（怎么应用）：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;规则本身：集成测试必须使用真实数据库，不能用 mock
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Why：上季度 mock 测试全部通过但生产环境迁移失败了
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;How to apply：在这个模块写测试时，始终连接真实数据库
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Project（项目动态）&lt;/strong&gt;：记的是「正在发生什么」，谁在做什么、截止日期是什么、有什么重要决策。这类记忆有一个特殊要求：必须把相对日期转成绝对日期。用户说「周四之前冻结合并」，Agent 要存成「2026-03-05 之前冻结合并」，因为「周四」过几天就没意义了，但「2026-03-05」永远准确。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Reference（外部指针）&lt;/strong&gt;：记的是「去哪找什么信息」，Bug 在 Linear 的哪个项目里追踪、Grafana 看板的地址是什么、Slack 的哪个频道能问到相关的人。这类记忆的价值在于，Agent 不需要知道外部系统的具体内容，只需要知道去哪里找。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="记忆文件格式"&gt;记忆文件格式
+&lt;/h3&gt;&lt;p&gt;每条记忆存为一个独立的 &lt;code&gt;.md&lt;/code&gt; 文件，文件开头有一段 YAML 格式的元信息。你可以把它理解为这条记忆的「身份证」：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nn"&gt;---&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kc"&gt;no&lt;/span&gt;-&lt;span class="l"&gt;mock-database&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;description&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;集成测试必须使用真实数据库，不能用 mock&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;type&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;feedback&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nn"&gt;---&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="l"&gt;集成测试必须使用真实数据库，不能用 mock。&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="cp"&gt;**Why:**&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;上季度 mock 测试全部通过但生产环境迁移失败了。&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="cp"&gt;**How&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;to apply:** 在这个模块写测试时，始终连接真实数据库。&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;文件开头这段 YAML 里，三个字段各有用途：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;name&lt;/code&gt;：人类可读的标识。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;description&lt;/code&gt;：一句话摘要，专门用于检索时的相关性匹配。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;type&lt;/code&gt;：四类型之一。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;然后有一个 &lt;code&gt;MEMORY.md&lt;/code&gt; 文件作为索引，它是一个不超过 200 行（或 25KB）的轻量目录：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-md" data-lang="md"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;-&lt;/span&gt; [&lt;span class="nt"&gt;No Mock Database&lt;/span&gt;](&lt;span class="na"&gt;feedback_no_mock_db.md&lt;/span&gt;) — tests must use real DB
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;-&lt;/span&gt; [&lt;span class="nt"&gt;User Preferences&lt;/span&gt;](&lt;span class="na"&gt;user_preferences.md&lt;/span&gt;) — prefers terse responses
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;-&lt;/span&gt; [&lt;span class="nt"&gt;Auth Rewrite&lt;/span&gt;](&lt;span class="na"&gt;project_auth_rewrite.md&lt;/span&gt;) — driven by compliance, not tech debt
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;MEMORY.md&lt;/code&gt; 索引始终被加载到 &lt;code&gt;System Prompt&lt;/code&gt; 里，但独立记忆文件按需加载。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-3.png"
+width="1790"
+height="1012"
+srcset="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-3_hu_52d6feee8ae72019.png 480w, https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-3_hu_a9d11a5af9d7711b.png 1024w"
+loading="lazy"
+alt="Memory 索引与按需加载"
+class="gallery-image"
+data-flex-grow="176"
+data-flex-basis="424px"
+&gt;&lt;/p&gt;
+&lt;h3 id="记忆检索"&gt;记忆检索
+&lt;/h3&gt;&lt;p&gt;存好了记忆，关键问题来了：每次对话时，怎么从几十条记忆里挑出最相关的那几条加载进来？&lt;/p&gt;
+&lt;p&gt;Claude Code 的做法非常巧妙，用一个廉价的小模型（Sonnet）来做记忆检索。Sonnet 侧查询不是在主模型需要时才触发的，而是在用户提交消息后立刻就开始了，和主模型的 API 调用并行执行：&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-4.png"
+width="1890"
+height="982"
+srcset="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-4_hu_810fc46042f2aa04.png 480w, https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-4_hu_4e8547d3f8faafc2.png 1024w"
+loading="lazy"
+alt="记忆检索并行流程"
+class="gallery-image"
+data-flex-grow="192"
+data-flex-basis="461px"
+&gt;&lt;/p&gt;
+&lt;h2 id="context-window"&gt;Context Window
+&lt;/h2&gt;&lt;p&gt;大模型有上下文窗口限制。即使是 200K Token 的窗口，一次复杂的编程任务（读了几十个文件、执行了几十条命令）很容易就塞满了。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-5.png"
+width="1024"
+height="559"
+srcset="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-5_hu_ec231366da6dcb10.png 480w, https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-5_hu_19b46eed90429799.png 1024w"
+loading="lazy"
+alt="上下文窗口限制"
+class="gallery-image"
+data-flex-grow="183"
+data-flex-basis="439px"
+&gt;&lt;/p&gt;
+&lt;p&gt;业界常见的做法是「简单截断」，只保留最近的 N 条消息，旧的扔掉。但这对于编程 Agent 来说是灾难性的：你可能 20 轮前读过一个关键配置文件，现在要改代码时那个文件的信息已经被截掉了，Agent 就会犯低级错误。&lt;/p&gt;
+&lt;p&gt;另一种做法是「全量摘要」，把整段对话总结成一段摘要。但这很贵（摘要本身就是一次 API 调用），而且有信息损失。&lt;/p&gt;
+&lt;p&gt;Claude Code 的核心理念是：压缩一定有信息损失，所以能不压就不压，必须压的时候从最轻的手段开始。&lt;/p&gt;
+&lt;p&gt;它设计了五个从轻到重的压缩手段，就像医院的分诊制度一样：先试最温和的，不行再上猛药。在每次 API 调用前依次尝试：&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-6.png"
+width="1748"
+height="2640"
+srcset="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-6_hu_d928051a84bb4da7.png 480w, https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-6_hu_4c909ce3234bcc73.png 1024w"
+loading="lazy"
+alt="五层压缩策略"
+class="gallery-image"
+data-flex-grow="66"
+data-flex-basis="158px"
+&gt;&lt;/p&gt;
+&lt;p&gt;每一步的「代价」是递增的：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;第 1 层几乎没有信息损失，完整内容还在磁盘上，只是不在上下文里了。&lt;/li&gt;
+&lt;li&gt;第 2、3 层有少量信息损失，丢掉了老的工具输出，但模型随时可以重新获取。&lt;/li&gt;
+&lt;li&gt;第 4 层有中等信息损失，对话细节被分段压缩了。&lt;/li&gt;
+&lt;li&gt;第 5 层信息损失最大，整段对话变成一段摘要。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;所以 Claude Code 的策略是：先用代价最小的手段，实在不行再升级。大部分情况下，前三层就够用了，根本不需要触发昂贵的全量摘要。&lt;/p&gt;
+&lt;h3 id="第一层大工具结果落盘"&gt;第一层：大工具结果落盘
+&lt;/h3&gt;&lt;p&gt;如果单个工具的结果超过约 50KB，就把完整内容写到磁盘上，在消息里只留一个 2KB 的预览摘要。这样模型还是能看到文件的大概内容（前 2KB），但不会撑爆上下文。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-7.png"
+width="1024"
+height="559"
+srcset="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-7_hu_5d507b18c3f56838.png 480w, https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-7_hu_f191ded18c89a4.png 1024w"
+loading="lazy"
+alt="大工具结果落盘"
+class="gallery-image"
+data-flex-grow="183"
+data-flex-basis="439px"
+&gt;&lt;/p&gt;
+&lt;p&gt;除了单个工具的限制，还有一个消息级的总量控制：同一条消息里所有工具结果的总大小不能超过 200KB。如果超了，系统会挑出最大的那几个结果存磁盘，直到总量降到限制以内。&lt;/p&gt;
+&lt;p&gt;这一层的精妙之处在于：完整内容并没有丢，它还在磁盘上。如果模型后面真的需要那个大文件的某个片段，它可以再次调用 &lt;code&gt;Read&lt;/code&gt; 工具去读取特定的行范围。&lt;/p&gt;
+&lt;h3 id="第二层snip"&gt;第二层：Snip
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;Snip&lt;/code&gt; 是最「粗暴」但也最高效的一层，直接把对话开头的一批老消息移除掉，然后插入一个边界标记告诉模型「这之前的内容已经被清理了」。&lt;/p&gt;
+&lt;p&gt;它不做任何摘要，不总结「前面聊了什么」，直接砍掉。听起来很暴力，但对于那些确实已经完全过时的消息来说，这是代价最低的做法，因为它不需要额外调用大模型来生成摘要，零 API 开销。&lt;/p&gt;
+&lt;h3 id="第三层micro-compact"&gt;第三层：Micro-Compact
+&lt;/h3&gt;&lt;p&gt;经过前两层之后，上下文里剩下的都是「不太老但也不太新」的消息。这些消息不能直接砍掉（可能还有用），但里面大量的工具输出其实已经过时了，比如 30 分钟前读的一个文件，现在那个文件可能已经被改过了。&lt;/p&gt;
+&lt;p&gt;Claude Code 怎么做？&lt;code&gt;Micro-Compact&lt;/code&gt; 的核心思想是时间衰减：越老的工具结果越不重要，可以被裁剪。但是，不是所有工具的结果都能裁剪：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-ts" data-lang="ts"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;COMPACTABLE_TOOLS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nx"&gt;Set&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;FILE_READ_TOOL_NAME&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="c1"&gt;// 读文件 → 可以重新读
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;...&lt;/span&gt;&lt;span class="nx"&gt;SHELL_TOOL_NAMES&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="c1"&gt;// 执行命令 → 可以重新执行
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;GREP_TOOL_NAME&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="c1"&gt;// 搜索 → 可以重新搜
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;GLOB_TOOL_NAME&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="c1"&gt;// 查找文件 → 可以重新查
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;WEB_SEARCH_TOOL_NAME&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="c1"&gt;// 搜索网页 → 可以重新搜
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;FILE_EDIT_TOOL_NAME&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="c1"&gt;// 编辑文件 → 结果可裁剪
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;FILE_WRITE_TOOL_NAME&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="c1"&gt;// 写文件 → 结果可裁剪
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;可以被裁剪的，都是「可重新获取」的工具。&lt;code&gt;Read&lt;/code&gt; 的结果可以再读一次，Bash 的输出可以再执行一次，搜索结果可以再搜一次。&lt;/p&gt;
+&lt;p&gt;但 &lt;code&gt;AgentTool&lt;/code&gt;（子 Agent 的输出）、&lt;code&gt;TaskTool&lt;/code&gt;（任务状态）这类工具的结果永远不会被裁剪，因为子 Agent 的推理过程是不可重复的，砍掉就真的丢了。&lt;/p&gt;
+&lt;h3 id="第四层context-collapse"&gt;第四层：Context Collapse
+&lt;/h3&gt;&lt;p&gt;经过前三层后，如果上下文还是太大，下一步就得做全量摘要了。但全量摘要代价很高（要额外调一次 API），而且会把整段对话的细节全部丢掉。有没有一个「中间态」，比全量摘要轻，但比 &lt;code&gt;Micro-Compact&lt;/code&gt; 重？&lt;/p&gt;
+&lt;p&gt;Claude Code 的做法是 &lt;code&gt;Context Collapse&lt;/code&gt;。它引入了一个非常巧妙的概念：读时投影（&lt;code&gt;Read-Time Projection&lt;/code&gt;）。&lt;/p&gt;
+&lt;p&gt;什么意思呢？前面三层都是「写时压缩」，直接修改消息列表，把内容替换掉或删掉。但 &lt;code&gt;Context Collapse&lt;/code&gt; 不修改原始消息，它只在调用 API 的那一刻，动态计算一个「压缩视图」（对冗长的工具输出 &lt;code&gt;Tool Outputs&lt;/code&gt; 进行压缩）给模型看。&lt;/p&gt;
+&lt;p&gt;它的触发有两级阈值：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;90%&lt;/code&gt; 上下文窗口：主动开始分段压缩旧消息，预留缓冲区。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;95%&lt;/code&gt; 上下文窗口：紧急压缩更多内容，留足 API 响应空间。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这个设计最精妙的地方是它和第 5 层的配合：&lt;code&gt;Context Collapse&lt;/code&gt; 运行在 &lt;code&gt;Auto-Compact&lt;/code&gt; 之前。&lt;/p&gt;
+&lt;p&gt;如果 &lt;code&gt;Context Collapse&lt;/code&gt; 已经通过「读时投影」把上下文压到了阈值以下，&lt;code&gt;Auto-Compact&lt;/code&gt; 就完全不需要触发了。这样模型保留了更多的细节上下文，而不是被一段粗糙的全量摘要替代。&lt;/p&gt;
+&lt;h3 id="第五层auto-compact"&gt;第五层：Auto-Compact
+&lt;/h3&gt;&lt;p&gt;当前面四层都不够用，上下文实在太大了，必须做一次彻底的压缩。这是代价最高但效果最强的一层。&lt;/p&gt;
+&lt;p&gt;什么时候触发？Claude Code 用一个公式计算触发阈值。以 200K Token 的模型为例：有效窗口大约 180K（预留 20K 给输出），减去 13K 缓冲区，当上下文达到 167K Token 时触发。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-8.png"
+width="1024"
+height="559"
+srcset="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-8_hu_ef8384880179b82a.png 480w, https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-8_hu_f4c2ebb257804cea.png 1024w"
+loading="lazy"
+alt="Auto-Compact 触发阈值"
+class="gallery-image"
+data-flex-grow="183"
+data-flex-basis="439px"
+&gt;&lt;/p&gt;
+&lt;p&gt;整个过程分三步：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;生成摘要&lt;/strong&gt;：调用大模型，把整段对话总结成一段结构化摘要。这个摘要不是随便写的，Claude Code 用一个精心设计的 Prompt，要求模型按多个维度来总结：用户的主要请求和意图、关键技术概念、涉及的文件和代码片段、遇到的错误和修复方案、问题解决过程、用户的所有消息（不能遗漏任何一条）、待完成的任务、当前工作状态、建议的下一步。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;替换旧消息&lt;/strong&gt;：把压缩边界之前的所有消息删掉，替换为刚才生成的摘要。同时插入一条边界标记消息，记录压缩前的 Token 数，方便后续追踪。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Post-Compact Restoration（压缩后恢复）&lt;/strong&gt;：这是整个流程中最关键的一步，压缩完不是就完了，还要主动恢复最重要的上下文。系统会从文件状态缓存（&lt;code&gt;fileStateCache&lt;/code&gt;）中找出最近访问过的文件，按最后访问时间排序，挑选最多 5 个、总共不超过 50K Token 的文件内容重新注入。同时恢复活跃的 Skill（不超过 25K Token），如果有进行中的 Plan 也会恢复 Plan 文件。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;为什么要把摘要写得这么细？因为压缩后模型要靠这段摘要来「恢复记忆」。如果摘要漏掉了关键信息（比如「用户还有一个待完成的任务」），模型就会忘记这件事。&lt;/p&gt;
+&lt;h2 id="query-loop"&gt;Query Loop
+&lt;/h2&gt;&lt;p&gt;不停「调模型 → 看结果 → 决定下一步」的循环，就叫主循环（&lt;code&gt;Query Loop&lt;/code&gt;），是整个 Agent 的「心脏」。&lt;/p&gt;
+&lt;p&gt;主循环这个东西，听上去会觉得很简单：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-ts" data-lang="ts"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="err"&gt;调模型&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="err"&gt;模型说要用工具&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="err"&gt;执行工具&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;break&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果真这么写，能跑通一个 demo，但在真实生产环境里会被千锤百炼出无数个 bug：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;用户中途按 &lt;code&gt;Ctrl+C&lt;/code&gt; 怎么办？&lt;/li&gt;
+&lt;li&gt;工具跑到一半挂了，下一轮调模型会被 API 直接拒收，怎么救？&lt;/li&gt;
+&lt;li&gt;模型输出超长被截断了，怎么续？&lt;/li&gt;
+&lt;li&gt;上下文太长塞不进去了，要不要压缩？什么时候压？&lt;/li&gt;
+&lt;li&gt;跑了 50 轮还没收敛，要不要强行止损？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Claude Code 的 1729 行主循环代码，80% 都在处理这些「异常路径」，真正的「正常路径」可能 200 行就写完了。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-9.png"
+width="1672"
+height="941"
+srcset="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-9_hu_12316e126052dab4.png 480w, https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-9_hu_39067ff0ee457703.png 1024w"
+loading="lazy"
+alt="Query Loop 异常路径"
+class="gallery-image"
+data-flex-grow="177"
+data-flex-basis="426px"
+&gt;&lt;/p&gt;
+&lt;h3 id="工具并行与串行"&gt;工具并行与串行
+&lt;/h3&gt;&lt;p&gt;但并不是所有工具都能这么并行。这里有个边界要讲清楚。&lt;/p&gt;
+&lt;p&gt;Claude Code 的工具在定义的时候，每个工具都有一个属性，标明它是「只读」还是「会改东西的」：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;只读工具（比如 &lt;code&gt;Read&lt;/code&gt;、&lt;code&gt;Grep&lt;/code&gt;、&lt;code&gt;Glob&lt;/code&gt;）：可以随便并行。你同时读 10 个文件，互不干扰。&lt;/li&gt;
+&lt;li&gt;会改状态的工具（比如 &lt;code&gt;Edit&lt;/code&gt;、&lt;code&gt;Write&lt;/code&gt;、&lt;code&gt;Bash&lt;/code&gt;）：必须串行。两个写文件操作如果并发跑，可能互相覆盖。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这个属性是在工具定义时就声明的。&lt;/p&gt;
+&lt;p&gt;如果开发者一时忘了写，框架会 &lt;code&gt;fail-closed&lt;/code&gt; 兜底，默认当成「会改东西的工具」（值为 &lt;code&gt;false&lt;/code&gt;），强制串行执行。&lt;/p&gt;
+&lt;p&gt;也就是说，宁可错杀让你慢一点，也绝不会因为漏写而出现并发踩踏。&lt;/p&gt;
+&lt;h3 id="缺失-tool_result-的补偿"&gt;缺失 &lt;code&gt;tool_result&lt;/code&gt; 的补偿
+&lt;/h3&gt;&lt;p&gt;模型回话时会吐出 &lt;code&gt;tool_use&lt;/code&gt; 块（工具调用请求）。工具跑完之后，要把执行结果以另一种格式塞回消息历史，这种「工具执行结果」叫 &lt;code&gt;tool_result&lt;/code&gt; 块。&lt;/p&gt;
+&lt;p&gt;API 协议有一条死规定：每个 &lt;code&gt;tool_use&lt;/code&gt; 块，必须有一个对应的 &lt;code&gt;tool_result&lt;/code&gt; 块跟它配对。如果消息历史里有个孤零零的 &lt;code&gt;tool_use&lt;/code&gt; 没人接，下一轮请求直接被 API 拒收，报错说「工具调用 ID 对不上」。&lt;/p&gt;
+&lt;p&gt;正常情况下没问题，工具跑完就有结果，配对很自然。但出错的时候呢？&lt;/p&gt;
+&lt;p&gt;比如：模型刚吐完 &lt;code&gt;tool_use&lt;/code&gt; 块，网络突然断了，工具根本没开始跑；或者工具跑到一半，用户按了 &lt;code&gt;Ctrl+C&lt;/code&gt;；或者模型出了问题，主循环临时切换到备用模型（这种切换机制叫「模型降级」），前一个模型吐出的 &lt;code&gt;tool_use&lt;/code&gt; 就没机会执行了。&lt;/p&gt;
+&lt;p&gt;这些情况下，消息历史里就有了「孤立的 &lt;code&gt;tool_use&lt;/code&gt; 块」。你不处理，下一轮想再调模型，API 直接拒收，会返回一个「请求格式不对」的错误。&lt;/p&gt;
+&lt;p&gt;Claude Code 的解决方案是：合成一个假的工具结果塞回去，内容写「这个工具因为 XX 错误没执行」。主循环里专门有段代码干这事，函数名也很直白，直译过来就是「把缺失的工具结果块补上」（源码里叫 &lt;code&gt;yieldMissingToolResultBlocks&lt;/code&gt;）。&lt;/p&gt;
+&lt;h3 id="输出截断恢复"&gt;输出截断恢复
+&lt;/h3&gt;&lt;p&gt;模型每一次返回都有个最大 token 数限制。Claude Code 常规默认是 32k，但在某些灰度场景下（背后是个可以开关的「特性开关」控制位）会被压到 8k 以控费。一旦模型一口气想吐 12k 的内容，到 8k 就被强行截断，剩下的 4k 没出来。这种状态在 API 协议里叫「输出 token 上限错误」。&lt;/p&gt;
+&lt;p&gt;Claude Code 的处理是两段式的，非常有意思：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;静默升档&lt;/strong&gt;：模型第一次触发 8k 截断时，主循环不报错，悄悄把上限调到 64k 然后重试这一轮。用户完全感知不到出过错，只是觉得「这次模型答得稍微慢了点」。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;nudge&lt;/code&gt; 续写&lt;/strong&gt;：如果调到 64k 还截断，那是真的输出太长了。这时候主循环会在下一轮的消息里，塞一段话给模型：「上次输出超长被截断了，请直接从断点续写，不要道歉、不要回顾你刚才在干什么、把剩余工作拆成更小的块」（英文原文是 &lt;code&gt;Output token limit hit. Resume directly — no apology, no recap...&lt;/code&gt;，后面还会指示模型「从断点续写、把剩余工作拆小」）。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这种「在消息里轻轻推一把提示模型续写」的动作，英文里叫 &lt;code&gt;nudge&lt;/code&gt;。但 &lt;code&gt;nudge&lt;/code&gt; 不能无限循环，会陷入死锁。&lt;/p&gt;
+&lt;p&gt;所以源码里写死了 3 次上限：续写 3 次还不行，主循环就老老实实退出，返回原因「输出超长救不回来」。&lt;/p&gt;
+&lt;h2 id="greprag-与-memory-system"&gt;&lt;code&gt;grep&lt;/code&gt;、RAG 与 Memory System
+&lt;/h2&gt;&lt;p&gt;Claude Code 检索系统的层次感很强：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;底层：&lt;code&gt;Grep&lt;/code&gt; / &lt;code&gt;Glob&lt;/code&gt; / &lt;code&gt;Read&lt;/code&gt; 三件套，处理简单定向检索。&lt;/li&gt;
+&lt;li&gt;中层：派 &lt;code&gt;Explore&lt;/code&gt; 子 agent，处理开放式探索和上下文隔离。&lt;/li&gt;
+&lt;li&gt;上层：主 agent 编排整体任务。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;RAG 的范式是「考试发卷子」：用户提问 → 系统一次性召回 Top-K 个片段 → 模型基于这些片段一次性生成答案。中间没有循环，没有反悔，没有「等等再看看」。这是一锤子买卖。&lt;/p&gt;
+&lt;p&gt;Claude Code 的范式是「现场探案」：用户提问 → 模型说「我先 Grep 一下」→ 系统执行 Grep 返回结果 → 模型看到结果说「嗯，看起来 &lt;code&gt;UserService&lt;/code&gt; 比较像，我 Read 一下」→ 系统执行 Read 返回内容 → 模型说「找到了，逻辑是这样的：……」。这是循环，是边查边推理。&lt;/p&gt;
+&lt;h3 id="为什么不用-rag"&gt;为什么不用 RAG
+&lt;/h3&gt;&lt;p&gt;Claude Code 不用 RAG，主要有六个原因：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;冷启动&lt;/strong&gt;：&lt;code&gt;grep&lt;/code&gt; 是毫秒级响应，开箱即用；RAG 要先建索引，分钟级冷启动，劝退一半用户。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;实时性&lt;/strong&gt;：&lt;code&gt;grep&lt;/code&gt; 每次现读磁盘最新版本；RAG 索引会滞后，文件改了得重建。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;精确性&lt;/strong&gt;：&lt;code&gt;grep&lt;/code&gt; 是确定性的字符正则匹配，要找 &lt;code&gt;getUserById&lt;/code&gt; 就只有它；RAG 是向量近似匹配，会把一堆相似函数糊在一起。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Token 经济&lt;/strong&gt;：&lt;code&gt;grep&lt;/code&gt; 加 &lt;code&gt;Read&lt;/code&gt; 按需读取，模型只看真正需要的几行；RAG 一上来就要给整个代码库做 embedding，存储和计算成本都不小。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;可解释性&lt;/strong&gt;：&lt;code&gt;grep&lt;/code&gt; 每一步检索过程都对用户透明可审计；RAG 的 Top-K 召回是黑盒，出 bug 没法 debug。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;决策权&lt;/strong&gt;：&lt;code&gt;grep&lt;/code&gt; 让 LLM 自己决定每一轮搜什么、读什么，多轮迭代逐步逼近答案；RAG 是一次性把材料丢给模型，模型只能将错就错。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-10.png"
+width="1672"
+height="941"
+srcset="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-10_hu_e268a8a83596ed16.png 480w, https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-10_hu_ba740318d6e8d285.png 1024w"
+loading="lazy"
+alt="检索分层结构"
+class="gallery-image"
+data-flex-grow="177"
+data-flex-basis="426px"
+&gt;&lt;/p&gt;
+&lt;p&gt;两种方案代表了两种不同的设计哲学。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;RAG 派&lt;/strong&gt;的潜台词是：LLM 不够强，所以我们要用工程手段帮它把材料准备好。&lt;code&gt;chunking&lt;/code&gt;、&lt;code&gt;embedding&lt;/code&gt;、向量召回，本质都是「替模型做决定」。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Claude Code 派&lt;/strong&gt;的潜台词是：LLM 已经足够强，工程的角色是给它准备好工具，把决策权还给它。&lt;code&gt;grep&lt;/code&gt; 不替模型做任何决定，它只是个工具。用还是不用、什么时候用、怎么用，全是模型说了算。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-11.png"
+width="1672"
+height="941"
+srcset="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-11_hu_d1866bf9f9830060.png 480w, https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-11_hu_f6ac4f674fcc6e3f.png 1024w"
+loading="lazy"
+alt="RAG 设计哲学"
+class="gallery-image"
+data-flex-grow="177"
+data-flex-basis="426px"
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-12.png"
+width="1672"
+height="941"
+srcset="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-12_hu_49f4e293c871c4d.png 480w, https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-12_hu_66ec161c3f796544.png 1024w"
+loading="lazy"
+alt="Claude Code 检索哲学"
+class="gallery-image"
+data-flex-grow="177"
+data-flex-basis="426px"
+&gt;&lt;/p&gt;
+&lt;h3 id="记忆如何写入"&gt;记忆如何写入
+&lt;/h3&gt;&lt;p&gt;光设计好类型和存储格式还不够。记忆是怎么写进去的？&lt;/p&gt;
+&lt;p&gt;最朴素的做法是让主对话自己写：每轮结束让模型「想想这次有啥该记的」，然后自己写文件。&lt;/p&gt;
+&lt;p&gt;但有两个缺点：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;模型分心&lt;/strong&gt;：主任务都做不好，还要分一脑子去想「这条要不要记、属于哪类、放哪里」，回复质量会打折。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Token 浪费&lt;/strong&gt;：每轮都得在 &lt;code&gt;System Prompt&lt;/code&gt; 里塞一段「记一下偏好啊」的指令，每次都进、每次都算钱，全是冗余。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Claude Code 的方案是：每轮对话结束后，后台单独跑一个代理来抽取记忆。&lt;/p&gt;
+&lt;p&gt;这个代理叫 &lt;code&gt;extractMemories&lt;/code&gt;，触发时机是每轮 &lt;code&gt;query loop&lt;/code&gt; 完整结束（也就是模型给出最终回复、没有任何 &lt;code&gt;tool call&lt;/code&gt; 了），通过一个 &lt;code&gt;stopHook&lt;/code&gt; 钩子触发。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Extract Memories&lt;/code&gt; 代理不是从零启动一个新对话，而是「完美 fork（复刻一份）主对话」，复用主对话的 prompt cache（把已经算过的 &lt;code&gt;System Prompt&lt;/code&gt; 缓存下来，下次不用重算）。&lt;/p&gt;
+&lt;p&gt;这意味着什么？意味着它不用重新加载几千 token 的 &lt;code&gt;System Prompt&lt;/code&gt;，只需要看着对话历史，决定「这次有没有值得记的东西」就行。整个抽取过程多花的钱很少。&lt;/p&gt;
+&lt;p&gt;抽取代理的逻辑大致是：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;扫一遍这一轮对话里用户的反馈、纠正、信息。&lt;/li&gt;
+&lt;li&gt;跟现有记忆比对，看有没有重复。&lt;/li&gt;
+&lt;li&gt;如果有新的值得记的内容，按四种类型分类，写一个新文件。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;注意「跟现有记忆比对」这步。代理会主动检测 &lt;code&gt;hasMemoryWritesSince&lt;/code&gt;，过滤掉它刚刚写过的内容，避免对同一件事反复写记忆。&lt;/p&gt;
+&lt;h2 id="multi-agent"&gt;Multi-Agent
+&lt;/h2&gt;&lt;p&gt;&lt;img src="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-13.png"
+width="1672"
+height="941"
+srcset="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-13_hu_14ae4a37fe65e3bd.png 480w, https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-13_hu_89cdd9e47f90d371.png 1024w"
+loading="lazy"
+alt="多 Agent 协作模式"
+class="gallery-image"
+data-flex-grow="177"
+data-flex-basis="426px"
+&gt;&lt;/p&gt;
+&lt;h3 id="三种协作形态"&gt;三种协作形态
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;父子型&lt;/strong&gt;：主 agent 处理整个任务，遇到某个子问题时派一个 subagent 出去搞定，拿结果回来接着干。这是最常见的，Claude Code 里的 &lt;code&gt;Task&lt;/code&gt; 工具就是这种。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;平级协作型&lt;/strong&gt;：几个 agent 职责对等，通过共享状态或者消息互相协作。不过这种在工程上比较难落地，状态同步很麻烦。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;主从型（Coordinator-Worker）&lt;/strong&gt;：有一个专门的「协调者 agent」，它自己不干活，只负责派 worker、收结果、做合成。worker 之间互不通信，全靠协调者调度。这种是高并发场景的标配。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Claude Code 源码里，常规 &lt;code&gt;Subagent&lt;/code&gt; 对应父子型，&lt;code&gt;Coordinator&lt;/code&gt; 模式对应主从型，&lt;code&gt;Fork Subagent&lt;/code&gt; 是父子型的一个特殊优化版本。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-14.png"
+width="1672"
+height="941"
+srcset="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-14_hu_e451b43ad84fc23c.png 480w, https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-14_hu_2681ddd0a5c39167.png 1024w"
+loading="lazy"
+alt="Claude Code 多 Agent 结构"
+class="gallery-image"
+data-flex-grow="177"
+data-flex-basis="426px"
+&gt;&lt;/p&gt;
+&lt;h3 id="工具与上下文隔离"&gt;工具与上下文隔离
+&lt;/h3&gt;&lt;p&gt;Claude Code 多 agent 设计里最关键的一环是隔离机制。&lt;/p&gt;
+&lt;p&gt;为什么隔离最关键？多 agent 系统本质就是「一堆 agent 共处一个进程、共享一个底层运行时」。如果隔离做得不好，一个 subagent 偷偷污染了父 agent 的状态、或者调了不该调的工具，整个系统就会乱成一锅粥。&lt;/p&gt;
+&lt;p&gt;Claude Code 在 subagent 启动时，把隔离做到了两个维度：工具隔离（不给子 agent 它不该有的工具）和上下文隔离（不让子 agent 搅乱父 agent 的运行时状态）。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-15.png"
+width="1672"
+height="941"
+srcset="https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-15_hu_f4dcfae50903cab7.png 480w, https://dyhes.github.io/p/aiclaude-code-%E6%9E%B6%E6%9E%84%E6%8B%86%E8%A7%A3/image-15_hu_c1c54dabff6591f1.png 1024w"
+loading="lazy"
+alt="Subagent 隔离机制"
+class="gallery-image"
+data-flex-grow="177"
+data-flex-basis="426px"
+&gt;&lt;/p&gt;
+&lt;p&gt;Claude Code 给 subagent 发工具的思路是「按 agent 身份走三道准入门」：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;所有 subagent 通用黑名单&lt;/strong&gt;：禁掉几类工具，包括能派新 subagent 的工具（防止子再派孙、孙再派重孙的递归嵌套）、能主动问用户问题的工具（子 agent 不该抢主 agent 的对话权）、能切换规划模式的工具（规划模式是主 agent 用来跟用户对齐方案的）以及能停止其他任务的工具（任务管理是主线程的专属权力）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;自定义 agent 额外黑名单&lt;/strong&gt;：用户自己写的 agent（比如在项目里自己配的那种 Markdown agent）比内置 agent 要再严一点，因为用户写的没经过官方审核，多防一道更安全。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;后台异步 agent 走白名单&lt;/strong&gt;：这类 agent 是完全后台跑的，没法跟用户交互，所以只准用事先圈定好的一小批工具（读文件、搜代码、执行命令、编辑文件这些）。白名单的哲学是「默认不准用，明确列出来的才能用」，比黑名单更保险。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="父子通信与-auto-background"&gt;父子通信与 auto-background
+&lt;/h3&gt;&lt;p&gt;父子之间能怎么通信，取决于你开没开「团队（&lt;code&gt;agent-teams&lt;/code&gt;）模式」。&lt;/p&gt;
+&lt;p&gt;默认形态和团队形态，是两条很不一样的线：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;默认形态&lt;/strong&gt;：subagent 更像一次「重型工具调用」，父 agent 派它出去、它跑完把结果交回来。这条线里，父 agent 没法中途给在跑的子 agent 插话，消息基本是子 → 父单向通知。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;团队（&lt;code&gt;agent-teams&lt;/code&gt;）模式&lt;/strong&gt;：开启之后才升级成完整的双向消息驱动，父 agent 能往子 agent 的信箱里扔字条，子 agent 也能回话，真正的双向对讲。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;父 agent 对正在跑的子 agent 是「只能等」的，没法中途塞新指令给它。就是一次「派出去，等结果」，跟你平时调一个普通工具没啥两样。&lt;/p&gt;
+&lt;p&gt;那又冒出一个新问题：如果子任务跑得特别久，父 agent 干等着不就被卡死了吗？Claude Code 这里有个补丁，叫 &lt;code&gt;auto-background&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;如果 subagent 很快跑完（比如 30 秒内），父 agent 就在前台阻塞等，像一次普通工具调用，完事就拿结果继续。但如果 subagent 跑超过 2 分钟还没完，Claude Code 会自动把它转到后台，让父 agent 可以先继续干别的。子任务真完成时，再回头通知父 agent。&lt;/p&gt;
+&lt;p&gt;这个设计本质上是把同步工具调用自动降级成异步通知的优化。没有它，长任务会一直占着父 agent 的执行权，用户也没法跟父 agent 继续对话。&lt;/p&gt;
+&lt;h3 id="coordinator-模式"&gt;Coordinator 模式
+&lt;/h3&gt;&lt;p&gt;Subagent（不管是常规的还是 &lt;code&gt;Fork&lt;/code&gt; 的），本质都是父子结构：父 agent 派一个子，自己该干啥干啥，子完成了通知一声。&lt;/p&gt;
+&lt;p&gt;但如果你的任务量很大，需要一堆 agent 同时开工呢？比如一个大的代码迁移，要并行调研 10 个模块。这时候父子结构就显得单薄了。&lt;/p&gt;
+&lt;p&gt;Claude Code 为此设计了一个专门的模式：&lt;code&gt;Coordinator&lt;/code&gt; 模式。这是 Claude Code 多 agent 设计里最「多 agent」的部分，也是最能打的地方。&lt;/p&gt;
+&lt;p&gt;常规模式下，主 agent 是「全能型选手」：它读代码、写代码、跑测试、做规划全都干，只在需要时才派 subagent 帮一把。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Coordinator&lt;/code&gt; 模式下，主 agent 不干实际工作了，它只做三件事：派 worker、收结果、合成答案。&lt;/p&gt;
+&lt;p&gt;这个角色转换是通过主 agent 的 &lt;code&gt;System Prompt&lt;/code&gt; 强制约束出来的。&lt;/p&gt;
+&lt;p&gt;既然主 agent 要协调，就得有专门的协调工具。&lt;code&gt;Coordinator&lt;/code&gt; 模式下，主 agent 多了一套「团队管理」工具箱：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;派 worker 的工具&lt;/strong&gt;：派一个新 worker 出去干某件具体的活，派完立刻返回 worker 的 ID。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;创建/解散团队的工具&lt;/strong&gt;：批量管理 worker 组。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;给 worker 发消息的工具&lt;/strong&gt;：给已经派出去的 worker 发后续指令（也就是前面讲的 &lt;code&gt;SendMessage&lt;/code&gt;），因为 worker 的上下文还在，续命比重新派一个更省钱。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;合成最终输出的工具&lt;/strong&gt;：协调者合成完答案后，通过这个工具把最终回复交给用户。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;停止 worker 的工具&lt;/strong&gt;：当协调者意识到某个 worker 跑错方向时，把它停掉省 token。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这套工具放在一起，协调者就有了一整套指挥团队的 API。&lt;/p&gt;</description></item></channel></rss>
